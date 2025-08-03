@@ -33,7 +33,7 @@ const Hero = () => {
       color: '#98FF98',
       brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc01f9b8f60323e5d811_paint-roller-white%20green%20dark.png',
       productCode: 'N°2572',
-      brushColor: '#98FF98' // لون الفرشاة مطابق للدائرة
+      brushColor: '#ffffff' // لون الفرشاة مطابق للدائرة
     },
   ];
 
