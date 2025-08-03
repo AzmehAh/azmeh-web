@@ -171,7 +171,7 @@ const Hero = () => {
     }} aria-hidden="true" />
   </motion.a>
 </div>
-           
+         </div>  
 
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-3 z-20">
