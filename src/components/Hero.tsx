@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight,Paintbrush } from 'lucide-react';
 
 const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
@@ -90,6 +90,7 @@ const Hero = () => {
                   className="w-32 h-32 rounded-full flex items-center justify-center shadow-lg transition-colors duration-500"
                   style={{ backgroundColor: backgrounds[currentBg].brushColor }}
                 >
+                  <Paintbrush className="w-16 h-16 text-gray-800" />
                   <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center">
                     <div className="w-16 h-2 bg-orange-400 rounded-full"></div>
                   </div>
