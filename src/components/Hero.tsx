@@ -83,42 +83,41 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Right Paint Brush */}
-        <div className="hidden lg:block flex-shrink-0 ml-12">
+    {/* Right Paint Brush */}
+<div className="hidden lg:block flex-shrink-0 ml-12">
   <motion.div
     initial={{ opacity: 0, x: 50 }}
     animate={{ opacity: 1, x: 0 }}
     transition={{ duration: 1, delay: 0.5 }}
   >
-    <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl w-80 border border-white/40">
+    <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl w-72 border border-white/40">
       
-      {/* Brush animation */}
-      <motion.img
-        src="https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png"
-        alt="paint roller"
-        className="w-32 h-auto mx-auto"
-        animate={{ y: [0, -10, 0] }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-        style={{
-          transform: `rotate(-30deg)`,
-          transformOrigin: 'center center',
-        }}
-      />
+      {/* Color Circle behind the brush */}
+      <div className="w-28 h-28 rounded-full mx-auto flex items-center justify-center shadow-md"
+           style={{ backgroundColor: backgrounds[currentBg].brushColor }}>
+        
+        {/* Paint Roller */}
+        <motion.img
+          src="https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png"
+          alt="paint roller"
+          className="w-20 h-auto"
+          animate={{ y: [0, -8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          style={{
+            transform: `rotate(-30deg)`,
+            transformOrigin: 'center',
+          }}
+        />
+      </div>
 
-      {/* Info card */}
+      {/* Info section */}
       <div className="mt-6 text-center">
-        <h6 className="text-xl font-bold text-white mb-1">{backgrounds[currentBg].title}</h6>
-        <p className="text-white/80 text-sm mb-3">Code</p>
-        <div className="w-10 h-10 mx-auto rounded-full border-2 border-white" style={{ backgroundColor: backgrounds[currentBg].brushColor }}></div>
+        <h6 className="text-lg font-semibold text-white mb-1">{backgrounds[currentBg].title}</h6>
+        <p className="text-sm text-white/80">Code: <span className="font-mono">{backgrounds[currentBg].brushColor}</span></p>
       </div>
     </div>
   </motion.div>
-    </div>
-      </div>
+</div>
 
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-2 z-20">
