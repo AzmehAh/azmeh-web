@@ -170,7 +170,7 @@ const Hero = () => {
       background: `radial-gradient(circle at 70% 80%, ${backgrounds[currentBg].brushColor}, transparent 70%)`
     }} aria-hidden="true" />
   </motion.a>
-</div>>
+</div>
            
 
       {/* Navigation Arrows */}
