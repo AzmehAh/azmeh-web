@@ -92,6 +92,7 @@ const Hero = () => {
     transition={{ duration: 1, delay: 0.5 }}
   >
     <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl w-80 border border-white/40">
+      
 {/* Right Paint Brush */}
 <div className="hidden lg:block flex-shrink-0 ml-12">
   <motion.div
@@ -137,9 +138,9 @@ const Hero = () => {
   </motion.div>
 </div>
 
+</div>
 
-
-    
+      </div>
 
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-2 z-20">
