@@ -1,47 +1,57 @@
-import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { motion, useAnimation } from "framer-motion";
 
 const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const controls = useAnimation();
 
   const backgrounds = [
     {
       image:
-        'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-      title: 'Exterior Facade Restoration',
+        "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+      title: "Exterior Facade Restoration",
       description:
-        'From weather-worn walls to faded surfaces, our team specializes in bringing back the vibrancy and protection your building deserves.',
-      brushColor: '#F5F5DC',
+        "From weather-worn walls to faded surfaces, our team specializes in bringing back the vibrancy and protection your building deserves.",
+      brushColor: "#F5F5DC",
       brushImage:
-        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc01f9b8f60323e5d811_paint-roller-white%20green%20dark.png',
+        "https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc01f9b8f60323e5d811_paint-roller-white%20green%20dark.png",
     },
     {
       image:
-        'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-      title: 'Industrial Coating Solutions',
+        "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+      title: "Industrial Coating Solutions",
       description:
-        'Advanced protective coatings for industrial environments, ensuring durability and performance under the harshest conditions.',
-      brushColor: '#4A90E2',
+        "Advanced protective coatings for industrial environments, ensuring durability and performance under the harshest conditions.",
+      brushColor: "#4A90E2",
       brushImage:
-        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png',
+        "https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png",
     },
     {
       image:
-        'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
-      title: 'Premium Interior Finishes',
+        "https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop",
+      title: "Premium Interior Finishes",
       description:
-        'Transform your interior spaces with our premium paint systems designed for beauty, durability, and health-conscious living.',
-      brushColor: '#E8E8E8',
+        "Transform your interior spaces with our premium paint systems designed for beauty, durability, and health-conscious living.",
+      brushColor: "#E8E8E8",
       brushImage:
-        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png',
+        "https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png",
     },
   ];
 
   useEffect(() => {
     setIsVisible(true);
   }, []);
+
+  // عند تغيير currentBg، شغّل حركة نزول وطلوع للفرشاية لمرة واحدة فقط
+  useEffect(() => {
+    const runAnimation = async () => {
+      await controls.start({ y: -15, transition: { duration: 0.4, ease: "easeOut" } });
+      await controls.start({ y: 0, transition: { duration: 0.4, ease: "easeIn" } });
+    };
+    runAnimation();
+  }, [currentBg, controls]);
 
   const nextSlide = () => {
     setCurrentBg((prev) => (prev + 1) % backgrounds.length);
@@ -58,7 +68,7 @@ const Hero = () => {
         <div
           key={index}
           className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentBg ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            index === currentBg ? "opacity-100" : "opacity-0 pointer-events-none"
           }`}
         >
           <div
@@ -74,7 +84,7 @@ const Hero = () => {
         <div className="flex-1 max-w-2xl text-white">
           <div
             className={`transform transition-all duration-1000 ${
-              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+              isVisible ? "translate-y-0 opacity-100" : "translate-y-10 opacity-0"
             }`}
           >
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
@@ -107,26 +117,18 @@ const Hero = () => {
                 className="w-32 h-32 rounded-full mx-auto flex items-center justify-center shadow-md"
                 style={{ backgroundColor: backgrounds[currentBg].brushColor }}
               >
-             <motion.img
-  src={backgrounds[currentBg].brushImage}
-  alt="paint roller"
-  className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-auto"
-  animate={{
-    y: [0, -15, 0],
-    rotateZ: -29
-  }}
-  transition={{
-    duration: 2,
-    repeat: Infinity,
-    ease: "easeInOut"
-  }}
-  style={{
-    transformOrigin: "center center"
-  }}
-  aria-hidden="true"
-  loading="lazy"
-/>
-
+                <motion.img
+                  src={backgrounds[currentBg].brushImage}
+                  alt="paint roller"
+                  className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-auto"
+                  animate={controls}
+                  initial={{ y: 0, rotateZ: -29 }}
+                  style={{
+                    transformOrigin: "center center",
+                  }}
+                  aria-hidden="true"
+                  loading="lazy"
+                />
               </div>
 
               {/* Name and Color Code */}
@@ -166,7 +168,7 @@ const Hero = () => {
             key={index}
             onClick={() => setCurrentBg(index)}
             className={`w-3 h-3 rounded-full transition duration-300 ${
-              index === currentBg ? 'bg-white' : 'bg-white/50'
+              index === currentBg ? "bg-white" : "bg-white/50"
             }`}
             aria-label={`Go to slide ${index + 1}`}
           />
