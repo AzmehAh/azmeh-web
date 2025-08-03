@@ -98,20 +98,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Right Paint Brush Card */}
-        <div className="hidden lg:block flex-shrink-0 ml-16">
-          <motion.a
-            href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
-            animate={cardControls}
-            className="banner-block-image relative block w-80 rounded-2xl p-6 no-underline overflow-hidden"
-            style={{
-              backdropFilter: 'blur(10px)',
-              backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          >
-            {/* Brush Image with 3D Transform */}
-           {/* Right Paint Brush Card - تم التعديل ليشبه "Lemon Cloud" */}
+      {/* Right Paint Brush Card - تم التعديل ليشبه "Lemon Cloud" */}
 <div className="hidden lg:block flex-shrink-0 ml-16">
   <motion.a
     href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
@@ -170,7 +157,6 @@ const Hero = () => {
       background: `radial-gradient(circle at 70% 80%, ${backgrounds[currentBg].brushColor}, transparent 70%)`
     }} aria-hidden="true" />
   </motion.a>
-</div>
 </div>
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-3 z-20">
