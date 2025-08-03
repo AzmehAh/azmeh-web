@@ -141,7 +141,8 @@ const Hero = () => {
       transition={{
         duration: 2,
         ease: "easeInOut",
-       
+        repeat: Infinity, 
+        repeatType: "mirror",
       }}
     >
       <img
