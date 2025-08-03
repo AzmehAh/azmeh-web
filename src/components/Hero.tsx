@@ -121,7 +121,7 @@ const Hero = () => {
           <span className="text-white text-sm">{backgrounds[currentBg].title}</span>
           <span className="text-white/80 text-xs">{backgrounds[currentBg].brushColor}</span>
         </div>
-      </div>
+     
 
   </motion.div>
     </div>
