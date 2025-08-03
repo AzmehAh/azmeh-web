@@ -103,6 +103,7 @@ const Hero = () => {
 
         {/* Right Paint Brush Card - تصميم معدل */}
     {/* Right Paint Brush Card - تصميم معدل */}
+{/* Right Paint Brush Card - تصميم معدل */}
 <div className="hidden lg:block flex-shrink-0 ml-16">
   <motion.a
     href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
@@ -126,21 +127,22 @@ const Hero = () => {
       aria-hidden="true"
     />
 
-    {/* الفرشاة فوق الدائرة - في المنتصف */}
+    {/* الفرشاة فوق الدائرة - حركة من تحت لفوق */}
     <motion.div
+      key={currentBg}  // مهم لتشغيل الحركة عند تغيير currentBg
       className="absolute cursor-pointer"
       style={{
         top: '50%',
         left: '50%',
-        transform: 'translate(-50%, -50%) rotateZ(-20deg)',  // حركنا مكان الفرشاة ودوّرناها هنا بدل مكان img
+        transform: 'translateX(-50%)',
         zIndex: 10,
       }}
       initial={{ y: 50 }}
       animate={{ y: 0 }}
-      transition={{ duration: 1, ease: "easeOut" }}
+      transition={{ duration: 1.5, ease: "easeOut" }}
       whileHover={{
-        y: [-10, 0], // حركة هزازة بسيطة صعودًا ثم نزولًا عند الـ hover
-        transition: { duration: 0.5, repeat: Infinity, repeatType: "mirror" }
+        y: [50, 0],  // تعيد الحركة من تحت إلى فوق عند الهوفر
+        transition: { duration: 1, ease: "easeOut" }
       }}
     >
       <img
@@ -149,8 +151,8 @@ const Hero = () => {
         loading="lazy"
         className="w-32 h-auto"
         style={{
-          filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`
-          // لا نضع هنا transform لأننا وضعناها في motion.div للسهولة
+          filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
+          transform: 'rotateZ(-20deg)'
         }}
         aria-hidden="true"
       />
@@ -166,10 +168,9 @@ const Hero = () => {
       </p>
     </div>
 
-    {/* الدائرة الصغيرة - حذفتها كما طلبت */}
-
   </motion.a>
 </div>
+
 
         </div>
 
