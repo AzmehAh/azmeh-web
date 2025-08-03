@@ -170,7 +170,7 @@ const Hero = () => {
         >
           <ChevronRight className="w-6 h-6" />
         </button>
-      </div>
+      </div> 
 
       {/* Slide Indicators */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
