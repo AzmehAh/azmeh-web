@@ -4,49 +4,51 @@ import { motion, useAnimation } from 'framer-motion';
 
 const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
-  const controls = useAnimation();
+  const brushControls = useAnimation();
+  const cardControls = useAnimation();
 
   const backgrounds = [
     {
-      image:
-        'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+      image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Exterior Facade Restoration',
-      description:
-        'From weather-worn walls to faded surfaces, our team specializes in bringing back the vibrancy and protection your building deserves.',
+      description: 'From weather-worn walls to faded surfaces, our team specializes in bringing back the vibrancy and protection your building deserves.',
       brushColor: '#F5F5DC',
-      brushImage:
-        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc01f9b8f60323e5d811_paint-roller-white%20green%20dark.png',
+      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
+      productCode: 'N°0510'
     },
     {
-      image:
-        'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+      image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Industrial Coating Solutions',
-      description:
-        'Advanced protective coatings for industrial environments, ensuring durability and performance under the harshest conditions.',
+      description: 'Advanced protective coatings for industrial environments, ensuring durability and performance under the harshest conditions.',
       brushColor: '#4A90E2',
-      brushImage:
-        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png',
+      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
+      productCode: 'N°0511'
     },
     {
-      image:
-        'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
+      image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Premium Interior Finishes',
-      description:
-        'Transform your interior spaces with our premium paint systems designed for beauty, durability, and health-conscious living.',
+      description: 'Transform your interior spaces with our premium paint systems designed for beauty, durability, and health-conscious living.',
       brushColor: '#E8E8E8',
-      brushImage:
-        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png',
+      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
+      productCode: 'N°0512'
     },
   ];
 
   useEffect(() => {
-    // عند تغيير currentBg، شغّل حركة الفرشاة مرة واحدة
-    controls.start({
+    // تحريك الفرشاة (تهتز وتنزل وترتفع مع ميل)
+    brushControls.start({
       y: [0, 30, 0],
       rotateZ: [-30, -15, -30],
       transition: { duration: 1.2, ease: 'easeInOut' },
     });
-  }, [currentBg, controls]);
+
+    // تحريك الكارد (يدخل من اليمين مع تلاشي)
+    cardControls.start({
+      opacity: [0, 1],
+      x: [500, 0],
+      transition: { duration: 0.8, ease: 'easeOut' },
+    });
+  }, [currentBg]);
 
   const nextSlide = () => {
     setCurrentBg((prev) => (prev + 1) % backgrounds.length);
@@ -100,45 +102,76 @@ const Hero = () => {
         <div className="hidden lg:block flex-shrink-0 ml-16">
           <motion.a
             href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="relative block w-80 rounded-2xl p-6 shadow-xl bg-white/20 backdrop-blur-lg border border-white/40 no-underline"
+            animate={cardControls}
+            className="banner-block-image relative block w-80 rounded-2xl p-6 no-underline overflow-hidden"
+            style={{
+              backdropFilter: 'blur(10px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+            }}
           >
-            {/* Brush Circle with Animated Brush */}
-            <div
-              className="w-32 h-32 rounded-full mx-auto flex items-center justify-center shadow-md"
-              style={{ backgroundColor: backgrounds[currentBg].brushColor }}
-            >
-              <motion.img
-                src={backgrounds[currentBg].brushImage}
-                alt="paint roller"
-                loading="lazy"
-                className="w-32 h-auto"
-                animate={controls}
-                initial={{ y: 0, rotateZ: -30 }}
-                style={{ transformOrigin: 'center center', transformStyle: 'preserve-3d' }}
-                aria-hidden="true"
-              />
-            </div>
+            {/* Brush Image with 3D Transform */}
+           {/* Right Paint Brush Card - تم التعديل ليشبه "Lemon Cloud" */}
+<div className="hidden lg:block flex-shrink-0 ml-16">
+  <motion.a
+    href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
+    animate={cardControls}
+    className="banner-block-image relative block w-80 h-96 rounded-2xl p-6 no-underline overflow-hidden"
+    style={{
+      backdropFilter: 'blur(10px)',
+      backgroundColor: 'rgba(255, 255, 255, 0.1)',
+      border: '1px solid rgba(255, 255, 255, 0.2)'
+    }}
+  >
+    {/* Brush Image with 3D Transform */}
+    <motion.img
+      src={backgrounds[currentBg].brushImage}
+      alt="paint roller"
+      loading="lazy"
+      className="banner-small-image absolute w-32 h-auto"
+      animate={controls}
+      initial={{ 
+        x: 80,
+        y: 120,
+        rotateZ: -25,
+        z: 4
+      }}
+      style={{ 
+        transformStyle: 'preserve-3d',
+        right: '15%',
+        top: '15%'
+      }}
+      aria-hidden="true"
+    />
 
-            {/* Name and Color Code */}
-            <div className="mt-6 flex justify-between items-center px-6 text-white select-none">
-              <h6 className="text-xl font-semibold">{backgrounds[currentBg].title}</h6>
-              <p className="text-sm font-mono opacity-70">
-                N°{backgrounds[currentBg].brushColor.slice(1).toUpperCase().slice(0, 4)}
-              </p>
-            </div>
+    {/* Name and Product Code - تصميم مشابه لـ "Lemon Cloud" */}
+    <div className="name-product absolute bottom-8 left-8 text-white">
+      <h6 className="heading-banner text-2xl font-medium mb-1">
+        {backgrounds[currentBg].title.split(' ')[0]}
+      </h6>
+      <p className="text-sm font-light opacity-90 tracking-wider">
+        {backgrounds[currentBg].productCode}
+      </p>
+    </div>
 
-            {/* Colored dot */}
-            <div
-              className="absolute bottom-4 right-6 w-6 h-6 rounded-full shadow-md"
-              style={{ backgroundColor: backgrounds[currentBg].brushColor }}
-              aria-hidden="true"
-            />
-          </motion.a>
-        </div>
-      </div>
+    {/* Color Drop - دائرة ملونة كبيرة */}
+    <div 
+      className="absolute bottom-6 right-6 w-8 h-8 rounded-full"
+      style={{ 
+        backgroundColor: backgrounds[currentBg].brushColor,
+        boxShadow: `0 0 30px ${backgrounds[currentBg].brushColor}`,
+        filter: 'brightness(1.1)'
+      }}
+      aria-hidden="true"
+    />
+    
+    {/* تأثيرات إضافية لتحقيق مظهر السحابة */}
+    <div className="absolute inset-0 opacity-20" style={{
+      background: `radial-gradient(circle at 70% 80%, ${backgrounds[currentBg].brushColor}, transparent 70%)`
+    }} aria-hidden="true" />
+  </motion.a>
+</div>>
+            </div>>
 
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-3 z-20">
@@ -172,7 +205,8 @@ const Hero = () => {
         ))}
       </div>
     </section>
-  ); 
+  );
 };
 
 export default Hero;
+
