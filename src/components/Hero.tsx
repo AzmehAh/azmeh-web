@@ -135,7 +135,7 @@ const Hero = () => {
         </p>
       </div>
       
-    </div>
+   
   </motion.div>
 </div>
 
