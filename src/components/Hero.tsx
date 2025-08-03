@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight,Paintbrush } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
@@ -10,19 +10,22 @@ const Hero = () => {
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Exterior Facade Restoration',
       description: 'From weather-worn walls to faded surfaces, our team specializes in bringing back the vibrancy and protection your building deserves.',
-      brushColor: '#F5F5DC'
+      brushColor: '#F5F5DC',
+      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc01f9b8f60323e5d811_paint-roller-white%20green%20dark.png'
     },
     {
       image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Industrial Coating Solutions',
       description: 'Advanced protective coatings for industrial environments, ensuring durability and performance under the harshest conditions.',
-      brushColor: '#4A90E2'
+      brushColor: '#4A90E2',
+      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png'
     },
     {
       image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Premium Interior Finishes',
       description: 'Transform your interior spaces with our premium paint systems designed for beauty, durability, and health-conscious living.',
-      brushColor: '#E8E8E8'
+      brushColor: '#E8E8E8',
+      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png'
     }
   ];
 
@@ -57,7 +60,7 @@ const Hero = () => {
       ))}
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-full">
-        {/* Left Content */}
+        {/* Left Text Content */}
         <div className="flex-1 max-w-2xl">
           <div className={`transform transition-all duration-1000 ${
             isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
@@ -79,33 +82,15 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Right Paint Brush Card */}
-        <div className="hidden lg:block flex-shrink-0 ml-12">
-          <div className={`transform transition-all duration-1000 delay-300 ${
-            isVisible ? 'translate-x-0 opacity-100' : 'translate-x-10 opacity-0'
-          }`}>
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 shadow-2xl w-80">
-              <div className="flex items-center justify-center mb-6">
-                <div 
-                  className="w-32 h-32 rounded-full flex items-center justify-center shadow-lg transition-colors duration-500"
-                  style={{ backgroundColor: backgrounds[currentBg].brushColor }}
-                >
-                  <Paintbrush className="w-16 h-16 text-gray-800" />
-                  <div className="w-20 h-20 bg-gray-800 rounded-full flex items-center justify-center">
-                    <div className="w-16 h-2 bg-orange-400 rounded-full"></div>
-                  </div>
-                </div>
-              </div>
-              <div className="text-center">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Premium Quality</h3>
-                <p className="text-gray-600 mb-4">Professional Grade</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">Color Code</span>
-                  <span className="font-mono text-sm text-gray-700">#{Math.floor(Math.random()*16777215).toString(16).toUpperCase()}</span>
-                </div>
-              </div>
-            </div>
-          </div>
+        {/* Right Paint Brush */}
+        <div className="hidden lg:flex flex-shrink-0 ml-12 items-center justify-center relative">
+          <div className="w-[280px] h-[280px] rounded-full" style={{ backgroundColor: backgrounds[currentBg].brushColor }} />
+          <img
+            src={backgrounds[currentBg].brushImage}
+            alt="paint roller"
+            className="absolute w-[220px] transform -rotate-[30deg] transition-all duration-700"
+            style={{ top: '30px', left: '30px' }}
+          />
         </div>
       </div>
 
