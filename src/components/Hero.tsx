@@ -107,23 +107,26 @@ const Hero = () => {
                 className="w-32 h-32 rounded-full mx-auto flex items-center justify-center shadow-md"
                 style={{ backgroundColor: backgrounds[currentBg].brushColor }}
               >
-                <motion.img
-                  src={backgrounds[currentBg].brushImage}
-                  alt="paint roller"
-                  className="w-24 h-auto"
-                  animate={{ y: [0, -15, 0] }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                  }}
-                  style={{
-                    transformOrigin: 'center center',
-                    transform: 'rotateZ(-29deg)',
-                  }}
-                  loading="lazy"
-                  aria-hidden="true"
-                />
+             <motion.img
+  src={backgrounds[currentBg].brushImage}
+  alt="paint roller"
+  className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-auto"
+  animate={{
+    y: [0, -15, 0],
+    rotateZ: -29
+  }}
+  transition={{
+    duration: 2,
+    repeat: Infinity,
+    ease: "easeInOut"
+  }}
+  style={{
+    transformOrigin: "center center"
+  }}
+  aria-hidden="true"
+  loading="lazy"
+/>
+
               </div>
 
               {/* Name and Color Code */}
