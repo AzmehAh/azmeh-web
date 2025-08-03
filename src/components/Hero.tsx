@@ -126,22 +126,21 @@ const Hero = () => {
       aria-hidden="true"
     />
 
-    {/* الفرشاة فوق الدائرة - حركة من تحت لفوق */}
+    {/* الفرشاة فوق الدائرة - في المنتصف */}
     <motion.div
-      className="absolute"
+      className="absolute cursor-pointer"
       style={{
-        left: '40%',
-        transform: 'translateX(-50%)',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%) rotateZ(-20deg)',  // حركنا مكان الفرشاة ودوّرناها هنا بدل مكان img
         zIndex: 10,
       }}
-      animate={{
-        y: [50, 0],   // تحرك من 50px تحت إلى مكانها الأصلي (0)
-      }}
-      transition={{
-        duration: 2,
-        ease: "easeInOut",
-        repeat: Infinity,
-        repeatType: "mirror",
+      initial={{ y: 50 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 1, ease: "easeOut" }}
+      whileHover={{
+        y: [-10, 0], // حركة هزازة بسيطة صعودًا ثم نزولًا عند الـ hover
+        transition: { duration: 0.5, repeat: Infinity, repeatType: "mirror" }
       }}
     >
       <img
@@ -150,8 +149,8 @@ const Hero = () => {
         loading="lazy"
         className="w-32 h-auto"
         style={{
-          filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
-          transform: 'rotateZ(-20deg)'
+          filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`
+          // لا نضع هنا transform لأننا وضعناها في motion.div للسهولة
         }}
         aria-hidden="true"
       />
@@ -171,6 +170,7 @@ const Hero = () => {
 
   </motion.a>
 </div>
+
         </div>
 
 
