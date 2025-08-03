@@ -137,11 +137,12 @@ const Hero = () => {
       }}
       animate={{
         y: [0, 50],   // تحرك من 50px تحت إلى مكانها الأصلي (0)
-      }}
+      }} 
       transition={{
         duration: 2, 
         ease: "easeInOut",
-       
+        repeat: Infinity, 
+        repeatType: "mirror",
       }}
     >
       <img
