@@ -117,7 +117,7 @@ const Hero = () => {
       <div className="mt-6 text-center">
   <h6 className="text-lg text-white font-semibold mb-2">{backgrounds[currentBg].title}</h6>
   <div className="flex justify-between items-center w-full px-4">
-    <span className="text-white text-sm font-medium">Color Name</span>
+    <span className="text-white text-sm font-medium"></span>
     <span className="text-white/70 text-xs">{backgrounds[currentBg].brushColor}</span>
   </div>
 </div>
