@@ -121,7 +121,7 @@ const Hero = () => {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                filter: 'blur(20px)',
+             
                 opacity: 0.4
               }}
               aria-hidden="true"
