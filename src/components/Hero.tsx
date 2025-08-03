@@ -138,7 +138,7 @@ const Hero = () => {
   </motion.div>
 </div>
 
-</div>
+
 
      
       {/* Navigation Arrows */}
