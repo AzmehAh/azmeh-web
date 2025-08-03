@@ -120,9 +120,9 @@ const Hero = () => {
                 backgroundColor: backgrounds[currentBg].color,
                 top: '50%',
                 left: '50%',
-                transform: 'translate(-50%, -50%)',
+                transform: 'translate(-50%, -50%)'
              
-                opacity: 0.4
+              
               }}
               aria-hidden="true"
             />
