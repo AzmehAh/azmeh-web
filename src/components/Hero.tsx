@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, useAnimation } from 'framer-motion';
 
 
-const Hero = () => {
+const Hero = () => { 
   const [currentBg, setCurrentBg] = useState(0);
   const controls = useAnimation();
   const cardControls = useAnimation();
@@ -152,7 +152,7 @@ const Hero = () => {
         alt="paint roller"
         loading="lazy"
         className="w-32 h-auto"
-        style={{ 
+        style={{
           
           transform: 'rotateZ(-30deg)'
         }}
