@@ -130,8 +130,8 @@ const Hero = () => {
     <motion.div
       className="absolute cursor-pointer"
       style={{
-        top: '50%',
-        left: '50%',
+        top: '40%',
+        left: '30%',
         transform: 'translate(-50%, -50%) rotateZ(-20deg)',  // حركنا مكان الفرشاة ودوّرناها هنا بدل مكان img
         zIndex: 10,
       }}
