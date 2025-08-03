@@ -107,7 +107,7 @@ const Hero = () => {
   <motion.a
     href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
     animate={cardControls}
-    className="banner-block-image relative block w-80 h-80  rounded-xl p-6 no-underline overflow-hidden"
+    className="banner-block-image relative block w-75 h-80  rounded-xl p-6 no-underline overflow-hidden"
     style={{
       backdropFilter: 'blur(12px)',
       backgroundColor: 'rgba(255, 255, 255, 0.12)',
