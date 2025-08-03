@@ -84,7 +84,8 @@ const Hero = () => {
         </div>
 
         {/* Right Paint Brush */}
-        <div className="hidden lg:block flex-shrink-0 ml-12">
+        {/* Right Paint Brush */}
+<div className="hidden lg:block flex-shrink-0 ml-12">
   <motion.div
     initial={{ opacity: 0, x: 50 }}
     animate={{ opacity: 1, x: 0 }}
@@ -92,9 +93,7 @@ const Hero = () => {
   >
     <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl w-80 border border-white/40">
       
-        <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl w-80 border border-white/40">
-      
-      {/* Brush over color circle */}
+      {/* Brush inside colored circle */}
       <div className="w-28 h-28 rounded-full mx-auto flex items-center justify-center shadow-md"
            style={{ backgroundColor: backgrounds[currentBg].brushColor }}>
         <motion.img 
@@ -118,14 +117,16 @@ const Hero = () => {
       <div className="mt-6 text-center">
         <h6 className="text-lg text-white font-semibold mb-2">{backgrounds[currentBg].title}</h6>
         <div className="flex justify-center items-center gap-3">
-          <span className="text-white text-sm">{backgrounds[currentBg].title}</span>
-          <span className="text-white/80 text-xs">{backgrounds[currentBg].brushColor}</span>
+          <span className="text-white text-sm font-medium">Color Name</span>
+          <span className="text-white/70 text-xs">{backgrounds[currentBg].brushColor}</span>
         </div>
       </div>
 
-  </motion.div>
     </div>
-    
+  </motion.div>
+</div>
+
+      </div>
 
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-2 z-20">
