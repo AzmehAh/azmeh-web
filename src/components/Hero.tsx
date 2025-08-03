@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useAnimation } from 'framer-motion';
 
 const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
+  const controls = useAnimation();
 
   const backgrounds = [
     {
@@ -14,8 +15,7 @@ const Hero = () => {
         'From weather-worn walls to faded surfaces, our team specializes in bringing back the vibrancy and protection your building deserves.',
       brushColor: '#F5F5DC',
       brushImage:
-        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
-      productCode: 'N°0510',
+        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc01f9b8f60323e5d811_paint-roller-white%20green%20dark.png',
     },
     {
       image:
@@ -25,9 +25,8 @@ const Hero = () => {
         'Advanced protective coatings for industrial environments, ensuring durability and performance under the harshest conditions.',
       brushColor: '#4A90E2',
       brushImage:
-        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
-      productCode: 'N°0511',
-    },
+        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png',
+    }, 
     {
       image:
         'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
@@ -36,10 +35,18 @@ const Hero = () => {
         'Transform your interior spaces with our premium paint systems designed for beauty, durability, and health-conscious living.',
       brushColor: '#E8E8E8',
       brushImage:
-        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
-      productCode: 'N°0512',
+        'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png',
     },
   ];
+
+  useEffect(() => {
+    // عند تغيير currentBg، شغّل حركة الفرشاة مرة واحدة
+    controls.start({
+      y: [0, 30, 0],
+      rotateZ: [-30, -15, -30],
+      transition: { duration: 1.2, ease: 'easeInOut' },
+    });
+  }, [currentBg, controls]);
 
   const nextSlide = () => {
     setCurrentBg((prev) => (prev + 1) % backgrounds.length);
@@ -59,9 +66,11 @@ const Hero = () => {
             index === currentBg ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
           aria-hidden={index !== currentBg}
-          style={{ backgroundImage: `url(${bg.image})` }}
         >
-          <div className="absolute inset-0 bg-cover bg-center bg-no-repeat" />
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${bg.image})` }}
+          />
           <div className="absolute inset-0 bg-black/50" />
         </div>
       ))}
@@ -91,43 +100,40 @@ const Hero = () => {
         <div className="hidden lg:block flex-shrink-0 ml-16">
           <motion.a
             href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
-            initial={{ opacity: 0, x: 500 }}
+            initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 1, delay: 0.5 }}
             className="relative block w-80 rounded-2xl p-6 shadow-xl bg-white/20 backdrop-blur-lg border border-white/40 no-underline"
           >
-            {/* Brush Image with 3D Transform */}
-            <img
-              src={backgrounds[currentBg].brushImage}
-              alt="paint roller"
-              loading="lazy"
-              className="banner-small-image absolute w-32 h-auto"
-              style={{
-                transform: 'translate3d(57px, 88px, 4px) rotateZ(-30deg)',
-                transformStyle: 'preserve-3d',
-                right: '20%',
-                top: '20%',
-              }}
-              aria-hidden="true"
-            />
+            {/* Brush Circle with Animated Brush */}
+            <div
+              className="w-32 h-32 rounded-full mx-auto flex items-center justify-center shadow-md"
+              style={{ backgroundColor: backgrounds[currentBg].brushColor }}
+            >
+              <motion.img
+                src={backgrounds[currentBg].brushImage}
+                alt="paint roller"
+                loading="lazy"
+                className="w-32 h-auto"
+                animate={controls}
+                initial={{ y: 0, rotateZ: -30 }}
+                style={{ transformOrigin: 'center center', transformStyle: 'preserve-3d' }}
+                aria-hidden="true"
+              />
+            </div>
 
-            {/* Name and Product Code */}
-            <div className="name-product absolute bottom-6 left-6 text-white">
-              <h6 className="heading-banner hover text-xl font-semibold">
-                {backgrounds[currentBg].title.split(' ')[0]}
-              </h6>
-              <p className="without-margin height text-sm opacity-80">
-                {backgrounds[currentBg].productCode}
+            {/* Name and Color Code */}
+            <div className="mt-6 flex justify-between items-center px-6 text-white select-none">
+              <h6 className="text-xl font-semibold">{backgrounds[currentBg].title}</h6>
+              <p className="text-sm font-mono opacity-70">
+                N°{backgrounds[currentBg].brushColor.slice(1).toUpperCase().slice(0, 4)}
               </p>
             </div>
 
-            {/* Color Drop */}
+            {/* Colored dot */}
             <div
-              className="drops absolute bottom-4 right-6 w-6 h-6 rounded-full"
-              style={{
-                backgroundColor: backgrounds[currentBg].brushColor,
-                boxShadow: `0 0 20px ${backgrounds[currentBg].brushColor}`,
-              }}
+              className="absolute bottom-4 right-6 w-6 h-6 rounded-full shadow-md"
+              style={{ backgroundColor: backgrounds[currentBg].brushColor }}
               aria-hidden="true"
             />
           </motion.a>
@@ -166,7 +172,7 @@ const Hero = () => {
         ))}
       </div>
     </section>
-  );
+  ); 
 };
 
 export default Hero;
