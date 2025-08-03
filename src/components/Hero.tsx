@@ -128,37 +128,29 @@ const Hero = () => {
             />
 
             {/* الفرشاة فوق الدائرة */}
-           <motion.div
-  className="absolute"
-  style={{
-    top: '35%',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    zIndex: 10
-  }}
-  initial={{
-    x: 57,
-    y: 88,
-    rotateZ: -30,
-    z: 4
-  }}
-  animate={controls}
-  transition={{ type: "spring", stiffness: 80, damping: 15 }}
->
-  <img
-    src={backgrounds[currentBg].brushImage}
-    alt="paint roller"
-    loading="lazy"
-    className="w-32 h-auto"
-    style={{
-      filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
-      transformStyle: 'preserve-3d'
-    }}
-    aria-hidden="true"
-  />
-</motion.div>
-
-
+            <motion.div
+              className="absolute"
+              style={{
+                top: '35%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                zIndex: 10
+              }}
+              animate={controls}
+            >
+              <img
+                src={backgrounds[currentBg].brushImage}
+                alt="paint roller"
+                loading="lazy"
+                className="w-32 h-auto"
+                style={{
+                  filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
+                  transform: 'rotateZ(-25deg)'
+                }}
+                aria-hidden="true"
+              />
+            </motion.div>
+ 
             {/* Name and Product Code */}
             <div className="name-product absolute bottom-8 left-8 text-white z-20">
               <h6 className="heading-banner text-2xl font-medium mb-1">
