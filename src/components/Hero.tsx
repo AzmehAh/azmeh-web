@@ -85,16 +85,7 @@ const Hero = () => {
 
         {/* Right Paint Brush */}
         {/* Right Paint Brush */}
-<div className="hidden lg:block flex-shrink-0 ml-12">
-  <motion.div
-    initial={{ opacity: 0, x: 50 }}
-    animate={{ opacity: 1, x: 0 }}
-    transition={{ duration: 1, delay: 0.5 }}
-  >
-    <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl w-80 border border-white/40">
-      
-      {/* Brush inside colored circle */}
-      {/* Right Paint Brush */}
+{/* Right Paint Brush */}
 <div className="hidden lg:block flex-shrink-0 ml-12">
   <motion.div
     initial={{ opacity: 0, x: 50 }}
@@ -134,8 +125,8 @@ const Hero = () => {
           N°{backgrounds[currentBg].brushColor.slice(1).toUpperCase().slice(0,4)}
         </p>
       </div>
-      
-   
+      </div>
+    </div>
   </motion.div>
 </div>
 
