@@ -83,7 +83,8 @@ const Hero = () => {
           </div>
         </div>
 
-    {/* Right Paint Brush */}
+        {/* Right Paint Brush */}
+       {/* Right Paint Brush */}
 <div className="hidden lg:block flex-shrink-0 ml-12">
   <motion.div
     initial={{ opacity: 0, x: 50 }}
@@ -119,6 +120,9 @@ const Hero = () => {
   </motion.div>
 </div>
 
+
+    </div>
+      
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-2 z-20">
         <button
