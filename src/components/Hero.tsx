@@ -116,7 +116,7 @@ const Hero = () => {
   >
     {/* الدائرة الكبيرة */}
     <div  
-      className="absolute w-48 h-40 rounded-full"
+      className="absolute w-40 h-40 rounded-full"
       style={{ 
         backgroundColor: backgrounds[currentBg].color,
         top: '30%',
