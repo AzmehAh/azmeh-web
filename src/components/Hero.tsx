@@ -130,6 +130,7 @@ const Hero = () => {
     <motion.div
       className="absolute"
       style={{
+        top:'20%',
         left: '40%',
         transform: 'translateX(-50%)',
         zIndex: 10,
