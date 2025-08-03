@@ -168,8 +168,8 @@ const BrushCard = ({ brush }) => {
   );
 };
 
- 
-
+     </div>
+  
         </div>
 
 
