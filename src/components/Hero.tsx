@@ -7,7 +7,7 @@ const Hero = () => {
   const controls = useAnimation();
   const cardControls = useAnimation();
 
-  const backgrounds = [
+  const backgrounds = [ 
     {
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Lemon Cloud',
@@ -60,7 +60,6 @@ const Hero = () => {
   const prevSlide = () => {
     setCurrentBg((prev) => (prev - 1 + backgrounds.length) % backgrounds.length);
   };
-
 const Brush = ({ currentBg, backgrounds }) => {
   const controls = useAnimation();
 
@@ -74,8 +73,6 @@ const Brush = ({ currentBg, backgrounds }) => {
       },
     });
   }, [currentBg]);
-};
-
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900">
       {/* Background Images */}
