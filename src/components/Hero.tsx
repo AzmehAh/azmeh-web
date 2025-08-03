@@ -2,11 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, useAnimation } from 'framer-motion';
 
+
 const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
   const controls = useAnimation();
   const cardControls = useAnimation();
+const Brush = ({ currentBg }) => {
+  const controls = useAnimation();
 
+  useEffect(() => {
+    // عندما يتغير الخلفية، نفذ الحركة
+    controls.start({
+      y: [50, 0],
+      transition: {
+        duration: 1.5,
+        ease: "easeInOut"
+      }
+    });
+  }, [currentBg]);
   const backgrounds = [
     {
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
@@ -135,14 +148,15 @@ const Hero = () => {
         transform: 'translateX(-50%)',
         zIndex: 10,
       }}
-      animate={{
-        y: [0, 50],   // تحرك من 50px تحت إلى مكانها الأصلي (0)
-      }}
-      transition={{
-        duration: 2,
-        ease: "easeInOut",
-        repeat: Infinity, 
-        repeatType: "mirror",
+     
+      animate={controls}
+      initial={{ y: 50 }} // تبدأ من تحت
+      className="absolute"
+      style={{
+        top: '20%',
+        left: '40%',
+        transform: 'translateX(-50%)',
+        zIndex: 10,
       }}
     >
       <img
