@@ -128,27 +128,23 @@ const Hero = () => {
             />
 
             {/* الفرشاة فوق الدائرة */}
-            <motion.div
-              className="absolute"
-              style={{
-                top: '35%',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                zIndex: 10
-              }}
+           src={backgrounds[currentBg].brushImage}
+              alt="paint roller"
+              loading="lazy"
+              className="banner-small-image absolute w-32 h-auto"
               animate={controls}
-            >
-              <img
-                src={backgrounds[currentBg].brushImage}
-                alt="paint roller"
-                loading="lazy"
-                className="w-32 h-auto"
-                style={{
-                  filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
-                  transform: 'rotateZ(-25deg)'
-                }}
-                aria-hidden="true"
-              />
+              initial={{ 
+                x: 57,
+                y: 88,
+                rotateZ: -30,
+                z: 4
+              }}
+              style={{ 
+                transformStyle: 'preserve-3d',
+                right: '20%',
+                top: '20%'
+              }}
+              aria-hidden="true"
             </motion.div>
 
             {/* Name and Product Code */}
