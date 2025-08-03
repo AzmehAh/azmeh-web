@@ -83,17 +83,40 @@ const Hero = () => {
         </div>
 
         {/* Right Paint Brush */}
-        <div className="hidden lg:flex flex-shrink-0 ml-12 items-center justify-center relative">
-          <div className="w-[280px] h-[280px] rounded-full" style={{ backgroundColor: backgrounds[currentBg].brushColor }} />
-          <img
-            src={backgrounds[currentBg].brushImage}
-            alt="paint roller"
-            className="absolute w-[220px] transform -rotate-[30deg] transition-all duration-700"
-            style={{ top: '30px', left: '30px' }}
-          />
-        </div>
-      </div>
+        <div className="hidden lg:block flex-shrink-0 ml-12">
+  <motion.div
+    initial={{ opacity: 0, x: 50 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 1, delay: 0.5 }}
+  >
+    <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl w-80 border border-white/40">
+      
+      {/* Brush animation */}
+      <motion.img
+        src="https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png"
+        alt="paint roller"
+        className="w-32 h-auto mx-auto"
+        animate={{ y: [0, -10, 0] }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        style={{
+          transform: `rotate(-30deg)`,
+          transformOrigin: 'center center',
+        }}
+      />
 
+      {/* Info card */}
+      <div className="mt-6 text-center">
+        <h6 className="text-xl font-bold text-white mb-1">{backgrounds[currentBg].title}</h6>
+        <p className="text-white/80 text-sm mb-3">Code</p>
+        <div className="w-10 h-10 mx-auto rounded-full border-2 border-white" style={{ backgroundColor: backgrounds[currentBg].brushColor }}></div>
+      </div>
+    </div>
+  </motion.div>
+</div>
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-2 z-20">
         <button
