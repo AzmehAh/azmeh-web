@@ -151,7 +151,7 @@ const Hero = () => {
         className="w-32 h-auto"
         style={{
           filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
-          transform: 'rotateZ(-20deg)'
+          transform: 'rotateZ(-30deg)'
         }}
         aria-hidden="true"
       />
