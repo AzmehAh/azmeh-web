@@ -135,15 +135,14 @@ const Hero = () => {
         transform: 'translateX(-50%)',
         zIndex: 10,
       }}
-        <motion.div
-      animate={controls}
-      initial={{ y: 50 }} // تبدأ من تحت
-      className="absolute"
-      style={{
-        top: '20%',
-        left: '40%',
-        transform: 'translateX(-50%)',
-        zIndex: 10,
+      animate={{
+        y: [0, 50],   // تحرك من 50px تحت إلى مكانها الأصلي (0)
+      }}
+      transition={{
+        duration: 2, 
+        ease: "easeInOut",
+        repeat: Infinity, 
+        repeatType: "mirror",
       }}
     >
       <img
