@@ -161,8 +161,19 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* الدائرة الصغيرة */}
-           
+            {/* الدائرة الصغيرة */} 
+            <div 
+              className="absolute bottom-6 right-6 w-8 h-8 rounded-full z-20"
+              style={{ 
+                backgroundColor: backgrounds[currentBg].color,
+                boxShadow: `0 0 30px ${backgrounds[currentBg].color}`,
+                filter: 'brightness(1.1)'
+              }}
+              aria-hidden="true"
+            />
+          </motion.a>
+        </div>
+      </div>
 
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-3 z-20">
