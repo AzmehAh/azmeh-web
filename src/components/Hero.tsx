@@ -57,17 +57,7 @@ const Hero = () => {
   const nextSlide = () => {
     setCurrentBg((prev) => (prev + 1) % backgrounds.length);
   };
-const Brush = ({ currentBg }) => {
-  const controls = useAnimation();useEffect(() => {
-    // عندما يتغير الخلفية، نفذ الحركة
-    controls.start({
-      y: [50, 0],
-      transition: {
-        duration: 1.5,
-        ease: "easeInOut"
-      }
-    });
-  }, [currentBg]); 
+
   const prevSlide = () => {
     setCurrentBg((prev) => (prev - 1 + backgrounds.length) % backgrounds.length);
   };
