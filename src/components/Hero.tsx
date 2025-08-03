@@ -102,10 +102,9 @@ const Hero = () => {
         </div>
 
         {/* Right Paint Brush Card - تصميم معدل */}
-    {import { motion } from "framer-motion";
+    
 
-const BrushCard = ({ brush }) => {
-  return (
+
     <motion.a
       href={`/product/${brush.title.toLowerCase().replace(/\s+/g, '-')}`}
       className="banner-block-image relative block w-80 h-96 rounded-2xl p-6 no-underline overflow-hidden cursor-pointer"
