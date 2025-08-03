@@ -119,8 +119,8 @@ const Hero = () => {
       className="absolute w-48 h-48 rounded-full"
       style={{ 
         backgroundColor: backgrounds[currentBg].color,
-        top: '50%',
-        left: '50%',
+        top: '30%',
+        left: '40%',
         transform: 'translate(-50%, -50%)'
       }}
       aria-hidden="true"
