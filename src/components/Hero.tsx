@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, useAnimation } from 'framer-motion';
 
-
-const Hero = () => { 
+const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
   const controls = useAnimation();
   const cardControls = useAnimation();
@@ -136,7 +135,7 @@ const Hero = () => {
         transform: 'translateX(-50%)',
         zIndex: 10,
       }}
-     
+        <motion.div
       animate={controls}
       initial={{ y: 50 }} // تبدأ من تحت
       className="absolute"
