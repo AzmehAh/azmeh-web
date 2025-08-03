@@ -12,25 +12,28 @@ const Hero = () => {
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Lemon Cloud',
       description: 'A fresh citrus-inspired palette that brings brightness and energy to any space.',
-      brushColor: '#FFFACD', // لون ليموني فاتح
+      color: '#FFFACD', // لون ليموني فاتح
       brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
-      productCode: 'N°2570'
+      productCode: 'N°2570',
+      brushColor: '#FFFACD' // لون الفرشاة مطابق للدائرة
     },
     {
       image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Ocean Breeze',
       description: 'Cool blue tones that evoke the serenity of coastal waters.',
-      brushColor: '#4A90E2',
-      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
-      productCode: 'N°2571'
+      color: '#4A90E2',
+      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc3114e0c7cae3be5bef_paint-roller-white%20orange.png',
+      productCode: 'N°2571',
+      brushColor: '#4A90E2'
     },
     {
       image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Mint Fresh',
       description: 'Revitalizing green hues for a natural and refreshing atmosphere.',
-      brushColor: '#98FF98',
-      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
-      productCode: 'N°2572'
+      color: '#98FF98',
+      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfc01f9b8f60323e5d811_paint-roller-white%20green%20dark.png',
+      productCode: 'N°2572',
+      brushColor: '#98FF98'
     },
   ];
 
@@ -98,7 +101,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Right Paint Brush Card - تصميم "Lemon Cloud" */}
+        {/* Right Paint Brush Card - تصميم معدل */}
         <div className="hidden lg:block flex-shrink-0 ml-16">
           <motion.a
             href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
@@ -110,29 +113,46 @@ const Hero = () => {
               border: '1px solid rgba(255, 255, 255, 0.25)'
             }}
           >
-            {/* Brush Image with 3D Transform */}
-            <motion.img
-              src={backgrounds[currentBg].brushImage}
-              alt="paint roller"
-              loading="lazy"
-              className="banner-small-image absolute w-32 h-auto"
-              animate={controls}
-              initial={{ 
-                x: 80,
-                y: 120,
-                rotateZ: -25,
-                z: 4
-              }}
+            {/* الدائرة الكبيرة */}
+            <div 
+              className="absolute w-48 h-48 rounded-full"
               style={{ 
-                transformStyle: 'preserve-3d',
-                right: '15%',
-                top: '15%'
+                backgroundColor: backgrounds[currentBg].color,
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)',
+                filter: 'blur(20px)',
+                opacity: 0.4
               }}
               aria-hidden="true"
             />
 
+            {/* الفرشاة فوق الدائرة */}
+            <motion.div
+              className="absolute"
+              style={{
+                top: '35%',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                zIndex: 10
+              }}
+              animate={controls}
+            >
+              <img
+                src={backgrounds[currentBg].brushImage}
+                alt="paint roller"
+                loading="lazy"
+                className="w-32 h-auto"
+                style={{
+                  filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
+                  transform: 'rotateZ(-25deg)'
+                }}
+                aria-hidden="true"
+              />
+            </motion.div>
+
             {/* Name and Product Code */}
-            <div className="name-product absolute bottom-8 left-8 text-white">
+            <div className="name-product absolute bottom-8 left-8 text-white z-20">
               <h6 className="heading-banner text-2xl font-medium mb-1">
                 {backgrounds[currentBg].title.split(' ')[0]}
               </h6>
@@ -141,21 +161,16 @@ const Hero = () => {
               </p>
             </div>
 
-            {/* Color Drop */}
+            {/* الدائرة الصغيرة */}
             <div 
-              className="absolute bottom-6 right-6 w-8 h-8 rounded-full"
+              className="absolute bottom-6 right-6 w-8 h-8 rounded-full z-20"
               style={{ 
-                backgroundColor: backgrounds[currentBg].brushColor,
-                boxShadow: `0 0 30px ${backgrounds[currentBg].brushColor}`,
+                backgroundColor: backgrounds[currentBg].color,
+                boxShadow: `0 0 30px ${backgrounds[currentBg].color}`,
                 filter: 'brightness(1.1)'
               }}
               aria-hidden="true"
             />
-            
-            {/* Cloud Effect */}
-            <div className="absolute inset-0 opacity-20" style={{
-              background: `radial-gradient(circle at 70% 80%, ${backgrounds[currentBg].brushColor}, transparent 70%)`
-            }} aria-hidden="true" />
           </motion.a>
         </div>
       </div>
