@@ -128,33 +128,36 @@ const Hero = () => {
             />
 
             {/* الفرشاة فوق الدائرة - حركة من تحت لفوق */}
-           <motion.div
-  className="absolute"
-  style={{
-    top: '35%',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    zIndex: 10,
-  }}
->
-  <div
-    className="w-32 h-32"
-    style={{
-      backgroundColor: backgrounds[currentBg].brushColor, // اللون الذي تريد تلوين الفرشاة به
-      WebkitMaskImage: `url(${backgrounds[currentBg].brushImage})`,
-      maskImage: `url(${backgrounds[currentBg].brushImage})`,
-      WebkitMaskRepeat: 'no-repeat',
-      maskRepeat: 'no-repeat',
-      WebkitMaskSize: 'contain',
-      maskSize: 'contain',
-      WebkitMaskPosition: 'center',
-      maskPosition: 'center',
-      transform: 'rotateZ(-30deg)',
-    }}
-    aria-hidden="true"
-  />
-</motion.div>
-
+            <motion.div
+              className="absolute"
+              style={{
+                top: '20%',
+                left: '40%',
+                transform: 'translateX(-50%)',
+                zIndex: 10,
+              }}
+              animate={{
+                y: [0, 50],
+              }}
+              transition={{
+                duration: 2,
+                ease: "easeInOut", 
+                repeat: Infinity,
+                repeatType: "mirror",
+              }}
+            >
+              <img
+                src={backgrounds[currentBg].brushImage}
+                alt="paint roller"
+                loading="lazy"
+                className="w-32 h-auto"
+                style={{
+                  filter: `drop-shadow(0 0 10px ${backgrounds[currentBg].brushColor})`,
+                  transform: 'rotateZ(-30deg)'
+                }}
+                aria-hidden="true"
+              />
+            </motion.div>
 
             {/* Name and Product Code */}
             <div className="name-product absolute bottom-8 left-8 text-white z-20">
