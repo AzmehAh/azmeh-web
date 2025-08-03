@@ -104,71 +104,70 @@ const Hero = () => {
         {/* Right Paint Brush Card - تصميم معدل */}
     {/* Right Paint Brush Card - تصميم معدل */}
 <div className="hidden lg:block flex-shrink-0 ml-16">
-  <motion.a
-    href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
-    animate={cardControls}
-    className="banner-block-image relative block w-80 h-96 rounded-2xl p-6 no-underline overflow-hidden"
+;
+
+<motion.a
+  href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
+  className="banner-block-image relative block w-80 h-96 rounded-2xl p-6 no-underline overflow-hidden cursor-pointer"
+  initial={{ 
+    x: -10, 
+    y: -20, 
+    z: 100, 
+    scale: 1, 
+    rotateZ: -30 
+  }}
+  animate={{ 
+    x: [ -4, -10, -4 ],   // حركة أفقية ذهاب وإياب خفيفة
+    y: [ -11, -20, -11 ], // حركة رأسية ذهاب وإياب خفيفة
+    z: [ 126, 100, 126 ], // حركة عمق (تقريب وإبعاد)
+    rotateZ: -30,
+    scale: 1,
+  }}
+  transition={{
+    duration: 4,
+    ease: "easeInOut",
+    repeat: Infinity,
+    repeatType: "mirror"
+  }}
+  whileHover={{
+    scale: 1.05,
+    rotateZ: -25,
+    transition: { duration: 0.3 }
+  }}
+  style={{
+    transformStyle: "preserve-3d"
+  }}
+>
+  <img
+    src={backgrounds[currentBg].brushImage}
+    alt="paint roller"
+    loading="lazy"
+    className="banner-small-image w-32 h-auto"
     style={{
-      backdropFilter: 'blur(12px)',
-      backgroundColor: 'rgba(255, 255, 255, 0.12)',
-      border: '1px solid rgba(255, 255, 255, 0.25)'
+      filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
+      transformStyle: "preserve-3d"
     }}
-  >
-    {/* الدائرة الكبيرة */}
-    <div 
-      className="absolute w-48 h-48 rounded-full"
-      style={{ 
-        backgroundColor: backgrounds[currentBg].color,
-        top: '30%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)'
-      }}
-      aria-hidden="true"
-    />
+  />
+  <div className="name-product absolute bottom-8 left-8 text-white z-20">
+    <h6 className="heading-banner hover:text-yellow-400">{backgrounds[currentBg].title}</h6>
+    <p className="text-sm opacity-90 tracking-wider">{backgrounds[currentBg].productCode}</p>
+  </div>
+  <div 
+    className="drops absolute bottom-6 right-6 w-8 h-8 rounded-full"
+    style={{ 
+      backgroundColor: backgrounds[currentBg].color,
+      boxShadow: `0 0 20px ${backgrounds[currentBg].color}`,
+      filter: 'brightness(1.1)'
+    }}
+    aria-hidden="true"
+  />
+</motion.a>
 
-    {/* الفرشاة فوق الدائرة - في المنتصف */}
-    <motion.div
-      className="absolute cursor-pointer"
-      style={{
-        top: '40%',
-        left: '30%',
-        transform: 'translate(-50%, -50%) rotateZ(-20deg)',  // حركنا مكان الفرشاة ودوّرناها هنا بدل مكان img
-        zIndex: 10,
-      }}
-      initial={{ y: 50 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 1, ease: "easeOut" }}
-      whileHover={{
-        y: [-10, 0], // حركة هزازة بسيطة صعودًا ثم نزولًا عند الـ hover
-        transition: { duration: 0.5, repeat: Infinity, repeatType: "mirror" }
-      }}
-    >
-      <img
-        src={backgrounds[currentBg].brushImage}
-        alt="paint roller"
-        loading="lazy"
-        className="w-32 h-auto"
-        style={{
-          filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`
-          // لا نضع هنا transform لأننا وضعناها في motion.div للسهولة
-        }}
-        aria-hidden="true"
-      />
-    </motion.div>
 
-    {/* Name and Product Code */}
-    <div className="name-product absolute bottom-8 left-8 text-white z-20">
-      <h6 className="heading-banner text-2xl font-medium mb-1">
-        {backgrounds[currentBg].title.split(' ')[0]}
-      </h6>
-      <p className="text-sm font-light opacity-90 tracking-wider">
-        {backgrounds[currentBg].productCode}
-      </p> 
-    </div>
 
-    {/* الدائرة الصغيرة - حذفتها كما طلبت */}
 
-  </motion.a>
+
+
 </div>
 
         </div>
