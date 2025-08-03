@@ -128,7 +128,8 @@ const Hero = () => {
             />
 
             {/* الفرشاة فوق الدائرة */}
-           src={backgrounds[currentBg].brushImage}
+            <motion.div
+               src={backgrounds[currentBg].brushImage}
               alt="paint roller"
               loading="lazy"
               className="banner-small-image absolute w-32 h-auto"
@@ -145,6 +146,7 @@ const Hero = () => {
                 top: '20%'
               }}
               aria-hidden="true"
+              />
             </motion.div>
 
             {/* Name and Product Code */}
