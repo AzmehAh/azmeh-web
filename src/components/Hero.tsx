@@ -117,7 +117,9 @@ const Hero = () => {
       </div>
     </div>
   </motion.div>
-</div>
+    </div>
+      </div>
+
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-2 z-20">
         <button
