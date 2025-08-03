@@ -132,7 +132,7 @@ const Hero = () => {
               className="absolute"
               style={{
                 top: '30%',
-                left: '45%',
+                left: '40%',
                 transform: 'translateX(-50%)',
                 zIndex: 10
               }}
