@@ -119,7 +119,7 @@ const Hero = () => {
       className="absolute w-48 h-48 rounded-full"
       style={{ 
         backgroundColor: backgrounds[currentBg].color,
-        top: '50%',
+        top: '30%',
         left: '50%',
         transform: 'translate(-50%, -50%)'
       }}
