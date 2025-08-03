@@ -4,7 +4,7 @@ import { motion, useAnimation } from 'framer-motion';
 
 const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
-  const controls = useAnimation();
+  const brushControls = useAnimation();
   const cardControls = useAnimation();
 
   const backgrounds = [
@@ -35,20 +35,20 @@ const Hero = () => {
   ];
 
   useEffect(() => {
-    // حركة الفرشاة (تأثير الطلاء)
-    controls.start({
+    // تحريك الفرشاة (تهتز وتنزل وترتفع مع ميل)
+    brushControls.start({
       y: [0, 30, 0],
       rotateZ: [-30, -15, -30],
       transition: { duration: 1.2, ease: 'easeInOut' },
     });
 
-    // حركة الكارد (تأثير الظهور)
+    // تحريك الكارد (يدخل من اليمين مع تلاشي)
     cardControls.start({
       opacity: [0, 1],
       x: [500, 0],
-      transition: { duration: 0.8, ease: 'easeOut' }
+      transition: { duration: 0.8, ease: 'easeOut' },
     });
-  }, [currentBg, controls, cardControls]);
+  }, [currentBg]);
 
   const nextSlide = () => {
     setCurrentBg((prev) => (prev + 1) % backgrounds.length);
@@ -98,7 +98,7 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Right Paint Brush Card - تم التعديل هنا */}
+        {/* Right Paint Brush Card */}
         <div className="hidden lg:block flex-shrink-0 ml-16">
           <motion.a
             href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
@@ -107,7 +107,7 @@ const Hero = () => {
             style={{
               backdropFilter: 'blur(10px)',
               backgroundColor: 'rgba(255, 255, 255, 0.1)',
-              border: '1px solid rgba(255, 255, 255, 0.2)'
+              border: '1px solid rgba(255, 255, 255, 0.2)',
             }}
           >
             {/* Brush Image with 3D Transform */}
@@ -116,17 +116,17 @@ const Hero = () => {
               alt="paint roller"
               loading="lazy"
               className="banner-small-image absolute w-32 h-auto"
-              animate={controls}
-              initial={{ 
+              animate={brushControls}
+              initial={{
                 x: 57,
                 y: 88,
                 rotateZ: -30,
-                z: 4
+                z: 4,
               }}
-              style={{ 
+              style={{
                 transformStyle: 'preserve-3d',
                 right: '20%',
-                top: '20%'
+                top: '20%',
               }}
               aria-hidden="true"
             />
@@ -142,11 +142,11 @@ const Hero = () => {
             </div>
 
             {/* Color Drop */}
-            <div 
+            <div
               className="drops absolute bottom-4 right-6 w-6 h-6 rounded-full"
-              style={{ 
+              style={{
                 backgroundColor: backgrounds[currentBg].brushColor,
-                boxShadow: `0 0 20px ${backgrounds[currentBg].brushColor}`
+                boxShadow: `0 0 20px ${backgrounds[currentBg].brushColor}`,
               }}
               aria-hidden="true"
             />
