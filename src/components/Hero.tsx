@@ -7,8 +7,7 @@ const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
   const controls = useAnimation();
   const cardControls = useAnimation();
-const Brush = ({ currentBg }) => {
-  const controls = useAnimation();
+
   const backgrounds = [
     {
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
@@ -58,7 +57,17 @@ const Brush = ({ currentBg }) => {
   const nextSlide = () => {
     setCurrentBg((prev) => (prev + 1) % backgrounds.length);
   };
-
+const Brush = ({ currentBg }) => {
+  const controls = useAnimation();useEffect(() => {
+    // عندما يتغير الخلفية، نفذ الحركة
+    controls.start({
+      y: [50, 0],
+      transition: {
+        duration: 1.5,
+        ease: "easeInOut"
+      }
+    });
+  }, [currentBg]); 
   const prevSlide = () => {
     setCurrentBg((prev) => (prev - 1 + backgrounds.length) % backgrounds.length);
   };
