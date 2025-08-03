@@ -149,7 +149,7 @@ const Hero = () => {
         src={backgrounds[currentBg].brushImage}
         alt="paint roller"
         loading="lazy"
-        className="w-32 h-auto"
+        className="w-40 h-auto"
         style={{
           
           transform: 'rotateZ(-30deg)'
