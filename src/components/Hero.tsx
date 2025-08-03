@@ -60,6 +60,7 @@ const Hero = () => {
   const prevSlide = () => {
     setCurrentBg((prev) => (prev - 1 + backgrounds.length) % backgrounds.length);
   };
+
 const Brush = ({ currentBg, backgrounds }) => {
   const controls = useAnimation();
 
@@ -73,6 +74,8 @@ const Brush = ({ currentBg, backgrounds }) => {
       },
     });
   }, [currentBg]);
+};
+
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900">
       {/* Background Images */}
