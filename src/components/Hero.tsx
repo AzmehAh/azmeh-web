@@ -180,7 +180,7 @@ const Hero = () => {
       <p className="text-sm font-light opacity-90 tracking-wider">
         {backgrounds[currentBg].productCode}
       </p>
-    </div>
+   
   </motion.a>
 </div>
         </div>
