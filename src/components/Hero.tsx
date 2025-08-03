@@ -102,87 +102,78 @@ const Hero = () => {
         </div>
 
         {/* Right Paint Brush Card - تصميم معدل */}
-       {/* Right Paint Brush Card - تصميم معدل */}
-<div className="hidden lg:block flex-shrink-0 ml-16">
-  <motion.a
-    href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
-    animate={cardControls}
-    className="banner-block-image relative block w-80 h-96 rounded-2xl p-6 no-underline overflow-hidden"
-    style={{
-      backdropFilter: 'blur(12px)',
-      backgroundColor: 'rgba(255, 255, 255, 0.12)',
-      border: '1px solid rgba(255, 255, 255, 0.25)'
-    }}
-  >
-    {/* الدائرة الكبيرة */}
-    <div 
-      className="absolute w-48 h-48 rounded-full transition-colors duration-500"
-      style={{ 
-        backgroundColor: backgrounds[currentBg].color,
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        filter: 'blur(24px)',
-        opacity: 0.35
-      }}
-      aria-hidden="true"
-    />
+        <div className="hidden lg:block flex-shrink-0 ml-16">
+          <motion.a
+            href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
+            animate={cardControls}
+            className="banner-block-image relative block w-80 h-96 rounded-2xl p-6 no-underline overflow-hidden"
+            style={{
+              backdropFilter: 'blur(12px)',
+              backgroundColor: 'rgba(255, 255, 255, 0.12)',
+              border: '1px solid rgba(255, 255, 255, 0.25)'
+            }}
+          >
+            {/* الدائرة الكبيرة */}
+            <div 
+              className="absolute w-48 h-48 rounded-full"
+              style={{ 
+                backgroundColor: backgrounds[currentBg].color,
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%)'
+             
+              
+              }}
+              aria-hidden="true"
+            />
 
-    {/* الفرشاة مع حركة من أسفل إلى أعلى */}
-    <motion.div
-      className="absolute"
-      style={{
-        top: '35%',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 10
-      }}
-      initial={{ y: 100, opacity: 0 }}
-      animate={{
-        y: 0,
-        opacity: 1,
-        transition: { 
-          type: 'spring',
-          damping: 10,
-          stiffness: 100,
-          delay: 0.3
-        }
-      }}
-      whileHover={{ y: -10 }}
-    >
-      <motion.img
-        src={backgrounds[currentBg].brushImage}
-        alt="paint roller"
-        loading="lazy"
-        className="w-32 h-auto"
-        style={{
-          filter: `drop-shadow(0 0 12px ${backgrounds[currentBg].brushColor})`,
-          transform: 'rotateZ(-20deg)'
-        }}
-        animate={{
-          rotateZ: [-20, -10, -20],
-          y: [0, 15, 0],
-          transition: {
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }
-        }}
-        aria-hidden="true"
-      />
-    </motion.div>
+            {/* الفرشاة فوق الدائرة */}
+            <motion.div
+              className="absolute"
+              style={{
+                top: '30%',
+                left: '40%',
+                transform: 'translateX(-50%)',
+                zIndex: 10
+              }}
+              animate={controls}
+            >
+              <img
+                src={backgrounds[currentBg].brushImage}
+                alt="paint roller"
+                loading="lazy"
+                className="w-32 h-auto"
+                style={{
+                  filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
+                  transform: 'rotateZ(-20deg)'
+                }}
+                aria-hidden="true"
+              />
+            </motion.div>
+ 
+            {/* Name and Product Code */}
+            <div className="name-product absolute bottom-8 left-8 text-white z-20">
+              <h6 className="heading-banner text-2xl font-medium mb-1">
+                {backgrounds[currentBg].title.split(' ')[0]}
+              </h6>
+              <p className="text-sm font-light opacity-90 tracking-wider">
+                {backgrounds[currentBg].productCode}
+              </p>
+            </div>
 
-    {/* Name and Product Code */}
-    <div className="name-product absolute bottom-8 left-8 text-white z-20">
-      <h6 className="heading-banner text-2xl font-medium mb-1">
-        {backgrounds[currentBg].title.split(' ')[0]}
-      </h6>
-      <p className="text-sm font-light opacity-90 tracking-wider">
-        {backgrounds[currentBg].productCode}
-      </p>
-    </div>
-  </motion.a> 
-</div>
+            {/* الدائرة الصغيرة */} 
+            <div 
+              className="absolute bottom-6 right-6 w-8 h-8 rounded-full z-20"
+              style={{ 
+                backgroundColor: backgrounds[currentBg].color,
+                boxShadow: `0 0 30px ${backgrounds[currentBg].color}`,
+                filter: 'brightness(1.1)'
+              }}
+              aria-hidden="true"
+            /> 
+          </motion.a>
+        </div>
+      </div> 
 
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-3 z-20">
