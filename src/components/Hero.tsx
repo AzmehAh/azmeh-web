@@ -163,7 +163,7 @@ const Hero = () => {
 
             
           </motion.a>
-        </div>
+     
       </div>
 
       {/* Navigation Arrows */}
