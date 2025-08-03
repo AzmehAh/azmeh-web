@@ -165,9 +165,11 @@ const BrushCard = ({ brush }) => {
         aria-hidden="true"
       />
     </motion.a>
-  
+  );
+};
 
-   </div>
+    </div>
+
         </div>
 
 
