@@ -92,42 +92,52 @@ const Hero = () => {
     transition={{ duration: 1, delay: 0.5 }}
   >
     <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl w-80 border border-white/40">
-      
-      {/* Brush inside colored circle */}
-      <div className="w-28 h-28 rounded-full mx-auto flex items-center justify-center shadow-md"
-           style={{ backgroundColor: backgrounds[currentBg].brushColor }}>
-        <motion.img 
+{/* Right Paint Brush */}
+<div className="hidden lg:block flex-shrink-0 ml-12">
+  <motion.div
+    initial={{ opacity: 0, x: 50 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 1, delay: 0.5 }}
+  >
+    <div className="relative bg-white/20 backdrop-blur-lg rounded-2xl p-6 shadow-xl w-80 border border-white/40">
+
+      {/* Brush image with tilt and animation */}
+      <div className="relative w-40 h-40 mx-auto perspective-1000">
+        <motion.img
           src={backgrounds[currentBg].brushImage}
           alt="paint roller"
-          className="w-20 h-auto"
-          animate={{ y: [0, -10, 0] }}
+          className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-auto"
+          animate={{ y: [0, -15, 0] }}
           transition={{
             duration: 2,
             repeat: Infinity,
             ease: "easeInOut"
           }}
           style={{
-            transform: `rotate(-30deg)`,
-            transformOrigin: 'center center',
+            transformOrigin: "center center",
+            transform: "rotateZ(-29deg)"
           }}
+          aria-hidden="true"
+          loading="lazy"
         />
       </div>
 
-      {/* Info row */}
-     <div className="mt-6">
-  <h6 className="text-lg text-white font-semibold mb-2 text-center">
-    {backgrounds[currentBg].title}
-  </h6>
-  <div className="flex justify-between items-center px-4">
-    <span className="text-white text-sm font-medium">Color Name</span>
-    <span className="text-white/70 text-xs">{backgrounds[currentBg].brushColor}</span>
-  </div>
-</div>
-
-
+      {/* Name and code block like your example */}
+      <div className="name-product mt-6 px-6 text-white" aria-hidden="true">
+        <h6 className="heading-banner hover mb-1 text-xl font-semibold">
+          {backgrounds[currentBg].title}
+        </h6>
+        <p className="without-margin height text-sm">
+          {/* You can replace this with actual code or number */}
+          N°{backgrounds[currentBg].brushColor.slice(1).toUpperCase().slice(0,4)}
+        </p>
+      </div>
+      
     </div>
   </motion.div>
 </div>
+
+
 
       </div>
 
