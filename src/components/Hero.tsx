@@ -13,7 +13,7 @@ const Hero = () => {
       title: 'Lemon Cloud',
       description: 'A fresh citrus-inspired palette that brings brightness and energy to any space.',
       color: '#4b3f72', // لون ليموني فاتح
-      brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
+      brushImage: 'https://i.postimg.cc/rFdMYHQp/Whats-App-Image-2025-08-03-at-4-27-35-PM.jpg',
       productCode: 'N°2570',
       brushColor: '#4b3f72' // لون الفرشاة مطابق للدائرة
     },
