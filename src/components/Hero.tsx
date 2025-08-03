@@ -179,11 +179,10 @@ const Hero = () => {
       </h6>
       <p className="text-sm font-light opacity-90 tracking-wider">
         {backgrounds[currentBg].productCode}
-      </p> 
+      </p>
     </div>
-  </motion.a>
+  </motion.a> 
 </div>
-        
 
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-3 z-20">
