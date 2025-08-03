@@ -115,32 +115,33 @@ const Hero = () => {
     }}
   >
     {/* الدائرة الكبيرة */}
-    <div 
+    <div  
       className="absolute w-48 h-48 rounded-full"
       style={{ 
         backgroundColor: backgrounds[currentBg].color,
-        top: '30%', 
+        top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)'
       }}
       aria-hidden="true"
     />
 
-    {/* الفرشاة فوق الدائرة - في المنتصف */}
+    {/* الفرشاة فوق الدائرة - حركة من تحت لفوق */}
     <motion.div
-      className="absolute cursor-pointer"
+      className="absolute"
       style={{
-        top: '40%',
-        left: '30%',
-        transform: 'translate(-50%, -50%) rotateZ(-20deg)',  // حركنا مكان الفرشاة ودوّرناها هنا بدل مكان img
+        left: '40%',
+        transform: 'translateX(-50%)',
         zIndex: 10,
       }}
-      initial={{ y: 50 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 1, ease: "easeOut" }}
-      whileHover={{
-        y: [-10, 0], // حركة هزازة بسيطة صعودًا ثم نزولًا عند الـ hover
-        transition: { duration: 0.5, repeat: Infinity, repeatType: "mirror" }
+      animate={{
+        y: [50, 0],   // تحرك من 50px تحت إلى مكانها الأصلي (0)
+      }}
+      transition={{
+        duration: 2,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "mirror",
       }}
     >
       <img
@@ -149,8 +150,8 @@ const Hero = () => {
         loading="lazy"
         className="w-32 h-auto"
         style={{
-          filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`
-          // لا نضع هنا transform لأننا وضعناها في motion.div للسهولة
+          filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
+          transform: 'rotateZ(-20deg)'
         }}
         aria-hidden="true"
       />
@@ -163,14 +164,13 @@ const Hero = () => {
       </h6>
       <p className="text-sm font-light opacity-90 tracking-wider">
         {backgrounds[currentBg].productCode}
-      </p> 
+      </p>
     </div>
 
     {/* الدائرة الصغيرة - حذفتها كما طلبت */}
 
   </motion.a>
 </div>
-
         </div>
 
 
