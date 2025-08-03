@@ -31,7 +31,7 @@ const Hero = () => {
       brushColor: '#E8E8E8',
       brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
       productCode: 'N°0512'
-    },
+    }, 
   ];
 
   useEffect(() => {
@@ -170,7 +170,7 @@ const Hero = () => {
         >
           <ChevronRight className="w-6 h-6" />
         </button>
-      </div> 
+      </div>
 
       {/* Slide Indicators */}
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex gap-3 z-20">
@@ -190,5 +190,4 @@ const Hero = () => {
 };
 
 export default Hero;
-
 
