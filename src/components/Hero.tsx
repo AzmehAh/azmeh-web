@@ -128,51 +128,35 @@ const Hero = () => {
 
     {/* الفرشاة فوق الدائرة - حركة من تحت لفوق */}
     <motion.div
-  className="absolute"
-  style={{
-    top: '28%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    zIndex: 10,
-  }}
-  animate={{
-    rotateZ: [-20, 20, -20],
-  }}
-  transition={{
-    duration: 2.5,
-    ease: "easeInOut",
-    repeat: Infinity,
-    repeatType: "mirror"
-  }}
->
-  <div
-    className="w-40 h-auto relative"
-    style={{
-      filter: `drop-shadow(0 4px 6px rgba(0,0,0,0.2))`
-    }}
-  >
-    <img
-      src={backgrounds[currentBg].brushImage}
-      alt="paint roller"
-      loading="lazy"
-      className="w-full h-auto"
+      className="absolute"
       style={{
-        transition: 'filter 0.5s ease-in-out'
+        top:'20%',
+        left: '40%',
+        transform: 'translateX(-50%)',
+        zIndex: 10,
       }}
-    />
-    {/* Overlay لتغيير لون الفرشاة بنفس لون الخلفية */}
-    <div
-      className="absolute inset-0"
-      style={{
-        backgroundColor: backgrounds[currentBg].brushColor,
-        mixBlendMode: 'multiply',
-        opacity: 0.85,
-        borderRadius: '0.25rem'
-      }}
-    />
-  </div>
-</motion.div>
-
+      animate={{
+        y: [0, 50],   // تحرك من 50px تحت إلى مكانها الأصلي (0)
+      }} 
+      transition={{
+        duration: 2, 
+        ease: "easeInOut",
+        repeat: Infinity, 
+        repeatType: "mirror",
+      }} 
+    >
+      <img
+        src={backgrounds[currentBg].brushImage}
+        alt="paint roller"
+        loading="lazy"
+        className="w-32 h-auto"
+        style={{
+          
+          transform: 'rotateZ(-30deg)'
+        }}
+        aria-hidden="true"
+      />
+    </motion.div>
 
     {/* Name and Product Code */}
     <div className="name-product absolute bottom-8 left-8 text-white z-20">
