@@ -7,7 +7,7 @@ const Hero = () => {
   const controls = useAnimation();
   const cardControls = useAnimation();
 
-  const backgrounds = [ 
+  const backgrounds = [
     {
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Lemon Cloud',
@@ -60,19 +60,7 @@ const Hero = () => {
   const prevSlide = () => {
     setCurrentBg((prev) => (prev - 1 + backgrounds.length) % backgrounds.length);
   };
-const Brush = ({ currentBg, backgrounds }) => {
-  const controls = useAnimation();
 
-  useEffect(() => {
-    // عند تغيير الخلفية أو تحميلها، شغل الحركة مرة واحدة
-    controls.start({
-      y: [50, 0, 20], // من تحت، لفوق، ثم ينزل شوي
-      transition: {
-        duration: 1.5,
-        ease: "easeInOut",
-      },
-    });
-  }, [currentBg]);
   return (
     <section className="relative h-screen flex items-center justify-center overflow-hidden bg-gray-900">
       {/* Background Images */}
@@ -139,15 +127,23 @@ const Brush = ({ currentBg, backgrounds }) => {
     />
 
     {/* الفرشاة فوق الدائرة - حركة من تحت لفوق */}
-     <motion.div
+    <motion.div
       className="absolute"
       style={{
-        top: '20%',
+        top:'20%',
         left: '40%',
         transform: 'translateX(-50%)',
         zIndex: 10,
       }}
-      animate={controls}
+      animate={{
+        y: [0, 50],   // تحرك من 50px تحت إلى مكانها الأصلي (0)
+      }}
+      transition={{
+        duration: 2,
+        ease: "easeInOut",
+        repeat: Infinity,
+        repeatType: "mirror",
+      }}
     >
       <img
         src={backgrounds[currentBg].brushImage}
@@ -155,12 +151,13 @@ const Brush = ({ currentBg, backgrounds }) => {
         loading="lazy"
         className="w-32 h-auto"
         style={{
-          // تم إزالة drop-shadow لإلغاء الإضاءة
+          filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
           transform: 'rotateZ(-30deg)'
         }}
         aria-hidden="true"
       />
     </motion.div>
+
     {/* Name and Product Code */}
     <div className="name-product absolute bottom-8 left-8 text-white z-20">
       <h6 className="heading-banner text-2xl font-medium mb-1">
