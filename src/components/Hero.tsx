@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { motion, useAnimation } from 'framer-motion';
-import { useEffect } from "react";
 
 const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
