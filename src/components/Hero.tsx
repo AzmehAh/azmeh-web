@@ -6,16 +6,17 @@ const Hero = () => {
   const [currentBg, setCurrentBg] = useState(0);
   const controls = useAnimation();
   const cardControls = useAnimation();
+  const textControls = useAnimation();
 
   const backgrounds = [
     {
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
       title: 'Lemon Cloud',
       description: 'A fresh citrus-inspired palette that brings brightness and energy to any space.',
-      color: '#FFFACD', // لون ليموني فاتح
+      color: '#FFFACD',
       brushImage: 'https://cdn.prod.website-files.com/65576d30478026e86cc17b29/655cfb60bbb70cd3cb60d696_paint-roller-%20greenpng.png',
       productCode: 'N°2570',
-      brushColor: '#FFFACD' // لون الفرشاة مطابق للدائرة
+      brushColor: '#FFFACD'
     },
     {
       image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop',
@@ -38,27 +39,47 @@ const Hero = () => {
   ];
 
   useEffect(() => {
-    // حركة الفرشاة (تأثير الطلاء)
-    controls.start({
-      y: [0, 30, 0],
-      rotateZ: [-25, -10, -25],
-      transition: { duration: 1.2, ease: 'easeInOut' },
-    });
+    // إعادة تعيين الحركات عند تغيير الشريحة
+    const runAnimations = async () => {
+      await textControls.start({
+        x: [-100, 0],
+        opacity: [0, 1],
+        transition: { duration: 0.8, ease: 'easeOut' }
+      });
 
-    // حركة الكارد (تأثير الظهور)
-    cardControls.start({
-      opacity: [0, 1],
-      x: [500, 0],
-      transition: { duration: 0.8, ease: 'easeOut' }
-    });
-  }, [currentBg, controls, cardControls]);
+      await cardControls.start({
+        x: [500, 0],
+        opacity: [0, 1],
+        transition: { duration: 0.8, ease: 'easeOut' }
+      });
+
+      await controls.start({
+        y: [100, 0],
+        opacity: [0, 1],
+        rotateZ: [-20, -10, -20],
+        transition: { 
+          y: { duration: 0.8, ease: 'easeOut' },
+          rotateZ: { duration: 2, repeat: Infinity, ease: 'easeInOut' }
+        }
+      });
+    };
+
+    runAnimations();
+  }, [currentBg, controls, cardControls, textControls]);
 
   const nextSlide = () => {
-    setCurrentBg((prev) => (prev + 1) % backgrounds.length);
+    // إخفاء العناصر قبل التغيير
+    textControls.start({ x: -100, opacity: 0 });
+    cardControls.start({ x: 500, opacity: 0 });
+    controls.start({ y: 100, opacity: 0 })
+      .then(() => setCurrentBg((prev) => (prev + 1) % backgrounds.length));
   };
 
   const prevSlide = () => {
-    setCurrentBg((prev) => (prev - 1 + backgrounds.length) % backgrounds.length);
+    textControls.start({ x: -100, opacity: 0 });
+    cardControls.start({ x: 500, opacity: 0 });
+    controls.start({ y: 100, opacity: 0 })
+      .then(() => setCurrentBg((prev) => (prev - 1 + backgrounds.length) % backgrounds.length));
   };
 
   return (
@@ -81,8 +102,12 @@ const Hero = () => {
       ))}
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 flex items-center justify-between h-full">
-        {/* Left Text Content */}
-        <div className="flex-1 max-w-2xl text-white">
+        {/* Left Text Content - حركة من اليسار */}
+        <motion.div 
+          className="flex-1 max-w-2xl text-white"
+          animate={textControls}
+          initial={{ x: -100, opacity: 0 }}
+        >
           <div className="transform transition-all duration-1000 translate-y-0 opacity-100">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight">
               {backgrounds[currentBg].title}
@@ -99,13 +124,14 @@ const Hero = () => {
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* Right Paint Brush Card - تصميم معدل */}
+        {/* Right Paint Brush Card - حركة من اليمين */}
         <div className="hidden lg:block flex-shrink-0 ml-16">
           <motion.a
             href={`/product/${backgrounds[currentBg].title.toLowerCase().replace(/\s+/g, '-')}`}
             animate={cardControls}
+            initial={{ x: 500, opacity: 0 }}
             className="banner-block-image relative block w-80 h-96 rounded-2xl p-6 no-underline overflow-hidden"
             style={{
               backdropFilter: 'blur(12px)',
@@ -115,42 +141,51 @@ const Hero = () => {
           >
             {/* الدائرة الكبيرة */}
             <div 
-              className="absolute w-48 h-48 rounded-full"
+              className="absolute w-48 h-48 rounded-full transition-colors duration-500"
               style={{ 
                 backgroundColor: backgrounds[currentBg].color,
                 top: '50%',
                 left: '50%',
-                transform: 'translate(-50%, -50%)'
-             
-              
+                transform: 'translate(-50%, -50%)',
+                filter: 'blur(24px)',
+                opacity: 0.35
               }}
               aria-hidden="true"
             />
 
-            {/* الفرشاة فوق الدائرة */}
+            {/* الفرشاة مع حركة من أسفل إلى أعلى */}
             <motion.div
               className="absolute"
               style={{
-                top: '30%',
-                left: '40%',
+                top: '35%',
+                left: '50%',
                 transform: 'translateX(-50%)',
                 zIndex: 10
               }}
               animate={controls}
+              initial={{ y: 100, opacity: 0 }}
             >
-              <img
+              <motion.img
                 src={backgrounds[currentBg].brushImage}
                 alt="paint roller"
                 loading="lazy"
                 className="w-32 h-auto"
                 style={{
-                  filter: `drop-shadow(0 0 8px ${backgrounds[currentBg].brushColor})`,
+                  filter: `drop-shadow(0 0 12px ${backgrounds[currentBg].brushColor})`,
                   transform: 'rotateZ(-20deg)'
+                }}
+                animate={{
+                  rotateZ: [-20, -10, -20],
+                  transition: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }
                 }}
                 aria-hidden="true"
               />
             </motion.div>
- 
+
             {/* Name and Product Code */}
             <div className="name-product absolute bottom-8 left-8 text-white z-20">
               <h6 className="heading-banner text-2xl font-medium mb-1">
@@ -160,20 +195,9 @@ const Hero = () => {
                 {backgrounds[currentBg].productCode}
               </p>
             </div>
-
-            {/* الدائرة الصغيرة */} 
-            <div 
-              className="absolute bottom-6 right-6 w-8 h-8 rounded-full z-20"
-              style={{ 
-                backgroundColor: backgrounds[currentBg].color,
-                boxShadow: `0 0 30px ${backgrounds[currentBg].color}`,
-                filter: 'brightness(1.1)'
-              }}
-              aria-hidden="true"
-            /> 
           </motion.a>
         </div>
-      </div> 
+      </div>
 
       {/* Navigation Arrows */}
       <div className="absolute bottom-8 right-8 flex gap-3 z-20">
@@ -198,7 +222,12 @@ const Hero = () => {
         {backgrounds.map((_, index) => (
           <button
             key={index}
-            onClick={() => setCurrentBg(index)}
+            onClick={() => {
+              textControls.start({ x: -100, opacity: 0 });
+              cardControls.start({ x: 500, opacity: 0 });
+              controls.start({ y: 100, opacity: 0 })
+                .then(() => setCurrentBg(index));
+            }}
             className={`w-3 h-3 rounded-full transition duration-300 ${
               index === currentBg ? 'bg-white' : 'bg-white/50'
             }`}
