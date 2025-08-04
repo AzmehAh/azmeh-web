@@ -105,7 +105,7 @@ const Hero = () => {
                 loading="lazy"
                 draggable={false}
               />
-
+ </motion.div>
               {/* غطاء داكن فقط عندما يكون العنصر مفعّل */}
               {isActive && (
                 <div className="absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-300" />
@@ -135,7 +135,7 @@ const Hero = () => {
                  
                 </div>
               </div>
-            </motion.div>
+           
           );
         })}
       </div>
