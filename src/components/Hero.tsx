@@ -60,12 +60,7 @@ const paintCategories = [
     description: "Tough coatings for factories and industrial environments.",
     image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
   },
-  {
-    id: "wood",
-    title: "Wood Paints",
-    description: "Protective and decorative finishes for wooden surfaces.",
-    image: "https://images.pexels.com/photos/33283968/pexels-photo-33283968.jpeg",
-  },
+ 
 ];
 
 const Hero = () => {
