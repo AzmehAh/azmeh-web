@@ -5,10 +5,13 @@ import { motion } from "framer-motion";
 // تضيف هذه الستايلات في نفس ملف JSX داخل <style> أو في CSS منفصل
 const style = `
 .typing-effect {
-  overflow: hidden; /* يمنع ظهور النص خارج الإطار */
-  white-space: nowrap; /* يمنع التفاف النص */
-
+  overflow: hidden;
+  /* white-space: nowrap; */ /* نحذف هذا السطر */
+  border-right: 2px solid white;
   animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
+  display: inline-block; /* ضروري */
+  max-width: 100%; /* يضمن عدم خروج النص */
+  word-wrap: break-word; /* يضمن الالتفاف */
 }
 
 @keyframes typing {
@@ -25,6 +28,7 @@ const style = `
     border-color: transparent;
   }
 }
+
 `;
 
 const paintCategories = [
