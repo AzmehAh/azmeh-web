@@ -88,15 +88,17 @@ const Hero = () => {
           const isActive = activeIndex === index;
 
           return (
-            <motion.div
-              key={category.id}
-              onClick={() => toggleActive(index)}
-              className="relative h-full cursor-pointer select-none overflow-hidden"
-              style={{
-                flex: isActive ? 4 : 1,
-                transition: "flex 0.5s ease",
-              }}
-            >
+           <motion.div
+  key={category.id}
+  onClick={() => toggleActive(index)}
+  className="relative h-full cursor-pointer select-none overflow-hidden"
+  style={{
+    flex: isActive ? 4 : 1,
+    transition: "flex 0.5s ease, transform 0.5s ease",
+    transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
+  }}
+>
+
               {/* صورة تغطي العنصر بالكامل */}
               <img
                 src={category.image}
