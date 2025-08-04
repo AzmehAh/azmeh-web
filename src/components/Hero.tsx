@@ -6,15 +6,15 @@ import { motion } from "framer-motion";
 const style = `
 .typing-effect {
   overflow: hidden; /* يمنع ظهور النص خارج الإطار */
-  
+  white-space: nowrap; /* يمنع التفاف النص */
 
   animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
 }
 
 @keyframes typing {
   from {
-    width: 0; 
-  }
+    width: 0;
+  } 
   to {
     width: 100%;
   }
@@ -78,7 +78,7 @@ const Hero = () => {
     setActiveIndex((current) => (current === index ? null : index));
   };
 
-  return ( 
+  return (
     <>
       {/* تضيف ستايل CSS */}
       <style>{style}</style>
