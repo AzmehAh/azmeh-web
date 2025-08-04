@@ -52,40 +52,51 @@ const Hero = () => {
   };
 
   return ( 
-   <div className="relative w-full h-screen overflow-visible"> {/* بدل overflow-hidden إلى overflow-visible */}
-  <div className="flex h-full">
-    {paintCategories.map((category, index) => {
-      const isActive = activeIndex === index;
-      
-      return (
-        <motion.div 
-          key={category.id}
-          className={`relative h-full cursor-pointer ${isActive ? 'flex-grow z-20' : 'flex-shrink z-10'}`}
-          initial={{ flex: 1 }}
-          animate={{ 
-            flex: isActive ? 5 : 1,
-            transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)',
-            marginLeft: '-25px',
-            marginRight: '-25px',
-          }}
-          style={{ transformOrigin: 'center center' }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          onMouseEnter={() => setActiveIndex(index)}
-          onMouseLeave={() => setActiveIndex(null)}
-        >
-          {!isActive && (
-            <div className="absolute inset-0  z-10" />
-          )}
+    <div className="relative w-full h-screen overflow-hidden">
+      <div className="flex h-full">
+        {paintCategories.map((category, index) => {
+          const isActive = activeIndex === index;
           
-          <motion.img
-            src={isActive && category.hoverImage ? category.hoverImage : category.image}
-            alt={category.title}
-            className="absolute inset-0 w-full h-full object-cover"
-            initial={{ scale: 1.1 }}
-            animate={{ scale: isActive ? 1 : 1.1 }}
-            transition={{ duration: 0.5 }}
-          />
-        
+          return (
+         <motion.div 
+  key={category.id}
+  className={`relative h-full cursor-pointer ${isActive ? 'z-20' : 'z-10'} transition-all duration-500`}
+  style={{ flex: isActive ? 1.2 : 1 }}
+  onMouseEnter={() => setActiveIndex(index)}
+  onMouseLeave={() => setActiveIndex(null)}
+>
+  {/* طبقة تظليل عند عدم النشاط */}
+  {!isActive && (
+    <div className="absolute inset-0 z-10 bg-black/30 pointer-events-none" />
+  )}
+
+  <motion.img
+    src={isActive && category.hoverImage ? category.hoverImage : category.image}
+    alt={category.title}
+    className="absolute inset-0 w-full h-full object-cover"
+    initial={{ scale: 1.1, translateX: 0 }}
+    animate={{
+      scale: isActive ? 1.15 : 1.1,
+      translateX: isActive ? '-10%' : '0%',
+    }}
+    transition={{ duration: 0.5 }}
+  />
+
+
+
+              {/* طبقة تظليل عند عدم النشاط */}
+              {!isActive && (
+                <div className="absolute inset-0  z-10" />
+              )}
+              
+              <motion.img
+  src={isActive && category.hoverImage ? category.hoverImage : category.image}
+  alt={category.title}
+  className="absolute inset-0 w-full h-full object-cover"
+  initial={{ scale: 1.1 }}
+  animate={{ scale: isActive ? 1 : 1.1 }}
+  transition={{ duration: 0.5 }}
+/>
 
               
               {/* المحتوى النصي */}
