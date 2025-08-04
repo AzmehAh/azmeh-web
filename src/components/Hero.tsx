@@ -91,7 +91,7 @@ const Hero = () => {
                 <motion.div
                   className="absolute top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white z-10 flex flex-col justify-center"
                   initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
+                 
                   exit={{ opacity: 0, x: 50 }}
                   transition={{ duration: 0.3 }}
                   style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
