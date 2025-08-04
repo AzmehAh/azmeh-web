@@ -103,9 +103,9 @@ const Hero = () => {
               <img
                 src={category.image}
                 alt={category.title}
-                className="w-full h-full object-cotain object-center absolute inset-0 pointer-events-none"
+                className="w-full h-full object-cover object-center absolute inset-0 pointer-events-none"
                 loading="lazy"
-                draggable={false}
+                draggable={false} 
               />
 
               {/* غطاء داكن فقط عندما يكون العنصر مفعّل */}
