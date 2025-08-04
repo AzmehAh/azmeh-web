@@ -68,7 +68,7 @@ const Hero = () => {
               }}
               style={{
                 transformOrigin: "left center",
-                minWidth: isActive ? "auto" : "120px",
+                minWidth: isActive ? "auto" : "170px",
               }}
               transition={{
                 duration: 0.5,
