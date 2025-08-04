@@ -96,8 +96,8 @@ const Hero = () => {
               />
 
               {/* طبقة تظليل وعنوان عمودي عند عدم النشاط */}
-              {!isActive && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center">
+              {!isActive && ( 
+                <div className="absolute inset-0 z-10 bg-black/40 flex items-center justify-center">
                   <p className="text-white text-lg font-semibold rotate-90 whitespace-nowrap tracking-widest">
                     {category.title}
                   </p>
