@@ -21,12 +21,14 @@ const paintCategories = [
     description: "Elegant and modern finishes for home and office interiors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
   },
-  {
-    id: "exterior",
-    title: "Exterior Paints",
-    description: "Weather-resistant coatings for long-term exterior protection.",
-    image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
-  }, 
+ {
+  id: "exterior",
+  title: "Exterior Paints",
+  description: "Weather-resistant coatings for long-term exterior protection.",
+  image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
+  hoverImage: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
+},
+
   {
     id: "industrial",
     title: "Industrial Paints",
@@ -73,15 +75,15 @@ const Hero = () => {
                 <div className="absolute inset-0  z-10" />
               )}
               
-              {/* الصورة */}
               <motion.img
-                src={category.image}
-                alt={category.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                initial={{ scale: 1.1 }}
-                animate={{ scale: isActive ? 1 : 1.1 }}
-                transition={{ duration: 0.5 }}
-              />
+  src={isActive && category.hoverImage ? category.hoverImage : category.image}
+  alt={category.title}
+  className="absolute inset-0 w-full h-full object-cover"
+  initial={{ scale: 1.1 }}
+  animate={{ scale: isActive ? 1 : 1.1 }}
+  transition={{ duration: 0.5 }}
+/>
+
               
               {/* المحتوى النصي */}
               {isActive && (
