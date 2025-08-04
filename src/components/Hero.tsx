@@ -7,7 +7,7 @@ const style = `
 .typing-effect {
   overflow: hidden;
   /* white-space: nowrap; */ /* نحذف هذا السطر */
-
+  border-right: 2px solid white;
   animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
   display: inline-block; /* ضروري */
   max-width: 100%; /* يضمن عدم خروج النص */
@@ -15,7 +15,7 @@ const style = `
 }
 
 @keyframes typing {
-  from {
+  from { 
     width: 0;
   }
   to {
