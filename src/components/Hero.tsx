@@ -65,6 +65,7 @@ const paintCategories = [
   },
 ];
 
+
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const navigate = useNavigate();
