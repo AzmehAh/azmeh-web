@@ -2,28 +2,20 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-// تضيف هذه الستايلات في نفس ملف JSX داخل <style> أو في CSS منفصل
 const style = ` 
 .typing-effect {
-  overflow: hidden; /* يمنع ظهور النص خارج الإطار */
-  white-space: nowrap; /* يمنع التفاف النص */
-
+  overflow: hidden;
+  white-space: nowrap;
   animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
 }
 
 @keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
+  from { width: 0; }
+  to { width: 100%; }
 }
 
 @keyframes blink-caret {
-  50% {
-    border-color: transparent;
-  }
+  50% { border-color: transparent; }
 }
 `;
 
@@ -80,26 +72,37 @@ const Hero = () => {
 
   return (
     <>
-      {/* تضيف ستايل CSS */}
       <style>{style}</style>
 
       <div className="relative w-full h-screen overflow-hidden flex">
         {paintCategories.map((category, index) => {
           const isActive = activeIndex === index;
+          const isBeforeActive = activeIndex !== null && index < activeIndex;
+          const isAfterActive = activeIndex !== null && index > activeIndex;
 
           return (
-           <motion.div
-  key={category.id}
-  onClick={() => toggleActive(index)}
-  className="relative h-full cursor-pointer select-none overflow-hidden"
-  style={{
-    flex: isActive ? 4 : 1,
-    transition: "flex 0.5s ease, transform 0.5s ease",
-    transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
-  }}
->
-
-              {/* صورة تغطي العنصر بالكامل */}
+            <motion.div
+              key={category.id}
+              onClick={() => toggleActive(index)}
+              className={`relative h-full cursor-pointer select-none overflow-hidden transform origin-left transition-all duration-500 ease-in-out ${
+                isActive ? "z-50" : "z-10"
+              }`}
+              style={{
+                flex: isActive ? 4 : 1,
+                transform: isActive 
+                  ? "rotate(0deg)" 
+                  : isBeforeActive 
+                    ? "rotate(-5deg)" 
+                    : "rotate(5deg)",
+                marginLeft: isBeforeActive ? "-20px" : "0",
+                marginRight: isAfterActive ? "-20px" : "0",
+              }}
+              initial={false}
+              animate={{
+                scale: isActive ? 1.02 : 1,
+              }}
+              transition={{ duration: 0.5 }}
+            >
               <img
                 src={category.image}
                 alt={category.title}
@@ -108,12 +111,10 @@ const Hero = () => {
                 draggable={false}
               />
 
-              {/* غطاء داكن فقط عندما يكون العنصر مفعّل */}
               {isActive && (
                 <div className="absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-300" />
               )}
 
-              {/* المحتوى النصي - يظهر فقط عند التفعيل */}
               <div
                 className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white ${
                   isActive ? "block pointer-events-auto" : "hidden pointer-events-none"
@@ -134,7 +135,6 @@ const Hero = () => {
                   >
                     Explore Products
                   </button>
-                 
                 </div>
               </div>
             </motion.div>
