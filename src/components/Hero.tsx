@@ -27,7 +27,42 @@ const style = `
 `;
 
 const paintCategories = [
-  // ... (بقية المصفوفة كما هي بدون تغيير)
+  {
+    id: "automotive",
+    title: "Automotive Paints",
+    description: "High-durability coatings with a glossy finish for vehicles.",
+    image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
+  }, 
+  {
+    id: "sports",
+    title: "Sports Field Paints",
+    description: "Specialized coatings designed for outdoor sports surfaces.",
+    image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
+  },
+  {
+    id: "interior",
+    title: "Interior Paints",
+    description: "Elegant and modern finishes for home and office interiors.",
+    image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+  },
+  {
+    id: "exterior",
+    title: "Exterior Paints",
+    description: "Weather-resistant coatings for long-term exterior protection.",
+    image: "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg",
+  },
+  {
+    id: "industrial",
+    title: "Industrial Paints",
+    description: "Tough coatings for factories and industrial environments.",
+    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
+  },
+  {
+    id: "wood",
+    title: "Wood Paints",
+    description: "Protective and decorative finishes for wooden surfaces.",
+    image: "https://images.pexels.com/photos/162557/wood-grain-wood-texture-background-162557.jpeg",
+  },
 ];
 
 const Hero = () => {
