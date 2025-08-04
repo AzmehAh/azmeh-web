@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 
 const paintCategories = [
   {
@@ -61,58 +61,57 @@ const Hero = () => {
         return (
           <motion.div
             key={category.id}
-            className="relative h-full cursor-pointer select-none"
-            layout
             onClick={() => toggleActive(index)}
+            className="relative h-full cursor-pointer select-none overflow-hidden"
             style={{
               flex: isActive ? 4 : 1,
-              // إزالة clipPath تماما
-              backgroundImage: `url(${category.image})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              position: "relative",
-              margin: 0,
-              padding: 0,
-              
-              overflow: 'hidden',
+              transition: "flex 0.5s ease",
             }}
-           
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-             {/* Overlay */}
-            <motion.div
-              className="absolute inset-0"
-              animate={{ backgroundColor: isActive ? "rgba(0,0,0,0.6)" : "rgba(0,0,0,0.3)" }}
-              transition={{ duration: 0.5 }}
+            {/* صورة تغطي العنصر بالكامل */}
+            <img
+              src={category.image}
+              alt={category.title}
+              className="w-full h-full object-cover absolute inset-0"
+              loading="lazy"
+              draggable={false}
             />
 
-            <AnimatePresence>
-              {isActive && (
-                <motion.div
-                  className="absolute top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white z-10 flex flex-col justify-center"
-                  initial={{ opacity: 0, x: 50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 50 }} 
-                  transition={{ duration: 0.3 }}
-                  style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
-                 >
-                  <h2 className="text-3xl font-extrabold mb-2">{category.title}</h2>
-                  <p className="mb-6">{category.description}</p>
-                    <div className="flex items-center">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleExplore(category.id);
-                      }}
-                      className="bg-white text-black px-5 py-2 rounded shadow hover:bg-gray-200 transition"
-                    >
-                      Explore Products
-                    </button>
-                   
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* غطاء داكن فقط عندما يكون العنصر مفعّل */}
+            {isActive && (
+              <div className="absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-300" />
+            )}
+
+            {/* المحتوى النصي - يظهر فقط عند التفعيل */}
+            <div
+              className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-1/3 text-white transition-opacity duration-300 ${
+                isActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+              }`}
+              style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
+            >
+              <h2 className="text-3xl font-extrabold mb-2">{category.title}</h2>
+              <p className="mb-6">{category.description}</p>
+              <div className="flex items-center">
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleExplore(category.id);
+                  }}
+                  className="bg-white text-black px-5 py-2 rounded shadow hover:bg-gray-200 transition"
+                >
+                  Explore Products
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setActiveIndex(null);
+                  }}
+                  className="ml-4 px-3 py-2 border border-white rounded text-white hover:bg-white hover:text-black transition text-sm"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
           </motion.div>
         );
       })}
