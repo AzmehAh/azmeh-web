@@ -68,14 +68,14 @@ const Hero = () => {
               transition: "flex 0.5s ease",
             }}
           >
-            {/* صورة تغطي العنصر بالكامل */}
-            <img
-              src={category.image}
-              alt={category.title}
-              className="w-full h-full object-cover absolute inset-0"
-              loading="lazy"
-              draggable={false}
-            />
+           <img
+  src={category.image}
+  alt={category.title}
+  className="w-full h-full object-cover object-center absolute inset-0 pointer-events-none hover:scale-100"
+  loading="lazy"
+  draggable={false}
+/>
+
 
             {/* غطاء داكن فقط عندما يكون العنصر مفعّل */}
             {isActive && (
