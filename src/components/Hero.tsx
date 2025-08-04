@@ -64,8 +64,8 @@ const Hero = () => {
               initial={{ flex: 1 }}
               animate={{ 
                 flex: isActive ? 5 : 1,
-                transform: isActive ? 'rotate(-5deg)' : 'rotate(-5deg)'
-              }}
+                transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)'
+              }} 
               transition={{ duration: 0.5 }}
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
