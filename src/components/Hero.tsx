@@ -7,6 +7,7 @@ const style = `
   overflow: hidden;
   white-space: nowrap;
   animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
+  border-right: 2px solid white;
 }
 
 @keyframes typing {
@@ -18,10 +19,47 @@ const style = `
   50% { border-color: transparent; }
 }
 
-@media (max-width: 768px) {
+/* تحسينات للشاشات المتوسطة */
+@media (max-width: 1024px) {
   .typing-effect {
     white-space: normal;
     animation: none;
+    border-right: none;
+    font-size: 1.25rem; /* حجم خط أكبر قليلاً */
+    line-height: 1.4;
+  }
+  .text-container {
+    width: 90% !important; /* أعرض النص قليلاً */
+    right: 5% !important;  /* اجعل النص أقرب للمنتصف */
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+}
+
+/* تحسينات للشاشات الصغيرة والموبايل */
+@media (max-width: 640px) {
+  .typing-effect {
+    white-space: normal;
+    animation: none;
+    border-right: none;
+    font-size: 1.4rem; /* خط أكبر للموبايل */
+    line-height: 1.5;
+  }
+  .text-container {
+    width: 95% !important;
+    right: 2.5% !important;
+    top: 55% !important;
+    transform: translateY(-55%) !important;
+    padding: 1rem;
+    background: rgba(0,0,0,0.5);
+    border-radius: 8px;
+  }
+  h2 {
+    font-size: 1.8rem !important;
+  }
+  button {
+    font-size: 1rem !important;
+    padding: 0.75rem 1.5rem !important;
   }
 }
 `;
@@ -65,7 +103,6 @@ const paintCategories = [
   },
 ];
 
-
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const navigate = useNavigate();
@@ -108,7 +145,7 @@ const Hero = () => {
               )}
 
               <div
-                className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white ${
+                className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white text-container ${
                   isActive ? "block pointer-events-auto" : "hidden pointer-events-none"
                 }`}
                 style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
