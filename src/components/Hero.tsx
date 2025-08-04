@@ -2,40 +2,13 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-// CSS لتأثير التيبنج (typing effect)
-const style = ` 
-.typing-effect {
-  overflow: hidden; /* يمنع ظهور النص خارج الإطار */
-  white-space: nowrap; /* يمنع التفاف النص */
-  border-right: 2px solid white; /* مؤشر الكتابة */
-  animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
-  width: fit-content;
-  display: inline-block;
-}
-
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%; 
-  }
-}
-
-@keyframes blink-caret {
-  50% {
-    border-color: transparent;
-  }
-}
-`;
-
 const paintCategories = [
   {
     id: "automotive",
     title: "Automotive Paints",
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
-  }, 
+  },
   {
     id: "sports",
     title: "Sports Field Paints",
@@ -60,82 +33,59 @@ const paintCategories = [
     description: "Tough coatings for factories and industrial environments.",
     image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
   },
- 
 ];
 
 const Hero = () => {
-  const [activeIndex, setActiveIndex] = useState(null);
   const navigate = useNavigate();
+  const [hovered, setHovered] = useState(null);
 
-  const handleExplore = (id) => {
+  const handleNavigate = (id) => {
     navigate(`/products?category=${id}`);
   };
 
   return (
-    <>
-      {/* إضافة ستايلات CSS */}
-      <style>{style}</style>
-
-      <div className="relative w-full h-screen overflow-hidden flex">
-        {paintCategories.map((category, index) => {
-          const isActive = activeIndex === index;
-
-          return (
-            <motion.div
-              key={category.id}
-              onMouseEnter={() => setActiveIndex(index)}  // فتح عند مرور الماوس
-              onMouseLeave={() => setActiveIndex(null)}   // إغلاق عند ابتعاد الماوس
-              className="relative h-full cursor-pointer select-none overflow-hidden"
-              style={{
-                flex: isActive ? 4 : 1,
-                transition: "flex 0.5s ease, transform 0.5s ease",
-                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)", // ميلان لليسار
-                zIndex: isActive ? 10 : 1,
+    <div className="w-full h-screen overflow-hidden flex flex-row">
+      {paintCategories.map((category, index) => (
+        <motion.div
+          key={category.id}
+          onMouseEnter={() => setHovered(index)}
+          onMouseLeave={() => setHovered(null)}
+          className="relative h-full flex-1 group transition-all duration-500 ease-in-out cursor-pointer"
+          style={{
+            transform: hovered === index ? "skewY(0deg)" : "skewY(-3deg)",
+            zIndex: hovered === index ? 10 : 1,
+          }}
+        >
+          <img
+            src={category.image}
+            alt={category.title}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+          <div
+            className={`absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center items-start p-8 transition-opacity duration-500 ${
+              hovered === index ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <h2 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
+              {category.title}
+            </h2>
+            <p className="text-white text-lg mb-6 max-w-md drop-shadow">
+              {category.description}
+            </p>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                handleNavigate(category.id);
               }}
+              className="bg-white text-black font-semibold px-6 py-2 rounded shadow hover:bg-gray-200 transition"
             >
-              <img
-                src={category.image}
-                alt={category.title}
-                className="w-full h-full object-cover object-center absolute inset-0 pointer-events-none"
-                loading="lazy"
-                draggable={false}
-                style={{
-                  transform: isActive ? "scale(1)" : "scale(1.1)",
-                  transition: "transform 0.5s ease",
-                }}
-              />
-              {isActive && (
-                <div className="absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-300" />
-              )}
-              <div
-                className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white ${
-                  isActive ? "block pointer-events-auto" : "hidden pointer-events-none"
-                }`}
-                style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
-              >
-                <h2 className="text-3xl font-extrabold mb-2">{category.title}</h2>
-                <p className={`mb-6 ${isActive ? "typing-effect" : ""}`}>
-                  {category.description}
-                </p>
-                <div className="flex items-center">
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleExplore(category.id);
-                    }}
-                    className="bg-white text-black px-5 py-2 rounded shadow hover:bg-gray-200 transition"
-                  >
-                    Explore Products
-                  </button>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
-    </>
+              Explore Products
+            </button>
+          </div>
+        </motion.div>
+      ))}
+    </div>
   );
 };
 
 export default Hero;
-
