@@ -84,7 +84,7 @@ const Hero = () => {
 
             {/* المحتوى النصي - يظهر فقط عند التفعيل */}
             <div
-              className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-1/3 text-white transition-opacity duration-300 ${
+              className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white transition-opacity duration-300 ${
                 isActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
               }`}
               style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
