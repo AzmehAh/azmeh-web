@@ -58,7 +58,7 @@ const Hero = () => {
           const isActive = activeIndex === index;
           
           return (
-         <motion.div 
+    <motion.div 
   key={category.id}
   className={`relative h-full cursor-pointer ${isActive ? 'z-20' : 'z-10'} transition-all duration-500`}
   style={{ flex: isActive ? 1.2 : 1 }}
@@ -81,22 +81,7 @@ const Hero = () => {
     }}
     transition={{ duration: 0.5 }}
   />
-
-
-
-              {/* طبقة تظليل عند عدم النشاط */}
-              {!isActive && (
-                <div className="absolute inset-0  z-10" />
-              )}
-              
-              <motion.img
-  src={isActive && category.hoverImage ? category.hoverImage : category.image}
-  alt={category.title}
-  className="absolute inset-0 w-full h-full object-cover"
-  initial={{ scale: 1.1 }}
-  animate={{ scale: isActive ? 1 : 1.1 }}
-  transition={{ duration: 0.5 }}
-/>
+</motion.div>
 
               
               {/* المحتوى النصي */}
