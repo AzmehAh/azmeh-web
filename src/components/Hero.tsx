@@ -39,7 +39,7 @@ const paintCategories = [
     id: "wood",
     title: "Wood Paints",
     description: "Protective and decorative finishes for wooden surfaces.",
-    image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
+    image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
   },
 ];
 
