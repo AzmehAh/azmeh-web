@@ -58,18 +58,23 @@ const Hero = () => {
           const isActive = activeIndex === index;
           
           return (
-            <motion.div
-              key={category.id}
-              className={`relative h-full cursor-pointer ${isActive ? 'flex-grow' : 'flex-shrink'}`}
-              initial={{ flex: 1 }}
-              animate={{ 
-                flex: isActive ? 5 : 1,
-                transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)'
-              }} 
-              transition={{ duration: 0.5 }}
-               onMouseEnter={() => setActiveIndex(index)}
-              onMouseLeave={() => setActiveIndex(null)}
-            >
+           <motion.div
+  key={category.id}
+  className={`relative h-full cursor-pointer ${isActive ? 'flex-grow' : 'flex-shrink'}`}
+  initial={{ flex: 1 }}
+  animate={{ 
+    flex: isActive ? 5 : 1,
+    transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)',
+    marginLeft: isActive ? '0' : '-20px', // إزاحة جانبية لتعويض الميلان
+    marginRight: isActive ? '0' : '-20px' // إزاحة جانبية لتعويض الميلان
+  }} 
+  transition={{ duration: 0.5 }}
+  onMouseEnter={() => setActiveIndex(index)}
+  onMouseLeave={() => setActiveIndex(null)}
+  style={{
+    transformOrigin: 'center center' // نقطة ارتكاز التحويل في المنتصف
+  }}
+>
               {/* طبقة تظليل عند عدم النشاط */}
               {!isActive && (
                 <div className="absolute inset-0  z-10" />
