@@ -66,23 +66,26 @@ const Hero = () => {
             onClick={() => toggleActive(index)}
             style={{
               flex: isActive ? 4 : 1,
-              clipPath: "polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%)",
+              // إزالة clipPath تماما
               backgroundImage: `url(${category.image})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
               position: "relative",
-              margin: 0, // إزالة أي هامش لتقليل الفراغات بين الصور
+              margin: 0,
               padding: 0,
+              borderRadius: '8px', // لمسة جمال بدون قص ميل
+              overflow: 'hidden',
             }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            {/* Overlay with stronger opacity on active */}
+            {/* Overlay */}
             <motion.div
               className="absolute inset-0"
               animate={{ backgroundColor: isActive ? "rgba(0,0,0,0.6)" : "rgba(0,0,0,0.3)" }}
               transition={{ duration: 0.5 }}
             />
 
-            {/* Content container - وضع النص بجانب، منتصف يمين */}
             <AnimatePresence>
               {isActive && (
                 <motion.div
@@ -105,8 +108,16 @@ const Hero = () => {
                     >
                       Explore Products
                     </button>
-                    {/* Close button بشكل أقل بروز */}
-                   
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveIndex(null);
+                      }}
+                      className="ml-4 px-3 py-2 border border-white rounded text-white hover:bg-white hover:text-black transition text-sm"
+                      aria-label="Close"
+                    >
+                      ×
+                    </button>
                   </div>
                 </motion.div>
               )}
@@ -119,4 +130,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
