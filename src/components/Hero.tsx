@@ -71,7 +71,8 @@ const Hero = () => {
               backgroundSize: "cover",
               backgroundPosition: "center",
               position: "relative",
-              margin: 0,
+              margin: 0, // إزالة أي هامش لتقليل الفراغات بين الصور
+              padding: 0,
             }}
           >
             {/* Overlay with stronger opacity on active */}
@@ -81,38 +82,41 @@ const Hero = () => {
               transition={{ duration: 0.5 }}
             />
 
-            {/* Content container */}
+            {/* Content container - وضع النص بجانب، منتصف يمين */}
             <AnimatePresence>
               {isActive && (
                 <motion.div
-                  className="absolute bottom-8 left-8 right-8 text-white z-10"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 20 }}
+                  className="absolute top-1/2 right-8 transform -translate-y-1/2 w-1/3 text-white z-10 flex flex-col justify-center"
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 50 }}
                   transition={{ duration: 0.3 }}
                   style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
                 >
                   <h2 className="text-3xl font-extrabold mb-2">{category.title}</h2>
                   <p className="mb-6">{category.description}</p>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleExplore(category.id);
-                    }}
-                    className="bg-white text-black px-5 py-2 rounded shadow hover:bg-gray-200 transition"
-                  >
-                    Explore Products
-                  </button>
-                  {/* Close button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setActiveIndex(null);
-                    }}
-                    className="ml-4 px-3 py-2 border border-white rounded text-white hover:bg-white hover:text-black transition"
-                  >
-                    Close
-                  </button>
+                  <div className="flex items-center">
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleExplore(category.id);
+                      }}
+                      className="bg-white text-black px-5 py-2 rounded shadow hover:bg-gray-200 transition"
+                    >
+                      Explore Products
+                    </button>
+                    {/* Close button بشكل أقل بروز */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveIndex(null);
+                      }}
+                      className="ml-4 px-3 py-2 border border-white rounded text-white hover:bg-white hover:text-black transition text-sm"
+                      aria-label="Close"
+                    >
+                      ×
+                    </button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
@@ -124,3 +128,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
