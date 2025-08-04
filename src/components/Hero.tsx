@@ -7,7 +7,7 @@ const style = `
 .typing-effect {
   overflow: hidden; /* يمنع ظهور النص خارج الإطار */
   white-space: nowrap; /* يمنع التفاف النص */
-  border-right: 2px solid white; /* مؤشر وميضي */
+
   animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
 }
 
