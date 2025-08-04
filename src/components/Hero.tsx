@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 // تضيف هذه الستايلات في نفس ملف JSX داخل <style> أو في CSS منفصل
-const style = `
+const style = ` 
 .typing-effect {
   overflow: hidden; /* يمنع ظهور النص خارج الإطار */
-
+  white-space: nowrap; /* يمنع التفاف النص */
 
   animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
 }
