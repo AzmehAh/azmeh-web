@@ -66,6 +66,7 @@ const Hero = () => {
             style={{
               flex: isActive ? 4 : 1,
               transition: "flex 0.5s ease",
+              clipPath: "polygon(0 0, 100% 0, 95% 100%, 0% 100%)", // ميل من اليمين فقط
             }}
           >
             {/* صورة تغطي العنصر بالكامل */}
@@ -77,12 +78,12 @@ const Hero = () => {
               draggable={false}
             />
 
-            {/* غطاء داكن فقط عندما يكون العنصر مفعّل */}
+            {/* تغطية سوداء شفافة عند الفتح فقط */}
             {isActive && (
               <div className="absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-300" />
             )}
 
-            {/* المحتوى النصي - يظهر فقط عند التفعيل */}
+            {/* المحتوى النصي يظهر فقط عند التفعيل */}
             <div
               className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-1/3 text-white transition-opacity duration-300 ${
                 isActive ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
