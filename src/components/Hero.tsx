@@ -68,10 +68,10 @@ const Hero = () => {
               }}
               style={{
                 transformOrigin: "left center",
-                minWidth: isActive ? "auto" : "150px",
+                minWidth: isActive ? "auto" : "120px",
               }}
               transition={{
-                duration: 0.5,
+                duration:  0.5,
                 ease: "easeInOut",
               }}
               onMouseEnter={() => setActiveIndex(index)}
