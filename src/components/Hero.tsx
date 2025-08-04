@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const paintCategories = [
   {
@@ -12,80 +11,85 @@ const paintCategories = [
   {
     id: "sports",
     title: "Sports Field Paints",
-    description: "Specialized coatings designed for outdoor sports surfaces.",
+    description: "Specialized coatings for sports surfaces.",
     image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
   },
   {
     id: "interior",
     title: "Interior Paints",
-    description: "Elegant and modern finishes for home and office interiors.",
+    description: "Modern finishes for home interiors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
   },
   {
     id: "exterior",
     title: "Exterior Paints",
-    description: "Weather-resistant coatings for long-term exterior protection.",
+    description: "Weather-resistant coatings for outdoor walls.",
     image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
-  },
-  {
-    id: "industrial",
-    title: "Industrial Paints",
-    description: "Tough coatings for factories and industrial environments.",
-    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
   },
 ];
 
 const Hero = () => {
   const navigate = useNavigate();
-  const [hovered, setHovered] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(null);
 
-  const handleNavigate = (id) => {
+  const handleExplore = (id) => {
     navigate(`/products?category=${id}`);
   };
 
   return (
-    <div className="w-full h-screen overflow-hidden flex flex-row">
-      {paintCategories.map((category, index) => (
-        <motion.div
-          key={category.id}
-          onMouseEnter={() => setHovered(index)}
-          onMouseLeave={() => setHovered(null)}
-          className="relative h-full flex-1 group transition-all duration-500 ease-in-out cursor-pointer"
-          style={{
-            transform: hovered === index ? "skewY(0deg)" : "skewY(-3deg)",
-            zIndex: hovered === index ? 10 : 1,
-          }}
-        >
-          <img
-            src={category.image}
-            alt={category.title}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          />
+    <div className="w-full h-screen flex overflow-hidden bg-black">
+      {paintCategories.map((category, index) => {
+        const isActive = index === activeIndex;
+
+        return (
           <div
-            className={`absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center items-start p-8 transition-opacity duration-500 ${
-              hovered === index ? "opacity-100" : "opacity-0"
-            }`}
+            key={category.id}
+            className="relative group cursor-pointer transition-all duration-500 ease-in-out"
+            style={{
+              flex: 1,
+              overflow: "hidden",
+              transform: isActive ? "skewX(0deg)" : "skewX(-8deg)",
+              transformOrigin: "bottom left",
+            }}
+            onMouseEnter={() => setActiveIndex(index)}
+            onMouseLeave={() => setActiveIndex(null)}
           >
-            <h2 className="text-3xl font-bold text-white mb-4 drop-shadow-lg">
-              {category.title}
-            </h2>
-            <p className="text-white text-lg mb-6 max-w-md drop-shadow">
-              {category.description}
-            </p>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleNavigate(category.id);
+            <div
+              className="w-full h-full"
+              style={{
+                transform: isActive ? "skewX(0deg)" : "skewX(8deg)",
+                transformOrigin: "bottom left",
               }}
-              className="bg-white text-black font-semibold px-6 py-2 rounded shadow hover:bg-gray-200 transition"
             >
-              Explore Products
-            </button>
+              <img
+                src={category.image}
+                alt={category.title}
+                className="w-full h-full object-cover"
+                draggable={false}
+              />
+              {isActive && (
+                <div className="absolute inset-0 bg-black bg-opacity-60 text-white p-6 flex flex-col justify-center">
+                  <h2 className="text-2xl font-bold mb-2">{category.title}</h2>
+                  <p className="mb-4">{category.description}</p>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleExplore(category.id);
+                    }}
+                    className="bg-white text-black px-5 py-2 rounded hover:bg-gray-200"
+                  >
+                    Explore
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </motion.div>
-      ))}
+        );
+      })}
     </div>
   );
 };
 
 export default Hero;
+
+
