@@ -58,7 +58,7 @@ const Hero = () => {
           return (
             <motion.div
               key={category.id}
-              className={`relative h-full cursor-pointer overflow-hidden ${isActive ? 'flex-grow' : 'flex-shrink'}`}
+              className={`relative h-full cursor-pointer ${isActive ? 'flex-grow' : 'flex-shrink'}`}
               initial={{ flex: 1 }}
               animate={{ 
                 flex: isActive ? 5 : 1,
