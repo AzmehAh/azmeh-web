@@ -35,16 +35,11 @@ const paintCategories = [
   },
   {
     id: "wood",
-    title: "Wood Paints",
+    title: "Wood Paints", 
     description: "Protective and decorative finishes for wooden surfaces.",
     image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
   },
-   {
-    id: "automotive",
-    title: "Automotive Paints",
-    description: "High-durability coatings with a glossy finish for vehicles.",
-    image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
-  }, 
+  
 ];
 
 const Hero = () => {
