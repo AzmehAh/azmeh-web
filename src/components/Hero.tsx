@@ -78,8 +78,9 @@ const Hero = () => {
     setActiveIndex((current) => (current === index ? null : index));
   };
 
-  return (
+  return ( 
     <>
+      {/* تضيف ستايل CSS */}
       <style>{style}</style>
 
       <div className="relative w-full h-screen overflow-hidden flex">
@@ -87,7 +88,7 @@ const Hero = () => {
           const isActive = activeIndex === index;
 
           return (
-            <div
+            <motion.div
               key={category.id}
               onClick={() => toggleActive(index)}
               className="relative h-full cursor-pointer select-none overflow-hidden"
@@ -96,6 +97,7 @@ const Hero = () => {
                 transition: "flex 0.5s ease",
               }}
             >
+              {/* صورة تغطي العنصر بالكامل */}
               <img
                 src={category.image}
                 alt={category.title}
@@ -104,13 +106,17 @@ const Hero = () => {
                 draggable={false}
               />
 
+              {/* غطاء داكن فقط عندما يكون العنصر مفعّل */}
               {isActive && (
                 <div className="absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-300" />
               )}
 
+              {/* المحتوى النصي - يظهر فقط عند التفعيل */}
               <div
-                className={`absolute z-10 top-1/2 right-8 w-[80%] text-white pointer-events-auto`}
-                style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)", transform: "translateY(-50%)" }}
+                className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white ${
+                  isActive ? "block pointer-events-auto" : "hidden pointer-events-none"
+                }`}
+                style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
               >
                 <h2 className="text-3xl font-extrabold mb-2">{category.title}</h2>
                 <p className={`mb-6 ${isActive ? "typing-effect" : ""}`}>
@@ -126,9 +132,10 @@ const Hero = () => {
                   >
                     Explore Products
                   </button>
+                 
                 </div>
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
