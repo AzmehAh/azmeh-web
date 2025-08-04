@@ -108,16 +108,7 @@ const Hero = () => {
                     >
                       Explore Products
                     </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setActiveIndex(null);
-                      }}
-                      className="ml-4 px-3 py-2 border border-white rounded text-white hover:bg-white hover:text-black transition text-sm"
-                      aria-label="Close"
-                    >
-                      ×
-                    </button>
+                   
                   </div>
                 </motion.div>
               )}
