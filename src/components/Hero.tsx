@@ -58,7 +58,7 @@ const Hero = () => {
           const isActive = activeIndex === index;
           
           return (
-          <motion.div
+         <motion.div
   key={category.id}
   className={`relative h-full cursor-pointer ${isActive ? 'flex-grow' : 'flex-shrink'}`}
   initial={{ flex: 1 }}
@@ -72,8 +72,12 @@ const Hero = () => {
   }}
   style={{
     transformOrigin: 'center center',
+  transform: 'none' // إضافة هذه السطر لضبط التحويل الابتدائي
   }}
-  transition={{ duration: 0.5 }}
+  transition={{ 
+    duration: 0.5,
+    ease: "easeInOut" // لجعل الحركة أكثر سلاسة
+  }}
   onMouseEnter={() => setActiveIndex(index)}
   onMouseLeave={() => setActiveIndex(null)}
 >
