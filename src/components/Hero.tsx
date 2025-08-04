@@ -73,7 +73,7 @@ const Hero = () => {
               position: "relative",
               margin: 0,
               padding: 0,
-              borderRadius: '8px', // لمسة جمال بدون قص ميل
+              
               overflow: 'hidden',
             }}
            
