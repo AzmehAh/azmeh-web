@@ -3,30 +3,47 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const style = `
-.text-description {
-  overflow-wrap: break-word;
-  white-space: normal;
-  font-size: 1.2rem;
-  line-height: 1.5;
-  border: none; /* لا يوجد مؤشر كتابة */
-  /* بدون أي حركة */
+.typing-effect {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
+  border-right: 2px solid white;
 }
 
+@keyframes typing { 
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink-caret {
+  50% { border-color: transparent; }
+}
+
+/* تحسينات للشاشات المتوسطة */
 @media (max-width: 1024px) {
-  .text-description {
-    font-size: 1.25rem;
+  .typing-effect {
+    white-space: normal;
+    animation: none;
+    border-right: none;
+    font-size: 1.25rem; /* حجم خط أكبر قليلاً */
+    line-height: 1.4;
   }
   .text-container {
-    width: 90% !important;
-    right: 5% !important;
+    width: 90% !important; /* أعرض النص قليلاً */
+    right: 5% !important;  /* اجعل النص أقرب للمنتصف */
     top: 50% !important;
     transform: translateY(-50%) !important;
   }
 }
 
+/* تحسينات للشاشات الصغيرة والموبايل */
 @media (max-width: 640px) {
-  .text-description {
-    font-size: 1.4rem;
+  .typing-effect {
+    white-space: normal;
+    animation: none;
+    border-right: none;
+    font-size: 1.4rem; /* خط أكبر للموبايل */
+    line-height: 1.5;
   }
   .text-container {
     width: 95% !important;
@@ -134,7 +151,9 @@ const Hero = () => {
                 style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
               >
                 <h2 className="text-3xl font-extrabold mb-2">{category.title}</h2>
-                <p className="mb-6 text-description">{category.description}</p>
+                <p className={`mb-6 ${isActive ? "typing-effect" : ""}`}>
+                  {category.description}
+                </p>
                 <div className="flex items-center">
                   <button
                     onClick={(e) => {
