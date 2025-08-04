@@ -35,7 +35,7 @@ const paintCategories = [
   },
   {
     id: "wood",
-    title: "Wood Paints", 
+    title: "Wood Paints",
     description: "Protective and decorative finishes for wooden surfaces.",
     image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
   },
@@ -50,7 +50,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black">
+    <div className="relative w-full h-screen overflow-hidden">
       <div className="flex h-full">
         {paintCategories.map((category, index) => {
           const isActive = activeIndex === index;
@@ -59,53 +59,55 @@ const Hero = () => {
             <motion.div
               key={category.id}
               className={`relative h-full cursor-pointer ${
-                isActive ? "flex-grow" : "flex-shrink-0"
+                isActive ? "flex-grow" : "flex-shrink"
               }`}
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
                 transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
+                marginLeft:
+                  isActive && index !== paintCategories.length - 1
+                    ? "-25px"
+                    : "-25px",
+                marginRight:
+                  isActive && index !== paintCategories.length - 1
+                    ? "-25px"
+                    : "-25px",
               }}
-              style={{
-                transformOrigin: "left center",
-                minWidth: isActive ? "auto" : "120px",
+              style={{ 
+                transformOrigin: "center center",
+                transform: "none",
               }}
               transition={{
-                duration:  0.5,
+                duration: 0.5,
                 ease: "easeInOut",
               }}
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              {/* Background image with overlay */}
-              <motion.div
-                className="absolute inset-0 w-full h-full overflow-hidden"
+              {/* صورة الخلفية */}
+              <motion.img
+                src={category.image}
+                alt={category.title}
+                className="absolute inset-0 w-full h-full object-cover"
                 initial={{ scale: 1.1 }}
                 animate={{ scale: isActive ? 1 : 1.1 }}
                 transition={{ duration: 0.5 }}
-              >
-                <img
-                  src={category.image}
-                  alt={category.title}
-                  className="w-full h-full object-cover"
-                />
-                <div className="absolute inset-0 bg-black/40" />
-              </motion.div>
+              />
 
-              {/* Title when inactive */}
               {!isActive && (
-                <motion.div
-                  className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                >
-                  <p className="text-white text-lg font-semibold rotate-90 whitespace-nowrap tracking-wide transform origin-center">
-                    {category.title}
-                  </p>
-                </motion.div>
-              )}
+  <div
+    className="absolute inset-0 z-10 bg-black/40 flex items-center justify-center"
+    style={{ transform: 'rotate(-5deg)', transformOrigin: 'center center' }}
+  >
+    <p className="text-white text-lg font-semibold rotate-90 whitespace-nowrap tracking-wide">
+      {category.title}
+    </p>
+  </div>
+)}
 
-              {/* Full content when active */}
+
+              {/* المحتوى النصي الكامل عند التفعيل */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
