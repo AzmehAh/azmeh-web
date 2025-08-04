@@ -65,8 +65,8 @@ const Hero = () => {
   animate={{ 
     flex: isActive ? 5 : 1,
     transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)',
-    marginLeft: isActive ? '0' : '-20px', // إزاحة جانبية لتعويض الميلان
-    marginRight: isActive ? '0' : '-20px' // إزاحة جانبية لتعويض الميلان
+    marginLeft: isActive ? '0' : '-25px', // إزاحة جانبية لتعويض الميلان
+    marginRight: isActive ? '0' : '-25px' // إزاحة جانبية لتعويض الميلان
   }} 
   transition={{ duration: 0.5 }}
   onMouseEnter={() => setActiveIndex(index)}
