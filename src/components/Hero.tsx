@@ -76,7 +76,7 @@ const Hero = () => {
               borderRadius: '8px', // لمسة جمال بدون قص ميل
               overflow: 'hidden',
             }}
-            whileHover={{ scale: 1.05 }}
+           
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
             {/* Overlay */}
