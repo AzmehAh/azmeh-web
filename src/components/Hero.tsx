@@ -79,12 +79,7 @@ const Hero = () => {
            
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
           >
-            {/* Overlay */}
-            <motion.div
-              className="absolute inset-0"
-              animate={{ backgroundColor: isActive ? "rgba(0,0,0,0.6)" : "rgba(0,0,0,0.3)" }}
-              transition={{ duration: 0.5 }}
-            />
+
 
             <AnimatePresence>
               {isActive && (
