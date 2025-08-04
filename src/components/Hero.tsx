@@ -85,8 +85,7 @@ const Hero = () => {
             animate={{ scale: isActive ? 1 : 1.1 }}
             transition={{ duration: 0.5 }}
           />
-        </motion.div>
-     
+        
 
               
               {/* المحتوى النصي */}
