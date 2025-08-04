@@ -2,33 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-// CSS لتأثير التيبنج (typing effect)
-const style = ` 
-.typing-effect {
-  overflow: hidden; /* يمنع ظهور النص خارج الإطار */
-  white-space: nowrap; /* يمنع التفاف النص */
-  border-right: 2px solid white; /* مؤشر الكتابة */
-  animation: typing 2s steps(30, end), blink-caret 0.75s step-end infinite;
-  width: fit-content;
-  display: inline-block;
-}
-
-@keyframes typing {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%; 
-  }
-}
-
-@keyframes blink-caret {
-  50% {
-    border-color: transparent;
-  }
-}
-`;
-
 const paintCategories = [
   {
     id: "automotive",
@@ -77,70 +50,67 @@ const Hero = () => {
   };
 
   return (
-    <>
-      {/* إضافة ستايلات CSS */}
-      <style>{style}</style>
-
-      <div className="relative w-full h-screen overflow-hidden flex">
+    <div className="relative w-full h-screen overflow-hidden">
+      <div className="flex h-full">
         {paintCategories.map((category, index) => {
           const isActive = activeIndex === index;
-
+          
           return (
             <motion.div
               key={category.id}
-              onMouseEnter={() => setActiveIndex(index)}  // فتح عند مرور الماوس
-              onMouseLeave={() => setActiveIndex(null)}   // إغلاق عند ابتعاد الماوس
-              className="relative h-full cursor-pointer select-none overflow-hidden"
-              style={{
-                flex: isActive ? 4 : 1,
-                transition: "flex 0.5s ease, transform 0.5s ease",
-                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)", // ميلان لليسار
-                zIndex: isActive ? 10 : 1,
+              className={`relative h-full cursor-pointer overflow-hidden ${isActive ? 'flex-grow' : 'flex-shrink'}`}
+              initial={{ flex: 1 }}
+              animate={{ 
+                flex: isActive ? 5 : 1,
+                transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)'
               }}
+              transition={{ duration: 0.5 }}
+              onMouseEnter={() => setActiveIndex(index)}
+              onMouseLeave={() => setActiveIndex(null)}
             >
-              <img
+              {/* طبقة تظليل عند عدم النشاط */}
+              {!isActive && (
+                <div className="absolute inset-0 bg-black bg-opacity-30 z-10" />
+              )}
+              
+              {/* الصورة */}
+              <motion.img
                 src={category.image}
                 alt={category.title}
-                className="w-full h-full object-cover object-center absolute inset-0 pointer-events-none"
-                loading="lazy"
-                draggable={false}
-                style={{
-                  transform: isActive ? "scale(1)" : "scale(1.1)",
-                  transition: "transform 0.5s ease",
-                }}
+                className="absolute inset-0 w-full h-full object-cover"
+                initial={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.1 }}
+                transition={{ duration: 0.5 }}
               />
+              
+              {/* المحتوى النصي */}
               {isActive && (
-                <div className="absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-300" />
-              )}
-              <div
-                className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white ${
-                  isActive ? "block pointer-events-auto" : "hidden pointer-events-none"
-                }`}
-                style={{ textShadow: "0 0 8px rgba(0,0,0,0.8)" }}
-              >
-                <h2 className="text-3xl font-extrabold mb-2">{category.title}</h2>
-                <p className={`mb-6 ${isActive ? "typing-effect" : ""}`}>
-                  {category.description}
-                </p>
-                <div className="flex items-center">
+                <motion.div
+                  className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
+                    {category.title}
+                  </h2>
+                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
+                    {category.description}
+                  </p>
                   <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleExplore(category.id);
-                    }}
-                    className="bg-white text-black px-5 py-2 rounded shadow hover:bg-gray-200 transition"
+                    onClick={() => handleExplore(category.id)}
+                    className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                   >
                     Explore Products
                   </button>
-                </div>
-              </div>
+                </motion.div>
+              )}
             </motion.div>
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 
 export default Hero;
-
