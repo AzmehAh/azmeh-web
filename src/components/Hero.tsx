@@ -105,12 +105,12 @@ const Hero = () => {
                 loading="lazy"
                 draggable={false}
               />
- </motion.div>
+
               {/* غطاء داكن فقط عندما يكون العنصر مفعّل */}
               {isActive && (
                 <div className="absolute inset-0 bg-black bg-opacity-60 transition-opacity duration-300" />
               )}
-
+ </motion.div>
               {/* المحتوى النصي - يظهر فقط عند التفعيل */}
               <div
                 className={`absolute z-10 top-1/2 right-8 transform -translate-y-1/2 w-[80%] text-white ${
