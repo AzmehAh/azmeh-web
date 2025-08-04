@@ -63,7 +63,7 @@ const Hero = () => {
               }`}
               initial={{ flex: 1 }}
               animate={{
-                flex: isActive ? 5 : 1,
+                flex: isActive ? 4 : 1,
                 transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
                 marginLeft:
                   isActive && index !== paintCategories.length - 1
