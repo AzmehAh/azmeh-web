@@ -52,7 +52,7 @@ const paintCategories = [
     id: "exterior",
     title: "Exterior Paints",
     description: "Weather-resistant coatings for long-term exterior protection.",
-    image: "https://images.pexels.com/photos/2102587/pexels-photo-2102587.jpeg",
+    image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
   },
   {
     id: "industrial",
