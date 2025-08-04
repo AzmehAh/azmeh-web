@@ -58,18 +58,22 @@ const Hero = () => {
           const isActive = activeIndex === index;
           
           return (
-          <motion.div
+           <motion.div
   key={category.id}
   className={`relative h-full cursor-pointer ${isActive ? 'flex-grow' : 'flex-shrink'}`}
   initial={{ flex: 1 }}
   animate={{ 
     flex: isActive ? 5 : 1,
-    x: isActive ? 0 : -30, // إزاحة أفقية بدلاً من الميلان
-    zIndex: isActive ? 10 : 1 // تحريك الطبقات
-  }} 
+    transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)',
+    marginLeft: isActive ? '0' : '-25px', // إزاحة جانبية لتعويض الميلان
+    marginRight: isActive ? '0' : '-25px' // إزاحة جانبية لتعويض الميلان
+  }}  
   transition={{ duration: 0.5 }}
   onMouseEnter={() => setActiveIndex(index)}
   onMouseLeave={() => setActiveIndex(null)}
+  style={{
+    transformOrigin: 'center center' // نقطة ارتكاز التحويل في المنتصف
+  }}
 >
               {/* طبقة تظليل عند عدم النشاط */}
               {!isActive && (
