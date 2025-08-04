@@ -58,7 +58,7 @@ const Hero = () => {
           const isActive = activeIndex === index;
           
           return (
-         <motion.div
+         <motion.div 
   key={category.id}
   className={`relative h-full cursor-pointer ${isActive ? 'flex-grow' : 'flex-shrink'}`}
   initial={{ flex: 1 }}
@@ -66,7 +66,9 @@ const Hero = () => {
     flex: isActive ? 5 : 1,
     transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)',
     marginLeft: isActive ? '0' : '-25px',
-    
+    marginRight: isActive 
+      ? (index === paintCategories.length -1 ? '0' : '-25px') 
+      : '-25px',
   }}
   style={{
     transformOrigin: 'center center',
