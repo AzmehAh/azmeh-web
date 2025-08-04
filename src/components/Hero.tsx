@@ -68,7 +68,7 @@ const Hero = () => {
               }}
               style={{
                 transformOrigin: "left center",
-                minWidth: isActive ? "auto" : "100px",
+                minWidth: isActive ? "auto" : "120px",
               }}
               transition={{
                 duration: 0.5,
@@ -77,7 +77,7 @@ const Hero = () => {
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              {/* صورة الخلفية */}
+              {/* Background image with overlay */}
               <motion.div
                 className="absolute inset-0 w-full h-full overflow-hidden"
                 initial={{ scale: 1.1 }}
@@ -92,7 +92,7 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-black/40" />
               </motion.div>
 
-              {/* العنوان عند عدم التفعيل */}
+              {/* Title when inactive */}
               {!isActive && (
                 <motion.div
                   className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
@@ -105,7 +105,7 @@ const Hero = () => {
                 </motion.div>
               )}
 
-              {/* المحتوى النصي الكامل عند التفعيل */}
+              {/* Full content when active */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
