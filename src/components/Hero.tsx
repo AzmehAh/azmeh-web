@@ -56,17 +56,19 @@ const Hero = () => {
         return (
           <motion.div
             key={category.id}
-            className="relative h-full transition-all duration-500 ease-in-out cursor-pointer group"
+            className="relative h-full cursor-pointer"
             onClick={() => setActiveIndex(index)}
             style={{
               flex: isActive ? "4" : "1",
-              clipPath: "polygon(10% 0, 100% 0, 90% 100%, 0% 100%)",
+              clipPath: "polygon(0% 0%, 90% 0%, 100% 100%, 10% 100%)", // ميلان باتجاه اليمين
               backgroundImage: `url(${category.image})`,
               backgroundSize: "cover",
               backgroundPosition: "center",
             }}
           >
+            {/* التعتيم */}
             <div className="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-50 transition-all duration-300" />
+            {/* المحتوى */}
             <div
               className="absolute bottom-8 left-8 right-8 text-white transition-opacity duration-300"
               style={{ opacity: isActive ? 1 : 0 }}
