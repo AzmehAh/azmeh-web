@@ -70,7 +70,7 @@ const Hero = () => {
             >
               {/* طبقة تظليل عند عدم النشاط */}
               {!isActive && (
-                <div className="absolute inset-0 bg-black bg-opacity-30 z-10" />
+                <div className="absolute inset-0  z-10" />
               )}
               
               {/* الصورة */}
