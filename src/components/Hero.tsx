@@ -67,6 +67,7 @@ const Hero = () => {
     transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)',
     marginLeft: isActive ? '0' : '-25px',
     
+  }}
   style={{
     transformOrigin: 'center center',
   transform: 'none' // إضافة هذه السطر لضبط التحويل الابتدائي
