@@ -89,7 +89,7 @@ const Hero = () => {
             <AnimatePresence>
               {isActive && (
                 <motion.div
-                  className="absolute top-1/2 right-8 transform -translate-y-1/2 w-1/5 text-white z-10 flex flex-col justify-center"
+                  className="absolute top-1/2 right-8 transform -translate-y-1/2 w-1/7 text-white z-10 flex flex-col justify-center"
                   initial={{ opacity: 0, x: 50 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 50 }}
