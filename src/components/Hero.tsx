@@ -39,6 +39,12 @@ const paintCategories = [
     description: "Protective and decorative finishes for wooden surfaces.",
     image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
   },
+   {
+    id: "automotive",
+    title: "Automotive Paints",
+    description: "High-durability coatings with a glossy finish for vehicles.",
+    image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
+  }, 
 ];
 
 const Hero = () => {
@@ -97,8 +103,7 @@ const Hero = () => {
 
               {!isActive && (
   <div
-    className="absolute inset-0 z-10 bg-black/40 flex items-center justify-center"
-    style={{ transform: 'rotate(-5deg)', transformOrigin: 'center center' }}
+    className="absolute inset-0 z-10 bg-black/40 flex items-center justify-center pointer-events-none"
   >
     <p className="text-white text-lg font-semibold rotate-90 whitespace-nowrap tracking-wide">
       {category.title}
