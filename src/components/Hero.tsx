@@ -39,7 +39,7 @@ const paintCategories = [
     id: "wood",
     title: "Wood Paints",
     description: "Protective and decorative finishes for wooden surfaces.",
-    image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
+    image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
   },
 ];
 
@@ -58,23 +58,28 @@ const Hero = () => {
           const isActive = activeIndex === index;
           
           return (
-           <motion.div
+          <motion.div
   key={category.id}
   className={`relative h-full cursor-pointer ${isActive ? 'flex-grow' : 'flex-shrink'}`}
   initial={{ flex: 1 }}
   animate={{ 
     flex: isActive ? 5 : 1,
     transform: isActive ? 'rotate(0deg)' : 'rotate(-5deg)',
-    marginLeft: isActive ? '0' : '-25px', // إزاحة جانبية لتعويض الميلان
-    marginRight: isActive ? '0' : '-25px' // إزاحة جانبية لتعويض الميلان
-  }}  
+    marginLeft: isActive ? '0' : '-25px',
+    marginRight: isActive 
+      ? (index === paintCategories.length -1 ? '0' : '-25px') 
+      : '-25px',
+  }}
+  style={{
+    transformOrigin: 'center center',
+  }}
   transition={{ duration: 0.5 }}
   onMouseEnter={() => setActiveIndex(index)}
   onMouseLeave={() => setActiveIndex(null)}
-  style={{
-    transformOrigin: 'center center' // نقطة ارتكاز التحويل في المنتصف
-  }}
 >
+
+
+
               {/* طبقة تظليل عند عدم النشاط */}
               {!isActive && (
                 <div className="absolute inset-0  z-10" />
