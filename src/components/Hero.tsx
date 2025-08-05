@@ -11,31 +11,31 @@ const paintCategories = [
   },
   {
     id: "sports",
-    title: "Sports Field",
+    title: "Sports Field ",
     description: "Specialized coatings designed for outdoor sports surfaces.",
     image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
   },
   {
     id: "interior",
-    title: "Interior",
+    title: "Interior ",
     description: "Elegant and modern finishes for home and office interiors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
   },
   {
     id: "exterior",
-    title: "Exterior",
+    title: "Exterior ",
     description: "Weather-resistant coatings for long-term exterior protection.",
     image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
   },
   {
     id: "industrial",
-    title: "Industrial",
+    title: "Industrial ",
     description: "Tough coatings for factories and industrial environments.",
     image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
   },
   {
     id: "wood",
-    title: "Wood",
+    title: "Wood ",
     description: "Protective and decorative finishes for wooden surfaces.",
     image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
   },
@@ -88,7 +88,25 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* المحتوى النصي الكامل عند التفعيل مع العنوان المتحرك */}
+              {/* العنوان الواحد المتحرك */}
+              <motion.p
+                className="absolute text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap pointer-events-none"
+                style={{
+                  writingMode: isActive ? "horizontal-tb" : "vertical-rl",
+                  textOrientation: "upright",
+                  top: "50%",
+                  left: isActive ? "50%" : "10%",
+                  transform: isActive
+                    ? "translate(-50%, -50%)"
+                    : "translate(0, -50%)",
+                  fontSize: isActive ? "3rem" : "1.5rem",
+                  transition: "all 0.5s ease-in-out",
+                }}
+              >
+                {category.title}
+              </motion.p>
+
+              {/* المحتوى النصي بدون العنوان */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
@@ -96,24 +114,10 @@ const Hero = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <motion.p
-                    className="text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap mb-6"
-                    style={{
-                      writingMode: "horizontal-tb",
-                      textOrientation: "upright",
-                      fontSize: "3rem",
-                      transition: "all 0.5s ease-in-out",
-                    }}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                  >
-                    {category.title}
-                  </motion.p>
-
+                  {/* تم حذف العنوان من هنا */}
                   <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
                     {category.description}
                   </p>
-
                   <button
                     onClick={() => handleExplore(category.id)}
                     className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
@@ -122,28 +126,10 @@ const Hero = () => {
                   </button>
                 </motion.div>
               )}
-
-              {/* العنوان العمودي عند عدم التفعيل */}
-              {!isActive && (
-                <motion.p
-                  className="absolute text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap pointer-events-none"
-                  style={{
-                    writingMode: "vertical-rl",
-                    textOrientation: "upright",
-                    top: "50%",
-                    left: "10%",
-                    transform: "translate(0, -50%)",
-                    fontSize: "1.5rem",
-                    transition: "all 0.5s ease-in-out",
-                  }}
-                >
-                  {category.title}
-                </motion.p>
-              )}
             </motion.div>
           );
         })}
-      </div> 
+      </div>
     </div>
   );
 };
