@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
-    activeImage: "https://example.com/automotive-detail.jpg"
+    activeImage: "https://example.com/automotive-detail.jpg",
   },
   {
     id: "sports",
