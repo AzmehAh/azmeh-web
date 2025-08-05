@@ -88,20 +88,25 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* العنوان العمودي مع الحركة */}
-              <motion.div
-                className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
-                style={{ transformOrigin: "center center" }}
-                initial={false}
-                animate={{
-                  x: isActive ? 0 : 0,
-                  y: isActive ? 0 : 0,
+              {/* العنوان الواحد المتحرك */}
+              <motion.p
+                className="absolute text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap pointer-events-none"
+                style={{
+                  writingMode: isActive ? "horizontal-tb" : "vertical-rl",
+                  textOrientation: "upright",
+                  top: "50%",
+                  left: isActive ? "50%" : "10%",
+                  transform: isActive
+                    ? "translate(-50%, -50%)"
+                    : "translate(0, -50%)",
+                  fontSize: isActive ? "3rem" : "1.5rem",
+                  transition: "all 0.5s ease-in-out",
                 }}
               >
-               
-              </motion.div>
+                {category.title}
+              </motion.p>
 
-              {/* المحتوى النصي الكامل عند التفعيل */}
+              {/* المحتوى النصي بدون العنوان */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
@@ -109,29 +114,7 @@ const Hero = () => {
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
-                     <motion.p
-                  className="text-white font-semibold whitespace-nowrap tracking-wide drop-shadow-lg"
-                  style={{
-                    writingMode: isActive ? "horizontal-tb" : "vertical-rl",
-                    textOrientation: "upright",
-                  }}
-                  initial={false}
-                  animate={{
-                    fontSize: isActive ? "3rem" : "1.5rem",
-                    translateX: isActive ? "0%" : "0%",
-                    translateY: isActive ? "0%" : "0%",
-                    top: isActive ? "50%" : "50%",
-                    left: isActive ? "50%" : "10%",
-                    position: "absolute",
-                    x: isActive ? "-50%" : "0%",
-                    y: isActive ? "-50%" : "0%",
-                  }}
-                  transition={{ duration: 0.5, ease: "easeInOut" }}
-                >
-                  {category.title}
-                </motion.p>
-                  </h2>
+                  {/* تم حذف العنوان من هنا */}
                   <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
                     {category.description}
                   </p>
@@ -150,6 +133,8 @@ const Hero = () => {
     </div>
   );
 };
+
+export default Hero;
 
 export default Hero;
 
