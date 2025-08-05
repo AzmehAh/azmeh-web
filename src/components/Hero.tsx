@@ -7,8 +7,8 @@ const paintCategories = [
     id: "automotive",
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
-    image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
-    activeImage: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
+    image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
+    activeImage: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
   },
   {
     id: "sports",
