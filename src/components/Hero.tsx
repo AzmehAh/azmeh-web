@@ -50,7 +50,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-screen  overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden">
       <div className="flex h-full">
         {paintCategories.map((category, index) => {
           const isActive = activeIndex === index;
@@ -97,13 +97,13 @@ const Hero = () => {
 
               {!isActive && (
   <div
-  className="absolute inset-0 z-10 px-8 flex items-center justify-start"
->
-  <p className="text-white text-xl font-semibold whitespace-nowrap tracking-wide">
-    {category.title}
-  </p>
-</div>
-
+    className="absolute inset-0 z-10 flex items-center justify-center"
+    style={{ transform: 'rotate(-5deg)', transformOrigin: 'center center' }}
+  >
+    <p className="text-white text-xl font-semibold rotate-90 whitespace-nowrap tracking-wide">
+      {category.title}
+    </p> 
+  </div>
 )}
 
 
