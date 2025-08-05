@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-const paintCategories = [
-  {
+{
     id: "automotive",
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
-    image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
+    image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
+    activeImage: "https://example.com/automotive-detail.jpg"
   },
   {
     id: "sports",
@@ -78,15 +78,15 @@ const Hero = () => {
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              {/* صورة الخلفية */}
-              <motion.img
-                src={category.image}
-                alt={category.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                initial={{ scale: 1.1 }}
-                animate={{ scale: isActive ? 1 : 1.1 }}
-                transition={{ duration: 0.5 }}
-              />
+             <motion.img
+  src={isActive ? category.activeImage || category.image : category.image}
+  alt={category.title}
+  className="absolute inset-0 w-full h-full object-cover"
+  initial={{ scale: 1.1 }}
+  animate={{ scale: isActive ? 1 : 1.1 }}
+  transition={{ duration: 0.5 }}
+/>
+
 
               {/* العنوان الواحد المتحرك */}
               <motion.p
