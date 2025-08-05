@@ -102,7 +102,7 @@ const Hero = () => {
                   </button>
                 </motion.div>
               )}
-            </AnimatePresence>
+            </AnimatePresence> 
           </motion.div>
         );
       })}
