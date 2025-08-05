@@ -109,7 +109,7 @@ const Hero = () => {
               {/* المحتوى النصي بدون العنوان */}
               {isActive && (
                 <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-start mt-20 p-12 z-20"
+                  className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
