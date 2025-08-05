@@ -90,7 +90,7 @@ const Hero = () => {
 
               {/* العنوان الواحد المتحرك */}
               <motion.p
-                className="absolute text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap pointer-events-none"
+                className="absolute text-white font-bold  justify-center items-start p-12 tracking-wide drop-shadow-lg whitespace-nowrap pointer-events-none"
                 style={{
                   writingMode: isActive ? "horizontal-tb" : "vertical-rl",
                   textOrientation: "upright",
