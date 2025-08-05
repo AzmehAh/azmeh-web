@@ -98,7 +98,19 @@ const Hero = () => {
                   y: isActive ? 0 : 0,
                 }}
               >
-                <motion.p
+               
+              </motion.div>
+
+              {/* المحتوى النصي الكامل عند التفعيل */}
+              {isActive && (
+                <motion.div
+                  className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
+                     <motion.p
                   className="text-white font-semibold whitespace-nowrap tracking-wide drop-shadow-lg"
                   style={{
                     writingMode: isActive ? "horizontal-tb" : "vertical-rl",
@@ -119,17 +131,7 @@ const Hero = () => {
                 >
                   {category.title}
                 </motion.p>
-              </motion.div>
-
-              {/* المحتوى النصي الكامل عند التفعيل */}
-              {isActive && (
-                <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  
+                  </h2>
                   <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
                     {category.description}
                   </p>
