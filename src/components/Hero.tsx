@@ -97,7 +97,7 @@ const Hero = () => {
 
               {!isActive && (
   <div
-  className="absolute inset-0 z-10 flex items-center justify-center"
+  className="absolute inset-0 z-10 flex items-center justify-start"
 >
   <p className="text-white text-xl font-semibold whitespace-nowrap tracking-wide">
     {category.title}
