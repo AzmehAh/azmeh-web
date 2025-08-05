@@ -94,7 +94,7 @@ const Hero = () => {
                 style={{
                   writingMode: isActive ? "horizontal-tb" : "vertical-rl",
                   textOrientation: "upright",
-                  top: "45%",
+                  top: "50%",
                   left: isActive ? "40%" : "10%",
                   transform: isActive
                     ? "translate(-50%, -50%)"
