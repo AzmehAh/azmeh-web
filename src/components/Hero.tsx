@@ -8,7 +8,7 @@ const paintCategories = [
     title: "Automotive Paints",
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://images.pexels.com/photos/190574/pexels-photo-190574.jpeg",
-  }, 
+  },
   {
     id: "sports",
     title: "Sports Field Paints",
@@ -58,59 +58,66 @@ const Hero = () => {
           return (
             <motion.div
               key={category.id}
-              className={`relative h-full cursor-pointer ${
+              className={`relative h-full cursor-pointer overflow-hidden transition-all duration-500 ${
                 isActive ? "flex-grow" : "flex-shrink"
               }`}
-              initial={{ flex: 1 }}
-              animate={{
-                flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
-                marginLeft:
-                  isActive && index !== paintCategories.length - 1
-                    ? "-25px"
-                    : "-25px",
-                marginRight:
-                  isActive && index !== paintCategories.length - 1
-                    ? "-25px"
-                    : "-25px",
-              }}
-              style={{ 
-                transformOrigin: "center center",
-                transform: "none",
-              }}
-              transition={{
-                duration: 0.5,
-                ease: "easeInOut",
-              }}
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
+              animate={{
+                flex: isActive ? 5 : 1,
+              }}
+              transition={{
+                duration: 0.6,
+                ease: "easeInOut",
+              }}
             >
-              {/* صورة الخلفية */}
-              <motion.img
-                src={category.image}
-                alt={category.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                initial={{ scale: 1.1 }}
-                animate={{ scale: isActive ? 1 : 1.1 }}
-                transition={{ duration: 0.5 }}
+              {/* خلفية الصورة */}
+              <motion.div
+                className="absolute inset-0 bg-cover bg-center transition-all duration-700"
+                style={{
+                  backgroundImage: `url(${category.image})`,
+                  transform: isActive ? "skewX(0deg)" : "skewX(-5deg)",
+                }}
               />
 
-              {!isActive && (
-  <div
-    className="absolute inset-0 z-10 flex items-center justify-center"
-    style={{ transform: 'rotate(-5deg)', transformOrigin: 'center center' }}
-  >
-    <p className="text-white text-xl font-semibold rotate-90 whitespace-nowrap tracking-wide">
-      {category.title}
-    </p> 
-  </div>
-)}
+              {/* غطاء داكن للوضوح */}
+              <div className="absolute inset-0 bg-black/40 z-10 transition-all duration-500" />
 
+              {/* عنوان عمودي في البداية → يتحول لأفقي عند التفعيل */}
+              <motion.div
+                className="absolute z-20 inset-0 flex items-center justify-center"
+                animate={{
+                  x: isActive ? 0 : 0,
+                  y: isActive ? 0 : 0,
+                }}
+              >
+                <motion.p
+                  initial={false}
+                  animate={{
+                    writingMode: isActive ? "horizontal-tb" : "vertical-rl",
+                    rotate: isActive ? 0 : 0,
+                    fontSize: isActive ? "2.5rem" : "1.25rem",
+                    translateY: isActive ? "0%" : "0%",
+                    translateX: isActive ? "0%" : "-30%",
+                    color: "#ffffff",
+                  }}
+                  transition={{
+                    duration: 0.6,
+                    ease: "easeInOut",
+                  }}
+                  className="font-bold text-white tracking-wide text-center pointer-events-none"
+                  style={{
+                    textOrientation: "upright",
+                  }}
+                >
+                  {category.title}
+                </motion.p>
+              </motion.div>
 
-              {/* المحتوى النصي الكامل عند التفعيل */}
+              {/* المحتوى عند التفعيل */}
               {isActive && (
                 <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
+                  className="absolute inset-0 z-30 flex flex-col justify-center items-start p-12"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
@@ -118,7 +125,7 @@ const Hero = () => {
                   <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
                     {category.title}
                   </h2>
-                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
+                  <p className="text-lg text-white mb-6 max-w-lg drop-shadow-lg">
                     {category.description}
                   </p>
                   <button
