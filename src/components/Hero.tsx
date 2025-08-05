@@ -88,7 +88,54 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* العنوان العمودي على اليسار عند غير التفعيل */}
+              {/* المحتوى النصي مع العنوان المتحرك في مكان ثابت */}
+              {isActive && (
+                <motion.div
+                  className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  style={{ position: "relative" }}
+                >
+                  {/* العنوان داخل المحتوى، لكنه يتحول من عمودي إلى أفقي بحركة */}
+                  <motion.p
+                    className="text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap mb-6"
+                    style={{
+                      position: "absolute",
+                      top: "50%",
+                      left: 0,
+                      transformOrigin: "left center",
+                      writingMode: isActive ? "horizontal-tb" : "vertical-rl",
+                      textOrientation: "upright",
+                      fontSize: isActive ? "3rem" : "1.5rem",
+                      transform: isActive
+                        ? "translateY(-50%) rotate(0deg)"
+                        : "translateY(-50%) rotate(0deg)",
+                      transition: "all 0.5s ease-in-out",
+                    }}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                  >
+                    {category.title}
+                  </motion.p>
+
+                  {/* مسافة بين العنوان والشرح */}
+                  <div style={{ paddingLeft: "4rem", maxWidth: "600px" }}>
+                    <p className="text-xl text-white mb-6 drop-shadow-lg">
+                      {category.description}
+                    </p>
+
+                    <button
+                      onClick={() => handleExplore(category.id)}
+                      className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                    >
+                      Explore Products
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+
+              {/* العنوان العمودي على اليسار عند عدم التفعيل خارج المحتوى */}
               {!isActive && (
                 <motion.p
                   className="absolute text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap pointer-events-none"
@@ -100,57 +147,9 @@ const Hero = () => {
                     transform: "translate(0, -50%)",
                     fontSize: "1.5rem",
                   }}
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
                 >
                   {category.title}
                 </motion.p>
-              )}
-
-              {/* المحتوى النصي مع العنوان الأفقي المتحرك عند التفعيل */}
-              {isActive && (
-                <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <motion.p
-                    className="text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap mb-6"
-                    style={{
-                      writingMode: "horizontal-tb",
-                      textOrientation: "upright",
-                      fontSize: "3rem",
-                    }}
-                    initial={{
-                      x: "-50%",
-                      y: "-50%",
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      translateX: "-100%", // ابدأ خارج الشاشة لليسار
-                      opacity: 0,
-                    }}
-                    animate={{
-                      translateX: "0%",
-                      opacity: 1,
-                      transition: { duration: 0.5, ease: "easeInOut" },
-                    }}
-                  >
-                    {category.title}
-                  </motion.p>
-
-                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
-                    {category.description}
-                  </p>
-
-                  <button
-                    onClick={() => handleExplore(category.id)}
-                    className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-                  >
-                    Explore Products
-                  </button>
-                </motion.div>
               )}
             </motion.div>
           );
