@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 const paintCategories = [
   {
@@ -58,12 +58,18 @@ const Hero = () => {
           return (
             <motion.div
               key={category.id}
-              className={`relative h-full cursor-pointer overflow-hidden ${
+              className={`relative h-full cursor-pointer ${
                 isActive ? "flex-grow" : "flex-shrink"
               }`}
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
+                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
+                marginLeft: "-25px",
+                marginRight: "-25px",
+              }}
+              style={{
+                transformOrigin: "center center",
               }}
               transition={{
                 duration: 0.5,
@@ -72,63 +78,71 @@ const Hero = () => {
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              {/* صورة الخلفية مع ميلان وتكبير عند التفعيل */}
-              <motion.div
-                className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: `url(${category.image})` }}
-                initial={{ skewX: -5 }}
-                animate={{ skewX: isActive ? 0 : -5, scale: isActive ? 1 : 1.1 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-              />
-
-              {/* طبقة داكنة للوضوح */}
-              <motion.div
-                className="absolute inset-0 bg-black/40"
-                animate={{ opacity: isActive ? 0.6 : 0.4 }}
+              {/* صورة الخلفية */}
+              <motion.img
+                src={category.image}
+                alt={category.title}
+                className="absolute inset-0 w-full h-full object-cover"
+                initial={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.1 }}
                 transition={{ duration: 0.5 }}
               />
 
-              {/* العنوان العمودي الذي يتحول إلى أفقي في الوسط */}
-              <motion.h2
-                className="absolute text-white font-bold tracking-wide drop-shadow-lg pointer-events-none"
-                style={{
-                  writingMode: isActive ? "horizontal-tb" : "vertical-rl",
-                  textOrientation: "upright",
-                  whiteSpace: "nowrap",
-                }}
+              {/* العنوان العمودي مع الحركة */}
+              <motion.div
+                className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none"
+                style={{ transformOrigin: "center center" }}
                 initial={false}
                 animate={{
-                  top: isActive ? "50%" : "10%",
-                  left: isActive ? "50%" : "5%",
-                  fontSize: isActive ? "3rem" : "1.5rem",
-                  translateX: isActive ? "-50%" : "0%",
-                  translateY: isActive ? "-50%" : "0%",
+                  x: isActive ? 0 : 0,
+                  y: isActive ? 0 : 0,
                 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
               >
-                {category.title}
-              </motion.h2>
+                <motion.p
+                  className="text-white font-semibold whitespace-nowrap tracking-wide drop-shadow-lg"
+                  style={{
+                    writingMode: isActive ? "horizontal-tb" : "vertical-rl",
+                    textOrientation: "upright",
+                  }}
+                  initial={false}
+                  animate={{
+                    fontSize: isActive ? "3rem" : "1.5rem",
+                    translateX: isActive ? "0%" : "0%",
+                    translateY: isActive ? "0%" : "0%",
+                    top: isActive ? "50%" : "50%",
+                    left: isActive ? "50%" : "10%",
+                    position: "absolute",
+                    x: isActive ? "-50%" : "0%",
+                    y: isActive ? "-50%" : "0%",
+                  }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                >
+                  {category.title}
+                </motion.p>
+              </motion.div>
 
-              {/* المحتوى النصي عند التفعيل */}
-              <AnimatePresence>
-                {isActive && (
-                  <motion.div
-                    className="absolute bottom-10 left-10 right-10 z-20 bg-black bg-opacity-50 rounded-lg p-6"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 20 }}
-                    transition={{ duration: 0.4 }}
+              {/* المحتوى النصي الكامل عند التفعيل */}
+              {isActive && (
+                <motion.div
+                  className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h2 className="text-4xl font-bold text-white mb-4 drop-shadow-lg">
+                    {category.title}
+                  </h2>
+                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
+                    {category.description}
+                  </p>
+                  <button
+                    onClick={() => handleExplore(category.id)}
+                    className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
                   >
-                    <p className="text-white mb-4">{category.description}</p>
-                    <button
-                      onClick={() => handleExplore(category.id)}
-                      className="bg-white text-black px-5 py-2 rounded-md hover:bg-gray-100 transition"
-                    >
-                      Explore Products
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    Explore Products
+                  </button>
+                </motion.div>
+              )}
             </motion.div>
           );
         })}
