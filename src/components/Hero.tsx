@@ -97,13 +97,13 @@ const Hero = () => {
 
               {!isActive && (
   <div
-    className="absolute inset-0 z-10 flex items-center justify-center"
-    style={{ transform: 'rotate(-5deg)', transformOrigin: 'center center' }}
-  >
-    <p className="text-white  font-semibold rotate-90 whitespace-nowrap tracking-wide">
-      {category.title}
-    </p>
-  </div>
+  className="absolute inset-0 z-10 flex items-center justify-center"
+>
+  <p className="text-white text-xl font-semibold whitespace-nowrap tracking-wide">
+    {category.title}
+  </p>
+</div>
+
 )}
 
 
