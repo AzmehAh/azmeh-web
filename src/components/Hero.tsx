@@ -100,7 +100,7 @@ const Hero = () => {
     className="absolute inset-0 z-10 flex items-center justify-center"
     style={{ transform: 'rotate(-5deg)', transformOrigin: 'center center' }}
   >
-    <p className="text-white text-lg font-semibold rotate-90 whitespace-nowrap tracking-wide">
+    <p className="text-white text-xlg font-semibold rotate-90 whitespace-nowrap tracking-wide">
       {category.title}
     </p>
   </div>
