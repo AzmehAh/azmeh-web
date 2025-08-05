@@ -88,26 +88,7 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* العنوان العمودي على اليسار عند غير التفعيل */}
-              {!isActive && (
-                <motion.p
-                  className="absolute text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap pointer-events-none"
-                  style={{
-                    writingMode: "vertical-rl",
-                    textOrientation: "upright",
-                    top: "50%",
-                    left: "10%",
-                    transform: "translate(0, -50%)",
-                    fontSize: "1.5rem",
-                  }}
-                  initial={{ opacity: 1 }}
-                  animate={{ opacity: 1 }}
-                >
-                  {category.title}
-                </motion.p>
-              )}
-
-              {/* المحتوى النصي مع العنوان الأفقي المتحرك عند التفعيل */}
+              {/* المحتوى النصي الكامل عند التفعيل مع العنوان المتحرك */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start p-12 z-20"
@@ -121,21 +102,10 @@ const Hero = () => {
                       writingMode: "horizontal-tb",
                       textOrientation: "upright",
                       fontSize: "3rem",
+                      transition: "all 0.5s ease-in-out",
                     }}
-                    initial={{
-                      x: "-50%",
-                      y: "-50%",
-                      position: "absolute",
-                      top: "50%",
-                      left: "50%",
-                      translateX: "-100%", // ابدأ خارج الشاشة لليسار
-                      opacity: 0,
-                    }}
-                    animate={{
-                      translateX: "0%",
-                      opacity: 1,
-                      transition: { duration: 0.5, ease: "easeInOut" },
-                    }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                   >
                     {category.title}
                   </motion.p>
@@ -152,13 +122,30 @@ const Hero = () => {
                   </button>
                 </motion.div>
               )}
+
+              {/* العنوان العمودي عند عدم التفعيل */}
+              {!isActive && (
+                <motion.p
+                  className="absolute text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap pointer-events-none"
+                  style={{
+                    writingMode: "vertical-rl",
+                    textOrientation: "upright",
+                    top: "50%",
+                    left: "10%",
+                    transform: "translate(0, -50%)",
+                    fontSize: "1.5rem",
+                    transition: "all 0.5s ease-in-out",
+                  }}
+                >
+                  {category.title}
+                </motion.p>
+              )}
             </motion.div>
           );
         })}
-      </div>
+      </div> 
     </div>
   );
 };
 
 export default Hero;
- 
