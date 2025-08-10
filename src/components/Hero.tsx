@@ -42,57 +42,72 @@ const paintCategories = [
   },
 ];
 
-// هذا المكون يعرض العنوان بحروف متحركة
+// المكون الجديد لعرض العنوان عمودي من تحت لفوق وعند hover أفقي
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
-  const container = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
+  const containerVariants = {
+    vertical: {
+      transition: {
+        staggerChildren: 0.1,
+        staggerDirection: -1, // ترتيب الحروف من تحت لفوق
+      },
+    },
+    horizontal: {
       transition: {
         staggerChildren: 0.05,
+        staggerDirection: 1,
       },
     },
   };
 
-  const child = {
-    hidden: {
-      y: 20,
-      opacity: 0,
-      rotate: -90,
+  const letterVariants = {
+    vertical: {
       x: 0,
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
+      y: (i) => -i * 30,
       rotate: 0,
-      x: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 300, damping: 30 },
+    },
+    horizontal: {
+      x: (i) => i * 30,
+      y: 0,
+      rotate: 0,
+      opacity: 1,
+      transition: { type: "spring", stiffness: 300, damping: 30 },
     },
   };
 
   return (
     <motion.div
+      variants={containerVariants}
+      animate={isActive ? "horizontal" : "vertical"}
       style={{
-        display: isActive ? "flex" : "inline-block",
-        flexDirection: isActive ? "row" : "column",
-        transformOrigin: "center",
-        fontSize: isActive ? "3rem" : "1.5rem",
+        position: "relative",
+        height: 180,
+        width: isActive ? "auto" : 30,
+        display: "flex",
+        flexDirection: isActive ? "row" : "column-reverse",
+        alignItems: "center",
+        fontSize: "2.5rem",
         fontWeight: "bold",
         color: "white",
+        userSelect: "none",
         whiteSpace: "nowrap",
         cursor: "default",
-        userSelect: "none",
       }}
-      variants={container}
-      initial="hidden"
-      animate={isActive ? "visible" : "hidden"}
     >
-      {letters.map((letter, index) => (
+      {letters.map((letter, i) => (
         <motion.span
-          key={index}
-          variants={child}
-          style={{ display: "inline-block" }}
+          key={i}
+          custom={i}
+          variants={letterVariants}
+          style={{
+            display: "inline-block",
+            width: 30,
+            height: 30,
+            textAlign: "center",
+          }}
           aria-hidden="true"
         >
           {letter}
@@ -148,9 +163,9 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* هنا نستخدم المكون AnimatedTitle بدلاً من الفقرة العادية */}
+              {/* العنوان المتحرك */}
               <div
-                className="absolute text-white drop-shadow-lg pointer-events-none"
+                className="absolute drop-shadow-lg pointer-events-none"
                 style={{
                   top: "45%",
                   left: isActive ? "50%" : "30%",
@@ -158,12 +173,13 @@ const Hero = () => {
                     ? "translate(-50%, -50%)"
                     : "translate(0, -50%)",
                   transition: "all 0.5s ease-in-out",
+                  zIndex: 10,
                 }}
               >
                 <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
 
-              {/* المحتوى النصي بدون العنوان */}
+              {/* المحتوى النصي */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
