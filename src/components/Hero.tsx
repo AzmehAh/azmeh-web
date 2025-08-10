@@ -17,7 +17,7 @@ const paintCategories = [
     image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
   },
   {
-    id: "interior", 
+    id: "interior",
     title: "Interior",
     description: "Elegant and modern finishes for home and office interiors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
@@ -41,6 +41,66 @@ const paintCategories = [
     image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
   },
 ];
+
+// هذا المكون يعرض العنوان بحروف متحركة
+const AnimatedTitle = ({ text, isActive }) => {
+  const letters = Array.from(text);
+
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const child = {
+    hidden: {
+      y: 20,
+      opacity: 0,
+      rotate: -90,
+      x: 0,
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      rotate: 0,
+      x: 0,
+    },
+  };
+
+  return (
+    <motion.div
+      style={{
+        display: isActive ? "flex" : "inline-block",
+        flexDirection: isActive ? "row" : "column",
+        transformOrigin: "center",
+        fontSize: isActive ? "3rem" : "1.5rem",
+        fontWeight: "bold",
+        color: "white",
+        whiteSpace: "nowrap",
+        cursor: "default",
+        userSelect: "none",
+      }}
+      variants={container}
+      initial="hidden"
+      animate={isActive ? "visible" : "hidden"}
+    >
+      {letters.map((letter, index) => (
+        <motion.span
+          key={index}
+          variants={child}
+          style={{ display: "inline-block" }}
+          aria-hidden="true"
+        >
+          {letter}
+        </motion.span>
+      ))}
+    </motion.div>
+  );
+};
 
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -88,23 +148,20 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* العنوان الواحد المتحرك */}
-              <motion.p
-                className="absolute text-white font-bold tracking-wide drop-shadow-lg whitespace-nowrap pointer-events-none"
+              {/* هنا نستخدم المكون AnimatedTitle بدلاً من الفقرة العادية */}
+              <div
+                className="absolute text-white drop-shadow-lg pointer-events-none"
                 style={{
-                  writingMode: isActive ? "horizontal-tb" : "vertical-rl",
-                  textOrientation: "upright",
                   top: "45%",
                   left: isActive ? "50%" : "30%",
                   transform: isActive
                     ? "translate(-50%, -50%)"
                     : "translate(0, -50%)",
-                  fontSize: isActive ? "3rem" : "1.5rem",
                   transition: "all 0.5s ease-in-out",
                 }}
               >
-                {category.title}
-              </motion.p>
+                <AnimatedTitle text={category.title} isActive={isActive} />
+              </div>
 
               {/* المحتوى النصي بدون العنوان */}
               {isActive && (
