@@ -148,7 +148,7 @@ const Hero = () => {
       style={{
         position: "absolute",
         top: "50%",
-        left: "40%",
+        left: "35%",
         transform: "translate(-50%, -50%) rotate(-40deg)",
         fontSize: "4rem",
         fontWeight: "bold",
