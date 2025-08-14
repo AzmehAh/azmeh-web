@@ -47,14 +47,15 @@ const VerticalTitle = ({ text, isActive }) => {
     <div
       style={{
         display: "flex",
-        flexDirection: "column-reverse", // من الأسفل للأعلى
-        transform: "rotate(-15deg)", // الميلان البسيط
+        flexDirection: "column-reverse",
+        transform: isActive ? "rotate(-15deg)" : "rotate(15deg)", // الميلان المعكوس
         fontSize: isActive ? "3rem" : "1.5rem",
         fontWeight: "bold",
         color: "white",
         whiteSpace: "nowrap",
         userSelect: "none",
         letterSpacing: "2px",
+        transition: "transform 0.5s ease-in-out",
       }}
     >
       {text.split("").map((char, index) => (
@@ -87,7 +88,7 @@ const Hero = () => {
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)", // الميلان المعكوس للصورة
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
@@ -108,7 +109,12 @@ const Hero = () => {
 
               {/* Overlay شفاف */}
               {!isActive && (
-                <div className="absolute inset-0 bg-black/50 transition-all duration-500"></div>
+                <motion.div
+                  className="absolute inset-0 bg-black/50"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.5 }}
+                  transition={{ duration: 0.5 }}
+                ></motion.div>
               )}
 
               {/* العنوان العمودي */}
@@ -152,4 +158,5 @@ const Hero = () => {
 };
 
 export default Hero;
+
 
