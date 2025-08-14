@@ -42,7 +42,7 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان المتحرك العمودي
+// مكون العنوان المتحرك العمودي بعكس الميلان
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -55,7 +55,7 @@ const AnimatedTitle = ({ text, isActive }) => {
   };
 
   const child = {
-    hidden: { y: 20, opacity: 0, rotate: -15 },
+    hidden: { y: 20, opacity: 0, rotate: 15 }, // عكس الميلان من -15 إلى 15
     visible: { y: 0, opacity: 1, rotate: 0 },
   };
 
@@ -110,7 +110,7 @@ const Hero = () => {
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)", // عكس الميلان من -5deg إلى 5deg
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
