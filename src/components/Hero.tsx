@@ -9,7 +9,7 @@ const paintCategories = [
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
     activeImage: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
-  }, 
+  },
   {
     id: "sports",
     title: "Sports Field",
@@ -42,20 +42,22 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان المتحرك
+// مكون العنوان المتحرك عند التفاعل
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
   const container = {
     hidden: { opacity: 1 },
-    visible: { 
+    visible: {
       opacity: 1,
-      transition: { staggerChildren: 0.05 }
+      transition: {
+        staggerChildren: 0.05,
+      },
     },
   };
 
   const child = {
-    hidden: { y: 20, opacity: 0, rotate: -15 }, // الميلان للعمودي الافتراضي
+    hidden: { y: 20, opacity: 0, rotate: -15 },
     visible: { y: 0, opacity: 1, rotate: 0 },
   };
 
@@ -63,7 +65,7 @@ const AnimatedTitle = ({ text, isActive }) => {
     <motion.div
       style={{
         display: "flex",
-        flexDirection: isActive ? "row" : "column-reverse", // أفقي عند الفتح، عمودي افتراضي
+        flexDirection: isActive ? "row" : "column-reverse",
         transformOrigin: "center center",
         fontSize: "2rem",
         fontWeight: "bold",
@@ -134,22 +136,48 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-black/50 transition-all duration-500"></div>
               )}
 
-              {/* العنوان */}
-              <div
-                className="absolute text-white drop-shadow-lg pointer-events-none"
-                style={{
-                  top: "45%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  transition: "all 0.5s ease-in-out",
-                  fontSize: "2rem",
-                  fontWeight: "bold",
-                }}
-              >
-                <AnimatedTitle text={category.title} isActive={isActive} />
-              </div>
+              {/* العنوان الكبير المائل قبل التفاعل */}
+              {!isActive && (
+                <motion.div
+                  initial={{ opacity: 0, rotate: -20, scale: 0.8 }}
+                  animate={{ opacity: 1, rotate: -20, scale: 1 }}
+                  transition={{ duration: 0.6 }}
+                  className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+                  style={{ transformOrigin: "center" }}
+                >
+                  <div
+                    style={{
+                      fontSize: "4rem",
+                      fontWeight: "bold",
+                      color: "rgba(255, 255, 255, 0.8)",
+                      transform: "rotate(-20deg)",
+                      textShadow: "0 0 10px rgba(0,0,0,0.5)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {category.title}
+                  </div>
+                </motion.div>
+              )}
 
-              {/* المحتوى النصي عند التفعيل */}
+              {/* العنوان المتحرك عند التفاعل */}
+              {isActive && (
+                <div
+                  className="absolute text-white drop-shadow-lg pointer-events-none"
+                  style={{
+                    top: "45%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    transition: "all 0.5s ease-in-out",
+                    fontSize: "2rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  <AnimatedTitle text={category.title} isActive={isActive} />
+                </div>
+              )}
+
+              {/* المحتوى النصي عند التفاعل */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
@@ -177,4 +205,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
