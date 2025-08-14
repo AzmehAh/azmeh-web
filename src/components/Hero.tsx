@@ -42,44 +42,46 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان المتحرك
+// مكون العنوان المتحرك العمودي
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
   const container = {
     hidden: { opacity: 1 },
-    visible: {
+    visible: { 
       opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
+      transition: { staggerChildren: 0.05 }
     },
   };
 
   const child = {
-    hidden: { y: 20, opacity: 0, rotate: -90, x: 0 },
-    visible: { y: 0, opacity: 1, rotate: 0, x: 0 },
+    hidden: { y: 20, opacity: 0, rotate: -15 },
+    visible: { y: 0, opacity: 1, rotate: 0 },
   };
 
   return (
     <motion.div
       style={{
-        display: isActive ? "flex" : "inline-block",
-        flexDirection: isActive ? "row" : "column",
-        transformOrigin: "center",
+        display: "flex",
+        flexDirection: "column-reverse", // من تحت إلى فوق
+        transformOrigin: "center center",
         fontSize: isActive ? "3rem" : "1.5rem",
         fontWeight: "bold",
         color: "white",
-        whiteSpace: "nowrap",
         cursor: "default",
         userSelect: "none",
+        whiteSpace: "nowrap",
       }}
       variants={container}
       initial="hidden"
       animate={isActive ? "visible" : "hidden"}
     >
       {letters.map((letter, index) => (
-        <motion.span key={index} variants={child} style={{ display: "inline-block" }}>
+        <motion.span
+          key={index}
+          variants={child}
+          style={{ display: "inline-block", transformOrigin: "center" }}
+        >
           {letter}
         </motion.span>
       ))}
@@ -142,7 +144,7 @@ const Hero = () => {
                   transition: "all 0.5s ease-in-out",
                 }}
               >
-                {/* العنوان الثابت أولاً */}
+                {/* العنوان الثابت */}
                 {!isActive && (
                   <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{category.title}</div>
                 )}
@@ -178,4 +180,3 @@ const Hero = () => {
 };
 
 export default Hero;
- 
