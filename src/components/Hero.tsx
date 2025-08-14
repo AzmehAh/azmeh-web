@@ -42,7 +42,7 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان المتحرك العمودي بعكس الميلان
+// العنوان المتحرك: يظهر فقط عند التفعيل بشكل عمودي مائل
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -55,9 +55,11 @@ const AnimatedTitle = ({ text, isActive }) => {
   };
 
   const child = {
-    hidden: { y: 20, opacity: 0, rotate: 15 }, // عكس الميلان من -15 إلى 15
+    hidden: { y: 20, opacity: 0, rotate: -15 }, // الميلان جهة اليسار
     visible: { y: 0, opacity: 1, rotate: 0 },
   };
+
+  if (!isActive) return null; // لا نعرض إلا عند التفعيل
 
   return (
     <motion.div
@@ -65,7 +67,7 @@ const AnimatedTitle = ({ text, isActive }) => {
         display: "flex",
         flexDirection: "column-reverse", // من تحت إلى فوق
         transformOrigin: "center center",
-        fontSize: isActive ? "3rem" : "1.5rem",
+        fontSize: "3rem",
         fontWeight: "bold",
         color: "white",
         cursor: "default",
@@ -74,7 +76,7 @@ const AnimatedTitle = ({ text, isActive }) => {
       }}
       variants={container}
       initial="hidden"
-      animate={isActive ? "visible" : "hidden"}
+      animate="visible"
     >
       {letters.map((letter, index) => (
         <motion.span
@@ -110,7 +112,7 @@ const Hero = () => {
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(5deg)", // عكس الميلان من -5deg إلى 5deg
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)", // الميلان للصور
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
@@ -142,13 +144,14 @@ const Hero = () => {
                   left: isActive ? "50%" : "30%",
                   transform: isActive ? "translate(-50%, -50%)" : "translate(0, -50%)",
                   transition: "all 0.5s ease-in-out",
+                  fontSize: isActive ? "3rem" : "1.5rem",
+                  fontWeight: "bold",
                 }}
               >
-                {/* العنوان الثابت */}
-                {!isActive && (
-                  <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{category.title}</div>
-                )}
-                {/* العنوان المتحرك عند التفعيل */}
+                {/* النص الأفقي عند عدم التفعيل */}
+                {!isActive && <div>{category.title}</div>}
+
+                {/* النص العمودي عند التفعيل */}
                 <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
 
@@ -180,3 +183,4 @@ const Hero = () => {
 };
 
 export default Hero;
+
