@@ -20,10 +20,10 @@ const paintCategories = [
     id: "interior",
     title: "Interior",
     description: "Elegant and modern finishes for home and office interiors.",
-    image: "https://i.postimg.cc/gk64K1W2/Whats-App-Image-2025-08-14-at-4-24-41-PM.jpg",
+    image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
   },
   {
-    id: "exterior",
+    id: "exterior", 
     title: "Exterior",
     description: "Weather-resistant coatings for long-term exterior protection.",
     image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
