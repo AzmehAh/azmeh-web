@@ -89,14 +89,7 @@ const HeroSection = () => {
 
                 {/* Overlay ملون */}
                 <motion.div
-                  className="absolute inset-0"
-                  initial={{ opacity: 0 }}
-                  animate={{ 
-                    opacity: isActive ? 0.3 : 0,
-                    backgroundColor: category.color
-                  }}
-                  transition={{ duration: 0.3 }}
-                />
+                 
 
                 {/* المحتوى */}
                 <div className="absolute inset-0 flex flex-col justify-center items-center p-8">
@@ -142,7 +135,7 @@ const HeroSection = () => {
                         exit={{ opacity: 0, scale: 0.8 }}
                         transition={{ duration: 0.3 }}
                         onClick={() => handleExplore(category.id)}
-                        className="px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg  transition-all"
+                        className="px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-all"
                         style={{ boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
                       >
                         اكتشف المنتجات
