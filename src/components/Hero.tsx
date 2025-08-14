@@ -142,7 +142,7 @@ const Hero = () => {
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     transition={{ duration: 0.6 }}
-    className="absolute inset-0 pointer-events-none z-10"
+    className="absolute inset-0 pointer-events-none"
   >
     <div
       style={{
