@@ -110,3 +110,71 @@ const Hero = () => {
                 flex: isActive ? 5 : 1,
                 transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
                 marginLeft: "-25px",
+                marginRight: "-25px",
+              }}
+              style={{ transformOrigin: "center center" }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              onMouseEnter={() => setActiveIndex(index)}
+              onMouseLeave={() => setActiveIndex(null)}
+            >
+              {/* الصورة */}
+              <motion.img
+                src={isActive ? category.activeImage || category.image : category.image}
+                alt={category.title}
+                className="absolute inset-0 w-full h-full object-cover"
+                initial={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.1 }}
+                transition={{ duration: 0.5 }}
+              />
+
+              {/* Overlay شفاف */}
+              {!isActive && (
+                <div className="absolute inset-0 bg-black/50 transition-all duration-500"></div>
+              )}
+
+              {/* العنوان */}
+              <div
+                className="absolute text-white drop-shadow-lg pointer-events-none"
+                style={{
+                  top: "45%",
+                  left: isActive ? "50%" : "30%",
+                  transform: isActive ? "translate(-50%, -50%)" : "translate(0, -50%)",
+                  transition: "all 0.5s ease-in-out",
+                }}
+              >
+                {/* العنوان الثابت أولاً */}
+                {!isActive && (
+                  <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{category.title}</div>
+                )}
+                {/* العنوان المتحرك عند التفعيل */}
+                <AnimatedTitle text={category.title} isActive={isActive} />
+              </div>
+
+              {/* المحتوى النصي عند التفعيل */}
+              {isActive && (
+                <motion.div
+                  className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
+                    {category.description}
+                  </p>
+                  <button
+                    onClick={() => handleExplore(category.id)}
+                    className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                  >
+                    Explore Products
+                  </button>
+                </motion.div>
+              )}
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default Hero;
