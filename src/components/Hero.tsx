@@ -133,7 +133,7 @@ const Hero = () => {
 
               {/* Overlay شفاف */}
               {!isActive && (
-                <div className="absolute inset-0 bg-black/50 transition-all duration-500"></div>
+                <div className="absolute inset-0  transition-all duration-500"></div>
               )}
 
              {/* العنوان المائل قطريًا على كامل الصورة */}
