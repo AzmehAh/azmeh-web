@@ -9,7 +9,7 @@ const paintCategories = [
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
     activeImage: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
-  }, 
+  },
   {
     id: "sports",
     title: "Sports Field",
@@ -42,7 +42,6 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان المتحرك
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -108,7 +107,7 @@ const Hero = () => {
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)", // ✅ الميلان المعاكس
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
@@ -142,10 +141,26 @@ const Hero = () => {
                   transition: "all 0.5s ease-in-out",
                 }}
               >
-                {/* العنوان الثابت أولاً */}
+                {/* العنوان الثابت بشكل عمودي مائل */}
                 {!isActive && (
-                  <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{category.title}</div>
+                  <motion.div
+                    initial={{ rotate: 45, y: 50 }}
+                    animate={{ rotate: 45, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                    style={{
+                      writingMode: "vertical-rl",
+                      transform: "rotate(45deg)",
+                      fontSize: "1.5rem",
+                      fontWeight: "bold",
+                      color: "white",
+                      textShadow: "0 0 5px rgba(0,0,0,0.5)",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {category.title}
+                  </motion.div>
                 )}
+
                 {/* العنوان المتحرك عند التفعيل */}
                 <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
