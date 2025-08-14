@@ -148,8 +148,8 @@ const Hero = () => {
       style={{
         position: "absolute",
         top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%) rotate(-44deg)",
+        left: "40%",
+        transform: "translate(-50%, -50%) rotate(-40deg)",
         fontSize: "4rem",
         fontWeight: "bold",
         color: "rgba(255, 255, 255, 0.85)",
