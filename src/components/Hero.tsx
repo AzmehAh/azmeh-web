@@ -136,27 +136,25 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-black/50 transition-all duration-500"></div>
               )}
 
-             {/* العنوان المائل بطول الصورة */}
+             {/* العنوان المائل قطريًا على كامل الصورة */}
 {!isActive && (
   <motion.div
-    initial={{ opacity: 0, x: -100 }}
-    animate={{ opacity: 1, x: 0 }}
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
     transition={{ duration: 0.6 }}
-    className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
-    style={{
-      transform: "rotate(-20deg)", // نفس ميلان الصورة
-      transformOrigin: "center",
-    }}
+    className="absolute inset-0 pointer-events-none z-10"
   >
     <div
       style={{
-        fontSize: "6rem", // أكبر حتى يغطي الطول
+        position: "absolute",
+        top: "50%",
+        left: "50%",
+        transform: "translate(-50%, -50%) rotate(-30deg)",
+        fontSize: "4rem",
         fontWeight: "bold",
         color: "rgba(255, 255, 255, 0.85)",
-        textShadow: "0 0 15px rgba(0,0,0,0.7)",
+        textShadow: "0 0 10px rgba(0,0,0,0.5)",
         whiteSpace: "nowrap",
-        width: "150%", // أطول من عرض الصورة
-        textAlign: "center",
       }}
     >
       {category.title}
