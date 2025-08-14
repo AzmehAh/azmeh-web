@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 const paintCategories = [
   {
@@ -8,91 +8,39 @@ const paintCategories = [
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
-    activeImage: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
+    color: "#3b82f6", // Blue
   },
   {
     id: "sports",
-    title: "Sports ",
+    title: "Sports Field",
     description: "Specialized coatings designed for outdoor sports surfaces.",
     image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
+    color: "#10b981", // Emerald
   },
   {
     id: "interior",
     title: "Interior",
     description: "Elegant and modern finishes for home and office interiors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+    color: "#f59e0b", // Amber
   },
   {
-    id: "exterior", 
+    id: "exterior",
     title: "Exterior",
     description: "Weather-resistant coatings for long-term exterior protection.",
     image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
-  },
-  {
-    id: "wood",
-    title: "Wood",
-    description: "Protective and decorative finishes for wooden surfaces.",
-    image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
+    color: "#ef4444", // Red
   },
   {
     id: "industrial",
     title: "Industrial",
     description: "Tough coatings for factories and industrial environments.",
     image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
+    color: "#8b5cf6", // Violet
   },
-  
 ];
 
-// مكون العنوان المتحرك عند التفاعل
-const AnimatedTitle = ({ text, isActive }) => {
-  const letters = Array.from(text);
-
-  const container = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
-    },
-  };
-
-  const child = {
-    hidden: { y: 20, opacity: 0, rotate: -15 },
-    visible: { y: 0, opacity: 1, rotate: 0 },
-  };
-
-  return (
-    <motion.div
-      style={{
-        display: "flex",
-        flexDirection: isActive ? "row" : "column-reverse",
-        transformOrigin: "center center",
-        fontSize: "2rem",
-        fontWeight: "bold",
-        color: "white",
-        cursor: "default",
-        userSelect: "none",
-        whiteSpace: "nowrap",
-      }}
-      variants={container}
-      initial="hidden"
-      animate="visible"
-    >
-      {letters.map((letter, index) => (
-        <motion.span
-          key={index}
-          variants={child}
-          style={{ display: "inline-block", transformOrigin: "center" }}
-        >
-          {letter}
-        </motion.span>
-      ))}
-    </motion.div>
-  );
-};
-
-const Hero = () => {
+const HeroSection = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const navigate = useNavigate();
 
@@ -101,112 +49,114 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden bg-gray-900">
       <div className="flex h-full">
-        {paintCategories.map((category, index) => {
-          const isActive = activeIndex === index;
-
-          return (
-            <motion.div
-              key={category.id}
-              className={`relative h-full cursor-pointer ${isActive ? "flex-grow" : "flex-shrink"}`}
-              initial={{ flex: 1 }}
-              animate={{
-                flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
-                marginLeft: "-25px",
-                marginRight: "-25px",
-              }}
-              style={{ transformOrigin: "center center" }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-              onMouseEnter={() => setActiveIndex(index)}
-              onMouseLeave={() => setActiveIndex(null)}
-            >
-              {/* الصورة */}
-              <motion.img
-                src={category.image}
-                alt={category.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                initial={{ scale: 1.1 }}
-                animate={{ scale: isActive ? 1 : 1.1 }}
-                transition={{ duration: 0.5 }}
-              />
-
-              {/* Overlay شفاف */}
-              {!isActive && (
-                <div className="absolute inset-0  transition-all duration-500"></div>
-              )}
-
-             {/* العنوان المائل قطريًا على كامل الصورة */}
-{!isActive && (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.6 }}
-    className="absolute inset-0 pointer-events-none"
-  >
-    <div
-      style={{
-        letterSpacing: "0.3em",
-        position: "absolute",
-        top: "50%",
-        left: "35%",
-        transform: "translate(-50%, -50%) rotate(-45deg)",
-        fontSize: "3rem",
-        fontWeight: "bold",
-        color: "rgba(255, 255, 255, 0.85)",
-        textShadow: "0 0 10px rgba(0,0,0,0.5)",
-        whiteSpace: "nowrap",
-      }}
-    >
-      {category.title}
-    </div>
-  </motion.div>
-)}
-
-
-              {/* العنوان المتحرك عند التفاعل */}
-              {isActive && (
-                <div
-                  className="absolute text-white drop-shadow-lg pointer-events-none"
-                  style={{
-                    top: "45%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    transition: "all 0.5s ease-in-out",
-                    fontSize: "2rem",
-                    fontWeight: "bold",
-                  }}
-                >
-                  <AnimatedTitle text={category.title} isActive={isActive} />
-                </div>
-              )}
-
-              {/* المحتوى النصي عند التفاعل */}
-              {isActive && (
+        <AnimatePresence>
+          {paintCategories.map((category, index) => {
+            const isActive = activeIndex === index;
+            
+            return (
+              <motion.div
+                key={category.id}
+                className={`relative h-full cursor-pointer ${isActive ? "z-10" : "z-0"}`}
+                initial={{ width: "20%" }}
+                animate={{
+                  width: isActive ? "60%" : "20%",
+                  filter: isActive ? "brightness(1)" : "brightness(0.7)",
+                }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseLeave={() => setActiveIndex(null)}
+                layout
+              >
+                {/* الصورة مع تأثيرات الحركة */}
                 <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
+                  className="absolute inset-0 w-full h-full"
+                  initial={{ scale: 1 }}
+                  animate={{ scale: isActive ? 1.05 : 1 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
-                    {category.description}
-                  </p>
-                  <button
-                    onClick={() => handleExplore(category.id)}
-                    className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-                  >
-                    Explore Products
-                  </button>
+                  <img
+                    src={category.image}
+                    alt={category.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div 
+                    className="absolute inset-0 bg-black/30"
+                    style={{ mixBlendMode: "multiply" }}
+                  />
                 </motion.div>
-              )}
-            </motion.div>
-          );
-        })}
+
+                {/* Overlay ملون */}
+                <motion.div
+                  className="absolute inset-0"
+                  initial={{ opacity: 0 }}
+                  animate={{ 
+                    opacity: isActive ? 0.3 : 0,
+                    backgroundColor: category.color
+                  }}
+                  transition={{ duration: 0.3 }}
+                />
+
+                {/* المحتوى */}
+                <div className="absolute inset-0 flex flex-col justify-center items-center p-8">
+                  {/* العنوان */}
+                  <motion.div
+                    className="text-white mb-4 text-center"
+                    initial={{ scale: 1 }}
+                    animate={{ 
+                      scale: isActive ? 1.2 : 1,
+                      marginBottom: isActive ? "2rem" : "1rem"
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <h2 
+                      className={`font-bold ${isActive ? "text-5xl" : "text-3xl"} mb-2`}
+                      style={{ textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
+                    >
+                      {category.title}
+                    </h2>
+                  </motion.div>
+
+                  {/* الوصف - يظهر فقط عند التفاعل */}
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.3 }}
+                        className="text-white text-lg text-center max-w-md mb-8"
+                      >
+                        {category.description}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* الزر - يظهر فقط عند التفاعل */}
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.button
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ duration: 0.3 }}
+                        onClick={() => handleExplore(category.id)}
+                        className="px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-all"
+                        style={{ boxShadow: "0 4px 6px rgba(0,0,0,0.1)" }}
+                      >
+                        اكتشف المنتجات
+                      </motion.button>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </div>
     </div>
   );
 };
 
-export default Hero;
+export default HeroSection;
