@@ -29,17 +29,18 @@ const paintCategories = [
     image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
   },
   {
-    id: "industrial",
-    title: "Industrial",
-    description: "Tough coatings for factories and industrial environments.",
-    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
-  },
-  {
     id: "wood",
     title: "Wood",
     description: "Protective and decorative finishes for wooden surfaces.",
     image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
   },
+  {
+    id: "industrial",
+    title: "Industrial",
+    description: "Tough coatings for factories and industrial environments.",
+    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
+  },
+  
 ];
 
 // مكون العنوان المتحرك عند التفاعل
