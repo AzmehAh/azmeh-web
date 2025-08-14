@@ -147,6 +147,7 @@ const Hero = () => {
   >
     <div
       style={{
+        tracking:"[0.3em]",
         position: "absolute",
         top: "50%",
         left: "35%",
