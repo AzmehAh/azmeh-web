@@ -89,7 +89,9 @@ const HeroSection = () => {
 
                 {/* Overlay ملون */}
                 <motion.div
-                 
+                  className="absolute inset-0"
+                  
+                />
 
                 {/* المحتوى */}
                 <div className="absolute inset-0 flex flex-col justify-center items-center p-8">
