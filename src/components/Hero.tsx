@@ -8,6 +8,7 @@ const paintCategories = [
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
+    activeImage: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
   }, 
   {
     id: "sports",
@@ -20,6 +21,24 @@ const paintCategories = [
     title: "Interior",
     description: "Elegant and modern finishes for home and office interiors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+  },
+  {
+    id: "exterior",
+    title: "Exterior",
+    description: "Weather-resistant coatings for long-term exterior protection.",
+    image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
+  },
+  {
+    id: "industrial",
+    title: "Industrial",
+    description: "Tough coatings for factories and industrial environments.",
+    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
+  },
+  {
+    id: "wood",
+    title: "Wood",
+    description: "Protective and decorative finishes for wooden surfaces.",
+    image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
   },
 ];
 
