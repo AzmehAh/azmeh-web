@@ -42,7 +42,7 @@ const paintCategories = [
   },
 ];
 
-// هذا المكون يعرض العنوان بحروف متحركة
+// مكون العنوان المتحرك
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -57,18 +57,8 @@ const AnimatedTitle = ({ text, isActive }) => {
   };
 
   const child = {
-    hidden: {
-      y: 20,
-      opacity: 0,
-      rotate: -90,
-      x: 0,
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      rotate: 0,
-      x: 0,
-    },
+    hidden: { y: 20, opacity: 0, rotate: -90, x: 0 },
+    visible: { y: 0, opacity: 1, rotate: 0, x: 0 },
   };
 
   return (
@@ -89,12 +79,7 @@ const AnimatedTitle = ({ text, isActive }) => {
       animate={isActive ? "visible" : "hidden"}
     >
       {letters.map((letter, index) => (
-        <motion.span
-          key={index}
-          variants={child}
-          style={{ display: "inline-block" }}
-          aria-hidden="true"
-        >
+        <motion.span key={index} variants={child} style={{ display: "inline-block" }}>
           {letter}
         </motion.span>
       ))}
@@ -119,76 +104,9 @@ const Hero = () => {
           return (
             <motion.div
               key={category.id}
-              className={`relative h-full cursor-pointer ${
-                isActive ? "flex-grow" : "flex-shrink"
-              }`}
+              className={`relative h-full cursor-pointer ${isActive ? "flex-grow" : "flex-shrink"}`}
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
                 transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
                 marginLeft: "-25px",
-                marginRight: "-25px",
-              }}
-              style={{
-                transformOrigin: "center center",
-              }}
-              transition={{
-                duration: 0.5,
-                ease: "easeInOut",
-              }}
-              onMouseEnter={() => setActiveIndex(index)}
-              onMouseLeave={() => setActiveIndex(null)}
-            >
-              <motion.img
-                src={isActive ? category.activeImage || category.image : category.image}
-                alt={category.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                initial={{ scale: 1.1 }}
-                animate={{ scale: isActive ? 1 : 1.1 }}
-                transition={{ duration: 0.5 }}
-              />
-
-              {/* هنا نستخدم المكون AnimatedTitle بدلاً من الفقرة العادية */}
-              <div
-                className="absolute text-white drop-shadow-lg pointer-events-none"
-                style={{
-                  top: "45%",
-                  left: isActive ? "50%" : "30%",
-                  transform: isActive
-                    ? "translate(-50%, -50%)"
-                    : "translate(0, -50%)",
-                  transition: "all 0.5s ease-in-out",
-                }}
-              >
-                <AnimatedTitle text={category.title} isActive={isActive} />
-              </div>
-
-              {/* المحتوى النصي بدون العنوان */}
-              {isActive && (
-                <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
-                >
-                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
-                    {category.description}
-                  </p>
-                  <button
-                    onClick={() => handleExplore(category.id)}
-                    className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
-                  >
-                    Explore Products
-                  </button>
-                </motion.div>
-              )}
-            </motion.div>
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-export default Hero;
-  
