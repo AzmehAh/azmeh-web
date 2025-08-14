@@ -10,7 +10,7 @@ const paintCategories = [
     image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
   },
   {
-    id: "sports",
+    id: "sports", 
     title: "Sports Field",
     description: "Specialized coatings designed for outdoor sports surfaces.",
     image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
@@ -48,7 +48,7 @@ const VerticalTitle = ({ text, isActive }) => {
       style={{
         display: "flex",
         flexDirection: "column-reverse",
-        transform: "rotate(15deg)", // الميلان ثابت دائماً
+        transform: isActive ? "rotate(-15deg)" : "rotate(15deg)", // الميلان المعكوس
         fontSize: isActive ? "3rem" : "1.5rem",
         fontWeight: "bold",
         color: "white",
@@ -88,7 +88,7 @@ const Hero = () => {
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
-                transform: "rotate(5deg)", // الميلان ثابت دائماً
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)", // الميلان المعكوس للصورة
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
