@@ -48,7 +48,7 @@ const VerticalTitle = ({ text, isActive }) => {
       style={{
         display: "flex",
         flexDirection: "column-reverse",
-        transform: isActive ? "rotate(-15deg)" : "rotate(15deg)", // الميلان المعكوس
+        transform: "rotate(15deg)", // الميلان ثابت دائماً
         fontSize: isActive ? "3rem" : "1.5rem",
         fontWeight: "bold",
         color: "white",
@@ -88,7 +88,7 @@ const Hero = () => {
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(5deg)", // الميلان المعكوس للصورة
+                transform: "rotate(5deg)", // الميلان ثابت دائماً
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
