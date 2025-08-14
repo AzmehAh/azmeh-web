@@ -150,7 +150,7 @@ const Hero = () => {
         top: "50%",
         left: "35%",
         transform: "translate(-50%, -50%) rotate(-45deg)",
-        fontSize: "4rem",
+        fontSize: "3rem",
         fontWeight: "bold",
         color: "rgba(255, 255, 255, 0.85)",
         textShadow: "0 0 10px rgba(0,0,0,0.5)",
