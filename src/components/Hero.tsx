@@ -136,29 +136,34 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-black/50 transition-all duration-500"></div>
               )}
 
-              {/* العنوان الكبير المائل قبل التفاعل */}
-              {!isActive && (
-                <motion.div
-                  initial={{ opacity: 0, rotate: -20, scale: 0.8 }}
-                  animate={{ opacity: 1, rotate: -20, scale: 1 }}
-                  transition={{ duration: 0.6 }}
-                  className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
-                  style={{ transformOrigin: "center" }}
-                >
-                  <div
-                    style={{
-                      fontSize: "4rem",
-                      fontWeight: "bold",
-                      color: "rgba(255, 255, 255, 0.8)",
-                      transform: "rotate(-44deg)",
-                      textShadow: "0 0 10px rgba(0,0,0,0.5)",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {category.title}
-                  </div>
-                </motion.div>
-              )}
+             {/* العنوان المائل بطول الصورة */}
+{!isActive && (
+  <motion.div
+    initial={{ opacity: 0, x: -100 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.6 }}
+    className="absolute inset-0 flex items-center justify-center pointer-events-none z-20"
+    style={{
+      transform: "rotate(-20deg)", // نفس ميلان الصورة
+      transformOrigin: "center",
+    }}
+  >
+    <div
+      style={{
+        fontSize: "6rem", // أكبر حتى يغطي الطول
+        fontWeight: "bold",
+        color: "rgba(255, 255, 255, 0.85)",
+        textShadow: "0 0 15px rgba(0,0,0,0.7)",
+        whiteSpace: "nowrap",
+        width: "150%", // أطول من عرض الصورة
+        textAlign: "center",
+      }}
+    >
+      {category.title}
+    </div>
+  </motion.div>
+)}
+
 
               {/* العنوان المتحرك عند التفاعل */}
               {isActive && (
