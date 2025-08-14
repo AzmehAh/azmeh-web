@@ -8,7 +8,6 @@ const paintCategories = [
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
-    activeImage: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
   }, 
   {
     id: "sports",
@@ -22,27 +21,9 @@ const paintCategories = [
     description: "Elegant and modern finishes for home and office interiors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
   },
-  {
-    id: "exterior",
-    title: "Exterior",
-    description: "Weather-resistant coatings for long-term exterior protection.",
-    image: "https://images.pexels.com/photos/189349/pexels-photo-189349.jpeg",
-  },
-  {
-    id: "industrial",
-    title: "Industrial",
-    description: "Tough coatings for factories and industrial environments.",
-    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
-  },
-  {
-    id: "wood",
-    title: "Wood",
-    description: "Protective and decorative finishes for wooden surfaces.",
-    image: "https://images.pexels.com/photos/2440471/pexels-photo-2440471.jpeg",
-  },
 ];
 
-// العنوان المتحرك: يظهر فقط عند التفعيل بشكل عمودي مائل
+// مكون العنوان المتحرك
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -55,19 +36,17 @@ const AnimatedTitle = ({ text, isActive }) => {
   };
 
   const child = {
-    hidden: { y: 20, opacity: 0, rotate: -15 }, // الميلان جهة اليسار
+    hidden: { y: 20, opacity: 0, rotate: -15 }, // الميلان للعمودي الافتراضي
     visible: { y: 0, opacity: 1, rotate: 0 },
   };
-
-  if (!isActive) return null; // لا نعرض إلا عند التفعيل
 
   return (
     <motion.div
       style={{
         display: "flex",
-        flexDirection: "column-reverse", // من تحت إلى فوق
+        flexDirection: isActive ? "row" : "column-reverse", // أفقي عند الفتح، عمودي افتراضي
         transformOrigin: "center center",
-        fontSize: "3rem",
+        fontSize: "2rem",
         fontWeight: "bold",
         color: "white",
         cursor: "default",
@@ -112,7 +91,7 @@ const Hero = () => {
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(5deg)", // الميلان للصور
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
@@ -123,7 +102,7 @@ const Hero = () => {
             >
               {/* الصورة */}
               <motion.img
-                src={isActive ? category.activeImage || category.image : category.image}
+                src={category.image}
                 alt={category.title}
                 className="absolute inset-0 w-full h-full object-cover"
                 initial={{ scale: 1.1 }}
@@ -141,17 +120,13 @@ const Hero = () => {
                 className="absolute text-white drop-shadow-lg pointer-events-none"
                 style={{
                   top: "45%",
-                  left: isActive ? "50%" : "30%",
-                  transform: isActive ? "translate(-50%, -50%)" : "translate(0, -50%)",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
                   transition: "all 0.5s ease-in-out",
-                  fontSize: isActive ? "3rem" : "1.5rem",
+                  fontSize: "2rem",
                   fontWeight: "bold",
                 }}
               >
-                {/* النص الأفقي عند عدم التفعيل */}
-                {!isActive && <div>{category.title}</div>}
-
-                {/* النص العمودي عند التفعيل */}
                 <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
 
