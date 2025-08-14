@@ -8,8 +8,9 @@ const paintCategories = [
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
-  },
-  { 
+    activeImage: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
+  }, 
+  {
     id: "sports",
     title: "Sports Field",
     description: "Specialized coatings designed for outdoor sports surfaces.",
@@ -41,28 +42,48 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان العمودي والمائل
-const VerticalTitle = ({ text, isActive }) => {
+// مكون العنوان المتحرك
+const AnimatedTitle = ({ text, isActive }) => {
+  const letters = Array.from(text);
+
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const child = {
+    hidden: { y: 20, opacity: 0, rotate: -90, x: 0 },
+    visible: { y: 0, opacity: 1, rotate: 0, x: 0 },
+  };
+
   return (
-    <div
+    <motion.div
       style={{
-        display: "flex",
-        flexDirection: "column-reverse", // من الأسفل للأعلى
-        transform: "rotate(-15deg)", // الميلان البسيط
+        display: isActive ? "flex" : "inline-block",
+        flexDirection: isActive ? "row" : "column",
+        transformOrigin: "center",
         fontSize: isActive ? "3rem" : "1.5rem",
         fontWeight: "bold",
         color: "white",
         whiteSpace: "nowrap",
+        cursor: "default",
         userSelect: "none",
-        letterSpacing: "2px",
       }}
+      variants={container}
+      initial="hidden"
+      animate={isActive ? "visible" : "hidden"}
     >
-      {text.split("").map((char, index) => (
-        <span key={index} style={{ display: "inline-block" }}>
-          {char}
-        </span>
+      {letters.map((letter, index) => (
+        <motion.span key={index} variants={child} style={{ display: "inline-block" }}>
+          {letter}
+        </motion.span>
       ))}
-    </div>
+    </motion.div>
   );
 };
 
@@ -98,7 +119,7 @@ const Hero = () => {
             >
               {/* الصورة */}
               <motion.img
-                src={category.image}
+                src={isActive ? category.activeImage || category.image : category.image}
                 alt={category.title}
                 className="absolute inset-0 w-full h-full object-cover"
                 initial={{ scale: 1.1 }}
@@ -111,17 +132,22 @@ const Hero = () => {
                 <div className="absolute inset-0 bg-black/50 transition-all duration-500"></div>
               )}
 
-              {/* العنوان العمودي */}
+              {/* العنوان */}
               <div
                 className="absolute text-white drop-shadow-lg pointer-events-none"
                 style={{
-                  top: "50%",
-                  left: "10%",
-                  transform: "translateY(-50%)",
+                  top: "45%",
+                  left: isActive ? "50%" : "30%",
+                  transform: isActive ? "translate(-50%, -50%)" : "translate(0, -50%)",
                   transition: "all 0.5s ease-in-out",
                 }}
               >
-                <VerticalTitle text={category.title} isActive={isActive} />
+                {/* العنوان الثابت أولاً */}
+                {!isActive && (
+                  <div style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{category.title}</div>
+                )}
+                {/* العنوان المتحرك عند التفعيل */}
+                <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
 
               {/* المحتوى النصي عند التفعيل */}
@@ -152,4 +178,3 @@ const Hero = () => {
 };
 
 export default Hero;
-
