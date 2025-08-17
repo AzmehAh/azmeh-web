@@ -8,25 +8,29 @@ const ColorInspiration = () => {
       name: 'Little Kiwi',
       code: 'N°2555',
       color: '#B8C5A1',
-      image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
+      bucketImage: 'https://images.pexels.com/photos/1005632/pexels-photo-1005632.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
+      squareImage: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
     },
     {
       name: 'Ocean Crush',
       code: 'N°0050',
       color: '#7BA7BC',
-      image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
+      bucketImage: 'https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
+      squareImage: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
     },
     {
       name: 'Lemon Cloud',
       code: 'N°2570',
       color: '#E4A853',
-      image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
+      bucketImage: 'https://images.pexels.com/photos/271645/pexels-photo-271645.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
+      squareImage: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
     },
     {
       name: 'Charcoal Depth',
       code: 'N°8800',
       color: '#4A4A4A',
-      image: 'https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
+      bucketImage: 'https://images.pexels.com/photos/1068520/pexels-photo-1068520.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
+      squareImage: 'https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
     }
   ];
 
@@ -50,26 +54,36 @@ const ColorInspiration = () => {
               onMouseLeave={() => setHoveredColor(null)}
             >
               {/* Color Circle with Image Overlay */}
-              <div className="relative mb-8">
+              <div className="relative mb-8 w-32 h-32 md:w-40 md:h-40">
+                {/* دائرة اللون */}
                 <div 
-                  className={`w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-dashed border-gray-200 transition-all duration-500 ease-out ${
+                  className={`w-full h-full rounded-full border-2 border-dashed border-gray-200 transition-all duration-500 ease-out ${
                     hoveredColor === index ? 'shadow-xl scale-105' : 'shadow-sm hover:shadow-md'
                   }`}
                   style={{ backgroundColor: swatch.color }}
                 >
-                  {/* Image overlay that appears on hover */}
-                  <div 
-                    className={`absolute inset-0 rounded-full overflow-hidden transition-opacity duration-500 ease-out ${
+                  {/* Bucket image */}
+                  <img
+                    src={swatch.bucketImage}
+                    alt={`${swatch.name} bucket`}
+                    className={`absolute inset-0 w-full h-full object-cover rounded-full transition-opacity duration-500 ease-out ${
+                      hoveredColor === index ? 'opacity-0' : 'opacity-100'
+                    }`}
+                  />
+
+                  {/* Square image on hover */}
+                  <img
+                    src={swatch.squareImage}
+                    alt={`${swatch.name} square`}
+                    className={`absolute inset-0 w-full h-full object-cover rounded-md transition-opacity duration-500 ease-out ${
                       hoveredColor === index ? 'opacity-100' : 'opacity-0'
                     }`}
-                  >
-                    <img
-                      src={swatch.image}
-                      alt={swatch.name}
-                      className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-black/20 rounded-full"></div>
-                  </div>
+                  />
+
+                  {/* Overlay dark effect */}
+                  <div className={`absolute inset-0 rounded-full bg-black/20 transition-opacity duration-500 ease-out ${
+                    hoveredColor === index ? 'opacity-0' : 'opacity-20'
+                  }`}></div>
                 </div>
               </div>
 
