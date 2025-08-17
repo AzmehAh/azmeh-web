@@ -7,7 +7,7 @@ const ColorInspiration = () => {
     {
       name: 'Little Kiwi',
       code: 'N°2555',
-      bucketImage: 'https://images.pexels.com/photos/1005632/pexels-photo-1005632.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
+      bucketImage: 'https://drive.google.com/file/d/17shglax88-w3LDFwxXHDWrVFTEKQY-14/view?usp=sharing',
       squareImage: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
     },
     {
