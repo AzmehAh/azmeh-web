@@ -12,7 +12,7 @@ const paintCategories = [
   },
   {
     id: "sports",
-    title: "Sports Field",
+    title: "Sports ",
     description: "Specialized coatings designed for outdoor sports surfaces.",
     image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
     color: "#10b981",
