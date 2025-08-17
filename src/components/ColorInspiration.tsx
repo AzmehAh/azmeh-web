@@ -5,7 +5,7 @@ const ColorInspiration = () => {
 
   const colorSwatches = [
     {
-      name: 'Little Kiwi', 
+      name: 'Little Kiwi',
       code: 'N°2555',
       bucketImage: 'https://images.pexels.com/photos/1005632/pexels-photo-1005632.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
       squareImage: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
@@ -31,7 +31,7 @@ const ColorInspiration = () => {
   ];
 
   return (
-    <section className="py-32 bg-white relative">
+    <section className="py-32 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-20">
@@ -45,42 +45,50 @@ const ColorInspiration = () => {
           {colorSwatches.map((swatch, index) => (
             <div 
               key={index} 
-              className="relative flex flex-col items-center group cursor-pointer"
+              className="flex flex-col items-center group cursor-pointer"
               onMouseEnter={() => setHoveredColor(index)}
               onMouseLeave={() => setHoveredColor(null)}
             >
-              {/* Typography */}
-              <div className="text-center space-y-2 z-10">
-                <h3 className="text-xl md:text-2xl font-light text-gray-900 tracking-wide leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
-                  {swatch.name}
-                </h3>
-                <p className="text-sm md:text-base text-gray-500 font-light tracking-widest uppercase" style={{ fontFamily: 'Georgia, serif' }}>
-                  {swatch.code}
-                </p>
-              </div>
+              {/* Image container */}
+              <div className="relative mb-8 w-32 h-32 md:w-40 md:h-40">
+                {/* Bucket Image */}
+                <img
+                  src={swatch.bucketImage}
+                  alt={`${swatch.name} bucket`}
+                  className={`absolute inset-0 w-full h-full object-cover rounded-full transition-opacity duration-500 ease-out ${
+                    hoveredColor === index ? 'opacity-0' : 'opacity-100'
+                  }`}
+                />
 
-              {/* Small bucket image */}
-              <div className="mt-4 w-20 h-20 md:w-24 md:h-24 z-10">
-                <img 
-                  src={swatch.bucketImage} 
-                  alt={`${swatch.name} bucket`} 
-                  className="w-full h-full object-cover rounded-md shadow"
+                {/* Square Image on hover, أكبر من الدائرة */}
+                <img
+                  src={swatch.squareImage}
+                  alt={`${swatch.name} square`}
+                  className={`absolute top-[-10%] left-[-10%] w-[120%] h-[120%] object-cover rounded-md transition-all duration-500 ease-out ${
+                    hoveredColor === index ? 'opacity-100 scale-105' : 'opacity-0 scale-95'
+                  }`}
                 />
               </div>
 
-              {/* Large square image on hover */}
-              {hoveredColor === index && (
-                <div className="absolute top-[-150%] left-1/2 transform -translate-x-1/2 w-48 h-48 md:w-64 md:h-64 rounded-md shadow-2xl z-20 transition-all duration-500">
-                  <img 
-                    src={swatch.squareImage} 
-                    alt={`${swatch.name} square`} 
-                    className="w-full h-full object-cover rounded-md"
-                  />
-                </div>
-              )}
+              {/* Typography */}
+              <div className="text-center space-y-2">
+                <h3 
+                  className="text-xl md:text-2xl font-light text-gray-900 tracking-wide leading-tight"
+                  style={{ fontFamily: 'Georgia, serif' }}
+                >
+                  {swatch.name}
+                </h3>
+                <p 
+                  className="text-sm md:text-base text-gray-500 font-light tracking-widest uppercase"
+                  style={{ fontFamily: 'Georgia, serif' }}
+                >
+                  {swatch.code}
+                </p>
+              </div>
             </div>
           ))}
-        </div>
+        </div> 
+
         <div className="mt-20"></div>
       </div>
     </section>
