@@ -107,7 +107,7 @@ const Hero = () => {
   const navigate = useNavigate();
 
   const handleExplore = (id) => {
-    navigate(/products?category=${id});
+    navigate(`/products?category=${id}`);
   };
 
   return (
@@ -119,9 +119,9 @@ const Hero = () => {
           return (
             <motion.div
               key={category.id}
-              className={relative h-full cursor-pointer ${
+              className={`relative h-full cursor-pointer ${
                 isActive ? "flex-grow" : "flex-shrink"
-              }}
+              }`}
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
@@ -191,3 +191,4 @@ const Hero = () => {
 };
 
 export default Hero;
+ 
