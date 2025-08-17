@@ -1,82 +1,59 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
-const sections = [
-  {
-    id: "interior",
-    title: "داخلي",
-    description: "دهانات عصرية للمساحات الداخلية تعكس الأناقة والراحة.",
-  },
-  {
-    id: "exterior",
-    title: "خارجي",
-    description: "طلاءات متينة مقاومة للعوامل الجوية لحماية واجهات المباني.",
-  },
-  {
-    id: "industrial",
-    title: "صناعي",
-    description: "حلول قوية تناسب البيئات الصناعية القاسية.",
-  },
-];
-
-export default function HeroSection() {
-  const [active, setActive] = useState(null);
+const TiltedSection = () => {
+  const [hovered, setHovered] = useState(false);
 
   return (
-    <div className="flex h-screen overflow-hidden">
-      {sections.map((sec, i) => {
-        const isActive = active === sec.id;
+    <motion.div
+      className="relative h-screen bg-gray-900 overflow-hidden flex items-center justify-center"
+    >
+      <motion.div
+        className="relative w-3/4 h-3/4 bg-cover bg-center rounded-xl overflow-hidden cursor-pointer"
+        style={{
+          backgroundImage: `url("https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg")`,
+          transform: "skewY(-8deg)",
+        }}
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        animate={{
+          scale: hovered ? 1.05 : 1,
+          skewY: hovered ? 0 : -8,
+        }}
+        transition={{ duration: 0.5 }}
+      >
+        {/* الكلمة المائلة */}
+        <motion.h1
+          className="absolute top-1/2 left-1/2 text-white font-bold text-6xl transform -translate-x-1/2 -translate-y-1/2"
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1 }}
+          style={{ writingMode: "vertical-rl", transform: "rotate(-20deg)" }}
+        >
+          داخلي
+        </motion.h1>
 
-        return (
+        {/* المحتوى عند الاقتراب */}
+        {hovered && (
           <motion.div
-            key={sec.id}
-            onMouseEnter={() => setActive(sec.id)}
-            onMouseLeave={() => setActive(null)}
-            className="relative flex-1 flex items-center justify-center cursor-pointer bg-gray-800 text-white"
-            style={{
-              clipPath: "polygon(0 0, 100% 0, 80% 100%, 0% 100%)", // قص مائل لليسار
-            }}
-            animate={{
-              flex: isActive ? 3 : 1,
-            }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white p-8"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
           >
-            {/* الكلمة الكبيرة */}
-            <motion.h1
-              className="font-bold text-6xl absolute"
-              initial={false}
-              animate={{
-                rotate: isActive ? 0 : -90,
-                scale: isActive ? 1.2 : 1,
-                y: isActive ? -100 : 0,
-              }}
-              transition={{ duration: 0.6 }}
-              style={{ whiteSpace: "nowrap" }}
-            >
-              {sec.title}
-            </motion.h1>
-
-            {/* الوصف + الزر */}
-            <AnimatePresence>
-              {isActive && (
-                <motion.div
-                  initial={{ opacity: 0, y: 40 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 40 }}
-                  transition={{ duration: 0.5 }}
-                  className="absolute bottom-20 text-center px-4"
-                >
-                  <p className="text-lg mb-4">{sec.description}</p>
-                  <button className="px-6 py-3 bg-white text-gray-900 rounded-lg font-semibold hover:bg-gray-200">
-                    اكتشف أكثر
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
+            <h2 className="text-3xl font-bold mb-4">تشطيبات أنيقة وعصرية</h2>
+            <p className="text-lg mb-6 text-center max-w-md">
+              نقدم لك حلول طلاء داخلية تجمع بين الجمال والعملية لتناسب كل المساحات.
+            </p>
+            <button className="px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-all">
+              اكتشف المزيد
+            </button>
           </motion.div>
-        );
-      })}
-    </div>
+        )}
+      </motion.div>
+    </motion.div>
   );
-}
+};
+
+export default TiltedSection;
 
