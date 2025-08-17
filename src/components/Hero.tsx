@@ -4,13 +4,11 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const paintCategories = [
   {
-    id: "automotive", 
+    id: "automotive",
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://i.postimg.cc/76zbvLXr/Whats-App-Image-2025-08-05-at-4-00-04-PM.jpg",
-    color: "#3b82f6",
-  },
-  {
+    color: "#3b82f6", 
     id: "sports",
     title: "Sports Field",
     description: "Specialized coatings designed for outdoor sports surfaces.",
