@@ -76,9 +76,9 @@ const Header = () => {
               </button>
 
               {activeDropdown === 'system' && (  
-                <div className="absolute top-full left-[180%] max-h-[70vh] transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
+                <div className="absolute top-full left-[180%]  transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
                   <div className="flex">
-                    <div className="w-80  p-6">
+                    <div className="w-80  p-4">
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
                       <div className="grid grid-cols-1 gap-2">
                         {paintSystems.map((system, index) => (
