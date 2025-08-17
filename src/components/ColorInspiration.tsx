@@ -45,4 +45,46 @@ const ColorInspiration = () => {
           {colorSwatches.map((swatch, index) => (
             <div 
               key={index} 
+              className="relative flex flex-col items-center group cursor-pointer"
+              onMouseEnter={() => setHoveredColor(index)}
+              onMouseLeave={() => setHoveredColor(null)}
+            >
+              {/* Typography */}
+              <div className="text-center space-y-2 z-10">
+                <h3 className="text-xl md:text-2xl font-light text-gray-900 tracking-wide leading-tight" style={{ fontFamily: 'Georgia, serif' }}>
+                  {swatch.name}
+                </h3>
+                <p className="text-sm md:text-base text-gray-500 font-light tracking-widest uppercase" style={{ fontFamily: 'Georgia, serif' }}>
+                  {swatch.code}
+                </p>
+              </div>
 
+              {/* Small bucket image */}
+              <div className="mt-4 w-20 h-20 md:w-24 md:h-24 z-10">
+                <img 
+                  src={swatch.bucketImage} 
+                  alt={`${swatch.name} bucket`} 
+                  className="w-full h-full object-cover rounded-md shadow"
+                />
+              </div>
+
+              {/* Large square image on hover */}
+              {hoveredColor === index && (
+                <div className="absolute top-[-150%] left-1/2 transform -translate-x-1/2 w-48 h-48 md:w-64 md:h-64 rounded-md shadow-2xl z-20 transition-all duration-500">
+                  <img 
+                    src={swatch.squareImage} 
+                    alt={`${swatch.name} square`} 
+                    className="w-full h-full object-cover rounded-md"
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+        <div className="mt-20"></div>
+      </div>
+    </section>
+  );
+};
+
+export default ColorInspiration;
