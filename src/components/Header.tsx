@@ -85,7 +85,7 @@ const Header = () => {
                 </button>
                  
                 {activeDropdown === 'system' && (
-                  <div className="absolute top-full left-[80%] transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
+                  <div className="absolute top-full right-[50%] transform -translate-x-1/2 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
                     <div className="flex">
                       <div className="w-80 p-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
