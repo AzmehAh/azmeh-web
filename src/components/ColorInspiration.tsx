@@ -54,38 +54,39 @@ const ColorInspiration = () => {
               onMouseLeave={() => setHoveredColor(null)}
             >
               {/* Color Circle with Image Overlay */}
-              <div className="relative mb-8 w-32 h-32 md:w-40 md:h-40">
-                {/* دائرة اللون */}
-                <div 
-                  className={`w-full h-full rounded-full border-2 border-dashed border-gray-200 transition-all duration-500 ease-out ${
-                    hoveredColor === index ? 'shadow-xl scale-105' : 'shadow-sm hover:shadow-md'
-                  }`}
-                  style={{ backgroundColor: swatch.color }}
-                >
-                  {/* Bucket image */}
-                  <img
-                    src={swatch.bucketImage}
-                    alt={`${swatch.name} bucket`}
-                    className={`absolute inset-0 w-full h-full object-cover rounded-full transition-opacity duration-500 ease-out ${
-                      hoveredColor === index ? 'opacity-0' : 'opacity-100'
-                    }`}
-                  />
+             <div className="relative mb-8 w-32 h-32 md:w-40 md:h-40">
+  {/* دائرة اللون */}
+  <div 
+    className={`w-full h-full rounded-full border-2 border-dashed border-gray-200 transition-all duration-500 ease-out ${
+      hoveredColor === index ? 'shadow-xl scale-105' : 'shadow-sm hover:shadow-md'
+    }`}
+    style={{ backgroundColor: swatch.color }}
+  >
+    {/* Bucket image */}
+    <img
+      src={swatch.bucketImage}
+      alt={`${swatch.name} bucket`}
+      className={`absolute inset-0 w-full h-full object-cover rounded-full transition-opacity duration-500 ease-out ${
+        hoveredColor === index ? 'opacity-0' : 'opacity-100'
+      }`}
+    />
 
-                  {/* Square image on hover */}
-                  <img
-                    src={swatch.squareImage}
-                    alt={`${swatch.name} square`}
-                    className={`absolute inset-0 w-full h-full object-cover rounded-md transition-opacity duration-500 ease-out ${
-                      hoveredColor === index ? 'opacity-100' : 'opacity-0'
-                    }`}
-                  />
+    {/* Square image on hover, أكبر من الدائرة */}
+    <img
+      src={swatch.squareImage}
+      alt={`${swatch.name} square`}
+      className={`absolute top-[-10%] left-[-10%] w-[120%] h-[120%] object-cover rounded-md transition-all duration-500 ease-out ${
+        hoveredColor === index ? 'opacity-100 scale-110' : 'opacity-0 scale-90'
+      }`}
+    />
 
-                  {/* Overlay dark effect */}
-                  <div className={`absolute inset-0 rounded-full bg-black/20 transition-opacity duration-500 ease-out ${
-                    hoveredColor === index ? 'opacity-0' : 'opacity-20'
-                  }`}></div>
-                </div>
-              </div>
+    {/* Overlay dark effect */}
+    <div className={`absolute inset-0 rounded-full bg-black/20 transition-opacity duration-500 ease-out ${
+      hoveredColor === index ? 'opacity-0' : 'opacity-20'
+    }`}></div>
+  </div>
+</div>
+
 
               {/* Typography */}
               <div className="text-center space-y-2">
