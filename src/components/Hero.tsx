@@ -135,7 +135,8 @@ const Hero = () => {
               <motion.img
                 src={isActive ? category.activeImage || category.image : category.image}
                 alt={category.title}
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full bringhtess object-cover"
+                style={{ filter: "brightness(0.7)" }}
                 initial={{ scale: 1.1 }}
                 animate={{ scale: isActive ? 1 : 1.1 }}
                 transition={{ duration: 0.5 }}
