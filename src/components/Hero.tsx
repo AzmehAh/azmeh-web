@@ -132,15 +132,18 @@ const Hero = () => {
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              <motion.img
-                src={isActive ? category.activeImage || category.image : category.image}
-                alt={category.title}
-                className="absolute inset-0 w-full h-full bringhtess object-cover"
-                style={{ filter: "brightness(0.7)" }}
-                initial={{ scale: 1.1 }}
-                animate={{ scale: isActive ? 1 : 1.1 }}
-                transition={{ duration: 0.5 }}
-              />
+             <motion.img
+  src={isActive ? category.activeImage || category.image : category.image}
+  alt={category.title}
+  className="absolute inset-0 w-full h-full object-cover"
+  style={{
+    filter: isActive ? "brightness(0.6)" : "brightness(0.8)", // أغمق عند الفتح
+  }}
+  initial={{ scale: 1.1 }}
+  animate={{ scale: isActive ? 1 : 1.1 }}
+  transition={{ duration: 0.5 }}
+/>
+
 
               {/* هنا نستخدم المكون AnimatedTitle بدلاً من الفقرة العادية */}
               <div
