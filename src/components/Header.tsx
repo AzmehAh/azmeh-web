@@ -146,16 +146,19 @@ const Header = () => {
             </div>
           </nav>
 
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <a href="#" className="flex items-center">
-              <div className={`text-2xl font-bold transition-colors duration-200 ${
-                isScrolled ? 'text-[#2C5DB6]' : 'text-white'
-              }`}>
-                AL AZMEH <span className="text-sm font-normal ml-2">PAINTS</span>
-              </div>
-            </a>
-          </div>
+         {/* Logo */}
+<div className="flex-shrink-0">
+  <a href="#" className="flex items-center">
+    <img
+      src="./images/Azmeh-Paints-Logo.png" // ضع هنا رابط الصورة أو مسارها
+      alt="AL AZMEH PAINTS"
+      className={`h-10 w-auto transition-all duration-200 ${
+        isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'
+      }`}
+    />
+  </a>
+</div>
+
 
           {/* Right Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
