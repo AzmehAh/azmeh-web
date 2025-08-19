@@ -69,7 +69,7 @@ const ColorInspiration = () => {
                 <img
                   src={swatch.squareImage}
                   alt={`${swatch.name} square`}
-                  className={`absolute w-[200%] h-[200%] object-cover rounded-xl shadow-xl transition-all duration-700 ease-out ${
+                  className={`absolute w-[200%] h-[130%] object-cover rounded-xl shadow-xl transition-all duration-700 ease-out ${
                     hoveredColor === index
                       ? 'opacity-100 scale-100'
                       : 'opacity-0 scale-95'
