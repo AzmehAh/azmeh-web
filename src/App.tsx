@@ -3,7 +3,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
-import InspirationGallery from './components/InspirationGallery';
+
 import FAQ from './components/FAQ';
 import Brands from './components/Brands';
 import SocialMedia from './components/SocialMedia';
@@ -16,7 +16,7 @@ function App() {
       <Hero />
       <Services />
       <ColorInspiration />
-      <InspirationGallery />
+    
       <FAQ />
       <Brands />
       <SocialMedia />
