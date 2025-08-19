@@ -37,39 +37,26 @@ const Brands = () => {
           <h2 className="text-4xl font-bold text-gray-900 mb-6">
             Trusted by Leading Brands
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            We partner with world-class manufacturers to bring you the highest quality paint systems and coatings available in the market.
-          </p>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+        <div className="flex space-x-8 overflow-x-auto scrollbar-hide py-4">
           {brands.map((brand, index) => (
             <div
               key={index}
-              className="flex items-center justify-center p-6 bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-300 group cursor-pointer"
+              className="flex-shrink-0 w-32 h-20 flex items-center justify-center cursor-pointer transition-transform duration-300"
               onMouseEnter={() => setHoveredBrand(index)}
               onMouseLeave={() => setHoveredBrand(null)}
+              style={{
+                transform: hoveredBrand === index ? 'scale(1.2)' : 'scale(1)',
+              }}
             >
-              <div className="relative w-full h-16 flex items-center justify-center">
-                <div 
-                  className={`w-full h-full bg-gray-300 rounded flex items-center justify-center text-gray-600 font-semibold text-sm transition-all duration-300 ${
-                    hoveredBrand === index ? 'grayscale-0 opacity-100' : 'grayscale opacity-70'
-                  }`}
-                >
-                  {brand.name}
-                </div>
-              </div>
+              <img
+                src={brand.logo}
+                alt={brand.name}
+                className="w-full h-full object-contain"
+              />
             </div>
           ))}
-        </div>
-
-        <div className="text-center mt-12">
-          <p className="text-gray-600">
-            Interested in becoming a partner?{' '}
-            <a href="#contact" className="text-[#2C5DB6] hover:underline font-semibold">
-              Contact us
-            </a>
-          </p>
         </div>
       </div>
     </section>
