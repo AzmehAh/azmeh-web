@@ -31,6 +31,25 @@ const Footer = () => {
               />
             </div>
 
+            {/* Company Info */}
+            <div>
+              <h4 className="text-lg font-semibold mb-4">Contact Information</h4>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <Phone className="w-5 h-5 text-[#2C5DB6]" />
+                  <span className="text-gray-300">+1 (555) 123-4567</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Mail className="w-5 h-5 text-[#2C5DB6]" />
+                  <span className="text-gray-300">info@alazmehpaints.com</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <MapPin className="w-5 h-5 text-[#2C5DB6]" />
+                  <span className="text-gray-300">123 Industrial Ave, Paint City, PC 12345</span>
+                </div>
+              </div>
+            </div>
+
             {/* Quick Links */}
             <div>
               <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
@@ -100,3 +119,4 @@ const Footer = () => {
 };
 
 export default Footer;
+
