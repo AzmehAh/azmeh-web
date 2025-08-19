@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Services from './components/Services';
-import ColorInspiration from './components/ColorInspiration';
+
 import InspirationGallery from './components/InspirationGallery';
 import FAQ from './components/FAQ';
 import Brands from './components/Brands';
@@ -15,7 +15,7 @@ function App() {
       <Header />
       <Hero />
       <Services />
-      <ColorInspiration />
+   
       <InspirationGallery />
       <FAQ />
       <Brands />
