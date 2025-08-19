@@ -55,8 +55,15 @@ const Header = () => {
 
           {/* Left Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-           
-
+            <a 
+              href="#blog" 
+              className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${
+                isScrolled ? 'text-gray-900' : 'text-white'
+              }`}
+            >
+              Blog
+            </a>
+ 
             {/* System Dropdown */}
             <div className="relative">
               <button
@@ -133,14 +140,6 @@ const Header = () => {
                     >
                       View All FAQs →
                     </a>
-                     <a 
-              href="#blog" 
-              className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${
-                isScrolled ? 'text-gray-900' : 'text-white'
-              }`}
-            >
-              Blog
-            </a>
                   </div>
                 </div>
               )}
