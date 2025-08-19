@@ -13,19 +13,19 @@ const ColorInspiration = () => {
     {
       name: 'Ocean Crush',
       code: 'N°0050',
-      bucketImage: 'https://images.pexels.com/photos/1055691/pexels-photo-1055691.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
+      bucketImage: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg',
       squareImage: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
     },
     {
       name: 'Lemon Cloud',
       code: 'N°2570',
-      bucketImage: 'https://images.pexels.com/photos/271645/pexels-photo-271645.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
+      bucketImage: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg',
       squareImage: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
     },
     {
       name: 'Charcoal Depth',
       code: 'N°8800',
-      bucketImage: 'https://images.pexels.com/photos/1068520/pexels-photo-1068520.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
+      bucketImage: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg',
       squareImage: 'https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
     }
   ];
