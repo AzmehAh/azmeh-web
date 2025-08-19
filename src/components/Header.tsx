@@ -41,16 +41,9 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
 
-          {/* Left Navigation */}
+          {/* Left Navigation - 3 عناصر */}
           <nav className="hidden lg:flex items-center space-x-8">
-
-            {/* About */}
-            <a
-              href="#about"
-              className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${
-                isScrolled ? 'text-gray-900' : 'text-white'
-              }`}
-            >
+            <a href="#about" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               About Us
             </a>
 
@@ -97,15 +90,24 @@ const Header = () => {
               )}
             </div>
 
-            {/* Products */}
-            <a
-              href="#products"
-              className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${
-                isScrolled ? 'text-gray-900' : 'text-white'
-              }`}
-            >
+            <a href="#products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Products
             </a>
+          </nav>
+
+          {/* Logo في الوسط */}
+          <div className="flex-shrink-0">
+            <a href="#" className="flex items-center">
+              <img
+                src="/images/Azmeh-Paints-Logo.png"
+                alt="AL AZMEH PAINTS"
+                className={`h-10 w-auto transition-all duration-200 ${isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'}`}
+              />
+            </a>
+          </div>
+
+          {/* Right Navigation - 3 عناصر */}
+          <nav className="hidden lg:flex items-center space-x-8">
 
             {/* FAQ Dropdown */}
             <div
@@ -139,33 +141,9 @@ const Header = () => {
               )}
             </div>
 
-            {/* Blog */}
-            <a
-              href="#blog"
-              className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${
-                isScrolled ? 'text-gray-900' : 'text-white'
-              }`}
-            >
+            <a href="#blog" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Blog
             </a>
-
-          </nav>
-
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <a href="#" className="flex items-center">
-              <img
-                src="/images/Azmeh-Paints-Logo.png"
-                alt="AL AZMEH PAINTS"
-                className={`h-10 w-auto transition-all duration-200 ${
-                  isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'
-                }`}
-              />
-            </a>
-          </div>
-
-          {/* Right Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
 
             {/* Contact Dropdown */}
             <div
@@ -219,4 +197,3 @@ const Header = () => {
 };
 
 export default Header;
- 
