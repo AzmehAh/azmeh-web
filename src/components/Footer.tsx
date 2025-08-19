@@ -6,14 +6,7 @@ const Footer = () => {
     <footer className="relative bg-gray-900 text-white overflow-hidden">
       {/* Curved Top */}
       <div className="absolute top-0 left-0 right-0">
-        <svg
-          viewBox="0 0 1200 120"
-          preserveAspectRatio="none"
-          className="w-full h-16 md:h-20"
-          fill="currentColor"
-        >
-          <path d="M0,0 C300,120 900,120 1200,0 L1200,120 L0,120 Z" />
-        </svg>
+        
       </div>
 
       <div className="relative pt-24 pb-12">
