@@ -22,38 +22,13 @@ const Footer = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
 
-            {/* Company Info */}
-            <div className="lg:col-span-2">
-              <div className="mb-6 flex items-center space-x-3">
-                {/* Logo */}
-                <img
-                  src="/images/Azmeh-Paints-Logo.png"
-                  alt="AL AZMEH PAINTS"
-                  className="h-12 w-auto"
-                />
-                <h3 className="text-3xl font-bold text-white">
-                  AL AZMEH
-                  <span className="text-lg font-normal ml-2">PAINTS</span>
-                </h3>
-              </div>
-              <p className="text-gray-300 leading-relaxed max-w-md mb-6">
-                Leading provider of premium paint systems and technical solutions for residential, commercial, and industrial applications. Quality you can trust, results you can see.
-              </p>
-
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-[#2C5DB6]" />
-                  <span className="text-gray-300">+1 (555) 123-4567</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-[#2C5DB6]" />
-                  <span className="text-gray-300">info@alazmehpaints.com</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-[#2C5DB6]" />
-                  <span className="text-gray-300">123 Industrial Ave, Paint City, PC 12345</span>
-                </div>
-              </div>
+            {/* Company Logo */}
+            <div className="lg:col-span-2 flex items-center justify-start mb-6">
+              <img
+                src="/images/Azmeh-Paints-Logo.png"
+                alt="AL AZMEH PAINTS"
+                className="h-12 w-auto filter brightness-0 invert"
+              />
             </div>
 
             {/* Quick Links */}
