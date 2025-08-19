@@ -1,4 +1,4 @@
-{/*import React, { useState } from 'react';
+import React, { useState } from 'react';
 
 const InspirationGallery = () => {
   const [hoveredImage, setHoveredImage] = useState<number | null>(null);
@@ -20,7 +20,7 @@ const InspirationGallery = () => {
       id: 3,
       image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop',
       title: 'Elegant Bathroom',
-      category: 'Interior'
+      category: 'Interior' 
     },
     {
       id: 4,
@@ -35,7 +35,7 @@ const InspirationGallery = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Side - Gallery Grid */}
-{/*  <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             {galleryImages.map((item) => (
               <div
                 key={item.id}
@@ -65,7 +65,7 @@ const InspirationGallery = () => {
           </div>
 
           {/* Right Side - Content */}
-{/*} <div>
+          <div>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
               Inspiration on everything from colors to design
             </h2>
@@ -90,4 +90,4 @@ const InspirationGallery = () => {
   );
 };
 
-export default InspirationGallery;*/}
+export default InspirationGallery;
