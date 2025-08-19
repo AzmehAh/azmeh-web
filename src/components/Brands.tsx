@@ -10,7 +10,7 @@ const Brands = () => {
     { name: 'Benjamin Moore', logo: 'https://images.pexels.com/photos/3184642/pexels-photo-3184642.jpeg?auto=compress&cs=tinysrgb&w=200&h=100&fit=crop' }
   ];
 
-  // نسخ العناصر لتكرار الحركة المستمرة
+  // نسخ العناصر مرتين لتكرار سلس
   const repeatedBrands = [...brands, ...brands];
 
   return (
@@ -23,7 +23,7 @@ const Brands = () => {
         </div>
 
         <div className="relative w-full overflow-hidden">
-          <div className="flex animate-scroll whitespace-nowrap">
+          <div className="flex w-max animate-scroll">
             {repeatedBrands.map((brand, index) => (
               <div
                 key={index}
@@ -40,12 +40,11 @@ const Brands = () => {
         </div>
       </div>
 
-      {/* Tailwind CSS animation */}
       <style>
         {`
           @keyframes scroll {
             0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
+            100% { transform: translateX(-50%); } /* -50% لأننا نسخنا العناصر مرتين */
           }
           .animate-scroll {
             display: flex;
@@ -58,4 +57,5 @@ const Brands = () => {
 };
 
 export default Brands;
+
 
