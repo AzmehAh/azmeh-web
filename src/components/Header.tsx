@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
-
+import Logo from '../images/Azmeh-Paints-Logo.png';
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -150,7 +150,7 @@ const Header = () => {
 <div className="flex-shrink-0">
   <a href="#" className="flex items-center">
     <img
-      src="../images/Azmeh-Paints-Logo.png" // ضع هنا رابط الصورة أو مسارها
+      src="{Logo}" // ضع هنا رابط الصورة أو مسارها
       alt="AL AZMEH PAINTS"
       className={`h-10 w-auto transition-all duration-200 ${
         isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'
