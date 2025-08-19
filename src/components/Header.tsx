@@ -41,10 +41,20 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
 
-          {/* Left Navigation (3 عناصر) */}
+          {/* Left Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <a href="#about" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>About Us</a>
 
+            {/* About */}
+            <a
+              href="#about"
+              className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${
+                isScrolled ? 'text-gray-900' : 'text-white'
+              }`}
+            >
+              About Us
+            </a>
+
+            {/* System Dropdown */}
             <div
               className="relative"
               onMouseEnter={() => setActiveDropdown('system')}
@@ -59,7 +69,13 @@ const Header = () => {
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
                     <div className="grid grid-cols-1 gap-2">
                       {paintSystems.map((system, index) => (
-                        <a key={index} href={`#system-${system.toLowerCase().replace(/\s+/g, '-')}`} className="text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200">{system}</a>
+                        <a
+                          key={index}
+                          href={`#system-${system.toLowerCase().replace(/\s+/g, '-')}`}
+                          className="text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200"
+                        >
+                          {system}
+                        </a>
                       ))}
                     </div>
                   </div>
@@ -67,7 +83,13 @@ const Header = () => {
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3>
                     <div className="grid grid-cols-1 gap-2">
                       {technicalSolutions.map((solution, index) => (
-                        <a key={index} href={`#solution-${solution.toLowerCase().replace(/\s+/g, '-')}`} className="text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200">{solution}</a>
+                        <a
+                          key={index}
+                          href={`#solution-${solution.toLowerCase().replace(/\s+/g, '-')}`}
+                          className="text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200"
+                        >
+                          {solution}
+                        </a>
                       ))}
                     </div>
                   </div>
@@ -75,22 +97,17 @@ const Header = () => {
               )}
             </div>
 
-            <a href="#products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>Products</a>
-          </nav>
-
-          {/* Logo في المنتصف */}
-          <div className="flex-shrink-0">
-            <a href="#" className="flex items-center">
-              <img
-                src="/images/Azmeh-Paints-Logo.png"
-                alt="AL AZMEH PAINTS"
-                className={`h-10 w-auto transition-all duration-200 ${isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'}`}
-              />
+            {/* Products */}
+            <a
+              href="#products"
+              className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${
+                isScrolled ? 'text-gray-900' : 'text-white'
+              }`}
+            >
+              Products
             </a>
-          </div>
 
-          {/* Right Navigation (3 عناصر) */}
-          <nav className="hidden lg:flex items-center space-x-8">
+            {/* FAQ Dropdown */}
             <div
               className="relative"
               onMouseEnter={() => setActiveDropdown('faq')}
@@ -103,16 +120,54 @@ const Header = () => {
                 <div className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
                   <div className="p-4">
                     {faqItems.map((item, index) => (
-                      <a key={index} href="#faq" className="block text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200 mb-1">{item}</a>
+                      <a
+                        key={index}
+                        href="#faq"
+                        className="block text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                      >
+                        {item}
+                      </a>
                     ))}
-                    <a href="#faq" className="block text-[#2C5DB6] font-medium hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200 mt-2 border-t border-gray-200">View All FAQs →</a>
+                    <a
+                      href="#faq"
+                      className="block text-[#2C5DB6] font-medium hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200 mt-2 border-t border-gray-200"
+                    >
+                      View All FAQs →
+                    </a>
                   </div>
                 </div>
               )}
             </div>
 
-            <a href="#blog" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>Blog</a>
+            {/* Blog */}
+            <a
+              href="#blog"
+              className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${
+                isScrolled ? 'text-gray-900' : 'text-white'
+              }`}
+            >
+              Blog
+            </a>
 
+          </nav>
+
+          {/* Logo */}
+          <div className="flex-shrink-0">
+            <a href="#" className="flex items-center">
+              <img
+                src="/images/Azmeh-Paints-Logo.png"
+                alt="AL AZMEH PAINTS"
+                className={`h-10 w-auto transition-all duration-200 ${
+                  isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'
+                }`}
+              />
+            </a>
+          </div>
+
+          {/* Right Navigation */}
+          <nav className="hidden lg:flex items-center space-x-8">
+
+            {/* Contact Dropdown */}
             <div
               className="relative"
               onMouseEnter={() => setActiveDropdown('contact')}
@@ -130,11 +185,15 @@ const Header = () => {
                 </div>
               )}
             </div>
+
           </nav>
 
           {/* Mobile menu button */}
           <div className="lg:hidden">
-            <button onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} className={`p-2 rounded-md transition-colors duration-200 ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className={`p-2 rounded-md transition-colors duration-200 ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+            >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
@@ -160,3 +219,4 @@ const Header = () => {
 };
 
 export default Header;
+ 
