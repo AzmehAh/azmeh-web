@@ -4,6 +4,7 @@ import { Mail, Phone, MapPin, Facebook, Instagram, MessageCircle } from 'lucide-
 const Footer = () => {
   return (
     <footer className="relative bg-gray-900 text-white overflow-hidden">
+
       {/* Curved Top */}
       <div className="absolute top-0 left-0 right-0">
         <svg
@@ -18,19 +19,27 @@ const Footer = () => {
 
       <div className="relative pt-24 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+
             {/* Company Info */}
             <div className="lg:col-span-2">
-              <div className="mb-6">
-                <h3 className="text-3xl font-bold text-white mb-2">
+              <div className="mb-6 flex items-center space-x-3">
+                {/* Logo */}
+                <img
+                  src="/images/Azmeh-Paints-Logo.png"
+                  alt="AL AZMEH PAINTS"
+                  className="h-12 w-auto"
+                />
+                <h3 className="text-3xl font-bold text-white">
                   AL AZMEH
                   <span className="text-lg font-normal ml-2">PAINTS</span>
                 </h3>
-                <p className="text-gray-300 leading-relaxed max-w-md">
-                  Leading provider of premium paint systems and technical solutions for residential, commercial, and industrial applications. Quality you can trust, results you can see.
-                </p>
               </div>
-              
+              <p className="text-gray-300 leading-relaxed max-w-md mb-6">
+                Leading provider of premium paint systems and technical solutions for residential, commercial, and industrial applications. Quality you can trust, results you can see.
+              </p>
+
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
                   <Phone className="w-5 h-5 text-[#2C5DB6]" />
@@ -80,41 +89,34 @@ const Footer = () => {
                 </button>
               </form>
             </div>
+
           </div>
 
           {/* Social Media & Copyright */}
           <div className="border-t border-gray-800 pt-8">
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div className="flex items-center space-x-6 mb-4 md:mb-0">
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200 group"
-                >
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200 group">
                   <Facebook className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
                 </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200 group"
-                >
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200 group">
                   <Instagram className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
                 </a>
-                <a
-                  href="#"
-                  className="text-gray-400 hover:text-white transition-colors duration-200 group"
-                >
+                <a href="#" className="text-gray-400 hover:text-white transition-colors duration-200 group">
                   <MessageCircle className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
                 </a>
               </div>
-              
+
               <div className="text-gray-400 text-sm">
                 © 2025 Al Azmeh Paints. All rights reserved.
               </div>
             </div>
           </div>
+
         </div>
       </div>
 
-      {/* Decorative Elements */}
+      {/* Decorative Gradient */}
       <div className="absolute bottom-0 right-0 w-64 h-64 opacity-5">
         <div className="w-full h-full bg-gradient-to-tl from-[#2C5DB6] to-transparent rounded-full"></div>
       </div>
