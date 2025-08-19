@@ -35,7 +35,10 @@ const ColorInspiration = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
         <div className="text-center mb-20">
-          <h2 className="text-6xl md:text-7xl font-light text-gray-900 mb-8 tracking-tight" style={{ fontFamily: 'Georgia, serif' }}>
+          <h2
+            className="text-6xl md:text-7xl font-light text-gray-900 mb-8 tracking-tight"
+            style={{ fontFamily: 'Georgia, serif' }}
+          >
             New drops
           </h2>
         </div>
@@ -43,42 +46,46 @@ const ColorInspiration = () => {
         {/* Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-20">
           {colorSwatches.map((swatch, index) => (
-            <div 
-              key={index} 
+            <div
+              key={index}
               className="flex flex-col items-center group cursor-pointer"
               onMouseEnter={() => setHoveredColor(index)}
               onMouseLeave={() => setHoveredColor(null)}
             >
               {/* Image container */}
-              <div className="relative mb-8 w-32 h-32 md:w-40 md:h-40">
+              <div className="relative mb-10 w-36 h-36 md:w-44 md:h-44 flex items-center justify-center">
                 {/* Bucket Image */}
                 <img
                   src={swatch.bucketImage}
                   alt={`${swatch.name} bucket`}
-                  className={`absolute inset-0 w-full h-full object-cover  transition-opacity duration-500 ease-out ${
-                    hoveredColor === index ? 'opacity-0' : 'opacity-100'
+                  className={`absolute inset-0 w-full h-full object-cover rounded-full transition-all duration-500 ease-out ${
+                    hoveredColor === index
+                      ? 'opacity-0 scale-90'
+                      : 'opacity-100 scale-100'
                   }`}
                 />
 
-                {/* Square Image on hover, أكبر من الدائرة */}
+                {/* Square Image on hover */}
                 <img
                   src={swatch.squareImage}
                   alt={`${swatch.name} square`}
-                  className={`absolute top-[-10%] left-[-10%] w-[150%] h-[120%] object-cover rounded-md transition-all duration-500 ease-out ${
-                    hoveredColor === index ? 'opacity-100 scale-105' : 'opacity-0 scale-95'
+                  className={`absolute w-[200%] h-[200%] object-cover rounded-xl shadow-xl transition-all duration-700 ease-out ${
+                    hoveredColor === index
+                      ? 'opacity-100 scale-100'
+                      : 'opacity-0 scale-95'
                   }`}
                 />
               </div>
 
               {/* Typography */}
               <div className="text-center space-y-2">
-                <h3 
+                <h3
                   className="text-xl md:text-2xl font-light text-gray-900 tracking-wide leading-tight"
                   style={{ fontFamily: 'Georgia, serif' }}
                 >
                   {swatch.name}
                 </h3>
-                <p 
+                <p
                   className="text-sm md:text-base text-gray-500 font-light tracking-widest uppercase"
                   style={{ fontFamily: 'Georgia, serif' }}
                 >
@@ -87,7 +94,7 @@ const ColorInspiration = () => {
               </div>
             </div>
           ))}
-        </div> 
+        </div>
 
         <div className="mt-20"></div>
       </div>
