@@ -3,7 +3,7 @@ import React from 'react';
 const Brands = () => {
   const brands = [
     { name: 'Azmeh Paints', logo: '/images/Azmeh-Paints-Logo.png' },
-    { name: 'Sherwin-Williams', logo: 'https://images.pexels.com/photos/3184634/pexels-photo-3184634.jpeg?auto=compress&cs=tinysrgb&w=200&h=100&fit=crop' },
+    { name: 'SRT', logo: '/images/SRT-.gif' },
     { name: 'PPG Industries', logo: 'https://images.pexels.com/photos/3184636/pexels-photo-3184636.jpeg?auto=compress&cs=tinysrgb&w=200&h=100&fit=crop' },
     { name: 'AkzoNobel', logo: 'https://images.pexels.com/photos/3184638/pexels-photo-3184638.jpeg?auto=compress&cs=tinysrgb&w=200&h=100&fit=crop' },
     { name: 'BASF Coatings', logo: 'https://images.pexels.com/photos/3184640/pexels-photo-3184640.jpeg?auto=compress&cs=tinysrgb&w=200&h=100&fit=crop' },
