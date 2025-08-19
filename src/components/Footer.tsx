@@ -22,10 +22,13 @@ const Footer = () => {
             {/* Company Info */}
             <div className="lg:col-span-2">
               <div className="mb-6">
-                <h3 className="text-3xl font-bold text-white mb-2">
-                  AL AZMEH
-                  <span className="text-lg font-normal ml-2">PAINTS</span> 
-                </h3>
+                <div className="lg:col-span-2 flex items-center justify-start mb-6">
+              <img
+                src="/images/Azmeh-Paints-Logo.png"
+                alt="AL AZMEH PAINTS"
+                className="h-12 w-auto filter brightness-0 invert"
+              />
+            </div>
                 <p className="text-gray-300 leading-relaxed max-w-md">
                   Leading provider of premium paint systems and technical solutions for residential, commercial, and industrial applications. Quality you can trust, results you can see.
                 </p>
