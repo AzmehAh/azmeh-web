@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className="relative bg-gray-900 text-white overflow-hidden">
 
       {/* Curved Top */}
-      <div className="absolute top-0 left-0 right-0">
+       <div className="absolute top-0 left-0 right-0">
         <svg
           viewBox="0 0 1200 120"
           preserveAspectRatio="none"
