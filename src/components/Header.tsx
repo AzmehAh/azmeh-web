@@ -158,8 +158,8 @@ let timeoutId: NodeJS.Timeout;
             {/* Contact Dropdown */}
             <div
               className="relative"
-              onMouseEnter={() => setActiveDropdown('contact')}
-              onMouseLeave={() => setActiveDropdown(null)}
+              onMouseEnter={() => handleMouseEnter('contact')}
+              onMouseLeave={() => handleMouseLeave(null)}
             >
               <button className={`flex items-center text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
                 Contact & Distributors <ChevronDown className="ml-1 h-4 w-4" />
