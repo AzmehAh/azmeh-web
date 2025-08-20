@@ -6,12 +6,12 @@ const Header = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 const handleMouseEnter = (menu: string) => {
-  clearTimeout(timeoutId); // يلغي أي تايمر قديم
+  clearTimeout(timeoutId); 
   setActiveDropdown(menu);
 };
 
 const handleMouseLeave = () => {
-  timeoutId = setTimeout(() => setActiveDropdown(null), 300); // 300ms تأخير
+  timeoutId = setTimeout(() => setActiveDropdown(null), 300); 
 };
 
   useEffect(() => {
@@ -61,7 +61,7 @@ let timeoutId: NodeJS.Timeout;
               className="relative"
             
               onMouseEnter={() => handleMouseEnter('system')}
-  onMouseLeave={handleMouseLeave}
+              onMouseLeave={handleMouseLeave}
             >
               <button className={`flex items-center text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
                 System <ChevronDown className="ml-1 h-4 w-4" />
@@ -122,8 +122,8 @@ let timeoutId: NodeJS.Timeout;
             {/* FAQ Dropdown */}
             <div
               className="relative"
-              onMouseEnter={() => setActiveDropdown('faq')}
-              onMouseLeave={() => setActiveDropdown(null)}
+              onMouseEnter={() => handleMouseEnter('faq')}
+              onMouseLeave={() => handleMouseLeave(null)}
             >
               <button className={`flex items-center text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
                 FAQ <ChevronDown className="ml-1 h-4 w-4" />
