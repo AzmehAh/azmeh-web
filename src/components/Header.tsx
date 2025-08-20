@@ -5,6 +5,14 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const handleMouseEnter = (menu: string) => {
+  clearTimeout(timeoutId); // يلغي أي تايمر قديم
+  setActiveDropdown(menu);
+};
+
+const handleMouseLeave = () => {
+  timeoutId = setTimeout(() => setActiveDropdown(null), 300); // 300ms تأخير
+};
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -31,6 +39,7 @@ const Header = () => {
     'Do you provide technical support?',
     'What are your warranty terms?'
   ];
+let timeoutId: NodeJS.Timeout;
 
   return (
     <header
@@ -50,8 +59,9 @@ const Header = () => {
             {/* System Dropdown */}
             <div
               className="relative"
-              onMouseEnter={() => setActiveDropdown('system')}
-              onMouseLeave={() => setActiveDropdown(null)}
+            
+              onMouseEnter={() => handleMouseEnter('system')}
+  onMouseLeave={handleMouseLeave}
             >
               <button className={`flex items-center text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
                 System <ChevronDown className="ml-1 h-4 w-4" />
