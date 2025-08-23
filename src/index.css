@@ -10,7 +10,7 @@
 .menu-item::before {
   content: '';
   position: absolute;
-  right: 0; /* الخط على اليمين */
+ left: 0; /* الخط على اليمين */
   top: 50%;
   transform: translateY(-50%) scaleX(0);
   width: 6px; /* طول الخط */
