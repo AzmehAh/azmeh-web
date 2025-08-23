@@ -75,7 +75,7 @@ let timeoutId: NodeJS.Timeout;
                         <a
                           key={index}
                           href={`#system-${system.toLowerCase().replace(/\s+/g, '-')}`}
-                          className=" menu-item text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200"
+                          className=" nav-dropdown-link text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200"
                         >
                           {system}
                         </a>
@@ -168,7 +168,7 @@ let timeoutId: NodeJS.Timeout;
                 <div className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden">
                   <div className="p-4">
                     <a href="#contact" className="block text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200 mb-1">Contact Us</a>
-                    <a href="#distributors" className=" nav-dropdown-link-line block text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200">Find Distributors</a>
+                    <a href="#distributors" className=" block text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200">Find Distributors</a>
                   </div>
                 </div>
               )}
