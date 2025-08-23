@@ -67,7 +67,9 @@ let timeoutId: NodeJS.Timeout;
                 System <ChevronDown className="ml-1 h-4 w-4" />
               </button>
               {activeDropdown === 'system' && (
-                <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden flex">   
+                <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden flex w-max
+               origin-top transform scale-y-0 opacity-0 transition-all duration-300 ease-out
+               animate-dropdown">   
                   <div className="min-w-[23rem] p-4">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
                     <div className="grid grid-cols-1 gap-2"> 
