@@ -82,7 +82,7 @@ let timeoutId: NodeJS.Timeout;
                       ))}
                     </div>
                   </div>
-                  <div className="min-w-[23rem] p-6 border-l border-gray-200">
+                  <div className="min-w-[23rem] p-4 border-l border-gray-200">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3>
                     <div className="grid grid-cols-1 gap-2">
                       {technicalSolutions.map((solution, index) => (
