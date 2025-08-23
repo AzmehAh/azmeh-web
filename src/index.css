@@ -1,29 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- .nav-dropdown-link {
-  position: relative;       /* ضروري للخط الجانبي */
-  padding-left: 1rem;       /* مساحة للخط */
-  display: block;           /* كل رابط في صف مستقل */
-  transition: color 0.3s ease;
+ .menu-item {
+  position: relative;
+  padding-left: 1rem; /* مساحة للخط على اليسار */
+  transition: color 0.3s ease, background-color 0.3s ease;
 }
 
-.nav-dropdown-link-line {
+.menu-item::before {
+  content: '';
   position: absolute;
-  left: 0;
+  left: 0; /* الخط على اليسار */
   top: 0;
-  width: 4px;               /* سمك الخط */
+  width: 4px; /* سمك الخط */
   height: 100%;
-  background-color: #2C5DB6;
-  transform: scaleY(0);     /* مخفي في البداية */
+  background-color: #2C5DB6; /* لون الخط */
+  transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease; /* حركة سلسة */
 }
 
-.nav-dropdown-link:hover .nav-dropdown-link-line {
-  transform: scaleY(1);     /* يظهر تدريجياً من الأعلى للأسفل */
+.menu-item:hover::before {
+  transform: scaleY(1);
 }
 
-.nav-dropdown-link:hover {
-  color: #2C5DB6;           /* تغيير لون النص عند المرور */
-}
+.menu-item:hover {
+  color: #2C5DB6; /* تغيير لون النص عند المرور */
+} 
+
