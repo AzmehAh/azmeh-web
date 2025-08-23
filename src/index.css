@@ -4,7 +4,7 @@
  .menu-item {
   position: relative;
   padding-left: 1rem; /* مساحة للخط على اليسار */
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, background-color 0.3s ease;
 }
 
 .menu-item::before {
@@ -17,9 +17,13 @@
   background-color: #2C5DB6; /* لون الخط */
   transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease; /* حركة سلسة */
 }
 
 .menu-item:hover::before {
   transform: scaleY(1);
+}
+
+.menu-item:hover {
+  color: #2C5DB6; /* تغيير لون النص عند المرور */
 }
