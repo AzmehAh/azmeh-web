@@ -13,8 +13,8 @@
   left: 0;
   top: 50%;
   transform: translateY(-50%) scaleX(0);
-  width: 10px; /* طول الخط */
-  height: 2px; /* سمك الخط */
+  width: 15px; /* طول الخط */
+  height: 1px; /* سمك الخط */
   background-color: #2C5DB6;
   transform-origin: left;
   transition: transform 0.3s ease;
