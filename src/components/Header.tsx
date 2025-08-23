@@ -89,7 +89,7 @@ let timeoutId: NodeJS.Timeout;
                         <a
                           key={index}
                           href={`#solution-${solution.toLowerCase().replace(/\s+/g, '-')}`}
-                          className=" menu-item  text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200"
+                          className=" menu-item  text-gray-600 hover:text-[#2C5DB6]  px-3 py-2 rounded-md transition-colors duration-200"
                         >
                           {solution}
                         </a>
