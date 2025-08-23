@@ -1,7 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- .menu-item::before {
+.menu-item {
+  position: relative;
+  padding-left: 1rem; /* مساحة للخط على اليسار */
+  transition: color 0.3s ease;
+}
+
+.menu-item::before {
   content: '';
   position: absolute;
   left: 0; /* الخط على اليسار */
@@ -11,14 +17,9 @@
   background-color: #2C5DB6; /* لون الخط */
   transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.3s ease; /* حركة سلسة */
+  transition: transform 0.3s ease;
 }
 
 .menu-item:hover::before {
   transform: scaleY(1);
 }
-
-.menu-item:hover {
-  color: #2C5DB6; /* تغيير لون النص عند المرور */
-}
-
