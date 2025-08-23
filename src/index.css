@@ -3,21 +3,25 @@
 @tailwind utilities;
 .menu-item {
   position: relative;
-  padding-right: 1rem; /* مساحة للخط على اليمين */
-  transition: color 0.3s ease;
+  padding-left: 0.5rem; /* مساحة صغيرة جاهزة */
+  transition: all 0.3s ease;
 }
 
 .menu-item::before {
   content: '';
   position: absolute;
- left: 0; /* الخط على اليمين */
+  left: 0;
   top: 50%;
   transform: translateY(-50%) scaleX(0);
-  width: 8px; /* طول الخط */
+  width: 10px; /* طول الخط */
   height: 2px; /* سمك الخط */
-  background-color: #2C5DB6; /* لون الخط */
+  background-color: #2C5DB6;
   transform-origin: left;
   transition: transform 0.3s ease;
+}
+
+.menu-item:hover {
+  padding-left: 1.5rem; /* يزيح النص عند الهوفر */
 }
 
 .menu-item:hover::before {
