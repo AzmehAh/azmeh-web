@@ -135,14 +135,14 @@ let timeoutId: NodeJS.Timeout;
                       <a
                         key={index}
                         href="#faq"
-                        className="menu-item  block text-gray-600 hover:text-[#2C5DB6] hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                        className="menu-item  block text-gray-600 hover:text-[#2C5DB6]  px-3 py-2 rounded-md transition-colors duration-200 mb-1"
                       >
                         {item}
                       </a>
                     ))}
                     <a
                       href="#faq"
-                      className=" menu-item block text-[#2C5DB6] font-medium hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200 mt-2 border-t border-gray-200"
+                      className=" menu-item block text-[#2C5DB6] font-medium  px-3 py-2 rounded-md transition-colors duration-200 mt-2 border-t border-gray-200"
                     >
                       View All FAQs →
                     </a>
