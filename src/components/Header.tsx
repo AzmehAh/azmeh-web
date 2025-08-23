@@ -142,7 +142,7 @@ let timeoutId: NodeJS.Timeout;
                     ))}
                     <a
                       href="#faq"
-                      className="block text-[#2C5DB6] font-medium hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200 mt-2 border-t border-gray-200"
+                      className=" menu-item block text-[#2C5DB6] font-medium hover:bg-blue-50 px-3 py-2 rounded-md transition-colors duration-200 mt-2 border-t border-gray-200"
                     >
                       View All FAQs →
                     </a>
