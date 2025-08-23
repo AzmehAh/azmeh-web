@@ -1,24 +1,24 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- .nav-dropdown-link {
-  position: relative;
-  padding-left: 1rem;
-  display: block;
-}
-
-.nav-dropdown-link-line {
+ .menu-item::before {
+  content: '';
   position: absolute;
-  left: 0;
+  left: 0; /* الخط على اليسار */
   top: 0;
-  width: 4px;
+  width: 4px; /* سمك الخط */
   height: 100%;
-  background-color: #2C5DB6;
+  background-color: #2C5DB6; /* لون الخط */
   transform: scaleY(0);
   transform-origin: top;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease; /* حركة سلسة */
 }
 
-.nav-dropdown-link:hover .nav-dropdown-link-line {
+.menu-item:hover::before {
   transform: scaleY(1);
 }
+
+.menu-item:hover {
+  color: #2C5DB6; /* تغيير لون النص عند المرور */
+}
+
