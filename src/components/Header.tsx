@@ -107,12 +107,10 @@ let timeoutId: NodeJS.Timeout;
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
-               {/* Paint Systems + Technical Solutions */}
-    </motion.div>
-  )}
-</AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
             <a href="#products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Products
