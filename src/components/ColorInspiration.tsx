@@ -58,7 +58,7 @@ const ColorInspiration = () => {
                 <span className="text-sm text-gray-500">{swatch.code}</span>
               </div>
 
-              {{/* الصورة بتتمدد لتعبي المساحة بين العنوان والخط السفلي */}
+             {/* الصورة بتتمدد لتعبي المساحة بين العنوان والخط السفلي */}
 <div className="flex-1 flex items-center justify-center w-full">
   <div className="relative w-full h-full">
     {/* Bucket Image */}
@@ -85,7 +85,7 @@ const ColorInspiration = () => {
   </div>
 </div>
 
-           
+            </div>
           ))}
         </div>
       </div>
