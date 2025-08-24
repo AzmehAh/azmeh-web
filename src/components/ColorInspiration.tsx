@@ -48,43 +48,37 @@ const ColorInspiration = () => {
           {colorSwatches.map((swatch, index) => (
             <div
               key={index}
-              className="flex flex-col items-center group cursor-pointer w-52 h-[320px] border-t border-b border-gray-300"
+              className="relative overflow-hidden group cursor-pointer w-52 h-[320px] border-t border-b border-gray-300"
               onMouseEnter={() => setHoveredColor(index)}
               onMouseLeave={() => setHoveredColor(null)}
             >
               {/* العنوان */}
-              <div className="flex justify-between w-full px-2 text-gray-800 font-serif mt-2">
+              <div className="relative z-10 flex justify-between w-full px-2 text-gray-800 font-serif mt-2">
                 <span className="text-lg font-semibold">{swatch.name}</span>
                 <span className="text-sm text-gray-500">{swatch.code}</span>
               </div>
-{/* الصورة تمتد من أعلى البطاقة حتى الحد السفلي */}
-<div className="flex-1 flex items-start justify-center w-full">
-  <div className="relative w-full h-full">
-    {/* Bucket Image */}
-    <img
-      src={swatch.bucketImage}
-      alt={`${swatch.name} bucket`}
-      className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
-        hoveredColor === index
-          ? 'opacity-0 scale-90'
-          : 'opacity-100 scale-100'
-      }`}
-    /> 
 
-    {/* Square Image on hover */}
-    <img
-      src={swatch.squareImage}
-      alt={`${swatch.name} square`}
-      className={`absolute inset-0 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
-        hoveredColor === index
-          ? 'opacity-100 scale-100'
-          : 'opacity-0 scale-95'
-      }`}
-    />
-  </div>
-</div>
+              {/* Bucket Image (الخلفية الأساسية) */}
+              <img
+                src={swatch.bucketImage}
+                alt={`${swatch.name} bucket`}
+                className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
+                  hoveredColor === index
+                    ? 'opacity-0 scale-90'
+                    : 'opacity-100 scale-100'
+                }`}
+              />
 
-
+              {/* Square Image on hover (يغطي البطاقة كلها بما فيها الاسم) */}
+              <img
+                src={swatch.squareImage}
+                alt={`${swatch.name} square`}
+                className={`absolute inset-0 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
+                  hoveredColor === index
+                    ? 'opacity-100 scale-100'
+                    : 'opacity-0 scale-95'
+                }`}
+              />
             </div>
           ))}
         </div>
