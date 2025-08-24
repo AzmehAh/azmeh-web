@@ -57,15 +57,14 @@ const ColorInspiration = () => {
                 <span className="text-lg font-semibold">{swatch.name}</span>
                 <span className="text-sm text-gray-500">{swatch.code}</span>
               </div>
-
-             {/* الصورة بتتمدد لتعبي المساحة بين العنوان والخط السفلي */}
-<div className="flex-1 flex items-center justify-center w-full">
+{/* الصورة بتتمدد لتعبي المساحة بين أعلى البطاقة والخط السفلي */}
+<div className="flex-1 flex items-start justify-center w-full">
   <div className="relative w-full h-full">
     {/* Bucket Image */}
     <img
       src={swatch.bucketImage}
       alt={`${swatch.name} bucket`}
-      className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
+      className={`absolute top-0 left-0 w-full h-full object-contain transition-all duration-500 ease-out ${
         hoveredColor === index
           ? 'opacity-0 scale-90'
           : 'opacity-100 scale-100'
@@ -76,7 +75,7 @@ const ColorInspiration = () => {
     <img
       src={swatch.squareImage}
       alt={`${swatch.name} square`}
-      className={`absolute inset-0 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
+      className={`absolute top-0 left-0 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
         hoveredColor === index
           ? 'opacity-100 scale-100'
           : 'opacity-0 scale-95'
