@@ -48,12 +48,21 @@ const ColorInspiration = () => {
           {colorSwatches.map((swatch, index) => (
             <div
               key={index}
-              className="flex flex-col items-center group cursor-pointer"
+              className="flex flex-col items-center group cursor-pointer w-52"
               onMouseEnter={() => setHoveredColor(index)}
               onMouseLeave={() => setHoveredColor(null)}
             >
+              {/* خط علوي */}
+              <div className="border-t border-gray-300 w-full mb-4"></div>
+
+              {/* اسم اللون + الكود */}
+              <div className="flex justify-between w-full px-2 text-gray-800 font-serif mb-4">
+                <span className="text-lg font-semibold">{swatch.name}</span>
+                <span className="text-sm text-gray-500">{swatch.code}</span>
+              </div>
+
               {/* Image container */}
-              <div className="relative mb-10 w-36 h-36 md:w-44 md:h-44 flex items-center justify-center">
+              <div className="relative mb-6 w-36 h-36 md:w-44 md:h-44 flex items-center justify-center">
                 {/* Bucket Image */}
                 <img
                   src={swatch.bucketImage}
@@ -69,7 +78,7 @@ const ColorInspiration = () => {
                 <img
                   src={swatch.squareImage}
                   alt={`${swatch.name} square`}
-                  className={`absolute w-[200%] h-[130%] object-cover  shadow-xl transition-all duration-700 ease-out ${
+                  className={`absolute w-[200%] h-[130%] object-cover shadow-xl transition-all duration-700 ease-out ${
                     hoveredColor === index
                       ? 'opacity-100 scale-100'
                       : 'opacity-0 scale-95'
@@ -77,26 +86,11 @@ const ColorInspiration = () => {
                 />
               </div>
 
-              {/* Typography */}
-              <div className="text-center space-y-2">
-                <h3
-                  className="text-xl md:text-2xl font-light text-gray-900 tracking-wide leading-tight"
-                  style={{ fontFamily: 'Georgia, serif' }}
-                >
-                  {swatch.name}
-                </h3>
-                <p
-                  className="text-sm md:text-base text-gray-500 font-light tracking-widest uppercase"
-                  style={{ fontFamily: 'Georgia, serif' }}
-                >
-                  {swatch.code}
-                </p>
-              </div>
+              {/* خط سفلي */}
+              <div className="border-b border-gray-300 w-full mt-4"></div>
             </div>
           ))}
         </div>
-
-        <div className="mt-20"></div>
       </div>
     </section>
   );
