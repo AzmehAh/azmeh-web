@@ -188,35 +188,20 @@ const Header = () => {
             </div>
 
           </nav>
-{/* Mobile menu button */}
-<div className="lg:hidden">
-  <button
-    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-    className={`p-2 rounded-md transition-colors duration-200 ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-  >
-    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-  </button>
-</div>
 
-{/* Mobile menu */}
-<AnimatePresence>
-  {isMobileMenuOpen && (
-    <motion.div
-      initial={{ height: 0, opacity: 0 }}
-      animate={{ height: 'auto', opacity: 1 }}
-      exit={{ height: 0, opacity: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="lg:hidden bg-white border-t border-gray-200 overflow-hidden"
-    >
-      <div className="px-4 py-6 space-y-4">
-        <a href="#about" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">About Us</a>
-        <a href="#system" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">System</a>
-        <a href="#products" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Products</a>
-        <a href="#faq" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">FAQ</a>
-        <a href="#blog" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Blog</a>
-        <a href="#contact" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Contact</a>
-        <a href="#distributors" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Distributors</a>
+          {/* Mobile menu button */}
+          <div className="lg:hidden">
+            <button
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className={`p-2 rounded-md ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+            >
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </button>
+          </div>
+        </div>
       </div>
-    </motion.div>
-  )}
-</AnimatePresence>
+      {/* Mobile menu */}
+      {isMobileMenuOpen && ( <div className="lg:hidden bg-white border-t border-gray-200"> <div className="px-4 py-6 space-y-4"> 
+        <a href="#about" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">About Us</a> 
+        <a href="#system" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">System</a> <a href="#products" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Products</a> <a href="#faq" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">FAQ</a> <a href="#blog" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Blog</a> <a href="#contact" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Contact</a> <a href="#distributors" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Distributors</a> </div> </div> )} </header> ); }; export default Header;
+  
