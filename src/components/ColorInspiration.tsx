@@ -58,33 +58,34 @@ const ColorInspiration = () => {
                 <span className="text-sm text-gray-500">{swatch.code}</span>
               </div>
 
-              {/* الصورة بتتمدد لتعبي المساحة بين العنوان والخط السفلي */}
-              <div className="flex-1 flex items-center justify-center">
-                <div className="relative w-36 h-36 md:w-44 md:h-44">
-                  {/* Bucket Image */}
-                  <img
-                    src={swatch.bucketImage}
-                    alt={`${swatch.name} bucket`}
-                    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
-                      hoveredColor === index
-                        ? 'opacity-0 scale-90'
-                        : 'opacity-100 scale-100'
-                    }`}
-                  />
+              {{/* الصورة بتتمدد لتعبي المساحة بين العنوان والخط السفلي */}
+<div className="flex-1 flex items-center justify-center w-full">
+  <div className="relative w-full h-full">
+    {/* Bucket Image */}
+    <img
+      src={swatch.bucketImage}
+      alt={`${swatch.name} bucket`}
+      className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
+        hoveredColor === index
+          ? 'opacity-0 scale-90'
+          : 'opacity-100 scale-100'
+      }`}
+    />
 
-                  {/* Square Image on hover */}
-                  <img
-                    src={swatch.squareImage}
-                    alt={`${swatch.name} square`}
-                    className={`absolute inset-0 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
-                      hoveredColor === index
-                        ? 'opacity-100 scale-100' 
-                        : 'opacity-0 scale-95'
-                    }`}
-                  />
-                </div>
-              </div>
-            </div>
+    {/* Square Image on hover */}
+    <img
+      src={swatch.squareImage}
+      alt={`${swatch.name} square`}
+      className={`absolute inset-0 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
+        hoveredColor === index
+          ? 'opacity-100 scale-100'
+          : 'opacity-0 scale-95'
+      }`}
+    />
+  </div>
+</div>
+
+           
           ))}
         </div>
       </div>
