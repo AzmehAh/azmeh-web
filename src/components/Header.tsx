@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
 import { ChevronDown, Menu, X } from 'lucide-react';
 
 const Header = () => {
@@ -66,10 +67,17 @@ let timeoutId: NodeJS.Timeout;
               <button className={`flex items-center text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
                 System <ChevronDown className="ml-1 h-4 w-4" />
               </button>
-              {activeDropdown === 'system' && (
-                <div className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden flex w-max
-               origin-top transform scale-y-0 opacity-0 transition-all duration-300 ease-out
-               animate-dropdown">   
+              <AnimatePresence>
+  {activeDropdown === 'system' && (
+    <motion.div
+      initial={{ scaleY: 0, opacity: 0 }}
+      animate={{ scaleY: 1, opacity: 1 }}
+      exit={{ scaleY: 0, opacity: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden flex w-max origin-top"
+    >
+     
+  
                   <div className="min-w-[23rem] p-4">
                     <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
                     <div className="grid grid-cols-1 gap-2"> 
@@ -101,6 +109,10 @@ let timeoutId: NodeJS.Timeout;
                 </div>
               )}
             </div>
+               {/* Paint Systems + Technical Solutions */}
+    </motion.div>
+  )}
+</AnimatePresence>
 
             <a href="#products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Products
