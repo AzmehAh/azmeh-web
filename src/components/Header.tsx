@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   let timeoutId: NodeJS.Timeout;
 
@@ -25,16 +27,29 @@ const Header = () => {
   }, []);
 
   const paintSystems = [
-    'Concrete Exterior', 'Concrete Lining', 'Concrete Repair & Protection',
-    'Concrete Sealer', 'Ferrous & Steel Substrate Treatment', 'Fire Retardant Paints',
-    'Home & Industrial Wall/Ceiling Paints', 'Steel Coatings', 'Steel Linings',
-    'Floorings', 'Adhesives and Grouts', 'Joint Sealants'
+    { name: 'Concrete Exterior', id: 'concrete-exterior' },
+    { name: 'Concrete Lining', id: 'concrete-lining' },
+    { name: 'Concrete Repair & Protection', id: 'concrete-repair-protection' },
+    { name: 'Concrete Sealer', id: 'concrete-sealer' },
+    { name: 'Ferrous & Steel Substrate Treatment', id: 'ferrous-steel-treatment' },
+    { name: 'Fire Retardant Paints', id: 'fire-retardant-paints' },
+    { name: 'Home & Industrial Wall/Ceiling Paints', id: 'wall-ceiling-paints' },
+    { name: 'Steel Coatings', id: 'steel-coatings' },
+    { name: 'Steel Linings', id: 'steel-linings' },
+    { name: 'Floorings', id: 'floorings' },
+    { name: 'Adhesives and Grouts', id: 'adhesives-grouts' },
+    { name: 'Joint Sealants', id: 'joint-sealants' }
   ];
 
   const technicalSolutions = [
-    'Car Coating Systems', 'Concrete Walls Coating', 'Façade Protection',
-    'Industrial Flooring', 'Joint Sealant', 'Steel Surface Coatings',
-    'Roof Coatings', 'Wooden Surface Coatings'
+    { name: 'Car Coating Systems', id: 'car-coating-systems' },
+    { name: 'Concrete Walls Coating', id: 'concrete-walls-coating' },
+    { name: 'Façade Protection', id: 'facade-protection' },
+    { name: 'Industrial Flooring', id: 'industrial-flooring' },
+    { name: 'Joint Sealant', id: 'joint-sealant' },
+    { name: 'Steel Surface Coatings', id: 'steel-surface-coatings' },
+    { name: 'Roof Coatings', id: 'roof-coatings' },
+    { name: 'Wooden Surface Coatings', id: 'wooden-surface-coatings' }
   ];
 
   const faqItems = [
@@ -85,9 +100,16 @@ const Header = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
                       <div className="grid grid-cols-1 gap-2">
                         {paintSystems.map((system, index) => (
-                          <a key={index} href="#" className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
-                            {system}
-                          </a>
+                          <button
+                            key={index}
+                            onClick={() => {
+                              navigate(`/system/${system.id}`);
+                              setActiveDropdown(null);
+                            }}
+                            className="menu-item text-left text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+                          >
+                            {system.name}
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -95,9 +117,16 @@ const Header = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3>
                       <div className="grid grid-cols-1 gap-2">
                         {technicalSolutions.map((solution, index) => (
-                          <a key={index} href="#" className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
-                            {solution}
-                          </a>
+                          <button
+                            key={index}
+                            onClick={() => {
+                              navigate(`/system/${solution.id}`);
+                              setActiveDropdown(null);
+                            }}
+                            className="menu-item text-left text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+                          >
+                            {solution.name}
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -113,13 +142,13 @@ const Header = () => {
 
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="#" className="flex items-center">
+            <button onClick={() => navigate('/')} className="flex items-center">
               <img
                 src="/images/Azmeh-Paints-Logo.png"
                 alt="AL AZMEH PAINTS"
                 className={`h-10 w-auto transition-all duration-200 ${isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'}`}
               />
-            </a>
+            </button>
           </div>
 
           {/* Right Navigation */}
