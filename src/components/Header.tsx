@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, Menu, X } from 'lucide-react';
+import SystemDetailsModal from './SystemDetailsModal';
+import { systemsData, SystemData } from '../data/systemsData';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [selectedSystem, setSelectedSystem] = useState<SystemData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   let timeoutId: NodeJS.Timeout;
 
@@ -18,6 +22,14 @@ const Header = () => {
     timeoutId = setTimeout(() => setActiveDropdown(null), 300);
   };
 
+  const handleSystemClick = (systemId: string) => {
+    const system = systemsData[systemId];
+    if (system) {
+      setSelectedSystem(system);
+      setIsModalOpen(true);
+      setActiveDropdown(null);
+    }
+  };
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
@@ -25,16 +37,29 @@ const Header = () => {
   }, []);
 
   const paintSystems = [
-    'Concrete Exterior', 'Concrete Lining', 'Concrete Repair & Protection',
-    'Concrete Sealer', 'Ferrous & Steel Substrate Treatment', 'Fire Retardant Paints',
-    'Home & Industrial Wall/Ceiling Paints', 'Steel Coatings', 'Steel Linings',
-    'Floorings', 'Adhesives and Grouts', 'Joint Sealants'
+    { id: 'concrete-exterior', name: 'Concrete Exterior' },
+    { id: 'concrete-lining', name: 'Concrete Lining' },
+    { id: 'concrete-repair', name: 'Concrete Repair & Protection' },
+    { id: 'concrete-sealer', name: 'Concrete Sealer' },
+    { id: 'ferrous-steel', name: 'Ferrous & Steel Substrate Treatment' },
+    { id: 'fire-retardant', name: 'Fire Retardant Paints' },
+    { id: 'wall-ceiling', name: 'Home & Industrial Wall/Ceiling Paints' },
+    { id: 'steel-coatings', name: 'Steel Coatings' },
+    { id: 'steel-linings', name: 'Steel Linings' },
+    { id: 'floorings', name: 'Floorings' },
+    { id: 'adhesives', name: 'Adhesives and Grouts' },
+    { id: 'joint-sealants', name: 'Joint Sealants' }
   ];
 
   const technicalSolutions = [
-    'Car Coating Systems', 'Concrete Walls Coating', 'Façade Protection',
-    'Industrial Flooring', 'Joint Sealant', 'Steel Surface Coatings',
-    'Roof Coatings', 'Wooden Surface Coatings'
+    { id: 'car-coating', name: 'Car Coating Systems' },
+    { id: 'concrete-walls', name: 'Concrete Walls Coating' },
+    { id: 'facade-protection', name: 'Façade Protection' },
+    { id: 'industrial-flooring', name: 'Industrial Flooring' },
+    { id: 'joint-sealant', name: 'Joint Sealant' },
+    { id: 'steel-surface', name: 'Steel Surface Coatings' },
+    { id: 'roof-coatings', name: 'Roof Coatings' },
+    { id: 'wooden-surface', name: 'Wooden Surface Coatings' }
   ];
 
   const faqItems = [
@@ -85,9 +110,13 @@ const Header = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
                       <div className="grid grid-cols-1 gap-2">
                         {paintSystems.map((system, index) => (
-                          <a key={index} href="#" className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
-                            {system}
-                          </a>
+                          <button 
+                            key={index} 
+                            onClick={() => handleSystemClick(system.id)}
+                            className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-left w-full"
+                          >
+                            {system.name}
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -95,9 +124,13 @@ const Header = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3>
                       <div className="grid grid-cols-1 gap-2">
                         {technicalSolutions.map((solution, index) => (
-                          <a key={index} href="#" className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
-                            {solution}
-                          </a>
+                          <button 
+                            key={index} 
+                            onClick={() => handleSystemClick(solution.id)}
+                            className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-left w-full"
+                          >
+                            {solution.name}
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -200,6 +233,13 @@ const Header = () => {
           </div>
         </div>
       </div>
+
+      {/* System Details Modal */}
+      <SystemDetailsModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        systemData={selectedSystem}
+      />
       {/* Mobile menu */}
       {isMobileMenuOpen && ( <div className="lg:hidden bg-white border-t border-gray-200"> <div className="px-4 py-6 space-y-4"> 
         <a href="#about" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">About Us</a> 
