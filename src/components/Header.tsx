@@ -85,7 +85,7 @@ const Header = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
                       <div className="grid grid-cols-1 gap-2">
                         {paintSystems.map((system, index) => (
-                          <a key={index} href="/system?category=paint-systems" className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
+                          <a key={index} href="#" className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
                             {system}
                           </a>
                         ))}
@@ -95,7 +95,7 @@ const Header = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3>
                       <div className="grid grid-cols-1 gap-2">
                         {technicalSolutions.map((solution, index) => (
-                          <a key={index} href="/system?category=technical-solutions" className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
+                          <a key={index} href="#" className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
                             {solution}
                           </a>
                         ))}
@@ -146,7 +146,7 @@ const Header = () => {
                           {item}
                         </a>
                       ))}
-                      <a href="/#faq" className="block text-[#2C5DB6] font-medium px-3 py-2 mt-2 border-t border-gray-200">
+                      <a href="#faq" className="block text-[#2C5DB6] font-medium px-3 py-2 mt-2 border-t border-gray-200">
                         View All FAQs →
                       </a>
                     </div>
