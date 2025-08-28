@@ -106,7 +106,6 @@ let timeoutId: NodeJS.Timeout;
                       ))}
                     </div>
                   </div>
-                </div>
               </motion.div>
             )}
           </AnimatePresence>
