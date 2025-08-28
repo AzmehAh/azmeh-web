@@ -48,40 +48,55 @@ const ColorInspiration = () => {
           {colorSwatches.map((swatch, index) => (
             <div
               key={index}
-              className="relative overflow-hidden group cursor-pointer w-52 h-[320px] border-t border-b border-gray-300"
+              className="flex flex-col items-center group cursor-pointer"
               onMouseEnter={() => setHoveredColor(index)}
               onMouseLeave={() => setHoveredColor(null)}
             >
-              {/* العنوان */}
-              <div className="relative  flex justify-between w-full px-2 text-gray-800 font-serif mt-2">
-                <span className="text-lg font-semibold">{swatch.name}</span>
-                <span className="text-sm text-gray-500">{swatch.code}</span>
+              {/* Image container */}
+              <div className="relative mb-10 w-36 h-36 md:w-44 md:h-44 flex items-center justify-center">
+                {/* Bucket Image */}
+                <img
+                  src={swatch.bucketImage}
+                  alt={`${swatch.name} bucket`}
+                  className={`absolute inset-0 w-full h-full object-cover  transition-all duration-500 ease-out ${
+                    hoveredColor === index
+                      ? 'opacity-0 scale-90'
+                      : 'opacity-100 scale-100'
+                  }`}
+                />
+
+                {/* Square Image on hover */}
+                <img
+                  src={swatch.squareImage}
+                  alt={`${swatch.name} square`}
+                  className={`absolute w-[200%] h-[130%] object-cover  shadow-xl transition-all duration-700 ease-out ${
+                    hoveredColor === index
+                      ? 'opacity-100 scale-100'
+                      : 'opacity-0 scale-95'
+                  }`}
+                />
               </div>
 
-              {/* Bucket Image (الخلفية الأساسية) */}
-              <img
-                src={swatch.bucketImage}
-                alt={`${swatch.name} bucket`}
-                className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
-                  hoveredColor === index
-                    ? 'opacity-0 scale-90'
-                    : 'opacity-100 scale-100'
-                }`}
-              />
-
-              {/* Square Image on hover (يغطي البطاقة كلها بما فيها الاسم) */}
-              <img
-                src={swatch.squareImage}
-                alt={`${swatch.name} square`}
-                className={`absolute inset-0 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
-                  hoveredColor === index
-                    ? 'opacity-100 scale-100'
-                    : 'opacity-0 scale-95'
-                }`}
-              />
+              {/* Typography */}
+              <div className="text-center space-y-2">
+                <h3
+                  className="text-xl md:text-2xl font-light text-gray-900 tracking-wide leading-tight"
+                  style={{ fontFamily: 'Georgia, serif' }}
+                >
+                  {swatch.name}
+                </h3>
+                <p
+                  className="text-sm md:text-base text-gray-500 font-light tracking-widest uppercase"
+                  style={{ fontFamily: 'Georgia, serif' }}
+                >
+                  {swatch.code}
+                </p>
+              </div>
             </div>
           ))}
         </div>
+
+        <div className="mt-20"></div>
       </div>
     </section>
   );
