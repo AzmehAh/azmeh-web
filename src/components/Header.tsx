@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
+import SystemDetailsModal from './SystemDetailsModal';
+import { systemsData, SystemData } from '../data/systemsData';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
+  const [selectedSystem, setSelectedSystem] = useState<SystemData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   let timeoutId: NodeJS.Timeout;
 
@@ -20,6 +22,14 @@ const Header = () => {
     timeoutId = setTimeout(() => setActiveDropdown(null), 300);
   };
 
+  const handleSystemClick = (systemId: string) => {
+    const system = systemsData[systemId];
+    if (system) {
+      setSelectedSystem(system);
+      setIsModalOpen(true);
+      setActiveDropdown(null);
+    }
+  };
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
@@ -27,29 +37,29 @@ const Header = () => {
   }, []);
 
   const paintSystems = [
-    { name: 'Concrete Exterior', id: 'concrete-exterior' },
-    { name: 'Concrete Lining', id: 'concrete-lining' },
-    { name: 'Concrete Repair & Protection', id: 'concrete-repair-protection' },
-    { name: 'Concrete Sealer', id: 'concrete-sealer' },
-    { name: 'Ferrous & Steel Substrate Treatment', id: 'ferrous-steel-treatment' },
-    { name: 'Fire Retardant Paints', id: 'fire-retardant-paints' },
-    { name: 'Home & Industrial Wall/Ceiling Paints', id: 'wall-ceiling-paints' },
-    { name: 'Steel Coatings', id: 'steel-coatings' },
-    { name: 'Steel Linings', id: 'steel-linings' },
-    { name: 'Floorings', id: 'floorings' },
-    { name: 'Adhesives and Grouts', id: 'adhesives-grouts' },
-    { name: 'Joint Sealants', id: 'joint-sealants' }
+    { id: 'concrete-exterior', name: 'Concrete Exterior' },
+    { id: 'concrete-lining', name: 'Concrete Lining' },
+    { id: 'concrete-repair', name: 'Concrete Repair & Protection' },
+    { id: 'concrete-sealer', name: 'Concrete Sealer' },
+    { id: 'ferrous-steel', name: 'Ferrous & Steel Substrate Treatment' },
+    { id: 'fire-retardant', name: 'Fire Retardant Paints' },
+    { id: 'wall-ceiling', name: 'Home & Industrial Wall/Ceiling Paints' },
+    { id: 'steel-coatings', name: 'Steel Coatings' },
+    { id: 'steel-linings', name: 'Steel Linings' },
+    { id: 'floorings', name: 'Floorings' },
+    { id: 'adhesives', name: 'Adhesives and Grouts' },
+    { id: 'joint-sealants', name: 'Joint Sealants' }
   ];
 
   const technicalSolutions = [
-    { name: 'Car Coating Systems', id: 'car-coating-systems' },
-    { name: 'Concrete Walls Coating', id: 'concrete-walls-coating' },
-    { name: 'Façade Protection', id: 'facade-protection' },
-    { name: 'Industrial Flooring', id: 'industrial-flooring' },
-    { name: 'Joint Sealant', id: 'joint-sealant' },
-    { name: 'Steel Surface Coatings', id: 'steel-surface-coatings' },
-    { name: 'Roof Coatings', id: 'roof-coatings' },
-    { name: 'Wooden Surface Coatings', id: 'wooden-surface-coatings' }
+    { id: 'car-coating', name: 'Car Coating Systems' },
+    { id: 'concrete-walls', name: 'Concrete Walls Coating' },
+    { id: 'facade-protection', name: 'Façade Protection' },
+    { id: 'industrial-flooring', name: 'Industrial Flooring' },
+    { id: 'joint-sealant', name: 'Joint Sealant' },
+    { id: 'steel-surface', name: 'Steel Surface Coatings' },
+    { id: 'roof-coatings', name: 'Roof Coatings' },
+    { id: 'wooden-surface', name: 'Wooden Surface Coatings' }
   ];
 
   const faqItems = [
@@ -100,13 +110,10 @@ const Header = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
                       <div className="grid grid-cols-1 gap-2">
                         {paintSystems.map((system, index) => (
-                          <button
-                            key={index}
-                            onClick={() => {
-                              navigate(`/system/${system.id}`);
-                              setActiveDropdown(null);
-                            }}
-                            className="menu-item text-left text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+                          <button 
+                            key={index} 
+                            onClick={() => handleSystemClick(system.id)}
+                            className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-left w-full"
                           >
                             {system.name}
                           </button>
@@ -117,13 +124,10 @@ const Header = () => {
                       <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3>
                       <div className="grid grid-cols-1 gap-2">
                         {technicalSolutions.map((solution, index) => (
-                          <button
-                            key={index}
-                            onClick={() => {
-                              navigate(`/system/${solution.id}`);
-                              setActiveDropdown(null);
-                            }}
-                            className="menu-item text-left text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+                          <button 
+                            key={index} 
+                            onClick={() => handleSystemClick(solution.id)}
+                            className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-left w-full"
                           >
                             {solution.name}
                           </button>
@@ -142,13 +146,13 @@ const Header = () => {
 
           {/* Logo */}
           <div className="flex-shrink-0">
-            <button onClick={() => navigate('/')} className="flex items-center">
+            <a href="#" className="flex items-center">
               <img
                 src="/images/Azmeh-Paints-Logo.png"
                 alt="AL AZMEH PAINTS"
                 className={`h-10 w-auto transition-all duration-200 ${isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'}`}
               />
-            </button>
+            </a>
           </div>
 
           {/* Right Navigation */}
@@ -229,6 +233,13 @@ const Header = () => {
           </div>
         </div>
       </div>
+
+      {/* System Details Modal */}
+      <SystemDetailsModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        systemData={selectedSystem}
+      />
       {/* Mobile menu */}
       {isMobileMenuOpen && ( <div className="lg:hidden bg-white border-t border-gray-200"> <div className="px-4 py-6 space-y-4"> 
         <a href="#about" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">About Us</a> 
