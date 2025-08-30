@@ -141,24 +141,6 @@ const Header = () => {
           <Link to="/troubleshooting/car-coating" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
             Car Coating Problem Guide <span className="text-xs text-gray-500">(28 issues)</span>
           </Link>
-          <Link to="/troubleshooting/coating-defects" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
-            Coating Application Defects <span className="text-xs text-gray-500">(13 issues)</span>
-          </Link>
-          <Link to="/troubleshooting" className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"> 
-            View All Troubleshooting →
-          </Link>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-</div>
-
-
-            <Link to="/products" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Products
-            </Link>
-          </nav>
-
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
