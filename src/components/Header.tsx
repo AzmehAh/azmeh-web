@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import SystemDetailsModal from './SystemDetailsModal';
 import { systemsData, SystemData } from '../data/systemsData';
 
 const Header = () => {
+  const location = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -31,56 +32,17 @@ const Header = () => {
       setActiveDropdown(null);
     }
   };
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const paintSystems = [
-    { id: 'concrete-exterior', name: 'Concrete Exterior' },
-    { id: 'concrete-lining', name: 'Concrete Lining' },
-    { id: 'concrete-repair', name: 'Concrete Repair & Protection' },
-    { id: 'concrete-sealer', name: 'Concrete Sealer' },
-    { id: 'ferrous-steel', name: 'Ferrous & Steel Substrate Treatment' },
-    { id: 'fire-retardant', name: 'Fire Retardant Paints' },
-    { id: 'wall-ceiling', name: 'Home & Industrial Wall/Ceiling Paints' },
-    { id: 'steel-coatings', name: 'Steel Coatings' },
-    { id: 'steel-linings', name: 'Steel Linings' },
-    { id: 'floorings', name: 'Floorings' },
-    { id: 'adhesives', name: 'Adhesives and Grouts' },
-    { id: 'joint-sealants', name: 'Joint Sealants' }
-  ];
-
-  const technicalSolutions = [
-    { id: 'car-coating', name: 'Car Coating Systems' },
-    { id: 'concrete-walls', name: 'Concrete Walls Coating' },
-    { id: 'facade-protection', name: 'Façade Protection' },
-    { id: 'industrial-flooring', name: 'Industrial Flooring' },
-    { id: 'joint-sealant', name: 'Joint Sealant' },
-    { id: 'steel-surface', name: 'Steel Surface Coatings' },
-    { id: 'roof-coatings', name: 'Roof Coatings' },
-    { id: 'wooden-surface', name: 'Wooden Surface Coatings' }
-  ];
-
-  const faqItems = [
-    'What is the best paint for exterior walls?',
-    'How long does industrial coating last?',
-    'Do you provide technical support?',
-    'What are your warranty terms?'
-  ];
-
-  // Motion settings (حركة البرداية)
-  const curtainVariants = {
-    hidden: { scaleY: 0, opacity: 0 },
-    visible: { scaleY: 1, opacity: 1 },
-    exit: { scaleY: 0, opacity: 0 }
-  };
-
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-lg backdrop-blur-sm' : 'bg-transparent'
+        isScrolled ? 'bg-white shadow-lg backdrop-blur-sm' : 'bg-white/95 backdrop-blur-sm'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -88,161 +50,184 @@ const Header = () => {
 
           {/* Left Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <a href="#about" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+            <a href="#about" className="text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] text-gray-900">
               About Us
             </a>
 
             {/* System Dropdown */}
             <div className="relative" onMouseEnter={() => handleMouseEnter('system')} onMouseLeave={handleMouseLeave}>
-              <button className={`flex items-center text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+              <button className="flex items-center text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] text-gray-900">
                 System <ChevronDown className="ml-1 h-4 w-4" />
               </button>
+              
               <AnimatePresence>
                 {activeDropdown === 'system' && (
                   <motion.div
-                    variants={curtainVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 flex w-max origin-top overflow-hidden"
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute top-full left-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-gray-100 py-4 animate-dropdown"
                   >
-                    <div className="min-w-[23rem] p-4">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
-                      <div className="grid grid-cols-1 gap-2">
-                        {paintSystems.map((system, index) => (
-                          <button 
-                            key={index} 
-                            onClick={() => handleSystemClick(system.id)}
-                            className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-left w-full"
-                          >
-                            {system.name}
-                          </button>
-                        ))}
-                      </div>
+                    <div className="px-4 pb-2">
+                      <h3 className="text-sm font-semibold text-gray-500 uppercase tracking-wide">
+                        Paint Systems
+                      </h3>
                     </div>
-                    <div className="min-w-[23rem] p-4 border-l border-gray-200">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3>
-                      <div className="grid grid-cols-1 gap-2">
-                        {technicalSolutions.map((solution, index) => (
-                          <button 
-                            key={index} 
-                            onClick={() => handleSystemClick(solution.id)}
-                            className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-left w-full"
-                          >
-                            {solution.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
+                    {Object.values(systemsData).map((system) => (
+                      <button
+                        key={system.id}
+                        onClick={() => handleSystemClick(system.id)}
+                        className="menu-item w-full text-left px-4 py-3 hover:bg-blue-50 transition-colors duration-200 block"
+                      >
+                        <div className="font-medium text-gray-900">{system.title}</div>
+                        <div className="text-sm text-gray-500 mt-1">{system.description}</div>
+                      </button>
+                    ))}
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            <Link to="/products" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+            <Link to="/products" className="text-base font-medium hover:text-[#2C5DB6] text-gray-900 transition-colors duration-200">
               Products
             </Link>
-
           </nav>
 
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="#" className="flex items-center">
+            <Link to="/" className="flex items-center">
               <img
                 src="/images/Azmeh-Paints-Logo.png"
                 alt="AL AZMEH PAINTS"
-                className={`h-10 w-auto transition-all duration-200 ${isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'}`}
+                className="h-10 w-auto filter brightness-100"
               />
-            </a>
+            </Link>
           </div>
 
           {/* Right Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-
-            {/* FAQ Dropdown */}
-            <div className="relative" onMouseEnter={() => handleMouseEnter('faq')} onMouseLeave={handleMouseLeave}>
-              <button className={`flex items-center text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-                FAQ <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-              <AnimatePresence>
-                {activeDropdown === 'faq' && (
-                  <motion.div
-                    variants={curtainVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
-                  >
-                    <div className="p-4">
-                      {faqItems.map((item, index) => (
-                        <a key={index} href="#faq" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
-                          {item}
-                        </a>
-                      ))}
-                      <a href="#faq" className="block text-[#2C5DB6] font-medium px-3 py-2 mt-2 border-t border-gray-200">
-                        View All FAQs →
-                      </a>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <a href="#blog" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+            <a href="#faq" className="text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] text-gray-900">
+              FAQ
+            </a>
+            <a href="#blog" className="text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] text-gray-900">
               Blog
             </a>
-
-            {/* Contact Dropdown */}
-            <div className="relative" onMouseEnter={() => handleMouseEnter('contact')} onMouseLeave={handleMouseLeave}>
-              <button className={`flex items-center text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-                Contact & Distributors <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-              <AnimatePresence>
-                {activeDropdown === 'contact' && (
-                  <motion.div
-                    variants={curtainVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
-                  >
-                    <div className="p-4">
-                      <a href="#contact" className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
-                        Contact Us
-                      </a>
-                      <a href="#distributors" className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
-                        Find Distributors
-                      </a>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
+            <a href="#contact" className="text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] text-gray-900">
+              Contact
+            </a>
+            <a href="#distributors" className="text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] text-gray-900">
+              Distributors
+            </a>
           </nav>
 
           {/* Mobile menu button */}
           <div className="lg:hidden">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`p-2 rounded-md ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+              className="p-2 rounded-md text-gray-900 hover:text-[#2C5DB6] hover:bg-gray-100 transition-colors duration-200"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="lg:hidden overflow-hidden bg-white border-t border-gray-100"
+            >
+              <div className="py-4 space-y-1">
+                <Link
+                  to="/"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-[#2C5DB6] hover:bg-gray-50 transition-colors duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Home
+                </Link>
+                <a
+                  href="#about"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-[#2C5DB6] hover:bg-gray-50 transition-colors duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  About Us
+                </a>
+                
+                {/* Mobile System Menu */}
+                <div className="px-4 py-2">
+                  <div className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                    System
+                  </div>
+                  <div className="pl-4 space-y-1">
+                    {Object.values(systemsData).map((system) => (
+                      <button
+                        key={system.id}
+                        onClick={() => {
+                          handleSystemClick(system.id);
+                          setIsMobileMenuOpen(false);
+                        }}
+                        className="block w-full text-left py-2 text-sm text-gray-700 hover:text-[#2C5DB6] transition-colors duration-200"
+                      >
+                        {system.title}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <Link
+                  to="/products"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-[#2C5DB6] hover:bg-gray-50 transition-colors duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Products
+                </Link>
+                <a
+                  href="#faq"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-[#2C5DB6] hover:bg-gray-50 transition-colors duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  FAQ
+                </a>
+                <a
+                  href="#blog"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-[#2C5DB6] hover:bg-gray-50 transition-colors duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Blog
+                </a>
+                <a
+                  href="#contact"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-[#2C5DB6] hover:bg-gray-50 transition-colors duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Contact
+                </a>
+                <a
+                  href="#distributors"
+                  className="block px-4 py-3 text-base font-medium text-gray-900 hover:text-[#2C5DB6] hover:bg-gray-50 transition-colors duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  Distributors
+                </a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* System Details Modal */}
-      <SystemDetailsModal 
+      <SystemDetailsModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         systemData={selectedSystem}
       />
-      {/* Mobile menu */}
-      {isMobileMenuOpen && ( <div className="lg:hidden bg-white border-t border-gray-200"> <div className="px-4 py-6 space-y-4"> 
-        <a href="#about" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">About Us</a> 
-        <a href="#system" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">System</a> <a href="#products" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Products</a> <a href="#faq" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">FAQ</a> <a href="#blog" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Blog</a> <a href="#contact" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Contact</a> <a href="#distributors" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Distributors</a> </div> </div> )} </header> ); }; export default Header;
+    </header>
+  );
+};
+
+export default Header;
