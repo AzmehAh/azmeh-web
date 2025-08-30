@@ -78,10 +78,8 @@ const Header = () => {
   ];
 
   const faqItems = [
-    'What is the best paint for exterior walls?',
-    'How long does industrial coating last?',
-    'Do you provide technical support?',
-    'What are your warranty terms?'
+    'Industrial and Protective Coating',
+    'Architectural Coating'
   ];
 
   const curtainVariants = {
@@ -187,13 +185,20 @@ const Header = () => {
                     className="absolute top-full left-0 mt-2 w-80 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
                   >
                     <div className="p-4">
-                      {faqItems.map((item, index) => (
-                        <Link key={index} to="/faq" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
-                          {item}
-                        </Link>
-                      ))}
+                      <Link 
+                        to="/faq/industrial" 
+                        className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                      >
+                        Industrial and Protective Coating
+                      </Link>
+                      <Link 
+                        to="/faq/architectural" 
+                        className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                      >
+                        Architectural Coating
+                      </Link>
                       <Link to="/faq" className="block text-[#2C5DB6] font-medium px-3 py-2 mt-2 border-t border-gray-200">
-                        View All FAQs →
+                        View All Categories →
                       </Link>
                     </div>
                   </motion.div>
@@ -259,7 +264,12 @@ const Header = () => {
           <div className="px-4 py-6 space-y-4">
             <Link to="/about" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">About Us</Link>
             <Link to="/products" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Products</Link>
-            <Link to="/faq" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">FAQ</Link>
+            <div className="space-y-2">
+              <p className="text-gray-700 font-semibold">FAQ</p>
+              <Link to="/faq/industrial" className="block text-gray-600 hover:text-[#2C5DB6] pl-4">Industrial and Protective Coating</Link>
+              <Link to="/faq/architectural" className="block text-gray-600 hover:text-[#2C5DB6] pl-4">Architectural Coating</Link>
+              <Link to="/faq" className="block text-[#2C5DB6] font-medium pl-4">All Categories</Link>
+            </div>
             <Link to="/blog" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Blog</Link>
             <Link to="/contact" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Contact</Link>
             <Link to="/distributors" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Distributors</Link>

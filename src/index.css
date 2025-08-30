@@ -43,3 +43,23 @@
     animation: dropdown 0.3s ease-out forwards;
   }
 }
+/* styles.css */
+.nav-link {
+  position: relative;
+  padding-bottom: 4px; /* نفس الـ pb-1 */
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background-color: #facc15; /* tailwind yellow-400 */
+  transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}

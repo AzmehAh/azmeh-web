@@ -30,6 +30,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/faq/:category" element={<FAQ />} />
       </Routes>
       <Footer />
     </div>

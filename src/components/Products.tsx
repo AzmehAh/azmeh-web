@@ -130,51 +130,54 @@ const Products = () => {
                 </button>
               </div>
 
-              {/* Filter Categories */}
-              {Object.entries(filterOptions).map(([category, options]) => (
-                <div key={category} className="mb-6">
-                  <button
-                    onClick={() => setActiveFilterCategory(
-                      activeFilterCategory === category ? null : category
-                    )}
-                    className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-[#2C5DB6] transition-colors"
-                  >
-                    <span className="capitalize">By {category}</span>
-                    <ChevronDown className={`w-4 h-4 transition-transform ${
-                      activeFilterCategory === category ? 'rotate-180' : ''
-                    }`} />
-                  </button>
-                  
-                  <AnimatePresence>
-                    {activeFilterCategory === category && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="space-y-2 max-h-48 overflow-y-auto">
-                          {options.map((option) => (
-                            <label
-                              key={option}
-                              className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedFilters[category].includes(option)}
-                                onChange={() => toggleFilter(category, option)}
-                                className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
-                              />
-                              <span className="text-sm text-gray-700">{option}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
+             {/* Filter Categories */}
+{Object.entries(filterOptions).map(([category, options]) => (
+  <div key={category} className="mb-6">
+    <button
+      onClick={() =>
+        setActiveFilterCategory(activeFilterCategory === category ? null : category)
+      }
+      className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-[#2C5DB6] transition-colors"
+    >
+      <span className="capitalize">By {category}</span>
+      <ChevronDown
+        className={`w-4 h-4 transition-transform ${
+          activeFilterCategory === category ? 'rotate-180' : ''
+        }`}
+      />
+    </button>
+
+    <AnimatePresence>
+      {activeFilterCategory === category && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: 'auto', opacity: 1 }}
+          exit={{ height: 0, opacity: 0 }}
+          transition={{ duration: 0.3 }}
+          className="overflow-hidden"
+        >
+          <div className="space-y-2">
+            {options.map((option) => (
+              <label
+                key={option}
+                className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedFilters[category].includes(option)}
+                  onChange={() => toggleFilter(category, option)}
+                  className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
+                />
+                <span className="text-sm text-gray-700">{option}</span>
+              </label>
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+))}
+
 
               {/* Active Filters */}
               {getActiveFiltersCount() > 0 && (
