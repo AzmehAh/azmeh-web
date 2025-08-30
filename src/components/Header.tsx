@@ -215,7 +215,7 @@ const Header = () => {
 
            
 
-            <Link to="/blog" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-gray-900'}`}>
+            <Link to="/blog" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'white'}`}>
               Blog
             </Link>
 
