@@ -288,47 +288,187 @@ const Header = () => {
       />
 
       {/* Mobile menu */}
-      {isMobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-200">
-          <div className="px-4 py-6 space-y-4">
-            <Link to="/about" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">About Us</Link>
-            <Link to="/products" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Products</Link>
-            <div className="space-y-2">
-              <p className="text-gray-700 font-semibold">FAQ</p>
-              <Link to="/faq/industrial" className="block text-gray-600 hover:text-[#2C5DB6] pl-4">Industrial and Protective Coating</Link>
-              <Link to="/faq/architectural" className="block text-gray-600 hover:text-[#2C5DB6] pl-4">Architectural Coating</Link>
-              <Link to="/faq" className="block text-[#2C5DB6] font-medium pl-4">All Categories</Link>
-            </div>
-            <Link to="/blog" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Blog</Link>
-            <Link to="/contact" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Contact</Link>
-            <Link to="/distributors" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Distributors</Link>
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="lg:hidden bg-white border-t border-gray-200 overflow-hidden"
+          >
+            <div className="px-4 py-6 space-y-4 max-h-96 overflow-y-auto">
+              <Link 
+                to="/" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-gray-900 hover:text-orange-600 font-medium py-2"
+              >
+                Home
+              </Link>
+              <Link 
+                to="/about" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-gray-900 hover:text-orange-600 font-medium py-2"
+              >
+                About Us
+              </Link>
 
-            {/* System Dropdown */}
-            <div className="mt-4">
-              <h3 className="text-gray-700 font-semibold mb-2">Paint Systems</h3>
-              {paintSystems.map(system => (
-                <button 
-                  key={system.id} 
-                  onClick={() => handleSystemClick(system.id)}
-                  className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 w-full text-left"
+              {/* System Dropdown */}
+              <div>
+                <button
+                  onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'system' ? null : 'system')}
+                  className="flex items-center justify-between w-full text-gray-900 hover:text-orange-600 font-medium py-2"
                 >
-                  {system.name}
+                  <span>System</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'system' ? 'rotate-180' : ''}`} />
                 </button>
-              ))}
-              <h3 className="text-gray-700 font-semibold mt-4 mb-2">Technical Solutions</h3>
-              {technicalSolutions.map(solution => (
-                <button 
-                  key={solution.id} 
-                  onClick={() => handleSystemClick(solution.id)}
-                  className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 w-full text-left"
+                <AnimatePresence>
+                  {activeMobileDropdown === 'system' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden pl-4 mt-2 space-y-1"
+                    >
+                      <h5 className="text-sm font-semibold text-gray-700 mb-2">Paint Systems</h5>
+                      {paintSystems.slice(0, 6).map(system => (
+                        <button 
+                          key={system.id} 
+                          onClick={() => {
+                            handleSystemClick(system.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 w-full text-left text-sm"
+                        >
+                          {system.name}
+                        </button>
+                      ))}
+                      <h5 className="text-sm font-semibold text-gray-700 mb-2 mt-3">Technical Solutions</h5>
+                      {technicalSolutions.slice(0, 4).map(solution => (
+                        <button 
+                          key={solution.id} 
+                          onClick={() => {
+                            handleSystemClick(solution.id);
+                            setIsMobileMenuOpen(false);
+                          }}
+                          className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 w-full text-left text-sm"
+                        >
+                          {solution.name}
+                        </button>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <Link 
+                to="/products" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-gray-900 hover:text-orange-600 font-medium py-2"
+              >
+                Products
+              </Link>
+
+              {/* Technical Support Dropdown */}
+              <div>
+                <button
+                  onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'technical' ? null : 'technical')}
+                  className="flex items-center justify-between w-full text-gray-900 hover:text-orange-600 font-medium py-2"
                 >
-                  {solution.name}
+                  <span>Technical Support</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'technical' ? 'rotate-180' : ''}`} />
                 </button>
-              ))}
+                <AnimatePresence>
+                  {activeMobileDropdown === 'technical' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden pl-4 mt-2 space-y-1"
+                    >
+                      <h5 className="text-sm font-semibold text-gray-700 mb-2">FAQ</h5>
+                      <Link 
+                        to="/faq/industrial" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                      >
+                        Industrial and Protective Coating
+                      </Link>
+                      <Link 
+                        to="/faq/architectural" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                      >
+                        Architectural Coating
+                      </Link>
+                      
+                      <h5 className="text-sm font-semibold text-gray-700 mb-2 mt-3">Troubleshooting</h5>
+                      <Link 
+                        to="/troubleshooting/car-coating" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-gray-600 hover:text-orange-600 px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                      >
+                        Car Coating Problems <span className="text-xs text-gray-500">(28)</span>
+                      </Link>
+                      <Link 
+                        to="/troubleshooting/coating-defects" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-gray-600 hover:text-orange-600 px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                      >
+                        Application Defects <span className="text-xs text-gray-500">(13)</span>
+                      </Link>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+
+              <Link 
+                to="/blog" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-gray-900 hover:text-orange-600 font-medium py-2"
+              >
+                Blog
+              </Link>
+
+              {/* Contact Dropdown */}
+              <div>
+                <button
+                  onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'contact' ? null : 'contact')}
+                  className="flex items-center justify-between w-full text-gray-900 hover:text-orange-600 font-medium py-2"
+                >
+                  <span>Contact & Distributors</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {activeMobileDropdown === 'contact' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden pl-4 mt-2 space-y-1"
+                    >
+                      <Link 
+                        to="/contact" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-gray-600 hover:text-orange-600 px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                      >
+                        Contact Us
+                      </Link>
+                      <Link 
+                        to="/distributors" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-gray-600 hover:text-orange-600 px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                      >
+                        Find Distributors
+                      </Link>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

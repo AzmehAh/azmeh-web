@@ -7,6 +7,7 @@ import ColorInspiration from './components/ColorInspiration';
 import Products from './components/Products';
 import ProductDetail from './components/ProductDetail';
 import FAQ from './components/FAQ';
+import Troubleshooting from './components/Troubleshooting';
 import Brands from './components/Brands';
 import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
@@ -32,6 +33,8 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/faq/:category" element={<FAQ />} />
+        <Route path="/troubleshooting" element={<Troubleshooting />} />
+        <Route path="/troubleshooting/:category" element={<Troubleshooting />} />
       </Routes>
       <Footer />
     </div>
