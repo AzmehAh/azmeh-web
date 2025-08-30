@@ -26,113 +26,112 @@ const ProductDetail = () => {
   }, [product]);
 
   const handleDownloadDatasheet = () => {
-    // Placeholder for datasheet download
     alert(`Downloading datasheet for ${product?.name}`);
   };
-
-  if (!product) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Product Not Found</h1>
-          <p className="text-gray-600 mb-8">The product you're looking for doesn't exist.</p>
-          <Link to="/products" className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-            Back to Products
-          </Link>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Breadcrumb Navigation */}
-      <div className="bg-white border-b">
+      <div className="bg-white border-b relative z-50">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center text-sm text-gray-600">
             <Link to="/" className="hover:text-[#2C5DB6] transition-colors">Home</Link>
             <span className="mx-2">/</span>
             <Link to="/products" className="hover:text-[#2C5DB6] transition-colors">Products</Link>
-            <span className="mx-2">/</span>
-            <span className="text-gray-900">{product.name}</span>
+            {product && (
+              <>
+                <span className="mx-2">/</span>
+                <span className="text-gray-900">{product.name}</span>
+              </>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
-        <div className="container mx-auto px-4">
-          <Link to="/products" className="inline-flex items-center text-blue-200 hover:text-white mb-6 transition-colors">
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Products
-          </Link>
-          
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div>
-              <div className="flex items-center gap-3 mb-4">
-                <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
-                  {product.brand}
-                </span>
-                <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
-                  {product.code}
-                </span>
-              </div>
-              
-              <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
-                {product.name}
-              </h1>
-              
-              <p className="text-xl text-blue-100 mb-6 leading-relaxed">
-                {product.description}
-              </p>
-              
-              <p className="text-blue-100/90 mb-8 leading-relaxed">
-                {product.technicalDescription}
-              </p>
-              
-              <button
-                onClick={handleDownloadDatasheet}
-                className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center"
-              >
-                <Download className="w-6 h-6 mr-3" />
-                Download Technical Datasheet
-              </button>
-            </div>
-            
-            <div className="relative">
-              <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white/10 backdrop-blur-sm">
-                <motion.img
-                  key={currentImageIndex}
-                  src={product.images[currentImageIndex]}
-                  alt={product.name}
-                  className="w-full h-80 lg:h-96 object-cover"
-                  initial={{ opacity: 0, scale: 1.1 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.7 }}
-                />
-                
-                {/* Image Navigation Dots */}
-                {product.images.length > 1 && (
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    {product.images.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setCurrentImageIndex(index)}
-                        className={`w-3 h-3 rounded-full transition-all ${
-                          index === currentImageIndex 
-                            ? 'bg-white shadow-lg' 
-                            : 'bg-white/50 hover:bg-white/70'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
+      {!product ? (
+        <div className="min-h-[70vh] flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">Product Not Found</h1>
+            <p className="text-gray-600 mb-8">The product you're looking for doesn't exist.</p>
+            <Link to="/products" className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+              Back to Products
+            </Link>
           </div>
         </div>
-      </section>
-
+      ) : (
+        <>
+          {/* Hero Section */}
+          <section className="py-16 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
+            <div className="container mx-auto px-4">
+              <Link to="/products" className="inline-flex items-center text-blue-200 hover:text-white mb-6 transition-colors">
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Back to Products
+              </Link>
+              
+              <div className="grid lg:grid-cols-2 gap-12 items-center">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
+                      {product.brand}
+                    </span>
+                    <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
+                      {product.code}
+                    </span>
+                  </div>
+                  
+                  <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+                    {product.name}
+                  </h1>
+                  
+                  <p className="text-xl text-blue-100 mb-6 leading-relaxed">
+                    {product.description}
+                  </p>
+                  
+                  <p className="text-blue-100/90 mb-8 leading-relaxed">
+                    {product.technicalDescription}
+                  </p>
+                  
+                  <button
+                    onClick={handleDownloadDatasheet}
+                    className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center"
+                  >
+                    <Download className="w-6 h-6 mr-3" />
+                    Download Technical Datasheet
+                  </button>
+                </div>
+                
+                <div className="relative">
+                  <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white/10 backdrop-blur-sm">
+                    <motion.img
+                      key={currentImageIndex}
+                      src={product.images[currentImageIndex]}
+                      alt={product.name}
+                      className="w-full h-80 lg:h-96 object-cover"
+                      initial={{ opacity: 0, scale: 1.1 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.7 }}
+                    />
+                    
+                    {product.images.length > 1 && (
+                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                        {product.images.map((_, index) => (
+                          <button
+                            key={index}
+                            onClick={() => setCurrentImageIndex(index)}
+                            className={`w-3 h-3 rounded-full transition-all ${
+                              index === currentImageIndex 
+                                ? 'bg-white shadow-lg' 
+                                : 'bg-white/50 hover:bg-white/70'
+                            }`}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section> 
       {/* Product Specifications */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
@@ -383,7 +382,6 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
-    </div>
   );
 };
 

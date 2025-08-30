@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import SystemDetailsModal from './SystemDetailsModal';
 import { systemsData, SystemData } from '../data/systemsData';
@@ -12,6 +12,7 @@ const Header = () => {
   const [selectedSystem, setSelectedSystem] = useState<SystemData | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const location = useLocation();
   let timeoutId: NodeJS.Timeout;
 
   const handleMouseEnter = (menu: string) => {
@@ -31,11 +32,24 @@ const Header = () => {
       setActiveDropdown(null);
     }
   };
+
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    // تحديث الهيدر عند التنقل بين الصفحات
+    if (location.pathname !== '/') {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(window.scrollY > 50);
+    }
+
+    const handleScroll = () => {
+      if (location.pathname === '/') {
+        setIsScrolled(window.scrollY > 50);
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [location]);
 
   const paintSystems = [
     { id: 'concrete-exterior', name: 'Concrete Exterior' },
@@ -70,7 +84,6 @@ const Header = () => {
     'What are your warranty terms?'
   ];
 
-  // Motion settings (حركة البرداية)
   const curtainVariants = {
     hidden: { scaleY: 0, opacity: 0 },
     visible: { scaleY: 1, opacity: 1 },
@@ -88,9 +101,9 @@ const Header = () => {
 
           {/* Left Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <a href="#about" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+            <Link to="/about" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               About Us
-            </a>
+            </Link>
 
             {/* System Dropdown */}
             <div className="relative" onMouseEnter={() => handleMouseEnter('system')} onMouseLeave={handleMouseLeave}>
@@ -143,23 +156,21 @@ const Header = () => {
             <Link to="/products" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Products
             </Link>
-
           </nav>
 
           {/* Logo */}
           <div className="flex-shrink-0">
-            <a href="#" className="flex items-center">
+            <Link to="/" className="flex items-center">
               <img
                 src="/images/Azmeh-Paints-Logo.png"
                 alt="AL AZMEH PAINTS"
                 className={`h-10 w-auto transition-all duration-200 ${isScrolled ? 'filter brightness-100' : 'filter brightness-0 invert'}`}
               />
-            </a>
+            </Link>
           </div>
 
           {/* Right Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-
             {/* FAQ Dropdown */}
             <div className="relative" onMouseEnter={() => handleMouseEnter('faq')} onMouseLeave={handleMouseLeave}>
               <button className={`flex items-center text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
@@ -177,22 +188,22 @@ const Header = () => {
                   >
                     <div className="p-4">
                       {faqItems.map((item, index) => (
-                        <a key={index} href="#faq" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
+                        <Link key={index} to="/faq" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
                           {item}
-                        </a>
+                        </Link>
                       ))}
-                      <a href="#faq" className="block text-[#2C5DB6] font-medium px-3 py-2 mt-2 border-t border-gray-200">
+                      <Link to="/faq" className="block text-[#2C5DB6] font-medium px-3 py-2 mt-2 border-t border-gray-200">
                         View All FAQs →
-                      </a>
+                      </Link>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            <a href="#blog" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+            <Link to="/blog" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Blog
-            </a>
+            </Link>
 
             {/* Contact Dropdown */}
             <div className="relative" onMouseEnter={() => handleMouseEnter('contact')} onMouseLeave={handleMouseLeave}>
@@ -210,18 +221,17 @@ const Header = () => {
                     className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
                   >
                     <div className="p-4">
-                      <a href="#contact" className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
+                      <Link to="/contact" className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
                         Contact Us
-                      </a>
-                      <a href="#distributors" className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
+                      </Link>
+                      <Link to="/distributors" className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
                         Find Distributors
-                      </a>
+                      </Link>
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
-
           </nav>
 
           {/* Mobile menu button */}
@@ -242,7 +252,46 @@ const Header = () => {
         onClose={() => setIsModalOpen(false)}
         systemData={selectedSystem}
       />
+
       {/* Mobile menu */}
-      {isMobileMenuOpen && ( <div className="lg:hidden bg-white border-t border-gray-200"> <div className="px-4 py-6 space-y-4"> 
-        <a href="#about" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">About Us</a> 
-        <a href="#system" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">System</a> <a href="#products" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Products</a> <a href="#faq" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">FAQ</a> <a href="#blog" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Blog</a> <a href="#contact" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Contact</a> <a href="#distributors" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Distributors</a> </div> </div> )} </header> ); }; export default Header;
+      {isMobileMenuOpen && (
+        <div className="lg:hidden bg-white border-t border-gray-200">
+          <div className="px-4 py-6 space-y-4">
+            <Link to="/about" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">About Us</Link>
+            <Link to="/products" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Products</Link>
+            <Link to="/faq" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">FAQ</Link>
+            <Link to="/blog" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Blog</Link>
+            <Link to="/contact" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Contact</Link>
+            <Link to="/distributors" className="block text-gray-900 hover:text-[#2C5DB6] font-medium">Distributors</Link>
+
+            {/* System Dropdown */}
+            <div className="mt-4">
+              <h3 className="text-gray-700 font-semibold mb-2">Paint Systems</h3>
+              {paintSystems.map(system => (
+                <button 
+                  key={system.id} 
+                  onClick={() => handleSystemClick(system.id)}
+                  className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 w-full text-left"
+                >
+                  {system.name}
+                </button>
+              ))}
+              <h3 className="text-gray-700 font-semibold mt-4 mb-2">Technical Solutions</h3>
+              {technicalSolutions.map(solution => (
+                <button 
+                  key={solution.id} 
+                  onClick={() => handleSystemClick(solution.id)}
+                  className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 w-full text-left"
+                >
+                  {solution.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </header>
+  );
+};
+
+export default Header;
