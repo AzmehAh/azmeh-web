@@ -1,9 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, X, ChevronDown, Grid, List, SortAsc } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { productsData, filterOptions, Product } from '../data/productsData';
 
 const Products = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({
     type: [],
@@ -14,7 +16,6 @@ const Products = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeFilterCategory, setActiveFilterCategory] = useState<string | null>(null);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -272,7 +273,7 @@ const Products = () => {
                       className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group ${
                         viewMode === 'list' ? 'flex items-center' : ''
                       }`}
-                      onClick={() => setSelectedProduct(product)}
+                      onClick={() => navigate(`/product/${product.id}`)}
                     >
                       {/* Product Image */}
                       <div className={`${viewMode === 'list' ? 'w-24 h-24 flex-shrink-0' : 'h-48'} overflow-hidden`}>
@@ -327,132 +328,6 @@ const Products = () => {
           </div>
         </div>
       </div>
-
-      {/* Product Detail Modal */}
-      <AnimatePresence>
-        {selectedProduct && (
-          <div className="fixed inset-0 z-50 overflow-y-auto">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 bg-black/50 backdrop-blur-sm"
-              onClick={() => setSelectedProduct(null)}
-            />
-
-            <div className="flex min-h-full items-center justify-center p-4">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95, y: 20 }}
-                className="relative bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
-                onClick={(e) => e.stopPropagation()}
-              >
-                {/* Modal Header */}
-                <div className="relative bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white p-8">
-                  <button
-                    onClick={() => setSelectedProduct(null)}
-                    className="absolute top-6 right-6 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors duration-200"
-                  >
-                    <X className="w-6 h-6" />
-                  </button>
-                  
-                  <div className="flex items-start space-x-6">
-                    <div className="w-24 h-24 bg-white/10 rounded-xl overflow-hidden flex-shrink-0">
-                      <img
-                        src={selectedProduct.image}
-                        alt={selectedProduct.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-3 mb-2">
-                        <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-                          {selectedProduct.brand}
-                        </span>
-                        <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-                          {selectedProduct.code}
-                        </span>
-                      </div>
-                      <h1 className="text-3xl font-bold mb-3">{selectedProduct.name}</h1>
-                      <p className="text-xl opacity-90 leading-relaxed">
-                        {selectedProduct.description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Modal Content */}
-                <div className="overflow-y-auto max-h-[calc(90vh-250px)] p-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Features */}
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-4">Key Features</h3>
-                      <ul className="space-y-3">
-                        {selectedProduct.features.map((feature, index) => (
-                          <li key={index} className="flex items-start space-x-3">
-                            <div className="w-2 h-2 bg-[#2C5DB6] rounded-full mt-2 flex-shrink-0" />
-                            <span className="text-gray-700">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Applications */}
-                    <div>
-                      <h3 className="text-xl font-semibold text-gray-900 mb-4">Applications</h3>
-                      <ul className="space-y-3">
-                        {selectedProduct.applications.map((application, index) => (
-                          <li key={index} className="flex items-start space-x-3">
-                            <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-                            <span className="text-gray-700">{application}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-
-                  {/* Product Specifications */}
-                  <div className="mt-8 pt-8 border-t border-gray-200">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">Product Specifications</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-gray-50 rounded-lg p-4 text-center">
-                        <div className="text-sm text-gray-600 mb-1">Type</div>
-                        <div className="font-semibold text-gray-900">{selectedProduct.type}</div>
-                      </div>
-                      <div className="bg-gray-50 rounded-lg p-4 text-center">
-                        <div className="text-sm text-gray-600 mb-1">Material</div>
-                        <div className="font-semibold text-gray-900">{selectedProduct.material}</div>
-                      </div>
-                      <div className="bg-gray-50 rounded-lg p-4 text-center">
-                        <div className="text-sm text-gray-600 mb-1">Usage</div>
-                        <div className="font-semibold text-gray-900">{selectedProduct.usage}</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Modal Footer */}
-                <div className="border-t border-gray-200 p-6 bg-gray-50">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-gray-600">
-                      Need more information? Contact our technical support team
-                    </p>
-                    <div className="flex space-x-3">
-                      <button className="px-6 py-2 bg-[#2C5DB6] text-white rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                        Download Datasheet
-                      </button>
-                      <button className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors duration-200">
-                        Contact Support
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        )}
-      </AnimatePresence>
     </div>
   );
 };

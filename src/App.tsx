@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
 import Products from './components/Products';
+import ProductDetail from './components/ProductDetail';
 import FAQ from './components/FAQ';
 import Brands from './components/Brands';
 import SocialMedia from './components/SocialMedia';
@@ -28,6 +29,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<Products />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
       <Footer />
     </div>
