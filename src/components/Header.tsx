@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import SystemDetailsModal from './SystemDetailsModal';
 import { systemsData, SystemData } from '../data/systemsData';
@@ -139,9 +140,6 @@ const Header = () => {
               </AnimatePresence>
             </div>
 
-            <a href="#products" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Products
-            </a>
           </nav>
 
           {/* Logo */}
