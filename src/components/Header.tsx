@@ -97,7 +97,9 @@ const Header = () => {
             <Link to="/about" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               About Us
             </Link>
-
+ <Link to="/products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+              Products
+            </Link>
             {/* Technical Support Dropdown */}
             <div 
               className="relative" 
@@ -193,7 +195,7 @@ const Header = () => {
                       </div>
                     </div>
                     <div className="min-w-[23rem] p-4 border-l border-gray-200">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3> 
                       <div className="grid grid-cols-1 gap-2">
                         {technicalSolutions.map((solution, index) => (
                           <button 
@@ -211,9 +213,7 @@ const Header = () => {
               </AnimatePresence>
             </div>
 
-            <Link to="/products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Products
-            </Link>
+           
 
             <Link to="/blog" className={`text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-gray-900'}`}>
               Blog
