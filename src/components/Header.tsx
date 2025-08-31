@@ -309,7 +309,8 @@ const Header = () => {
                 </AnimatePresence>
               </div>
 
-              <Link to="/systems" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+              <Link to="/systems"  onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-gray-900 hover:text-orange-600 font-medium py-2"
               Systems
             </Link>
               <Link 
