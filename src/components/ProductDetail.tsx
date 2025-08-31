@@ -180,7 +180,7 @@ const ProductDetail = () => {
                         ))}
                       </div>
                     )}
-                  </div>
+              
          
           </section> 
       {/* Product Specifications */}
