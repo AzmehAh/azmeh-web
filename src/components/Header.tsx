@@ -158,7 +158,7 @@ const Header = () => {
 
           {/* Logo */}
 <div className="flex-shrink-0">
-  <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+  <Link to="/" className="flex items-center  transition-opacity">
     <img 
       src={isScrolled ? "/images/Azmeh-Paints-Logo.png" : "/images/Azmeh-Paints-Logo-White.png"} 
       alt="AL AZMEH PAINTS" 
