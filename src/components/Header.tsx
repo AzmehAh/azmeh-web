@@ -184,7 +184,7 @@ const Header = () => {
 
             {/* Contact Dropdown */}
             <div className="relative" onMouseEnter={() => handleMouseEnter('contact')} onMouseLeave={handleMouseLeave}>
-              <button className={`flex items-center text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text--white'}`}>
+              <button className={`flex items-center text-base font-medium hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
                 Contact & Distributors <ChevronDown className="ml-1 h-4 w-4" />
               </button>
               <AnimatePresence>
