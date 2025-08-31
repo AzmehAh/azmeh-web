@@ -309,54 +309,9 @@ const Header = () => {
                 </AnimatePresence>
               </div>
 
-              {/* System Dropdown */}
-              <div>
-                <button
-                  onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'system' ? null : 'system')}
-                  className="flex items-center justify-between w-full text-gray-900 hover:text-orange-600 font-medium py-2"
-                >
-                  <span>System</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'system' ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {activeMobileDropdown === 'system' && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden pl-4 mt-2 space-y-1"
-                    >
-                      <h5 className="text-sm font-semibold text-gray-700 mb-2">Paint Systems</h5>
-                      {paintSystems.slice(0, 6).map(system => (
-                        <button 
-                          key={system.id} 
-                          onClick={() => {
-                            handleSystemClick(system.id);
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 w-full text-left text-sm"
-                        >
-                          {system.name}
-                        </button>
-                      ))}
-                      <h5 className="text-sm font-semibold text-gray-700 mb-2 mt-3">Technical Solutions</h5>
-                      {technicalSolutions.slice(0, 4).map(solution => (
-                        <button 
-                          key={solution.id} 
-                          onClick={() => {
-                            handleSystemClick(solution.id);
-                            setIsMobileMenuOpen(false);
-                          }}
-                          className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 w-full text-left text-sm"
-                        >
-                          {solution.name}
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
+              <Link to="/systems" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+              Systems
+            </Link>
               <Link 
                 to="/products" 
                 onClick={() => setIsMobileMenuOpen(false)}
