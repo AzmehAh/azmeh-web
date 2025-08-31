@@ -92,6 +92,10 @@ const ProductDetail = () => {
         <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
           {product.name}
         </h1>
+
+        <p className="text-xl text-blue-100 mb-4 leading-relaxed">
+          {product.description}
+        </p>
         {/* Properties under title */}
         <div className="flex flex-wrap gap-4 mb-8">
           <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
@@ -104,10 +108,6 @@ const ProductDetail = () => {
             {product.usage}
           </span>
         </div>
-        <p className="text-xl text-blue-100 mb-4 leading-relaxed">
-          {product.description}
-        </p>
-
         <p className="text-blue-100/90 mb-6 leading-relaxed">
           {product.technicalDescription}
         </p>
