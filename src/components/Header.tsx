@@ -163,53 +163,7 @@ const Header = () => {
 
           {/* Right Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            {/* System Dropdown */}
-            <div className="relative" onMouseEnter={() => handleMouseEnter('system')} onMouseLeave={handleMouseLeave}>
-              <button className={`flex items-center text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-                System <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-              <AnimatePresence>
-                {activeDropdown === 'system' && (
-                  <motion.div
-                    variants={curtainVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute top-full left-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 flex w-max origin-top overflow-hidden"
-                  >
-                    <div className="min-w-[23rem] p-4">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Paint Systems</h3>
-                      <div className="grid grid-cols-1 gap-2">
-                        {paintSystems.map((system, index) => (
-                          <button 
-                            key={index} 
-                            onClick={() => handleSystemClick(system.id)}
-                            className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-left w-full"
-                          >
-                            {system.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div className="min-w-[23rem] p-4 border-l border-gray-200">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-4">Technical Solutions</h3>
-                      <div className="grid grid-cols-1 gap-2">
-                        {technicalSolutions.map((solution, index) => (
-                          <button 
-                            key={index} 
-                            onClick={() => handleSystemClick(solution.id)}
-                            className="menu-item text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-left w-full"
-                          >
-                            {solution.name}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+            
 
             <Link to="/products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Products
