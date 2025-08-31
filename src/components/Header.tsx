@@ -157,11 +157,16 @@ const Header = () => {
           </nav>
 
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-              <img src="/images/Azmeh-Paints-Logo.png" alt="AL AZMEH PAINTS" className="h-10 w-auto" />
-            </Link>
-          </div>
+<div className="flex-shrink-0">
+  <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+    <img 
+      src={isScrolled ? "/images/Azmeh-Paints-Logo.png" : "/images/Azmeh-Paints-Logo-White.png"} 
+      alt="AL AZMEH PAINTS" 
+      className="h-10 w-auto" 
+    />
+  </Link>
+</div>
+
 
           {/* Right Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
