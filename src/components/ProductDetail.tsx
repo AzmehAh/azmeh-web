@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, CheckCircle, Package, ArrowLeft, Shield, Info, Wrench, FileText } from "lucide-react";
+import { Download, Package } from "lucide-react";
 import { productsData, Product } from "../data/productsData";
+
+const brands = [
+  { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
+  { name: "SRT", logo: "/images/SRT-.gif" },
+  { name: "Original", logo: "/images/Original.gif" },
+  { name: "Omegan", logo: "/images/Omegan.gif" },
+  { name: "Mlonati", logo: "/images/Mlonati.gif" },
+  { name: "Jupiter", logo: "/images/Jupiter.gif" },
+  { name: "COPRAbEL", logo: "/images/COPRAbEL.jpg" },
+  { name: "Capric", logo: "/images/Capric.gif" },
+  { name: "Azur", logo: "/images/Azur-.png" },
+  { name: "AlDahab", logo: "/images/AlDahab.png" },
+];
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
- 
+
   useEffect(() => {
     if (id) {
-      const foundProduct = productsData.find(p => p.id === id);
+      const foundProduct = productsData.find((p) => p.id === id);
       setProduct(foundProduct || null);
     }
   }, [id]);
@@ -29,92 +42,108 @@ const ProductDetail = () => {
     alert(`Downloading datasheet for ${product?.name}`);
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 ">
-      
+  // البحث عن شعار البراند المناسب
+  const brandLogo =
+    product &&
+    brands.find((b) =>
+      product.brand ? product.brand.toLowerCase().includes(b.name.toLowerCase()) : false
+    )?.logo;
 
+  return (
+    <div className="min-h-screen bg-gray-50">
       {!product ? (
         <div className="min-h-[70vh] flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Product Not Found</h1>
-            <p className="text-gray-600 mb-8">The product you're looking for doesn't exist.</p>
-            <Link to="/products" className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+            <p className="text-gray-600 mb-8">
+              The product you're looking for doesn't exist.
+            </p>
+            <Link
+              to="/products"
+              className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            >
               Back to Products
             </Link>
           </div>
         </div>
       ) : (
         <>
-          {/* Hero Section */} 
+          {/* Hero Section */}
           <section className="py-16 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
-            <div className="container mx-auto px-20"> 
-             {/* Breadcrumb Navigation */}
-      <div className=" relative z-50">
-        <div className="container mx-auto px-4 pt-10">
-          <div className="flex items-center text-sm text-white">
-           <Link  to="/" 
-  className="nav-link"
->Home
-</Link>
-    <span className="mx-2">/</span>
-         <Link 
-  to="/products" 
-  className="nav-link"
->
-  Products
-</Link>
+            <div className="container mx-auto px-20">
+              {/* Breadcrumb Navigation */}
+              <div className="relative z-50">
+                <div className="container mx-auto px-4 pt-10">
+                  <div className="flex items-center text-sm text-white">
+                    <Link to="/" className="nav-link">
+                      Home
+                    </Link>
+                    <span className="mx-2">/</span>
+                    <Link to="/products" className="nav-link">
+                      Products
+                    </Link>
 
+                    {product && (
+                      <>
+                        <span className="mx-2">/</span>
+                        <span className="text-white">{product.name}</span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-            {product && (
-              <> 
-                <span className="mx-2">/</span>
-                <span className="text-white">{product.name}</span>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-              
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <div className="flex items-center gap-3 m-6">
-                    <span className="bg-white/20 px-3 py-1 rounded-full text-sm font-medium">
-                      {product.brand} 
-                    </span>
+                    {/* Brand Logo */}
+                    <div className="w-20 h-10 bg-white/20 rounded-full flex items-center justify-center p-2">
+                      {brandLogo ? (
+                        <img
+                          src={brandLogo}
+                          alt={product.brand || "Brand"}
+                          className="object-contain h-full"
+                        />
+                      ) : (
+                        <span className="text-sm font-medium">{product.brand}</span>
+                      )}
+                    </div>
+
+                    {/* Product Code */}
                     <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
                       {product.code}
                     </span>
                   </div>
-                  
+
                   <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
                     {product.name}
                   </h1>
-                  
+
                   <p className="text-xl text-blue-100 mb-6 leading-relaxed">
                     {product.description}
                   </p>
-                  
+
                   <p className="text-blue-100/90 mb-8 leading-relaxed">
                     {product.technicalDescription}
                   </p>
-                   <div className="mb-8">
-    <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-      <Package className="w-5 h-5 text-white mr-2" />
-      Packaging & Sizes
-    </h3>
-    <div className="flex flex-wrap gap-4">
-      {product.packaging.map((pack, index) => (
-        <div
-          key={index}
-          className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28"
-        > 
-         
-          <h4 className="text-sm font-bold text-white">{pack.size}</h4>
-         
-        </div>
-      ))}
-    </div>
-  </div>
+
+                  <div className="mb-8">
+                    <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+                      <Package className="w-5 h-5 text-white mr-2" />
+                      Packaging & Sizes
+                    </h3>
+                    <div className="flex flex-wrap gap-4">
+                      {product.packaging.map((pack, index) => (
+                        <div
+                          key={index}
+                          className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28"
+                        >
+                          <h4 className="text-sm font-bold text-white">{pack.size}</h4>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   <button
                     onClick={handleDownloadDatasheet}
                     className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center"
@@ -123,7 +152,7 @@ const ProductDetail = () => {
                     Download Technical Datasheet
                   </button>
                 </div>
-                
+
                 <div className="relative">
                   <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white/10 backdrop-blur-sm">
                     <motion.img
@@ -135,7 +164,7 @@ const ProductDetail = () => {
                       animate={{ opacity: 1, scale: 1 }}
                       transition={{ duration: 0.7 }}
                     />
-                    
+
                     {product.images.length > 1 && (
                       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
                         {product.images.map((_, index) => (
@@ -143,9 +172,9 @@ const ProductDetail = () => {
                             key={index}
                             onClick={() => setCurrentImageIndex(index)}
                             className={`w-3 h-3 rounded-full transition-all ${
-                              index === currentImageIndex 
-                                ? 'bg-white shadow-lg' 
-                                : 'bg-white/50 hover:bg-white/70'
+                              index === currentImageIndex
+                                ? "bg-white shadow-lg"
+                                : "bg-white/50 hover:bg-white/70"
                             }`}
                           />
                         ))}
