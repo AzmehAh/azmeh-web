@@ -92,145 +92,134 @@ const Systems = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:col-span-1">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900 flex items-center">
-                  <Settings className="w-5 h-5 text-[#2C5DB6] mr-2" />
-                  System Categories
-                </h3>
-                {(selectedCategory || selectedSubcategory || searchTerm) && (
-                  <button
-                    onClick={clearFilters}
-                    className="text-sm text-[#2C5DB6] hover:text-blue-700 font-medium"
+     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+    {/* Filters Sidebar */}
+    <div className="lg:col-span-1">
+      <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-xl font-bold text-gray-900">
+            System Categories
+          </h3>
+          {(selectedCategory || selectedSubcategory || searchTerm) && (
+            <button
+              onClick={clearFilters}
+              className="text-sm text-[#2C5DB6] hover:text-blue-700 font-medium"
+            >
+              Clear All
+            </button>
+          )}
+        </div>
+
+        {/* Search */}
+        <div className="mb-6">
+          <div className="relative">
+            <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search bulletins..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] transition-colors"
+            />
+          </div>
+        </div>
+
+        {/* Categories & Subcategories */}
+        <div className="space-y-4">
+          {Object.entries(systemCategories).map(([category, subcategories]) => (
+            <div key={category}>
+              {/* Category */}
+              <button
+                onClick={() => handleCategorySelect(category)}
+                className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${
+                  selectedCategory === category
+                    ? 'border-[#2C5DB6] bg-blue-50 text-[#2C5DB6]'
+                    : 'border-gray-200 bg-white hover:border-gray-300 text-gray-900'
+                }`}
+              >
+                <span className="font-semibold">{category}</span>
+              </button>
+
+              {/* Subcategories */}
+              <AnimatePresence>
+                {selectedCategory === category && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="overflow-hidden mt-2 space-y-2"
                   >
-                    Clear All
-                  </button>
+                    {subcategories.map((subcategory) => {
+                      const bulletinCount = bulletinsData.filter(
+                        (b) => b.subcategory === subcategory
+                      ).length;
+
+                      return (
+                        <label
+                          key={subcategory}
+                          className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedSubcategory === subcategory}
+                            onChange={() => handleSubcategorySelect(subcategory)}
+                            className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
+                          />
+                          <span className="text-sm text-gray-700">{subcategory}</span>
+                          {bulletinCount > 0 && (
+                            <span className="text-xs bg-gray-100 rounded-full px-2 py-0.5 text-gray-600 ml-auto">
+                              {bulletinCount}
+                            </span>
+                          )}
+                        </label>
+                      );
+                    })}
+                  </motion.div>
                 )}
-              </div>
+              </AnimatePresence>
+            </div>
+          ))}
+        </div>
 
-              {/* Search */}
-              <div className="mb-6">
-                <div className="relative">
-                  <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search bulletins..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] transition-colors"
-                  />
-                </div>
-              </div>
-
-              {/* Categories */}
-              <div className="space-y-4">
-                {Object.entries(systemCategories).map(([category, subcategories]) => (
-                  <div key={category}>
-                    <button
-                      onClick={() => handleCategorySelect(category)}
-                      className={`w-full text-left p-4 rounded-lg border-2 transition-all duration-200 ${
-                        selectedCategory === category
-                          ? 'border-[#2C5DB6] bg-blue-50 text-[#2C5DB6]'
-                          : 'border-gray-200 bg-white hover:border-gray-300 text-gray-900'
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        {category === 'Technical Solutions' ? (
-                          <Zap className="w-5 h-5 mr-3" />
-                        ) : (
-                          <Palette className="w-5 h-5 mr-3" />
-                        )}
-                        <span className="font-semibold">{category}</span>
-                      </div>
-                      <span className="text-sm opacity-75 mt-1 block">
-                        {subcategories.length} subcategories
-                      </span>
-                    </button>
-
-                    {/* Subcategories */}
-                    <AnimatePresence>
-                      {selectedCategory === category && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden mt-3 space-y-2"
-                        >
-                          {subcategories.map((subcategory) => {
-                            const IconComponent = getSubcategoryIcon(subcategory);
-                            const bulletinCount = bulletinsData.filter(b => b.subcategory === subcategory).length;
-                            
-                            return (
-                              <button
-                                key={subcategory}
-                                onClick={() => handleSubcategorySelect(subcategory)}
-                                className={`w-full text-left p-3 rounded-lg border transition-all duration-200 ${
-                                  selectedSubcategory === subcategory
-                                    ? 'border-[#2C5DB6] bg-blue-50 text-[#2C5DB6]'
-                                    : 'border-gray-100 bg-gray-50 hover:border-gray-200 text-gray-700'
-                                }`}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center">
-                                    <IconComponent className="w-4 h-4 mr-2" />
-                                    <span className="text-sm font-medium">{subcategory}</span>
-                                  </div>
-                                  {bulletinCount > 0 && (
-                                    <span className="text-xs bg-white rounded-full px-2 py-1 text-gray-600">
-                                      {bulletinCount}
-                                    </span>
-                                  )}
-                                </div>
-                              </button>
-                            );
-                          })}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ))}
-              </div>
-
-              {/* Active Filters */}
-              {(selectedCategory || selectedSubcategory) && (
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Active Filters</h4>
-                  <div className="space-y-2">
-                    {selectedCategory && (
-                      <span className="inline-flex items-center space-x-2 px-3 py-1 bg-[#2C5DB6] text-white text-sm rounded-full">
-                        <span>{selectedCategory}</span>
-                        <button
-                          onClick={() => {
-                            setSelectedCategory(null);
-                            setSelectedSubcategory(null);
-                          }}
-                          className="hover:bg-blue-700 rounded-full p-0.5 transition-colors"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </span>
-                    )}
-                    {selectedSubcategory && (
-                      <span className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-100 text-[#2C5DB6] text-sm rounded-full">
-                        <span>{selectedSubcategory}</span>
-                        <button
-                          onClick={() => setSelectedSubcategory(null)}
-                          className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      </span>
-                    )}
-                  </div>
-                </div>
+        {/* Active Filters */}
+        {(selectedCategory || selectedSubcategory) && (
+          <div className="mt-6 pt-6 border-t border-gray-200">
+            <h4 className="text-sm font-medium text-gray-900 mb-3">Active Filters</h4>
+            <div className="space-y-2">
+              {selectedCategory && (
+                <span className="inline-flex items-center space-x-2 px-3 py-1 bg-[#2C5DB6] text-white text-sm rounded-full">
+                  <span>{selectedCategory}</span>
+                  <button
+                    onClick={() => {
+                      setSelectedCategory(null);
+                      setSelectedSubcategory(null);
+                    }}
+                    className="hover:bg-blue-700 rounded-full p-0.5 transition-colors"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
+              )}
+              {selectedSubcategory && (
+                <span className="inline-flex items-center space-x-2 px-3 py-1 bg-blue-100 text-[#2C5DB6] text-sm rounded-full">
+                  <span>{selectedSubcategory}</span>
+                  <button
+                    onClick={() => setSelectedSubcategory(null)}
+                    className="hover:bg-blue-200 rounded-full p-0.5 transition-colors"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                </span>
               )}
             </div>
           </div>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
 
           {/* Content Area */}
           <div className="lg:col-span-3">
