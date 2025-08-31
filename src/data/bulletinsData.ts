@@ -569,4 +569,4 @@ export const systemCategories = {
     'Adhesives and Grouts',
     'Joint Sealants'
   ]
-};</parameter>
+};
