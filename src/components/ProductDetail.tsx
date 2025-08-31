@@ -69,112 +69,121 @@ const ProductDetail = () => {
       ) : (
         <>
           {/* Hero Section */}
-          <section className="py-16 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
-            <div className="container mx-auto px-20">
-              {/* Breadcrumb Navigation */}
-              <div className="relative z-50">
-                <div className="container mx-auto px-4 pt-10">
-                  <div className="flex items-center text-sm text-white">
-                    <Link to="/" className="nav-link">
-                      Home
-                    </Link>
-                    <span className="mx-2">/</span>
-                    <Link to="/products" className="nav-link">
-                      Products
-                    </Link>
+         <section className="py-16 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
+  <div className="container mx-auto px-20">
+    {/* Breadcrumb Navigation */}
+    <div className="relative z-50 mb-8">
+      <div className="flex items-center text-sm text-white">
+        <Link to="/" className="nav-link">Home</Link>
+        <span className="mx-2">/</span>
+        <Link to="/products" className="nav-link">Products</Link>
+        {product && (
+          <>
+            <span className="mx-2">/</span>
+            <span className="text-white">{product.name}</span>
+          </>
+        )}
+      </div>
+    </div>
 
-                    {product && (
-                      <>
-                        <span className="mx-2">/</span>
-                        <span className="text-white">{product.name}</span>
-                      </>
-                    )}
-                  </div>
-                </div>
+    <div className="grid lg:grid-cols-2 gap-12 items-center">
+      {/* Left Column */}
+      <div>
+        <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+          {product.name}
+        </h1>
+
+        <p className="text-xl text-blue-100 mb-4 leading-relaxed">
+          {product.description}
+        </p>
+
+        <p className="text-blue-100/90 mb-6 leading-relaxed">
+          {product.technicalDescription}
+        </p>
+
+        {/* Properties under title */}
+        <div className="flex flex-wrap gap-4 mb-8">
+          <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+            {product.type}
+          </span>
+          <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+            {product.material}
+          </span>
+          <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+            {product.usage}
+          </span>
+        </div>
+
+        <div className="mb-8">
+          <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+            <Package className="w-5 h-5 text-white mr-2" />
+            Packaging & Sizes
+          </h3>
+          <div className="flex flex-wrap gap-4">
+            {product.packaging.map((pack, index) => (
+              <div
+                key={index}
+                className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28"
+              >
+                <h4 className="text-sm font-bold text-white">{pack.size}</h4>
               </div>
+            ))}
+          </div>
+        </div>
 
-              <div className="grid lg:grid-cols-2 gap-12 items-center">
-                {/* Left Column */}
-                <div>
-                  <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
-                    {product.name}
-                  </h1>
+        <button
+          onClick={handleDownloadDatasheet}
+          className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center"
+        >
+          <Download className="w-6 h-6 mr-3" />
+          Download Technical Datasheet
+        </button>
+      </div>
 
-                  <p className="text-xl text-blue-100 mb-6 leading-relaxed">
-                    {product.description}
-                  </p>
+      {/* Right Column: Image with Brand Logo above */}
+      <div className="relative">
+        {/* Brand Logo above the image */}
+        {brandLogo && (
+          <div className="mb-4 text-right">
+            <img
+              src={brandLogo}
+              alt={product.brand || "Brand"}
+              className="w-24 h-auto object-contain inline-block"
+            />
+          </div>
+        )}
 
-                  <p className="text-blue-100/90 mb-8 leading-relaxed">
-                    {product.technicalDescription}
-                  </p>
+        <motion.img
+          key={currentImageIndex}
+          src={product.images[currentImageIndex]}
+          alt={product.name}
+          className="w-full h-80 lg:h-96 object-cover rounded-2xl"
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.7 }}
+        />
 
-                  <div className="mb-8">
-                    <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                      <Package className="w-5 h-5 text-white mr-2" />
-                      Packaging & Sizes
-                    </h3>
-                    <div className="flex flex-wrap gap-4">
-                      {product.packaging.map((pack, index) => (
-                        <div
-                          key={index}
-                          className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28"
-                        >
-                          <h4 className="text-sm font-bold text-white">{pack.size}</h4>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+        {/* Image Indicators */}
+        {product.images.length > 1 && (
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+            {product.images.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setCurrentImageIndex(index)}
+                className={`w-3 h-3 rounded-full transition-all ${
+                  index === currentImageIndex
+                    ? "bg-white shadow-lg"
+                    : "bg-white/50 hover:bg-white/70"
+                }`}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
 
-                  <button
-                    onClick={handleDownloadDatasheet}
-                    className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center"
-                  >
-                    <Download className="w-6 h-6 mr-3" />
-                    Download Technical Datasheet
-                  </button>
-                </div>
-
-                {/* Right Column: Image */}
-                <div className="relative">
-                  <motion.img
-                    key={currentImageIndex}
-                    src={product.images[currentImageIndex]}
-                    alt={product.name}
-                    className="w-full h-80 lg:h-96 object-cover rounded-2xl"
-                    initial={{ opacity: 0, scale: 1.1 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.7 }}
-                  />
-
-                  {/* Brand Logo فوق الصورة */}
-                  {brandLogo && (
-                    <img
-                      src={brandLogo}
-                      alt={product.brand || "Brand"}
-                      className="absolute top-4 right-4 w-24 h-auto object-contain"
-                    />
-                  )}
-
-                  {/* Image Indicators */}
-                  {product.images.length > 1 && (
-                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                      {product.images.map((_, index) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentImageIndex(index)}
-                          className={`w-3 h-3 rounded-full transition-all ${
-                            index === currentImageIndex
-                              ? "bg-white shadow-lg"
-                              : "bg-white/50 hover:bg-white/70"
-                          }`}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </section> 
       {/* Product Specifications */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-20">
