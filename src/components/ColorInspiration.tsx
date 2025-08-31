@@ -53,11 +53,7 @@ const ColorInspiration = () => {
               onMouseLeave={() => setHoveredColor(null)}
             >
               {/* العنوان */}
-              <div className="relative  flex justify-between w-full px-2 text-gray-800 font-serif mt-2">
-                <span className="text-lg font-semibold">{swatch.name}</span>
-                <span className="text-sm text-gray-500">{swatch.code}</span>
-              </div>
-
+             
               {/* Bucket Image (الخلفية الأساسية) */}
               <img
                 src={swatch.bucketImage}
@@ -79,7 +75,13 @@ const ColorInspiration = () => {
                     : 'opacity-0 scale-95'
                 }`}
               />
+               <div className="relative  flex justify-between w-full px-2 text-gray-800 font-serif mt-2">
+                <span className="text-lg font-semibold">{swatch.name}</span>
+                <span className="text-sm text-gray-500">{swatch.code}</span>
+              </div>
+
             </div>
+      
           ))}
         </div>
       </div>
