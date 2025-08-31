@@ -218,8 +218,7 @@ const Systems = () => {
         )}
       </div>
     </div>
-  </div>
-</div>
+ 
 
           {/* Content Area */}
           <div className="lg:col-span-3">
