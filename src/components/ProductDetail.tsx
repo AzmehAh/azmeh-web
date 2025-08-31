@@ -96,24 +96,7 @@ const ProductDetail = () => {
               <div className="grid lg:grid-cols-2 gap-12 items-center">
                 <div>
                   <div className="flex items-center gap-3 m-6">
-                    {/* Brand Logo */}
-                    <div className="w-20 h-10 bg-white/20 rounded-full flex items-center justify-center p-2">
-                      {brandLogo ? (
-                        <img
-                          src={brandLogo}
-                          alt={product.brand || "Brand"}
-                          className="object-contain h-full"
-                        />
-                      ) : (
-                        <span className="text-sm font-medium">{product.brand}</span>
-                      )}
-                    </div>
 
-                    {/* Product Code */}
-                    <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-bold">
-                      {product.code}
-                    </span>
-                  </div>
 
                   <h1 className="text-4xl lg:text-5xl font-bold mb-6 leading-tight">
                     {product.name}
@@ -154,33 +137,45 @@ const ProductDetail = () => {
                 </div>
 
                 <div className="relative">
-                  <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white/10 backdrop-blur-sm">
-                    <motion.img
-                      key={currentImageIndex}
-                      src={product.images[currentImageIndex]}
-                      alt={product.name}
-                      className="w-full h-80 lg:h-96 object-cover"
-                      initial={{ opacity: 0, scale: 1.1 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ duration: 0.7 }}
-                    />
+                  <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white/10 backdrop-blur-sm"> 
+                    {/* Product Image with Brand Logo */}
+<div className="relative">
+  <motion.img
+    key={currentImageIndex}
+    src={product.images[currentImageIndex]}
+    alt={product.name}
+    className="w-full h-80 lg:h-96 object-cover rounded-2xl"
+    initial={{ opacity: 0, scale: 1.1 }}
+    animate={{ opacity: 1, scale: 1 }}
+    transition={{ duration: 0.7 }}
+  />
 
-                    {product.images.length > 1 && (
-                      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                        {product.images.map((_, index) => (
-                          <button
-                            key={index}
-                            onClick={() => setCurrentImageIndex(index)}
-                            className={`w-3 h-3 rounded-full transition-all ${
-                              index === currentImageIndex
-                                ? "bg-white shadow-lg"
-                                : "bg-white/50 hover:bg-white/70"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
+  {/* Brand Logo فوق الصورة */}
+  {brandLogo && (
+    <img
+      src={brandLogo}
+      alt={product.brand || "Brand"}
+      className="absolute top-4 right-4 w-24 h-auto object-contain"
+    />
+  )}
+
+  {product.images.length > 1 && (
+    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+      {product.images.map((_, index) => (
+        <button
+          key={index}
+          onClick={() => setCurrentImageIndex(index)}
+          className={`w-3 h-3 rounded-full transition-all ${
+            index === currentImageIndex
+              ? "bg-white shadow-lg"
+              : "bg-white/50 hover:bg-white/70"
+          }`}
+        />
+      ))}
+    </div>
+  )}
+</div>
+
                 </div>
               </div>
             </div>
