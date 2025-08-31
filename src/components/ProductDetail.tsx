@@ -187,23 +187,6 @@ const ProductDetail = () => {
       {/* Product Specifications */}
       <section className="py-16 bg-white">
         <div className="container mx-auto px-20">
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl text-center">
-              <Info className="w-12 h-12 text-[#2C5DB6] mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Type</h3>
-              <p className="text-[#2C5DB6] font-medium">{product.type}</p>
-            </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl text-center">
-              <Package className="w-12 h-12 text-green-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Material</h3>
-              <p className="text-green-600 font-medium">{product.material}</p>
-            </div>
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-8 rounded-2xl text-center">
-              <Wrench className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Usage</h3>
-              <p className="text-purple-600 font-medium">{product.usage}</p>
-            </div>
-          </div>
 
           {/* Technical Specifications Table */}
           {product.technicalSpecs && product.technicalSpecs.length > 0 && (
