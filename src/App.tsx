@@ -8,8 +8,6 @@ import Products from './components/Products';
 import ProductDetail from './components/ProductDetail';
 import FAQ from './components/FAQ';
 import Troubleshooting from './components/Troubleshooting';
-import Systems from './components/Systems';
-import BlogPost from './components/BlogPost';
 import Brands from './components/Brands';
 import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
@@ -31,8 +29,6 @@ function App() {
       <Header /> 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/systems" element={<Systems />} />
-        <Route path="/blog/:id" element={<BlogPost />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/faq" element={<FAQ />} />
