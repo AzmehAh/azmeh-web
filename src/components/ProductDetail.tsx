@@ -69,7 +69,7 @@ const ProductDetail = () => {
       ) : (
         <>
           {/* Hero Section */}
-         <section className="py-20 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
+         <section className="py-28 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
   <div className="container mx-auto px-20">
     {/* Breadcrumb Navigation */}
     <div className="relative z-50 mb-8">
