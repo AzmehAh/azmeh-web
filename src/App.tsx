@@ -8,7 +8,7 @@ import Products from './components/Products';
 import ProductDetail from './components/ProductDetail';
 import Systems from './components/Systems';
 import BulletinDetail from './components/BulletinDetail';
-import FAQ from './components/FAQ';
+import FAQ from './components/FAQ2';
 import Troubleshooting from './components/Troubleshooting';
 import Brands from './components/Brands';
 import SocialMedia from './components/SocialMedia';
