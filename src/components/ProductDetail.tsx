@@ -184,61 +184,7 @@ const ProductDetail = () => {
   </div>
 </section>
 
-      {/* Product Specifications */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-20">
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl text-center">
-              <Info className="w-12 h-12 text-[#2C5DB6] mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Type</h3>
-              <p className="text-[#2C5DB6] font-medium">{product.type}</p>
-            </div>
-            <div className="bg-gradient-to-br from-green-50 to-green-100 p-8 rounded-2xl text-center">
-              <Package className="w-12 h-12 text-green-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Material</h3>
-              <p className="text-green-600 font-medium">{product.material}</p>
-            </div>
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 p-8 rounded-2xl text-center">
-              <Wrench className="w-12 h-12 text-purple-600 mx-auto mb-4" />
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">Usage</h3>
-              <p className="text-purple-600 font-medium">{product.usage}</p>
-            </div>
-          </div>
-
-          {/* Technical Specifications Table */}
-          {product.technicalSpecs && product.technicalSpecs.length > 0 && (
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-16">
-              <div className="bg-[#2C5DB6] px-8 py-6">
-                <h2 className="text-2xl font-bold text-white flex items-center">
-                  <FileText className="w-6 h-6 mr-3" />
-                  Technical Specifications
-                </h2>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-8 py-4 text-left font-semibold text-gray-800">Property</th>
-                      <th className="px-8 py-4 text-left font-semibold text-gray-800">Value</th>
-                      <th className="px-8 py-4 text-left font-semibold text-gray-800">Standard</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {product.technicalSpecs.map((spec, index) => (
-                      <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                        <td className="px-8 py-4 font-medium text-gray-800">{spec.property}</td>
-                        <td className="px-8 py-4 text-[#2C5DB6] font-semibold">{spec.value}</td>
-                        <td className="px-8 py-4 text-gray-600">{spec.standard}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
+      
       {/* Features and Applications */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-20">
