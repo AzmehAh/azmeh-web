@@ -19,7 +19,7 @@ const HomePage = () => (
     <Hero />
     <Services />
     <ColorInspiration />
-    <FAQ />
+    <FAQ2 />
     <Brands />
     <SocialMedia />
   </>
