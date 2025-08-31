@@ -69,14 +69,14 @@ const ColorInspiration = () => {
               <img
                 src={swatch.squareImage}
                 alt={`${swatch.name} square`}
-                className={`absolute inset-0 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
+                className={`absolute inset-0 z-10 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
                   hoveredColor === index
                     ? 'opacity-100 scale-100'
                     : 'opacity-0 scale-95'
                 }`}
               />
               {/* العنوان أسفل صورة الدلو */}
-  <div className="absolute z-10 bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800 font-serif">
+  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800 font-serif">
     <span className="block text-lg font-semibold">{swatch.name}</span>
 
   </div>
