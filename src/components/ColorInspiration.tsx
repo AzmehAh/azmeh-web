@@ -78,7 +78,7 @@ const ColorInspiration = () => {
               {/* العنوان أسفل صورة الدلو */}
   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800 font-serif">
     <span className="block text-lg font-semibold">{swatch.name}</span>
-    <span className="block text-sm text-gray-500">{swatch.code}</span>
+
   </div>
             </div>
        
