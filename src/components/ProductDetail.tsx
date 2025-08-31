@@ -182,8 +182,7 @@ const ProductDetail = () => {
                     )}
                   </div>
                 </div>
-              </div>
-            </div>
+          
           </section> 
       {/* Product Specifications */}
       <section className="py-16 bg-white">
