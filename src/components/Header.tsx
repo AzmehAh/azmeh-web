@@ -311,7 +311,7 @@ const Header = () => {
 
               <Link to="/systems" 
                  onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-orange-600 hover:text-[#2C5DB6]  font-medium py-2"
+                className="block text-gray-900 hover:text-[#2C5DB6] hover:text-[#2C5DB6]  font-medium py-2"
               >
               Systems
             </Link>
