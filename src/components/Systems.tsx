@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, Palette, Wrench, Shield, Building, Car, Layers, Hammer, Droplets, Settings, Factory, Home, Flame } from 'lucide-react';
+import { Search, X, Palette, Wrench, Shield, Building, Car, Layers, Hammer, Droplets, Settings, Factory, Home, Flame,ChevronDown } from 'lucide-react';
 import { bulletinsData, systemCategories } from '../data/bulletinsData';
 
 const Systems = () => {
@@ -101,11 +101,11 @@ const Systems = () => {
                     >
                       <span>{category}</span>
                       <motion.span
-                        animate={{ rotate: activeCategory === category ? 180 : 0 }}
-                        className="inline-block"
-                      >
-                        ▼
-                      </motion.span>
+    animate={{ rotate: activeCategory === category ? 180 : 0 }}
+    className="inline-block"
+  >
+    <ChevronDown className="w-4 h-4" />
+  </motion.span>
                     </button>
 
                     <AnimatePresence>
