@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, Package } from "lucide-react";
+import { Download, Package, Info, FileText, CheckCircle, Wrench, Shield } from "lucide-react";
 import { productsData, Product } from "../data/productsData";
 
 const brands = [
