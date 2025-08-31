@@ -240,4 +240,4 @@ const BulletinDetail = () => {
   );
 };
 
-export default BulletinDetail;</parameter>
+export default BulletinDetail;
