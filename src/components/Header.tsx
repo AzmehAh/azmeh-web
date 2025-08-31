@@ -97,7 +97,9 @@ const Header = () => {
             <Link to="/about" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               About Us
             </Link>
-
+<Link to="/products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+              Products
+            </Link>
             {/* Technical Support Dropdown */}
             <div 
               className="relative" 
@@ -165,9 +167,7 @@ const Header = () => {
           <nav className="hidden lg:flex items-center space-x-8">
             
 
-            <Link to="/products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Products
-            </Link>
+            
 
             <Link to="/systems" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Systems
