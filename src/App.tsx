@@ -6,6 +6,8 @@ import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
 import Products from './components/Products';
 import ProductDetail from './components/ProductDetail';
+import Systems from './components/Systems';
+import BulletinDetail from './components/BulletinDetail';
 import FAQ from './components/FAQ';
 import Troubleshooting from './components/Troubleshooting';
 import Brands from './components/Brands';
@@ -31,6 +33,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/systems" element={<Systems />} />
+        <Route path="/bulletin/:id" element={<BulletinDetail />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/faq/:category" element={<FAQ />} />
         <Route path="/troubleshooting" element={<Troubleshooting />} />
