@@ -244,14 +244,14 @@ const Header = () => {
               <Link 
                 to="/" 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-orange-600 font-medium py-2"
+                className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
               >
                 Home
               </Link>
               <Link 
                 to="/about" 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-orange-600 font-medium py-2"
+                className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
               >
                 About Us
               </Link>
@@ -260,7 +260,7 @@ const Header = () => {
               <div>
                 <button
                   onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'technical' ? null : 'technical')}
-                  className="flex items-center justify-between w-full text-gray-900 hover:text-orange-600 font-medium py-2"
+                  className="flex items-center justify-between w-full text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
                 >
                   <span>Technical Support</span>
                   <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'technical' ? 'rotate-180' : ''}`} />
@@ -323,7 +323,7 @@ const Header = () => {
               <Link 
                 to="/blog" 
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-orange-600 font-medium py-2"
+                className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
               >
                 Blog
               </Link>
@@ -332,7 +332,7 @@ const Header = () => {
               <div>
                 <button
                   onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'contact' ? null : 'contact')}
-                  className="flex items-center justify-between w-full text-gray-900 hover:text-orange-600 font-medium py-2"
+                  className="flex items-center justify-between w-full text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
                 >
                   <span>Contact & Distributors</span>
                   <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
@@ -348,14 +348,14 @@ const Header = () => {
                       <Link 
                         to="/contact" 
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-orange-600 px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
                       >
                         Contact Us
                       </Link>
                       <Link 
                         to="/distributors" 
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-orange-600 px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
                       >
                         Find Distributors
                       </Link>
