@@ -52,7 +52,7 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {!product ? (
-        <div className="min-h-[80vh] flex items-center justify-center">
+        <div className="min-h-[70vh] flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Product Not Found</h1>
             <p className="text-gray-600 mb-8">
@@ -69,7 +69,7 @@ const ProductDetail = () => {
       ) : (
         <>
           {/* Hero Section */}
-         <section className="py-25 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
+         <section className="py-28 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
   <div className="container mx-auto px-20">
     {/* Breadcrumb Navigation */}
     <div className="relative z-50 mb-8">
