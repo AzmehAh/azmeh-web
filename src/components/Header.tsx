@@ -240,7 +240,7 @@ const Header = () => {
             transition={{ duration: 0.3 }}
             className="lg:hidden bg-white border-t border-gray-200 overflow-hidden"
           >
-            <div className="px-4 py-6 space-y-4 max-h-96 overflow-y-auto">
+            <div className="px-4 py-6 space-y-2 max-h-96 overflow-y-auto">
               <Link 
                 to="/" 
                 onClick={() => setIsMobileMenuOpen(false)}
