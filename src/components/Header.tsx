@@ -293,14 +293,14 @@ const Header = () => {
                       <Link 
                         to="/troubleshooting/car-coating" 
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-orange-600 px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
                       >
                         Car Coating Problems <span className="text-xs text-gray-500">(28)</span>
                       </Link>
                       <Link 
                         to="/troubleshooting/coating-defects" 
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-orange-600 px-2 py-1 rounded-md transition-colors duration-200 text-sm"
+                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
                       >
                         Application Defects <span className="text-xs text-gray-500">(13)</span>
                       </Link>
