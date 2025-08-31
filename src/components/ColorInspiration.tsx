@@ -48,7 +48,7 @@ const ColorInspiration = () => {
           {colorSwatches.map((swatch, index) => (
             <div
               key={index}
-              className="relative overflow-hidden group cursor-pointer w-52 h-[320px] border-t border-b border-gray-300"
+              className="relative  cursor-pointer w-52 h-[320px] border-t border-b border-gray-300"
               onMouseEnter={() => setHoveredColor(index)}
               onMouseLeave={() => setHoveredColor(null)}
             >
