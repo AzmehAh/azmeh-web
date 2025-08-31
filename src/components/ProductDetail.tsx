@@ -138,8 +138,7 @@ const ProductDetail = () => {
 
                 <div className="relative">
                   <div className="relative overflow-hidden rounded-2xl shadow-2xl bg-white/10 backdrop-blur-sm"> 
-                    {/* Product Image with Brand Logo */}
-<div className="relative">
+                    <div className="relative">
   <motion.img
     key={currentImageIndex}
     src={product.images[currentImageIndex]}
@@ -150,7 +149,7 @@ const ProductDetail = () => {
     transition={{ duration: 0.7 }}
   />
 
-  {/* Brand Logo فوق الصورة */}
+  {/* Brand Logo فوق الصورة بدون كارد */}
   {brandLogo && (
     <img
       src={brandLogo}
@@ -175,6 +174,7 @@ const ProductDetail = () => {
     </div>
   )}
 </div>
+
 
                 </div>
               </div>
