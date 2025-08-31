@@ -186,7 +186,9 @@ const ProductDetail = () => {
 
       {/* Product Specifications */}
       <section className="py-16 bg-white">
-     
+        <div className="container mx-auto px-20">
+          
+          </div>
 
           {/* Technical Specifications Table */}
           {product.technicalSpecs && product.technicalSpecs.length > 0 && (
