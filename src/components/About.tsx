@@ -17,7 +17,9 @@ import {
   TrendingUp,
   Factory,
   Eye,
-  Handshake
+  Handshake,
+  Star,
+  Building
 } from 'lucide-react';
 
 const About = () => {
@@ -28,6 +30,10 @@ const About = () => {
 
   const statsRef = useRef(null);
   const isStatsInView = useInView(statsRef, { once: true });
+
+  // Calculate years since 1955
+  const currentYear = new Date().getFullYear();
+  const yearsOfExperience = currentYear - 1955;
 
   // Animated counters
   useEffect(() => {
@@ -46,84 +52,75 @@ const About = () => {
         }, 16);
       };
 
-      animateCounter(setExperienceCount, 50, 2000);
-      animateCounter(setProjectsCount, 5000, 2500);
-      animateCounter(setClientsCount, 1200, 2000);
-      animateCounter(setCountriesCount, 25, 1500);
+      animateCounter(setExperienceCount, yearsOfExperience, 2000);
+      animateCounter(setProjectsCount, 8000, 2500);
+      animateCounter(setClientsCount, 2000, 2000);
+      animateCounter(setCountriesCount, 35, 1500);
     }
-  }, [isStatsInView]);
+  }, [isStatsInView, yearsOfExperience]);
 
   const companyValues = [
     {
       icon: Shield,
-      title: 'Quality Assurance',
-      description: 'Unwavering commitment to delivering the highest quality paint systems and technical solutions.',
-      color: 'text-blue-600'
+      title: 'Quality Excellence',
+      description: 'Unwavering commitment to delivering the highest quality paint systems across all product lines.',
+      color: 'from-blue-500 to-blue-700'
     },
     {
       icon: Lightbulb,
       title: 'Innovation',
-      description: 'Continuous research and development to create cutting-edge coating technologies.',
-      color: 'text-yellow-600'
+      description: 'Continuous research and development to create cutting-edge coating technologies and solutions.',
+      color: 'from-yellow-400 to-yellow-600'
     },
     {
       icon: Globe,
-      title: 'Sustainability',
-      description: 'Environmental responsibility through eco-friendly formulations and sustainable practices.',
-      color: 'text-green-600'
-    },
-    {
-      icon: Handshake,
-      title: 'Customer Focus',
-      description: 'Building lasting relationships through exceptional service and technical support.',
-      color: 'text-purple-600'
-    },
-    {
-      icon: Award,
-      title: 'Excellence',
-      description: 'Setting industry standards through superior performance and reliability.',
-      color: 'text-red-600'
+      title: 'Social Responsibility',
+      description: 'Environmental stewardship through eco-friendly formulations and sustainable business practices.',
+      color: 'from-green-500 to-green-700'
     },
     {
       icon: Users,
-      title: 'Teamwork',
-      description: 'Collaborative approach ensuring every project benefits from our collective expertise.',
-      color: 'text-indigo-600'
+      title: 'Employee Growth',
+      description: 'Investing in our team through continuous training, development, and career advancement opportunities.',
+      color: 'from-purple-500 to-purple-700'
+    },
+    {
+      icon: Handshake,
+      title: 'Customer Trust',
+      description: 'Building lasting relationships through exceptional service, technical support, and reliable products.',
+      color: 'from-red-500 to-red-700'
+    },
+    {
+      icon: Award,
+      title: 'Industry Leadership',
+      description: 'Setting standards for excellence and innovation in the paint and coatings industry.',
+      color: 'from-indigo-500 to-indigo-700'
     }
-  ];
-
-  const achievements = [
-    'Premium Paint Systems',
-    'ISO 9001 & ISO 14001 Certified',
-    'Technical Excellence Certified',
-    'Over 50 Years of Excellence',
-    'Trusted Globally for Quality',
-    'Advanced R&D Capabilities'
   ];
 
   const goals = [
     {
       icon: TrendingUp,
-      title: 'Market Leadership',
-      description: 'To become the leading paint manufacturer in the Middle East and expand globally.',
+      title: 'Market Expansion',
+      description: 'Strengthen our position as the leading paint manufacturer in the Middle East and expand to new international markets.',
       gradient: 'from-blue-500 to-blue-700'
     },
     {
       icon: Factory,
-      title: 'Innovation Hub',
-      description: 'Establish world-class R&D facilities for next-generation coating technologies.',
+      title: 'Production Excellence',
+      description: 'Modernize manufacturing facilities and implement Industry 4.0 technologies for enhanced efficiency.',
       gradient: 'from-green-500 to-green-700'
     },
     {
       icon: Globe,
-      title: 'Sustainability',
-      description: 'Achieve carbon neutrality and develop 100% eco-friendly product lines by 2030.',
+      title: 'Sustainability Goals',
+      description: 'Achieve carbon neutrality by 2030 and develop comprehensive eco-friendly product lines.',
       gradient: 'from-purple-500 to-purple-700'
     },
     {
       icon: Users,
       title: 'Customer Excellence',
-      description: 'Provide unparalleled customer service and technical support worldwide.',
+      description: 'Provide world-class customer service and technical support across all markets we serve.',
       gradient: 'from-orange-500 to-orange-700'
     }
   ];
@@ -150,7 +147,7 @@ const About = () => {
               <div className="relative mb-8">
                 {/* Year Badge */}
                 <div className="absolute -top-4 -left-4 bg-green-500 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg transform rotate-12">
-                  EST. 1975
+                  EST. 1955
                 </div>
                 
                 {/* Company Logo */}
@@ -175,15 +172,15 @@ const About = () => {
                 </div>
                 <div className="flex items-center justify-center lg:justify-start space-x-3">
                   <Calendar className="w-6 h-6 text-green-400" />
-                  <span className="text-xl">Founded in 1975</span>
+                  <span className="text-xl">Founded in 1955</span>
                 </div>
                 <div className="flex items-start justify-center lg:justify-start space-x-3">
                   <Eye className="w-6 h-6 text-green-400 mt-1" />
                   <div>
                     <p className="text-lg font-semibold mb-2">Our Vision</p>
                     <p className="text-blue-100 leading-relaxed">
-                      To be the leading innovator in paint and coating technologies, 
-                      providing sustainable solutions that protect and beautify the world.
+                      To be the leading innovator in paint and coating technologies, providing sustainable 
+                      solutions that protect and beautify homes, furniture, vehicles, and industrial facilities worldwide.
                     </p>
                   </div>
                 </div>
@@ -200,43 +197,31 @@ const About = () => {
                 About Us
               </span>
               
-              <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-                Al Azmeh Paints Company Founded in 1975 in Damascus, Syria
+              <h1 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
+                Al Azmeh Paints Company Founded in 1955 in Damascus, Syria
               </h1>
               
               <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-                Al Azmeh has set its sights on delivering the highest quality paint systems and 
-                protective coatings. With decades of excellence and expertise, and through constant 
-                commitment to quality, the company has become one of the leading brands in the 
-                paint industry both locally and globally.
+                Al Azmeh produces all types of high-quality paints for homes, furniture, cars, and 
+                industrial applications. Through decades of excellence and expertise, and constant 
+                commitment to quality, we have become one of the leading brands in the paint industry 
+                both locally and globally.
               </p>
 
-              {/* Experience Hexagon */}
-              <div className="flex items-center space-x-8 mb-8">
-                <div className="relative">
-                  <div className="w-32 h-32 bg-gradient-to-br from-orange-400 to-orange-600 transform rotate-12 rounded-2xl flex items-center justify-center shadow-2xl">
-                    <div className="text-center transform -rotate-12">
-                      <div className="text-3xl font-bold text-white">50Y+</div>
-                      <div className="text-sm text-orange-100 font-medium">Proven Experience</div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Achievements List */}
-                <div className="space-y-3">
-                  {achievements.slice(0, 3).map((achievement, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.5 + index * 0.1 }}
-                      className="flex items-center space-x-3"
-                    >
-                      <CheckCircle className="w-5 h-5 text-green-400" />
-                      <span className="text-blue-100">{achievement}</span>
-                    </motion.div>
-                  ))}
-                </div>
+              {/* Product Categories */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {['Home Paints', 'Furniture Finishes', 'Automotive Coatings', 'Industrial Systems'].map((category, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 + index * 0.1 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center hover:bg-white/20 transition-colors duration-300"
+                  >
+                    <CheckCircle className="w-6 h-6 text-green-400 mx-auto mb-2" />
+                    <span className="text-blue-100 font-medium">{category}</span>
+                  </motion.div>
+                ))}
               </div>
 
               <motion.button
@@ -244,7 +229,7 @@ const About = () => {
                 whileTap={{ scale: 0.95 }}
                 className="group bg-white text-[#2C5DB6] px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all duration-300 flex items-center space-x-3"
               >
-                <span>Learn More About Us</span>
+                <span>Explore Our Products</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </motion.button>
             </motion.div>
@@ -292,6 +277,115 @@ const About = () => {
                 <div className="text-gray-600 font-medium">{stat.label}</div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Mission Statement */}
+      <section className="py-20 bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold mb-8">Our Mission</h2>
+              <p className="text-xl text-blue-100 max-w-4xl mx-auto leading-relaxed mb-12">
+                To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. 
+                We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility 
+                to the environment and society.
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                {['Quality Products', 'Innovation Focus', 'Customer Trust', 'Environmental Care'].map((value, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.2 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-xl p-6 hover:bg-white/20 transition-colors duration-300"
+                  >
+                    <CheckCircle className="w-8 h-8 text-green-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold">{value}</h3>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* About the Founder */}
+      <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            {/* Founder Image */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              className="relative"
+            >
+              <div className="relative">
+                <div className="absolute -inset-4 bg-gradient-to-r from-[#2C5DB6] to-blue-700 rounded-3xl opacity-20 blur-xl"></div>
+                <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-800 rounded-3xl p-8 shadow-2xl">
+                  <div className="w-64 h-64 mx-auto bg-gray-300 rounded-2xl flex items-center justify-center">
+                    <Users className="w-32 h-32 text-gray-500" />
+                  </div>
+                  <div className="mt-6 text-center">
+                    <h3 className="text-2xl font-bold text-white mb-2">Ahmed Al Azmeh</h3>
+                    <p className="text-blue-200">Founder & Visionary</p>
+                    <div className="mt-4 space-y-1 text-sm text-blue-200">
+                      <p>Born: 1918, Damascus</p>
+                      <p>Started Business: 1938</p>
+                      <p>Founded Al Azmeh Paints: 1955</p>
+                      <p>Legacy Continues: 1918 - 1998</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Founder Description */}
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <h2 className="text-4xl md:text-5xl font-bold mb-8">
+                Visionary Leadership
+              </h2>
+              <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
+                <p>
+                  Ahmed Al Azmeh was born in 1918 in Damascus, Syria. He started his entrepreneurial 
+                  journey in 1938 and founded Al Azmeh Paints Company in 1955 with a clear vision: 
+                  to create the highest quality paint systems for every application.
+                </p>
+                <p>
+                  Throughout his life until 1998, Ahmed led the company with unwavering dedication 
+                  to quality and innovation. His vision transformed a small local business into a 
+                  respected name in the paint industry, serving customers across multiple sectors 
+                  including residential, furniture, automotive, and industrial markets.
+                </p>
+                <p>
+                  His legacy of excellence continues to guide our company today, as we maintain the 
+                  same commitment to quality and customer satisfaction that he established nearly 
+                  seven decades ago.
+                </p>
+              </div>
+              
+              <div className="mt-8 grid grid-cols-2 gap-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-400 mb-2">80</div>
+                  <div className="text-gray-400">Years of Leadership</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-green-400 mb-2">1955</div>
+                  <div className="text-gray-400">Company Founded</div>
+                </div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -349,7 +443,7 @@ const About = () => {
               Our Core Values
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              The principles that guide every decision we make and every solution we create.
+              The principles that guide every decision we make and every solution we create for our customers.
             </p>
           </motion.div>
 
@@ -363,119 +457,11 @@ const About = () => {
                 className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 hover:border-[#2C5DB6]/20"
               >
                 <div className="text-center">
-                  <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${value.color === 'text-blue-600' ? 'from-blue-500 to-blue-700' : 
-                    value.color === 'text-yellow-600' ? 'from-yellow-400 to-yellow-600' :
-                    value.color === 'text-green-600' ? 'from-green-500 to-green-700' :
-                    value.color === 'text-purple-600' ? 'from-purple-500 to-purple-700' :
-                    value.color === 'text-red-600' ? 'from-red-500 to-red-700' :
-                    'from-indigo-500 to-indigo-700'} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                  <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
                     <value.icon className="w-10 h-10 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-4">{value.title}</h3>
                   <p className="text-gray-600 leading-relaxed">{value.description}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* About the Founder */}
-      <section className="py-20 bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Founder Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              className="relative"
-            >
-              <div className="relative">
-                <div className="absolute -inset-4 bg-gradient-to-r from-[#2C5DB6] to-blue-700 rounded-3xl opacity-20 blur-xl"></div>
-                <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-800 rounded-3xl p-8 shadow-2xl">
-                  <div className="w-64 h-64 mx-auto bg-gray-300 rounded-2xl flex items-center justify-center">
-                    <Users className="w-32 h-32 text-gray-500" />
-                  </div>
-                  <div className="mt-6 text-center">
-                    <h3 className="text-2xl font-bold text-white mb-2">Ahmed Al Azmeh</h3>
-                    <p className="text-blue-200">Founder & CEO</p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Founder Description */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <h2 className="text-4xl md:text-5xl font-bold mb-8">
-                Visionary Leadership
-              </h2>
-              <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
-                <p>
-                  Ahmed Al Azmeh founded the company in 1975 with a simple vision: to create 
-                  the highest quality paint systems that would protect and beautify structures 
-                  for generations to come.
-                </p>
-                <p>
-                  With over four decades of experience in chemical engineering and paint 
-                  technology, Ahmed has led the company through continuous innovation, 
-                  establishing Al Azmeh Paints as a trusted name in the industry.
-                </p>
-                <p>
-                  Under his leadership, the company has expanded from a small local operation 
-                  to an internationally recognized manufacturer, serving clients across multiple 
-                  continents while maintaining the highest standards of quality and service.
-                </p>
-              </div>
-              
-              <div className="mt-8 grid grid-cols-2 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-400 mb-2">50+</div>
-                  <div className="text-gray-400">Years Leading</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-400 mb-2">25+</div>
-                  <div className="text-gray-400">Countries Reached</div>
-                </div>
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Company Achievements */}
-      <section className="py-20 bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Our Achievements
-            </h2>
-            <p className="text-xl text-blue-100 max-w-3xl mx-auto">
-              Recognition and certifications that validate our commitment to excellence and quality.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            {achievements.map((achievement, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 group"
-              >
-                <div className="flex items-center space-x-3">
-                  <CheckCircle className="w-6 h-6 text-green-400 group-hover:scale-110 transition-transform duration-300" />
-                  <span className="font-semibold text-white">{achievement}</span>
                 </div>
               </motion.div>
             ))}
@@ -496,8 +482,8 @@ const About = () => {
               Ready to Transform Your Project?
             </h2>
             <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
-              Let our 50+ years of experience and innovative solutions bring your vision to life. 
-              Contact us today to discuss your next project.
+              Let our {yearsOfExperience}+ years of experience and innovative solutions bring your vision to life. 
+              Whether it's for your home, furniture, vehicle, or industrial facility, we have the perfect paint solution.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <motion.button
