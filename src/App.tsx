@@ -20,8 +20,9 @@ import About from './components/About';
 const HomePage = () => (
   <>
     <Hero />
-    <AboutSection />
+   
     <Services />
+     <AboutSection />
     <ColorInspiration />
     <FAQ2 />
     <Brands />
