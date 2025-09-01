@@ -129,9 +129,7 @@ const AboutSection = () => {
               ))}
             </div>
 
-                  
-          </motion.div>
-           {/* Read More Button */}
+                   {/* Read More Button */}
             <motion.button
               onClick={() => navigate('/about')}
               whileHover={{ scale: 1.02 }}
@@ -140,7 +138,17 @@ const AboutSection = () => {
             >
               <span>READ MORE</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
+            </motion.button><motion.button
+  onClick={() => navigate('/about')}
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+  className="inline-flex items-center space-x-3 px-6 py-2 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-[#2C5DB6] hover:text-[#2C5DB6] transition-all duration-300 w-auto"
+>
+  <span>READ MORE</span>
+  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+</motion.button>
+
+          </motion.div>
         </div>
       </div>
 
