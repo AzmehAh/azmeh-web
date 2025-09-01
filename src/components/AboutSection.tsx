@@ -31,7 +31,7 @@ const AboutSection = () => {
 
   const achievements = [
     'Premium Quality Paint Systems',
-    'Industrial & Residential Solutions',
+    'Industrial & Residential Solutions', 
     'Trusted Globally for Excellence',
     'Advanced Coating Technologies',
     'Over 70 Years of Innovation'
@@ -43,44 +43,88 @@ const AboutSection = () => {
       <div className="absolute top-0 right-0 w-64 h-64 opacity-5">
         <div className="w-full h-full bg-gradient-to-tl from-green-500 to-transparent rounded-full"></div>
       </div>
-
+      
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           
-          {/* Left Side - Logo + Experience Counter (6 columns) */}
+          {/* Left Side - Logo and Visual Elements (4 columns) */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="lg:col-span-6 relative flex flex-col justify-between bg-white rounded-3xl p-8 shadow-2xl border border-gray-100"
+            className="lg:col-span-4 relative"
           >
-           
-            {/* Company Logo */}
-            <div className="text-center mb-6">
-              <img
-                src="/images/Azmeh-Paints-Logo.png"
-                alt="Al Azmeh Paints"
-                className="h-20 w-auto mx-auto mb-4"
-              />
-              <h3 className="text-2xl font-bold text-[#2C5DB6] mb-1">AL AZMEH PAINTS</h3>
-         
-              <p className="text-[#2C5DB6] font-semibold mt-2">Excellence ... Quality</p>
-            </div>
+            {/* Decorative corner triangle */}
+            <div className="absolute -top-8 -left-8 w-24 h-24 bg-gradient-to-br from-green-500 to-green-600 transform rotate-45 rounded-lg"></div>
+            
+            {/* Main logo container */}
+            <div className="relative bg-white rounded-3xl p-8 shadow-2xl border border-gray-100">
+              {/* Decorative leaf pattern around year */}
+              <div className="relative mb-6">
+                <div className="absolute -top-2 -left-2 text-green-500 opacity-20">
+                  <svg width="120" height="60" viewBox="0 0 120 60" className="fill-current">
+                    <path d="M10,30 Q30,10 50,30 Q70,50 90,30 Q110,10 120,30" stroke="currentColor" strokeWidth="2" fill="none"/>
+                    <circle cx="20" cy="25" r="3" fill="currentColor"/>
+                    <circle cx="40" cy="35" r="3" fill="currentColor"/>
+                    <circle cx="60" cy="25" r="3" fill="currentColor"/>
+                    <circle cx="80" cy="35" r="3" fill="currentColor"/>
+                    <circle cx="100" cy="25" r="3" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div className="text-center text-4xl font-bold text-green-600 mb-2">1955</div>
+              </div>
 
-            {/* Experience Counter inside card */}
-            <div className="w-full  bg-blue-50 border border-blue-200 rounded-lg p-6 flex flex-col items-center justify-center mb-6">
-              <div className=" text-4xl font-bold text-[#2C5DB6]">{experienceCount}Y+</div>
-              <div className="text-sm text-gray-700 mt-1">Proven Experience</div>
+              {/* Company Logo */}
+              <div className="text-center mb-6">
+                <img
+                  src="/images/Azmeh-Paints-Logo.png"
+                  alt="Al Azmeh Paints"
+                  className="h-20 w-auto mx-auto mb-4"
+                />
+                <div className="text-center">
+                  <h3 className="text-2xl font-bold text-gray-900 mb-1">AL AZMEH PAINTS</h3>
+                  <p className="text-lg text-gray-600 italic">الأزمة للدهانات</p>
+                  <p className="text-green-600 font-semibold mt-2">Excellence ... Quality</p>
+                </div>
+              </div>
             </div>
+          </motion.div>
 
-            {/* Decorative leaf SVG */}
-            <div className="absolute top-4 right-4 opacity-10">
-              <svg width="80" height="40" viewBox="0 0 120 60" className="fill-current text-green-500">
-                <path d="M10,30 Q30,10 50,30 Q70,50 90,30 Q110,10 120,30" stroke="currentColor" strokeWidth="2" fill="none"/>
-                <circle cx="20" cy="25" r="3" fill="currentColor"/>
-                <circle cx="40" cy="35" r="3" fill="currentColor"/>
-                <circle cx="60" cy="25" r="3" fill="currentColor"/>
-              </svg>
+          {/* Center - Experience Counter (2 columns) */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="lg:col-span-2 flex justify-center"
+            ref={ref}
+          >
+            <div className="relative">
+              {/* Hexagonal background */}
+              <div className="relative w-32 h-32 flex items-center justify-center">
+                <svg width="128" height="128" viewBox="0 0 128 128" className="absolute inset-0">
+                  <polygon
+                    points="64,8 104,32 104,96 64,120 24,96 24,32"
+                    fill="none"
+                    stroke="#10B981"
+                    strokeWidth="3"
+                    className="opacity-20"
+                  />
+                  <polygon
+                    points="64,12 100,34 100,94 64,116 28,94 28,34"
+                    fill="#F0FDF4"
+                    stroke="#10B981"
+                    strokeWidth="2"
+                  />
+                </svg>
+                <div className="relative z-10 text-center">
+                  <div className="text-4xl font-bold text-gray-900">
+                    {experienceCount}Y+
+                  </div>
+                  <div className="text-sm text-gray-600 font-medium">
+                    Proven Experience
+                  </div>
+                </div>
+              </div>
             </div>
           </motion.div>
 
@@ -88,12 +132,11 @@ const AboutSection = () => {
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-6 flex flex-col justify-center"
-            ref={ref}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="lg:col-span-6"
           >
             {/* About Us Label */}
-            <span className=" self-start inline-block px-4 py-2 bg-[#ffffff] text-[#2C5DB6] rounded-full text-sm font-semibold uppercase tracking-wide mb-6">
+            <span className="inline-block px-4 py-2 bg-green-100 text-green-600 rounded-full text-sm font-semibold uppercase tracking-wide mb-6">
               About Us
             </span>
             
@@ -119,20 +162,20 @@ const AboutSection = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="flex items-center space-x-3 group"
                 >
-                  <div className="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                  <div className="flex-shrink-0 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                     <CheckCircle className="w-4 h-4" />
                   </div>
                   <span className="text-gray-700 font-medium">{achievement}</span>
                 </motion.div>
               ))}
             </div>
- 
+
             {/* Read More Button */}
             <motion.button
               onClick={() => navigate('/about')}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className=" self-start group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-[#2C5DB6] hover:text-[#2C5DB6] transition-all duration-300"
+              className="group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-[#2C5DB6] hover:text-[#2C5DB6] transition-all duration-300"
             >
               <span>READ MORE</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
