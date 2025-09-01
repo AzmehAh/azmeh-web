@@ -129,7 +129,7 @@ const AboutSection = () => {
               ))}
             </div>
 
-            {/* Read More Button */}
+                   {/* Read More Button */}
             <motion.button
               onClick={() => navigate('/about')}
               whileHover={{ scale: 1.02 }}
