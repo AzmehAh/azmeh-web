@@ -692,7 +692,7 @@ export const productsData: Product[] = [
   }
 ],
 {
-  id: "11",
+  id: "Paint product",
   name: "EPX02 Epoxy Polyamine",
   category: "Epoxy",
   description: "أساس إيبوكسي بوليامين ذو متانة عالية ومتعدد الاستخدامات مكوّن من مركبين.",
