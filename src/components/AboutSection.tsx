@@ -54,9 +54,7 @@ const AboutSection = () => {
             transition={{ duration: 0.8 }}
             className="lg:col-span-6 relative flex flex-col justify-between bg-white rounded-3xl p-8 shadow-2xl border border-gray-100"
           >
-            {/* Decorative corner triangle */}
-            <div className="absolute -top-8 -left-8 w-24 h-24 bg-gradient-to-br from-green-500 to-green-600 transform rotate-45 rounded-lg"></div>
-
+           
             {/* Company Logo */}
             <div className="text-center mb-6">
               <img
