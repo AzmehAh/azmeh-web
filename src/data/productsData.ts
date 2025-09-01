@@ -690,7 +690,7 @@ export const productsData: Product[] = [
       ]
     }
   }
-];
+],
 {
   id: 11,
   name: "EPX02 Epoxy Polyamine",
@@ -755,7 +755,7 @@ export const productsData: Product[] = [
     ]
   }
 }
-],
+];
 
 export const filterOptions = {
   type: [
