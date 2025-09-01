@@ -18,7 +18,7 @@ const paintCategories = [
   {
     id: "interior",
     title: "Interior",
-    description: "Elegant and modern finishes for home and office interiors.",
+    description: "Elegant and modern finishes for home and office interi ors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
   },
   {
@@ -60,7 +60,7 @@ const AnimatedTitle = ({ text, isActive }) => {
       y: 0,
       opacity: 1,
       rotateX: 0,
-      skew: isActive ? "0deg" : "15deg",
+      skew: isActive ? "0deg" : "15deg", // تأثير مائل عندما لا يكون نشطاً
       scale: isActive ? 1.2 : 1,
       textShadow: isActive 
         ? "0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)" 
@@ -89,7 +89,6 @@ const AnimatedTitle = ({ text, isActive }) => {
         userSelect: "none",
         textAlign: "center",
         lineHeight: "1.1",
-        padding: "0 20px", // إضافة بادنغ لمنع التصاق النص بالحافة
       }}
       variants={container}
       initial="hidden"
@@ -121,7 +120,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden ">
       <div className="flex h-full">
         {paintCategories.map((category, index) => {
           const isActive = activeIndex === index;
@@ -174,7 +173,7 @@ const Hero = () => {
               />
 
               {/* العنوان المعدل بنمط مائل وبارز */}
-              <motion.div
+              <div
                 className="absolute text-white pointer-events-none z-10"
                 style={{
                   top: isActive ? "35%" : "45%",
@@ -182,17 +181,11 @@ const Hero = () => {
                   transform: "translate(-50%, -50%)",
                   transition: "all 0.5s ease-in-out",
                   width: "100%",
-                  textAlign: "center",
-                  padding: "0 20px", // إضافة بادنغ لمنع التصاق النص بالحافة
+                  textAlign: "center"
                 }}
-                initial={{ y: 0 }}
-                animate={{ 
-                  y: isActive ? -20 : 0 // حركة صعودية عند التفعيل
-                }}
-                transition={{ duration: 0.5 }}
               >
                 <AnimatedTitle text={category.title} isActive={isActive} />
-              </motion.div>
+              </div>
 
               {/* المحتوى النصي */}
               {isActive && (
@@ -202,7 +195,7 @@ const Hero = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
-                  <p className="text-xl text-white mb-6 max-w-lg text-center drop-shadow-lg bg-opacity-40 p-4 rounded-lg">
+                  <p className="text-xl text-white mb-6 max-w-lg text-center drop-shadow-lg  bg-opacity-40 p-4 rounded-lg">
                     {category.description}
                   </p>
                   <button
