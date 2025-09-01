@@ -122,7 +122,7 @@ const AboutSection = () => {
                   <div className="flex-shrink-0 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                     <CheckCircle className="w-4 h-4" />
                   </div>
-                  <span className="text-blue-700 font-medium">{achievement}</span>
+                  <span className="text-gray-700 font-medium">{achievement}</span>
                 </motion.div>
               ))}
             </div>
