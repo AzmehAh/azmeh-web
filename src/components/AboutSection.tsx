@@ -190,23 +190,7 @@ const AboutSection = () => {
               </button>
             </motion.div>
 
-            {/* Additional Stats */}
-            <div className="pt-8 border-t border-gray-200">
-              <div className="grid grid-cols-3 gap-6 text-center">
-                <div>
-                  <div className="text-2xl font-bold text-[#2C5DB6]">4 Sectors</div>
-                  <div className="text-sm text-gray-600">Home, Furniture, Cars, Industry</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-[#2C5DB6]">Quality First</div>
-                  <div className="text-sm text-gray-600">Commitment to Excellence</div>
-                </div>
-                <div>
-                  <div className="text-2xl font-bold text-[#2C5DB6]">Global Brand</div>
-                  <div className="text-sm text-gray-600">Trusted Worldwide</div>
-                </div>
-              </div>
-            </div>
+            
           </motion.div>
         </div>
       </div>
