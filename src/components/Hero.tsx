@@ -1,256 +1,191 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Palette, Shield, Sparkles } from "lucide-react";
 
-const Hero = () => {
-  const [isLoaded, setIsLoaded] = useState(false);
-  const navigate = useNavigate();
+const paintCategories = [
+  {
+    id: "automotive",
+    title: "Automotive",
+    description: "High-durability coatings with a glossy finish for vehicles.",
+    image: "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg",
+  },
+  {
+    id: "sports",
+    title: "Sports Field",
+    description: "Specialized coatings designed for outdoor sports surfaces.",
+    image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
+  },
+  {
+    id: "interior",
+    title: "Interior",
+    description: "Elegant and modern finishes for home and office interiors.",
+    image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+  },
+  {
+    id: "exterior",
+    title: "Exterior",
+    description: "Weather-resistant coatings for long-term exterior protection.",
+    image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+  },
+  {
+    id: "industrial",
+    title: "Industrial",
+    description: "Tough coatings for factories and industrial environments.",
+    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
+  },
+];
 
-  useEffect(() => {
-    // Trigger the animation after a short delay
-    const timer = setTimeout(() => {
-      setIsLoaded(true);
-    }, 500);
+// هذا المكون يعرض العنوان بحروف متحركة
+const AnimatedTitle = ({ text, isActive }) => {
+  const letters = Array.from(text);
 
-    return () => clearTimeout(timer);
-  }, []);
-
-  const titleVariants = {
-    initial: {
-      rotate: -90,
-      x: -200,
-      y: 0,
-      transformOrigin: "center center",
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
     },
-    animate: {
+  };
+
+  const child = {
+    hidden: {
+      y: 20,
+      opacity: 0,
+      rotate: -90,
+      x: 0,
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
       rotate: 0,
       x: 0,
-      y: 0,
-      transformOrigin: "center center",
-      transition: {
-        duration: 1.2,
-        ease: [0.25, 0.46, 0.45, 0.94],
-      },
     },
-  };
-
-  const subtitleVariants = {
-    initial: { opacity: 0, y: 50 },
-    animate: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: 0.8,
-        duration: 0.8,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const buttonVariants = {
-    initial: { opacity: 0, scale: 0.8 },
-    animate: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        delay: 1.2,
-        duration: 0.6,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const backgroundVariants = {
-    initial: { scale: 1.1 },
-    animate: {
-      scale: 1,
-      transition: {
-        duration: 2,
-        ease: "easeOut",
-      },
-    },
-  };
-
-  const floatingIconVariants = {
-    initial: { opacity: 0, y: 100, rotate: -45 },
-    animate: (delay: number) => ({
-      opacity: 0.3,
-      y: 0,
-      rotate: 0,
-      transition: {
-        delay: delay,
-        duration: 1,
-        ease: "easeOut",
-      },
-    }),
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-[#2C5DB6] via-blue-600 to-blue-800">
-      {/* Background Image with Animation */}
-      <motion.div
-        className="absolute inset-0 z-0"
-        variants={backgroundVariants}
-        initial="initial"
-        animate={isLoaded ? "animate" : "initial"}
-      >
-        <div
-          className="w-full h-full bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: `linear-gradient(rgba(44, 93, 182, 0.7), rgba(30, 64, 128, 0.8)), url('https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')`,
-          }}
-        />
-      </motion.div>
-
-      {/* Floating Background Icons */}
-      <motion.div
-        className="absolute top-20 right-20 z-10"
-        variants={floatingIconVariants}
-        initial="initial"
-        animate={isLoaded ? "animate" : "initial"}
-        custom={1.5}
-      >
-        <Palette className="w-20 h-20 text-white" />
-      </motion.div>
-
-      <motion.div
-        className="absolute bottom-32 left-20 z-10"
-        variants={floatingIconVariants}
-        initial="initial"
-        animate={isLoaded ? "animate" : "initial"}
-        custom={1.8}
-      >
-        <Shield className="w-16 h-16 text-white" />
-      </motion.div>
-
-      <motion.div
-        className="absolute top-1/3 right-1/4 z-10"
-        variants={floatingIconVariants}
-        initial="initial"
-        animate={isLoaded ? "animate" : "initial"}
-        custom={2.1}
-      >
-        <Sparkles className="w-12 h-12 text-white" />
-      </motion.div>
-
-      {/* Main Content */}
-      <div className="relative z-20 flex items-center justify-center h-full px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-6xl mx-auto">
-          {/* Animated Title */}
-          <motion.h1
-            className="text-6xl md:text-8xl lg:text-9xl font-bold text-white mb-8 tracking-tight"
-            variants={titleVariants}
-            initial="initial"
-            animate={isLoaded ? "animate" : "initial"}
-            style={{
-              fontFamily: "Georgia, serif",
-              textShadow: "0 4px 20px rgba(0, 0, 0, 0.5)",
-            }}
-          >
-            AL AZMEH
-            <br />
-            <span className="text-yellow-400">PAINTS</span>
-          </motion.h1>
-
-          {/* Subtitle */}
-          <motion.p
-            className="text-xl md:text-2xl text-blue-100 mb-12 leading-relaxed max-w-3xl mx-auto"
-            variants={subtitleVariants}
-            initial="initial"
-            animate={isLoaded ? "animate" : "initial"}
-          >
-            Excellence in Every Drop. Discover premium paint systems and 
-            technical solutions designed for every application and environment.
-          </motion.p>
-
-          {/* CTA Button */}
-          <motion.div
-            variants={buttonVariants}
-            initial="initial"
-            animate={isLoaded ? "animate" : "initial"}
-          >
-            <motion.button
-              onClick={() => navigate('/products')}
-              className="group relative bg-gradient-to-r from-yellow-400 to-yellow-500 text-gray-900 px-10 py-5 rounded-full font-bold text-lg shadow-2xl hover:shadow-yellow-400/25 transition-all duration-300"
-              whileHover={{ 
-                scale: 1.05,
-                boxShadow: "0 20px 40px rgba(251, 191, 36, 0.4)"
-              }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <span className="flex items-center space-x-3">
-                <span>Explore Our Products</span>
-                <motion.div
-                  className="inline-block"
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ 
-                    repeat: Infinity, 
-                    duration: 1.5,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <ArrowRight className="w-6 h-6" />
-                </motion.div>
-              </span>
-              
-              {/* Button Glow Effect */}
-              <div className="absolute inset-0 rounded-full bg-gradient-to-r from-yellow-400 to-yellow-500 opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-xl" />
-            </motion.button>
-          </motion.div>
-
-          {/* Bottom Accent */}
-          <motion.div
-            className="mt-20 flex justify-center space-x-8 text-blue-200"
-            initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: isLoaded ? 1 : 0,
-              transition: { delay: 1.6, duration: 0.8 }
-            }}
-          >
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-400">70+</div>
-              <div className="text-sm">Years of Excellence</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-400">2000+</div>
-              <div className="text-sm">Satisfied Clients</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-bold text-yellow-400">35+</div>
-              <div className="text-sm">Countries Served</div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-black/20 to-transparent z-10" />
-      
-      {/* Animated Particles */}
-      {Array.from({ length: 6 }).map((_, index) => (
-        <motion.div
+    <motion.div
+      style={{
+        display: isActive ? "flex" : "inline-block",
+        flexDirection: isActive ? "row" : "column",
+        transformOrigin: "center",
+        fontSize: isActive ? "3rem" : "1.5rem",
+        fontWeight: "bold",
+        color: "white",
+        whiteSpace: "nowrap",
+        cursor: "default",
+        userSelect: "none",
+      }}
+      variants={container}
+      initial="hidden"
+      animate={isActive ? "visible" : "hidden"}
+    >
+      {letters.map((letter, index) => (
+        <motion.span
           key={index}
-          className="absolute w-2 h-2 bg-yellow-400 rounded-full opacity-60"
-          animate={{
-            y: [-20, -100, -20],
-            x: [0, Math.random() * 100 - 50, 0],
-            opacity: [0.6, 1, 0.6],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 2,
-            repeat: Infinity,
-            delay: Math.random() * 2,
-            ease: "easeInOut",
-          }}
-          style={{
-            left: `${10 + Math.random() * 80}%`,
-            bottom: `${Math.random() * 20}%`,
-          }}
-        />
+          variants={child}
+          style={{ display: "inline-block" }}
+          aria-hidden="true"
+        >
+          {letter}
+        </motion.span>
       ))}
+    </motion.div>
+  );
+};
+
+const Hero = () => {
+  const [activeIndex, setActiveIndex] = useState(null);
+  const navigate = useNavigate();
+
+  const handleExplore = (id) => {
+    navigate(`/products?category=${id}`);
+  };
+
+  return (
+    <div className="relative w-full h-screen overflow-hidden">
+      <div className="flex h-full">
+        {paintCategories.map((category, index) => {
+          const isActive = activeIndex === index;
+
+          return (
+            <motion.div
+              key={category.id}
+              className={`relative h-full cursor-pointer ${
+                isActive ? "flex-grow" : "flex-shrink"
+              }`}
+              initial={{ flex: 1 }}
+              animate={{
+                flex: isActive ? 5 : 1,
+                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
+                marginLeft: "-25px",
+                marginRight: "-25px",
+              }}
+              style={{
+                transformOrigin: "center center",
+              }}
+              transition={{
+                duration: 0.5,
+                ease: "easeInOut",
+              }}
+              onMouseEnter={() => setActiveIndex(index)}
+              onMouseLeave={() => setActiveIndex(null)}
+            >
+             <motion.img
+  src={isActive ? category.activeImage || category.image : category.image}
+  alt={category.title}
+  className="absolute inset-0 w-full h-full object-cover"
+  style={{
+    filter: isActive ? "brightness(0.6)" : "brightness(0.8)", // أغمق عند الفتح
+  }}
+  initial={{ scale: 1.1 }}
+  animate={{ scale: isActive ? 1 : 1.1 }}
+  transition={{ duration: 0.5 }}
+/>
+
+
+              {/* هنا نستخدم المكون AnimatedTitle بدلاً من الفقرة العادية */}
+              <div
+                className="absolute text-white drop-shadow-lg pointer-events-none"
+                style={{
+                  top: "45%",
+                  left: isActive ? "50%" : "30%",
+                  transform: isActive
+                    ? "translate(-50%, -50%)"
+                    : "translate(0, -50%)",
+                  transition: "all 0.5s ease-in-out",
+                }}
+              >
+                <AnimatedTitle text={category.title} isActive={isActive} />
+              </div>
+
+              {/* المحتوى النصي بدون العنوان */}
+              {isActive && (
+                <motion.div
+                  className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
+                    {category.description}
+                  </p>
+                  <button
+                    onClick={() => handleExplore(category.id)}
+                    className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                  >
+                    Explore Products
+                  </button>
+                </motion.div>
+              )}
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
 export default Hero;
+ 
