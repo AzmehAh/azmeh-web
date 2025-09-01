@@ -93,7 +93,7 @@ const AboutSection = () => {
             ref={ref}
           >
             {/* About Us Label */}
-            <span className=" self-start inline-block px-4 py-2 bg-[ffffff] text-[#2C5DB6] rounded-full text-sm font-semibold uppercase tracking-wide mb-6">
+            <span className=" self-start inline-block px-4 py-2 bg-[#ffffff] text-[#2C5DB6] rounded-full text-sm font-semibold uppercase tracking-wide mb-6">
               About Us
             </span>
             
