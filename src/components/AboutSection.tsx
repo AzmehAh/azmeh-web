@@ -83,7 +83,7 @@ const AboutSection = () => {
                 />
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-gray-900 mb-1">AL AZMEH PAINTS</h3>
-                  <p className="text-lg text-gray-600 italic">الأزمة للدهانات</p>
+  
                   <p className="text-green-600 font-semibold mt-2">Excellence ... Quality</p>
                 </div>
               </div>
