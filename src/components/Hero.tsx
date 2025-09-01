@@ -35,7 +35,7 @@ const paintCategories = [
   },
 ];
 
-// هذا المكون يعرض العنوان بحروف متحركة
+// مكون العنوان المتحرك
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -43,34 +43,22 @@ const AnimatedTitle = ({ text, isActive }) => {
     hidden: { opacity: 1 },
     visible: {
       opacity: 1,
-      transition: {
-        staggerChildren: 0.05,
-      },
+      transition: { staggerChildren: 0.05 },
     },
   };
 
   const child = {
-    hidden: {
-      y: 20,
-      opacity: 0,
-      rotate: -90,
-      x: 0,
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      rotate: 0,
-      x: 0,
-    },
+    hidden: { y: 20, opacity: 0, rotate: -90 },
+    visible: { y: 0, opacity: 1, rotate: 0 },
   };
 
   return (
     <motion.div
       style={{
-        display: isActive ? "flex" : "inline-block",
-        flexDirection: isActive ? "row" : "column",
+        display: "flex",
+        flexDirection: "row",
         transformOrigin: "center",
-        fontSize: isActive ? "3rem" : "1.5rem",
+        fontSize: isActive ? "3rem" : "5rem", // كبير قبل الفتح
         fontWeight: "bold",
         color: "white",
         whiteSpace: "nowrap",
@@ -79,13 +67,17 @@ const AnimatedTitle = ({ text, isActive }) => {
       }}
       variants={container}
       initial="hidden"
-      animate={isActive ? "visible" : "hidden"}
+      animate="visible"
     >
       {letters.map((letter, index) => (
         <motion.span
           key={index}
           variants={child}
-          style={{ display: "inline-block" }}
+          style={{
+            display: "inline-block",
+            transform: isActive ? "rotate(0deg)" : "rotate(-20deg)", // مائل قبل الفتح
+            transition: "transform 0.5s ease-in-out",
+          }}
           aria-hidden="true"
         >
           {letter}
@@ -122,30 +114,25 @@ const Hero = () => {
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
-              style={{
-                transformOrigin: "center center",
-              }}
-              transition={{
-                duration: 0.5,
-                ease: "easeInOut",
-              }}
+              style={{ transformOrigin: "center center" }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-             <motion.img
-  src={isActive ? category.activeImage || category.image : category.image}
-  alt={category.title}
-  className="absolute inset-0 w-full h-full object-cover"
-  style={{
-    filter: isActive ? "brightness(0.6)" : "brightness(0.8)", // أغمق عند الفتح
-  }}
-  initial={{ scale: 1.1 }}
-  animate={{ scale: isActive ? 1 : 1.1 }}
-  transition={{ duration: 0.5 }}
-/>
+              {/* الخلفية */}
+              <motion.img
+                src={category.image}
+                alt={category.title}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{
+                  filter: isActive ? "brightness(0.6)" : "brightness(0.8)",
+                }}
+                initial={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.1 }}
+                transition={{ duration: 0.5 }}
+              />
 
-
-              {/* هنا نستخدم المكون AnimatedTitle بدلاً من الفقرة العادية */}
+              {/* العنوان */}
               <div
                 className="absolute text-white drop-shadow-lg pointer-events-none"
                 style={{
@@ -160,7 +147,7 @@ const Hero = () => {
                 <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
 
-              {/* المحتوى النصي بدون العنوان */}
+              {/* النص وزر اكسبلور */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
@@ -185,7 +172,6 @@ const Hero = () => {
       </div>
     </div>
   );
-}; 
+};
 
-export default Hero; 
- 
+export default Hero;
