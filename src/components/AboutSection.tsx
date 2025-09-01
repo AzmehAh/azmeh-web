@@ -69,7 +69,7 @@ const AboutSection = () => {
 
             {/* Experience Counter inside card */}
             <div className="w-full bg-green-50 border border-green-200 rounded-lg p-6 flex flex-col items-center justify-center mb-6">
-              <div className="text-4xl font-bold text-green-600">{experienceCount}Y+</div>
+              <div className="text-4xl font-bold text-[#2C5DB6]">{experienceCount}Y+</div>
               <div className="text-sm text-gray-700 mt-1">Proven Experience</div>
             </div>
 
