@@ -129,7 +129,9 @@ const AboutSection = () => {
               ))}
             </div>
 
-                   {/* Read More Button */}
+                  
+          </motion.div>
+           {/* Read More Button */}
             <motion.button
               onClick={() => navigate('/about')}
               whileHover={{ scale: 1.02 }}
@@ -139,7 +141,6 @@ const AboutSection = () => {
               <span>READ MORE</span>
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </motion.button>
-          </motion.div>
         </div>
       </div>
 
