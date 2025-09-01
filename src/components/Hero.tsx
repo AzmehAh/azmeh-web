@@ -51,31 +51,29 @@ const AnimatedTitle = ({ text, isActive }) => {
 
   const child = {
     hidden: {
-      y: 20,
-      opacity: 0,
-      rotate: -90,
+      opacity: 1,
+      rotate: 0, // يبدأ بدون دوران
+      y: 0,
       x: 0,
+      scale: 1,
     },
     visible: {
-      y: 0,
       opacity: 1,
-      rotate: 0,
+      rotate: 0, // ينتهي بدون دوران
+      y: 0,
       x: 0,
+      scale: 1,
     },
   };
 
   return (
     <motion.div
       style={{
-        display: isActive ? "flex" : "inline-block",
-        flexDirection: isActive ? "row" : "column",
-        transformOrigin: "center",
-        fontSize: isActive ? "3rem" : "1.5rem",
-        fontWeight: "bold",
-        color: "white",
-        whiteSpace: "nowrap",
-        cursor: "default",
-        userSelect: "none",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        perspective: "1000px",
+        transformStyle: "preserve-3d",
       }}
       variants={container}
       initial="hidden"
@@ -85,10 +83,20 @@ const AnimatedTitle = ({ text, isActive }) => {
         <motion.span
           key={index}
           variants={child}
-          style={{ display: "inline-block" }}
+          style={{ 
+            display: "inline-block",
+            fontSize: isActive ? "2.5rem" : "4rem",
+            fontWeight: "900",
+            color: "white",
+            textShadow: "2px 2px 8px rgba(0,0,0,0.7)",
+            transform: isActive ? "rotate(0deg)" : "rotate(-15deg)",
+            transformOrigin: "center center",
+            margin: isActive ? "0 2px" : "0 1px",
+            transition: "all 0.5s ease-in-out",
+          }}
           aria-hidden="true"
         >
-          {letter}
+          {letter === " " ? "\u00A0" : letter}
         </motion.span>
       ))}
     </motion.div>
@@ -133,28 +141,26 @@ const Hero = () => {
               onMouseLeave={() => setActiveIndex(null)}
             >
              <motion.img
-  src={isActive ? category.activeImage || category.image : category.image}
-  alt={category.title}
-  className="absolute inset-0 w-full h-full object-cover"
-  style={{
-    filter: isActive ? "brightness(0.6)" : "brightness(0.8)", // أغمق عند الفتح
-  }}
-  initial={{ scale: 1.1 }}
-  animate={{ scale: isActive ? 1 : 1.1 }}
-  transition={{ duration: 0.5 }}
-/>
-
+                src={category.image}
+                alt={category.title}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{
+                  filter: isActive ? "brightness(0.6)" : "brightness(0.8)",
+                }}
+                initial={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.1 }}
+                transition={{ duration: 0.5 }}
+              />
 
               {/* هنا نستخدم المكون AnimatedTitle بدلاً من الفقرة العادية */}
               <div
                 className="absolute text-white drop-shadow-lg pointer-events-none"
                 style={{
-                  top: "45%",
-                  left: isActive ? "50%" : "30%",
-                  transform: isActive
-                    ? "translate(-50%, -50%)"
-                    : "translate(0, -50%)",
-                  transition: "all 0.5s ease-in-out",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "100%",
+                  textAlign: "center",
                 }}
               >
                 <AnimatedTitle text={category.title} isActive={isActive} />
@@ -163,12 +169,12 @@ const Hero = () => {
               {/* المحتوى النصي بدون العنوان */}
               {isActive && (
                 <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
+                  className="absolute inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
+                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg text-center">
                     {category.description}
                   </p>
                   <button
@@ -187,5 +193,4 @@ const Hero = () => {
   );
 };
 
-export default Hero; 
- 
+export default Hero;
