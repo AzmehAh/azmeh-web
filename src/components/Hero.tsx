@@ -120,7 +120,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-black">
+    <div className="relative w-full h-screen overflow-hidden ">
       <div className="flex h-full">
         {paintCategories.map((category, index) => {
           const isActive = activeIndex === index;
@@ -190,7 +190,7 @@ const Hero = () => {
               {/* المحتوى النصي */}
               {isActive && (
                 <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
+                  className="absolute px-10 inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
