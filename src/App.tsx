@@ -1,7 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
-import About from './components/About';
 import Hero from './components/Hero';
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
@@ -33,7 +32,6 @@ function App() {
       <Header /> 
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<About />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/systems" element={<Systems />} />

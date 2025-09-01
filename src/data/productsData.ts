@@ -624,7 +624,7 @@ export const productsData: Product[] = [
       precautions: [
         'Use only in spray booth environment',
         'Wear full respiratory protection',
-         'Avoid skin contact',
+        'Avoid skin contact',
         'Use explosion-proof equipment'
       ],
       firstAid: [
