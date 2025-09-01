@@ -119,7 +119,7 @@ const AboutSection = () => {
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   className="flex items-center space-x-3 group"
                 >
-                  <div className="flex-shrink-0 w-6 h-6 bg-green-500 text-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                  <div className="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
                     <CheckCircle className="w-4 h-4" />
                   </div>
                   <span className="text-gray-700 font-medium">{achievement}</span>
