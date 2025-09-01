@@ -65,7 +65,7 @@ const AboutSection = () => {
                 className="h-20 w-auto mx-auto mb-4"
               />
               <h3 className="text-2xl font-bold text-gray-900 mb-1">AL AZMEH PAINTS</h3>
-              <p className="text-lg text-gray-600 italic">الأزمة للدهانات</p>
+         
               <p className="text-green-600 font-semibold mt-2">Excellence ... Quality</p>
             </div>
 
@@ -95,7 +95,7 @@ const AboutSection = () => {
             ref={ref}
           >
             {/* About Us Label */}
-            <span className="inline-block px-4 py-2 bg-green-100 text-green-600 rounded-full text-sm font-semibold uppercase tracking-wide mb-6">
+            <span className=" self-start inline-block px-4 py-2 bg-green-100 text-green-600 rounded-full text-sm font-semibold uppercase tracking-wide mb-6">
               About Us
             </span>
             
