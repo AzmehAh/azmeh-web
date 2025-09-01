@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-// بيانات الأقسام
 const paintCategories = [
   {
     id: "automotive",
@@ -36,29 +35,66 @@ const paintCategories = [
   },
 ];
 
-// مكون يعرض النص عموديًا ومائلًا وكبيرًا
-const VerticalTitle = ({ text }) => {
+// هذا المكون يعرض العنوان بحروف متحركة
+const AnimatedTitle = ({ text, isActive }) => {
+  const letters = Array.from(text);
+
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.05,
+      },
+    },
+  };
+
+  const child = {
+    hidden: {
+      y: 20,
+      opacity: 0,
+      rotate: -90,
+      x: 0,
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      rotate: 0,
+      x: 0,
+    },
+  };
+
   return (
-    <div
+    <motion.div
       style={{
-        writingMode: "vertical-rl", // نص عمودي من الأسفل للأعلى
-        textOrientation: "upright", // يبقي الحروف بشكل طبيعي
-        transform: "rotate(-10deg)", // ميل بسيط
-        fontSize: "3rem",
+        display: isActive ? "flex" : "inline-block",
+        flexDirection: isActive ? "row" : "column",
+        transformOrigin: "center",
+        fontSize: isActive ? "3rem" : "1.5rem",
         fontWeight: "bold",
-        fontStyle: "italic",
         color: "white",
-        textShadow: "2px 2px 5px rgba(0,0,0,0.7)",
-        userSelect: "none",
         whiteSpace: "nowrap",
+        cursor: "default",
+        userSelect: "none",
       }}
+      variants={container}
+      initial="hidden"
+      animate={isActive ? "visible" : "hidden"}
     >
-      {text}
-    </div>
+      {letters.map((letter, index) => (
+        <motion.span
+          key={index}
+          variants={child}
+          style={{ display: "inline-block" }}
+          aria-hidden="true"
+        >
+          {letter}
+        </motion.span>
+      ))}
+    </motion.div>
   );
 };
 
-// المكون الرئيسي
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const navigate = useNavigate();
@@ -96,33 +132,35 @@ const Hero = () => {
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              {/* الخلفية */}
-              <motion.img
-                src={category.image}
-                alt={category.title}
-                className="absolute inset-0 w-full h-full object-cover"
-                style={{
-                  filter: isActive ? "brightness(0.6)" : "brightness(0.8)",
-                }}
-                initial={{ scale: 1.1 }}
-                animate={{ scale: isActive ? 1 : 1.1 }}
-                transition={{ duration: 0.5 }}
-              />
+             <motion.img
+  src={isActive ? category.activeImage || category.image : category.image}
+  alt={category.title}
+  className="absolute inset-0 w-full h-full object-cover"
+  style={{
+    filter: isActive ? "brightness(0.6)" : "brightness(0.8)", // أغمق عند الفتح
+  }}
+  initial={{ scale: 1.1 }}
+  animate={{ scale: isActive ? 1 : 1.1 }}
+  transition={{ duration: 0.5 }}
+/>
 
-              {/* العنوان العمودي الكبير */}
+
+              {/* هنا نستخدم المكون AnimatedTitle بدلاً من الفقرة العادية */}
               <div
-                className="absolute pointer-events-none"
+                className="absolute text-white drop-shadow-lg pointer-events-none"
                 style={{
-                  top: "50%",
-                  left: "10%",
-                  transform: "translate(-50%, -50%)",
-                  zIndex: 10,
+                  top: "45%",
+                  left: isActive ? "50%" : "30%",
+                  transform: isActive
+                    ? "translate(-50%, -50%)"
+                    : "translate(0, -50%)",
+                  transition: "all 0.5s ease-in-out",
                 }}
               >
-                <VerticalTitle text={category.title} />
+                <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
 
-              {/* المحتوى يظهر عند التفعيل */}
+              {/* المحتوى النصي بدون العنوان */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
@@ -145,8 +183,9 @@ const Hero = () => {
           );
         })}
       </div>
-    </div>
+    </div> 
   );
-};
+}; 
 
-export default Hero;
+export default Hero; 
+ 
