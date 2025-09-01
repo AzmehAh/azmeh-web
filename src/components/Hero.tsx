@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
+// بيانات الأقسام
 const paintCategories = [
   {
     id: "automotive",
@@ -35,58 +36,29 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان المتحرك
-const AnimatedTitle = ({ text, isActive }) => {
-  const letters = Array.from(text);
-
-  const container = {
-    hidden: { opacity: 1 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.05 },
-    },
-  };
-
-  const child = {
-    hidden: { y: 20, opacity: 0, rotate: -90 },
-    visible: { y: 0, opacity: 1, rotate: 0 },
-  };
-
+// مكون يعرض النص عموديًا ومائلًا وكبيرًا
+const VerticalTitle = ({ text }) => {
   return (
-    <motion.div
+    <div
       style={{
-        display: "flex",
-        flexDirection: "row",
-        transformOrigin: "center",
-        fontSize: isActive ? "3rem" : "5rem", // كبير قبل الفتح
+        writingMode: "vertical-rl", // نص عمودي من الأسفل للأعلى
+        textOrientation: "upright", // يبقي الحروف بشكل طبيعي
+        transform: "rotate(-10deg)", // ميل بسيط
+        fontSize: "3rem",
         fontWeight: "bold",
+        fontStyle: "italic",
         color: "white",
-        whiteSpace: "nowrap",
-        cursor: "default",
+        textShadow: "2px 2px 5px rgba(0,0,0,0.7)",
         userSelect: "none",
+        whiteSpace: "nowrap",
       }}
-      variants={container}
-      initial="hidden"
-      animate="visible"
     >
-      {letters.map((letter, index) => (
-        <motion.span
-          key={index}
-          variants={child}
-          style={{
-            display: "inline-block",
-            transform: isActive ? "rotate(0deg)" : "rotate(-20deg)", // مائل قبل الفتح
-            transition: "transform 0.5s ease-in-out",
-          }}
-          aria-hidden="true"
-        >
-          {letter}
-        </motion.span>
-      ))}
-    </motion.div>
+      {text}
+    </div>
   );
 };
 
+// المكون الرئيسي
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const navigate = useNavigate();
@@ -114,8 +86,13 @@ const Hero = () => {
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
-              style={{ transformOrigin: "center center" }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              style={{
+                transformOrigin: "center center",
+              }}
+              transition={{
+                duration: 0.5,
+                ease: "easeInOut",
+              }}
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
@@ -132,22 +109,20 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* العنوان */}
+              {/* العنوان العمودي الكبير */}
               <div
-                className="absolute text-white drop-shadow-lg pointer-events-none"
+                className="absolute pointer-events-none"
                 style={{
-                  top: "45%",
-                  left: isActive ? "50%" : "30%",
-                  transform: isActive
-                    ? "translate(-50%, -50%)"
-                    : "translate(0, -50%)",
-                  transition: "all 0.5s ease-in-out",
+                  top: "50%",
+                  left: "10%",
+                  transform: "translate(-50%, -50%)",
+                  zIndex: 10,
                 }}
               >
-                <AnimatedTitle text={category.title} isActive={isActive} />
+                <VerticalTitle text={category.title} />
               </div>
 
-              {/* النص وزر اكسبلور */}
+              {/* المحتوى يظهر عند التفعيل */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
