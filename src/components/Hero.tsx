@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const paintCategories = [
-  { 
+  {
     id: "automotive",
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
@@ -18,7 +18,7 @@ const paintCategories = [
   {
     id: "interior",
     title: "Interior",
-    description: "Elegant and modern finishes for home and office interiors.",
+    description: "Elegant and modern finishes for home and office interi ors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
   },
   {
@@ -209,7 +209,7 @@ const Hero = () => {
             </motion.div>
           );
         })}
-      </div 
+      </div>
     </div>
   );
 };
