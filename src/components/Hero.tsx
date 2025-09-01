@@ -35,6 +35,82 @@ const paintCategories = [
   },
 ];
 
+// مكون العنوان المعدل بنمط مائل وبارز
+const AnimatedTitle = ({ text, isActive }) => {
+  const letters = Array.from(text);
+
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.03,
+      },
+    },
+  };
+
+  const child = {
+    hidden: {
+      y: 100,
+      opacity: 0,
+      rotateX: -90,
+      skew: "20deg",
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      skew: isActive ? "0deg" : "15deg", // تأثير مائل عندما لا يكون نشطاً
+      scale: isActive ? 1.2 : 1,
+      textShadow: isActive 
+        ? "0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)" 
+        : "0 0 5px rgba(255,255,255,0.5)",
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 200
+      }
+    },
+  };
+
+  return (
+    <motion.div
+      style={{
+        display: "flex",
+        perspective: "1000px",
+        transformStyle: "preserve-3d",
+        fontSize: isActive ? "4.5rem" : "2.8rem",
+        fontWeight: "900",
+        fontStyle: "italic",
+        color: "white",
+        textTransform: "uppercase",
+        letterSpacing: "1px",
+        cursor: "default",
+        userSelect: "none",
+        textAlign: "center",
+        lineHeight: "1.1",
+      }}
+      variants={container}
+      initial="hidden"
+      animate="visible"
+    >
+      {letters.map((letter, index) => (
+        <motion.span
+          key={index}
+          variants={child}
+          style={{ 
+            display: "inline-block",
+            transformOrigin: "center bottom"
+          }}
+          aria-hidden="true"
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </motion.div>
+  );
+};
+
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const navigate = useNavigate();
@@ -52,7 +128,9 @@ const Hero = () => {
           return (
             <motion.div
               key={category.id}
-              className="relative h-full cursor-pointer"
+              className={`relative h-full cursor-pointer ${
+                isActive ? "flex-grow" : "flex-shrink"
+              }`}
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
@@ -70,14 +148,13 @@ const Hero = () => {
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              {/* الصورة */}
               <motion.img
                 src={category.image}
                 alt={category.title}
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
-                  filter: isActive
-                    ? "brightness(0.7) contrast(1.2)"
+                  filter: isActive 
+                    ? "brightness(0.7) contrast(1.2)" 
                     : "brightness(0.5) contrast(1.1)",
                 }}
                 initial={{ scale: 1.1 }}
@@ -85,39 +162,40 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* طبقة التدرج - تغطي كامل الصورة دايمًا */}
-              <div
-                className="absolute inset-0 z-5"
+              {/* طبقة تدرج لوني لتحسين قراءة النص */}
+              <div 
+                className="absolute inset-0"
                 style={{
                   background: isActive
-                    ? "linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(0,0,0,0.8))"
-                    : "linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.9))",
+                    ? "linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)"
+                    : "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%)"
                 }}
               />
 
-              {/* العناوين بشكل درج */}
-              {!isActive && (
-                <div
-                  className="absolute left-6 top-1/2 transform -translate-y-1/2 rotate-[-90deg] origin-left z-10"
-                >
-                  <p className="text-white text-3xl font-bold italic tracking-wide opacity-80">
-                    {category.title}
-                  </p>
-                </div>
-              )}
+              {/* العنوان المعدل بنمط مائل وبارز */}
+              <div
+                className="absolute text-white pointer-events-none z-10"
+                style={{
+                  top: isActive ? "35%" : "45%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  transition: "all 0.5s ease-in-out",
+                  width: "100%",
+                  textAlign: "center"
+                }}
+              >
+                <AnimatedTitle text={category.title} isActive={isActive} />
+              </div>
 
-              {/* العنوان + المحتوى عند الفتح */}
+              {/* المحتوى النصي */}
               {isActive && (
                 <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-center text-center p-12 z-20"
+                  className="absolute inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
-                  <h2 className="text-5xl font-extrabold italic text-white mb-6 drop-shadow-lg">
-                    {category.title}
-                  </h2>
-                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg bg-black bg-opacity-40 p-4 rounded-lg">
+                  <p className="text-xl text-white mb-6 max-w-lg text-center drop-shadow-lg bg-black bg-opacity-40 p-4 rounded-lg">
                     {category.description}
                   </p>
                   <button
@@ -126,7 +204,7 @@ const Hero = () => {
                   >
                     Explore Products
                   </button>
-                </motion.div>
+                </motion.div> 
               )}
             </motion.div>
           );
