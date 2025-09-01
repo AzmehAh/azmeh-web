@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-// بيانات الأقسام
 const paintCategories = [
-  {
+  { 
     id: "automotive",
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
@@ -36,40 +35,79 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان المتدرج للكلمات
+// مكون العنوان المعدل بنمط مائل وبارز
 const AnimatedTitle = ({ text, isActive }) => {
-  const words = text.split(" "); // تقسيم النص إلى كلمات
+  const letters = Array.from(text);
+
+  const container = {
+    hidden: { opacity: 1 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.03,
+      },
+    },
+  };
+
+  const child = {
+    hidden: {
+      y: 100,
+      opacity: 0,
+      rotateX: -90,
+      skew: "20deg",
+    },
+    visible: {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      skew: isActive ? "0deg" : "15deg", // تأثير مائل عندما لا يكون نشطاً
+      scale: isActive ? 1.2 : 1,
+      textShadow: isActive 
+        ? "0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)" 
+        : "0 0 5px rgba(255,255,255,0.5)",
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 200
+      }
+    },
+  };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", perspective: "1000px" }}>
-      {words.map((word, index) => (
+    <motion.div
+      style={{
+        display: "flex",
+        perspective: "1000px",
+        transformStyle: "preserve-3d",
+        fontSize: isActive ? "4.5rem" : "2.8rem",
+        fontWeight: "900",
+        fontStyle: "italic",
+        color: "white",
+        textTransform: "uppercase",
+        letterSpacing: "1px",
+        cursor: "default",
+        userSelect: "none",
+        textAlign: "center",
+        lineHeight: "1.1",
+      }}
+      variants={container}
+      initial="hidden"
+      animate="visible"
+    >
+      {letters.map((letter, index) => (
         <motion.span
           key={index}
-          initial={{ y: 50, opacity: 0, rotateX: -45 }}
-          animate={{
-            y: 0,
-            opacity: 1,
-            rotateX: 0,
-            scale: isActive ? 1.3 : 1,
-            textShadow: isActive
-              ? "0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)"
-              : "0 0 5px rgba(255,255,255,0.5)",
-          }}
-          transition={{ type: "spring", stiffness: 120, damping: 12, delay: index * 0.1 }}
-          style={{
+          variants={child}
+          style={{ 
             display: "inline-block",
-            fontSize: isActive ? "4.5rem" : "3rem",
-            fontWeight: 900,
-            fontStyle: "italic",
-            color: "white",
-            margin: "0 5px",
-            transformOrigin: "center bottom",
+            transformOrigin: "center bottom"
           }}
+          aria-hidden="true"
         >
-          {word}
+          {letter === " " ? "\u00A0" : letter}
         </motion.span>
       ))}
-    </div>
+    </motion.div>
   );
 };
 
@@ -77,7 +115,9 @@ const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(null);
   const navigate = useNavigate();
 
-  const handleExplore = (id) => navigate(`/products?category=${id}`);
+  const handleExplore = (id) => {
+    navigate(`/products?category=${id}`);
+  };
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-black">
@@ -88,39 +128,66 @@ const Hero = () => {
           return (
             <motion.div
               key={category.id}
-              className="relative h-full cursor-pointer"
+              className={`relative h-full cursor-pointer ${
+                isActive ? "flex-grow" : "flex-shrink"
+              }`}
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
                 transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
+                marginLeft: "-25px",
+                marginRight: "-25px",
               }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              style={{
+                transformOrigin: "center center",
+              }}
+              transition={{
+                duration: 0.5,
+                ease: "easeInOut",
+              }}
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-              {/* الخلفية */}
               <motion.img
                 src={category.image}
                 alt={category.title}
                 className="absolute inset-0 w-full h-full object-cover"
-                style={{ filter: isActive ? "brightness(0.7) contrast(1.2)" : "brightness(0.5) contrast(1.1)" }}
+                style={{
+                  filter: isActive 
+                    ? "brightness(0.7) contrast(1.2)" 
+                    : "brightness(0.5) contrast(1.1)",
+                }}
                 initial={{ scale: 1.1 }}
                 animate={{ scale: isActive ? 1 : 1.1 }}
                 transition={{ duration: 0.5 }}
               />
 
-              {/* طبقة سوداء لتوضيح النص */}
-              <div
-                className="absolute inset-0 bg-black"
-                style={{ opacity: isActive ? 0.2 : 0.5 }}
+              {/* طبقة تدرج لوني لتحسين قراءة النص */}
+              <div 
+                className="absolute inset-0"
+                style={{
+                  background: isActive
+                    ? "linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)"
+                    : "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%)"
+                }}
               />
 
-              {/* العنوان */}
-              <div className="absolute w-full text-center top-1/3">
+              {/* العنوان المعدل بنمط مائل وبارز */}
+              <div
+                className="absolute text-white pointer-events-none z-10"
+                style={{
+                  top: isActive ? "35%" : "45%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  transition: "all 0.5s ease-in-out",
+                  width: "100%",
+                  textAlign: "center"
+                }}
+              >
                 <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
 
-              {/* المحتوى عند الفتح */}
+              {/* المحتوى النصي */}
               {isActive && (
                 <motion.div
                   className="absolute inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
@@ -137,12 +204,12 @@ const Hero = () => {
                   >
                     Explore Products
                   </button>
-                </motion.div>
+                </motion.div> 
               )}
             </motion.div>
           );
         })}
-      </div>
+      </div 
     </div>
   );
 };
