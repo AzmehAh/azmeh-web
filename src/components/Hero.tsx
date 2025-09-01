@@ -35,7 +35,7 @@ const paintCategories = [
   },
 ];
 
-// هذا المكون يعرض العنوان بحروف متحركة
+// مكون العنوان المعدل بنمط مائل وبارز
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -44,51 +44,67 @@ const AnimatedTitle = ({ text, isActive }) => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.05,
+        staggerChildren: 0.03,
       },
     },
   };
 
   const child = {
     hidden: {
-      y: 20,
+      y: 100,
       opacity: 0,
-      rotate: -90,
-      x: 0,
+      rotateX: -90,
+      skew: "20deg",
     },
     visible: {
       y: 0,
       opacity: 1,
-      rotate: 0,
-      x: 0,
+      rotateX: 0,
+      skew: isActive ? "0deg" : "15deg", // تأثير مائل عندما لا يكون نشطاً
+      scale: isActive ? 1.2 : 1,
+      textShadow: isActive 
+        ? "0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)" 
+        : "0 0 5px rgba(255,255,255,0.5)",
+      transition: {
+        type: "spring",
+        damping: 12,
+        stiffness: 200
+      }
     },
   };
 
   return (
     <motion.div
       style={{
-        display: isActive ? "flex" : "inline-block",
-        flexDirection: isActive ? "row" : "column",
-        transformOrigin: "center",
-        fontSize: isActive ? "3rem" : "1.5rem",
-        fontWeight: "bold",
+        display: "flex",
+        perspective: "1000px",
+        transformStyle: "preserve-3d",
+        fontSize: isActive ? "4.5rem" : "2.8rem",
+        fontWeight: "900",
+        fontStyle: "italic",
         color: "white",
-        whiteSpace: "nowrap",
+        textTransform: "uppercase",
+        letterSpacing: "1px",
         cursor: "default",
         userSelect: "none",
+        textAlign: "center",
+        lineHeight: "1.1",
       }}
       variants={container}
       initial="hidden"
-      animate={isActive ? "visible" : "hidden"}
+      animate="visible"
     >
       {letters.map((letter, index) => (
         <motion.span
           key={index}
           variants={child}
-          style={{ display: "inline-block" }}
+          style={{ 
+            display: "inline-block",
+            transformOrigin: "center bottom"
+          }}
           aria-hidden="true"
         >
-          {letter}
+          {letter === " " ? "\u00A0" : letter}
         </motion.span>
       ))}
     </motion.div>
@@ -104,7 +120,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden bg-black">
       <div className="flex h-full">
         {paintCategories.map((category, index) => {
           const isActive = activeIndex === index;
@@ -132,48 +148,59 @@ const Hero = () => {
               onMouseEnter={() => setActiveIndex(index)}
               onMouseLeave={() => setActiveIndex(null)}
             >
-             <motion.img
-  src={isActive ? category.activeImage || category.image : category.image}
-  alt={category.title}
-  className="absolute inset-0 w-full h-full object-cover"
-  style={{
-    filter: isActive ? "brightness(0.6)" : "brightness(0.8)", // أغمق عند الفتح
-  }}
-  initial={{ scale: 1.1 }}
-  animate={{ scale: isActive ? 1 : 1.1 }}
-  transition={{ duration: 0.5 }}
-/>
-
-
-              {/* هنا نستخدم المكون AnimatedTitle بدلاً من الفقرة العادية */}
-              <div
-                className="absolute text-white drop-shadow-lg pointer-events-none"
+              <motion.img
+                src={category.image}
+                alt={category.title}
+                className="absolute inset-0 w-full h-full object-cover"
                 style={{
-                  top: "45%",
-                  left: isActive ? "50%" : "30%",
-                  transform: isActive
-                    ? "translate(-50%, -50%)"
-                    : "translate(0, -50%)",
+                  filter: isActive 
+                    ? "brightness(0.7) contrast(1.2)" 
+                    : "brightness(0.5) contrast(1.1)",
+                }}
+                initial={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.1 }}
+                transition={{ duration: 0.5 }}
+              />
+
+              {/* طبقة تدرج لوني لتحسين قراءة النص */}
+              <div 
+                className="absolute inset-0"
+                style={{
+                  background: isActive
+                    ? "linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)"
+                    : "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%)"
+                }}
+              />
+
+              {/* العنوان المعدل بنمط مائل وبارز */}
+              <div
+                className="absolute text-white pointer-events-none z-10"
+                style={{
+                  top: isActive ? "35%" : "45%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
                   transition: "all 0.5s ease-in-out",
+                  width: "100%",
+                  textAlign: "center"
                 }}
               >
                 <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
 
-              {/* المحتوى النصي بدون العنوان */}
+              {/* المحتوى النصي */}
               {isActive && (
                 <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-start mt-40 p-12 z-20"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.3 }}
+                  className="absolute inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
                 >
-                  <p className="text-xl text-white mb-6 max-w-lg drop-shadow-lg">
+                  <p className="text-xl text-white mb-6 max-w-lg text-center drop-shadow-lg bg-black bg-opacity-40 p-4 rounded-lg">
                     {category.description}
                   </p>
                   <button
                     onClick={() => handleExplore(category.id)}
-                    className="bg-white text-black px-6 py-3 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                    className="bg-white text-black px-8 py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-lg shadow-lg"
                   >
                     Explore Products
                   </button>
@@ -183,9 +210,8 @@ const Hero = () => {
           );
         })}
       </div>
-    </div> 
+    </div>
   );
-}; 
+};
 
-export default Hero; 
- 
+export default Hero;
