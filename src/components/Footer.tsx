@@ -3,8 +3,7 @@ import { Mail, Phone, MapPin, Facebook, Instagram, MessageCircle } from 'lucide-
 
 const Footer = () => {
   return (
-    <footer className="relative bg-gray-900 text-white overflow-hidden">
-      {/* Curved Top */}
+    <footer className="relative bg-[#f5f5f5]
       <div className="absolute top-0 left-0 right-0">
         
       </div>
