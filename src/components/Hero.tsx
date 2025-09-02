@@ -173,20 +173,26 @@ const Hero = () => {
               />
 
               {/* العنوان المعدل بنمط مائل وبارز */}
-             <div
+          {/* العنوان المعدل بنمط مائل وأفقي عند الفتح */}
+<div
   className="absolute text-white pointer-events-none z-10"
   style={{
     top: "50%",
     left: "50%",
-    transform: "translate(-50%, -50%) rotate(-65deg)", // هنا أضفنا الميلان
-    transition: "all 0.5s ease-in-out",
-    width: "100%",
+    transform: isActive
+      ? "translate(-50%, -50%) rotate(0deg)" // عند الفتح يصير أفقي
+      : "translate(-50%, -50%) rotate(-65deg)", // قبل الفتح مايل
+    transition: "all 0.6s ease-in-out",
+    width: isActive ? "120%" : "100%", // مساحة أكبر عند الفتح
     textAlign: "center",
-    whiteSpace: "nowrap"
+    whiteSpace: "nowrap",
+    lineHeight: isActive ? "1.4" : "1.1", // line-height أكبر عند الفتح
+    padding: isActive ? "20px" : "0px", // مساحة إضافية عند الفتح
   }}
 >
   <AnimatedTitle text={category.title} isActive={isActive} />
 </div>
+
 
               {/* المحتوى النصي */}
               {isActive && (
