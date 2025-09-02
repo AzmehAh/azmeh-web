@@ -148,10 +148,7 @@ const Hero = () => {
               }}
               style={{ transformOrigin: "center center" }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-              onMouseEnter={() => {
-                setActiveIndex(index);
-                setIsManual(true);
-              }}
+            
               onClick={() => {
                 setActiveIndex(index);
                 setIsManual(true);
