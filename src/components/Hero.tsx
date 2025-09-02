@@ -191,7 +191,7 @@ const Hero = () => {
 
             {isActive && (
   <motion.div
-    className="absolute inset-0 flex flex-col justify-start items-start mt-40 p-12 z-20"
+    className="absolute inset-0 flex flex-col justify-start items-start mt-30 p-12 z-20"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 0.3, duration: 0.5 }}
