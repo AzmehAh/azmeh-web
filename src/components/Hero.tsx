@@ -196,7 +196,7 @@ const Hero = () => {
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 0.3, duration: 0.5 }}
   > 
-    <p className="text-xl mb-6 text-gray-600 leading-relaxed max-w-xl text-center drop-shadow-lg bg-opacity-40 p-4 rounded-lg">
+    <p className="text-xl mb-6 text-white leading-relaxed max-w-xl text-center drop-shadow-lg bg-opacity-40 p-4 rounded-lg">
       {category.description}
     </p>
 
