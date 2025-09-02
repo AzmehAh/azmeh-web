@@ -18,7 +18,7 @@ const paintCategories = [
   {
     id: "interior",
     title: "Interior",
-    description: "Elegant and modern finishes for home and office interiors.",
+    description: "Elegant and modern finishes for home and office interi ors.",
     image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
   },
   {
@@ -35,8 +35,7 @@ const paintCategories = [
   },
 ];
 
-
-// مكون العنوان المعدل مع تحسينات الأداء والمظهر
+// مكون العنوان المعدل بنمط مائل وبارز
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -61,7 +60,7 @@ const AnimatedTitle = ({ text, isActive }) => {
       y: 0,
       opacity: 1,
       rotateX: 0,
-      skew: isActive ? "0deg" : "15deg",
+      skew: isActive ? "0deg" : "15deg", // تأثير مائل عندما لا يكون نشطاً
       scale: isActive ? 1.2 : 1,
       textShadow: isActive 
         ? "0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)" 
@@ -78,7 +77,6 @@ const AnimatedTitle = ({ text, isActive }) => {
     <motion.div
       style={{
         display: "flex",
-        justifyContent: "center",
         perspective: "1000px",
         transformStyle: "preserve-3d",
         fontSize: isActive ? "4.5rem" : "2.8rem",
@@ -91,7 +89,6 @@ const AnimatedTitle = ({ text, isActive }) => {
         userSelect: "none",
         textAlign: "center",
         lineHeight: "1.1",
-        width: "100%",
       }}
       variants={container}
       initial="hidden"
@@ -123,7 +120,7 @@ const Hero = () => {
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden">
+    <div className="relative w-full h-screen overflow-hidden ">
       <div className="flex h-full">
         {paintCategories.map((category, index) => {
           const isActive = activeIndex === index;
@@ -175,32 +172,37 @@ const Hero = () => {
                 }}
               />
 
-              {/* حاوية العنوان مع تحسينات الانتقال */}
-              <motion.div
-                className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10 pointer-events-none w-full"
-                initial={false}
-                animate={{
-                  rotate: isActive ? 0 : -65,
-                  width: isActive ? "100%" : "auto",
-                }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeInOut"
-                }}
-              >
-                <AnimatedTitle text={category.title} isActive={isActive} />
-              </motion.div>
+              {/* العنوان المعدل بنمط مائل وبارز */}
+          {/* العنوان المعدل بنمط مائل وأفقي عند الفتح */}
+<div
+  className="absolute text-white pointer-events-none z-10"
+  style={{
+    top: "50%",
+    left: "50%",
+    transform: isActive
+      ? "translate(-50%, -50%) rotate(0deg)" // عند الفتح يصير أفقي
+      : "translate(-50%, -50%) rotate(-65deg)", // قبل الفتح مايل
+    transition: "all 0.6s ease-in-out",
+    width: isActive ? "120%" : "100%", // مساحة أكبر عند الفتح
+    textAlign: "center",
+    whiteSpace: "nowrap",
+    lineHeight: isActive ? "1.4" : "1.1", // line-height أكبر عند الفتح
+    padding: isActive ? "20px" : "0px", // مساحة إضافية عند الفتح
+  }}
+>
+  <AnimatedTitle text={category.title} isActive={isActive} />
+</div>
+
 
               {/* المحتوى النصي */}
               {isActive && (
                 <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-center p-12 z-20"
-                  style={{ marginTop: "5rem" }}
+                  className="absolute inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
-                  <p className="text-xl text-white mb-6 max-w-lg text-center drop-shadow-lg bg-black bg-opacity-40 p-4 rounded-lg">
+                  <p className="text-xl text-white mb-6 max-w-lg text-center drop-shadow-lg  bg-opacity-40 p-4 rounded-lg">
                     {category.description}
                   </p>
                   <button
@@ -213,7 +215,7 @@ const Hero = () => {
               )}
             </motion.div>
           );
-        })}
+        })} 
       </div>
     </div>
   );
