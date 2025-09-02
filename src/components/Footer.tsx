@@ -31,7 +31,7 @@ const Footer = () => {
 
           {/* BRW Galaxy LLC */}
           <div>
-            <h4 className="font-semibold mb-3 border-b-2 border-white inline-block text-gray-600">
+            <h4 className="font-semibold mb-3 border-b-2 border-white inline-block text-white">
               Contact Info (BRW Galaxy LLC)
             </h4>
             <div className="space-y-2 mt-2 text-gray-100">
@@ -47,12 +47,12 @@ const Footer = () => {
                 <Phone className="w-5 h-5 text-white" />
                 <span>(+1) 423 667 1606</span>
               </div>
-            </div>
+            </div> 
           </div>
 
           {/* Syria Branch */}
           <div>
-            <h4 className="font-semibold mb-3 border-b-2 border-white inline-block text-gray-600">
+            <h4 className="font-semibold mb-3 border-b-2 border-white inline-block text-white">
               Contact Info
             </h4>
             <div className="space-y-2 mt-2 text-gray-100">
@@ -73,7 +73,7 @@ const Footer = () => {
 
           {/* BRW Galaxy FZE */}
           <div>
-            <h4 className="font-semibold mb-3 border-b-2 border-white inline-block text-gray-600">
+            <h4 className="font-semibold mb-3 border-b-2 border-white inline-block text-white">
               Contact Info (BRW Galaxy FZE)
             </h4>
             <div className="space-y-2 mt-2 text-gray-100">
