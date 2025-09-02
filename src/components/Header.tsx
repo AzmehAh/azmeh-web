@@ -97,7 +97,7 @@ const Header = () => {
             <Link to="/about" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               About Us
             </Link>
-<Link to="/products" className={`text-base font-medium transition-colors duration-200 hover:text-[#2C5DB6] ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+<Link to="/products" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Products
             </Link>
             {/* Technical Support Dropdown */}
@@ -109,7 +109,7 @@ const Header = () => {
               <button 
                 className={`flex items-center text-base font-medium transition-colors duration-200 ${
                   isScrolled ? 'text-gray-900' : 'text-white'
-                } hover:text-[#2C5DB6]`}
+                } nav-link`}
               >
                 Technical Support <ChevronDown className="ml-1 h-4 w-4" />
               </button> 
@@ -140,7 +140,7 @@ const Header = () => {
                     {/* Troubleshooting */}
                     <div className="min-w-[25rem] p-4 border-l border-gray-200">
                       <h4 className="font-semibold text-gray-900 mb-2">Troubleshooting</h4>
-                      <Link to="/troubleshooting/car-coating" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
+                      <Link to="/troubleshooting/car-coating" className="menu-item block text-gray-600 nav-link px-3 py-2 rounded-md transition-colors duration-200 mb-1">
                         Car Coating Problem Guide <span className="text-xs text-gray-500">(28 issues)</span>
                       </Link>
                       <Link to="/troubleshooting/coating-defects" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
