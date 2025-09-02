@@ -181,12 +181,12 @@ const Hero = () => {
     left: "50%",
     transform: isActive
       ? "translate(-50%, -50%) rotate(0deg)" // عند الفتح يصير أفقي
-      : "translate(-50%, -50%) rotate(-75deg)", // قبل الفتح مايل
+      : "translate(-50%, -50%) rotate(-80deg)", // قبل الفتح مايل
     transition: "all 0.6s ease-in-out",
     width: isActive ? "120%" : "100%", // مساحة أكبر عند الفتح
     textAlign: "center",
     whiteSpace: "nowrap",
-    lineHeight: isActive ? "1" : "1.1", // line-height أكبر عند الفتح
+    lineHeight: isActive ? "1.4" : "1.1", // line-height أكبر عند الفتح
     padding: isActive ? "20px" : "0px", // مساحة إضافية عند الفتح
   }}
 >
