@@ -182,12 +182,12 @@ const Hero = () => {
     width: isActive ? "120%" : "100%", // مساحة أكبر عند الفتح
     textAlign: "center",
     whiteSpace: "nowrap",
-    lineHeight: isActive ? "1.4" : "1.4", // line-height أكبر عند الفتح
+    lineHeight: isActive ? "1.4" : "1.1", // line-height أكبر عند الفتح
     padding: isActive ? "20px" : "0px", // مساحة إضافية عند الفتح
   }}
 >
   <AnimatedTitle text={category.title} isActive={isActive} />
-</div>
+</div> 
 
 
             {isActive && (
