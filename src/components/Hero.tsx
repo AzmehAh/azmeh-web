@@ -51,29 +51,30 @@ const AnimatedTitle = ({ text, isActive }) => {
     },
   };
 
-  const child = {
-    hidden: {
-      y: 100,
-      opacity: 0,
-      rotateX: -90,
-      skew: "20deg",
-    },
-    visible: {
-      y: 0,
-      opacity: 1,
-      rotateX: 0,
-      skew: isActive ? "0deg" : "15deg", // تأثير مائل عندما لا يكون نشطاً
-      scale: isActive ? 1.2 : 1,
-      textShadow: isActive 
-        ? "0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(255,255,255,0.5)" 
-        : "0 0 5px rgba(255,255,255,0.5)",
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 200
-      }
-    },
-  };
+  cconst child = {
+  hidden: {
+    y: 50,            // قلل الحركة الرأسية لتخفيف "القفز"
+    opacity: 0,
+    rotateX: -45,     // قلل الميل عند الاختفاء
+    skew: "10deg",    // خفف الميل
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    rotateX: 0,
+    skew: isActive ? "0deg" : "10deg", // تأثير مائل خفيف عندما لا يكون نشطاً
+    scale: isActive ? 1.1 : 1,        // قلل التكبير
+    textShadow: isActive 
+      ? "0 0 8px rgba(255,255,255,0.7), 0 0 15px rgba(255,255,255,0.4)" 
+      : "0 0 3px rgba(0,0,0,0.3)",   // ظل افتراضي أخف وأكثر وضوحًا
+    transition: {
+      type: "spring",
+      damping: 15,     // خفف ارتداد الحركة
+      stiffness: 120,  // خفف الصلابة لتكون الحركة أنعم
+    }
+  },
+};
+
 
   return (
     <motion.div
