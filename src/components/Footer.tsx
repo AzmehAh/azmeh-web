@@ -10,7 +10,6 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <img src="/images/Azmeh-Paints-Logo.png" alt="AL AZMEH PAINTS" className="h-12 w-auto filter brightness-0 invert" /> </div>
-            </div>
             <p className="text-gray-200 mb-4 max-w-xs">
               Al-Dakhlallah Engineering Company for Electrical and Mechanical Projects is a Syrian company established in 2005
             </p>
