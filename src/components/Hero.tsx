@@ -191,12 +191,12 @@ const Hero = () => {
 
             {isActive && (
   <motion.div
-    className="self-start inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
+    className="absolute inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 0.3, duration: 0.5 }}
   > 
-    <p className="text-xl mb-6 text-white leading-relaxed max-w-xl text-center drop-shadow-lg bg-opacity-40 p-4 rounded-lg">
+    <p className="text-xl mb-6 text-white leading-relaxed max-w-xl text-center drop-shadow-lg bg-opacity-40 p-2 rounded-lg">
       {category.description}
     </p>
 
