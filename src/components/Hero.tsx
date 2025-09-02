@@ -135,7 +135,7 @@ const Hero = () => {
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(-6deg)",
+                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
