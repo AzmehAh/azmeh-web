@@ -85,7 +85,7 @@ const AnimatedTitle = ({ text, isActive }) => {
         fontStyle: "italic",
         color: "white",
         textTransform: "uppercase",
-        letterSpacing: "1px",
+        letterSpacing: "2px",
         cursor: "default",
         userSelect: "none",
         textAlign: "center",
