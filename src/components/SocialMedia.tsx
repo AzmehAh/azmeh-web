@@ -4,61 +4,36 @@ import { Instagram, Facebook, MessageCircle, ExternalLink } from 'lucide-react';
 const SocialMedia = () => {
   const socialPosts = [
     { 
-      image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
-      caption: 'Transform your space with our premium interior paint collection',
-      platform: 'instagram'
-    },
-    {
-      image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
-      caption: 'Exterior facade restoration project completed in downtown',
-      platform: 'instagram'
-    },
-    {
-      image: 'https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
-      caption: 'Modern kitchen design with our latest color trends',
+      iframe: 'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02JwdafQwMtxfNuq767fjKzWeWRf12YYs6giSBtNGDQCHqiDjduh9f7gThS8dhmMtil&show_text=true&width=500',
       platform: 'facebook'
     },
-    {
-      image: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
-      caption: 'Industrial coating solutions for maximum durability',
+    { 
+      iframe: 'https://www.instagram.com/p/CnAbc123456/embed', // مثال
       platform: 'instagram'
-    }
+    },
+    // أضف أي منشورات أخرى بنفس الشكل
   ];
 
   return (
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Social Media Grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-16">
           {socialPosts.map((post, index) => (
             <div
               key={index}
               className="relative group cursor-pointer overflow-hidden rounded-lg shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              <div className="aspect-square">
-                <img
-                  src={post.image}
-                  alt={post.caption}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                <div className="absolute bottom-4 left-4 right-4">
-                  <p className="text-white text-sm leading-relaxed mb-2">
-                    {post.caption}
-                  </p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-1">
-                      {post.platform === 'instagram' ? (
-                        <Instagram className="w-4 h-4 text-white" />
-                      ) : (
-                        <Facebook className="w-4 h-4 text-white" />
-                      )}
-                      <span className="text-white text-xs capitalize">{post.platform}</span>
-                    </div>
-                    <ExternalLink className="w-4 h-4 text-white" />
-                  </div>
-                </div>
+              <div className="aspect-square w-full h-full">
+                <iframe
+                  src={post.iframe}
+                  title={`social-post-${index}`}
+                  className="w-full h-full rounded-lg"
+                  style={{ border: 'none', overflow: 'hidden' }}
+                  scrolling="no"
+                  allowFullScreen={true}
+                  allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                ></iframe>
               </div>
             </div>
           ))}
