@@ -51,7 +51,7 @@ const AnimatedTitle = ({ text, isActive }) => {
     },
   };
 
-  cconst child = {
+  const child = {
   hidden: {
     y: 50,            // قلل الحركة الرأسية لتخفيف "القفز"
     opacity: 0,
