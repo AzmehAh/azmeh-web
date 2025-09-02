@@ -205,7 +205,7 @@ const Hero = () => {
       onClick={() => handleExplore(category.id)}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="self-start group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-[#2C5DB6] hover:text-[#2C5DB6] transition-all duration-300"
+      className="self-start group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] hover:text-[#2C5DB6] transition-all duration-300"
     >
       <span>READ MORE</span>
       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
