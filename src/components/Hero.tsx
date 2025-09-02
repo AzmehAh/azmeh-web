@@ -4,36 +4,37 @@ import { motion } from "framer-motion";
 
 const paintCategories = [
   {
+    id: "flooring",
+    title: "Flooring",
+    description: "Durable coatings that protect and enhance wooden, concrete, and tiled floors.",
+    image: "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+  },
+  {
+    id: "industrial",
+    title: "Industrial",
+    description: "Heavy-duty coatings designed for factories and industrial environments.",
+    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
+  },
+  {
+    id: "furniture",
+    title: "Furniture",
+    description: "Protective and stylish finishes for wooden and metal furniture.",
+    image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+  },
+  {
     id: "automotive",
     title: "Automotive",
     description: "High-durability coatings with a glossy finish for vehicles.",
     image: "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg",
   },
   {
-    id: "sports",
-    title: "Sports Field",
-    description: "Specialized coatings designed for outdoor sports surfaces.",
-    image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
-  },
-  {
-    id: "interior",
-    title: "Interior",
-    description: "Elegant and modern finishes for home and office interi ors.",
-    image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-  },
-  {
-    id: "exterior",
-    title: "Exterior",
-    description: "Weather-resistant coatings for long-term exterior protection.",
+    id: "protective",
+    title: "Protective",
+    description: "Weather-resistant protective coatings for buildings and outdoor structures.",
     image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
   },
-  {
-    id: "industrial",
-    title: "Industrial",
-    description: "Tough coatings for factories and industrial environments.",
-    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
-  },
 ];
+
 
 // مكون العنوان المعدل بنمط مائل وبارز
 const AnimatedTitle = ({ text, isActive }) => {
