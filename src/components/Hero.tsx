@@ -66,7 +66,7 @@ const AnimatedTitle = ({ text, isActive }) => {
     scale: isActive ? 1.1 : 1,        // قلل التكبير
     textShadow: isActive 
       ? "0 0 8px rgba(255,255,255,0.7), 0 0 15px rgba(255,255,255,0.4)" 
-      : "0 0 3px rgba(0,0,0,0.3)",   // ظل افتراضي أخف وأكثر وضوحًا
+      : "0 0 3px rgba(0,0,0,0.9)",   // ظل افتراضي أخف وأكثر وضوحًا
     transition: {
       type: "spring",
       damping: 15,     // خفف ارتداد الحركة
