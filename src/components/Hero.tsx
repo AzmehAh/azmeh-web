@@ -64,7 +64,7 @@ const AnimatedTitle = ({ text, isActive }) => {
       skew: isActive ? "0deg" : "10deg",
       scale: isActive ? 1.1 : 1,
       textShadow: isActive
-        ? "0 0 8px rgba(255,255,255,0.7), 0 0 15px rgba(255,255,255,0.4)"
+        ? "0 0 8px  0 0 15px rgba(255,255,255,0.4)"
         : "0 0 3px rgba(0,0,0,0.9)",
       transition: { type: "spring", damping: 15, stiffness: 120 },
     },
