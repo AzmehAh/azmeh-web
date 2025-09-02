@@ -36,7 +36,7 @@ const ColorInspiration = () => {
         {/* Title */}
         <div className="text-center mb-20">
           <h2
-            className="text-6xl md:text-7xl font-light text-gray-900 mb-8 tracking-tight"
+            className="text-6xl md:text-7xl font-semibold text-gray-900 mb-8 "
             style={{ fontFamily: 'Georgia, serif' }}
           >
             New drops
