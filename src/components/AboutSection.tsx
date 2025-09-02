@@ -98,7 +98,7 @@ const AboutSection = () => {
             </span>
             
             {/* Main Heading */}
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">
+            <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-8 leading-tight">
               Al Azmeh Paints Company Founded in 1955 in Damascus, Syria
             </h2>
             
