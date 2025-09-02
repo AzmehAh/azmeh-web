@@ -165,15 +165,7 @@ const Hero = () => {
               />
 
               {/* طبقة تدرج لوني لتحسين قراءة النص */}
-              <div 
-                className="absolute inset-0"
-                style={{
-                  background: isActive
-                    ? "linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.6) 100%)"
-                    : "linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%)"
-                }}
-              />
-
+              
               {/* العنوان المعدل بنمط مائل وبارز */}
           {/* العنوان المعدل بنمط مائل وأفقي عند الفتح */}
 <div
