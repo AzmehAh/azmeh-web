@@ -171,8 +171,8 @@ const Hero = () => {
               <div
                 className="absolute text-white pointer-events-none z-10"
                 style={{
-                  top: isActive ? "45%" : "68%",
-                  left: isActive ? "65%" : "35%", 
+                  top: isActive ? "45%" : "65%",
+                  left: isActive ? "65%" : "40%", 
                   transform: isActive
                     ? "translate(-50%, -50%) rotate(0deg)"
                     : "translate(-50%, -50%) rotate(-90deg)",
