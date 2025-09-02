@@ -157,7 +157,7 @@ const Hero = () => {
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
                   filter: isActive 
-                    ? "brightness(0.3) contrast(1.2)" 
+                    ? "brightness(0.7) contrast(1.2)" 
                     : "brightness(0.4) contrast(1.1)",
                 }}
                 initial={{ scale: 1.1 }}
