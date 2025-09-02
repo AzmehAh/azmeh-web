@@ -181,7 +181,7 @@ const Hero = () => {
     left: "50%",
     transform: isActive
       ? "translate(-50%, -50%) rotate(0deg)" // عند الفتح يصير أفقي
-      : "translate(-50%, -50%) rotate(-70deg)", // قبل الفتح مايل
+      : "translate(-50%, -50%) rotate(-75deg)", // قبل الفتح مايل
     transition: "all 0.6s ease-in-out",
     width: isActive ? "120%" : "100%", // مساحة أكبر عند الفتح
     textAlign: "center",
