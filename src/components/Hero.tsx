@@ -173,19 +173,20 @@ const Hero = () => {
               />
 
               {/* العنوان المعدل بنمط مائل وبارز */}
-              <div
-                className="absolute text-white pointer-events-none z-10"
-                style={{
-                  top: isActive ? "35%" : "45%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  transition: "all 0.5s ease-in-out",
-                  width: "100%",
-                  textAlign: "center"
-                }}
-              >
-                <AnimatedTitle text={category.title} isActive={isActive} />
-              </div>
+             <div
+  className="absolute text-white pointer-events-none z-10"
+  style={{
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%) rotate(-65deg)", // هنا أضفنا الميلان
+    transition: "all 0.5s ease-in-out",
+    width: "100%",
+    textAlign: "center",
+    whiteSpace: "nowrap"
+  }}
+>
+  <AnimatedTitle text={category.title} isActive={isActive} />
+</div>
 
               {/* المحتوى النصي */}
               {isActive && (
