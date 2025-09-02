@@ -11,7 +11,7 @@ const Footer = () => {
           <div>
             <div className="flex items-center mb-4">
               <img
-                src="/images/Azmeh-Paints-Logo.png"
+                src="/images/Azmeh-Paints-Logo-White.png"
                 alt="DKL Engineering"
                 className="h-12 w-auto"
               />
@@ -93,11 +93,11 @@ const Footer = () => {
           </div>
 
         </div>
-      </div>
 
-      {/* Small bottom bar */}
-      <div className="bg-white text-[#0055a3] text-center py-2">
-        © {new Date().getFullYear()} DKL Engineering. All rights reserved.
+        {/* Copyright inside footer */}
+        <div className="text-center text-gray-200 mt-8 border-t border-white/20 pt-4">
+          © {new Date().getFullYear()} DKL Engineering. All rights reserved.
+        </div>
       </div>
     </footer>
   );
