@@ -131,11 +131,11 @@ const Hero = () => {
               key={category.id}
               className={`relative h-full cursor-pointer ${
                 isActive ? "flex-grow" : "flex-shrink"
-              }`}
+              }`} 
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(-5deg)" : "rotate(0deg)",
+                transform: isActive ? "rotate(0deg)" : "rotate(-5deg)",
                 marginLeft: "-25px",
                 marginRight: "-25px",
               }}
