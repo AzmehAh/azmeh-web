@@ -179,7 +179,7 @@ const Hero = () => {
   className="absolute text-white pointer-events-none z-10"
   style={{
     top: "50%",
-    left: isActive ?  "60%" :"50%",
+    left: isActive ?  "65%" :"50%",
     transform: isActive
       ? "translate(-50%, -50%) rotate(0deg)" // عند الفتح يصير أفقي
       : "translate(-50%, -50%) rotate(-80deg)", // قبل الفتح مايل
