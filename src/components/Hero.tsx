@@ -80,11 +80,11 @@ const AnimatedTitle = ({ text, isActive }) => {
       style={{
         display: "flex",
         perspective: "1000px",
-        transformStyle: "preserve-3d",
+        transformStyle: "preserve-3d", 
         fontSize: isActive ? "4.5rem" : "5rem",
         fontWeight: "900",
         fontStyle: "italic",
-        color: "black",
+        color: "white",
         textTransform: "uppercase",
         letterSpacing: "2px",
         cursor: "default",
