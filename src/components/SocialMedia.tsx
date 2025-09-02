@@ -3,11 +3,10 @@ import { Instagram, Facebook, MessageCircle, ExternalLink } from 'lucide-react';
 
 const SocialMedia = () => {
   const socialPosts = [
-   <iframe src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02JwdafQwMtxfNuq767fjKzWeWRf12YYs6giSBtNGDQCHqiDjduh9f7gThS8dhmMtil&show_text=true&width=500" width="500" height="694" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"></iframe> {
+    { 
       image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
       caption: 'Transform your space with our premium interior paint collection',
-      platform: 'instagram',
-      link:''
+      platform: 'instagram'
     },
     {
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop',
@@ -100,7 +99,7 @@ const SocialMedia = () => {
             </a>
           </div>
         </div>
-      </div> 
+      </div>
     </section>
   );
 };
