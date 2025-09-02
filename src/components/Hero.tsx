@@ -172,23 +172,24 @@ const Hero = () => {
               />
 
               <div
-                className="absolute text-white pointer-events-none z-10"
-                style={{
-                  top: isActive ? "45%" : "65%",
-                  left: isActive ? "65%" : "40%",
-                  transform: isActive
-                    ? "translate(-50%, -50%) rotate(0deg)"
-                    : "translate(-50%, -50%) rotate(-83deg)",
-                  transition: "all 0.6s ease-in-out",
-                  width: isActive ? "120%" : "100%",
-                  textAlign: "center",
-                  whiteSpace: "nowrap",
-                  lineHeight: isActive ? "1.4" : "1.1",
-                  padding: isActive ? "20px" : "0px",
-                }}
-              >
-                <AnimatedTitle text={category.title} isActive={isActive} />
-              </div>
+  className="absolute text-white pointer-events-none z-10 flex items-center justify-center"
+  style={{
+    top: "50%", // يظل في منتصف القسم عموديًا
+    left: "50%",
+    transform: isActive
+      ? "translate(-50%, -50%) rotate(0deg)" // عند الفتح أفقي
+      : "translate(-50%, -50%) rotate(-83deg)", // قبل الفتح مائل
+    transition: "all 0.6s ease-in-out",
+    width: "100%", // يغطي عرض القسم بالكامل
+    textAlign: "center",
+    whiteSpace: "nowrap",
+    lineHeight: "1.2",
+    fontSize: "2.5rem", // حجم ثابت للعناوين قبل الفتح
+    overflow: "visible", // تأكد من ظهور النص كامل
+  }}
+>
+  <AnimatedTitle text={category.title} isActive={isActive} />
+</div>
 
               {isActive && (
                 <motion.div
