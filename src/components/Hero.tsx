@@ -3,8 +3,38 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 const paintCategories = [
-  // ... (بقية المصفوفة كما هي)
+  {
+    id: "automotive",
+    title: "Automotive",
+    description: "High-durability coatings with a glossy finish for vehicles.",
+    image: "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg",
+  },
+  {
+    id: "sports",
+    title: "Sports Field",
+    description: "Specialized coatings designed for outdoor sports surfaces.",
+    image: "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg",
+  },
+  {
+    id: "interior",
+    title: "Interior",
+    description: "Elegant and modern finishes for home and office interiors.",
+    image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+  },
+  {
+    id: "exterior",
+    title: "Exterior",
+    description: "Weather-resistant coatings for long-term exterior protection.",
+    image: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+  },
+  {
+    id: "industrial",
+    title: "Industrial",
+    description: "Tough coatings for factories and industrial environments.",
+    image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
+  },
 ];
+
 
 // مكون العنوان المعدل مع تحسينات الأداء والمظهر
 const AnimatedTitle = ({ text, isActive }) => {
