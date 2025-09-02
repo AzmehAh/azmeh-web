@@ -188,24 +188,30 @@ const Hero = () => {
 </div>
 
 
-              {/* المحتوى النصي */}
-              {isActive && (
-                <motion.div
-                  className="absolute inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.5 }}
-                >
-                  <p className="text-xl text-white mb-6 max-w-lg text-center drop-shadow-lg  bg-opacity-40 p-4 rounded-lg">
-                    {category.description}
-                  </p>
-                  <button
-                    onClick={() => handleExplore(category.id)}
-                    className="bg-white text-black px-8 py-4 rounded-lg font-bold hover:bg-gray-100 transition-colors text-lg shadow-lg"
-                  >
-                    Explore Products
-                  </button>
-                </motion.div> 
+            {isActive && (
+  <motion.div
+    className="absolute inset-0 flex flex-col justify-center items-center mt-40 p-12 z-20"
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.3, duration: 0.5 }}
+  >
+    <p className="text-xl text-white mb-6 max-w-lg text-center drop-shadow-lg bg-opacity-40 p-4 rounded-lg">
+      {category.description}
+    </p>
+
+    {/* زر بأسلوب Read More */}
+    <motion.button
+      onClick={() => handleExplore(category.id)}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className="self-start group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-[#2C5DB6] hover:text-[#2C5DB6] transition-all duration-300"
+    >
+      <span>READ MORE</span>
+      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+    </motion.button>
+  </motion.div>
+)}
+
               )}
             </motion.div>
           );
