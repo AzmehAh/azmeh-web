@@ -95,7 +95,7 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
 <a
   href="#" 
   className="flex items-center bg-[#25D366] text-white
-             rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
+             rounded-full px-4 py-3 overflow-hidden transition-all duration-400 
              w-13 hover:w-50 group"
 >
   <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
