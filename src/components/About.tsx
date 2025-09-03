@@ -462,7 +462,7 @@ const About = () => {
                <div className="flex flex-col items-start gap-2">
   <div className="flex items-center gap-3">
     <div 
-      className={`w-16 h-16 rounded-2xl  flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}
+      className={`w-16 h-16  flex items-center justify-center group-hover:scale-110  transition-all duration-300`}
     >
       <value.icon className="w-8 h-8 text-gray-600" />
     </div>
