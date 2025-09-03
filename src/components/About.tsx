@@ -187,55 +187,63 @@ const About = () => {
               </div>
             </motion.div>
 
-            {/* Right Side - Company Description */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
+           
+          {/* Right Side - Company Information (6 columns) */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="lg:col-span-6 flex flex-col justify-center"
+            ref={ref}
+          >
+            {/* About Us Label */}
+            <span className=" self-start inline-block px-4 py-2 bg-[#ffffff] text-[#2C5DB6] rounded-full text-sm font-semibold uppercase tracking-wide mb-6">
+              About Us
+            </span>
+            
+            {/* Main Heading */}
+            <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-8 leading-tight">
+              Al Azmeh Paints Company Founded in 1955 in Damascus, Syria
+            </h2>
+            
+            {/* Description */}
+            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
+              Al Azmeh has set its sights on delivering the highest quality paint systems and coatings. 
+              With decades of excellence and expertise, and through its constant commitment to quality, 
+              the company has become one of the leading brands in the paint industry both locally and globally.
+            </p>
+
+            {/* Achievements Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+              {achievements.map((achievement, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  className="flex items-center space-x-3 group"
+                >
+                  <div className="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
+                    <CheckCircle className="w-4 h-4" />
+                  </div>
+                  <span className="text-gray-700 font-medium">{achievement}</span>
+                </motion.div>
+              ))}
+            </div>
+ 
+            {/* Read More Button */}
+            <motion.button
+              onClick={() => navigate('/about')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className=" self-start group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-[#2C5DB6] hover:text-[#2C5DB6] transition-all duration-300"
             >
-              <span className="inline-block px-4 py-2 bg-green-500 text-white rounded-full text-sm font-semibold tracking-wide uppercase mb-6">
-                About Us
-              </span>
-              
-              <h1 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
-                Al Azmeh Paints Company Founded in 1955 in Damascus, Syria
-              </h1>
-              
-              <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-                Al Azmeh produces all types of high-quality paints for homes, furniture, cars, and 
-                industrial applications. Through decades of excellence and expertise, and constant 
-                commitment to quality, we have become one of the leading brands in the paint industry 
-                both locally and globally.
-              </p>
-
-              {/* Product Categories */}
-              <div className="grid grid-cols-2 gap-4 mb-8">
-                {['Home Paints', 'Furniture Finishes', 'Automotive Coatings', 'Industrial Systems'].map((category, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.5 + index * 0.1 }}
-                    className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center hover:bg-white/20 transition-colors duration-300"
-                  >
-                    <CheckCircle className="w-6 h-6 text-green-400 mx-auto mb-2" />
-                    <span className="text-blue-100 font-medium">{category}</span>
-                  </motion.div>
-                ))}
-              </div>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="group bg-white text-[#2C5DB6] px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all duration-300 flex items-center space-x-3"
-              >
-                <span>Explore Our Products</span>
-                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </motion.button>
-            </motion.div>
-          </div>
+              <span>READ MORE</span>
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </motion.button>
+          </motion.div>
         </div>
-      </section>
+      </div>
 
       {/* Experience Statistics */}
       <section ref={statsRef} className="py-20 bg-white">
