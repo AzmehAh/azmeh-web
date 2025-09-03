@@ -101,7 +101,7 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
   <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
     <MessageCircle className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
     <span
-      className="ml--2 whitespace-nowrap opacity-0 group-hover:opacity-100 
+      className="ml-1 whitespace-nowrap opacity-0 group-hover:opacity-100 
                  transition-all duration-300 hidden group-hover:inline"
     >
       WhatsApp Support
