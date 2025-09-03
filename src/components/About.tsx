@@ -413,23 +413,29 @@ const About = () => {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+      className="group card-hover bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
     >
       {/* الخط العلوي */}
-      <div className="w-full h-2 bg-gray-200 relative overflow-hidden">
+      <div className="relative w-full h-2 bg-white overflow-hidden">
         <div
-          className="absolute left-0 top-0 h-full transition-all duration-500 group-hover:w-full"
-          style={{ width: '0%', backgroundColor: goal.color }}
+          className="absolute top-0 left-0 h-full w-0 group-hover:w-full transition-all duration-500"
+          style={{ backgroundColor: goal.color }}
         ></div>
       </div>
 
       <div className="p-8">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-            <goal.icon className="w-8 h-8" style={{ color: goal.color }} />
+          <div
+            className="w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+          >
+            <goal.icon
+              className="w-8 h-8"
+              style={{ color: goal.color }}
+            />
           </div>
           <h3 className="text-2xl font-bold text-gray-900">{goal.title}</h3>
         </div>
+
         <p className="text-gray-600 leading-relaxed">{goal.description}</p>
       </div>
     </motion.div>
