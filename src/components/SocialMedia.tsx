@@ -63,8 +63,12 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
              w-12 hover:w-44 group"
 >
-  <Instagram className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-  <span className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+  <Instagram className="w-5 h-5 mx-auto group-hover:mx-0 
+                       transition-all duration-300 flex-shrink-0 group-hover:scale-110" />
+  <span
+    className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
+               transition-all duration-300 hidden group-hover:inline"
+  >
     Follow on Instagram
   </span>
 </a>
@@ -75,8 +79,12 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
              w-12 hover:w-44 group"
 >
-  <Facebook className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-  <span className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+  <Facebook className="w-5 h-5 mx-auto group-hover:mx-0 
+                      transition-all duration-300 flex-shrink-0 group-hover:scale-110" />
+  <span
+    className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
+               transition-all duration-300 hidden group-hover:inline"
+  >
     Like on Facebook
   </span>
 </a>
@@ -87,8 +95,12 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
              w-12 hover:w-44 group"
 >
-  <MessageCircle className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-  <span className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+  <MessageCircle className="w-5 h-5 mx-auto group-hover:mx-0 
+                           transition-all duration-300 flex-shrink-0 group-hover:scale-110" />
+  <span
+    className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
+               transition-all duration-300 hidden group-hover:inline"
+  >
     WhatsApp Support
   </span>
 </a>
