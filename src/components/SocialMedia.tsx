@@ -59,12 +59,16 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
 <a
   href="#"
-  className="flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white 
+  className="flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
              w-12 hover:w-44 group"
 >
-  <Instagram className="w-5 h-5 mx-auto group-hover:mx-0 
-                       transition-all duration-300 flex-shrink-0 group-hover:scale-110" />
+  {/* أيقونة */}
+  <div className="flex-1 flex justify-center group-hover:justify-start transition-all duration-300">
+    <Instagram className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+  </div>
+
+  {/* النص */}
   <span
     className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
                transition-all duration-300 hidden group-hover:inline"
@@ -75,12 +79,14 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
 
 <a
   href="#"
-  className="flex items-center bg-[#1877F2] text-white 
+  className="flex items-center bg-[#1877F2] text-white
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
              w-12 hover:w-44 group"
 >
-  <Facebook className="w-5 h-5 mx-auto group-hover:mx-0 
-                      transition-all duration-300 flex-shrink-0 group-hover:scale-110" />
+  <div className="flex-1 flex justify-center group-hover:justify-start transition-all duration-300">
+    <Facebook className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+  </div>
+
   <span
     className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
                transition-all duration-300 hidden group-hover:inline"
@@ -91,12 +97,14 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
 
 <a
   href="#"
-  className="flex items-center bg-[#25D366] text-white 
+  className="flex items-center bg-[#25D366] text-white
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
              w-12 hover:w-44 group"
 >
-  <MessageCircle className="w-5 h-5 mx-auto group-hover:mx-0 
-                           transition-all duration-300 flex-shrink-0 group-hover:scale-110" />
+  <div className="flex-1 flex justify-center group-hover:justify-start transition-all duration-300">
+    <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
+  </div>
+
   <span
     className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
                transition-all duration-300 hidden group-hover:inline"
