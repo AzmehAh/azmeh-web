@@ -464,7 +464,7 @@ const About = () => {
     <div 
       className={`w-16 h-16  flex items-center justify-center group-hover:scale-110  transition-all duration-300`}
     >
-      <value.icon className="w-8 h-8 text-gray-600 hover:text-[#0055A3]" />
+      <value.icon className="w-8 h-8 text-gray-600 group hover:text-[#0055A3]" />
     </div>
     <h3 className="text-xl font-bold text-gray-900 hover:text-[#0055A3]">{value.title}</h3>
   </div>
