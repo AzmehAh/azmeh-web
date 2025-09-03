@@ -419,7 +419,7 @@ const About = () => {
       <div className="w-full h-2 bg-gray-200 relative overflow-hidden">
         <div
           className="absolute top-0 left-0 h-2 w-0 transition-all duration-500 group-hover:w-full"
-          style={{ background: goal.gradient }}
+          style={{ background: goal.gradient }} // لون أو تدرج لكل كارد
         ></div>
       </div>
 
@@ -428,8 +428,9 @@ const About = () => {
         <div className="flex items-center gap-4 mb-4">
           <div
             className="w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+            style={{ background: goal.gradient }}
           >
-            <goal.icon className="w-8 h-8" style={{ color: goal.color }} />
+            <goal.icon className="w-8 h-8 text-white" />
           </div>
           <h3 className="text-2xl font-bold text-gray-900">{goal.title}</h3>
         </div>
@@ -440,6 +441,7 @@ const About = () => {
     </motion.div>
   ))}
 </div>
+
 
 
 
