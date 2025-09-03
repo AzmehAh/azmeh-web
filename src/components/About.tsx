@@ -408,30 +408,38 @@ const About = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {goals.map((goal, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-            > 
-              <div className="flex flex-col items-start gap-3"
-                <div className="flex items-center"
-              <div className={`h-2 bg-gradient-to-r ${goal.gradient}`}></div>
-              <div className="p-8">
-                <div
-                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${goal.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
-                >
-                  <goal.icon className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{goal.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{goal.description}</p>
-              </div>
-            </motion.div>
-          ))}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+  {goals.map((goal, index) => (
+    <motion.div
+      key={index}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+    >
+      {/* خط ديكوري بالأعلى */}
+      <div className={`h-2 bg-gradient-to-r ${goal.gradient}`}></div>
+
+      <div className="p-8">
+        {/* أيقونة */}
+        <div
+          className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${goal.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+        >
+          <goal.icon className="w-8 h-8 text-white" />
         </div>
+
+        {/* العنوان + الوصف */}
+        <h3 className="text-2xl font-bold text-gray-900 mb-4">
+          {goal.title}
+        </h3>
+        <p className="text-gray-600 leading-relaxed">
+          {goal.description}
+        </p>
+      </div>
+    </motion.div>
+  ))}
+</div>
+
       </div>
     </section>
 
