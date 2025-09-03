@@ -428,7 +428,6 @@ const About = () => {
             <goal.icon className={`w-8 h-8`} style={{ background: goal.gradient }} />
           </div> 
           <h3 className="text-2xl font-bold text-gray-900">{goal.title}</h3>
-        </div>
 
         <p className="text-gray-600 leading-relaxed">{goal.description}</p>
       </div>
