@@ -64,17 +64,15 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
              w-12 hover:w-44 group"
 >
   {/* أيقونة */}
-  <div className="flex justify-center group-hover:justify-start transition-all duration-300">
-    <Instagram className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+  <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
+    <Instagram className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
+    <span
+      className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
+                 transition-all duration-300 hidden group-hover:inline"
+    >
+      Follow on Instagram
+    </span>
   </div>
-
-  {/* النص */}
-  <span
-    className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
-               transition-all duration-300 hidden group-hover:inline"
-  >
-    Follow on Instagram
-  </span>
 </a>
 
 <a
@@ -83,34 +81,32 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
              w-12 hover:w-44 group"
 >
-  <div className="flex justify-center group-hover:justify-start transition-all duration-300">
-    <Facebook className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+  <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
+    <Facebook className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
+    <span
+      className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
+                 transition-all duration-300 hidden group-hover:inline"
+    >
+      Like on Facebook
+    </span>
   </div>
-
-  <span
-    className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
-               transition-all duration-300 hidden group-hover:inline"
-  >
-    Like on Facebook
-  </span>
 </a>
 
 <a
-  href="#" 
+  href="#"
   className="flex items-center bg-[#25D366] text-white
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
              w-12 hover:w-44 group"
 >
-  <div className="flex justify-center group-hover:justify-start transition-all duration-300">
-    <MessageCircle className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+  <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
+    <MessageCircle className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
+    <span
+      className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
+                 transition-all duration-300 hidden group-hover:inline"
+    >
+      WhatsApp Support
+    </span>
   </div>
-
-  <span
-    className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
-               transition-all duration-300 hidden group-hover:inline"
-  >
-    WhatsApp Support
-  </span>
 </a>
 
 
