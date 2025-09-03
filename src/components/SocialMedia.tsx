@@ -61,7 +61,7 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
   href="#"
   className="flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
-             w-12 hover:w-45 group"
+             w-15 hover:w-45 group"
 >
   {/* أيقونة */}
   <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
