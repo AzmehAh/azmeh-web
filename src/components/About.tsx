@@ -464,7 +464,7 @@ const About = () => {
     <div 
       className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}
     >
-      <value.icon className="w-8 h-8 text-white" />
+      <value.icon className="w-8 h-8 text-gray-900" />
     </div>
     <h3 className="text-xl font-bold text-gray-900">{value.title}</h3>
   </div>
