@@ -406,21 +406,19 @@ const About = () => {
               Driving innovation and excellence in every aspect of our business to shape the future of the paint industry.
             </p>
           </motion.div>
- 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
   {goals.map((goal, index) => (
     <motion.div
       key={index}
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="group card-hover bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+      className="card-hover group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+      style={{ '--card-line-gradient': goal.gradient }} // تمرير التدرج لكل كارد
     >
       {/* الخط العلوي */}
-      <div 
-        className="h-2 w-0 group-hover:w-full transition-all duration-500"
-        style={{ background: goal.gradient }}
-      ></div>
+      <div className="card-top-line w-full bg-gray-200"></div>
 
       <div className="p-8">
         <div className="flex items-center gap-4 mb-4">
@@ -428,7 +426,7 @@ const About = () => {
             className={`w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
           >
             <goal.icon className={`w-8 h-8`} style={{ background: goal.gradient }} />
-          </div>
+          </div> 
           <h3 className="text-2xl font-bold text-gray-900">{goal.title}</h3>
         </div>
 
@@ -437,7 +435,6 @@ const About = () => {
     </motion.div>
   ))}
 </div>
-
 
 
         </div>
