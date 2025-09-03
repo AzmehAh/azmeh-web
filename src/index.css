@@ -121,7 +121,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.card-top-line {
+ .card-top-line {
   position: relative;
   height: 8px;
   overflow: hidden;
@@ -141,4 +141,3 @@
 .card-hover:hover .card-top-line::after {
   width: 100%;
 }
-
