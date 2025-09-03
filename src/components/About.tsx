@@ -243,10 +243,9 @@ const About = () => {
               <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </motion.button>
           </motion.div>
-        </div>
-   
-
        
+
+          </div>
         </div>
       </section>
 
