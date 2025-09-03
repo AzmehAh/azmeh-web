@@ -466,13 +466,16 @@ const About = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 hover:border-[#2C5DB6]/20"
               >
-                <div className="text-center">
-                  <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
-                    <value.icon className="w-10 h-10 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">{value.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
-                </div>
+<div className="flex flex-col items-center text-center gap-3">
+  <div
+    className={`w-20 h-20 rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}
+  >
+    <value.icon className="w-10 h-10 text-white" />
+  </div>
+  <h3 className="text-xl font-bold text-gray-900">{value.title}</h3>
+  <p className="text-gray-600 leading-relaxed">{value.description}</p>
+</div>
+
               </motion.div>
             ))}
           </div>
