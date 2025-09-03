@@ -233,7 +233,7 @@ const About = () => {
           className="self-start flex items-center space-x-3 px-6 py-3 bg-white text-[#2C5DB6] font-semibold shadow-lg hover:bg-[#2C5DB6] hover:text-white transition-all duration-300"
         >
           <span>READ MORE</span>
-          <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-2" />
+          <ArrowRight className="w-5 h-5 " />
         </motion.button>
       </motion.div>
 
