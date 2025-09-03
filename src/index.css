@@ -133,7 +133,7 @@
   left: 0;
   bottom: 0;
   width: 0;
-  height: 100%;
+  height: 100%; 
   background: var(--card-line-color, #0055A3); /* لون افتراضي */
   transition: width 0.4s ease;
 }
