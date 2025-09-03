@@ -133,12 +133,11 @@
   left: 0;
   bottom: 0;
   width: 0;
-  height: 100%; 
-  background: var(--card-line-color, #0055A3); /* لون افتراضي */
+  height: 100%;
+  background: var(--card-line-gradient, linear-gradient(to right, #0055A3, #FACC15)); /* افتراضي */
   transition: width 0.4s ease;
 }
 
-/* عند تمرير الماوس على الكارد */
 .card-hover:hover .card-top-line::after {
   width: 100%;
 }
