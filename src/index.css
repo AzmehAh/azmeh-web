@@ -121,11 +121,12 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+/* styles.css أو أي ملف CSS عادي */
 .card-top-line {
   position: relative;
-  height: 8px; /* ارتفاع الخط */
+  height: 8px;
   overflow: hidden;
-  background-color: transparent; /* حذف اللون الرمادي */
+  background-color: transparent;
 }
 
 .card-top-line::after {
@@ -135,7 +136,7 @@
   bottom: 0;
   width: 0;
   height: 100%;
-  background-color: var(--card-line-color, #0055A3); /* لون الخط لكل كارد */
+  background-color: var(--card-line-color, #0055A3);
   transition: width 0.4s ease;
 }
 
