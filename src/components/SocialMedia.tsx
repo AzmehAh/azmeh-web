@@ -60,7 +60,7 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
 <a
   href="#"
   className="flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white
-             rounded-full px-4 py-3 overflow-hidden transition-all duration-500 ease-in-out
+             rounded-full px-4 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out
              w-12 hover:w-52 hover:scale-105 group"
 >
   {/* أيقونة */}
@@ -78,7 +78,7 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
 <a
   href="#"
   className="flex items-center bg-[#1877F2] text-white
-             rounded-full px-4 py-3 overflow-hidden transition-all duration-500 ease-in-out
+             rounded-full px-4 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out
              w-12 hover:w-52 hover:scale-105 group"
 >
   <div className="flex items-center justify-center transition-all duration-300 ease-in-out group-hover:justify-start w-full">
