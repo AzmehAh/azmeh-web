@@ -35,6 +35,16 @@ const About = () => {
   const currentYear = new Date().getFullYear();
   const yearsOfExperience = currentYear - 1955;
 
+  // Company achievements
+  const achievements = [
+    "Leading paint manufacturer in the Middle East",
+    "Premium quality products for over 69 years",
+    "Serving residential, automotive, and industrial markets",
+    "Innovative eco-friendly paint solutions",
+    "Trusted by thousands of customers worldwide",
+    "Comprehensive product range for all applications"
+  ];
+
   // Animated counters
   useEffect(() => {
     if (isStatsInView) {
