@@ -151,9 +151,7 @@ const About = () => {
         {/* شعار الشركة والمعلومات */}
         <div className="relative">
           {/* EST. 1955 Badge */}
-          <div className="absolute -top-4 -left-4 bg-green-500 text-white px-6 py-2 rounded-full font-bold text-lg shadow-lg transform rotate-12">
-            EST. 1955
-          </div>
+        
           <div className="relative bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
             <img
               src="/images/Azmeh-Paints-Logo-White.png"
