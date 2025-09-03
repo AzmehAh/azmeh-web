@@ -56,7 +56,7 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
             Stay updated with our latest projects, color trends, and design inspiration. Join our community of paint enthusiasts and professionals.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
 <a
   href="#"
   className="flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white
