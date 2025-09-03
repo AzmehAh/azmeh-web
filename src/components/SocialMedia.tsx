@@ -96,7 +96,7 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
   href="#"
   className="flex items-center bg-[#25D366] text-white
              rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
-             w-12 hover:w-55 group"
+             w-12 hover:w-50 group"
 >
   <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
     <MessageCircle className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
