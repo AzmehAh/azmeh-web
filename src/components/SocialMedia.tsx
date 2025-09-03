@@ -57,35 +57,42 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
           </p>
           
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="#"
-              className="flex items-center space-x-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-8 py-4 rounded-full hover:shadow-lg transition-all duration-300 group"
-            >
-              <Instagram className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
-              <span className="font-semibold">Follow on Instagram</span>
-            </a>
-            
-         <a
+<a
   href="#"
-  className="flex items-center bg-[#1877F2] text-white rounded-full px-4 py-3 
-             overflow-hidden transition-all duration-300 w-12 hover:w-40 group"
+  className="flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white 
+             rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
+             w-12 hover:w-44 group"
+>
+  <Instagram className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+  <span className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    Follow on Instagram
+  </span>
+</a>
+
+<a
+  href="#"
+  className="flex items-center bg-[#1877F2] text-white 
+             rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
+             w-12 hover:w-44 group"
 >
   <Facebook className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-  <span
-    className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-  >
+  <span className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
     Like on Facebook
   </span>
 </a>
 
-            
-            <a
-              href="#"
-              className="flex items-center space-x-3 bg-[#25D366] text-white px-8 py-4 rounded-full hover:shadow-lg transition-all duration-300 group"
-            >
-              <MessageCircle className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
-              <span className="font-semibold">WhatsApp Support</span>
-            </a>
+<a
+  href="#"
+  className="flex items-center bg-[#25D366] text-white 
+             rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
+             w-12 hover:w-44 group"
+>
+  <MessageCircle className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+  <span className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    WhatsApp Support
+  </span>
+</a>
+
           </div>
         </div>
       </div>
