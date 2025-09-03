@@ -414,12 +414,11 @@ const About = () => {
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+      className="card-hover group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+      style={{ '--card-line-color': goal.color || '#0055A3' }} // تمرير اللون لكل كارد
     >
-      {/* خط ديكوري بالأعلى */}
-       <div className="nav-link">
-        <div className="h-2 w-full bg-gray-200"></div>
-      </div>
+      {/* الخط العلوي */}
+      <div className="card-top-line w-full bg-gray-200"></div>
 
       <div className="p-8">
         {/* أيقونة + عنوان أفقي */}
@@ -427,7 +426,7 @@ const About = () => {
           <div
             className={`w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
           >
-            <goal.icon className={`w-8 h-8  text-gradient-to-br ${goal.gradient}`}  />
+            <goal.icon className={`w-8 h-8 text-gradient-to-br ${goal.gradient}`} />
           </div>
           <h3 className="text-2xl font-bold text-gray-900">{goal.title}</h3>
         </div>
@@ -438,6 +437,7 @@ const About = () => {
     </motion.div>
   ))}
 </div>
+
 
       </div>
     </section>
