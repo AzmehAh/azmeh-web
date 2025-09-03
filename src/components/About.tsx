@@ -414,10 +414,10 @@ const About = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="card-hover group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-      style={{ '--card-line-color': goal.color || '#0055A3' }} // لون الخط لكل كارد
+      style={{ '--card-line-color': goal.color || '#0055A3' }} // هنا لون الخط الخاص بالكارد
     >
       {/* الخط العلوي */}
-      <div className="card-top-line w-full bg-gray-200"></div>
+      <div className="card-top-line w-full"></div>
 
       <div className="p-8">
         {/* أيقونة + عنوان أفقي */}
@@ -436,6 +436,7 @@ const About = () => {
     </motion.div>
   ))}
 </div>
+
 
 
 
