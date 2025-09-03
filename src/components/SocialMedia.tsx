@@ -65,13 +65,19 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
               <span className="font-semibold">Follow on Instagram</span>
             </a>
             
-            <a
-              href="#"
-              className="flex items-center space-x-3 bg-[#1877F2] text-white px-8 py-4 rounded-full hover:shadow-lg transition-all duration-300 group"
-            >
-              <Facebook className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" />
-              <span className="font-semibold">Like on Facebook</span>
-            </a>
+         <a
+  href="#"
+  className="flex items-center bg-[#1877F2] text-white rounded-full px-4 py-3 
+             overflow-hidden transition-all duration-300 w-12 hover:w-40 group"
+>
+  <Facebook className="w-5 h-5 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
+  <span
+    className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+  >
+    Like on Facebook
+  </span>
+</a>
+
             
             <a
               href="#"
