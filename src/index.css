@@ -121,27 +121,23 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-/* styles.css أو أي ملف CSS عادي */
-/* الخط العلوي للكارد */
-/* الخط العلوي للكارد */
 .card-top-line {
   position: relative;
   height: 8px; /* ارتفاع الخط */
   overflow: hidden;
-  background-color: #e5e7eb; /* رمادي فاتح كخلفية للخط */
 }
 
-/* الخط الداخلي الذي يتغير لونه لكل كارد */
-.card-top-line-inner {
+.card-top-line::after {
+  content: '';
   position: absolute;
-  top: 0;
   left: 0;
+  bottom: 0;
+  width: 0;
   height: 100%;
-  width: 0; /* يبدأ صغير */
-  transition: width 0.4s ease; /* حركة سلسة */
+  background-color: var(--card-line-color, #0055A3); /* لون افتراضي */
+  transition: width 0.4s ease;
 }
 
-/* عند hover على الكارد */
-.card-hover:hover .card-top-line-inner {
-  width: 100%; /* يتمدد الخط بعرض الكارد */
+.card-hover:hover .card-top-line::after {
+  width: 100%;
 }
