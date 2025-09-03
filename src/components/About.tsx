@@ -420,7 +420,7 @@ const About = () => {
               <div className={`h-2 bg-gradient-to-r ${goal.gradient}`}></div>
               <div className="p-8">
                 <div className="flex justify-center items-center">
-                <div
+                <div 
                   className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${goal.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
                 >
                   <goal.icon className="w-8 h-8 text-white" />
