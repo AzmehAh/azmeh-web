@@ -60,15 +60,15 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
 <a
   href="#"
   className="flex items-center bg-gradient-to-r from-purple-500 to-pink-500 text-white
-             rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
-             w-12 hover:w-44 group"
+             rounded-full px-4 py-3 overflow-hidden transition-all duration-500 ease-in-out
+             w-12 hover:w-52 hover:scale-105 group"
 >
   {/* أيقونة */}
-  <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
-    <Instagram className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
+  <div className="flex items-center justify-center transition-all duration-300 ease-in-out group-hover:justify-start w-full">
+    <Instagram className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300 ease-in-out" />
     <span
       className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
-                 transition-all duration-300 hidden group-hover:inline"
+                 transition-all duration-300 ease-in-out hidden group-hover:inline"
     >
       Follow on Instagram
     </span>
@@ -78,14 +78,14 @@ iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebo
 <a
   href="#"
   className="flex items-center bg-[#1877F2] text-white
-             rounded-full px-4 py-3 overflow-hidden transition-all duration-300 
-             w-12 hover:w-44 group"
+             rounded-full px-4 py-3 overflow-hidden transition-all duration-500 ease-in-out
+             w-12 hover:w-52 hover:scale-105 group"
 >
-  <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
-    <Facebook className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
+  <div className="flex items-center justify-center transition-all duration-300 ease-in-out group-hover:justify-start w-full">
+    <Facebook className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300 ease-in-out" />
     <span
       className="ml-3 whitespace-nowrap opacity-0 group-hover:opacity-100 
-                 transition-all duration-300 hidden group-hover:inline"
+                 transition-all duration-300 ease-in-out hidden group-hover:inline"
     >
       Like on Facebook
     </span>
