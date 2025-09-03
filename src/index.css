@@ -134,7 +134,7 @@
   bottom: 0;
   width: 0;
   height: 100%;
-  background: var(--card-line-gradient, linear-gradient(to right, #0055A3, #FACC15)); /* افتراضي */
+  background-color: var(--card-line-color, #0055A3); /* لون افتراضي */
   transition: width 0.4s ease;
 }
 
