@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
-import { FaBolt, FaGlobe, FaTools, FaUsers, FaChartLine, FaCogs } from "react-icons/fa";
 import { 
   MapPin, 
   Calendar, 
@@ -62,25 +61,25 @@ const About = () => {
 
   const companyValues = [
     {
-      icon: FaCogs,
+      icon: Shield,
       title: 'Quality Excellence',
       description: 'Unwavering commitment to delivering the highest quality paint systems across all product lines.',
       color: 'from-blue-500 to-blue-700'
     },
     {
-      icon: FaChartLine,
+      icon: Lightbulb,
       title: 'Innovation',
       description: 'Continuous research and development to create cutting-edge coating technologies and solutions.',
       color: 'from-yellow-400 to-yellow-600'
     },
     {
-      icon: FaUsers,
+      icon: Globe,
       title: 'Social Responsibility',
       description: 'Environmental stewardship through eco-friendly formulations and sustainable business practices.',
       color: 'from-green-500 to-green-700'
     },
     {
-      icon: FaTools,
+      icon: Users,
       title: 'Employee Growth',
       description: 'Investing in our team through continuous training, development, and career advancement opportunities.',
       color: 'from-purple-500 to-purple-700'
@@ -393,20 +392,22 @@ const About = () => {
 
       {/* Company Goals */}
       <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            Our Strategic Goals
-          </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-           Driving innovation and excellence in every aspect of our business to shape the future of the paint industry.
-          </p>
-<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+              Our Strategic Goals
+            </h2>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Driving innovation and excellence in every aspect of our business to shape the future of the paint industry.
+            </p>
+          </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
   {goals.map((goal, index) => (
     <motion.div
       key={index}
@@ -435,10 +436,8 @@ const About = () => {
   ))}
 </div>
 
-
-
-      </div>
-    </section>
+        </div>
+      </section>
 
       {/* Company Values */}
       <section className="py-20 bg-white">
@@ -464,20 +463,15 @@ const About = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group   hover:shadow-xl transition-all duration-500 p-8 border border-gray-100 hover:border-[#0055A3]/20"
+                className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 hover:border-[#2C5DB6]/20"
               >
-               <div className="flex flex-col items-start gap-2">
-  <div className="flex items-center gap-3">
-    <div 
-      className={`w-16 h-16  flex items-center justify-center group-hover:scale-110  transition-all duration-300`}
-    >
-      <value.icon className="w-8 h-8 text-gray-600 group-hover:text-[#0055A3]" />
-    </div>
-    <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#0055A3]">{value.title}</h3>
-  </div>
-  <p className="text-gray-600 leading-relaxed">{value.description}</p>
-</div>
-
+                <div className="text-center">
+                  <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                    <value.icon className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">{value.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                </div>
               </motion.div>
             ))}
           </div>
