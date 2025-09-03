@@ -406,7 +406,6 @@ const About = () => {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
            Driving innovation and excellence in every aspect of our business to shape the future of the paint industry.
           </p>
-        </motion.div>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
   {goals.map((goal, index) => (
     <motion.div
@@ -415,7 +414,7 @@ const About = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="card-hover group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-      style={{ '--card-line-color': goal.color || '#0055A3' }} // هنا لون كل كارد
+      style={{ '--card-line-gradient': goal.gradient }} // تمرير التدرج لكل كارد
     >
       {/* الخط العلوي */}
       <div className="card-top-line w-full bg-gray-200"></div>
@@ -435,7 +434,6 @@ const About = () => {
     </motion.div>
   ))}
 </div>
-
 
 
       </div>
