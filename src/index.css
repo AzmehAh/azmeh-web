@@ -122,24 +122,25 @@
   overflow: hidden;
 }
 /* styles.css أو أي ملف CSS عادي */
+/* الخط العلوي للكارد */
 .card-top-line {
   position: relative;
   height: 8px; /* ارتفاع الخط */
   overflow: hidden;
-  background-color: transparent; /* لا لون ثابت */
+  background-color: #e5e7eb; /* رمادي فاتح كخلفية للخط */
 }
 
-.card-top-line::after {
-  content: '';
+/* الخط الداخلي الذي يتغير لونه لكل كارد */
+.card-top-line-inner {
   position: absolute;
+  top: 0;
   left: 0;
-  bottom: 0;
-  width: 0;
   height: 100%;
-  background-color: var(--card-line-color, #0055A3); /* لون الخط لكل كارد */
-  transition: width 0.4s ease;
+  width: 0; /* يبدأ صغير */
+  transition: width 0.4s ease; /* حركة سلسة */
 }
 
-.card-hover:hover .card-top-line::after {
-  width: 100%;
+/* عند hover على الكارد */
+.card-hover:hover .card-top-line-inner {
+  width: 100%; /* يتمدد الخط بعرض الكارد */
 }
