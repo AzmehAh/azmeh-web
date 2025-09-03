@@ -415,13 +415,12 @@ const About = () => {
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       className="card-hover group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-      style={{ '--card-line-color': goal.color || '#0055A3' }} // تمرير اللون لكل كارد
+      style={{ '--card-line-color': goal.color || '#0055A3' }} // هنا لون كل كارد
     >
       {/* الخط العلوي */}
       <div className="card-top-line w-full bg-gray-200"></div>
 
       <div className="p-8">
-        {/* أيقونة + عنوان أفقي */}
         <div className="flex items-center gap-4 mb-4">
           <div
             className={`w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}
@@ -431,12 +430,12 @@ const About = () => {
           <h3 className="text-2xl font-bold text-gray-900">{goal.title}</h3>
         </div>
 
-        {/* الوصف */}
         <p className="text-gray-600 leading-relaxed">{goal.description}</p>
       </div>
     </motion.div>
   ))}
 </div>
+
 
 
       </div>
