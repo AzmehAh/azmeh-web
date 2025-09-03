@@ -407,7 +407,7 @@ const About = () => {
            Driving innovation and excellence in every aspect of our business to shape the future of the paint industry.
           </p>
 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-  {goals.map((goal, index) => (
+  {goals.map((goal, index) => ( 
     <motion.div
       key={index}
       initial={{ opacity: 0, y: 30 }}
