@@ -3,7 +3,6 @@ import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { FaBolt, FaGlobe, FaTools, FaUsers, FaChartLine, FaCogs } from "react-icons/fa";
 import { 
-  FaBolt, FaGlobe, FaTools, FaUsers, FaChartLine, FaCogs,
   MapPin, 
   Calendar, 
   Target, 
@@ -63,25 +62,25 @@ const About = () => {
 
   const companyValues = [
     {
-      icon: Shield,
+      icon: FaCogs,
       title: 'Quality Excellence',
       description: 'Unwavering commitment to delivering the highest quality paint systems across all product lines.',
       color: 'from-blue-500 to-blue-700'
     },
     {
-      icon: Lightbulb,
+      icon: FaChartLine,
       title: 'Innovation',
       description: 'Continuous research and development to create cutting-edge coating technologies and solutions.',
       color: 'from-yellow-400 to-yellow-600'
     },
     {
-      icon: Globe,
+      icon: FaUsers,
       title: 'Social Responsibility',
       description: 'Environmental stewardship through eco-friendly formulations and sustainable business practices.',
       color: 'from-green-500 to-green-700'
     },
     {
-      icon: Users,
+      icon: FaTools,
       title: 'Employee Growth',
       description: 'Investing in our team through continuous training, development, and career advancement opportunities.',
       color: 'from-purple-500 to-purple-700'
