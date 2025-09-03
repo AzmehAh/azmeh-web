@@ -417,7 +417,7 @@ const About = () => {
       className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
     >
       {/* خط ديكوري بالأعلى */}
-      <div className={`h-2 bg-gradient-to-r ${goal.gradient}`}></div>
+      <div className={`h-2 nav-link bg-gradient-to-r ${goal.gradient}`}></div>
 
       <div className="p-8">
         {/* أيقونة + عنوان أفقي */}
