@@ -154,7 +154,7 @@ const About = () => {
         
           <div className="relative bg-white/10 backdrop-blur-sm rounded-3xl p-8 border border-white/20">
             <img
-              src="/images/Azmeh-Paints-Logo-White.png"
+              src="/images/Azmeh-Paints-Logo.png"
               alt="Al Azmeh Paints"
               className="h-24 w-auto mx-auto lg:mx-0"
             />
