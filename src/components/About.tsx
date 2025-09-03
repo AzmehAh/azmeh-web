@@ -266,7 +266,7 @@ const About = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="text-center group"
+                 className="text-center group"
               >
                 <div className={`w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-${stat.color}-500 to-${stat.color}-700 flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300`}>
                   <stat.icon className="w-10 h-10 text-white" />
@@ -406,48 +406,27 @@ const About = () => {
               Driving innovation and excellence in every aspect of our business to shape the future of the paint industry.
             </p>
           </motion.div>
-<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-  {goals.map((goal, index) => (
-    <motion.div
-      key={index}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="group card-hover bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-    >
-      {/* الخط العلوي */}
-      <div className="relative w-full h-2 bg-white overflow-hidden">
-        <div
-          className="absolute top-0 left-0 h-full w-0 group-hover:w-full transition-all duration-500"
-          style={{ backgroundColor: goal.color }}
-        ></div>
-      </div>
 
-      <div className="p-8">
-        <div className="flex items-center gap-4 mb-4">
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-          >
-            <goal.icon
-              className="w-8 h-8"
-              style={{ color: goal.color }}
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {goals.map((goal, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+              >
+                <div className={`h-2 bg-gradient-to-r ${goal.gradient}`}></div>
+                <div className="p-8">
+                  <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${goal.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                    <goal.icon className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">{goal.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{goal.description}</p>
+                </div>
+              </motion.div>
+            ))}
           </div>
-          <h3 className="text-2xl font-bold text-gray-900">{goal.title}</h3>
-        </div>
-
-        <p className="text-gray-600 leading-relaxed">{goal.description}</p>
-      </div>
-    </motion.div>
-  ))}
-</div>
-
-
-
-
-
-
-
         </div>
       </section>
 
