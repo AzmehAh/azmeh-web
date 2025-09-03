@@ -121,23 +121,3 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
-.card-top-line {
-  position: relative;
-  height: 8px;
-  overflow: hidden;
-}
-
-.card-top-line::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 0;
-  height: 100%;
-  background-color: #0055A3; /* الأزرق الموحد لكل الكروت */
-  transition: width 0.4s ease;
-}
-
-.card-hover:hover .card-top-line::after {
-  width: 100%;
-}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { FaBolt, FaGlobe, FaTools, FaUsers, FaChartLine, FaCogs } from "react-icons/fa";
 import { 
   MapPin, 
   Calendar, 
@@ -35,16 +36,6 @@ const About = () => {
   const currentYear = new Date().getFullYear();
   const yearsOfExperience = currentYear - 1955;
 
-  // Company achievements
-  const achievements = [
-    "Leading paint manufacturer in the Middle East",
-    "Premium quality products for over 69 years",
-    "Serving residential, automotive, and industrial markets",
-    "Innovative eco-friendly paint solutions",
-    "Trusted by thousands of customers worldwide",
-    "Comprehensive product range for all applications"
-  ];
-
   // Animated counters
   useEffect(() => {
     if (isStatsInView) {
@@ -71,25 +62,25 @@ const About = () => {
 
   const companyValues = [
     {
-      icon: Shield,
+      icon: FaCogs,
       title: 'Quality Excellence',
       description: 'Unwavering commitment to delivering the highest quality paint systems across all product lines.',
       color: 'from-blue-500 to-blue-700'
     },
     {
-      icon: Lightbulb,
+      icon: FaChartLine,
       title: 'Innovation',
       description: 'Continuous research and development to create cutting-edge coating technologies and solutions.',
       color: 'from-yellow-400 to-yellow-600'
     },
     {
-      icon: Globe,
+      icon: FaUsers,
       title: 'Social Responsibility',
       description: 'Environmental stewardship through eco-friendly formulations and sustainable business practices.',
       color: 'from-green-500 to-green-700'
     },
     {
-      icon: Users,
+      icon: FaTools,
       title: 'Employee Growth',
       description: 'Investing in our team through continuous training, development, and career advancement opportunities.',
       color: 'from-purple-500 to-purple-700'
@@ -198,59 +189,51 @@ const About = () => {
             </motion.div>
 
             {/* Right Side - Company Description */}
-          <motion.div
-  initial={{ opacity: 0, x: 50 }}
-  whileInView={{ opacity: 1, x: 0 }}
-  transition={{ duration: 0.8, delay: 0.2 }}
-  className="lg:col-span-6 flex flex-col justify-center"
->
-  {/* About Us Label */}
-  <span className="self-start inline-block px-4 py-2 bg-white text-[#2C5DB6] rounded-full text-sm font-semibold uppercase tracking-wide mb-6">
-    About Us
-  </span>
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+            >
+              <span className="inline-block px-4 py-2 bg-green-500 text-white rounded-full text-sm font-semibold tracking-wide uppercase mb-6">
+                About Us
+              </span>
+              
+              <h1 className="text-4xl md:text-5xl font-bold mb-8 leading-tight">
+                Al Azmeh Paints Company Founded in 1955 in Damascus, Syria
+              </h1>
+              
+              <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+                Al Azmeh produces all types of high-quality paints for homes, furniture, cars, and 
+                industrial applications. Through decades of excellence and expertise, and constant 
+                commitment to quality, we have become one of the leading brands in the paint industry 
+                both locally and globally.
+              </p>
 
-  {/* Main Heading */}
-  <h2 className="text-4xl md:text-5xl font-semibold text-gray-900 mb-8 leading-tight">
-    Al Azmeh Paints Company Founded in 1955 in Damascus, Syria
-  </h2>
+              {/* Product Categories */}
+              <div className="grid grid-cols-2 gap-4 mb-8">
+                {['Home Paints', 'Furniture Finishes', 'Automotive Coatings', 'Industrial Systems'].map((category, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 + index * 0.1 }}
+                    className="bg-white/10 backdrop-blur-sm rounded-lg p-4 text-center hover:bg-white/20 transition-colors duration-300"
+                  >
+                    <CheckCircle className="w-6 h-6 text-green-400 mx-auto mb-2" />
+                    <span className="text-blue-100 font-medium">{category}</span>
+                  </motion.div>
+                ))}
+              </div>
 
-  {/* Description */}
-  <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-    Al Azmeh has set its sights on delivering the highest quality paint systems and coatings. 
-    With decades of excellence and expertise, and through its constant commitment to quality, 
-    the company has become one of the leading brands in the paint industry both locally and globally.
-  </p>
-
-  {/* Achievements Grid */}
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-    {achievements.map((achievement, index) => (
-      <motion.div
-        key={index}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: index * 0.1 }}
-        className="flex items-center space-x-3 group"
-      >
-        <div className="flex-shrink-0 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-          <CheckCircle className="w-4 h-4" />
-        </div>
-        <span className="text-gray-700 font-medium">{achievement}</span>
-      </motion.div>
-    ))}
-  </div>
-
-  {/* Read More Button */}
-  <motion.button
-    onClick={() => navigate('/about')}
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
-    className="self-start group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-gray-700 font-semibold rounded-lg hover:border-[#2C5DB6] hover:text-[#2C5DB6] transition-all duration-300"
-  >
-    <span>READ MORE</span>
-    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-  </motion.button>
-</motion.div>
-
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="group bg-white text-[#2C5DB6] px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl transition-all duration-300 flex items-center space-x-3"
+              >
+                <span>Explore Our Products</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -284,7 +267,7 @@ const About = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                 className="text-center group"
+                className="text-center group"
               >
                 <div className={`w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-${stat.color}-500 to-${stat.color}-700 flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300`}>
                   <stat.icon className="w-10 h-10 text-white" />
@@ -410,51 +393,45 @@ const About = () => {
 
       {/* Company Goals */}
       <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }} 
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-              Our Strategic Goals
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Driving innovation and excellence in every aspect of our business to shape the future of the paint industry.
-            </p>
-          </motion.div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            Our Strategic Goals
+          </h2>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+           Driving innovation and excellence in every aspect of our business to shape the future of the paint industry.
+          </p>
+        </motion.div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-  {goals.map((goal, index) => (
-    <motion.div
-      key={index}
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      className="card-hover group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-    >
-      {/* الخط العلوي الأزرق لكل كارد */}
-      <div className="card-top-line w-full bg-gray-200"></div>
-
-      <div className="p-8">
-        {/* أيقونة + عنوان */}
-        <div className="flex items-center gap-4 mb-4">
-          <div
-            className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-300"
-          >
-            <goal.icon className="w-8 h-8 text-[#0055A3]" />
-          </div>
-          <h3 className="text-2xl font-bold text-gray-900">{goal.title}</h3>
+          {goals.map((goal, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
+            >
+              <div className={`h-2 bg-gradient-to-r ${goal.gradient}`}></div>
+              <div className="p-8">
+                <div
+                  className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${goal.gradient} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                >
+                  <goal.icon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">{goal.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{goal.description}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
-
-        <p className="text-gray-600 leading-relaxed">{goal.description}</p>
       </div>
-    </motion.div>
-  ))}
-</div>
-
-        </div>
-      </section>
+    </section>
 
       {/* Company Values */}
       <section className="py-20 bg-white">
@@ -480,20 +457,15 @@ const About = () => {
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="group bg-white  shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 hover:border-[#0055A3]/20"
+                className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 hover:border-[#2C5DB6]/20"
               >
-            <div className="flex flex-col items-start gap-2">
-  <div className="flex items-center gap-3">
-    <div
-      className={`w-16 h-16  flex items-center justify-center   transition-all duration-300`}
-    >
-      <value.icon className="w-8 h-8 group-hover:text-[#0055A3] text-gray-600" />
-    </div>
-    <h3 className="text-xl font-bold group-hover:text-[#0055A3] text-gray-900">{value.title}</h3>
-  </div>
-  <p className="text-gray-600 leading-relaxed">{value.description}</p>
-</div>
-
+                <div className="text-center">
+                  <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${value.color} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-300`}>
+                    <value.icon className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">{value.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{value.description}</p>
+                </div>
               </motion.div>
             ))}
           </div>
