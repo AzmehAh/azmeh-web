@@ -123,7 +123,7 @@
 }
  .card-top-line {
   position: relative;
-  height: 8px; /* ارتفاع الخط */
+  height: 8px;
   overflow: hidden;
 }
 
@@ -134,7 +134,7 @@
   bottom: 0;
   width: 0;
   height: 100%;
-  background-color: var(--card-line-color, #0055A3); /* لون افتراضي */
+  background: var(--card-line-gradient, #0055A3); /* يمكن تمرير تدرج */
   transition: width 0.4s ease;
 }
 
