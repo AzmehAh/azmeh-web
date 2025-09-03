@@ -159,7 +159,7 @@ const About = () => {
               className="h-24 w-auto mx-auto lg:mx-0"
             />
             <div className="mt-4 text-center lg:text-left">
-              <p className="text-2xl font-bold text-green-400">Al Azmeh Paints</p>
+              <p className="text-2xl font-bold text-white">Al Azmeh Paints</p>
               <p className="text-blue-200 italic">Excellence in Every Drop</p>
             </div>
           </div>
