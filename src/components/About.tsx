@@ -416,7 +416,9 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden"
-            >
+            > 
+              <div className="flex flex-col items-start gap-3"
+                <div className="flex items-center"
               <div className={`h-2 bg-gradient-to-r ${goal.gradient}`}></div>
               <div className="p-8">
                 <div
