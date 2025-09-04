@@ -140,26 +140,50 @@ const AboutSection = () => {
                   }}
                 />
 
-              {/* Content */}
-<div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
-  {/* Title */}
-  <div className="flex items-center space-x-3">
-    <h3 className="text-2xl font-bold text-white">
-      {card.title} 
-    </h3>
-  </div>
-
-  {/* Overlay Description */}
-  <motion.div
-    className="absolute inset-0 bg-black/70 text-white p-4 flex items-center justify-center text-sm rounded-2xl"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: hoveredCard === card.id ? 1 : 0 }}
-    transition={{ duration: 0.3, ease: "easeInOut" }}
-  >
-    <p>{card.description}</p>
-
-
-
+                {/* Content */}
+                <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
+                  {/* Title */}
+                  <div className="flex items-center space-x-3">
+                    <h3 className="text-2xl font-bold text-white">
+                      {card.title} 
+                    </h3>
+                  </div>
+ 
+                  {/* Expandable Description with max-height */}
+                  <motion.div
+                    className="relative overflow-hidden mt-2"
+                    initial={{ maxHeight: 0, opacity: 0 }}
+                    animate={{ 
+                      maxHeight: hoveredCard === card.id ? 200 : 0,
+                      opacity: hoveredCard === card.id ? 1 : 0
+                    }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
+                  >
+                    {/* Expanding circular background */}
+                    <motion.div
+                      className="absolute inset-0 backdrop-blur-sm rounded-xl"
+                      initial={{ scale: 0, borderRadius: '50%' }}
+                      animate={{ 
+                        scale: hoveredCard === card.id ? 1 : 0,
+                        borderRadius: hoveredCard === card.id ? '12px' : '50%'
+                      }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    />
+                    
+                    {/* Text Content */}
+                    <motion.div 
+                      className="relative z-10 p-4"
+                      initial={{ y: 10, opacity: 0 }}
+                      animate={{ 
+                        y: hoveredCard === card.id ? 0 : 10,
+                        opacity: hoveredCard === card.id ? 1 : 0
+                      }}
+                      transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
+                    >
+                      <p className="text-white text-sm leading-relaxed">
+                        {card.description}
+                      </p>
+                    </motion.div>
                     
                   </motion.div>
                 </div>
