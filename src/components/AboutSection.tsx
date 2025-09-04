@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Eye, Target, Heart } from 'lucide-react';
@@ -6,6 +6,7 @@ import { Eye, Target, Heart } from 'lucide-react';
 const AboutSection = () => {
   const navigate = useNavigate();
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const cardRefs = [useRef(null), useRef(null), useRef(null)];
 
   const cards = [
     {
@@ -99,6 +100,7 @@ const AboutSection = () => {
             {cards.map((card, index) => (
               <motion.div
                 key={card.id}
+                ref={cardRefs[index]}
                 className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group"
                 onHoverStart={() => setHoveredCard(card.id)}
                 onHoverEnd={() => setHoveredCard(null)}
@@ -107,13 +109,32 @@ const AboutSection = () => {
               >
                 {/* Background Image */}
                 <div className="absolute inset-0">
-                  <img
+                   <img
                     src={card.image}
                     alt={card.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-black/20"></div>
                 </div>
+
+                {/* Expanding Circle Effect */}
+                 <motion.div
+                  className="absolute inset-0 rounded-full bg-[#425e44] origin-center"
+                  initial={{ scale: 0, opacity: 0.3 }}
+                    animate={{
+                    scale: hoveredCard === card.id ? 3 : 0,
+                    opacity: hoveredCard === card.id ? 1 : 0
+                  }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  style={{
+                    width: "125%",
+                    height: "400%",
+                    top: "auto",
+                    bottom: "-400%",
+                    left: "auto",
+                    right: "-16px"
+                  }}
+                />
 
                 {/* Content */}
                 <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
@@ -159,19 +180,19 @@ const AboutSection = () => {
                       transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
                     >
                       <p className="text-gray-700 text-sm leading-relaxed">
-                        {card.description}
+                         {card.description}
                       </p>
                     </motion.div>
                   </motion.div>
                 </div>
               </motion.div>
             ))}
-          </motion.div>
-
+          </motion.div> 
+ 
         </div>
       </div>
     </section>
   );
 };
 
-export default AboutSection;
+export default AboutSection;    
