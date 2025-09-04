@@ -177,7 +177,7 @@ const Hero = () => {
                     left: isActive ? "auto" : "50%",
                     transform: isActive
                       ? "none"
-                      : "translate(-50%, -50%) rotate(-95deg)",
+                      : "translate(-50%, -50%) rotate(-90deg)",
                     transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
                     textAlign: isActive ? "left" : "center",
