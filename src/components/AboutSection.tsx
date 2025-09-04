@@ -125,7 +125,7 @@ const AboutSection = () => {
                     scale: hoveredCard === card.id ? 3 : 0,
                     opacity: hoveredCard === card.id ? 1 : 0
                   }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                   style={{
                     width: "125%",
                     height: "400%",
