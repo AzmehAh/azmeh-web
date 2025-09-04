@@ -4,125 +4,33 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const paintCategories = [
-  {
-    id: "flooring",
-    title: "Flooring",
-    description:
-      "Durable coatings that protect and enhance wooden, concrete, and tiled floors.",
-    image:
-      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-  },
-  {
-    id: "industrial",
-    title: "Industrial",
-    description:
-      "Heavy-duty coatings designed for factories and industrial environments.",
-    image:
-      "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
-  },
-  {
-    id: "furniture",
-    title: "Furniture",
-    description:
-      "Protective and stylish finishes for wooden and metal furniture.",
-    image:
-      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-  },
-  {
-    id: "automotive",
-    title: "Automotive",
-    description:
-      "High-durability coatings with a glossy finish for vehicles.",
-    image:
-      "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg",
-  },
-  {
-    id: "protective",
-    title: "Protective",
-    description:
-      "Weather-resistant protective coatings for buildings and outdoor structures.",
-    image:
-      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-  },
+  // ... (بقية المصفوفة كما هي بدون تغيير)
 ];
 
 // مكون العنوان المعدل بنمط مائل وبارز
 const AnimatedTitle = ({ text, isActive }) => {
-  const letters = Array.from(text);
-
-  const container = {
-    hidden: { opacity: 1 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.03 } },
-  };
-
-  const child = {
-    hidden: { y: 50, opacity: 0, rotateX: -45, skew: "10deg" },
-    visible: {
-      y: 0,
-      opacity: 1,
-      rotateX: 0,
-      skew: isActive ? "0deg" : "10deg",
-      scale: isActive ? 1.1 : 1,
-      textShadow: isActive
-        ? "0 0 8px  0 0 15px rgba(255,255,255,0.4)"
-        : "0 0 3px rgba(0,0,0,0.9)",
-      transition: { type: "spring", damping: 15, stiffness: 120 },
-    },
-  };
- 
-  return (
-    <motion.div
-      style={{
-        display: "flex",
-        perspective: "1000px",
-        transformStyle: "preserve-3d",
-        fontSize: isActive ? "4rem" : "5rem",
-        fontWeight: "900",
-        fontStyle: "italic",
-        color: "white",
-        textTransform: "uppercase",
-        letterSpacing: "2px",
-        cursor: "default",
-        userSelect: "none",
-        textAlign: "center",
-        lineHeight: "1.1",
-      }}
-      variants={container}
-      initial="hidden"
-      animate="visible"
-    >
-      {letters.map((letter, index) => (
-        <motion.span
-          key={index}
-          variants={child}
-          style={{ display: "inline-block", transformOrigin: "center bottom" }}
-        >
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
-      ))}
-    </motion.div>
-  );
+  // ... (نفس الكود السابق بدون تغيير)
 };
 
 const Hero = () => {
-  const [activeIndex, setActiveIndex] = useState(0); // أول قسم مفتوح
-  const [isManual, setIsManual] = useState(false); // إذا ضغط المستخدم
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isManual, setIsManual] = useState(false);
   const navigate = useNavigate();
   const intervalRef = useRef(null);
 
   const handleExplore = (id) => {
     navigate(`/products?category=${id}`);
-    setIsManual(true); // إيقاف التغيير التلقائي عند الضغط
+    setIsManual(true);
   };
 
   useEffect(() => {
-    if (isManual) return; // توقف التلقائي إذا ضغط المستخدم
+    if (isManual) return;
 
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) =>
         prev + 1 < paintCategories.length ? prev + 1 : 0
       );
-    }, 4000); // تغيير كل 4 ثواني
+    }, 4000);
 
     return () => clearInterval(intervalRef.current);
   }, [isManual]);
@@ -148,7 +56,6 @@ const Hero = () => {
               }}
               style={{ transformOrigin: "center center" }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
-            
               onClick={() => {
                 setActiveIndex(index);
                 setIsManual(true);
@@ -168,63 +75,53 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              <div
-                className="absolute text-white pointer-events-none z-10"
-                style={{
-                  top: isActive ? "45%" : "72%",
-                  left: isActive ? "65%" : "40%", 
-                  transform: isActive
-                    ? "translate(-50%, -50%) rotate(0deg)"
-                    : "translate(-50%, -50%) rotate(-90deg)",
-                  transition: "all 0.6s ease-in-out",
-                  width: isActive ? "120%" : "100%",
-                  textAlign: "center",
-                  whiteSpace: "nowrap",
-                  lineHeight: isActive ? "1.4" : "1.1",
-                  padding: isActive ? "20px" : "0px",
-                }}
-              >
-                <AnimatedTitle text={category.title} isActive={isActive} />
+              {/* حاوية موحدة للعناصر النصية والزر */}
+              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-8 md:p-12">
+                {/* العنوان المتحرك */}
+                <div
+                  className="text-white pointer-events-none mb-4 md:mb-8"
+                  style={{
+                    position: isActive ? "static" : "absolute",
+                    top: isActive ? "auto" : "50%",
+                    left: isActive ? "auto" : "50%",
+                    transform: isActive
+                      ? "none"
+                      : "translate(-50%, -50%) rotate(-90deg)",
+                    transition: "all 0.6s ease-in-out",
+                    width: isActive ? "100%" : "auto",
+                    textAlign: isActive ? "left" : "center",
+                  }}
+                >
+                  <AnimatedTitle text={category.title} isActive={isActive} />
+                </div>
+
+                {/* الوصف والزر (يظهران فقط عند التفعيل) */}
+                {isActive && (
+                  <motion.div
+                    className="w-full max-w-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                  >
+                    <p className="text-lg md:text-xl mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
+                      {category.description}
+                    </p>
+                    <motion.button
+                      onClick={() => handleExplore(category.id)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="group inline-flex items-center space-x-3 px-6 py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300"
+                    >
+                      <span>READ MORE</span>
+                      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    </motion.button>
+                  </motion.div>
+                )}
               </div>
-{/* Content (Title + Description + Button) */}
-{isActive && (
-  <motion.div
-    className="absolute z-20 text-white"
-    style={{
-      bottom: "120px", // المسافة من الأسفل
-      left: "60px",    // بداية موحدة للجميع
-      maxWidth: "480px",
-    }}
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: 0.3, duration: 0.5 }}
-  >
-    {/* العنوان */}
-    <AnimatedTitle text={category.title} isActive={isActive} />
-
-    {/* الشرح */}
-    <p className="text-lg mt-3 mb-4 leading-relaxed text-white drop-shadow-lg">
-      {category.description}
-    </p>
-
-    {/* الزر */}
-    <motion.button
-      onClick={() => handleExplore(category.id)}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className="group inline-flex items-center space-x-3 px-6 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300"
-    >
-      <span>READ MORE</span>
-      <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-    </motion.button>
-  </motion.div>
-)}
-
-
             </motion.div>
           );
         })}
-      </div> 
+      </div>
     </div>
   );
 };
