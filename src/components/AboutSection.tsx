@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Eye, Target, Heart,ArrowRight } from 'lucide-react';
+import { Eye, Target, Heart, ArrowRight } from 'lucide-react';
 
 const AboutSection = () => {
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ const AboutSection = () => {
       {/* Background decorative elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-[#0055A3]/10 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-80 h-80 bg-blue-300/20 rounded-full blur-2xl translate-x-1/2 translate-y-1/2"></div>
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
 
@@ -51,45 +51,46 @@ const AboutSection = () => {
             {/* Background decorative circles */}
             <div className="absolute top-4 right-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
             <div className="absolute bottom-4 left-4 w-24 h-24 bg-white/5 rounded-full blur-lg"></div>
-            
-            <div className="relative z-10">
-              {/* Company Logo */}
-              <div className="mb-8 flex justify-center lg:justify-start">
-                <img
-                  src="/images/Azmeh-Paints-Logo.png"
-                  alt="Al Azmeh Paints"
-                  className="h-16 w-auto brightness-0 invert"
-                />
-              </div>
 
-              {/* Main Heading */}
-              <h2 className="text-4xl md:text-4xl font-semboid text-white mb-6 leading-tight">
-                Al Azmeh Paints – Excellence Since 1955
-              </h2>
-              
-              {/* Description */}
-              <p className="text-blue-100 mb-8 leading-relaxed text-lg">
-                Al Azmeh has set its sights on delivering the highest quality paint systems and coatings. 
-                With decades of excellence and expertise, we have become one of the leading brands in the paint industry.
-              </p>
+            {/* Content with flex column */}
+            <div className="relative z-10 flex flex-col justify-between h-full">
+              <div>
+                {/* Company Logo */}
+                <div className="mb-8 flex justify-center lg:justify-start">
+                  <img
+                    src="/images/Azmeh-Paints-Logo.png"
+                    alt="Al Azmeh Paints"
+                    className="h-16 w-auto brightness-0 invert"
+                  />
+                </div>
 
-              {/* Features */}
-              <div className="text-white/90 mb-8 text-sm uppercase tracking-wide font-medium">
-                PREMIUM QUALITY • INNOVATIVE SOLUTIONS • TRUSTED WORLDWIDE
+                {/* Main Heading */}
+                <h2 className="text-4xl md:text-4xl font-semboid text-white mb-6 leading-tight">
+                  Al Azmeh Paints – Excellence Since 1955
+                </h2>
+
+                {/* Description */}
+                <p className="text-blue-100 mb-8 leading-relaxed text-lg">
+                  Al Azmeh has set its sights on delivering the highest quality paint systems and coatings. 
+                  With decades of excellence and expertise, we have become one of the leading brands in the paint industry.
+                </p>
+
+                {/* Features */}
+                <div className="text-white/90 mb-8 text-sm uppercase tracking-wide font-medium">
+                  PREMIUM QUALITY • INNOVATIVE SOLUTIONS • TRUSTED WORLDWIDE
+                </div>
               </div>
 
               {/* Read More Button */}
-              {/* Read More Button */}
-<motion.button
-  onClick={() => navigate('/about')}
-  whileHover={{ scale: 1.02 }}
-  whileTap={{ scale: 0.98 }}
-  className="absolute bottom-4 left-1/2 transform -translate-x-1/2 group inline-flex items-center justify-center space-x-3 px-6 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300 z-30"
->
-  <span>READ MORE</span>
-  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-</motion.button>
-
+              <motion.button
+                onClick={() => navigate('/about')}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="mt-6 self-center group inline-flex items-center justify-center space-x-3 px-6 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300"
+              >
+                <span>READ MORE</span>
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </motion.button>
             </div>
           </motion.div>
 
@@ -112,7 +113,7 @@ const AboutSection = () => {
               >
                 {/* Background Image */}
                 <div className="absolute inset-0">
-                   <img
+                  <img
                     src={card.image}
                     alt={card.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -121,10 +122,10 @@ const AboutSection = () => {
                 </div>
 
                 {/* Expanding Circle Effect */}
-                 <motion.div
+                <motion.div
                   className="absolute inset-0 rounded-full bg-[#0055A3] origin-center"
                   initial={{ scale: 0, opacity: 0.3 }}
-                    animate={{
+                  animate={{
                     scale: hoveredCard === card.id ? 3 : 0,
                     opacity: hoveredCard === card.id ? 1 : 0
                   }}
@@ -141,27 +142,26 @@ const AboutSection = () => {
 
                 {/* Content */}
                 <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
-                  {/* Title and Icon */}
+                  {/* Title */}
                   <div className="flex items-center space-x-3">
-                   
                     <h3 className="text-2xl font-bold text-white">
                       {card.title} 
                     </h3>
                   </div>
 
-                  {/* Expandable Description with Bubble Effect */}
+                  {/* Expandable Description with max-height */}
                   <motion.div
-                    className="relative"
-                    initial={{ height: 0, opacity: 0 }}
+                    className="relative overflow-hidden mt-2"
+                    initial={{ maxHeight: 0, opacity: 0 }}
                     animate={{ 
-                      height: hoveredCard === card.id ? 'auto' : 0,
+                      maxHeight: hoveredCard === card.id ? 200 : 0,
                       opacity: hoveredCard === card.id ? 1 : 0
                     }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                   >
                     {/* Expanding circular background */}
                     <motion.div
-                      className="absolute inset-0  backdrop-blur-sm rounded-xl"
+                      className="absolute inset-0 backdrop-blur-sm rounded-xl"
                       initial={{ scale: 0, borderRadius: '50%' }}
                       animate={{ 
                         scale: hoveredCard === card.id ? 1 : 0,
@@ -181,19 +181,19 @@ const AboutSection = () => {
                       transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
                     >
                       <p className="text-white text-sm leading-relaxed">
-                         {card.description}
+                        {card.description}
                       </p>
                     </motion.div>
                   </motion.div>
                 </div>
               </motion.div>
             ))}
-          </motion.div> 
- 
+          </motion.div>
+
         </div>
       </div>
     </section> 
   );
 };
 
-export default AboutSection;    
+export default AboutSection;
