@@ -46,7 +46,7 @@ const AboutSection = () => {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-gradient-to-br from-[#2C5DB6] via-blue-600 to-blue-800 rounded-3xl p-10 shadow-xl flex flex-col justify-center text-white relative overflow-hidden"
+            className="bg-[#0055A3] rounded-3xl p-10 shadow-xl flex flex-col justify-center text-white relative overflow-hidden"
           >
             {/* Background decorative circles */}
             <div className="absolute top-4 right-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
