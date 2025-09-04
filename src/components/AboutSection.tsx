@@ -13,26 +13,23 @@ const AboutSection = () => {
       id: 1,
       title: 'Vision',
       image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
-      description:
-        'To be the leading innovator in paint and coating technologies, providing sustainable solutions that protect and beautify homes, furniture, vehicles, and industrial facilities worldwide.',
-      icon: Eye,
+      description: 'To be the leading innovator in paint and coating technologies, providing sustainable solutions that protect and beautify homes, furniture, vehicles, and industrial facilities worldwide.',
+      icon: Eye
     },
     {
       id: 2,
       title: 'Mission',
       image: 'https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
-      description:
-        'To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility to the environment.',
-      icon: Target,
+      description: 'To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility to the environment.',
+      icon: Target
     },
     {
       id: 3,
       title: 'Values',
       image: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
-      description:
-        'Quality Excellence, Innovation, Environmental Responsibility, Customer Trust, Employee Growth, and Industry Leadership guide every decision we make and every solution we create.',
-      icon: Heart,
-    },
+      description: 'Quality Excellence, Innovation, Environmental Responsibility, Customer Trust, Employee Growth, and Industry Leadership guide every decision we make and every solution we create.',
+      icon: Heart
+    }
   ];
 
   return (
@@ -43,17 +40,19 @@ const AboutSection = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
+
           {/* Left Column */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-[#0055A3] rounded-3xl p-10 shadow-xl flex flex-col justify-between text-white relative overflow-hidden"
+            className="bg-[#0055A3] rounded-3xl p-10 shadow-xl flex flex-col justify-center text-white relative overflow-hidden"
           >
             {/* Background decorative circles */}
             <div className="absolute top-4 right-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
             <div className="absolute bottom-4 left-4 w-24 h-24 bg-white/5 rounded-full blur-lg"></div>
 
+            {/* Content with flex column */}
             <div className="relative z-10 flex flex-col justify-between h-full">
               <div>
                 {/* Company Logo */}
@@ -66,14 +65,14 @@ const AboutSection = () => {
                 </div>
 
                 {/* Main Heading */}
-                <h2 className="text-4xl md:text-4xl font-semibold text-white mb-6 leading-tight">
+                <h2 className="text-4xl md:text-4xl font-semboid text-white mb-6 leading-tight">
                   Al Azmeh Paints – Excellence Since 1955
                 </h2>
 
                 {/* Description */}
                 <p className="text-blue-100 mb-8 leading-relaxed text-lg">
-                  Al Azmeh has set its sights on delivering the highest quality paint systems and coatings. With
-                  decades of excellence and expertise, we have become one of the leading brands in the paint industry.
+                  Al Azmeh has set its sights on delivering the highest quality paint systems and coatings. 
+                  With decades of excellence and expertise, we have become one of the leading brands in the paint industry.
                 </p>
 
                 {/* Features */}
@@ -87,7 +86,7 @@ const AboutSection = () => {
                 onClick={() => navigate('/about')}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="mt-6 self-start group inline-flex items-center justify-center space-x-3 px-6 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300"
+                className="mt-6 self-center group inline-flex items-center justify-center space-x-3 px-6 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300"
               >
                 <span>READ MORE</span>
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -104,7 +103,7 @@ const AboutSection = () => {
           >
             {cards.map((card, index) => (
               <motion.div
-                key={card.id}
+                key={card.id} 
                 ref={cardRefs[index]}
                 className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group"
                 onHoverStart={() => setHoveredCard(card.id)}
@@ -128,40 +127,73 @@ const AboutSection = () => {
                   initial={{ scale: 0, opacity: 0.3 }}
                   animate={{
                     scale: hoveredCard === card.id ? 3 : 0,
-                    opacity: hoveredCard === card.id ? 1 : 0,
+                    opacity: hoveredCard === card.id ? 1 : 0
                   }}
-                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                   style={{
-                    width: '125%',
-                    height: '400%',
-                    top: 'auto',
-                    bottom: '-400%',
-                    left: 'auto',
-                    right: '-16px',
+                    width: "125%",
+                    height: "400%",
+                    top: "auto",
+                    bottom: "-400%",
+                    left: "auto",
+                    right: "-16px"
                   }}
                 />
 
                 {/* Content */}
-                <div className="relative z-10 h-full min-h-[200px] p-6 flex flex-col justify-center">
+                <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[160px]">
                   {/* Title */}
-                  <h3 className="text-2xl font-bold text-white mb-2">{card.title}</h3>
+                  <div className="flex items-center  space-x-3">
+                    <h3 className="text-2xl font-bold text-white">
+                      {card.title} 
+                    </h3>
+                  </div>
 
-                  {/* Overlay Description */}
+                  {/* Expandable Description with max-height */}
                   <motion.div
-                    className="absolute inset-0 bg-[#0055A3] text-white p-6 flex items-center justify-center text-sm rounded-2xl"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: hoveredCard === card.id ? 1 : 0 }}
-                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="relative overflow-hidden mt-2"
+                    initial={{ maxHeight: 0, opacity: 0 }}
+                    animate={{ 
+                      maxHeight: hoveredCard === card.id ? 200 : 0,
+                      opacity: hoveredCard === card.id ? 1 : 0
+                    }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
                   >
-                    <p>{card.description}</p>
+                    {/* Expanding circular background */}
+                    <motion.div
+                      className="absolute inset-0 backdrop-blur-sm rounded-xl"
+                      initial={{ scale: 0, borderRadius: '50%' }}
+                      animate={{ 
+                        scale: hoveredCard === card.id ? 1 : 0,
+                        borderRadius: hoveredCard === card.id ? '12px' : '50%'
+                      }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    />
+                    
+                    {/* Text Content */}
+                    <motion.div 
+                      className="relative z-10 p-4"
+                      initial={{ y: 10, opacity: 0 }}
+                      animate={{ 
+                        y: hoveredCard === card.id ? 0 : 10,
+                        opacity: hoveredCard === card.id ? 1 : 0
+                      }}
+                      transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
+                    >
+                      <p className="text-white text-sm leading-relaxed">
+                        {card.description}
+                      </p>
+                    </motion.div>
+                    
                   </motion.div>
                 </div>
               </motion.div>
             ))}
           </motion.div>
+
         </div>
-      </div>
-    </section>
+      </div> 
+    </section>  
   );
 };
 
