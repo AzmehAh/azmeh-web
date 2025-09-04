@@ -167,7 +167,7 @@ const Hero = () => {
               />
 
               {/* حاوية موحدة للعناصر النصية والزر */}
-              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-8 md:p-12">
+              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-8 md:p-16">
                 {/* العنوان المتحرك */}
                 <div
                   className="text-white pointer-events-none mb-4 md:mb-8"
