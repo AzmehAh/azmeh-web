@@ -190,15 +190,15 @@ const Hero = () => {
   <motion.div
     className="absolute z-20"
     style={{
-      bottom: "25%",   // يضل ثابت عن أسفل الكارد
-      left: "6%",     // يضل ثابت عن يسار الكارد
-      maxWidth: "500px"
+      bottom: "50px",   // ثابت، ما بيتغير مع حجم الكارد
+      left: "50px",     // ثابت، يبقى دائماً نفس البداية
+      maxWidth: "480px"
     }}
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 0.3, duration: 0.5 }}
   >
-    <p className="text-xl mb-4 text-white leading-relaxed drop-shadow-lg  p-4 rounded-lg">
+    <p className="text-xl mb-6 text-white leading-relaxed drop-shadow-lg bg-black/40 p-4 rounded-lg">
       {category.description}
     </p>
     <motion.button
