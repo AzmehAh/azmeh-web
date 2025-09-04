@@ -12,14 +12,14 @@ const AboutSection = () => {
     {
       id: 1,
       title: 'Vision',
-      image: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      image: 'https://m.media-amazon.com/images/I/71wqob-X0nL._UF894%2C1000_QL80_.jpg',
       description: 'To be the leading innovator in paint and coating technologies, providing sustainable solutions that protect and beautify homes, furniture, vehicles, and industrial facilities worldwide.',
       icon: Eye
     },
     {
       id: 2,
       title: 'Mission',
-      image: 'https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=400&h=300&fit=crop',
+      image: 'https://com.bimago.media/media/catalog/image/view/product/127492/role/image/size/1500x2240/type/ft-osmr-wiz1/61b99cf5ba9560c800f08e85e8e3f534.webp',
       description: 'To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility to the environment.',
       icon: Target
     },
