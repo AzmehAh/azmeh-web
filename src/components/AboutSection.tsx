@@ -121,7 +121,7 @@ const AboutSection = () => {
 <motion.div
   className="absolute rounded-full z-0"
   initial={{ 
-    scale: 0,
+    scale: 0, 
     opacity: 1
   }}
   animate={{
