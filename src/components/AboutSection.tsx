@@ -63,7 +63,7 @@ const AboutSection = () => {
               </div>
 
               {/* Main Heading */}
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
+              <h2 className="text-4xl md:text-4xl font-bold text-white mb-6 leading-tight">
                 Al Azmeh Paints – Excellence Since 1955
               </h2>
               
