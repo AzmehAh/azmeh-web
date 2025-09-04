@@ -117,64 +117,40 @@ const AboutSection = () => {
                   <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-black/20"></div>
                 </div>
 
-                {/* Expanding Circle Effect - IMPROVED */}
-                <motion.div
-                  className="absolute inset-0 bg-[#2C5DB6] rounded-full origin-center"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{
-                    scale: hoveredCard === card.id ? 1.5 : 0,
-                    opacity: hoveredCard === card.id ? 0.7 : 0
+                {/* Expanding Circle Effect */}
+                 <motion.div
+                  className="absolute inset-0 rounded-full bg-[#425e44] origin-center"
+                  initial={{ scale: 0, opacity: 0.3 }}
+                    animate={{
+                    scale: hoveredCard === card.id ? 3 : 0,
+                    opacity: hoveredCard === card.id ? 1 : 0
                   }}
-                  transition={{ 
-                    duration: 0.5, 
-                    ease: "easeOut",
-                    opacity: { duration: 0.3 }
-                  }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
                   style={{
-                    width: "100%",
-                    height: "100%",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-                    zIndex: 1
+                    width: "125%",
+                    height: "400%",
+                    top: "auto",
+                    bottom: "-400%",
+                    left: "auto",
+                    right: "-16px"
                   }}
                 />
 
                 {/* Content */}
                 <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
                   {/* Title and Icon */}
-                  <div className="flex items-center space-x-3 z-20">
-                    <motion.div 
-                      className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center"
-                      animate={{
-                        backgroundColor: hoveredCard === card.id ? 'rgba(255, 255, 255, 0.9)' : 'rgba(255, 255, 255, 0.2)',
-                        scale: hoveredCard === card.id ? 1.1 : 1
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <motion.div
-                        animate={{
-                          color: hoveredCard === card.id ? '#2C5DB6' : 'white'
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <card.icon className="w-5 h-5" />
-                      </motion.div>
-                    </motion.div>
-                    <motion.h3 
-                      className="text-2xl font-bold text-white"
-                      animate={{
-                        scale: hoveredCard === card.id ? 1.05 : 1
-                      }}
-                      transition={{ duration: 0.3 }}
-                    >
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                      <card.icon className="w-5 h-5 text-white" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-white">
                       {card.title}
-                    </motion.h3>
+                    </h3>
                   </div>
 
                   {/* Expandable Description with Bubble Effect */}
                   <motion.div
-                    className="relative overflow-hidden"
+                    className="relative"
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ 
                       height: hoveredCard === card.id ? 'auto' : 0,
@@ -184,7 +160,7 @@ const AboutSection = () => {
                   >
                     {/* Expanding circular background */}
                     <motion.div
-                      className="absolute inset-0 bg-white/95 backdrop-blur-sm rounded-xl"
+                      className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-xl"
                       initial={{ scale: 0, borderRadius: '50%' }}
                       animate={{ 
                         scale: hoveredCard === card.id ? 1 : 0,
@@ -219,4 +195,4 @@ const AboutSection = () => {
   );
 };
 
-export default AboutSection;
+export default AboutSection;  
