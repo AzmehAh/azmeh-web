@@ -105,10 +105,10 @@ const AboutSection = () => {
               <motion.div
                 key={card.id} 
                 ref={cardRefs[index]}
-                className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group"
+                className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group min-h-[160px]"
                 onHoverStart={() => setHoveredCard(card.id)}
                 onHoverEnd={() => setHoveredCard(null)}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ y: -5 }}
                 transition={{ duration: 0.3 }}
               >
                 {/* Background Image */}
@@ -141,51 +141,52 @@ const AboutSection = () => {
                 />
 
                 {/* Content */}
-                <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[160px]">
+                <div className="relative z-10 p-6 h-full flex flex-col justify-between">
                   {/* Title */}
-                  <div className="flex items-center  space-x-3">
+                  <div className="flex items-center space-x-3">
                     <h3 className="text-2xl font-bold text-white">
                       {card.title} 
                     </h3>
                   </div>
 
-                  {/* Expandable Description with max-height */}
-                  <motion.div
-                    className="relative overflow-hidden mt-2"
-                    initial={{ maxHeight: 0, opacity: 0 }}
-                    animate={{ 
-                      maxHeight: hoveredCard === card.id ? 200 : 0,
-                      opacity: hoveredCard === card.id ? 1 : 0
-                    }}
-                    transition={{ duration: 0.4, ease: "easeInOut" }}
-                  >
-                    {/* Expanding circular background */}
+                  {/* Expandable Description with fixed height container */}
+                  <div className="mt-2 overflow-hidden">
                     <motion.div
-                      className="absolute inset-0 backdrop-blur-sm rounded-xl"
-                      initial={{ scale: 0, borderRadius: '50%' }}
+                      className="relative"
+                      initial={{ height: 0, opacity: 0 }}
                       animate={{ 
-                        scale: hoveredCard === card.id ? 1 : 0,
-                        borderRadius: hoveredCard === card.id ? '12px' : '50%'
-                      }}
-                      transition={{ duration: 0.5, ease: "easeOut" }}
-                    />
-                    
-                    {/* Text Content */}
-                    <motion.div 
-                      className="relative z-10 p-4"
-                      initial={{ y: 10, opacity: 0 }}
-                      animate={{ 
-                        y: hoveredCard === card.id ? 0 : 10,
+                        height: hoveredCard === card.id ? "auto" : 0,
                         opacity: hoveredCard === card.id ? 1 : 0
                       }}
-                      transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
+                      transition={{ duration: 0.4, ease: "easeInOut" }}
                     >
-                      <p className="text-white text-sm leading-relaxed">
-                        {card.description}
-                      </p>
+                      {/* Expanding circular background */}
+                      <motion.div
+                        className="absolute inset-0 backdrop-blur-sm rounded-xl"
+                        initial={{ scale: 0, borderRadius: '50%' }}
+                        animate={{ 
+                          scale: hoveredCard === card.id ? 1 : 0,
+                          borderRadius: hoveredCard === card.id ? '12px' : '50%'
+                        }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                      />
+                      
+                      {/* Text Content */}
+                      <motion.div 
+                        className="relative z-10 p-4"
+                        initial={{ y: 10, opacity: 0 }}
+                        animate={{ 
+                          y: hoveredCard === card.id ? 0 : 10,
+                          opacity: hoveredCard === card.id ? 1 : 0
+                        }}
+                        transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
+                      >
+                        <p className="text-white text-sm leading-relaxed">
+                          {card.description}
+                        </p>
+                      </motion.div>
                     </motion.div>
-                    
-                  </motion.div>
+                  </div>
                 </div>
               </motion.div>
             ))}
