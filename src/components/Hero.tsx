@@ -186,32 +186,40 @@ const Hero = () => {
               >
                 <AnimatedTitle text={category.title} isActive={isActive} />
               </div>
+{/* Content (Title + Description + Button) */}
 {isActive && (
   <motion.div
-    className="absolute z-20"
+    className="absolute z-20 text-white"
     style={{
-      bottom: "200px",   // ثابت، ما بيتغير مع حجم الكارد
-      left: "50px",     // ثابت، يبقى دائماً نفس البداية
-      maxWidth: "480px"
+      bottom: "120px", // المسافة من الأسفل
+      left: "60px",    // بداية موحدة للجميع
+      maxWidth: "480px",
     }}
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ delay: 0.3, duration: 0.5 }}
   >
-    <p className="text-xl mb-3 text-white leading-relaxed drop-shadow-lg  p-3 rounded-lg">
+    {/* العنوان */}
+    <AnimatedTitle text={category.title} isActive={isActive} />
+
+    {/* الشرح */}
+    <p className="text-lg mt-3 mb-4 leading-relaxed text-white drop-shadow-lg">
       {category.description}
     </p>
+
+    {/* الزر */}
     <motion.button
       onClick={() => handleExplore(category.id)}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300"
+      className="group inline-flex items-center space-x-3 px-6 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300"
     >
       <span>READ MORE</span>
       <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
     </motion.button>
   </motion.div>
 )}
+
 
             </motion.div>
           );
