@@ -141,7 +141,7 @@ const AboutSection = () => {
                   {/* Title and Icon */}
                   <div className="flex items-center space-x-3">
                    
-                    <h3 className="text-2xl font-bold text-white">
+                    <h3 className="text-2xl text-center font-bold text-white">
                       {card.title}
                     </h3>
                   </div>
