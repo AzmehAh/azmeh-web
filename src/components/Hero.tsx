@@ -174,7 +174,7 @@ const Hero = () => {
                   style={{
                     position: isActive ? "static" : "absolute",
                     top: isActive ? "auto" : "50%",
-                    left: isActive ? "auto" : "60%",
+                    left: isActive ? "auto" : "40%",
                     transform: isActive
                       ? "none"
                       : "translate(-50%, -50%) rotate(-90deg)",
