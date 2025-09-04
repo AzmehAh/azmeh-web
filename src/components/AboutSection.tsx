@@ -2,10 +2,10 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
+
 const AboutAlAzmeh = () => {
   const navigate = useNavigate();
 
-  // فقط 3 أقسام للعمود الأيمن
   const sections = [
     { title: 'Vision', description: 'Our vision is to deliver world-class paint solutions.' },
     { title: 'Mission', description: 'Our mission is excellence in every coat and color.' },
@@ -15,9 +15,8 @@ const AboutAlAzmeh = () => {
   return (
     <section className="py-24 bg-gray-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* استخدم grid مع items-stretch لجعل الأعمدة بنفس الارتفاع */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
-          
+
           {/* Left column - Text + Read More */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -44,7 +43,7 @@ const AboutAlAzmeh = () => {
             </motion.button>
           </motion.div>
 
-          {/* Right column - 3 Sections */}
+          {/* Right column - 3 Sections with Bubble Effect */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -55,7 +54,7 @@ const AboutAlAzmeh = () => {
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white rounded-xl p-6 shadow hover:shadow-lg cursor-pointer transition-all duration-300 flex-1 flex flex-col justify-center"
+                className="bubble-card bg-white rounded-xl p-6 shadow hover:shadow-lg cursor-pointer transition-all duration-300 flex-1 flex flex-col justify-center"
               >
                 <h3 className="text-xl font-semibold text-[#2C5DB6] mb-2">{section.title}</h3>
                 <p className="text-gray-600 text-sm">{section.description}</p>
@@ -70,4 +69,3 @@ const AboutAlAzmeh = () => {
 };
 
 export default AboutAlAzmeh;
-
