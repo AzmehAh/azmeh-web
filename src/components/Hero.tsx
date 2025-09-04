@@ -190,7 +190,7 @@ const Hero = () => {
   <motion.div
     className="absolute z-20"
     style={{
-      bottom: "180px",   // ثابت، ما بيتغير مع حجم الكارد
+      bottom: "200px",   // ثابت، ما بيتغير مع حجم الكارد
       left: "50px",     // ثابت، يبقى دائماً نفس البداية
       maxWidth: "480px"
     }}
