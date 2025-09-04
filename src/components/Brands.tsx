@@ -19,50 +19,45 @@ const Brands = () => {
   const repeatedBrands = [...brands, ...brands];
 
   return (
-    <section className="py-20 bg-gray-50">
-  <div className="text-center mb-16">
-    <h2 className="text-4xl font-bold text-gray-900 mb-6">
-      Trusted by Leading Brands
-    </h2>
-  </div>
-
-  {/* الشريط بعرض الشاشة كاملة */}
-  <div className="relative w-full overflow-hidden">
-    <div className="flex w-max animate-scroll">
-      {repeatedBrands.map((brand, index) => (
-        <div
-          key={index}
-          className="flex-shrink-0 w-32 h-20 flex items-center justify-center mx-6 
-                     cursor-pointer transition-transform duration-300 hover:scale-110"
-        >
-          <img
-            src={brand.logo}
-            alt={brand.name}
-            className="w-full h-full object-contain"
-          />
+    <section className="py-20 bg-gray-50 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl font-bold text-gray-900 mb-6">
+            Trusted by Leading Brands
+          </h2>
         </div>
-      ))}
-    </div>
 
-    {/* تدرج يمين ويسار لقص سلس */}
-    <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-gray-50 to-transparent pointer-events-none" />
-    <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none" />
-  </div>
+        <div className="relative w-full overflow-hidden">
+          <div className="flex w-max animate-scroll">
+            {repeatedBrands.map((brand, index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 w-32 h-20 flex items-center justify-center mx-6 cursor-pointer transition-transform duration-300 hover:scale-110"
+              >
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
 
-  <style>
-    {`
-      @keyframes scroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); }
-      }
-      .animate-scroll {
-        display: flex;
-        animation: scroll 20s linear infinite;
-      }
-    `}
-  </style>
-</section>
-
+      <style>
+        {`
+          @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } /* -50% لأننا نسخنا العناصر مرتين */
+          }
+          .animate-scroll {
+            display: flex;
+            animation: scroll 20s linear infinite;
+          }
+        `} 
+      </style>
+    </section>
   );
 };
 
