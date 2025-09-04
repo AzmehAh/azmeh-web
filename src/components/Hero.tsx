@@ -4,14 +4,105 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const paintCategories = [
-  // ... (بقية المصفوفة كما هي بدون تغيير)
+  {
+    id: "flooring",
+    title: "Flooring",
+    description:
+      "Durable coatings that protect and enhance wooden, concrete, and tiled floors.",
+    image:
+      "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
+  },
+  {
+    id: "industrial",
+    title: "Industrial",
+    description:
+      "Heavy-duty coatings designed for factories and industrial environments.",
+    image:
+      "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
+  },
+  {
+    id: "furniture",
+    title: "Furniture",
+    description:
+      "Protective and stylish finishes for wooden and metal furniture.",
+    image:
+      "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
+  },
+  {
+    id: "automotive",
+    title: "Automotive",
+    description:
+      "High-durability coatings with a glossy finish for vehicles.",
+    image:
+      "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg",
+  },
+  {
+    id: "protective",
+    title: "Protective",
+    description:
+      "Weather-resistant protective coatings for buildings and outdoor structures.",
+    image:
+      "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
+  },
 ];
 
 // مكون العنوان المعدل بنمط مائل وبارز
 const AnimatedTitle = ({ text, isActive }) => {
-  // ... (نفس الكود السابق بدون تغيير)
-};
+  const letters = Array.from(text);
 
+  const container = {
+    hidden: { opacity: 1 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.03 } },
+  };
+
+  const child = {
+    hidden: { y: 50, opacity: 0, rotateX: -45, skew: "10deg" },
+    visible: {
+      y: 0,
+      opacity: 1,
+      rotateX: 0,
+      skew: isActive ? "0deg" : "10deg",
+      scale: isActive ? 1.1 : 1,
+      textShadow: isActive
+        ? "0 0 8px  0 0 15px rgba(255,255,255,0.4)"
+        : "0 0 3px rgba(0,0,0,0.9)",
+      transition: { type: "spring", damping: 15, stiffness: 120 },
+    },
+  };
+ 
+  return (
+    <motion.div
+      style={{
+        display: "flex",
+        perspective: "1000px",
+        transformStyle: "preserve-3d",
+        fontSize: isActive ? "4rem" : "5rem",
+        fontWeight: "900",
+        fontStyle: "italic",
+        color: "white",
+        textTransform: "uppercase",
+        letterSpacing: "2px",
+        cursor: "default",
+        userSelect: "none",
+        textAlign: "center",
+        lineHeight: "1.1",
+      }}
+      variants={container}
+      initial="hidden"
+      animate="visible"
+    >
+      {letters.map((letter, index) => (
+        <motion.span
+          key={index}
+          variants={child}
+          style={{ display: "inline-block", transformOrigin: "center bottom" }}
+        >
+          {letter === " " ? "\u00A0" : letter}
+        </motion.span>
+      ))}
+    </motion.div>
+  );
+};
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isManual, setIsManual] = useState(false);
