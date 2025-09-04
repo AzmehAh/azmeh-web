@@ -139,11 +139,13 @@ const AboutSection = () => {
                 {/* Content */}
                 <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
                   {/* Title and Icon */}
-                 {/* Title Centered */}
-<div className="absolute inset-0 flex items-center justify-center text-center pointer-events-none">
-  <h3 className="text-2xl font-bold text-white">{card.title}</h3>
+                 <div className="absolute inset-0 flex items-center justify-center text-center">
+  <h3 className="text-2xl font-bold text-white">
+    {card.title}
+  </h3>
 </div>
 
+                  </div>
 
                   {/* Expandable Description with Bubble Effect */}
                   <motion.div
