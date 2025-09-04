@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Eye, Target, Heart } from 'lucide-react';
@@ -6,9 +6,6 @@ import { Eye, Target, Heart } from 'lucide-react';
 const AboutSection = () => {
   const navigate = useNavigate();
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
-  const [circlePosition, setCirclePosition] = useState({ x: 0, y: 0, scale: 0 });
-  const containerRef = useRef<HTMLDivElement>(null);
-  const cardRefs = [useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null), useRef<HTMLDivElement>(null)];
 
   const cards = [
     {
@@ -34,28 +31,6 @@ const AboutSection = () => {
     }
   ];
 
-  const handleCardHover = (cardId: number, index: number) => {
-    setHoveredCard(cardId);
-    
-    if (cardRefs[index].current && containerRef.current) {
-      const cardRect = cardRefs[index].current.getBoundingClientRect();
-      const containerRect = containerRef.current.getBoundingClientRect();
-      
-      const relativeX = cardRect.left - containerRect.left + cardRect.width / 2;
-      const relativeY = cardRect.top - containerRect.top + cardRect.height / 2;
-      
-      setCirclePosition({
-        x: relativeX,
-        y: relativeY,
-        scale: 1
-      });
-    }
-  };
-
-  const handleContainerLeave = () => {
-    setHoveredCard(null);
-    setCirclePosition(prev => ({ ...prev, scale: 0 }));
-  };
   return (
     <section className="py-24 bg-gray-50 relative overflow-hidden">
       {/* Background decorative elements */}
@@ -119,47 +94,20 @@ const AboutSection = () => {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col space-y-6 h-full relative"
-            ref={containerRef}
-            onMouseLeave={handleContainerLeave}
+            className="flex flex-col space-y-6 h-full"
           >
-            {/* Moving Circle */}
-            <motion.div
-              className="absolute pointer-events-none z-0"
-              style={{
-                width: '280px',
-                height: '280px',
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(44, 93, 182, 0.15), rgba(44, 93, 182, 0.25))',
-                backdropFilter: 'blur(20px)',
-                border: '1px solid rgba(44, 93, 182, 0.2)',
-              }}
-              animate={{
-                x: circlePosition.x - 140, // Center the circle
-                y: circlePosition.y - 140,
-                scale: circlePosition.scale,
-                opacity: circlePosition.scale
-              }}
-              transition={{
-                type: "spring",
-                damping: 25,
-                stiffness: 300,
-                mass: 0.8
-              }}
-            />
-
             {cards.map((card, index) => (
               <motion.div
                 key={card.id}
-                ref={cardRefs[index]}
-                className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group z-10"
-                onMouseEnter={() => handleCardHover(card.id, index)}
+                className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group"
+                onHoverStart={() => setHoveredCard(card.id)}
+                onHoverEnd={() => setHoveredCard(null)}
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
                 {/* Background Image */}
                 <div className="absolute inset-0">
-                   <img
+                  <img
                     src={card.image}
                     alt={card.title}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
@@ -168,7 +116,7 @@ const AboutSection = () => {
                 </div>
 
                 {/* Content */}
-                <div className="relative z-20 p-6 h-full flex flex-col justify-between min-h-[140px]">
+                <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
                   {/* Title and Icon */}
                   <div className="flex items-center space-x-3">
                     <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
@@ -189,9 +137,20 @@ const AboutSection = () => {
                     }}
                     transition={{ duration: 0.4, ease: "easeInOut" }}
                   >
+                    {/* Expanding circular background */}
+                    <motion.div
+                      className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-xl"
+                      initial={{ scale: 0, borderRadius: '50%' }}
+                      animate={{ 
+                        scale: hoveredCard === card.id ? 1 : 0,
+                        borderRadius: hoveredCard === card.id ? '12px' : '50%'
+                      }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    />
+                    
                     {/* Text Content */}
                     <motion.div 
-                      className="relative z-30 p-4 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg"
+                      className="relative z-10 p-4"
                       initial={{ y: 10, opacity: 0 }}
                       animate={{ 
                         y: hoveredCard === card.id ? 0 : 10,
@@ -200,19 +159,19 @@ const AboutSection = () => {
                       transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
                     >
                       <p className="text-gray-700 text-sm leading-relaxed">
-                         {card.description}
+                        {card.description}
                       </p>
                     </motion.div>
                   </motion.div>
                 </div>
               </motion.div>
             ))}
-          </motion.div> 
- 
+          </motion.div>
+
         </div>
       </div>
     </section>
   );
 };
 
-export default AboutSection;    
+export default AboutSection;
