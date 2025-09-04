@@ -107,32 +107,15 @@ const AboutSection = () => {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-              {cardPositions.length > 0 && hoveredCard && (
-  <motion.div
-    className="absolute rounded-full z-0"
-    initial={{ 
-      scale: 0,
-      opacity: 1
-    }}
-    animate={{
-      scale: 3,
-      x: cardPositions[hoveredCard-1].x + cardPositions[hoveredCard-1].width/2,
-      y: cardPositions[hoveredCard-1].y + cardPositions[hoveredCard-1].height/2,
-      opacity: 1
-    }}
-    transition={{ 
-      duration: 0.6, 
-      ease: "easeInOut"
-    }}
-    style={{
-      width: cardPositions[hoveredCard-1].width,
-      height: cardPositions[hoveredCard-1].width, // دائرة متساوية الأبعاد
-      backgroundColor: "#425e44",
-      transform: "translate(-50%, -50%)"
-    }}
-  />
-)}
-
+                {/* Background Image */}
+                <div className="absolute inset-0">
+                   <img
+                    src={card.image}
+                    alt={card.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-black/20"></div>
+                </div>
 
                 {/* Expanding Circle Effect */}
                  <motion.div
