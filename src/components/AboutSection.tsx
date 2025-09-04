@@ -102,93 +102,69 @@ const AboutSection = () => {
             className="flex flex-col space-y-6 h-full"
           >
             {cards.map((card, index) => (
-              <motion.div
-                key={card.id} 
-                ref={cardRefs[index]}
-                className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group min-h-[160px]"
-                onHoverStart={() => setHoveredCard(card.id)}
-                onHoverEnd={() => setHoveredCard(null)}
-                whileHover={{ y: -5 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Background Image */}
-                <div className="absolute inset-0">
-                  <img
-                    src={card.image}
-                    alt={card.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-black/20"></div>
-                </div>
+           <motion.div
+  key={card.id} 
+  ref={cardRefs[index]}
+  className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group flex flex-col"
+  onHoverStart={() => setHoveredCard(card.id)}
+  onHoverEnd={() => setHoveredCard(null)}
+  whileHover={{ scale: 1.02 }}
+  transition={{ duration: 0.3 }}
+>
+  {/* Background Image */}
+  <div className="absolute inset-0">
+    <img
+      src={card.image}
+      alt={card.title}
+      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+    />
+    <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-black/20"></div>
+  </div>
 
-                {/* Expanding Circle Effect */}
-                <motion.div
-                  className="absolute inset-0 rounded-full bg-[#0055A3] origin-center"
-                  initial={{ scale: 0, opacity: 0.3 }}
-                  animate={{
-                    scale: hoveredCard === card.id ? 3 : 0,
-                    opacity: hoveredCard === card.id ? 1 : 0
-                  }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  style={{
-                    width: "125%",
-                    height: "400%",
-                    top: "auto",
-                    bottom: "-400%",
-                    left: "auto",
-                    right: "-16px"
-                  }}
-                />
+  {/* Circle Effect */}
+  <motion.div
+    className="absolute inset-0 rounded-full bg-[#0055A3] origin-center"
+    initial={{ scale: 0, opacity: 0.3 }}
+    animate={{
+      scale: hoveredCard === card.id ? 3 : 0,
+      opacity: hoveredCard === card.id ? 1 : 0
+    }}
+    transition={{ duration: 0.3, ease: "easeOut" }}
+    style={{
+      width: "125%",
+      height: "400%",
+      top: "auto",
+      bottom: "-400%",
+      left: "auto",
+      right: "-16px"
+    }}
+  />
 
-                {/* Content */}
-                <div className="relative z-10 p-6 h-full flex flex-col justify-between">
-                  {/* Title */}
-                  <div className="flex items-center space-x-3">
-                    <h3 className="text-2xl font-bold text-white">
-                      {card.title} 
-                    </h3>
-                  </div>
+  {/* Content */}
+  <div className="relative z-10 p-6 flex flex-col justify-between h-full">
+    {/* Title */}
+    <h3 className="text-2xl font-bold text-white">{card.title}</h3>
 
-                  {/* Expandable Description with fixed height container */}
-                  <div className="mt-2 overflow-hidden">
-                    <motion.div
-                      className="relative"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ 
-                        height: hoveredCard === card.id ? "auto" : 0,
-                        opacity: hoveredCard === card.id ? 1 : 0
-                      }}
-                      transition={{ duration: 0.4, ease: "easeInOut" }}
-                    >
-                      {/* Expanding circular background */}
-                      <motion.div
-                        className="absolute inset-0 backdrop-blur-sm rounded-xl"
-                        initial={{ scale: 0, borderRadius: '50%' }}
-                        animate={{ 
-                          scale: hoveredCard === card.id ? 1 : 0,
-                          borderRadius: hoveredCard === card.id ? '12px' : '50%'
-                        }}
-                        transition={{ duration: 0.5, ease: "easeOut" }}
-                      />
-                      
-                      {/* Text Content */}
-                      <motion.div 
-                        className="relative z-10 p-4"
-                        initial={{ y: 10, opacity: 0 }}
-                        animate={{ 
-                          y: hoveredCard === card.id ? 0 : 10,
-                          opacity: hoveredCard === card.id ? 1 : 0
-                        }}
-                        transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
-                      >
-                        <p className="text-white text-sm leading-relaxed">
-                          {card.description}
-                        </p>
-                      </motion.div>
-                    </motion.div>
-                  </div>
-                </div>
-              </motion.div>
+    {/* Description (fade in/out without changing card height) */}
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{
+        opacity: hoveredCard === card.id ? 1 : 0,
+        y: hoveredCard === card.id ? 0 : 20
+      }}
+      transition={{ duration: 0.4 }}
+      className="mt-3"
+    >
+      <p className="text-white text-sm leading-relaxed">
+        {card.description}
+      </p>
+    </motion.div>
+  </div>
+</motion.div>
+
+                    
+               
+              
             ))}
           </motion.div>
 
