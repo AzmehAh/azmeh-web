@@ -5,18 +5,18 @@ import { useNavigate } from 'react-router-dom';
 const AboutAlAzmeh = () => {
   const navigate = useNavigate();
 
+  // فقط 3 أقسام للعمود الأيمن
   const sections = [
     { title: 'Vision', description: 'Our vision is to deliver world-class paint solutions.' },
     { title: 'Mission', description: 'Our mission is excellence in every coat and color.' },
     { title: 'Values', description: 'Integrity, Quality, Sustainability.' },
-    { title: 'Goals', description: 'Innovate and lead the paint industry globally.' },
-    { title: 'Company History', description: 'Founded in 1955 in Damascus, Syria.' },
   ];
 
   return (
     <section className="py-24 bg-gray-50 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+        {/* استخدم grid مع items-stretch لجعل الأعمدة بنفس الارتفاع */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-stretch">
           
           {/* Left column - Text + Read More */}
           <motion.div
@@ -44,18 +44,18 @@ const AboutAlAzmeh = () => {
             </motion.button>
           </motion.div>
 
-          {/* Right column - Sections list */}
+          {/* Right column - 3 Sections */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-6 flex flex-col justify-start space-y-6"
+            className="lg:col-span-6 flex flex-col justify-between space-y-6"
           >
             {sections.map((section, index) => (
               <motion.div
                 key={index}
                 whileHover={{ scale: 1.02 }}
-                className="bg-white rounded-xl p-6 shadow hover:shadow-lg cursor-pointer transition-all duration-300"
+                className="bg-white rounded-xl p-6 shadow hover:shadow-lg cursor-pointer transition-all duration-300 flex-1 flex flex-col justify-center"
               >
                 <h3 className="text-xl font-semibold text-[#2C5DB6] mb-2">{section.title}</h3>
                 <p className="text-gray-600 text-sm">{section.description}</p>
@@ -70,3 +70,4 @@ const AboutAlAzmeh = () => {
 };
 
 export default AboutAlAzmeh;
+
