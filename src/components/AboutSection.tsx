@@ -177,7 +177,7 @@ const AboutSection = () => {
                       }}
                       transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
                     >
-                      <p className="text-gray-700 text-sm leading-relaxed">
+                      <p className="text-white text-sm leading-relaxed">
                          {card.description}
                       </p>
                     </motion.div>
