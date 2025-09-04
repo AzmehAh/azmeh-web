@@ -20,27 +20,31 @@ const Brands = () => {
 
   return (
     <section className="py-20 bg-gray-50">
-  <div className="text-center mb-16">
-    <h2 className="text-4xl font-bold text-gray-900 mb-6">
-      Trusted by Leading Brands
-    </h2>
-  </div>
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="text-center mb-16">
+      <h2 className="text-4xl font-bold text-gray-900 mb-6">
+        Trusted by Leading Brands
+      </h2>
+    </div>
 
-  {/* الحاوية العريضة */}
-  <div className="relative w-screen overflow-hidden">
-    <div className="flex w-max animate-scroll px-12"> {/* padding إضافي من اليمين واليسار */}
-      {repeatedBrands.map((brand, index) => (
-        <div
-          key={index}
-          className="flex-shrink-0 w-32 h-20 flex items-center justify-center mx-6 cursor-pointer transition-transform duration-300 hover:scale-110"
-        >
-          <img
-            src={brand.logo}
-            alt={brand.name}
-            className="w-full h-full object-contain"
-          />
-        </div>
-      ))}
+    {/* الحاوية الرئيسية */}
+    <div className="relative overflow-hidden"> 
+      {/* شريط التحريك */}
+      <div className="flex w-max animate-scroll px-12">
+        {repeatedBrands.map((brand, index) => (
+          <div
+            key={index}
+            className="flex-shrink-0 w-32 h-20 flex items-center justify-center mx-6 
+                       cursor-pointer transition-transform duration-300 hover:scale-110"
+          >
+            <img
+              src={brand.logo}
+              alt={brand.name}
+              className="w-full h-full object-contain"
+            />
+          </div>
+        ))}
+      </div>
     </div>
   </div>
 
