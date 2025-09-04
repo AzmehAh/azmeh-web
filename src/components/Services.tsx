@@ -17,7 +17,7 @@ const Services = () => {
               key={index} 
               className="flex items-center space-x-4 group cursor-pointer"
             >
-              <span className="text-3xl font-bold text-gray-700 group-hover:text-[#0055a3] transition-colors duration-300">
+              <span className="text-3xl font-bold text-white  group-hover:text-[#0055a3] transition-colors duration-300">
                 {service.number}
               </span>
               <h3 className="text-lg font-bold text-gray-900">{service.title}</h3>
