@@ -148,7 +148,7 @@ const AboutSection = () => {
 
                   {/* Overlay Description */}
                   <motion.div
-                    className="absolute inset-0 bg-black/70 text-white p-6 flex items-center justify-center text-sm rounded-2xl"
+                    className="absolute inset-0 bg-[#0055A3] text-white p-6 flex items-center justify-center text-sm rounded-2xl"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: hoveredCard === card.id ? 1 : 0 }}
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
