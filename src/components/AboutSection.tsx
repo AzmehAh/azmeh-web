@@ -119,10 +119,13 @@ const AboutSection = () => {
 
                 {/* Expanding Circle Effect */}
                  {/* Expanding Circle Effect */}
-<motion.div
-  className="absolute inset-0 bg-gradient-to-b from-[#2C5DB6] to-[#425e44]"
-  initial={{ y: "-100%" }}
-  animate={{ y: hoveredCard === card.id ? "0%" : "-100%" }}
+{/* Background Image with Swipe Effect */}
+<motion.img
+  src={card.image}
+  alt={card.title}
+  className="absolute inset-0 w-full h-full object-cover"
+  initial={{ y: "-100%" }} // تبدأ من فوق
+  animate={{ y: hoveredCard === card.id ? "0%" : "-100%" }} // تنزل وتظهر
   transition={{ duration: 0.6, ease: "easeInOut" }}
 />
 
