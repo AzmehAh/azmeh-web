@@ -191,7 +191,7 @@ const Hero = () => {
     className="absolute z-20"
     style={{
       bottom: "15%",   // يضل ثابت عن أسفل الكارد
-      left: "10%",     // يضل ثابت عن يسار الكارد
+      left: "8%",     // يضل ثابت عن يسار الكارد
       maxWidth: "500px"
     }}
     initial={{ opacity: 0, y: 20 }}
