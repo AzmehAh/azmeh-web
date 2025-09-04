@@ -141,3 +141,30 @@
 .card-hover:hover .card-top-line::after {
   width: 100%;
 }
+.bubble-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.bubble-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(44, 93, 182, 0.1); /* لون الفقاعة */
+  transition: all 0.5s ease-out;
+  z-index: 0;
+}
+
+.bubble-card:hover::before {
+  width: 200%;
+  height: 200%;
+}
+
+.bubble-card * {
+  position: relative;
+  z-index: 10;
+}
