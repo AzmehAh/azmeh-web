@@ -141,9 +141,9 @@ const AboutSection = () => {
                 />
 
                 {/* Content */}
-                <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
+                <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[160px]">
                   {/* Title */}
-                  <div className="flex items-center min-h-[200px] space-x-3">
+                  <div className="flex items-center  space-x-3">
                     <h3 className="text-2xl font-bold text-white">
                       {card.title} 
                     </h3>
