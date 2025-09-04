@@ -119,7 +119,7 @@ const AboutSection = () => {
 
                 {/* Expanding Circle Effect */}
                  <motion.div
-                  className="absolute inset-0 rounded-full bg-[#425e44] origin-center"
+                  className="absolute inset-0 rounded-full bg-[#0055A3] origin-center"
                   initial={{ scale: 0, opacity: 0.3 }}
                     animate={{
                     scale: hoveredCard === card.id ? 3 : 0,
