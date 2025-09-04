@@ -46,12 +46,13 @@ const AboutSection = () => {
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="bg-[#0055A3] rounded-3xl p-10 shadow-xl flex flex-col justify-between text-white relative overflow-hidden"
+            className="bg-[#0055A3] rounded-3xl p-10 shadow-xl flex flex-col justify-center text-white relative overflow-hidden"
           >
             {/* Background decorative circles */}
             <div className="absolute top-4 right-4 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
             <div className="absolute bottom-4 left-4 w-24 h-24 bg-white/5 rounded-full blur-lg"></div>
 
+            {/* Content with flex column */}
             <div className="relative z-10 flex flex-col justify-between h-full">
               <div>
                 {/* Company Logo */}
@@ -140,20 +141,50 @@ const AboutSection = () => {
                 />
 
                 {/* Content */}
-                <div className="relative z-10 h-full min-h-[140px]">
+                <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
                   {/* Title */}
-                  <div className="relative z-10 p-6">
-                    <h3 className="text-2xl font-bold text-white">{card.title}</h3>
+                  <div className="flex items-center space-x-3">
+                    <h3 className="text-2xl font-bold text-white">
+                      {card.title} 
+                    </h3>
                   </div>
 
-                  {/* Overlay Description */}
+                  {/* Expandable Description with max-height */}
                   <motion.div
-                    className="absolute inset-0 bg-black/70 text-white p-6 flex items-center justify-center text-sm rounded-2xl"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: hoveredCard === card.id ? 1 : 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="relative overflow-hidden mt-2"
+                    initial={{ maxHeight: 0, opacity: 0 }}
+                    animate={{ 
+                      maxHeight: hoveredCard === card.id ? 200 : 0,
+                      opacity: hoveredCard === card.id ? 1 : 0
+                    }}
+                    transition={{ duration: 0.4, ease: "easeInOut" }}
                   >
-                    <p>{card.description}</p>
+                    {/* Expanding circular background */}
+                    <motion.div
+                      className="absolute inset-0 backdrop-blur-sm rounded-xl"
+                      initial={{ scale: 0, borderRadius: '50%' }}
+                      animate={{ 
+                        scale: hoveredCard === card.id ? 1 : 0,
+                        borderRadius: hoveredCard === card.id ? '12px' : '50%'
+                      }}
+                      transition={{ duration: 0.5, ease: "easeOut" }}
+                    />
+                    
+                    {/* Text Content */}
+                    <motion.div 
+                      className="relative z-10 p-4"
+                      initial={{ y: 10, opacity: 0 }}
+                      animate={{ 
+                        y: hoveredCard === card.id ? 0 : 10,
+                        opacity: hoveredCard === card.id ? 1 : 0
+                      }}
+                      transition={{ duration: 0.3, delay: hoveredCard === card.id ? 0.2 : 0 }}
+                    >
+                      <p className="text-white text-sm leading-relaxed">
+                        {card.description}
+                      </p>
+                    </motion.div>
+                    
                   </motion.div>
                 </div>
               </motion.div>
@@ -162,7 +193,7 @@ const AboutSection = () => {
 
         </div>
       </div>
-    </section>
+    </section>  
   );
 };
 
