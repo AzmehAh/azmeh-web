@@ -118,18 +118,23 @@ const AboutSection = () => {
                 </div>
 
                 {/* Expanding Circle Effect */}
-                 {/* Expanding Circle Effect */}
-{/* Background Image with Swipe Effect */}
-<motion.img
-  src={card.image}
-  alt={card.title}
-  className="absolute inset-0 w-full h-full object-cover"
-  initial={{ y: "-100%" }} // تبدأ من فوق
-  animate={{ y: hoveredCard === card.id ? "0%" : "-100%" }} // تنزل وتظهر
-  transition={{ duration: 0.6, ease: "easeInOut" }}
-/>
-
-
+                 <motion.div
+                  className="absolute inset-0 rounded-full bg-[#425e44] origin-center"
+                  initial={{ scale: 0, opacity: 0.3 }}
+                    animate={{
+                    scale: hoveredCard === card.id ? 3 : 0,
+                    opacity: hoveredCard === card.id ? 1 : 0
+                  }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  style={{
+                     width: "125%",
+                    height: "400%",
+                    top: "auto",
+                    bottom: "-400%",
+                    left: "auto",
+                    right: "-16px"
+                  }}
+                />
 
                 {/* Content */}
                 <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
