@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Eye, Target, Heart } from 'lucide-react';
+import { Eye, Target, Heart,ArrowRight } from 'lucide-react';
 
 const AboutSection = () => {
   const navigate = useNavigate();
