@@ -20,32 +20,33 @@ const Brands = () => {
 
   return (
     <section className="py-20 bg-gray-50">
-  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div className="text-center mb-16">
-      <h2 className="text-4xl font-bold text-gray-900 mb-6">
-        Trusted by Leading Brands
-      </h2>
+  <div className="text-center mb-16">
+    <h2 className="text-4xl font-bold text-gray-900 mb-6">
+      Trusted by Leading Brands
+    </h2>
+  </div>
+
+  {/* الحاوية بعرض الشاشة */}
+  <div className="relative w-screen overflow-hidden">
+    <div className="flex w-max animate-scroll px-16"> 
+      {repeatedBrands.map((brand, index) => (
+        <div
+          key={index}
+          className="flex-shrink-0 w-32 h-20 flex items-center justify-center mx-6 
+                     cursor-pointer transition-transform duration-300 hover:scale-110"
+        >
+          <img
+            src={brand.logo}
+            alt={brand.name}
+            className="w-full h-full object-contain"
+          />
+        </div>
+      ))}
     </div>
 
-    {/* الحاوية الرئيسية */}
-    <div className="relative overflow-hidden"> 
-      {/* شريط التحريك */}
-      <div className="flex w-max animate-scroll px-12">
-        {repeatedBrands.map((brand, index) => (
-          <div
-            key={index}
-            className="flex-shrink-0 w-32 h-20 flex items-center justify-center mx-6 
-                       cursor-pointer transition-transform duration-300 hover:scale-110"
-          >
-            <img
-              src={brand.logo}
-              alt={brand.name}
-              className="w-full h-full object-contain"
-            />
-          </div>
-        ))}
-      </div>
-    </div>
+    {/* تدرجات يمين ويسار (تخفي القطع وتعطي نعومة) */}
+    <div className="absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-gray-50 to-transparent pointer-events-none" />
+    <div className="absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none" />
   </div>
 
   <style>
