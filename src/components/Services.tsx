@@ -3,7 +3,7 @@ import React from 'react';
 const Services = () => {
   const services = [
     { number: '01', title: 'ECO-FRIENDLY PAINTING' },
-    { number: '02', title: 'PRECISION INTERIOR PAINTING' },
+    { number: '02', title: 'PRECISION INTERIOR ' },
     { number: '03', title: 'INDUSTRIAL COATINGS' },
     { number: '04', title: 'CUSTOM SOLUTIONS' }
   ];
