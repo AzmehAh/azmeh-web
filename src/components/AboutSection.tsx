@@ -118,30 +118,23 @@ const AboutSection = () => {
                 </div>
 
                 {/* Expanding Circle Effect */}
-<motion.div
-  className="absolute rounded-full z-0"
-  initial={{ 
-    scale: 0, 
-    opacity: 1
-  }}
-  animate={{
-    scale: hoveredCard === card.id ? 3 : 0,
-    opacity: hoveredCard === card.id ? 1 : 0
-  }}
-  transition={{ 
-    duration: 0.6, 
-    ease: "easeInOut"
-  }}
-  style={{
-    transform: "translate(-50%, -50%)",
-    backgroundColor: "#425e44", // اللون صلب وواضح
-    width: cardPositions[hoveredCard-1]?.width || 100,
-    height: cardPositions[hoveredCard-1]?.width || 100,
-    x: cardPositions[hoveredCard-1]?.x + (cardPositions[hoveredCard-1]?.width || 0)/2,
-    y: cardPositions[hoveredCard-1]?.y + (cardPositions[hoveredCard-1]?.height || 0)/2
-  }}
-/>
-
+                <motion.div
+                  className="absolute inset-0 rounded-full bg-[#425e44] origin-center"
+                  initial={{ scale: 0, opacity: 0.3 }}
+                    animate={{
+                    scale: hoveredCard === card.id ? 3 : 0,
+                    opacity: hoveredCard === card.id ? 1 : 0
+                  }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  style={{
+                    width: "125%",
+                    height: "400%",
+                    top: "auto",
+                    bottom: "-400%",
+                    left: "auto",
+                    right: "-16px"
+                  }}
+                />
 
                 {/* Content */}
                 <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
