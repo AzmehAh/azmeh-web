@@ -26,9 +26,9 @@ const Brands = () => {
     </h2>
   </div>
 
-  {/* الحاوية بعرض الشاشة */}
-  <div className="relative w-screen overflow-hidden">
-    <div className="flex w-max animate-scroll px-16"> 
+  {/* الشريط بعرض الشاشة كاملة */}
+  <div className="relative w-full overflow-hidden">
+    <div className="flex w-max animate-scroll">
       {repeatedBrands.map((brand, index) => (
         <div
           key={index}
@@ -44,16 +44,16 @@ const Brands = () => {
       ))}
     </div>
 
-    {/* تدرجات يمين ويسار (تخفي القطع وتعطي نعومة) */}
-    <div className="absolute top-0 left-0 h-full w-16 bg-gradient-to-r from-gray-50 to-transparent pointer-events-none" />
-    <div className="absolute top-0 right-0 h-full w-16 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none" />
+    {/* تدرج يمين ويسار لقص سلس */}
+    <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-gray-50 to-transparent pointer-events-none" />
+    <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-gray-50 to-transparent pointer-events-none" />
   </div>
 
   <style>
     {`
       @keyframes scroll {
         0% { transform: translateX(0); }
-        100% { transform: translateX(-50%); } /* -50% لأننا نسخنا العناصر مرتين */
+        100% { transform: translateX(-50%); }
       }
       .animate-scroll {
         display: flex;
