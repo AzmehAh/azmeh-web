@@ -158,7 +158,7 @@ const AboutSection = () => {
                   >
                     {/* Expanding circular background */}
                     <motion.div
-                      className="absolute inset-0 bg-white/90 backdrop-blur-sm rounded-xl"
+                      className="absolute inset-0  backdrop-blur-sm rounded-xl"
                       initial={{ scale: 0, borderRadius: '50%' }}
                       animate={{ 
                         scale: hoveredCard === card.id ? 1 : 0,
