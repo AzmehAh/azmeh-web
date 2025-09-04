@@ -76,7 +76,7 @@ const AnimatedTitle = ({ text, isActive }) => {
         display: "flex",
         perspective: "1000px",
         transformStyle: "preserve-3d",
-        fontSize: isActive ? "4rem" : "5rem",
+        fontSize: isActive ? "3rem" : "5rem",
         fontWeight: "900",
         fontStyle: "italic",
         color: "white",
