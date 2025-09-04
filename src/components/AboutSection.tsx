@@ -79,14 +79,17 @@ const AboutSection = () => {
               </div>
 
               {/* Read More Button */}
-              <motion.button
-                onClick={() => navigate('/about')}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="self-start bg-white text-[#2C5DB6] px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-xl transition-all duration-300"
-              >
-                Read More
-              </motion.button>
+              {/* Read More Button */}
+<motion.button
+  onClick={() => navigate('/about')}
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+  className="absolute bottom-4 left-1/2 transform -translate-x-1/2 group inline-flex items-center justify-center space-x-3 px-6 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300 z-30"
+>
+  <span>READ MORE</span>
+  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+</motion.button>
+
             </div>
           </motion.div>
 
