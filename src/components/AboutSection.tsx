@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Eye, Target, Heart } from 'lucide-react';
@@ -6,7 +6,32 @@ import { Eye, Target, Heart } from 'lucide-react';
 const AboutSection = () => {
   const navigate = useNavigate();
   const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [cardPositions, setCardPositions] = useState<Array<{x: number, y: number, width: number, height: number}>>([]);
   const cardRefs = [useRef(null), useRef(null), useRef(null)];
+
+  useEffect(() => {
+    // حساب مواقع وأبعاد الكروت بعد تحميل المكون
+    const updateCardPositions = () => {
+      const positions = cardRefs.map(ref => {
+        if (ref.current) {
+          const rect = ref.current.getBoundingClientRect();
+          return {
+            x: rect.left + window.scrollX,
+            y: rect.top + window.scrollY,
+            width: rect.width,
+            height: rect.height
+          };
+        }
+        return { x: 0, y: 0, width: 0, height: 0 };
+      });
+      setCardPositions(positions);
+    };
+
+    updateCardPositions();
+    window.addEventListener('resize', updateCardPositions);
+    
+    return () => window.removeEventListener('resize', updateCardPositions);
+  }, []);
 
   const cards = [
     {
@@ -95,13 +120,45 @@ const AboutSection = () => {
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="flex flex-col space-y-6 h-full"
+            className="flex flex-col space-y-6 h-full relative"
           >
+            {/* Large Expanding Circle (positioned absolutely) */}
+            {cardPositions.length > 0 && hoveredCard && (
+              <motion.div
+                className="absolute rounded-full bg-[#425e44] origin-center z-0"
+                initial={{ 
+                  scale: 0,
+                  x: cardPositions[hoveredCard-1].x + cardPositions[hoveredCard-1].width/2,
+                  y: cardPositions[hoveredCard-1].y + cardPositions[hoveredCard-1].height/2,
+                  width: cardPositions[hoveredCard-1].width,
+                  height: cardPositions[hoveredCard-1].height,
+                  opacity: 0
+                }}
+                animate={{
+                  scale: 3,
+                  x: cardPositions[hoveredCard-1].x + cardPositions[hoveredCard-1].width/2,
+                  y: cardPositions[hoveredCard-1].y + cardPositions[hoveredCard-1].height/2,
+                  width: cardPositions[hoveredCard-1].width * 2,
+                  height: cardPositions[hoveredCard-1].width * 2, // دائرة متساوية الأبعاد
+                  opacity: 1
+                }}
+                transition={{ 
+                  duration: 0.6, 
+                  ease: "easeOut",
+                  x: { duration: 0.8, ease: "easeInOut" },
+                  y: { duration: 0.8, ease: "easeInOut" }
+                }}
+                style={{
+                  transform: "translate(-50%, -50%)", // لتوسيط الدائرة على نقطة المركز
+                }}
+              />
+            )}
+
             {cards.map((card, index) => (
               <motion.div
                 key={card.id}
                 ref={cardRefs[index]}
-                className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group"
+                className="relative flex-1 bg-white rounded-2xl shadow-lg overflow-hidden cursor-pointer group z-10"
                 onHoverStart={() => setHoveredCard(card.id)}
                 onHoverEnd={() => setHoveredCard(null)}
                 whileHover={{ scale: 1.02 }}
@@ -116,25 +173,6 @@ const AboutSection = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-black/40 to-black/20"></div>
                 </div>
-
-                {/* Expanding Circle Effect */}
-                <motion.div
-                  className="absolute inset-0 rounded-full bg-[#425e44] origin-center"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{
-                    scale: hoveredCard === card.id ? 3 : 0,
-                    opacity: hoveredCard === card.id ? 1 : 0
-                  }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  style={{
-                    width: "125%",
-                    height: "400%",
-                    top: "auto",
-                    bottom: "-400%",
-                    left: "auto",
-                    right: "-16px"
-                  }}
-                />
 
                 {/* Content */}
                 <div className="relative z-10 p-6 h-full flex flex-col justify-between min-h-[140px]">
