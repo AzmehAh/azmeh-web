@@ -19,40 +19,32 @@ const BrandsSection = () => {
   const animationRef = useRef<number>();
   const lastTime = useRef(0);
 
-  // نكرر العناصر 3 مرات على الأقل للتمرير السلس
-  const duplicated = [...brands, ...brands, ...brands];
-
   const cardWidth = 128; // w-32
-  const gap = 24;        // mx-6
+  const gap = 24; // mx-6
+
+  // نكرر العناصر عدة مرات للتمرير السلس
+  const repeatCount = 10;
+  const duplicated = Array(repeatCount)
+    .fill(brands)
+    .flat();
+
   const totalWidthOriginal = brands.length * (cardWidth + gap);
   const totalWidth = duplicated.length * (cardWidth + gap);
-  const animationDuration = 20; // ثانية
-  const direction = -1; // حركة من اليمين لليسار
+  const speed = 0.3; // سرعة الحركة px لكل إطار
 
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const animate = (currentTime: number) => {
-    if (!lastTime.current) lastTime.current = currentTime;
-
-    const deltaTime = currentTime - lastTime.current;
-    const deltaProgress = deltaTime / (animationDuration * 1000);
+  const animate = (time: number) => {
+    if (!lastTime.current) lastTime.current = time;
 
     let currentX = x.get();
-    let newX = currentX + direction * deltaProgress * totalWidthOriginal;
+    currentX -= speed;
 
-    // ضبط loop
-    if (Math.abs(newX) >= totalWidthOriginal) {
-      newX += totalWidthOriginal;
+    // إعادة ضبط loop
+    if (Math.abs(currentX) >= totalWidthOriginal) {
+      currentX += totalWidthOriginal;
     }
 
-    x.set(newX);
-    lastTime.current = currentTime;
+    x.set(currentX);
+    lastTime.current = time;
     animationRef.current = requestAnimationFrame(animate);
   };
 
@@ -69,7 +61,7 @@ const BrandsSection = () => {
         </h2>
       </div>
 
-      <div className="relative overflow-hidden w-full">
+      <div className="relative w-full overflow-hidden">
         <motion.div
           className="flex"
           style={{ x, gap: `${gap}px` }}
