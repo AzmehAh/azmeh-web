@@ -66,7 +66,7 @@ const Founder = () => {
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-green-400 mb-2">1955</div>
-                <div className="text-gray-400">Company Founded</div>
+                <div className="text-gray-600">Company Founded</div>
               </div>
             </div>
           </motion.div>
