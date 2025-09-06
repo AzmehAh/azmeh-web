@@ -72,7 +72,7 @@ const Goals = () => {
   ))}
 </div>
 
-   
+     
       </section>
   );
 };
