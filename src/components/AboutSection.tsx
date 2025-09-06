@@ -33,7 +33,7 @@ const AboutSection = () => {
     <section className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          
+
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -58,56 +58,50 @@ const AboutSection = () => {
             </Link>
           </motion.div>
 
-        {/* Right Content - Experience Counter with Logo */}
-<motion.div
-  initial={{ opacity: 0, x: 20 }}
-  whileInView={{ opacity: 1, x: 0 }}
-  transition={{ duration: 0.6, delay: 0.2 }}
-  className="flex justify-center lg:justify-end"
->
-  <div className="relative">
-    {/* Background decoration */}
-    <div className="absolute -inset-4 bg-gradient-to-br from-[#2C5DB6]/10 to-blue-200/20 rounded-2xl blur-xl"></div>
-    
-    {/* Main counter card */}
-    <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-700 rounded-2xl p-8 text-white shadow-2xl flex flex-col items-center">
-      
-      {/* Logo on top */}
-      <div className="w-20 h-20 mb-4">
-        <img 
-          src="/images/Azmeh-Paints-Logo.png" 
-          alt="Al Azmeh Paints" 
-          className="w-full h-full object-contain"
-        />
-      </div>
-      
-      {/* Counter */}
-      <motion.div 
-        className="text-4xl font-bold mb-2"
-        initial={{ scale: 0.5 }}
-        whileInView={{ scale: 1 }}
-        transition={{ duration: 0.5, delay: 0.5 }}
-      >
-        {count}
-      </motion.div>
-      <div className="text-sm font-semibold text-blue-100 uppercase tracking-wide">
-        Years of Experience
-      </div>
-      <div className="mt-2 text-blue-200 text-xs">
-        Since 1955
-      </div>
+          {/* Right Content - Experience Counter with Logo */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="flex justify-center lg:justify-end"
+          >
+            <div className="relative">
 
-      {/* Decorative elements */}
-      <div className="absolute top-2 right-2 w-8 h-8 bg-white/5 rounded-full"></div>
-      <div className="absolute bottom-2 left-2 w-6 h-6 bg-white/5 rounded-full"></div>
-    </div>
-  </div>
-</motion.div>
+              {/* Background decoration */}
+              <div className="absolute -inset-4 bg-gradient-to-br from-[#2C5DB6]/10 to-blue-200/20 rounded-2xl blur-xl"></div>
+              
+              {/* Main counter card */}
+              <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-700 rounded-2xl p-6 sm:p-8 text-white shadow-2xl flex flex-col items-center">
 
-                  {/* Decorative elements */}
-                  <div className="absolute top-2 right-2 w-8 h-8 bg-white/5 rounded-full"></div>
-                  <div className="absolute bottom-2 left-2 w-6 h-6 bg-white/5 rounded-full"></div>
+                {/* Logo on top */}
+                <div className="w-16 h-16 sm:w-20 sm:h-20 mb-4">
+                  <img 
+                    src="/images/Azmeh-Paints-Logo.png" 
+                    alt="Al Azmeh Paints" 
+                    className="w-full h-full object-contain"
+                  />
                 </div>
+                
+                {/* Counter */}
+                <motion.div 
+                  className="text-3xl sm:text-4xl font-bold mb-2"
+                  initial={{ scale: 0.5 }}
+                  whileInView={{ scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.5 }}
+                >
+                  {count}
+                </motion.div>
+                <div className="text-xs sm:text-sm font-semibold text-blue-100 uppercase tracking-wide">
+                  Years of Experience
+                </div>
+                <div className="mt-1 sm:mt-2 text-blue-200 text-xs">
+                  Since 1955
+                </div>
+
+                {/* Decorative elements */}
+                <div className="absolute top-2 right-2 w-6 h-6 bg-white/5 rounded-full"></div>
+                <div className="absolute bottom-2 left-2 w-4 h-4 bg-white/5 rounded-full"></div>
+
               </div>
             </div>
           </motion.div>
