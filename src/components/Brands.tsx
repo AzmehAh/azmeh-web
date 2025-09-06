@@ -130,7 +130,7 @@ const BrandsSection = () => {
             {duplicated.map((brand, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-32 h-20 flex items-center justify-center bg-white rounded-xl shadow-md border border-gray-200"
+                className="flex-shrink-0 w-32 h-20 flex items-center justify-center  rounded-xl shadow-md border border-gray-200"
               >
                 <img
                   src={brand.logo}
