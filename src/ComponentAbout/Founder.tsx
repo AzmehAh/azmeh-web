@@ -41,7 +41,7 @@ const Founder = () => {
             <h2 className="text-4xl md:text-5xl font-bold mb-8">
               Visionary Leadership
             </h2>
-            <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
+            <div className="space-y-6 text-lg text-gray-600 leading-relaxed">
               <p>
                 Ahmed Al Azmeh was born in 1918 in Damascus, Syria. He started his entrepreneurial 
                 journey in 1938 and founded Al Azmeh Paints Company in 1955 with a clear vision: 
