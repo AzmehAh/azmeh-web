@@ -34,7 +34,7 @@ const ColorInspiration = () => {
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
-        <div className="text-center mb-20">
+        <div className="text-center mb-10">
           <h2
             className="text-5xl md:text-6xl font-semibold text-gray-900 mb-8 "
            
