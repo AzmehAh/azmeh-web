@@ -21,7 +21,7 @@ const HomePage = () => (
     <Hero />
    
     <Services />
-     <AboutSection />
+     
     <ColorInspiration />
    
     <Brands />
