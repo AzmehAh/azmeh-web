@@ -43,7 +43,7 @@ const Goals = () => {
             return (
               <div
                 key={index}
-                className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-400"
+                className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
               >
                 {/* الخط العلوي الأزرق */}
                 <div className="relative h-2 overflow-hidden">
