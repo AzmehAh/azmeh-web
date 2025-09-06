@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef, useEffect, useState } from "react";
 
 const Brands = () => {
   const brands = [
@@ -14,8 +14,27 @@ const Brands = () => {
     { name: "AlDahab", logo: "/images/AlDahab.png" },
   ];
 
-  // نكرّر العناصر مرتين أو أكثر حتى يصير المرور سلس
-  const repeatedBrands = [...brands, ...brands, ...brands];
+  const containerRef = useRef(null);
+  const [repeatedBrands, setRepeatedBrands] = useState(brands);
+
+  // حساب عدد التكرارات بناءً على عرض الشاشة
+  useEffect(() => {
+    const updateRepeat = () => {
+      if (!containerRef.current) return;
+      const containerWidth = containerRef.current.offsetWidth;
+      const brandWidth = 32 + 24; // w-32 + mx-6
+      const minRepeat = Math.ceil(containerWidth / brandWidth);
+      // نكرر العناصر لضمان تغطية كاملة + إضافية للتمرير
+      const repeated = Array(Math.max(minRepeat, 3))
+        .fill(brands)
+        .flat();
+      setRepeatedBrands(repeated);
+    };
+
+    updateRepeat();
+    window.addEventListener("resize", updateRepeat);
+    return () => window.removeEventListener("resize", updateRepeat);
+  }, [brands]);
 
   return (
     <section className="py-20 bg-gray-50">
@@ -25,8 +44,8 @@ const Brands = () => {
         </h2>
       </div>
 
-      <div className="relative w-full overflow-hidden">
-        <div className="flex w-[200%] animate-scroll">
+      <div ref={containerRef} className="relative w-full overflow-hidden">
+        <div className="flex animate-scroll">
           {repeatedBrands.map((brand, index) => (
             <div
               key={index}
