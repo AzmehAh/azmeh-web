@@ -79,7 +79,13 @@ const AboutSection = () => {
                     src="/images/Azmeh-Paints-Logo.png" 
                     alt="Al Azmeh Paints" 
                     className="w-full h-full object-contain"
-                  />
+                  /> <img 
+      src="/images/Azmeh-Paints-Logo.png" 
+      alt="AL AZMEH PAINTS" 
+      className={`h-10 w-auto transition-all duration-300 ${
+        isScrolled ? "filter-none" : "brightness-0 invert"
+      }`}
+    />
                 </div>
                 
                 {/* Counter */}
