@@ -178,11 +178,11 @@ const Header = () => {
             
 
             <Link to="/systems" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Systems
+ Blog
             </Link>
 
             <Link to="/blog" className={`text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Blog
+              Contact
             </Link>
 
             {/* Contact Dropdown */}
