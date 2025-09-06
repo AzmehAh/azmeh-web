@@ -124,7 +124,7 @@ import { useTranslation } from "react-i18next";
   Trusted by Leading Brands
 </h2>
 <p className="text-center text-gray-600 mb-12">
-  {t("brands.brands.description")}
+ 
 </p>
 
         <div
