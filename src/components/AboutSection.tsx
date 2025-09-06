@@ -74,7 +74,7 @@ const AboutSection = () => {
               <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-700 rounded-2xl p-6 sm:p-8 text-white shadow-2xl flex flex-col items-center">
 
                 {/* Logo on top */}
-                <div className="w-25 h-25 sm:w-30 sm:h-30 mb-4">
+                <div className="w-18 h-18 sm:w-30 sm:h-30 mb-4">
                   <img 
                     src="/images/Azmeh-Paints-Logo.png" 
                     alt="Al Azmeh Paints" 
