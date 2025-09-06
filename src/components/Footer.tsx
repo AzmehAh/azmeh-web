@@ -17,7 +17,7 @@ const Footer = () => {
                 className="h-12 w-auto filter brightness-0 invert"
               />
             </div>
-            <p className="text-gray-300 text-sm leading-relaxed">
+            <p className="text-gray-600 text-sm leading-relaxed">
               Excellence in paint systems and coatings since 1955. Trusted by professionals worldwide.
             </p>
             <div className="pt-4">
