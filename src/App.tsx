@@ -2,7 +2,6 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
-
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
 import Products from './components/Products';
@@ -14,7 +13,7 @@ import Troubleshooting from './components/Troubleshooting';
 import Brands from './components/Brands';
 import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
-import About from './ComponentAbout/About';
+import About from './componentabout/About';
 
 const HomePage = () => (
   <>
