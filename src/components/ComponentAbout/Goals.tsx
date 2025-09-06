@@ -52,8 +52,8 @@ const Goals = () => {
               transition={{ duration: 0.6, delay: index * 0.2 }}
               className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 overflow-hidden"
             >
-              {/* الخط العلوي الأزرق */}
-              <div className="w-full h-1 bg-[#0055A3] group-hover:scale-x-105 transition-transform duration-300 origin-left"></div>
+              {/* الخط العلوي الأزرق يمتد عند Hover */}
+              <div className="w-full h-1 bg-[#0055A3] transform scale-x-90 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
 
               <div className="p-8">
                 {/* أيقونة + عنوان */}
