@@ -43,14 +43,14 @@ const Goals = () => {
             return (
               <div
                 key={index}
-                className="relative group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 bubble-card"
+                className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-500"
               >
                 {/* الخط العلوي الأزرق */}
-                <div className="card-top-line relative h-2 overflow-hidden">
+                <div className="relative h-2 overflow-hidden">
                   <div className="absolute left-0 bottom-0 w-0 h-full bg-[#0055A3] transition-all duration-400 group-hover:w-full"></div>
                 </div>
 
-                <div className="p-8 relative z-10 flex flex-col gap-4">
+                <div className="p-8 flex flex-col gap-4">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 bg-[#E6F0FA]">
                       <Icon className="w-8 h-8 text-[#0055A3]" />
