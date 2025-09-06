@@ -2,10 +2,8 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import AboutCompany from './components/AboutCompany';
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
-import BlogSection from './components/BlogSection';
 import Products from './components/Products';
 import ProductDetail from './components/ProductDetail';
 import Systems from './components/Systems';
@@ -20,10 +18,8 @@ import About from "./components/ComponentAbout/About";
 const HomePage = () => ( 
   <>
     <Hero />
-    <AboutCompany />
     <Services />
     <ColorInspiration />
-    <BlogSection />
     <Brands />
     <SocialMedia />
   </>
