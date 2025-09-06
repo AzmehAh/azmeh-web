@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
-import SectionHeading from "../ui/SectionHeading";
+
 import { useTranslation } from "react-i18next";
 
 const BrandsSection = () => {
