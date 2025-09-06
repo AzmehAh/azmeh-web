@@ -1,7 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
+import SectionHeading from "../ui/SectionHeading";
+import { useTranslation } from "react-i18next";
 
 const BrandsSection = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
+
+  const animationRef = useRef<number>();
+  const x = useMotionValue(0);
+  const lastTime = useRef(0);
+  const isHovered = useRef(false);
+  const isDragging = useRef(false);
+
   const brands = [
     { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
     { name: "SRT", logo: "/images/SRT-.gif" },
@@ -15,70 +26,144 @@ const BrandsSection = () => {
     { name: "AlDahab", logo: "/images/AlDahab.png" },
   ];
 
-  const x = useMotionValue(0);
-  const animationRef = useRef<number>();
-  const lastTime = useRef(0);
+  // تكرار العناصر للإنسيابية
+  const duplicated = [...brands, ...brands, ...brands, ...brands];
 
   const cardWidth = 128; // w-32
   const gap = 24; // mx-6
-
-  // نكرر العناصر عدة مرات للتمرير السلس
-  const repeatCount = 10;
-  const duplicated = Array(repeatCount)
-    .fill(brands)
-    .flat();
-
+  const animationDuration = 20; // بالثواني
   const totalWidthOriginal = brands.length * (cardWidth + gap);
   const totalWidth = duplicated.length * (cardWidth + gap);
-  const speed = 0.3; // سرعة الحركة px لكل إطار
+  const direction = isRTL ? 1 : -1;
 
-  const animate = (time: number) => {
-    if (!lastTime.current) lastTime.current = time;
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-    let currentX = x.get();
-    currentX -= speed;
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-    // إعادة ضبط loop
-    if (Math.abs(currentX) >= totalWidthOriginal) {
-      currentX += totalWidthOriginal;
+  // الحركة التلقائية مع إعادة ضبط الموضع لل-loop اللانهائي
+  const animate = (currentTime: number) => {
+    if (!lastTime.current) lastTime.current = currentTime;
+
+    if (!isHovered.current && !isDragging.current) {
+      const deltaTime = currentTime - lastTime.current;
+      const deltaProgress = deltaTime / (animationDuration * 1000);
+
+      let currentX = x.get();
+      let newX = currentX + direction * deltaProgress * totalWidthOriginal;
+
+      if (direction < 0) {
+        if (Math.abs(newX) >= totalWidthOriginal) {
+          newX += totalWidthOriginal;
+        } else if (newX > 0) {
+          newX -= totalWidthOriginal;
+        }
+      } else {
+        if (newX >= totalWidthOriginal) {
+          newX -= totalWidthOriginal;
+        } else if (newX < 0) {
+          newX += totalWidthOriginal;
+        }
+      }
+
+      x.set(newX);
     }
 
-    x.set(currentX);
-    lastTime.current = time;
+    lastTime.current = currentTime;
     animationRef.current = requestAnimationFrame(animate);
   };
 
   useEffect(() => {
     animationRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(animationRef.current!);
-  }, []);
+  }, [isRTL]);
+
+  const handleMouseEnter = () => {
+    isHovered.current = true;
+  };
+
+  const handleMouseLeave = () => {
+    isHovered.current = false;
+    lastTime.current = performance.now();
+  };
+
+  const handleDragStart = () => {
+    isDragging.current = true;
+  };
+
+  const handleDragEnd = () => {
+    isDragging.current = false;
+    lastTime.current = performance.now();
+
+    let currentX = x.get();
+
+    if (direction < 0) {
+      if (Math.abs(currentX) >= totalWidthOriginal) {
+        x.set(currentX + totalWidthOriginal);
+      } else if (currentX > 0) {
+        x.set(currentX - totalWidthOriginal);
+      }
+    } else {
+      if (currentX >= totalWidthOriginal) {
+        x.set(currentX - totalWidthOriginal);
+      } else if (currentX < 0) {
+        x.set(currentX + totalWidthOriginal);
+      }
+    }
+  };
+
+  const dragConstraints = isRTL
+    ? { left: 0, right: totalWidth - windowWidth }
+    : { left: -totalWidth + windowWidth, right: 0 };
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="text-center mb-16">
-        <h2 className="text-4xl font-bold text-gray-900 mb-6">
-          Trusted by Leading Brands
-        </h2>
-      </div>
+    <section className="bg-gray-50 pt-24 pb-24">
+      <div className="pt-10 max-w-screen-2xl mx-auto">
+        <SectionHeading
+          subtitle={t("brands.brands.subtitle")}
+          title={t("brands.brands.title")}
+          description={t("brands.brands.description")}
+          centered
+        />
 
-      <div className="relative w-full overflow-hidden">
-        <motion.div
-          className="flex"
-          style={{ x, gap: `${gap}px` }}
+        <div
+          className="relative overflow-x-clip overflow-y-visible mt-12 w-full"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          dir={isRTL ? "rtl" : "ltr"}
         >
-          {duplicated.map((brand, index) => (
-            <div
-              key={index}
-              className="flex-shrink-0 w-32 h-20 flex items-center justify-center"
-            >
-              <img
-                src={brand.logo}
-                alt={brand.name}
-                className="w-full h-full object-contain"
-              />
-            </div>
-          ))}
-        </motion.div>
+          <motion.div
+            drag="x"
+            dragConstraints={dragConstraints}
+            dragElastic={0.2}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+            className={`flex ${isRTL ? "flex-row-reverse" : ""}`}
+            style={{
+              width: `${totalWidth}px`,
+              x,
+              gap: `${gap}px`,
+              cursor: "grab",
+            }}
+            whileTap={{ cursor: "grabbing" }}
+          >
+            {duplicated.map((brand, index) => (
+              <div
+                key={index}
+                className="flex-shrink-0 w-32 h-20 flex items-center justify-center bg-white rounded-xl shadow-md border border-gray-200"
+              >
+                <img
+                  src={brand.logo}
+                  alt={brand.name}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+            ))}
+          </motion.div>
+        </div>
       </div>
     </section>
   );
