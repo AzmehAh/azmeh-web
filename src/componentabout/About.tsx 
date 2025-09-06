@@ -1,4 +1,4 @@
-// About.tsx (المكون الرئيسي)
+
 import React from 'react';
 import AboutSection from './AboutSection';
 import Values from './Values';
