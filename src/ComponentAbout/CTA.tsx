@@ -9,7 +9,7 @@ const CTA = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 rounded-3xl p-12 text-white"
+          className="bg-[#0055A3]  rounded-3xl p-12 text-white"
         >
           <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to Transform Your Project?
