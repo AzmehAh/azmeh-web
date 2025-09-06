@@ -1,7 +1,7 @@
-import React, { useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
 
-const Brands = () => {
+const BrandsSection = () => {
   const brands = [
     { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
     { name: "SRT", logo: "/images/SRT-.gif" },
@@ -15,32 +15,50 @@ const Brands = () => {
     { name: "AlDahab", logo: "/images/AlDahab.png" },
   ];
 
-  // تكرار العناصر لتغطية الحركة المستمرة
-  const repeatedBrands = [...brands, ...brands, ...brands, ...brands];
-
   const x = useMotionValue(0);
-  const requestRef = useRef<number>(0);
+  const animationRef = useRef<number>();
+  const lastTime = useRef(0);
 
-  const speed = 0.3; // سرعة الحركة (قيمة أقل = أبطأ)
+  // نكرر العناصر 3 مرات على الأقل للتمرير السلس
+  const duplicated = [...brands, ...brands, ...brands];
 
-  // حلقة الحركة
-  const animate = (time: number) => {
+  const cardWidth = 128; // w-32
+  const gap = 24;        // mx-6
+  const totalWidthOriginal = brands.length * (cardWidth + gap);
+  const totalWidth = duplicated.length * (cardWidth + gap);
+  const animationDuration = 20; // ثانية
+  const direction = -1; // حركة من اليمين لليسار
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const animate = (currentTime: number) => {
+    if (!lastTime.current) lastTime.current = currentTime;
+
+    const deltaTime = currentTime - lastTime.current;
+    const deltaProgress = deltaTime / (animationDuration * 1000);
+
     let currentX = x.get();
-    currentX -= speed;
+    let newX = currentX + direction * deltaProgress * totalWidthOriginal;
 
-    // إعادة ضبط loop
-    const totalWidth = repeatedBrands.length * (32 + 24); // w-32 + mx-6
-    if (Math.abs(currentX) >= totalWidth / 2) {
-      currentX += totalWidth / 2;
+    // ضبط loop
+    if (Math.abs(newX) >= totalWidthOriginal) {
+      newX += totalWidthOriginal;
     }
 
-    x.set(currentX);
-    requestRef.current = requestAnimationFrame(animate);
+    x.set(newX);
+    lastTime.current = currentTime;
+    animationRef.current = requestAnimationFrame(animate);
   };
 
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(requestRef.current);
+    animationRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationRef.current!);
   }, []);
 
   return (
@@ -51,17 +69,15 @@ const Brands = () => {
         </h2>
       </div>
 
-      <div className="relative w-full overflow-hidden">
+      <div className="relative overflow-hidden w-full">
         <motion.div
           className="flex"
-          style={{
-            x,
-          }}
+          style={{ x, gap: `${gap}px` }}
         >
-          {repeatedBrands.map((brand, index) => (
+          {duplicated.map((brand, index) => (
             <div
               key={index}
-              className="flex-shrink-0 w-32 h-20 flex items-center justify-center mx-6"
+              className="flex-shrink-0 w-32 h-20 flex items-center justify-center"
             >
               <img
                 src={brand.logo}
@@ -76,4 +92,4 @@ const Brands = () => {
   );
 };
 
-export default Brands;
+export default BrandsSection;
