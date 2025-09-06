@@ -58,15 +58,7 @@ const AboutSection = () => {
             <div className="text-white/90 mb-8 text-sm uppercase tracking-wide font-medium">
               PREMIUM QUALITY • INNOVATIVE SOLUTIONS • TRUSTED WORLDWIDE
             </div>
-            <motion.button
-              onClick={() => navigate("/about")}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="mt-6 self-start group inline-flex items-center justify-center space-x-3 px-6 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300"
-            >
-              <span>READ MORE</span>
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </motion.button>
+
           </motion.div>
 
           {/* Right Column - Cards */}
