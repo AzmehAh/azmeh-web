@@ -61,11 +61,11 @@ const Founder = () => {
 
             <div className="mt-8 grid grid-cols-2 gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-[0055A3] mb-2">80</div>
+                <div className="text-3xl font-bold text-[#0055A3] mb-2">80</div>
                 <div className="text-gray-400">Years of Leadership</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-green-400 mb-2">1955</div>
+                <div className="text-3xl font-bold text-[#0055A3]  mb-2">1955</div>
                 <div className="text-gray-600">Company Founded</div>
               </div>
             </div>
