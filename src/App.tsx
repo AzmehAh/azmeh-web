@@ -11,6 +11,8 @@ import BulletinDetail from './components/BulletinDetail';
 import FAQ from './components/FAQ';
 import Troubleshooting from './components/Troubleshooting';
 import Brands from './components/Brands';
+import AboutSection from './components/AboutSection';
+import BlogSection from './components/BlogSection';
 import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
 import About from './ComponentAbout/About.tsx'; // تم إصلاح هذا السطر
@@ -19,7 +21,9 @@ const HomePage = () => (
   <>
     <Hero />
     <Services />
+    <AboutSection />
     <ColorInspiration />
+    <BlogSection />
     <Brands />
     <SocialMedia />
   </>

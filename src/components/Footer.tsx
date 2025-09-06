@@ -1,102 +1,145 @@
 import React from 'react';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
-    <footer className="bg-[#0055a3] text-white">
+    <footer className="bg-gray-900 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          
           {/* Company Info */}
-          <div>
-            <div className="flex items-center mb-4">
+          <div className="space-y-4">
+            <div className="flex items-center mb-6">
               <img
                 src="/images/Azmeh-Paints-Logo.png"
-                alt="DKL Engineering"
+                alt="Al Azmeh Paints"
                 className="h-12 w-auto filter brightness-0 invert"
               />
             </div>
-            <p className="text-gray-200 mb-4 max-w-xs">
-              Al-Dakhlallah Engineering Company for Electrical and Mechanical Projects is a Syrian company established in 2005
+            <p className="text-gray-300 text-sm leading-relaxed">
+              Excellence in paint systems and coatings since 1955. Trusted by professionals worldwide.
             </p>
-            <div className="flex space-x-3">
-              <button className="p-2 bg-white rounded shadow hover:bg-gray-200">
-                <Mail className="w-5 h-5 text-[#0055a3]" />
-              </button>
-              <button className="p-2 bg-white rounded shadow hover:bg-gray-200">
-                <Phone className="w-5 h-5 text-[#0055a3]" />
-              </button>
+            <div className="pt-4">
+              <p className="text-gray-400 text-sm">
+                © {new Date().getFullYear()} Al Azmeh Paints. All rights reserved.
+              </p>
             </div>
           </div>
 
-          {/* BRW Galaxy LLC */}
+          {/* Quick Links */}
           <div>
-            <h4 className="font-semibold mb-3 border-b-2 border-white inline-block text-white">
-              Contact Info (BRW Galaxy LLC)
-            </h4>
-            <div className="space-y-2 mt-2 text-gray-100">
-              <div className="flex items-start space-x-2">
-                <MapPin className="w-5 h-5 mt-1 text-white" />
-                <span>USA - Tennessee - Chattanooga - Marlin Rd 5726 Ste 312 - Zip code 37411</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="w-5 h-5 text-white" />
-                <span>manager@dkl-syria.com</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="w-5 h-5 text-white" />
-                <span>(+1) 423 667 1606</span>
-              </div>
-            </div> 
+            <h4 className="font-semibold mb-6 text-white text-lg">Quick Links</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link to="/" className="text-gray-300 hover:text-white transition-colors text-sm">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/products" className="text-gray-300 hover:text-white transition-colors text-sm">
+                  Products
+                </Link>
+              </li>
+              <li>
+                <Link to="/systems" className="text-gray-300 hover:text-white transition-colors text-sm">
+                  Services
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="text-gray-300 hover:text-white transition-colors text-sm">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-gray-300 hover:text-white transition-colors text-sm">
+                  Contact
+                </Link>
+              </li>
+            </ul>
           </div>
 
-          {/* Syria Branch */}
+          {/* Contact Information */}
           <div>
-            <h4 className="font-semibold mb-3 border-b-2 border-white inline-block text-white">
-              Contact Info
-            </h4>
-            <div className="space-y-2 mt-2 text-gray-100">
-              <div className="flex items-start space-x-2">
-                <MapPin className="w-5 h-5 mt-1 text-white" />
-                <span>Syria-Damascus - Mazzeh - Fayez Mansour Str - Muhafaza building 6</span>
+            <h4 className="font-semibold mb-6 text-white text-lg">Contact Info</h4>
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <Mail className="w-5 h-5 text-[#2C5DB6] mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-gray-300 text-sm">manager@dkl-syria.com</p>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="w-5 h-5 text-white" />
-                <span>manager@dkl-syria.com</span>
+              <div className="flex items-start space-x-3">
+                <Phone className="w-5 h-5 text-[#2C5DB6] mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-gray-300 text-sm">(+963) 988 691 712</p>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="w-5 h-5 text-white" />
-                <span>(+963) 988 691 712</span>
+              <div className="flex items-start space-x-3">
+                <MapPin className="w-5 h-5 text-[#2C5DB6] mt-0.5 flex-shrink-0" />
+                <div>
+                  <p className="text-gray-300 text-sm">
+                    Damascus, Syria - Mazzeh<br/>
+                    Fayez Mansour Street
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* BRW Galaxy FZE */}
+          {/* Social Media */}
           <div>
-            <h4 className="font-semibold mb-3 border-b-2 border-white inline-block text-white">
-              Contact Info (BRW Galaxy FZE)
-            </h4>
-            <div className="space-y-2 mt-2 text-gray-100">
-              <div className="flex items-start space-x-2">
-                <MapPin className="w-5 h-5 mt-1 text-white" />
-                <span>UAE-Dubai World Trade Center #103- Floor 26</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Mail className="w-5 h-5 text-white" />
-                <span>manager@dkl-syria.com</span>
-              </div>
-              <div className="flex items-center space-x-2">
-                <Phone className="w-5 h-5 text-white" />
-                <span>(+971) 54 388 7822</span>
-              </div>
+            <h4 className="font-semibold mb-6 text-white text-lg">Follow Us</h4>
+            <div className="flex space-x-4">
+              <a
+                href="#"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
+              >
+                <Facebook className="w-5 h-5" />
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
+              >
+                <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
+              >
+                <Linkedin className="w-5 h-5" />
+              </a>
+              <a
+                href="#"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
+              >
+                <Youtube className="w-5 h-5" />
+              </a>
+            </div>
+            <div className="mt-6 pt-6 border-t border-gray-800">
+              <p className="text-gray-400 text-xs">
+                Stay updated with our latest news and products
+              </p>
             </div>
           </div>
 
         </div>
 
-        {/* Copyright inside footer */}
-        <div className="text-center text-gray-200 mt-8 border-t border-white/20 pt-4">
-          © {new Date().getFullYear()} DKL Engineering. All rights reserved.
+        {/* Bottom Border */}
+        <div className="mt-12 pt-8 border-t border-gray-800">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm mb-4 md:mb-0">
+              Professional paint solutions for every application
+            </p>
+            <div className="flex space-x-6 text-sm">
+              <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
+                Privacy Policy
+              </Link>
+              <Link to="/terms" className="text-gray-400 hover:text-white transition-colors">
+                Terms of Service
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>
