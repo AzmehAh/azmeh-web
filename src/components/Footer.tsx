@@ -64,19 +64,19 @@ const Footer = () => {
             <h4 className="font-semibold mb-6 text-white text-lg">Contact Info</h4>
             <div className="space-y-4">
               <div className="flex items-start space-x-3">
-                <Mail className="w-5 h-5 text-[#2C5DB6] mt-0.5 flex-shrink-0" />
+                <Mail className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-gray-300 text-sm">manager@dkl-syria.com</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
-                <Phone className="w-5 h-5 text-[#2C5DB6] mt-0.5 flex-shrink-0" />
+                <Phone className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-gray-300 text-sm">(+963) 988 691 712</p>
                 </div>
               </div>
               <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-[#2C5DB6] mt-0.5 flex-shrink-0" />
+                <MapPin className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-gray-300 text-sm">
                     Damascus, Syria - Mazzeh<br/>
