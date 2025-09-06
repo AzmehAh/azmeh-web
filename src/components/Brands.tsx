@@ -3,9 +3,7 @@ import { motion, useMotionValue } from "framer-motion";
 
 import { useTranslation } from "react-i18next";
 
-const BrandsSection = () => {
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.dir() === "rtl";
+
 
   const animationRef = useRef<number>();
   const x = useMotionValue(0);
