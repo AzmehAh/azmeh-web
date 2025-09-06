@@ -26,12 +26,13 @@ const BrandsSection = () => {
     { name: "AlDahab", logo: "/images/AlDahab.png" },
   ];
 
-  // تكرار العناصر للإنسيابية
-  const duplicated = [...brands, ...brands, ...brands, ...brands];
+  // تكرار العناصر عدة مرات للإنسيابية
+  const repeatCount = 5;
+  const duplicated = Array(repeatCount).fill(brands).flat();
 
-  const cardWidth = 128; // w-32
-  const gap = 24; // mx-6
-  const animationDuration = 20; // بالثواني
+  const cardWidth = 160; // عرض كل بطاقة علامة تجارية
+  const gap = 32; // المسافة بين البطاقات
+  const animationDuration = 25; // مدة الحركة بالثواني
   const totalWidthOriginal = brands.length * (cardWidth + gap);
   const totalWidth = duplicated.length * (cardWidth + gap);
   const direction = isRTL ? 1 : -1;
@@ -55,13 +56,14 @@ const BrandsSection = () => {
       let currentX = x.get();
       let newX = currentX + direction * deltaProgress * totalWidthOriginal;
 
+      // ضبط loop بحيث يعيد القيمة عند الخروج عن طول المحتوى الأصلي
       if (direction < 0) {
         if (Math.abs(newX) >= totalWidthOriginal) {
           newX += totalWidthOriginal;
         } else if (newX > 0) {
           newX -= totalWidthOriginal;
         }
-      } else { 
+      } else {
         if (newX >= totalWidthOriginal) {
           newX -= totalWidthOriginal;
         } else if (newX < 0) {
@@ -115,17 +117,18 @@ const BrandsSection = () => {
     }
   };
 
+  // ضبط dragConstraints حسب اتجاه اللغة لمنع ظهور فراغات بيضاء
   const dragConstraints = isRTL
     ? { left: 0, right: totalWidth - windowWidth }
     : { left: -totalWidth + windowWidth, right: 0 };
 
   return (
-    <section className="bg-gray-50 pt-24 pb-24">
-      <div className="pt-10 max-w-screen-2xl mx-auto">
+    <section className="py-20 bg-gray-50">
+      <div className="max-w-screen-2xl mx-auto">
         <SectionHeading
-          subtitle={t("brands.brands.subtitle")}
-          title={t("brands.brands.title")}
-          description={t("brands.brands.description")}
+          subtitle={t("brands.subtitle", "Our Partners")}
+          title={t("brands.title", "Trusted by Leading Brands")}
+          description={t("brands.description", "We collaborate with the most reputable brands in the industry")}
           centered
         />
 
@@ -153,12 +156,12 @@ const BrandsSection = () => {
             {duplicated.map((brand, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-32 h-20 flex items-center justify-center bg-white rounded-xl shadow-md border border-gray-200"
+                className="bg-white backdrop-blur-sm rounded-xl p-6 shadow-lg border border-white/40 w-40 h-32 flex-shrink-0 flex items-center justify-center"
               >
                 <img
                   src={brand.logo}
                   alt={brand.name}
-                  className="w-full h-full object-contain"
+                  className="w-full h-full object-contain p-2"
                 />
               </div>
             ))}
