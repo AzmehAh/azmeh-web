@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, Target, Heart, ArrowRight } from "lucide-react";
 
 const cards = [
-  {
+  { 
     id: 1,
     title: "Vision",
     image: "https://m.media-amazon.com/images/I/71wqob-X0nL._UF894%2C1000_QL80_.jpg",
@@ -143,7 +143,7 @@ const AboutSection = () => {
                       {card.description}
                     </p>
                   </motion.div>
-                </div 
+                </div>
               </motion.div>
             ))}
           </motion.div>
