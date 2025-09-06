@@ -1,7 +1,7 @@
 import React, { useState, useEffect,useRef  } from 'react';
-import { motion, useInView,useNavigate  } from 'framer-motion';
+import { motion, useInView,useNavigate,motion  } from 'framer-motion';
 import { useRef } from 'react';
-import { motion } from 'framer-motion';
+
 import { 
   Eye, Target, Heart, ArrowRight,
   MapPin, 
