@@ -58,47 +58,52 @@ const AboutSection = () => {
             </Link>
           </motion.div>
 
-          {/* Right Content - Experience Counter with Logo */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="flex justify-center lg:justify-end"
-          >
-            <div className="flex items-center gap-8">
-              {/* Company Logo */}
-              <div className="relative">
-                <img 
-                  src="/images/Azmeh-Paints-Logo.png" 
-                  alt="Al Azmeh Paints" 
-                  className="w-32 h-32 object-contain"
-                />
-              </div>
-              
-              {/* Experience Counter */}
-              <div className="relative">
-                {/* Background decoration */}
-                <div className="absolute -inset-4 bg-gradient-to-br from-[#2C5DB6]/10 to-blue-200/20 rounded-2xl blur-xl"></div>
-                
-                {/* Main counter card */}
-                <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-700 rounded-2xl p-8 text-white shadow-2xl">
-                  <div className="text-center">
-                    <motion.div 
-                      className="text-4xl font-bold mb-2"
-                      initial={{ scale: 0.5 }}
-                      whileInView={{ scale: 1 }}
-                      transition={{ duration: 0.5, delay: 0.5 }}
-                    >
-                      {count}
-                    </motion.div>
-                    <div className="text-sm font-semibold text-blue-100 uppercase tracking-wide">
-                      Years of Experience
-                    </div>
-                    <div className="mt-2 text-blue-200 text-xs">
-                      Since 1955
-                    </div>
-                  </div>
-                  
+        {/* Right Content - Experience Counter with Logo */}
+<motion.div
+  initial={{ opacity: 0, x: 20 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.6, delay: 0.2 }}
+  className="flex justify-center lg:justify-end"
+>
+  <div className="relative">
+    {/* Background decoration */}
+    <div className="absolute -inset-4 bg-gradient-to-br from-[#2C5DB6]/10 to-blue-200/20 rounded-2xl blur-xl"></div>
+    
+    {/* Main counter card */}
+    <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-700 rounded-2xl p-8 text-white shadow-2xl flex flex-col items-center">
+      
+      {/* Logo on top */}
+      <div className="w-20 h-20 mb-4">
+        <img 
+          src="/images/Azmeh-Paints-Logo.png" 
+          alt="Al Azmeh Paints" 
+          className="w-full h-full object-contain"
+        />
+      </div>
+      
+      {/* Counter */}
+      <motion.div 
+        className="text-4xl font-bold mb-2"
+        initial={{ scale: 0.5 }}
+        whileInView={{ scale: 1 }}
+        transition={{ duration: 0.5, delay: 0.5 }}
+      >
+        {count}
+      </motion.div>
+      <div className="text-sm font-semibold text-blue-100 uppercase tracking-wide">
+        Years of Experience
+      </div>
+      <div className="mt-2 text-blue-200 text-xs">
+        Since 1955
+      </div>
+
+      {/* Decorative elements */}
+      <div className="absolute top-2 right-2 w-8 h-8 bg-white/5 rounded-full"></div>
+      <div className="absolute bottom-2 left-2 w-6 h-6 bg-white/5 rounded-full"></div>
+    </div>
+  </div>
+</motion.div>
+
                   {/* Decorative elements */}
                   <div className="absolute top-2 right-2 w-8 h-8 bg-white/5 rounded-full"></div>
                   <div className="absolute bottom-2 left-2 w-6 h-6 bg-white/5 rounded-full"></div>
