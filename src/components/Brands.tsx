@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
-import { useTranslation } from "react-i18next";
 
 const BrandsSection = () => {
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.dir() === "rtl";
+  const isRTL = false; // false = LTR, true = RTL
 
   const animationRef = useRef<number>();
   const x = useMotionValue(0);
@@ -25,12 +23,11 @@ const BrandsSection = () => {
     { name: "AlDahab", logo: "/images/AlDahab.png" },
   ];
 
-  // تكرار العناصر للإنسيابية
   const duplicated = [...brands, ...brands, ...brands];
 
-  const cardWidth = 128; // w-32
-  const gap = 24; // mx-6
-  const animationDuration = 20; // بالثواني
+  const cardWidth = 128;
+  const gap = 24;
+  const animationDuration = 20;
   const totalWidthOriginal = brands.length * (cardWidth + gap);
   const totalWidth = duplicated.length * (cardWidth + gap);
   const direction = isRTL ? 1 : -1;
@@ -54,17 +51,11 @@ const BrandsSection = () => {
       let newX = currentX + direction * deltaProgress * totalWidthOriginal;
 
       if (direction < 0) {
-        if (Math.abs(newX) >= totalWidthOriginal) {
-          newX += totalWidthOriginal;
-        } else if (newX > 0) {
-          newX -= totalWidthOriginal;
-        }
+        if (Math.abs(newX) >= totalWidthOriginal) newX += totalWidthOriginal;
+        else if (newX > 0) newX -= totalWidthOriginal;
       } else {
-        if (newX >= totalWidthOriginal) {
-          newX -= totalWidthOriginal;
-        } else if (newX < 0) {
-          newX += totalWidthOriginal;
-        }
+        if (newX >= totalWidthOriginal) newX -= totalWidthOriginal;
+        else if (newX < 0) newX += totalWidthOriginal;
       }
 
       x.set(newX);
@@ -79,37 +70,23 @@ const BrandsSection = () => {
     return () => cancelAnimationFrame(animationRef.current!);
   }, [isRTL]);
 
-  const handleMouseEnter = () => {
-    isHovered.current = true;
-  };
-
+  const handleMouseEnter = () => (isHovered.current = true);
   const handleMouseLeave = () => {
     isHovered.current = false;
     lastTime.current = performance.now();
   };
-
-  const handleDragStart = () => {
-    isDragging.current = true;
-  };
-
+  const handleDragStart = () => (isDragging.current = true);
   const handleDragEnd = () => {
     isDragging.current = false;
     lastTime.current = performance.now();
 
     let currentX = x.get();
-
     if (direction < 0) {
-      if (Math.abs(currentX) >= totalWidthOriginal) {
-        x.set(currentX + totalWidthOriginal);
-      } else if (currentX > 0) {
-        x.set(currentX - totalWidthOriginal);
-      }
+      if (Math.abs(currentX) >= totalWidthOriginal) x.set(currentX + totalWidthOriginal);
+      else if (currentX > 0) x.set(currentX - totalWidthOriginal);
     } else {
-      if (currentX >= totalWidthOriginal) {
-        x.set(currentX - totalWidthOriginal);
-      } else if (currentX < 0) {
-        x.set(currentX + totalWidthOriginal);
-      }
+      if (currentX >= totalWidthOriginal) x.set(currentX - totalWidthOriginal);
+      else if (currentX < 0) x.set(currentX + totalWidthOriginal);
     }
   };
 
@@ -125,7 +102,7 @@ const BrandsSection = () => {
           Trusted by Leading Brands
         </h2>
         <p className="text-center text-gray-600 mb-12">
-          {t("brands.brands.description")}
+          Here are some of our trusted partners.
         </p>
 
         {/* السكشن المتحرك */}
