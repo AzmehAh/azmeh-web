@@ -1,0 +1,20 @@
+import React from "react";
+import AboutSection from "./AboutSection";
+import Founder from "./Founder";
+import Goals from "./Goals";
+import Values from "./Values";
+import CTA from "./CTA";
+
+const About = () => {
+  return (
+    <div className="min-h-screen bg-gray-50 pt-20">
+      <AboutSection />
+      <Founder />
+      <Goals />
+      <Values />
+      <CTA />
+    </div>
+  );
+};
+
+export default About;
