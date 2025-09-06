@@ -31,7 +31,7 @@ const AboutSection = () => {
   const navigate = useNavigate();
 
   return (
-    <section className="py-30 bg-[#0055A3] relative overflow-hidden text-white">
+    <section className="py-20 bg-[#0055A3] relative overflow-hidden text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch">
           {/* Left Column */}
