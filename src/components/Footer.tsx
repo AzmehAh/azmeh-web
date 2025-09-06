@@ -21,7 +21,7 @@ const Footer = () => {
               Excellence in paint systems and coatings since 1955. Trusted by professionals worldwide.
             </p>
             <div className="pt-4">
-              <p className="text-gray-400 text-sm">
+              <p className="text-white text-sm">
                 © {new Date().getFullYear()} Al Azmeh Paints. All rights reserved.
               </p>
             </div>
@@ -37,22 +37,22 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link to="/products" className="text-white hover:text-white transition-colors text-sm">
                   Products
                 </Link>
               </li>
               <li>
-                <Link to="/systems" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link to="/systems" className="text-white hover:text-white transition-colors text-sm">
                   Services
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link to="/about" className="text-white hover:text-white transition-colors text-sm">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-300 hover:text-white transition-colors text-sm">
+                <Link to="/contact" className="text-white hover:text-white transition-colors text-sm">
                   Contact
                 </Link>
               </li>
