@@ -1,32 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, ArrowRight } from 'lucide-react';
+import { Calendar, ArrowRight, User, Clock } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { getLatestPosts } from '../data/blogData';
 
 const BlogSection = () => {
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Latest Trends in Industrial Coating Technologies",
-      image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      publishDate: "2024-01-15",
-      excerpt: "Discover the newest innovations in industrial coatings that are transforming manufacturing and construction industries."
-    },
-    {
-      id: 2,
-      title: "Choosing the Right Paint for Your Home Interior",
-      image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      publishDate: "2024-01-10",
-      excerpt: "A comprehensive guide to selecting the perfect interior paint colors and finishes for every room in your home."
-    },
-    {
-      id: 3,
-      title: "Sustainable Paint Solutions for Environmental Responsibility",
-      image: "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
-      publishDate: "2024-01-05",
-      excerpt: "Learn about eco-friendly paint options that reduce environmental impact without compromising on quality and durability."
-    }
-  ];
+  // Get the latest 3 blog posts
+  const latestPosts = getLatestPosts(3);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -63,42 +43,77 @@ const BlogSection = () => {
 
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-          {blogPosts.map((post, index) => (
+          {latestPosts.map((post, index) => (
             <motion.article
               key={post.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
+              className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 group cursor-pointer"
             >
-              {/* Post Image */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-
-              {/* Post Content */}
-              <div className="p-6">
-                {/* Publish Date */}
-                <div className="flex items-center text-sm text-gray-500 mb-3">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  <span>{formatDate(post.publishDate)}</span>
+              <Link to={`/blog/${post.slug}`}>
+                {/* Post Image */}
+                <div className="relative overflow-hidden">
+                  <img
+                    src={post.coverImage}
+                    alt={post.title}
+                    className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  
+                  {/* Category Badge */}
+                  <div className="absolute top-4 left-4">
+                    <span className="px-3 py-1 bg-[#2C5DB6] text-white text-xs font-medium rounded-full">
+                      {post.category}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Post Title */}
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
-                  {post.title}
-                </h3>
+                {/* Post Content */}
+                <div className="p-6">
+                  {/* Post Meta */}
+                  <div className="flex items-center text-sm text-gray-500 mb-3 space-x-4">
+                    <div className="flex items-center">
+                      <Calendar className="w-4 h-4 mr-1" />
+                      <span>{formatDate(post.publishDate)}</span>
+                    </div>
+                    <div className="flex items-center">
+                      <Clock className="w-4 h-4 mr-1" />
+                      <span>{post.readTime}</span>
+                    </div>
+                  </div>
 
-                {/* Post Excerpt */}
-                <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                  {post.excerpt}
-                </p>
-              </div>
+                  {/* Post Title */}
+                  <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
+                    {post.title}
+                  </h3>
+
+                  {/* Post Excerpt */}
+                  <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
+                    {post.excerpt}
+                  </p>
+
+                  {/* Author Info */}
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <img
+                        src={post.author.avatar}
+                        alt={post.author.name}
+                        className="w-8 h-8 rounded-full object-cover mr-3"
+                      />
+                      <span className="text-sm font-medium text-gray-700">
+                        {post.author.name}
+                      </span>
+                    </div>
+                    
+                    {/* Read More Arrow */}
+                    <div className="flex items-center text-[#2C5DB6] text-sm font-semibold group-hover:translate-x-1 transition-transform">
+                      <span>Read More</span>
+                      <ArrowRight className="w-4 h-4 ml-1" />
+                    </div>
+                  </div>
+                </div>
+              </Link>
             </motion.article>
           ))}
         </div>

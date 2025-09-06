@@ -16,6 +16,7 @@ import BlogSection from './components/BlogSection';
 import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
 import About from './ComponentAbout/About.tsx'; // تم إصلاح هذا السطر
+import Blog from './components/Blog';
 
 const HomePage = () => ( 
   <>
@@ -44,6 +45,8 @@ function App() {
         <Route path="/faq/:category" element={<FAQ />} />
         <Route path="/troubleshooting" element={<Troubleshooting />} />
         <Route path="/troubleshooting/:category" element={<Troubleshooting />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:slug" element={<Blog />} />
       </Routes>
       <Footer />
     </div>

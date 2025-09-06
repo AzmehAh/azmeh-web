@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Award } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AboutSection = () => {
+  const [count, setCount] = useState(0);
   const currentYear = new Date().getFullYear();
-  const yearsOfExperience = currentYear - 1955;
+  const targetYears = currentYear - 1955;
+
+  // Animated counter effect
+  useEffect(() => {
+    const duration = 2000; // 2 seconds
+    const steps = 60; // Number of animation steps
+    const increment = targetYears / steps;
+    const stepDuration = duration / steps;
+
+    let currentStep = 0;
+    const timer = setInterval(() => {
+      currentStep++;
+      if (currentStep <= steps) {
+        setCount(Math.floor(increment * currentStep));
+      } else {
+        setCount(targetYears);
+        clearInterval(timer);
+      }
+    }, stepDuration);
+
+    return () => clearInterval(timer);
+  }, [targetYears]);
 
   return (
     <section className="py-20 bg-white">
@@ -36,35 +58,51 @@ const AboutSection = () => {
             </Link>
           </motion.div>
 
-          {/* Right Content - Experience Counter */}
+          {/* Right Content - Experience Counter with Logo */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="flex justify-center lg:justify-end"
           >
-            <div className="relative">
-              {/* Background decoration */}
-              <div className="absolute -inset-8 bg-gradient-to-br from-[#2C5DB6]/10 to-blue-200/20 rounded-3xl blur-2xl"></div>
+            <div className="flex items-center gap-8">
+              {/* Company Logo */}
+              <div className="relative">
+                <img 
+                  src="/images/Azmeh-Paints-Logo.png" 
+                  alt="Al Azmeh Paints" 
+                  className="w-32 h-32 object-contain"
+                />
+              </div>
               
-              {/* Main counter card */}
-              <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-700 rounded-2xl p-12 text-white shadow-2xl">
-                <div className="text-center">
-                  <div className="flex items-center justify-center mb-4">
-                    <Award className="w-12 h-12 text-yellow-300" />
-                  </div>
-                  <div className="text-6xl font-bold mb-2">{yearsOfExperience}</div>
-                  <div className="text-xl font-semibold text-blue-100 uppercase tracking-wide">
-                    Years of Experience
-                  </div>
-                  <div className="mt-4 text-blue-200 text-sm">
-                    Since 1955
-                  </div>
-                </div>
+              {/* Experience Counter */}
+              <div className="relative">
+                {/* Background decoration */}
+                <div className="absolute -inset-4 bg-gradient-to-br from-[#2C5DB6]/10 to-blue-200/20 rounded-2xl blur-xl"></div>
                 
-                {/* Decorative elements */}
-                <div className="absolute top-4 right-4 w-20 h-20 bg-white/5 rounded-full"></div>
-                <div className="absolute bottom-4 left-4 w-16 h-16 bg-white/5 rounded-full"></div>
+                {/* Main counter card */}
+                <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-700 rounded-2xl p-8 text-white shadow-2xl">
+                  <div className="text-center">
+                    <motion.div 
+                      className="text-4xl font-bold mb-2"
+                      initial={{ scale: 0.5 }}
+                      whileInView={{ scale: 1 }}
+                      transition={{ duration: 0.5, delay: 0.5 }}
+                    >
+                      {count}
+                    </motion.div>
+                    <div className="text-sm font-semibold text-blue-100 uppercase tracking-wide">
+                      Years of Experience
+                    </div>
+                    <div className="mt-2 text-blue-200 text-xs">
+                      Since 1955
+                    </div>
+                  </div>
+                  
+                  {/* Decorative elements */}
+                  <div className="absolute top-2 right-2 w-8 h-8 bg-white/5 rounded-full"></div>
+                  <div className="absolute bottom-2 left-2 w-6 h-6 bg-white/5 rounded-full"></div>
+                </div>
               </div>
             </div>
           </motion.div>
