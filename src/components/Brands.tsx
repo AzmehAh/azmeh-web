@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
-
 import { useTranslation } from "react-i18next";
 
-
+const BrandsSection = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.dir() === "rtl";
 
   const animationRef = useRef<number>();
   const x = useMotionValue(0);
@@ -119,14 +120,15 @@ import { useTranslation } from "react-i18next";
   return (
     <section className="bg-gray-50 pt-24 pb-24">
       <div className="pt-10 max-w-screen-2xl mx-auto">
-    
-<h2 className="text-4xl font-bold text-center mb-6">
-  Trusted by Leading Brands
-</h2>
-<p className="text-center text-gray-600 mb-12">
- 
-</p>
+        {/* عنوان السكشن */}
+        <h2 className="text-4xl font-bold text-center mb-6">
+          Trusted by Leading Brands
+        </h2>
+        <p className="text-center text-gray-600 mb-12">
+          {t("brands.brands.description")}
+        </p>
 
+        {/* السكشن المتحرك */}
         <div
           className="relative overflow-x-clip overflow-y-visible mt-12 w-full"
           onMouseEnter={handleMouseEnter}
