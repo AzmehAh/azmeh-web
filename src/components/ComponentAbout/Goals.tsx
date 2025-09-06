@@ -70,7 +70,7 @@ const Goals = () => {
       </div>
     </motion.div>
   ))}
-</div>
+
 
      
       </section>
