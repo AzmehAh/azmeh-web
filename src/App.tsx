@@ -13,16 +13,13 @@ import Troubleshooting from './components/Troubleshooting';
 import Brands from './components/Brands';
 import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
-import About from './ComponentAbout/About.tsx';
- 
+import About from './ComponentAbout/About'; // تم إصلاح هذا السطر
+
 const HomePage = () => ( 
   <>
     <Hero />
-   
     <Services />
-     
     <ColorInspiration />
-   
     <Brands />
     <SocialMedia />
   </>
