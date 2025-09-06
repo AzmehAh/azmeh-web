@@ -20,7 +20,7 @@ const Founder = () => {
                 <Users className="w-32 h-32 text-gray-500" />
               </div>
               <div className="mt-6 text-center">
-                <h3 className="text-2xl font-bold text-gray-600 mb-2">Ahmed Al Azmeh</h3>
+                <h3 className="text-2xl font-bold text-gray-50 mb-2">Ahmed Al Azmeh</h3>
                 <p className="text-blue-200">Founder & Visionary</p>
                 <div className="mt-4 space-y-1 text-sm text-blue-200">
                   <p>Born: 1918, Damascus</p>
@@ -29,7 +29,7 @@ const Founder = () => {
                   <p>Legacy Continues: 1918 - 1998</p>
                 </div>
               </div>
-            </div>
+            </div> 
           </motion.div>
 
           {/* Founder Description */}
@@ -41,7 +41,7 @@ const Founder = () => {
             <h2 className="text-4xl md:text-5xl font-bold mb-8">
               Visionary Leadership
             </h2>
-            <div className="space-y-6 text-lg text-gray-50 leading-relaxed">
+            <div className="space-y-6 text-lg text-gray-300 leading-relaxed">
               <p>
                 Ahmed Al Azmeh was born in 1918 in Damascus, Syria. He started his entrepreneurial 
                 journey in 1938 and founded Al Azmeh Paints Company in 1955 with a clear vision: 
