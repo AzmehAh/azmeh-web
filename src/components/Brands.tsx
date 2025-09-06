@@ -1,4 +1,5 @@
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect } from "react";
+import { motion, useMotionValue } from "framer-motion";
 
 const Brands = () => {
   const brands = [
@@ -14,27 +15,33 @@ const Brands = () => {
     { name: "AlDahab", logo: "/images/AlDahab.png" },
   ];
 
-  const containerRef = useRef(null);
-  const [repeatedBrands, setRepeatedBrands] = useState(brands);
+  // تكرار العناصر لتغطية الحركة المستمرة
+  const repeatedBrands = [...brands, ...brands, ...brands, ...brands];
 
-  // حساب عدد التكرارات بناءً على عرض الشاشة
+  const x = useMotionValue(0);
+  const requestRef = useRef<number>(0);
+
+  const speed = 0.3; // سرعة الحركة (قيمة أقل = أبطأ)
+
+  // حلقة الحركة
+  const animate = (time: number) => {
+    let currentX = x.get();
+    currentX -= speed;
+
+    // إعادة ضبط loop
+    const totalWidth = repeatedBrands.length * (32 + 24); // w-32 + mx-6
+    if (Math.abs(currentX) >= totalWidth / 2) {
+      currentX += totalWidth / 2;
+    }
+
+    x.set(currentX);
+    requestRef.current = requestAnimationFrame(animate);
+  };
+
   useEffect(() => {
-    const updateRepeat = () => {
-      if (!containerRef.current) return;
-      const containerWidth = containerRef.current.offsetWidth;
-      const brandWidth = 32 + 24; // w-32 + mx-6
-      const minRepeat = Math.ceil(containerWidth / brandWidth);
-      // نكرر العناصر لضمان تغطية كاملة + إضافية للتمرير
-      const repeated = Array(Math.max(minRepeat, 3))
-        .fill(brands)
-        .flat();
-      setRepeatedBrands(repeated);
-    };
-
-    updateRepeat();
-    window.addEventListener("resize", updateRepeat);
-    return () => window.removeEventListener("resize", updateRepeat);
-  }, [brands]);
+    requestRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(requestRef.current);
+  }, []);
 
   return (
     <section className="py-20 bg-gray-50">
@@ -44,12 +51,17 @@ const Brands = () => {
         </h2>
       </div>
 
-      <div ref={containerRef} className="relative w-full overflow-hidden">
-        <div className="flex animate-scroll">
+      <div className="relative w-full overflow-hidden">
+        <motion.div
+          className="flex"
+          style={{
+            x,
+          }}
+        >
           {repeatedBrands.map((brand, index) => (
             <div
               key={index}
-              className="flex-shrink-0 w-32 h-20 flex items-center justify-center mx-6 cursor-pointer transition-transform duration-300 hover:scale-110"
+              className="flex-shrink-0 w-32 h-20 flex items-center justify-center mx-6"
             >
               <img
                 src={brand.logo}
@@ -58,21 +70,8 @@ const Brands = () => {
               />
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
-
-      <style>
-        {`
-          @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-          }
-          .animate-scroll {
-            display: flex;
-            animation: scroll 25s linear infinite;
-          }
-        `}
-      </style>
     </section>
   );
 };
