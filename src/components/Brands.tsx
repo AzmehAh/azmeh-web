@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
-import SectionHeading from "../ui/SectionHeading";
+
 import { useTranslation } from "react-i18next";
 
 const BrandsSection = () => {
@@ -121,12 +121,13 @@ const BrandsSection = () => {
   return (
     <section className="bg-gray-50 pt-24 pb-24">
       <div className="pt-10 max-w-screen-2xl mx-auto">
-        <SectionHeading
-          subtitle={t("brands.brands.subtitle")}
-          title={t("brands.brands.title")}
-          description={t("brands.brands.description")}
-          centered
-        />
+    
+<h2 className="text-4xl font-bold text-center mb-6">
+  Trusted by Leading Brands
+</h2>
+<p className="text-center text-gray-600 mb-12">
+  {t("brands.brands.description")}
+</p>
 
         <div
           className="relative overflow-x-clip overflow-y-visible mt-12 w-full"
