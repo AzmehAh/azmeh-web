@@ -76,10 +76,6 @@ const AboutSection = () => {
                 {/* Logo on top */}
                 <div className="w-16 h-16 sm:w-20 sm:h-20 mb-4">
                   <img 
-                    src="/images/Azmeh-Paints-Logo.png" 
-                    alt="Al Azmeh Paints" 
-                    className="w-full h-full object-contain"
-                  /> <img 
       src="/images/Azmeh-Paints-Logo.png" 
       alt="AL AZMEH PAINTS" 
       className={`h-10 w-auto transition-all duration-300 ${
