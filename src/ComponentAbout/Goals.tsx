@@ -52,7 +52,7 @@ const Goals = () => {
 
                 <div className="p-8 flex flex-col gap-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 bg-[#E6F0FA]">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-300 ">
                       <Icon className="w-8 h-8 text-[#0055A3]" />
                     </div>
                     <h3 className="text-2xl font-bold text-gray-900">{goal.title}</h3>
