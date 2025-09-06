@@ -1,25 +1,10 @@
-import React, { useState, useEffect,useRef  } from 'react';
-import { motion, useInView,useNavigate,motion  } from 'framer-motion';
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { 
   Eye, Target, Heart, ArrowRight,
-  MapPin, 
-  Calendar, 
-  Target, 
-  Heart, 
-  Users, 
-  Award, 
-  Palette, 
-  Shield,  
-  Lightbulb, 
-  Globe,
-  CheckCircle,
-  ArrowRight,
-  TrendingUp,
-  Factory,
-  Eye,
-  Handshake,
-  Star,
-  Building
+  MapPin, Calendar, Users, Award, Palette, Shield, Lightbulb, Globe,
+  CheckCircle, TrendingUp, Factory, Handshake, Star, Building
 } from 'lucide-react';
 
 const About = () => {
