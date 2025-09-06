@@ -61,7 +61,7 @@ const BrandsSection = () => {
         } else if (newX > 0) {
           newX -= totalWidthOriginal;
         }
-      } else {
+      } else { 
         if (newX >= totalWidthOriginal) {
           newX -= totalWidthOriginal;
         } else if (newX < 0) {
