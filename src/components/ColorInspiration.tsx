@@ -41,7 +41,7 @@ const ColorInspiration = () => {
   </h3>
 
   {/* العنوان الكبير */}
-  <h2 className="text-5xl md:text-6xl font-semibold text-gray-900 mb-8">
+  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
     New Drops
   </h2>
 </div>
