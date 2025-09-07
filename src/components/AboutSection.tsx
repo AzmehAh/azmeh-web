@@ -82,7 +82,7 @@ const AboutSection = () => {
                   <img 
                     src="/images/Azmeh-Paints-Logo.png" 
                     alt="Al Azmeh Paints" 
-                    className="w-full h-full brightness-0 invert object-contain"
+                    className="w-full h-full  object-contain"
                   />
                 </div>
                 
