@@ -168,3 +168,12 @@
   position: relative;
   z-index: 10;
 }
+/* Chrome, Safari */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: none; 
+}
