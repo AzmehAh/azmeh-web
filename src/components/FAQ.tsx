@@ -222,7 +222,7 @@ const FAQ = () => {
         <div className="mt-16 text-center">
           <div className="bg-[#0055A3] rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
-            <p className="text-[#0055A3]  mb-6 max-w-2xl mx-auto">
+            <p className="text-white  mb-6 max-w-2xl mx-auto">
               Our technical experts are ready to help you with any specific questions about our products and applications.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
