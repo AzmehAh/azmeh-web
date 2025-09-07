@@ -106,16 +106,23 @@ const BrandsSection = () => {
         </p>
 
         {/* السكشن المتحرك */}
-      <div
-  className="relative overflow-hidden mt-12 w-full px-16" // ← هون ضفت px-16
+      {/* السكشن المتحرك */}
+<div
+  className="relative overflow-hidden mt-12 w-full"
   onMouseEnter={handleMouseEnter}
   onMouseLeave={handleMouseLeave}
   dir={isRTL ? "rtl" : "ltr"}
+  style={{
+    WebkitMaskImage:
+      "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+    WebkitMaskRepeat: "no-repeat",
+    WebkitMaskSize: "100% 100%",
+    maskImage:
+      "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+    maskRepeat: "no-repeat",
+    maskSize: "100% 100%",
+  }}
 >
-  {/* التدرجات على الطرفين (على حدود الفتحة مو الشاشة) */}
-  <div className="absolute top-0 left-16 h-full w-24 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
-  <div className="absolute top-0 right-16 h-full w-24 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
-
   <motion.div
     drag="x"
     dragConstraints={dragConstraints}
