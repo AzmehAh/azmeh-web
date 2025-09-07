@@ -99,7 +99,7 @@ const BrandsSection = () => {
       <div className="pt-10 max-w-screen-2xl mx-auto relative">
         {/* عنوان السكشن */}
         <h2 className="text-4xl font-bold text-center mb-6">
-          Trusted by Leading Brands
+           Brands
         </h2>
         <p className="text-center text-gray-600 mb-12">
           Here are some of our trusted partners.
