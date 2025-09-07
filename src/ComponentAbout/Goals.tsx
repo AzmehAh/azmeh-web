@@ -47,7 +47,7 @@ const Goals = () => {
               >
                 {/* الخط العلوي الأزرق */}
                 <div className="relative h-2 overflow-hidden">
-                  <div className="absolute left-0 bottom-0 w-0 h-full bg-[#0055A3] transition-all duration-400 group-hover:w-full"></div>
+                  <div className="absolute left-0 bottom-0 w-0 h-full bg-[#0055A3] transition-all duration-200 group-hover:w-full"></div>
                 </div>
 
                 <div className="p-8 flex flex-col gap-4">
