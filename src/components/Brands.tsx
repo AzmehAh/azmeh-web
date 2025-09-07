@@ -105,7 +105,7 @@ const BrandsSection = () => {
 
   {/* العنوان الكبير */}
   <h2 className="text-4xl font-bold text-gray-900 mb-6">
-    Brands
+   Our Featured Brands
   </h2>
 </div>
 
