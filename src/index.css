@@ -28,6 +28,12 @@
 .menu-item:hover::before {
   transform: translateY(-50%) scaleX(1);
 }
+.menu-item {
+  position: relative;
+  padding-left: 0.5rem;
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* تضمن أن البادينج لا يزيد من حجم العنصر */
+} 
 @layer utilities {
   @keyframes dropdown {
     0% {
