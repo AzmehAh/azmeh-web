@@ -95,8 +95,8 @@ const BrandsSection = () => {
     : { left: -totalWidth + windowWidth, right: 0 };
 
   return (
-    <section className="bg-gray-50 pt-24 pb-24">
-      <div className="pt-10 max-w-screen-2xl mx-auto">
+    <section className="bg-gray-50 pt-24 pb-24 relative">
+      <div className="pt-10 max-w-screen-2xl mx-auto relative">
         {/* عنوان السكشن */}
         <h2 className="text-4xl font-bold text-center mb-6">
           Trusted by Leading Brands
@@ -107,11 +107,15 @@ const BrandsSection = () => {
 
         {/* السكشن المتحرك */}
         <div
-          className="relative overflow-x-clip overflow-y-visible mt-12 w-full"
+          className="relative overflow-hidden mt-12 w-full"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
           dir={isRTL ? "rtl" : "ltr"}
         >
+          {/* التدرجات على الطرفين */}
+          <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
+          <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
+
           <motion.div
             drag="x"
             dragConstraints={dragConstraints}
@@ -130,7 +134,7 @@ const BrandsSection = () => {
             {duplicated.map((brand, index) => (
               <div
                 key={index}
-                className="flex-shrink-0 w-32 h-20 flex items-center justify-center   "
+                className="flex-shrink-0 w-32 h-20 flex items-center justify-center"
               >
                 <img
                   src={brand.logo}
