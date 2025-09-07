@@ -3,7 +3,10 @@
 @tailwind utilities;
 .menu-item {
   position: relative;
-  padding-left: 0.5rem; /* مساحة صغيرة جاهزة */
+  display: inline-flex;        /* يخلي النص ثابت عمودياً */
+  align-items: center;         /* النص بالنص */
+  height: 48px;                /* ارتفاع ثابت لكل العناصر */
+  padding: 0 1rem;
   transition: all 0.3s ease;
 }
 
@@ -11,22 +14,23 @@
   content: '';
   position: absolute;
   left: 0;
-  top: 50%;
+  top: 50%;                    /* دائماً بالنص */
   transform: translateY(-50%) scaleX(0);
-  width: 15px; /* طول الخط */
-  height: 2px; /* سمك الخط */
+  width: 15px;
+  height: 2px;
   background-color: #2C5DB6;
   transform-origin: left;
   transition: transform 0.3s ease;
-}  
+}
 
 .menu-item:hover {
-  padding-left: 1.5rem; /* يزيح النص عند الهوفر */
+  padding-left: 2rem;          /* يحرك النص عند الهوفر */
 }
 
 .menu-item:hover::before {
   transform: translateY(-50%) scaleX(1);
 }
+
 @layer utilities {
   @keyframes dropdown {
     0% {
