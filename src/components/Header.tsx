@@ -188,7 +188,7 @@ const Header = () => {
             {/* Contact Dropdown */}
             <div className="relative" onMouseEnter={() => handleMouseEnter('contact')} onMouseLeave={handleMouseLeave}>
               <button className={`flex items-center text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-                Contact & Distributors <ChevronDown className="ml-1 h-4 w-4" />
+                Contact & Job Application <ChevronDown className="ml-1 h-4 w-4" />
               </button>
               <AnimatePresence>
                 {activeDropdown === 'contact' && (
@@ -204,8 +204,8 @@ const Header = () => {
                       <Link to="/contact" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
                         Contact Us
                       </Link>
-                      <Link to="/distributors" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
-                        Find Distributors
+                      <Link to="/job-application" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
+                        Apply for Job
                       </Link>
                     </div>
                   </motion.div>

@@ -15,6 +15,8 @@ import AboutSection from './components/AboutSection';
 import BlogSection from './components/BlogSection';
 import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
+import Contact from './components/Contact';
+import JobApplication from './components/JobApplication';
 import About from './ComponentAbout/About.tsx'; // تم إصلاح هذا السطر
 
 const HomePage = () => ( 
@@ -36,6 +38,8 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/job-application" element={<JobApplication />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/systems" element={<Systems />} />
