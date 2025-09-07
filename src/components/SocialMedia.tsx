@@ -35,14 +35,14 @@ const SocialMedia = () => {
   >
       Inspiration & Ideas
      </motion.h3>
-          <motion.h2>
+          <motion.h2
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6, delay: 0.1 }}
     className="text-4xl font-bold text-gray-900 mb-4"
   >
             Follow us for inspiration
-           </motion.h2>
+            </motion.h2>
           <p className="text-lg text-white/90 max-w-2xl mx-auto leading-relaxed">
             Stay updated with our latest projects, color trends, and design inspiration. Join our community of paint enthusiasts and professionals.
           </p>
