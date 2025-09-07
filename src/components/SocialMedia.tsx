@@ -27,15 +27,15 @@ const SocialMedia = () => {
         
         {/* العنوان والنص */}
         <div className="text-center mb-16">
-  {/* المجموعة الأولى */}
-  <div className="mb-8">
-    <h3 className="text-sm uppercase text-[#ffffff] mb-2 tracking-widest">
+          <h3 className="text-sm uppercase text-[#0055A3] mb-2 tracking-widest">
       Creative Vibes
     </h3>
-    <h2 className="text-4xl md:text-5xl font-extrabold text-white" style={{ textShadow: '2px 2px 6px rgba(0,0,0,0.3)' }}>
-      Explore Our Designs
-    </h2>
-  </div>
+          <h2 className="text-4xl font-extrabold text-white mb-4" style={{ textShadow: '2px 2px 6px rgba(0,0,0,0.3)' }}>
+            Follow us for inspiration
+          </h2>
+          
+          <div className="mt-6 w-24 h-1 bg-white/50 mx-auto rounded"></div>
+        </div>
 
         {/* Social Media Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-16">
