@@ -81,7 +81,7 @@ const FAQ = () => {
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Category Not Found</h1>
           <p className="text-gray-600 mb-8">The FAQ category you're looking for doesn't exist.</p>
-          <Link to="/faq" className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+          <Link to="/faq" className="bg-[#0055A3] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
             Back to FAQ Categories
           </Link>
         </div>
