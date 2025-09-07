@@ -18,7 +18,7 @@
   background-color: #2C5DB6;
   transform-origin: left; 
   transition: transform 0.3s ease;
-}
+ 
 
 .menu-item:hover {
   padding-left: 1.5rem; /* يزيح النص عند الهوفر */
