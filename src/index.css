@@ -5,16 +5,16 @@
   position: relative;
   display: flex;
   align-items: center;
-  height: 40px;
-  padding-left: 1rem; /* قللناها بدل 1.5rem */
+  height: 40px;           /* ارتفاع موحد */
+  padding-left: 1rem;
   transition: all 0.3s ease;
 }
 
 .menu-item::before {
   content: '';
   position: absolute;
-  left: 0.25rem; /* بدل 0 حتى يقرب شوي من النص */
-  top: 50%;
+  left: 0.25rem;
+  top: 50%;               /* يبقى بالنص */
   transform: translateY(-50%);
   width: 0;
   height: 2px;
@@ -23,7 +23,7 @@
 }
 
 .menu-item:hover {
-  padding-left: 1.5rem; /* قللنا الفرق */
+  padding-left: 1.5rem;
 }
 
 .menu-item:hover::before {
