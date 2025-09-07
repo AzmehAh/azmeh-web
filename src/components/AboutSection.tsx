@@ -95,16 +95,12 @@ const AboutSection = () => {
                 >
                   {count}
                 </motion.div>
-                <div className="text-xs sm:text-sm font-semibold text-blue-100 uppercase tracking-wide">
+                <div className="text-xs sm:text-sm font-semibold text-[#0055A3]uppercase tracking-wide">
                   Years of Experience
                 </div>
-                <div className="mt-1 sm:mt-2 text-blue-200 text-xs">
+                <div className="mt-1 sm:mt-2 text-[#0055A3] text-xs">
                   Since 1955
                 </div>
-
-                {/* Decorative elements */}
-                <div className="absolute top-2 right-2 w-6 h-6 bg-white/5 rounded-full"></div>
-                <div className="absolute bottom-2 left-2 w-4 h-4 bg-white/5 rounded-full"></div>
 
               </div>
             </div>
