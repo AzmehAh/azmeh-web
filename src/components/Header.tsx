@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
-
+import SystemDetailsModal from './SystemDetailsModal';
+import { systemsData, SystemData } from '../data/systemsData';
+ 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMobileDropdown, setActiveMobileDropdown] = useState<string | null>(null);
+  const [selectedSystem, setSelectedSystem] = useState<SystemData | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const location = useLocation();
   let timeoutId: NodeJS.Timeout;
@@ -19,6 +23,15 @@ const Header = () => {
 
   const handleMouseLeave = () => {
     timeoutId = setTimeout(() => setActiveDropdown(null), 300);
+  };
+
+  const handleSystemClick = (systemId: string) => {
+    const system = systemsData[systemId];
+    if (system) {
+      setSelectedSystem(system);
+      setIsModalOpen(true);
+      setActiveDropdown(null);
+    }
   };
 
   useEffect(() => {
@@ -37,6 +50,32 @@ const Header = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location]);
+
+  const paintSystems = [
+    { id: 'concrete-exterior', name: 'Concrete Exterior' },
+    { id: 'concrete-lining', name: 'Concrete Lining' },
+    { id: 'concrete-repair', name: 'Concrete Repair & Protection' },
+    { id: 'concrete-sealer', name: 'Concrete Sealer' },
+    { id: 'ferrous-steel', name: 'Ferrous & Steel Substrate Treatment' },
+    { id: 'fire-retardant', name: 'Fire Retardant Paints' },
+    { id: 'wall-ceiling', name: 'Home & Industrial Wall/Ceiling Paints' },
+    { id: 'steel-coatings', name: 'Steel Coatings' },
+    { id: 'steel-linings', name: 'Steel Linings' },
+    { id: 'floorings', name: 'Floorings' },
+    { id: 'adhesives', name: 'Adhesives and Grouts' },
+    { id: 'joint-sealants', name: 'Joint Sealants' }
+  ];
+
+  const technicalSolutions = [
+    { id: 'car-coating', name: 'Car Coating Systems' },
+    { id: 'concrete-walls', name: 'Concrete Walls Coating' },
+    { id: 'facade-protection', name: 'Façade Protection' },
+    { id: 'industrial-flooring', name: 'Industrial Flooring' },
+    { id: 'joint-sealant', name: 'Joint Sealant' },
+    { id: 'steel-surface', name: 'Steel Surface Coatings' },
+    { id: 'roof-coatings', name: 'Roof Coatings' },
+    { id: 'wooden-surface', name: 'Wooden Surface Coatings' }
+  ];
 
   const curtainVariants = {
     hidden: { scaleY: 0, opacity: 0 },
@@ -58,10 +97,9 @@ const Header = () => {
             <Link to="/about" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               About Us
             </Link>
-            <Link to="/products" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+<Link to="/products" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Products
             </Link>
-
             {/* Technical Support Dropdown */}
             <div 
               className="relative" 
@@ -118,23 +156,33 @@ const Header = () => {
             </div>
           </nav>
 
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center transition-opacity">
-              <img 
-                src="/images/Azmeh-Paints-Logo.png" 
-                alt="AL AZMEH PAINTS" 
-                className={`h-10 w-auto transition-all duration-300 ${
-                  isScrolled ? "filter-none" : "brightness-0 invert"
-                }`}
-              />
-            </Link>
-          </div>
+         {/* Logo */}
+<div className="flex-shrink-0">
+  <Link to="/" className="flex items-center transition-opacity">
+    <img 
+      src="/images/Azmeh-Paints-Logo.png" 
+      alt="AL AZMEH PAINTS" 
+      className={`h-10 w-auto transition-all duration-300 ${
+        isScrolled ? "filter-none" : "brightness-0 invert"
+      }`}
+    />
+  </Link>
+</div>
+
+
 
           {/* Right Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
+            
+
+            
+
+            <Link to="/systems" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+ Blog
+            </Link>
+
             <Link to="/blog" className={`text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Blog
+              Contact
             </Link>
 
             {/* Contact Dropdown */}
@@ -177,6 +225,13 @@ const Header = () => {
           </div>
         </div>
       </div>
+
+      {/* System Details Modal */}
+      <SystemDetailsModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        systemData={selectedSystem}
+      />
 
       {/* Mobile menu */}
       <AnimatePresence>
@@ -257,6 +312,12 @@ const Header = () => {
                 </AnimatePresence>
               </div>
 
+              <Link to="/systems" 
+                 onClick={() => setIsMobileMenuOpen(false)}
+                className="block text-gray-900 hover:text-[#2C5DB6] hover:text-[#2C5DB6]  font-medium py-2"
+              >
+              Systems
+            </Link>
               <Link 
                 to="/products" 
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -309,7 +370,7 @@ const Header = () => {
                 </AnimatePresence>
               </div> 
             </div>
-          </motion.div>
+          </motion.div 
         )}
       </AnimatePresence>
     </header> 
