@@ -4,24 +4,20 @@
 .menu-item {
   position: relative;
   padding-left: 0.5rem;
-  transition: padding-left 0.3s ease;
-  display: inline-block; /* يحافظ على الشكل الأصلي */
-  line-height: 2; /* 🔥 يحدد ارتفاع ثابت للجميع */
-  min-height: 40px; /* 🔥 ارتفاع أدنى ثابت */
-  vertical-align: middle; /* محاذاة عمودية */
-} 
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center; /* يخلي الخط والنص بنفس المستوى */
+  height: 40px; /* حدد ارتفاع ثابت */
+}
 
 .menu-item::before {
   content: '';
-  position: absolute;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
   width: 0;
   height: 2px;
   background-color: #2C5DB6;
   transition: width 0.3s ease;
-} 
+  margin-right: 5px; /* مسافة صغيرة عن النص */
+}
 
 .menu-item:hover {
   padding-left: 1.5rem;
@@ -30,6 +26,7 @@
 .menu-item:hover::before {
   width: 15px;
 }
+
 @layer utilities {
   @keyframes dropdown {
     0% {
