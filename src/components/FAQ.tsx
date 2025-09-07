@@ -36,14 +36,18 @@ const FAQ = () => {
                 className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
               >
                 <div className="p-8">
-                  <div className="flex items-start mb-4">
-                    <div className="w-12 h-12 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">  
-                      <HelpCircle className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors">
-                      {cat.title}
-                    </h3>
-                  </div>
+                <div className="flex mb-4">
+  {/* أيقونة ثابتة */}
+  <div className="w-12 h-12 flex-shrink-0 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">
+    <HelpCircle className="w-6 h-6 text-white" />
+  </div>
+
+  {/* نص العنوان */}
+  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors leading-snug">
+    {cat.title}
+  </h3>
+</div>
+
                   <p className="text-gray-600 leading-relaxed mb-6">
                     {cat.description}
                   </p>
