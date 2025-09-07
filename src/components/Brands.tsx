@@ -106,22 +106,11 @@ const BrandsSection = () => {
         </p>
 
         {/* السكشن المتحرك */}
-      {/* السكشن المتحرك */}
-<div
-  className="relative overflow-hidden mt-12 w-full"
+      <div
+  className="relative overflow-x-clip mt-12 w-full"
   onMouseEnter={handleMouseEnter}
   onMouseLeave={handleMouseLeave}
   dir={isRTL ? "rtl" : "ltr"}
-  style={{
-    WebkitMaskImage:
-      "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-    WebkitMaskRepeat: "no-repeat",
-    WebkitMaskSize: "100% 100%",
-    maskImage:
-      "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
-    maskRepeat: "no-repeat",
-    maskSize: "100% 100%",
-  }}
 >
   <motion.div
     drag="x"
