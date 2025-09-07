@@ -106,45 +106,46 @@ const BrandsSection = () => {
         </p>
 
         {/* السكشن المتحرك */}
-        <div
-          className="relative overflow-hidden mt-12 w-full"
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-          dir={isRTL ? "rtl" : "ltr"}
-        >
-          {/* التدرجات على الطرفين */}
-          <div className="absolute top-0 left-0 h-full w-24 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
-          <div className="absolute top-0 right-0 h-full w-24 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
+      <div
+  className="relative overflow-hidden mt-12 w-full px-16" // ← هون ضفت px-16
+  onMouseEnter={handleMouseEnter}
+  onMouseLeave={handleMouseLeave}
+  dir={isRTL ? "rtl" : "ltr"}
+>
+  {/* التدرجات على الطرفين (على حدود الفتحة مو الشاشة) */}
+  <div className="absolute top-0 left-16 h-full w-24 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
+  <div className="absolute top-0 right-16 h-full w-24 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
 
-          <motion.div
-            drag="x"
-            dragConstraints={dragConstraints}
-            dragElastic={0.2}
-            onDragStart={handleDragStart}
-            onDragEnd={handleDragEnd}
-            className={`flex ${isRTL ? "flex-row-reverse" : ""}`}
-            style={{
-              width: `${totalWidth}px`,
-              x,
-              gap: `${gap}px`,
-              cursor: "grab",
-            }}
-            whileTap={{ cursor: "grabbing" }}
-          >
-            {duplicated.map((brand, index) => (
-              <div
-                key={index}
-                className="flex-shrink-0 w-32 h-20 flex items-center justify-center"
-              >
-                <img
-                  src={brand.logo}
-                  alt={brand.name}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-            ))}
-          </motion.div>
-        </div>
+  <motion.div
+    drag="x"
+    dragConstraints={dragConstraints}
+    dragElastic={0.2}
+    onDragStart={handleDragStart}
+    onDragEnd={handleDragEnd}
+    className={`flex ${isRTL ? "flex-row-reverse" : ""}`}
+    style={{
+      width: `${totalWidth}px`,
+      x,
+      gap: `${gap}px`,
+      cursor: "grab",
+    }}
+    whileTap={{ cursor: "grabbing" }}
+  >
+    {duplicated.map((brand, index) => (
+      <div
+        key={index}
+        className="flex-shrink-0 w-32 h-20 flex items-center justify-center"
+      >
+        <img
+          src={brand.logo}
+          alt={brand.name}
+          className="w-full h-full object-contain"
+        />
+      </div>
+    ))}
+  </motion.div>
+</div>
+
       </div>
     </section>
   );
