@@ -101,9 +101,7 @@ const BrandsSection = () => {
         <h2 className="text-4xl font-bold text-center mb-6">
            Brands
         </h2>
-        <p className="text-center text-gray-600 mb-12">
-          Here are some of our trusted partners.
-        </p>
+       
 
         {/* السكشن المتحرك */}
       <div
