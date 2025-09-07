@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from "framer-motion";
 
 const ColorInspiration = () => {
   const [hoveredColor, setHoveredColor] = useState<number | null>(null);
@@ -36,14 +37,24 @@ const ColorInspiration = () => {
         {/* Title */}
       <div className="text-center mb-10">
   {/* العنوان الصغير */}
-  <h3 className="text-sm uppercase text-[#0055A3] mb-2">
+   <motion.h3
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+    className="text-sm uppercase text-[#0055A3] mb-2"
+  >
     Fresh & Exclusive
-  </h3>
+   </motion.h3>
 
   {/* العنوان الكبير */}
-  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
+  <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8"><motion.h2
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay: 0.1 }}
+    className="text-4xl font-bold text-gray-900 mb-4"
+  >
     New Drops
-  </h2>
+    </motion.h2>
 </div>
 
 
