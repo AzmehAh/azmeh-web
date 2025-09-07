@@ -63,12 +63,12 @@ const SocialMedia = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
    <a
   href="#"
-  className="flex items-center bg-[#0055a3] text-white rounded-full px-4 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-55 group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
->   
+  className="flex items-center bg-[#0055a3] text-white rounded-full px-4 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-60 group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+>
   <div className="flex items-center  justify-start w-full">
     <Instagram className="w-5 h-5 flex-shrink-0 " />
     <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-      Follow on Instagram 
+      Follow on Instagram  
     </span>
   </div>
 </a>
