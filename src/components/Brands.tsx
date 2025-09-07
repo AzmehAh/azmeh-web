@@ -99,14 +99,24 @@ const BrandsSection = () => {
       <div className="pt-10 max-w-screen-2xl mx-auto relative">
        <div className="text-center mb-10">
   {/* العنوان الصغير */}
-  <h3 className="text-sm uppercase text-[#0055A3] mb-2">
+   <motion.h3
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+    className="text-sm uppercase text-[#0055A3] mb-2"
+  >
     Trusted Partners
-  </h3>
+  </motion.h2>
 
   {/* العنوان الكبير */}
-  <h2 className="text-4xl font-bold text-gray-900 mb-6">
+ <motion.h2
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay: 0.1 }}
+    className="text-4xl font-bold text-gray-900 mb-4"
+  >
    Our Featured Brands
-  </h2>
+    </motion.h2>
 </div>
 
        
