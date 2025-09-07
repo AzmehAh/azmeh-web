@@ -34,14 +34,18 @@ const ColorInspiration = () => {
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Title */}
-        <div className="text-center mb-10">
-          <h2
-            className="text-5xl md:text-6xl font-semibold text-gray-900 mb-8 "
-           
-          >
-            New drops
-          </h2>
-        </div>
+      <div className="text-center mb-10">
+  {/* العنوان الصغير */}
+  <h3 className="text-sm uppercase text-[#0055A3] mb-2">
+    Fresh & Exclusive
+  </h3>
+
+  {/* العنوان الكبير */}
+  <h2 className="text-5xl md:text-6xl font-semibold text-gray-900 mb-8">
+    New Drops
+  </h2>
+</div>
+
 
         {/* Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-20">
