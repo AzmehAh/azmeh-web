@@ -40,30 +40,15 @@ const AboutSection = () => {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
           >
-           <div className="text-center mb-16">
-  {/* العنوان الصغير */}
-  <h3 className="text-sm uppercase text-[#0055A3] mb-2">
-    {/* ممكن تضع هنا شيء صغير يعكس السكشن */}
-    {/* مثال: Company Highlights */}
-    Company Highlights
-  </h3>
-
-  {/* العنوان الكبير */}
-  <h2 className="text-4xl font-bold text-gray-900 mb-6">
-    About Us
-  </h2>
-
-  {/* النصوص كما هي */}
-  <p className="text-lg text-gray-600 leading-relaxed mb-6">
-    Al Azmeh Paints has been delivering excellence in paint systems and coatings since 1955. 
-    We provide innovative solutions for residential, industrial, and commercial applications worldwide.
-  </p>
-  <p className="text-lg text-gray-600 leading-relaxed mb-8">
-    Our commitment to quality and innovation has made us a trusted partner for professionals 
-    and homeowners seeking superior paint solutions.
-  </p>
-</div>
-
+            <h2 className="text-4xl font-bold text-gray-900 mb-6">About Us</h2>
+            <p className="text-lg text-gray-600 leading-relaxed mb-6">
+              Al Azmeh Paints has been delivering excellence in paint systems and coatings since 1955. 
+              We provide innovative solutions for residential, industrial, and commercial applications worldwide.
+            </p> 
+            <p className="text-lg text-gray-600 leading-relaxed mb-8">
+              Our commitment to quality and innovation has made us a trusted partner for professionals 
+              and homeowners seeking superior paint solutions.
+            </p>
             <Link
               to="/about"
               className="inline-flex items-center bg-[#2C5DB6] text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold"
