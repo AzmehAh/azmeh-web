@@ -72,7 +72,7 @@ const AboutSection = () => {
             <div className="relative">
 
               {/* Background decoration */}
-              <div className="absolute -inset-4 bg-gradient-to-br from-[#2C5DB6]/10 to-blue-200/20 rounded-2xl blur-xl"></div>
+              <div className="absolute -inset-4 bg-white rounded-2xl blur-xl"></div>
               
               {/* Main counter card */}
               <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-700 rounded-2xl p-6 sm:p-8 text-white shadow-2xl flex flex-col items-center">
