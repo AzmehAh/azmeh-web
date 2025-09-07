@@ -14,11 +14,11 @@
   top: 50%;
   transform: translateY(-50%) scaleX(0);
   width: 15px;
-  height: 4px;
+  height: 2px;
   background-color: #2C5DB6;
   transform-origin: left;
-  transition: transform 0.3s ease;
-  display: block; /* إضافة هذه الخاصية */
+  transition: transform 0.3s ease, visibility 0.3s ease;
+  visibility: hidden; /* إخفاء العنصر تماماً عندما لا يكون ظاهراً */
 } 
 
 .menu-item:hover {
@@ -27,13 +27,8 @@
 
 .menu-item:hover::before {
   transform: translateY(-50%) scaleX(1);
+  visibility: visible; /* إظهار العنصر عند الهوفر */
 }
-.menu-item {
-  position: relative;
-  padding-left: 0.5rem;
-  transition: all 0.3s ease;
-  box-sizing: border-box; /* تضمن أن البادينج لا يزيد من حجم العنصر */
-} 
 @layer utilities {
   @keyframes dropdown {
     0% {
