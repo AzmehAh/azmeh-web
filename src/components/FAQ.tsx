@@ -95,9 +95,9 @@ const FAQ = () => {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center text-sm text-gray-600">
-            <Link to="/" className="hover:text-[#2C5DB6] transition-colors">Home</Link>
+            <Link to="/" className="hover:text-[#0055A3] transition-colors">Home</Link>
             <span className="mx-2">/</span>
-            <Link to="/faq" className="hover:text-[#2C5DB6] transition-colors">FAQ</Link>
+            <Link to="/faq" className="hover:text-[#0055A3] transition-colors">FAQ</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">{currentCategory.title}</span>
           </div>
