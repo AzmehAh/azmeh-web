@@ -370,7 +370,7 @@ const Header = () => {
                 </AnimatePresence>
               </div> 
             </div>
-          </motion.div 
+          </motion.div>
         )}
       </AnimatePresence>
     </header> 
