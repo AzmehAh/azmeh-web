@@ -94,7 +94,7 @@ const SocialMedia = () => {
   className="flex items-center bg-[#0055a3] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-60 group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
 >
   <div className="flex items-center  flex justify-start w-full "> 
-    <MessageCircleagram className="w-5 h-5 flex-shrink-0 " />
+    <MessageCircle className="w-5 h-5 flex-shrink-0 " />
     <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
         WhatsApp Support
     </span>
