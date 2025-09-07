@@ -86,9 +86,9 @@ const AboutSection = () => {
                   />
                 </div>
                 
-                {/* Counter */}
+                {/* Counter */} 
                 <motion.div 
-                  className="text-3xl sm:text-4xl text-gray-900 font-bold mb-2"
+                  className="text-3xl sm:text-4xl text-[#0055A3] font-bold mb-2"
                   initial={{ scale: 0.5 }}
                   whileInView={{ scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.5 }}
