@@ -63,14 +63,15 @@ const SocialMedia = () => {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
          <a
   href="#"
-  className="flex items-center bg-[#0055a3] text-white rounded-full h-12 w-12 group shadow-lg hover:shadow-2xl origin-left transition-all duration-500 ease-in-out hover:w-52 overflow-hidden"
+  className="relative group inline-flex items-center bg-[#0055a3] text-white rounded-full h-12 w-12 overflow-hidden shadow-lg hover:shadow-2xl origin-left transition-all duration-500 ease-in-out hover:w-52"
 >
-  <div className="flex items-center justify-center w-full group-hover:justify-start px-3 transition-all duration-300">
-    <Instagram className="w-5 h-5 flex-shrink-0" />
-    <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap">
-      Follow on Instagram
-    </span>
-  </div>
+  {/* الإيقونة في المنتصف دائمًا */}
+  <Instagram className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-5 h-5 flex-shrink-0 z-10" />
+
+  {/* النص يظهر عند Hover */}
+  <span className="absolute left-12 opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap font-medium">
+    Follow on Instagram
+  </span>
 </a>
 
 
