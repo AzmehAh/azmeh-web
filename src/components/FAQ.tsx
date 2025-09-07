@@ -36,7 +36,7 @@ const FAQ = () => {
                 className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
               >
                 <div className="p-8">
-                  <div className="flex items-center mb-4">
+                  <div className="flex items-start mb-4">
                     <div className="w-12 h-12 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">  
                       <HelpCircle className="w-6 h-6 text-white" />
                     </div>
