@@ -3,23 +3,20 @@
 @tailwind utilities;
 .menu-item {
   position: relative;
-  display: flex;
-  align-items: center;
-  height: 40px;           /* ارتفاع موحد */
-  padding-left: 1rem;
+  padding-left: 0.5rem;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center; /* يخلي الخط والنص بنفس المستوى */
+  height: 40px; /* حدد ارتفاع ثابت */
 }
 
 .menu-item::before {
   content: '';
-  position: absolute;
-  left: 0.25rem;
-  top: 50%;               /* يبقى بالنص */
-  transform: translateY(-50%);
   width: 0;
   height: 2px;
   background-color: #2C5DB6;
   transition: width 0.3s ease;
+  margin-right: 5px; /* مسافة صغيرة عن النص */
 }
 
 .menu-item:hover {
