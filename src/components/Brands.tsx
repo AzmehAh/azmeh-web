@@ -97,10 +97,18 @@ const BrandsSection = () => {
   return (
     <section className="bg-gray-50 pt-24 pb-24 relative">
       <div className="pt-10 max-w-screen-2xl mx-auto relative">
-        {/* عنوان السكشن */}
-        <h2 className="text-4xl font-bold text-center mb-6">
-           Brands
-        </h2>
+       <div className="text-center mb-10">
+  {/* العنوان الصغير */}
+  <h3 className="text-sm uppercase text-[#0055A3] mb-2">
+    Trusted Partners
+  </h3>
+
+  {/* العنوان الكبير */}
+  <h2 className="text-4xl font-bold text-gray-900 mb-6">
+    Brands
+  </h2>
+</div>
+
        
 
         {/* السكشن المتحرك */}
