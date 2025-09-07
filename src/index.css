@@ -4,7 +4,10 @@
 .menu-item {
   position: relative;
   padding-left: 0.5rem;
-  transition: all 0.3s ease;
+  transition: padding-left 0.3s ease;
+  display: inline-flex; /* يستخدم Flexbox للمحاذاة الدقيقة */
+  align-items: center; /* يمركز المحتوى عمودياً */
+  height: 40px; /* 🔥 ارتفاع ثابت - غير القيمة كما تريد */
 } 
 
 .menu-item::before {
