@@ -106,7 +106,7 @@ const BrandsSection = () => {
     className="text-sm uppercase text-[#0055A3] mb-2"
   >
     Trusted Partners
-  </motion.h2>
+  </motion.h3>
 
   {/* العنوان الكبير */}
  <motion.h2
@@ -118,7 +118,7 @@ const BrandsSection = () => {
    Our Featured Brands
     </motion.h2>
 </div>
-</div>
+
        
 
         {/* السكشن المتحرك */}
