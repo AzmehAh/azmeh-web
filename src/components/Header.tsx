@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
-import SystemDetailsModal from './SystemDetailsModal';
-import { systemsData, SystemData } from '../data/systemsData';
+
+
  
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -51,31 +51,8 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location]);
 
-  const paintSystems = [
-    { id: 'concrete-exterior', name: 'Concrete Exterior' },
-    { id: 'concrete-lining', name: 'Concrete Lining' },
-    { id: 'concrete-repair', name: 'Concrete Repair & Protection' },
-    { id: 'concrete-sealer', name: 'Concrete Sealer' },
-    { id: 'ferrous-steel', name: 'Ferrous & Steel Substrate Treatment' },
-    { id: 'fire-retardant', name: 'Fire Retardant Paints' },
-    { id: 'wall-ceiling', name: 'Home & Industrial Wall/Ceiling Paints' },
-    { id: 'steel-coatings', name: 'Steel Coatings' },
-    { id: 'steel-linings', name: 'Steel Linings' },
-    { id: 'floorings', name: 'Floorings' },
-    { id: 'adhesives', name: 'Adhesives and Grouts' },
-    { id: 'joint-sealants', name: 'Joint Sealants' }
-  ];
-
-  const technicalSolutions = [
-    { id: 'car-coating', name: 'Car Coating Systems' },
-    { id: 'concrete-walls', name: 'Concrete Walls Coating' },
-    { id: 'facade-protection', name: 'Façade Protection' },
-    { id: 'industrial-flooring', name: 'Industrial Flooring' },
-    { id: 'joint-sealant', name: 'Joint Sealant' },
-    { id: 'steel-surface', name: 'Steel Surface Coatings' },
-    { id: 'roof-coatings', name: 'Roof Coatings' },
-    { id: 'wooden-surface', name: 'Wooden Surface Coatings' }
-  ];
+  
+  
 
   const curtainVariants = {
     hidden: { scaleY: 0, opacity: 0 },
