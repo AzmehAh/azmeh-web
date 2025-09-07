@@ -22,7 +22,7 @@ const SocialMedia = () => {
   ];
 
   return (
-    <section className="py-20 relative" style={{ background: 'linear-gradient(135deg, #0055a3 0%, #ffffff 100%)' }}>
+    <section className="py-20 relative  bg-[#0055A3]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* العنوان والنص */}
