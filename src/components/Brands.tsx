@@ -118,7 +118,7 @@ const BrandsSection = () => {
    Our Featured Brands
     </motion.h2>
 </div>
-
+</div>
        
 
         {/* السكشن المتحرك */}
