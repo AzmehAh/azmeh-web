@@ -1,38 +1,31 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Dropdown Menu Item */
 .menu-item {
   position: relative;
-  padding-left: 1.5rem; /* مساحة للنص بعيدًا عن الخط الجانبي */
-  transition: padding-left 0.3s ease;
+  padding-left: 0.5rem; /* مساحة صغيرة جاهزة */
+  transition: all 0.3s ease;
 }
 
-/* الخط الجانبي العريض والثابت */
 .menu-item::before {
   content: '';
   position: absolute;
-  left: 0;        /* على يسار النص */
-  top: 0;         /* من أعلى العنصر */
-  width: 4px;     /* سماكة الخط */
-  height: 100%;   /* يغطي كامل ارتفاع العنصر */
-  background-color: #2C5DB6; /* اللون الأزرق */
-  
-  /* الحركة: يبدأ مخفي أفقياً */
-  transform: scaleX(0);
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%) scaleX(0);
+  width: 15px; /* طول الخط */
+  height: 2px; /* سمك الخط */
+  background-color: #2C5DB6;
   transform-origin: left;
   transition: transform 0.3s ease;
-}
+} 
 
-/* عند Hover تظهر الحركة */
-.menu-item:hover::before {
-  transform: scaleX(1); /* يظهر الخط بالكامل */
-}
-
-/* تحريك النص قليلًا عند Hover لإضافة تفاعل */
 .menu-item:hover {
-  padding-left: 2rem;
+  padding-left: 1.5rem; /* يزيح النص عند الهوفر */
+}
+
+.menu-item:hover::before {
+  transform: translateY(-50%) scaleX(1);
 }
 @layer utilities {
   @keyframes dropdown {
