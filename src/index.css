@@ -5,7 +5,7 @@
   position: relative;
   padding-left: 0.5rem; /* مساحة صغيرة جاهزة */
   transition: all 0.3s ease;
-}
+} 
 
 .menu-item::before {
   content: '';
@@ -18,11 +18,11 @@
   background-color: #2C5DB6;
   transform-origin: left;
   transition: transform 0.3s ease;
-}  
+} 
 
 .menu-item:hover {
   padding-left: 1.5rem; /* يزيح النص عند الهوفر */
- 
+}
 
 .menu-item:hover::before {
   transform: translateY(-50%) scaleX(1);
