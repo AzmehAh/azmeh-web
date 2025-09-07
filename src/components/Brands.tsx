@@ -107,7 +107,7 @@ const BrandsSection = () => {
 
         {/* السكشن المتحرك */}
       <div
-  className="relative overflow-x-clip mt-12 w-full"
+  className="relative overflow-x-clip mt-12 max-w-[90%] mx-auto"
   onMouseEnter={handleMouseEnter}
   onMouseLeave={handleMouseLeave}
   dir={isRTL ? "rtl" : "ltr"}
