@@ -39,8 +39,12 @@ const AboutSection = () => {
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-          >
-            <h2 className="text-4xl font-bold text-gray-900 mb-6">About Us</h2>
+          ><h3 className="text-sm uppercase text-[#0055A3] mb-2">
+    Our Legacy
+  </h3>
+           <h2 className="text-4xl font-bold text-gray-900 mb-6">
+    Excellence in Paint Solutions
+  </h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
               Al Azmeh Paints has been delivering excellence in paint systems and coatings since 1955. 
               We provide innovative solutions for residential, industrial, and commercial applications worldwide.
