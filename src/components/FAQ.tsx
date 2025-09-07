@@ -136,7 +136,7 @@ const FAQ = () => {
               placeholder="Search questions..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20 transition-all"
+              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20 transition-all"
             />
           </div>
           {searchTerm && (
@@ -171,11 +171,11 @@ const FAQ = () => {
                 >
                   <div className="flex items-start space-x-4 flex-1">
                     <div className="flex-shrink-0 mt-1">
-                      <div className="w-8 h-8 bg-gradient-to-br from-[#2C5DB6] to-blue-700 rounded-lg flex items-center justify-center">
+                      <div className="w-8 h-8 bg-gradient-to-br from-[#0055A3] to-blue-700 rounded-lg flex items-center justify-center">
                         <span className="text-white font-bold text-sm">{index + 1}</span>
                       </div>
                     </div>
-                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#2C5DB6] transition-colors leading-relaxed">
+                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#0055A3] transition-colors leading-relaxed">
                       {item.question}
                     </h3>
                   </div>
@@ -184,7 +184,7 @@ const FAQ = () => {
                       animate={{ rotate: openItem === item.id ? 180 : 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#2C5DB6] transition-colors" />
+                      <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-[#0055A3] transition-colors" />
                     </motion.div>
                   </div>
                 </button>
@@ -200,7 +200,7 @@ const FAQ = () => {
                     >
                       <div className="px-6 pb-6">
                         <div className="pl-12 pr-4">
-                          <div className="bg-blue-50 rounded-lg p-6 border-l-4 border-[#2C5DB6]">
+                          <div className="bg-blue-50 rounded-lg p-6 border-l-4 border-[#0055A3]">
                             <div className="flex items-start space-x-3">
                               <CheckCircle className="w-5 h-5 text-[#0055A3] mt-0.5 flex-shrink-0" />
                               <p className="text-gray-700 leading-relaxed">
