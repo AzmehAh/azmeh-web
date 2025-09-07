@@ -5,7 +5,9 @@
   position: relative;
   padding-left: 0.5rem;
   transition: padding-left 0.3s ease;
-  line-height: 1.5; /* يحافظ على الارتفاع الطبيعي للنص */
+  display: inline-flex;        /* يستخدم Flexbox */
+  align-items: center;         /* يمركز المحتوى عمودياً */
+  height: 40px;                /* 🔥 ارتفاع ثابت للجميع */
 } 
 
 .menu-item::before {
