@@ -7,28 +7,28 @@ const BlogSection = () => {
   const blogPosts = [
     {
       id: 1,
-      title: "Latest Trends in Industrial Coating Technologies",
-      image: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      title: "Meet 13 top interior designers, architects, and professional painters shaping the industry",
+      image: "https://images.pexels.com/photos/5824899/pexels-photo-5824899.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
       publishDate: "2024-01-15",
-      excerpt: "Discover the newest innovations in industrial coatings that are transforming manufacturing and construction industries."
+      excerpt: "Discover the leading professionals who are transforming the design and painting industry with their innovative approaches."
     },
     {
       id: 2,
-      title: "Choosing the Right Paint for Your Home Interior",
-      image: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
+      title: "Transform outdoor wood furniture with exterior wood stain",
+      image: "https://images.pexels.com/photos/5824905/pexels-photo-5824905.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
       publishDate: "2024-01-10",
-      excerpt: "A comprehensive guide to selecting the perfect interior paint colors and finishes for every room in your home."
+      excerpt: "Learn expert techniques to revitalize your outdoor wood furniture using high-quality exterior wood stains."
     },
     {
       id: 3,
-      title: "Sustainable Paint Solutions for Environmental Responsibility",
+      title: "Eco Spec®: Benjamin Moore's greenest and lowest-odor interior paint",
       image: "https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=600&h=400&fit=crop",
       publishDate: "2024-01-05",
-      excerpt: "Learn about eco-friendly paint options that reduce environmental impact without compromising on quality and durability."
+      excerpt: "Explore the benefits of Eco Spec®, the environmentally friendly paint solution with minimal odor and maximum performance."
     }
   ];
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', { 
       year: 'numeric', 
@@ -49,7 +49,7 @@ const BlogSection = () => {
             transition={{ duration: 0.6 }}
             className="text-4xl font-bold text-gray-900 mb-6"
           >
-            Latest from Our Blog
+            Benjamin Moore Insights
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -57,9 +57,22 @@ const BlogSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-xl text-gray-600 max-w-3xl mx-auto"
           >
-            Stay informed with expert insights, industry trends, and practical tips from our paint specialists.
+            Discover the latest trends, professional tips, and innovative products from the world of premium paints.
           </motion.p>
         </div>
+
+        {/* Special Offer Banner */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="bg-[#2C5DB6] text-white p-6 rounded-xl mb-12 text-center"
+        >
+          <h3 className="text-2xl font-bold mb-2">Special Offer</h3>
+          <p className="text-lg">
+            Save 20%* on up to 3 gallons of Regal® Select Interior paint using code <span className="font-mono font-bold">REGAL20</span> in your cart.
+          </p>
+        </motion.div>
 
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
