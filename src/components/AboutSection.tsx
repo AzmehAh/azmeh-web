@@ -95,7 +95,7 @@ const AboutSection = () => {
                 >
                   {count}
                 </motion.div>
-                <div className="text-xs sm:text-sm font-semibold text-[#0055A3]uppercase tracking-wide">
+                <div className="text-xs sm:text-sm font-semibold text-[#0055A3] uppercase tracking-wide">
                   Years of Experience
                 </div>
                 <div className="mt-1 sm:mt-2 text-[#0055A3] text-xs">
