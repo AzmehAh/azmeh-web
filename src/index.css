@@ -4,20 +4,19 @@
 .menu-item {
   position: relative;
   padding-left: 0.5rem;
-  transition: padding-left 0.3s ease;
+  transition: all 0.3s ease;
 } 
 
 .menu-item::before {
   content: '';
   position: absolute;
-  left: -15px; /* إبعاده خارج العنصر полностью */
+  left: 0;
   top: 50%;
-  transform: translateY(-50%) scaleX(0);
-  width: 15px;
+  transform: translateY(-50%);
+  width: 0;
   height: 2px;
   background-color: #2C5DB6;
-  transform-origin: left;
-  transition: transform 0.3s ease;
+  transition: width 0.3s ease;
 } 
 
 .menu-item:hover {
@@ -25,8 +24,7 @@
 }
 
 .menu-item:hover::before {
-  transform: translateY(-50%) scaleX(1);
-  left: 0; /* إرجاعه إلى موضعه الطبيعي */
+  width: 15px;
 }
 @layer utilities {
   @keyframes dropdown {
