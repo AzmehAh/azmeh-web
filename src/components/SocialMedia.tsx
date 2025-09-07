@@ -44,9 +44,7 @@ const SocialMedia = () => {
   >
             Follow us for inspiration
             </motion.h2>
-          <p className="text-lg text-white/90 max-w-2xl mx-auto leading-relaxed">
-            Stay updated with our latest projects, color trends, and design inspiration. Join our community of paint enthusiasts and professionals.
-          </p>
+         
           <div className="mt-6 w-24 h-1 bg-white/50 mx-auto rounded"></div>
         </div>
 
