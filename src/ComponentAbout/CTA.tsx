@@ -27,7 +27,7 @@ const CTA = () => {
               Get In Touch
             </motion.button>
             <motion.button
-              whileHover={{ scale: 1.05 }}
+            
               whileTap={{ scale: 0.95 }}
               className="bg-white/20 backdrop-blur-sm rounded-lg text-white px-8 py-4  font-bold text-lg hover:bg-white/30 transition-all duration-300"
             >
