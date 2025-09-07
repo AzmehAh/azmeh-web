@@ -43,7 +43,7 @@ const FAQ = () => {
   </div>
 
   {/* نص العنوان */}
-  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors leading-snug">
+  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#0055A3] transition-colors leading-snug">
     {cat.title}
   </h3>
 </div>
@@ -51,7 +51,7 @@ const FAQ = () => {
                   <p className="text-gray-600 leading-relaxed mb-6">
                     {cat.description}
                   </p>
-                  <div className="flex items-center text-[#2C5DB6] font-semibold group-hover:translate-x-2 transition-transform">
+                  <div className="flex items-center text-[#0055A3] font-semibold group-hover:translate-x-2 transition-transform">
                     <span>View Questions</span>
                     <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
                   </div>
