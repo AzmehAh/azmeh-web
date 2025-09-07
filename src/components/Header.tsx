@@ -182,9 +182,7 @@ const Header = () => {
  Blog
             </Link>
 
-            <Link to="/blog" className={`text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Contact
-            </Link>
+
 
             {/* Contact Dropdown */}
             <div className="relative" onMouseEnter={() => handleMouseEnter('contact')} onMouseLeave={handleMouseLeave}>
