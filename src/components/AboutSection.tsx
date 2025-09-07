@@ -75,7 +75,7 @@ const AboutSection = () => {
               <div className="absolute -inset-4 bg-gradient-to-br from-[#2C5DB6]/10 to-blue-200/20 rounded-2xl blur-xl"></div>
               
               {/* Main counter card */}
-              <div className="relative bg-white rounded-xl p-20 sm:p-15 text-white shadow-2xl flex flex-col items-center">
+              <div className="relative bg-white rounded-xl p-20 sm:p-15 text-white shadow-xl flex flex-col items-center">
 
                 {/* Logo on top */}
                 <div className="w-30 h-16 mb-4">
