@@ -43,7 +43,9 @@ const AboutSection = () => {
            <div className="text-center mb-16">
   {/* العنوان الصغير */}
   <h3 className="text-sm uppercase text-[#0055A3] mb-2">
-    Company Overview
+    {/* ممكن تضع هنا شيء صغير يعكس السكشن */}
+    {/* مثال: Company Highlights */}
+    Company Highlights
   </h3>
 
   {/* العنوان الكبير */}
@@ -51,7 +53,7 @@ const AboutSection = () => {
     About Us
   </h2>
 
-  {/* النصوص */}
+  {/* النصوص كما هي */}
   <p className="text-lg text-gray-600 leading-relaxed mb-6">
     Al Azmeh Paints has been delivering excellence in paint systems and coatings since 1955. 
     We provide innovative solutions for residential, industrial, and commercial applications worldwide.
