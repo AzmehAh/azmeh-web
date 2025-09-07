@@ -41,25 +41,36 @@ const BlogSection = () => {
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl font-bold text-gray-900 mb-6"
-          >
-            Latest from Our Blog
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl font-bold text-gray-900 mb-6"
-          >
-            Latest from Our Blog
-          </motion.p>
-        </div>
+      {/* Section Header - Blog */}
+<div className="text-center mb-16">
+  {/* العنوان الصغير */}
+  <motion.h3
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+    className="text-sm uppercase text-[#0055A3] mb-2"
+  >
+    Paint Inspiration
+  </motion.h3>
+
+  {/* العنوان الكبير */}
+  <motion.h2
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6, delay: 0.1 }}
+    className="text-4xl font-bold text-gray-900 mb-4"
+  >
+    Latest from Our Blog
+  </motion.h2>
+
+  {/* الخط الأزرق */}
+  <motion.div
+    initial={{ width: 0 }}
+    whileInView={{ width: "80%" }}
+    transition={{ duration: 0.6, delay: 0.2 }}
+    className="h-1 bg-[#0055A3] mx-auto rounded"
+  />
+</div>
 
         {/* Blog Posts Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
@@ -76,7 +87,7 @@ const BlogSection = () => {
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-full h-60 object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-60 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
