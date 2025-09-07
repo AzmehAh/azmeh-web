@@ -18,13 +18,7 @@ const cards = [
       "To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility to the environment.",
     icon: Target,
   },
-  {
-    id: 3,
-    title: "Values",
-    description:
-      "Quality Excellence, Innovation, Environmental Responsibility, Customer Trust, Employee Growth, and Industry Leadership guide every decision we make and every solution we create.",
-    icon: Heart,
-  },
+ 
 ];
 
 const AboutSection = () => {
