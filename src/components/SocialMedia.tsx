@@ -61,19 +61,19 @@ const SocialMedia = () => {
 
         {/* Social Follow Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-          <a
-            href="#"
-            className="flex items-center bg-[#0055a3] text-white rounded-full px-4 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-52 hover:scale-105 group shadow-lg hover:shadow-2xl"
-          >
-            <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
-              <Instagram className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
-              <span
-                className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300 hidden group-hover:inline"
-              >
-                Follow on Instagram
-              </span>
-            </div>
-          </a>
+<a
+  href="#"
+  className="flex items-center bg-[#0055a3] text-white rounded-full px-4 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-52 group shadow-lg hover:shadow-2xl origin-left"
+>
+  <div className="flex items-center justify-start w-full">
+    <Instagram className="w-5 h-5 flex-shrink-0 ml-2" />
+    <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+      Follow on Instagram
+    </span>
+  </div>
+</a>
+
+              
 
           <a
             href="#"
