@@ -4,7 +4,8 @@
 .menu-item {
   position: relative;
   padding-left: 0.5rem;
-  transition: all 0.3s ease;
+  transition: padding-left 0.3s ease; /* transition للpadding فقط */
+  display: inline-block; /* لمنع تأثير الارتفاع */
 } 
 
 .menu-item::before {
@@ -17,8 +18,8 @@
   height: 2px;
   background-color: #2C5DB6;
   transform-origin: left;
-  transition: transform 0.3s ease, visibility 0.3s ease;
-  visibility: hidden; /* إخفاء العنصر تماماً عندما لا يكون ظاهراً */
+  transition: transform 0.3s ease;
+  opacity: 0; /* إخفاء كامل */
 } 
 
 .menu-item:hover {
@@ -27,7 +28,7 @@
 
 .menu-item:hover::before {
   transform: translateY(-50%) scaleX(1);
-  visibility: visible; /* إظهار العنصر عند الهوفر */
+  opacity: 1; /* إظهار كامل */
 }
 @layer utilities {
   @keyframes dropdown {
