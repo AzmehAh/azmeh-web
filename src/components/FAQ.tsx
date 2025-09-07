@@ -113,7 +113,7 @@ const FAQ = () => {
         <div className="text-center mb-16">
           <Link
             to="/faq"
-            className="inline-flex items-center text-[#2C5DB6] hover:text-blue-700 font-medium mb-6 transition-colors"
+            className="inline-flex items-center text-[#0055A3] hover:text-blue-700 font-medium mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to All Categories
@@ -202,7 +202,7 @@ const FAQ = () => {
                         <div className="pl-12 pr-4">
                           <div className="bg-blue-50 rounded-lg p-6 border-l-4 border-[#2C5DB6]">
                             <div className="flex items-start space-x-3">
-                              <CheckCircle className="w-5 h-5 text-[#2C5DB6] mt-0.5 flex-shrink-0" />
+                              <CheckCircle className="w-5 h-5 text-[#0055A3] mt-0.5 flex-shrink-0" />
                               <p className="text-gray-700 leading-relaxed">
                                 {item.answer}
                               </p>
@@ -220,7 +220,7 @@ const FAQ = () => {
 
         {/* Contact Section */}
         <div className="mt-16 text-center">
-          <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 rounded-2xl p-8 text-white">
+          <div className="bg-[#0055A3] rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">Still have questions?</h3>
             <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
               Our technical experts are ready to help you with any specific questions about our products and applications.
