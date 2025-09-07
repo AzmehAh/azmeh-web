@@ -27,14 +27,15 @@ const SocialMedia = () => {
         
         {/* العنوان والنص */}
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-extrabold text-white mb-4" style={{ textShadow: '2px 2px 6px rgba(0,0,0,0.3)' }}>
-            Follow us for inspiration
-          </h2>
-          <p className="text-lg text-white/90 max-w-2xl mx-auto leading-relaxed">
-            Stay updated with our latest projects, color trends, and design inspiration. Join our community of paint enthusiasts and professionals.
-          </p>
-          <div className="mt-6 w-24 h-1 bg-white/50 mx-auto rounded"></div>
-        </div>
+  {/* المجموعة الأولى */}
+  <div className="mb-8">
+    <h3 className="text-sm uppercase text-[#ffffff] mb-2 tracking-widest">
+      Creative Vibes
+    </h3>
+    <h2 className="text-4xl md:text-5xl font-extrabold text-white" style={{ textShadow: '2px 2px 6px rgba(0,0,0,0.3)' }}>
+      Explore Our Designs
+    </h2>
+  </div>
 
         {/* Social Media Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-16">
