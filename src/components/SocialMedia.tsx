@@ -87,7 +87,7 @@ const SocialMedia = () => {
 
          <a
   href="#" 
-  className="flex items-center bg-[#0055a3] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-60 group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+  className="flex items-center bg-[#0055a3] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-50 group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
 >
   <div className="flex items-center  flex justify-start w-full "> 
     <MessageCircle className="w-5 h-5 flex-shrink-0 " />
