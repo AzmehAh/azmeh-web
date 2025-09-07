@@ -3,9 +3,8 @@
 @tailwind utilities;
 .menu-item {
   position: relative;
-  padding-left: 0.5rem;
-  transition: padding-left 0.3s ease; /* transition للpadding فقط */
-  display: inline-block; /* لمنع تأثير الارتفاع */
+  padding-left: 0.5rem; /* مساحة صغيرة جاهزة */
+  transition: all 0.3s ease;
 } 
 
 .menu-item::before {
@@ -14,21 +13,19 @@
   left: 0;
   top: 50%;
   transform: translateY(-50%) scaleX(0);
-  width: 15px;
-  height: 2px;
+  width: 15px; /* طول الخط */
+  height: 2px; /* سمك الخط */
   background-color: #2C5DB6;
   transform-origin: left;
   transition: transform 0.3s ease;
-  opacity: 0; /* إخفاء كامل */
-} 
+}  
 
 .menu-item:hover {
-  padding-left: 1.5rem;
+  padding-left: 1.5rem; /* يزيح النص عند الهوفر */
 }
 
 .menu-item:hover::before {
   transform: translateY(-50%) scaleX(1);
-  opacity: 1; /* إظهار كامل */
 }
 @layer utilities {
   @keyframes dropdown {
