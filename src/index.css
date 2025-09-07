@@ -24,8 +24,8 @@
   padding-left: 1.5rem; /* يزيح النص عند الهوفر */
 }
 
-.menu-item:hover::before {
-  transform: translateY(-50%) scaleX(0);
+.menu-item:hover::before { 
+  transform: translateY(-50%) scaleX(1);
 }
 @layer utilities {
   @keyframes dropdown {
