@@ -43,12 +43,12 @@ const AboutSection = () => {
            <div className="text-center mb-16">
   {/* العنوان الصغير */}
   <h3 className="text-sm uppercase text-[#0055A3] mb-2">
-    Our Legacy
+    Company Overview
   </h3>
 
   {/* العنوان الكبير */}
   <h2 className="text-4xl font-bold text-gray-900 mb-6">
-    Excellence in Paint Solutions
+    About Us
   </h2>
 
   {/* النصوص */}
