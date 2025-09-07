@@ -4,8 +4,7 @@
 .menu-item {
   position: relative;
   padding-left: 0.5rem;
-  transition: padding-left 0.3s ease;
-  display: inline-block;
+  transition: all 0.3s ease;
 } 
 
 .menu-item::before {
@@ -14,12 +13,11 @@
   left: 0;
   top: 50%;
   transform: translateY(-50%) scaleX(0);
-  width: 15px;
+  width: 0; /* 🔥 هادلي رح يحل المشكلة - عرض صفر */
   height: 2px;
   background-color: #2C5DB6;
   transform-origin: left;
-  transition: transform 0.3s ease;
-  pointer-events: none; /* منع التفاعل مع العنصر */
+  transition: all 0.3s ease; /* transition لجميع الخصائص */
 } 
 
 .menu-item:hover {
@@ -28,6 +26,7 @@
 
 .menu-item:hover::before {
   transform: translateY(-50%) scaleX(1);
+  width: 15px; /* 🔥 إعادة العرض إلى 15px عند الهوفر */
 }
 @layer utilities {
   @keyframes dropdown {
