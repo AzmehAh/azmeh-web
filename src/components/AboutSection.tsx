@@ -93,7 +93,7 @@ const AboutSection = () => {
                   whileInView={{ scale: 1 }}
                   transition={{ duration: 0.5, delay: 0.5 }}
                 >
-                  {count}+Y
+                  {count}Y+
                 </motion.div>
                 <div className="text-xs sm:text-sm font-semibold text-[#0055A3] uppercase tracking-wide">
                   Years of Experience
