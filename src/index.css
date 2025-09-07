@@ -5,9 +5,10 @@
   position: relative;
   padding-left: 0.5rem;
   transition: padding-left 0.3s ease;
-  display: inline-flex;        /* يستخدم Flexbox */
-  align-items: center;         /* يمركز المحتوى عمودياً */
-  height: 40px;                /* 🔥 ارتفاع ثابت للجميع */
+  display: inline-block; /* يحافظ على الشكل الأصلي */
+  line-height: 2; /* 🔥 يحدد ارتفاع ثابت للجميع */
+  min-height: 40px; /* 🔥 ارتفاع أدنى ثابت */
+  vertical-align: middle; /* محاذاة عمودية */
 } 
 
 .menu-item::before {
