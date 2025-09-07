@@ -80,11 +80,11 @@ const BlogSection = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
-
+ 
               {/* Post Content */}
               <div className="p-6">
                 {/* Publish Date */}
-                <div className="flex items-center text-sm  group-hover:scale-110 transition-transform duration-500 text-gray-500 mb-3">
+                <div className="flex items-center text-sm  text-gray-500 mb-3">
                   <Calendar className="w-4 h-4 mr-2" />
                   <span>{formatDate(post.publishDate)}</span>
                 </div>
