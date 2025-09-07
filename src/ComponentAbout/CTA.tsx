@@ -20,7 +20,7 @@ const CTA = () => {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <motion.button
-              whileHover={{ scale: 1.05 }}
+
               whileTap={{ scale: 0.95 }}
               className="bg-white text-[#2C5DB6] px-8 py-4 rounded-lg font-bold text-lg hover:shadow-2xl transition-all duration-300"
             >
