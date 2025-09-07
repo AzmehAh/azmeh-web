@@ -73,34 +73,30 @@ const SocialMedia = () => {
   </div>
 </a> 
 
+   <a
+  href="#" 
+  className="flex items-center bg-[#0055a3] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-60 group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+>
+  <div className="flex items-center  flex justify-start w-full "> 
+    <Facebook className="w-5 h-5 flex-shrink-0 " />
+    <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+       Like on Facebook
+    </span>
+  </div>
+</a> 
 
-          <a
-            href="#"
-            className="flex items-center bg-[#0055a3] text-white rounded-full px-4 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-52 hover:scale-105 group shadow-lg hover:shadow-2xl"
-          >
-            <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
-              <Facebook className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
-              <span
-                className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300 hidden group-hover:inline"
-              >
-                Like on Facebook
-              </span>
-            </div>
-          </a>
+         <a
+  href="#"
+  className="flex items-center justify-center bg-[#0055a3] text-white rounded-full h-12 w-12 hover:w-60 overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 ease-in-out origin-left group"
+>
+  <div className="flex items-center justify-center w-full px-2 transition-all duration-500 group-hover:justify-start">
+    <MessageCircle className="w-5 h-5 flex-shrink-0" />
+    <span className="ml-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 whitespace-nowrap">
+        WhatsApp Support
+    </span>
+  </div>
+</a>
 
-          <a
-            href="#"
-            className="flex items-center bg-[#0055a3] text-white rounded-full px-4 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-52 hover:scale-105 group shadow-lg hover:shadow-2xl"
-          >
-            <div className="flex items-center justify-center transition-all duration-300 group-hover:justify-start w-full">
-              <MessageCircle className="w-5 h-5 flex-shrink-0 group-hover:ml-2 transition-all duration-300" />
-              <span
-                className="ml-2 opacity-0 group-hover:opacity-100 transition-all duration-300 hidden group-hover:inline"
-              >
-                WhatsApp Support
-              </span>
-            </div>
-          </a>
         </div>
       </div>
     </section>
