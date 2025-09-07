@@ -94,11 +94,12 @@ const Header = () => {
 
           {/* Left Navigation */}
           <nav className="hidden lg:flex items-center space-x-8">
-            <Link to="/about" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              About Us
-            </Link>
+            
 <Link to="/products" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
               Products
+            </Link>
+            <Link to="/about" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+              About Us
             </Link>
             {/* Technical Support Dropdown */}
             <div 
