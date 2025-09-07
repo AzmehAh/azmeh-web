@@ -13,11 +13,13 @@
   position: absolute;
   left: 0;
   top: 50%;
-  transform: translateY(-50%);
-  width: 0; /* بدء بعرض صفر */
+  transform: translateY(-50%) scaleX(0);
+  width: 15px;
   height: 2px;
   background-color: #2C5DB6;
-  transition: width 0.3s ease; /* transition للعرض فقط */
+  transform-origin: left;
+  transition: transform 0.3s ease;
+  pointer-events: none; /* منع التفاعل مع العنصر */
 } 
 
 .menu-item:hover {
@@ -25,7 +27,7 @@
 }
 
 .menu-item:hover::before {
-  width: 15px; /* توسيع إلى 15px عند الهوفر */
+  transform: translateY(-50%) scaleX(1);
 }
 @layer utilities {
   @keyframes dropdown {
