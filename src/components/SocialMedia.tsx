@@ -1,5 +1,6 @@
 import React from 'react';
 import { Instagram, Facebook, MessageCircle } from 'lucide-react';
+import { motion } from "framer-motion";
 
 const SocialMedia = () => {
   const socialPosts = [
