@@ -59,7 +59,8 @@ const ColorInspiration = () => {
 
 
         {/* Grid */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-16 lg:gap-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20
+">
           {colorSwatches.map((swatch, index) => (
             <div
               key={index}
