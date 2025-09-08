@@ -41,7 +41,6 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان المحسن
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -72,7 +71,7 @@ const AnimatedTitle = ({ text, isActive }) => {
         flexWrap: "wrap",
         perspective: "1000px",
         transformStyle: "preserve-3d",
-        fontSize: isActive ? "clamp(2rem, 5vw, 4rem)" : "clamp(1.5rem, 4vw, 3rem)",
+        fontSize: isActive ? "clamp(1.8rem, 5vw, 3.5rem)" : "clamp(1.4rem, 4vw, 2.5rem)",
         fontWeight: "900",
         fontStyle: "italic",
         color: "white",
@@ -158,7 +157,7 @@ const Hero = () => {
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
                   filter: isActive
-                    ? "brightness(0.4) contrast(1.2)"
+                    ? "brightness(0.45) contrast(1.2)"
                     : "brightness(0.4) contrast(1.1)",
                 }}
                 initial={{ scale: 1.1 }}
@@ -166,7 +165,7 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
+              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-2 sm:p-4 md:p-6 lg:p-16">
                 <div
                   className="text-white pointer-events-none mb-4"
                   style={{
@@ -175,7 +174,7 @@ const Hero = () => {
                     left: isActive ? "auto" : "50%",
                     transform: isActive
                       ? "none"
-                      : "translate(-50%, -50%) scale(0.8)",
+                      : "translate(-50%, -50%) scale(0.7)",
                     transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
                     textAlign: isActive ? "left" : "center",
