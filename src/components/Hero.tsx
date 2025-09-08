@@ -8,7 +8,7 @@ const paintCategories = [
     id: "flooring",
     title: "Flooring",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      "Durable coatings that protect and enhance wooden, concrete, and tiled floors.",
     image:
       "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
   },
@@ -16,7 +16,7 @@ const paintCategories = [
     id: "industrial",
     title: "Industrial",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.",
+      "Heavy-duty coatings designed for factories and industrial environments.",
     image:
       "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
   },
@@ -24,7 +24,7 @@ const paintCategories = [
     id: "furniture",
     title: "Furniture",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies ligula sed magna dictum porta.",
+      "Protective and stylish finishes for wooden and metal furniture.",
     image:
       "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
   },
@@ -32,7 +32,7 @@ const paintCategories = [
     id: "automotive",
     title: "Automotive",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla quis lorem ut libero malesuada feugiat.",
+      "High-durability coatings with a glossy finish for vehicles.",
     image:
       "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg",
   },
@@ -40,13 +40,14 @@ const paintCategories = [
     id: "protective",
     title: "Protective",
     description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin eget tortor risus.",
+      "Weather-resistant protective coatings for buildings and outdoor structures.",
     image:
       "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
   },
 ];
 
-const AnimatedTitle = ({ text, isActive, windowWidth }) => {
+// مكون العنوان المعدل بنمط مائل وبارز
+const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
   const container = {
@@ -63,39 +64,26 @@ const AnimatedTitle = ({ text, isActive, windowWidth }) => {
       skew: isActive ? "0deg" : "10deg",
       scale: isActive ? 1.1 : 1,
       textShadow: isActive
-        ? "0 0 8px rgba(255,255,255,0.4)"
+        ? "0 0 8px  0 0 15px rgba(255,255,255,0.4)"
         : "0 0 3px rgba(0,0,0,0.9)",
       transition: { type: "spring", damping: 15, stiffness: 120 },
     },
   };
-
-  const fontSize = isActive
-    ? windowWidth < 640
-      ? "1.6rem"
-      : windowWidth < 768
-      ? "2.2rem"
-      : "4rem"
-    : windowWidth < 640
-    ? "2rem"
-    : windowWidth < 768
-    ? "2.5rem"
-    : "5rem";
-
-  const letterSpacing =
-    windowWidth < 640 ? "0.5px" : windowWidth < 768 ? "1px" : "2px";
-
+ 
   return (
     <motion.div
       style={{
         display: "flex",
         perspective: "1000px",
         transformStyle: "preserve-3d",
-        fontSize,
+        fontSize: isActive 
+          ? (window.innerWidth < 640 ? "2.5rem" : window.innerWidth < 768 ? "3rem" : "4rem")
+          : (window.innerWidth < 640 ? "3rem" : window.innerWidth < 768 ? "4rem" : "5rem"),
         fontWeight: "900",
         fontStyle: "italic",
         color: "white",
         textTransform: "uppercase",
-        letterSpacing,
+        letterSpacing: window.innerWidth < 640 ? "1px" : "2px",
         cursor: "default",
         userSelect: "none",
         textAlign: "center",
@@ -117,11 +105,9 @@ const AnimatedTitle = ({ text, isActive, windowWidth }) => {
     </motion.div>
   );
 };
-
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isManual, setIsManual] = useState(false);
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const navigate = useNavigate();
   const intervalRef = useRef(null);
 
@@ -129,12 +115,6 @@ const Hero = () => {
     navigate(`/products?category=${id}`);
     setIsManual(true);
   };
-
-  useEffect(() => {
-    const handleResize = () => setWindowWidth(window.innerWidth);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
 
   useEffect(() => {
     if (isManual) return;
@@ -154,36 +134,6 @@ const Hero = () => {
         {paintCategories.map((category, index) => {
           const isActive = activeIndex === index;
 
-          const flexValue = isActive
-            ? windowWidth < 768
-              ? 3
-              : 5
-            : 1;
-
-          const rotateValue = isActive
-            ? 0
-            : windowWidth < 640
-            ? 2
-            : windowWidth < 768
-            ? 5
-            : 5;
-
-          const marginLR = windowWidth < 768 ? "-10px" : "-25px";
-
-          const transformTitle = isActive
-            ? "none"
-            : windowWidth < 640
-            ? "translate(-50%, -50%) rotate(-25deg) scale(0.7)"
-            : windowWidth < 768
-            ? "translate(-50%, -50%) rotate(-45deg) scale(0.85)"
-            : "translate(-50%, -50%) rotate(-90deg)";
-
-          const filterImg = isActive
-            ? windowWidth < 768
-              ? "brightness(0.5) contrast(1.2)"
-              : "brightness(0.4) contrast(1.2)"
-            : "brightness(0.4) contrast(1.1)";
-
           return (
             <motion.div
               key={category.id}
@@ -192,10 +142,10 @@ const Hero = () => {
               }`}
               initial={{ flex: 1 }}
               animate={{
-                flex: flexValue,
-                transform: `rotate(${rotateValue}deg)`,
-                marginLeft: marginLR,
-                marginRight: marginLR,
+                flex: isActive ? 5 : 1,
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
+                marginLeft: window.innerWidth < 768 ? "-15px" : "-25px",
+                marginRight: window.innerWidth < 768 ? "-15px" : "-25px",
               }}
               style={{ transformOrigin: "center center" }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -208,36 +158,39 @@ const Hero = () => {
                 src={category.image}
                 alt={category.title}
                 className="absolute inset-0 w-full h-full object-cover"
-                style={{ filter: filterImg }}
+                style={{
+                  filter: isActive
+                    ? "brightness(0.4) contrast(1.2)"
+                    : "brightness(0.4) contrast(1.1)",
+                }}
                 initial={{ scale: 1.1 }}
                 animate={{ scale: isActive ? 1 : 1.1 }}
                 transition={{ duration: 0.5 }}
               />
 
-              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-2 sm:p-4 md:p-6 lg:p-16">
+              {/* حاوية موحدة للعناصر النصية والزر */}
+              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
+                {/* العنوان المتحرك */}
                 <div
                   className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
                   style={{
                     position: isActive ? "static" : "absolute",
                     top: isActive ? "auto" : "50%",
-                    left: isActive
-                      ? "auto"
-                      : windowWidth < 768
-                      ? "50%"
-                      : "40%",
-                    transform: transformTitle,
-                    transition: "all 0.5s ease-in-out",
+                    left: isActive ? "auto" : window.innerWidth < 768 ? "50%" : "40%",
+                    transform: isActive
+                      ? "none"
+                      : window.innerWidth < 768 
+                        ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
+                        : "translate(-50%, -50%) rotate(-90deg)",
+                    transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
                     textAlign: isActive ? "left" : "center",
                   }}
                 >
-                  <AnimatedTitle
-                    text={category.title}
-                    isActive={isActive}
-                    windowWidth={windowWidth}
-                  />
+                  <AnimatedTitle text={category.title} isActive={isActive} />
                 </div>
 
+                {/* الوصف والزر (يظهران فقط عند التفعيل) */}
                 {isActive && (
                   <motion.div
                     className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
@@ -263,9 +216,9 @@ const Hero = () => {
             </motion.div>
           );
         })}
-      </div>
+      </div> 
     </div>
   );
 };
 
-export default Hero;
+export default Hero;   
