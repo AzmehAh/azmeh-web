@@ -371,29 +371,6 @@ const Header = () => {
           </motion.div>
         )}
       </AnimatePresence>
-              >
-                <Link 
-                  to="/contact" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-sm"
-                >
-                  Contact Us
-                </Link>
-                <Link 
-                  to="/job-application" 
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-sm"
-                >
-                  Apply for Job
-                </Link>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-    </motion.div>
-  )}
-</AnimatePresence>
 
     </header> 
   );
