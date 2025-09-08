@@ -168,55 +168,56 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* حاوية موحدة للعناصر النصية والزر */}
-              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
-                {/* العنوان المتحرك */}
-                <div
-                  className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
-                  style={{
-                    position: isActive ? "static" : "absolute",
-                    top: isActive ? "auto" : "50%",
-                    left: isActive ? "auto" : window.innerWidth < 768 ? "50%" : "40%",
-                    transform: isActive
-                      ? "none"
-                      : window.innerWidth < 768 
-                        ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
-                        : "translate(-50%, -50%) rotate(-90deg)",
-                    transition: "all 0.6s ease-in-out",
-                    width: isActive ? "100%" : "auto",
-                    textAlign: isActive ? "left" : "center",
-                  }}
-                >
-                  <AnimatedTitle text={category.title} isActive={isActive} />
-                </div>
+              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-2 sm:p-4 md:p-6 lg:p-16">
+  <div
+    className="text-white pointer-events-none mb-4"
+    style={{
+      position: isActive ? "static" : "absolute",
+      top: isActive ? "auto" : "50%",
+      left: isActive ? "auto" : "50%",
+      transform: isActive
+        ? "none"
+        : "translate(-50%, -50%) scale(0.7)",
+      transition: "all 0.6s ease-in-out",
+      width: isActive ? "100%" : "auto",
+      textAlign: isActive ? "left" : "center",
+    }}
+  >
+    <AnimatedTitle
+      text={category.title}
+      isActive={isActive}
+      style={{
+        fontSize: isActive
+          ? "clamp(1.4rem, 4vw, 2.5rem)" // أقل من السابق للشاشات الصغيرة
+          : "clamp(1.2rem, 3vw, 2rem)",
+      }}
+    />
+  </div>
 
-                {/* الوصف والزر (يظهران فقط عند التفعيل) */}
-                {isActive && (
-                  <motion.div
-                    className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                  >
-                    <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
-                      {category.description}
-                    </p>
-                    <motion.button
-                      onClick={() => handleExplore(category.id)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300 text-sm sm:text-base"
-                    >
-                      <span>READ MORE</span>
-                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-                    </motion.button>
-                  </motion.div>
-                )}
-              </div>
-            </motion.div>
-          );
-        })}
-      </div> 
+  {isActive && (
+    <motion.div
+      className="w-full max-w-sm sm:max-w-sm md:max-w-md lg:max-w-lg"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.3, duration: 0.5 }}
+    >
+      <p className="text-xs sm:text-sm md:text-base lg:text-lg mb-3 sm:mb-4 text-white leading-relaxed break-words drop-shadow-lg">
+        {category.description}
+      </p>
+      <motion.button
+        onClick={() => handleExplore(category.id)}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="group inline-flex items-center space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300 text-xs sm:text-sm md:text-base"
+      >
+        <span>READ MORE</span>
+        <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 group-hover:translate-x-1 transition-transform" />
+      </motion.button>
+    </motion.div>
+  )}
+</div>
+
+       
     </div>
   );
 };
