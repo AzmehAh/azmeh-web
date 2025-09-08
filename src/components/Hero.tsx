@@ -46,7 +46,7 @@ const paintCategories = [
   },
 ];
 
-// مكون العنوان المعدل بنمط مائل وبارز
+// مكون العنوان المتحرك
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -69,21 +69,34 @@ const AnimatedTitle = ({ text, isActive }) => {
       transition: { type: "spring", damping: 15, stiffness: 120 },
     },
   };
- 
+
   return (
     <motion.div
       style={{
         display: "flex",
         perspective: "1000px",
         transformStyle: "preserve-3d",
-        fontSize: isActive 
-          ? (window.innerWidth < 640 ? "2.5rem" : window.innerWidth < 768 ? "3rem" : "4rem")
-          : (window.innerWidth < 640 ? "3rem" : window.innerWidth < 768 ? "4rem" : "5rem"),
+        fontSize: isActive
+          ? window.innerWidth < 640
+            ? "2rem"
+            : window.innerWidth < 768
+            ? "2.5rem"
+            : "4rem"
+          : window.innerWidth < 640
+          ? "2.5rem"
+          : window.innerWidth < 768
+          ? "3rem"
+          : "5rem",
         fontWeight: "900",
         fontStyle: "italic",
         color: "white",
         textTransform: "uppercase",
-        letterSpacing: window.innerWidth < 640 ? "1px" : "2px",
+        letterSpacing:
+          window.innerWidth < 640
+            ? "0.5px"
+            : window.innerWidth < 768
+            ? "1px"
+            : "2px",
         cursor: "default",
         userSelect: "none",
         textAlign: "center",
@@ -105,6 +118,7 @@ const AnimatedTitle = ({ text, isActive }) => {
     </motion.div>
   );
 };
+
 const Hero = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isManual, setIsManual] = useState(false);
@@ -142,10 +156,14 @@ const Hero = () => {
               }`}
               initial={{ flex: 1 }}
               animate={{
-                flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
-                marginLeft: window.innerWidth < 768 ? "-15px" : "-25px",
-                marginRight: window.innerWidth < 768 ? "-15px" : "-25px",
+                flex: isActive ? (window.innerWidth < 768 ? 3 : 5) : 1,
+                transform: isActive
+                  ? "rotate(0deg)"
+                  : window.innerWidth < 768
+                  ? "rotate(2deg)"
+                  : "rotate(5deg)",
+                marginLeft: window.innerWidth < 768 ? "-10px" : "-25px",
+                marginRight: window.innerWidth < 768 ? "-10px" : "-25px",
               }}
               style={{ transformOrigin: "center center" }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -160,7 +178,9 @@ const Hero = () => {
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
                   filter: isActive
-                    ? "brightness(0.4) contrast(1.2)"
+                    ? window.innerWidth < 768
+                      ? "brightness(0.5) contrast(1.2)"
+                      : "brightness(0.4) contrast(1.2)"
                     : "brightness(0.4) contrast(1.1)",
                 }}
                 initial={{ scale: 1.1 }}
@@ -168,8 +188,8 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* حاوية موحدة للعناصر النصية والزر */}
-              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
+              {/* حاوية النصوص والزر */}
+              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-2 sm:p-4 md:p-6 lg:p-16">
                 {/* العنوان المتحرك */}
                 <div
                   className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
@@ -179,9 +199,11 @@ const Hero = () => {
                     left: isActive ? "auto" : window.innerWidth < 768 ? "50%" : "40%",
                     transform: isActive
                       ? "none"
-                      : window.innerWidth < 768 
-                        ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
-                        : "translate(-50%, -50%) rotate(-90deg)",
+                      : window.innerWidth < 640
+                      ? "translate(-50%, -50%) rotate(-30deg) scale(0.7)"
+                      : window.innerWidth < 768
+                      ? "translate(-50%, -50%) rotate(-45deg) scale(0.85)"
+                      : "translate(-50%, -50%) rotate(-90deg)",
                     transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
                     textAlign: isActive ? "left" : "center",
@@ -190,7 +212,7 @@ const Hero = () => {
                   <AnimatedTitle text={category.title} isActive={isActive} />
                 </div>
 
-                {/* الوصف والزر (يظهران فقط عند التفعيل) */}
+                {/* الوصف والزر */}
                 {isActive && (
                   <motion.div
                     className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
