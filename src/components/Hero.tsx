@@ -216,9 +216,9 @@ const Hero = () => {
             </motion.div>
           );
         })}
-      </div> 
+      </div>
     </div> 
   );
 };
- 
-export default Hero;    
+
+export default Hero;
