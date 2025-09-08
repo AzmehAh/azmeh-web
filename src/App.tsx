@@ -1,5 +1,7 @@
 import React from 'react';
+import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import Services from './components/Services';
@@ -32,6 +34,13 @@ const HomePage = () => (
 );
 
 function App() {
+  const location = useLocation();
+
+  // Auto-scroll to top when navigating between pages
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+
   return (
     <div className="min-h-screen">
       <Header /> 

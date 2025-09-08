@@ -38,11 +38,11 @@ const BlogSection = () => {
   };
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
       {/* Section Header - Blog */}
-<div className="text-center mb-16">
+<div className="text-center mb-8 sm:mb-12 lg:mb-16">
   {/* العنوان الصغير */}
   <motion.h3
     initial={{ opacity: 0, y: 20 }}
@@ -58,7 +58,7 @@ const BlogSection = () => {
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6, delay: 0.1 }}
-    className="text-4xl font-bold text-gray-900 mb-4"
+    className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4"
   >
     Latest from Our Blog
   </motion.h2>
@@ -68,12 +68,12 @@ const BlogSection = () => {
     initial={{ width: 0 }}
     whileInView={{ width: "80%" }}
     transition={{ duration: 0.6, delay: 0.2 }}
-    className="h-1 bg-[#0055A3] mx-auto rounded"
+    className="h-1 bg-[#0055A3] mx-auto rounded max-w-24 sm:max-w-32"
   />
 </div>
 
         {/* Blog Posts Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8 sm:mb-12">
           {blogPosts.map((post, index) => (
             <motion.article
               key={post.id}
@@ -87,13 +87,13 @@ const BlogSection = () => {
                 <img
                   src={post.image}
                   alt={post.title}
-                  className="w-full h-60 object-cover"
+                  className="w-full h-48 sm:h-56 lg:h-60 object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
  
               {/* Post Content */}
-              <div className="p-6">
+              <div className="p-4 sm:p-6">
                 {/* Publish Date */}
                 <div className="flex items-center text-sm  text-gray-500 mb-3">
                   <Calendar className="w-4 h-4 mr-2" />
@@ -101,7 +101,7 @@ const BlogSection = () => {
                 </div>
 
                 {/* Post Title */}
-                <h3 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
                   {post.title}
                 </h3>
 
@@ -123,10 +123,10 @@ const BlogSection = () => {
         >
           <Link
             to="/systems"
-            className="inline-flex items-center bg-[#2C5DB6] text-white px-8 py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold"
+            className="inline-flex items-center bg-[#2C5DB6] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-sm sm:text-base"
           >
             View All Articles
-            <ArrowRight className="w-5 h-5 ml-2" />
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
           </Link>
         </motion.div>
 

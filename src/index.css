@@ -177,3 +177,30 @@
 * {
   scrollbar-width: none; 
 }
+
+/* Improved mobile responsiveness */
+@media (max-width: 640px) {
+  .container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Ensure hero section doesn't overlap with fixed header */
+  .hero-mobile-spacing {
+    padding-top: 5rem;
+  }
+  
+  /* Better mobile text sizing */
+  h1 { font-size: 1.875rem !important; }
+  h2 { font-size: 1.5rem !important; }
+  h3 { font-size: 1.25rem !important; }
+}
+
+/* Smoother transitions for responsive elements */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
