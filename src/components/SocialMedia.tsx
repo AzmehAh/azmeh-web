@@ -71,7 +71,7 @@ const SocialMedia = () => {
         </div>
 
         {/* Social Follow Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+        <div className="flex  sm:flex-row items-center justify-center gap-5">
               <a
   href="#" 
   className="flex items-center bg-[#0055a3] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-12 hover:w-60 group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
