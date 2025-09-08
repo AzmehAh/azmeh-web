@@ -233,122 +233,86 @@ const Header = () => {
       />
 
       {/* Mobile menu */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="lg:hidden bg-white border-t border-gray-200 overflow-hidden"
+      {/* Mobile menu */}
+<AnimatePresence>
+  {isMobileMenuOpen && (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: 'auto' }}
+      exit={{ opacity: 0, height: 0 }}
+      transition={{ duration: 0.3 }}
+      className="lg:hidden bg-white border-t border-gray-200 overflow-hidden"
+    >
+      <div className="px-4 py-6 space-y-2 max-h-96 overflow-y-auto">
+        <Link 
+          to="/" 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-3 px-2 rounded-md transition-colors duration-200"
+        >
+          Home
+        </Link>
+        <Link 
+          to="/about" 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-3 px-2 rounded-md transition-colors duration-200"
+        >
+          About Us
+        </Link>
+        <Link 
+          to="/blog" 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-3 px-2 rounded-md transition-colors duration-200"
+        >
+          Blog
+        </Link>
+        <Link 
+          to="/products" 
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-3 px-2 rounded-md transition-colors duration-200"
+        >
+          Products
+        </Link>
+
+        {/* Contact Dropdown */}
+        <div>
+          <button
+            onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'contact' ? null : 'contact')}
+            className="flex items-center justify-between w-full text-gray-900 hover:text-[#2C5DB6] font-medium py-3 px-2 rounded-md transition-colors duration-200"
           >
-            <div className="px-4 py-6 space-y-2 max-h-96 overflow-y-auto">
-              <Link 
-                to="/" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
+            <span>Contact & Job Application</span>
+            <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
+          </button>
+          <AnimatePresence>
+            {activeMobileDropdown === 'contact' && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden pl-4 mt-2 space-y-1"
               >
-                Home
-              </Link>
-              <Link 
-                to="/about" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
-              >
-                About Us
-              </Link>
-
-              {/* Technical Support Dropdown */}
-              <div>
-                <button
-                  onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'technical' ? null : 'technical')}
-                  className="flex items-center justify-between w-full text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
+                <Link 
+                  to="/contact" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-sm"
                 >
-                  <span>Technical Support</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'technical' ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {activeMobileDropdown === 'technical' && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: 'auto', opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden pl-4 mt-2 space-y-1"
-                    >
-                      <h5 className="text-sm font-semibold text-gray-700 mb-2">FAQ</h5>
-                      <Link 
-                        to="/faq/industrial" 
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
-                      >
-                        Industrial and Protective Coating
-                      </Link>
-                      <Link 
-                        to="/faq/architectural" 
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
-                      >
-                        Architectural Coating
-                      </Link>
-                      
-                      <h5 className="text-sm font-semibold text-gray-700 mb-2 mt-3">Troubleshooting</h5>
-                      <Link 
-                        to="/troubleshooting/car-coating" 
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
-                      >
-                        Car Coating Problems <span className="text-xs text-gray-500">(28)</span>
-                      </Link> 
-                      <Link 
-                        to="/troubleshooting/coating-defects" 
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-[#2C5DB6] px-2 py-1 rounded-md transition-colors duration-200 text-sm"
-                      >
-                        Application Defects <span className="text-xs text-gray-500">(13)</span>
-                      </Link>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <Link to="/systems" 
-                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-[#2C5DB6] hover:text-[#2C5DB6]  font-medium py-2"
-              >
-              Blog
-            </Link>
-              <Link 
-                to="/products" 
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
-              >
-                Products
-              </Link>
-
-             
-
-              {/* Contact Dropdown */}
-              <div>
-                <button
-                  onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'contact' ? null : 'contact')}
-                  className="flex items-center justify-between w-full text-gray-900 hover:text-[#2C5DB6] font-medium py-2"
+                  Contact Us
+                </Link>
+                <Link 
+                  to="/job-application" 
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 text-sm"
                 >
-                  <span>Contact & Distributors</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
-                </button>
-                <div className="p-4">
-                      <Link to="/contact" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
-                        Contact Us
-                      </Link>
-                      <Link to="/job-application" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
-                        Apply for Job
-                      </Link>
-                    </div>
-              </div> 
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                  Apply for Job
+                </Link>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
     </header> 
   );
 };
