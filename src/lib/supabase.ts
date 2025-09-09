@@ -485,13 +485,17 @@ export const api = {
     if (filters.usage) {
       query = query.eq('usage', filters.usage);
     }
+    if (filters.search) {
+      query = query.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%,code.ilike.%${filters.search}%`);
+    }
+
     query = query.order('created_at', { ascending: false });
     
     const { data, error } = await query;
     if (error) throw error;
     return data;
   },
-    if (filters.search) {
+
   // Enhanced Bulletins API
   async getBulletinsWithFilters(filters: {
     category?: string;
@@ -503,7 +507,7 @@ export const api = {
       .from('bulletins')
       .select('*')
       .eq('status', 'published');
-      query = query.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%,code.ilike.%${filters.search}%`);
+
     if (filters.category) {
       query = query.eq('category', filters.category);
     }
@@ -516,7 +520,7 @@ export const api = {
     if (filters.search) {
       query = query.or(`title.ilike.%${filters.search}%,short_description.ilike.%${filters.search}%`);
     }
-    }
+
     query = query.order('created_at', { ascending: false });
     
     const { data, error } = await query;

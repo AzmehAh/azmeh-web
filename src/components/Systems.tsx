@@ -1,10 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Palette, Wrench, Shield, Building, Car, Layers, Hammer, Droplets, Settings, Factory, Home, Flame,ChevronDown } from 'lucide-react';
 import { systemCategories } from '../data/bulletinsData';
 import { supabase, api, Bulletin } from '../lib/supabase';
-import { useState, useEffect } from 'react';
 
 const Systems = () => {
   const navigate = useNavigate();
