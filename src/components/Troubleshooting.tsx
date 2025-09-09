@@ -2,12 +2,37 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ArrowLeft, Search, AlertTriangle, CheckCircle, Wrench, AlertCircle } from 'lucide-react';
-import { troubleshootingCategories, TroubleshootingItem } from '../data/troubleshootingData';
+import { supabase, TroubleshootingCategory, TroubleshootingItem } from '../lib/supabase';
 
 const Troubleshooting = () => {
   const { category } = useParams<{ category?: string }>();
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [troubleshootingCategories, setTroubleshootingCategories] = useState<(TroubleshootingCategory & { troubleshooting_items: TroubleshootingItem[] })[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTroubleshootingData();
+  }, []);
+
+  const fetchTroubleshootingData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('troubleshooting_categories')
+        .select(`
+          *,
+          troubleshooting_items (*)
+        `)
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+      setTroubleshootingCategories(data || []);
+    } catch (error) {
+      console.error('Error fetching troubleshooting data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Get the current category data
   const currentCategory = category 
@@ -16,6 +41,14 @@ const Troubleshooting = () => {
 
   // If no category is specified, show category selection
   if (!category) {
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-[#0055A3]"></div>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-gray-50 pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -56,7 +89,7 @@ const Troubleshooting = () => {
                     <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
                   </div>
                   <div className="mt-4 text-sm text-gray-500">
-                    {cat.issueCount} issues covered
+                    {cat.troubleshooting_items.length} issues covered
                   </div>
                 </div>
               </Link>
@@ -69,7 +102,7 @@ const Troubleshooting = () => {
 
   // Filter issues based on search
   const filteredIssues = currentCategory 
-    ? currentCategory.data.filter(issue => 
+    ? currentCategory.troubleshooting_items.filter(issue => 
         issue.problem.toLowerCase().includes(searchTerm.toLowerCase()) ||
         issue.solution.toLowerCase().includes(searchTerm.toLowerCase())
       )

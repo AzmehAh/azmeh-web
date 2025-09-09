@@ -2,12 +2,37 @@ import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, ChevronUp, ArrowLeft, Search, HelpCircle, CheckCircle } from 'lucide-react';
-import { faqCategories, FAQItem } from '../data/faqData';
+import { supabase, FAQCategory, FAQItem } from '../lib/supabase';
 
 const FAQ = () => {
   const { category } = useParams<{ category?: string }>();
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [faqCategories, setFaqCategories] = useState<(FAQCategory & { faq_items: FAQItem[] })[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchFAQData();
+  }, []);
+
+  const fetchFAQData = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('faq_categories')
+        .select(`
+          *,
+          faq_items (*)
+        `)
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+      setFaqCategories(data || []);
+    } catch (error) {
+      console.error('Error fetching FAQ data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Get the current category data
   const currentCategory = category 
@@ -16,6 +41,14 @@ const FAQ = () => {
 
   // If no category is specified, show category selection
   if (!category) {
+    if (loading) {
+      return (
+        <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+        </div>
+      );
+    }
+
     return (
       <div className="min-h-screen bg-gray-50 pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -56,7 +89,7 @@ const FAQ = () => {
                     <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
                   </div>
                   <div className="mt-4 text-sm text-gray-500">
-                    {cat.data.length} questions available
+                    {cat.faq_items.length} questions available
                   </div>
                 </div>
               </Link>
@@ -69,7 +102,7 @@ const FAQ = () => {
 
   // Filter FAQs based on search
   const filteredFAQs = currentCategory 
-    ? currentCategory.data.filter(faq => 
+    ? currentCategory.faq_items.filter(faq => 
         faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
         faq.answer.toLowerCase().includes(searchTerm.toLowerCase())
       )
