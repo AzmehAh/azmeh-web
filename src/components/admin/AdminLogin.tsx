@@ -26,12 +26,11 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
     
     if (loginError) {
       setError(loginError);
+      setIsLoading(false);
     } else if (user) {
       onLogin();
       navigate('/admin');
     }
-    
-    setIsLoading(false);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +69,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
               required
               value={formData.email}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20"
               placeholder="admin@example.com"
             />
           </div>
@@ -87,7 +86,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
               required
               value={formData.password}
               onChange={handleInputChange}
-              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
+              className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20"
               placeholder="Enter your password"
             />
           </div>
@@ -106,7 +105,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-[#0055A3] text-white py-3 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-[#0055A3]/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+            className="w-full bg-[#2C5DB6] text-white py-3 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-[#2C5DB6]/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {isLoading ? (
               <>
@@ -123,7 +122,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
         </form>
 
         <div className="mt-6 text-center text-sm text-gray-600">
-          Demo credentials: admin@alazmepaints.com / admin123
+          Use your admin email and password to sign in
         </div>
       </motion.div>
     </div>

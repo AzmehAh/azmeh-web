@@ -50,8 +50,22 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
-    setIsAdminAuthenticated(auth.isAuthenticated());
-    setAuthChecked(true);
+    const checkAuth = async () => {
+      const authenticated = await auth.isAuthenticated();
+      setIsAdminAuthenticated(authenticated);
+      setAuthChecked(true);
+    };
+    
+    checkAuth();
+
+    // Listen to auth state changes
+    const { data: { subscription } } = auth.onAuthStateChange((user) => {
+      setIsAdminAuthenticated(!!user);
+    });
+
+    return () => {
+      subscription?.unsubscribe();
+    };
   }, []);
 
   const handleAdminLogin = () => {
@@ -59,7 +73,6 @@ function App() {
   };
 
   const handleAdminLogout = () => {
-    auth.signOut();
     setIsAdminAuthenticated(false);
   };
 
@@ -72,13 +85,13 @@ function App() {
   if (!authChecked) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#2C5DB6]"></div>
       </div>
     );
   }
   return (
     <div className="min-h-screen">
-      <Header /> 
+      {!location.pathname.startsWith('/admin') && <Header />}
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<About />} />
@@ -142,7 +155,7 @@ function App() {
           } />
         </Route>
       </Routes>
-      <Footer />
+      {!location.pathname.startsWith('/admin') && <Footer />}
     </div>
   );
 }

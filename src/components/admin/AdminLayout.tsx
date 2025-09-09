@@ -12,7 +12,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { auth } from '../../lib/auth';
 
 interface AdminLayoutProps {
@@ -22,22 +22,10 @@ interface AdminLayoutProps {
 const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [adminUser, setAdminUser] = useState(auth.getCurrentAdmin());
 
-  useEffect(() => {
-    const user = auth.getCurrentAdmin();
-    setAdminUser(user);
-    
-    // Redirect to login if not authenticated
-    if (!user && location.pathname.startsWith('/admin') && location.pathname !== '/admin/login') {
-      window.location.href = '/admin/login';
-    }
-  }, [location]);
-
-  const handleLogout = () => {
-    auth.signOut();
+  const handleLogout = async () => {
+    await auth.signOut();
     if (onLogout) onLogout();
-    window.location.href = '/admin/login';
   };
 
   const navigation = [
@@ -97,7 +85,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
                   onClick={() => setSidebarOpen(false)}
                   className={`flex items-center px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
                     isActive(item.href)
-                      ? 'bg-[#0055A3] text-white'
+                      ? 'bg-[#2C5DB6] text-white'
                       : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
@@ -136,7 +124,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
               <div className="text-right">
                 <div className="text-sm font-medium text-gray-900">Admin User</div>
                 <div className="text-xs text-gray-500">Administrator</div>
-                <div className="text-xs text-gray-500">{adminUser?.email || 'Administrator'}</div>
+                <div className="text-xs text-gray-500">Authenticated</div>
               </div>
             </div>
           </div>
