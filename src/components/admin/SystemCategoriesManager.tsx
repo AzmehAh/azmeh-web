@@ -420,29 +420,6 @@ const CategoryModal = ({
     </div>
   );
 
-  async function handleSave() {
-    if (!formData.name.trim()) {
-      alert('Category name is required');
-      return;
-    }
-
-    setSaving(true);
-    try {
-      if (category) {
-        await api.updateBulletinCategoryConfig(category.id, formData);
-      } else {
-        await api.createBulletinCategoryConfig(formData);
-      }
-
-      onSave();
-      onClose();
-    } catch (error) {
-      console.error('Error saving category:', error);
-      alert('Error saving category');
-    } finally {
-      setSaving(false);
-    }
-  }
 };
 
 export default SystemCategoriesManager;
