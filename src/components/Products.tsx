@@ -2,11 +2,15 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, X, ChevronDown, Grid, List, SortAsc } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { productsData, filterOptions, Product } from '../data/productsData';
+import { productsData, Product } from '../data/productsData';
+import { api, ProductFilterType, ProductFilterValue } from '../lib/supabase';
 
 const Products = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterOptions, setFilterOptions] = useState<Record<string, string[]>>({});
+  const [filterTypes, setFilterTypes] = useState<(ProductFilterType & { product_filter_values: ProductFilterValue[] })[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({
     type: [],
     brand: [],
@@ -16,6 +20,41 @@ const Products = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeFilterCategory, setActiveFilterCategory] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchFilterData();
+  }, []);
+
+  const fetchFilterData = async () => {
+    try {
+      const data = await api.getProductFilterTypes();
+      setFilterTypes(data || []);
+      
+      // Transform data into filter options format
+      const options: Record<string, string[]> = {};
+      data?.forEach(filterType => {
+        const key = filterType.name.toLowerCase();
+        options[key] = filterType.product_filter_values
+          .filter(value => value.is_active)
+          .sort((a, b) => a.sort_order - b.sort_order)
+          .map(value => value.value);
+      });
+      
+      setFilterOptions(options);
+      
+      // Initialize selectedFilters with empty arrays for each filter type
+      const initialFilters: Record<string, string[]> = {};
+      data?.forEach(filterType => {
+        initialFilters[filterType.name.toLowerCase()] = [];
+      });
+      setSelectedFilters(initialFilters);
+      
+    } catch (error) {
+      console.error('Error fetching filter data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -53,12 +92,11 @@ const Products = () => {
   };
 
   const clearFilters = () => {
-    setSelectedFilters({
-      type: [],
-      brand: [],
-      material: [],
-      usage: []
+    const emptyFilters: Record<string, string[]> = {};
+    filterTypes.forEach(filterType => {
+      emptyFilters[filterType.name.toLowerCase()] = [];
     });
+    setSelectedFilters(emptyFilters);
     setSearchTerm('');
   };
 
@@ -80,6 +118,11 @@ const Products = () => {
         </div>
       </div>
 
+      {loading ? (
+        <div className="flex items-center justify-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+        </div>
+      ) : (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
@@ -132,24 +175,24 @@ const Products = () => {
               </div>
 
              {/* Filter Categories */}
-{Object.entries(filterOptions).map(([category, options]) => (
+{filterTypes.map((filterType) => (
   <div key={category} className="mb-6">
     <button
       onClick={() =>
-        setActiveFilterCategory(activeFilterCategory === category ? null : category)
+        setActiveFilterCategory(activeFilterCategory === filterType.name.toLowerCase() ? null : filterType.name.toLowerCase())
       }
       className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-[#2C5DB6] transition-colors"
     >
-      <span className="capitalize">By {category}</span>
+      <span className="capitalize">By {filterType.name}</span>
       <ChevronDown
         className={`w-4 h-4 transition-transform ${
-          activeFilterCategory === category ? 'rotate-180' : ''
+          activeFilterCategory === filterType.name.toLowerCase() ? 'rotate-180' : ''
         }`}
       />
     </button>
 
     <AnimatePresence>
-      {activeFilterCategory === category && (
+      {activeFilterCategory === filterType.name.toLowerCase() && (
         <motion.div
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
@@ -158,20 +201,23 @@ const Products = () => {
           className="overflow-hidden"
         >
           <div className="space-y-2">
-            {options.map((option) => (
-              <label
-                key={option}
+            {filterType.product_filter_values
+              .filter(value => value.is_active)
+              .sort((a, b) => a.sort_order - b.sort_order)
+              .map((filterValue) => (
+                <label
+                  key={filterValue.id}
                 className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
               >
                 <input
                   type="checkbox"
-                  checked={selectedFilters[category].includes(option)}
-                  onChange={() => toggleFilter(category, option)}
+                  checked={selectedFilters[filterType.name.toLowerCase()]?.includes(filterValue.value) || false}
+                  onChange={() => toggleFilter(filterType.name.toLowerCase(), filterValue.value)}
                   className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
                 />
-                <span className="text-sm text-gray-700">{option}</span>
+                <span className="text-sm text-gray-700">{filterValue.display_name || filterValue.value}</span>
               </label>
-            ))}
+              ))}
           </div>
         </motion.div>
       )}
@@ -332,6 +378,7 @@ const Products = () => {
           </div>
         </div>
       </div>
+      )}
     </div>
   );
 };

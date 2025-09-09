@@ -2,12 +2,13 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Palette, Wrench, Shield, Building, Car, Layers, Hammer, Droplets, Settings, Factory, Home, Flame,ChevronDown } from 'lucide-react';
-import { systemCategories } from '../data/bulletinsData';
-import { supabase, api, Bulletin } from '../lib/supabase';
+import { supabase, api, Bulletin, BulletinCategoryConfig } from '../lib/supabase';
 
 const Systems = () => {
   const navigate = useNavigate();
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
+  const [systemCategories, setSystemCategories] = useState<Record<string, string[]>>({});
+  const [bulletinCategories, setBulletinCategories] = useState<BulletinCategoryConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
@@ -15,15 +16,33 @@ const Systems = () => {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchBulletins();
+    fetchData();
   }, []);
 
-  const fetchBulletins = async () => {
+  const fetchData = async () => {
     try {
-      const data = await api.getBulletins();
-      setBulletins(data || []);
+      const [bulletinsData, categoriesData] = await Promise.all([
+        api.getBulletins(),
+        api.getBulletinCategoriesConfig()
+      ]);
+      
+      setBulletins(bulletinsData || []);
+      setBulletinCategories(categoriesData || []);
+      
+      // Build dynamic system categories from bulletins
+      const categoriesMap: Record<string, string[]> = {};
+      categoriesData?.forEach(category => {
+        if (category.is_active) {
+          const categoryBulletins = bulletinsData?.filter(b => b.category === category.name) || [];
+          const subcategories = [...new Set(categoryBulletins.map(b => b.subcategory))];
+          categoriesMap[category.name] = subcategories;
+        }
+      });
+      
+      setSystemCategories(categoriesMap);
+      
     } catch (error) {
-      console.error('Error fetching bulletins:', error);
+      console.error('Error fetching data:', error);
     } finally {
       setLoading(false);
     }
@@ -58,12 +77,12 @@ const Systems = () => {
     if (searchTerm) {
       filtered = filtered.filter(b =>
         b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        b.shortDescription.toLowerCase().includes(searchTerm.toLowerCase())
+        (b.short_description && b.short_description.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
 
     return filtered;
-  }, [selectedFilters, searchTerm]);
+  }, [selectedFilters, searchTerm, bulletins]);
 
   const handleBulletinClick = (id: string) => {
     navigate(`/bulletin/${id}`);

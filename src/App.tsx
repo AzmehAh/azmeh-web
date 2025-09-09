@@ -16,6 +16,8 @@ import ProductsManager from './components/admin/ProductsManager';
 import ProductCategoriesManager from './components/admin/ProductCategoriesManager';
 import BulletinsManager from './components/admin/BulletinsManager';
 import ContentManager from './components/admin/ContentManager';
+import ProductFiltersManager from './components/admin/ProductFiltersManager';
+import SystemCategoriesManager from './components/admin/SystemCategoriesManager';
 import ContactMessages from './components/admin/ContactMessages';
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
@@ -139,6 +141,16 @@ function App() {
           <Route path="categories" element={
             <ProtectedRoute>
               <ProductCategoriesManager />
+            </ProtectedRoute>
+          } />
+          <Route path="product-filters" element={
+            <ProtectedRoute>
+              <ProductFiltersManager />
+            </ProtectedRoute>
+          } />
+          <Route path="system-categories" element={
+            <ProtectedRoute>
+              <SystemCategoriesManager />
             </ProtectedRoute>
           } />
           <Route path="bulletins" element={

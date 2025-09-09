@@ -172,6 +172,35 @@ export interface ContentBlock {
   updated_at: string;
 }
 
+export interface ProductFilterType {
+  id: string;
+  name: string;
+  description?: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface ProductFilterValue {
+  id: string;
+  filter_type_id: string;
+  value: string;
+  display_name?: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface BulletinCategoryConfig {
+  id: string;
+  name: string;
+  description?: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 // API Functions
 export const api = {
   // Products
@@ -450,6 +479,148 @@ export const api = {
     
     if (error) throw error;
     return data;
+  },
+
+  // Product Filter Management
+  async getProductFilterTypes() {
+    const { data, error } = await supabase
+      .from('product_filter_types')
+      .select(`
+        *,
+        product_filter_values (*)
+      `)
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async createProductFilterType(filterType: Omit<ProductFilterType, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_filter_types')
+      .insert([filterType])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateProductFilterType(id: string, updates: Partial<ProductFilterType>) {
+    const { data, error } = await supabase
+      .from('product_filter_types')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteProductFilterType(id: string) {
+    const { error } = await supabase
+      .from('product_filter_types')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  async getProductFilterValues(filterTypeId?: string) {
+    let query = supabase
+      .from('product_filter_values')
+      .select(`
+        *,
+        product_filter_types (name)
+      `)
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
+
+    if (filterTypeId) {
+      query = query.eq('filter_type_id', filterTypeId);
+    }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    return data;
+  },
+
+  async createProductFilterValue(filterValue: Omit<ProductFilterValue, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_filter_values')
+      .insert([filterValue])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateProductFilterValue(id: string, updates: Partial<ProductFilterValue>) {
+    const { data, error } = await supabase
+      .from('product_filter_values')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteProductFilterValue(id: string) {
+    const { error } = await supabase
+      .from('product_filter_values')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Bulletin Category Management
+  async getBulletinCategoriesConfig() {
+    const { data, error } = await supabase
+      .from('bulletin_categories_config')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order', { ascending: true });
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async createBulletinCategoryConfig(category: Omit<BulletinCategoryConfig, 'id' | 'created_at' | 'updated_at'>) {
+    const { data, error } = await supabase
+      .from('bulletin_categories_config')
+      .insert([{ ...category, updated_at: new Date().toISOString() }])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateBulletinCategoryConfig(id: string, updates: Partial<BulletinCategoryConfig>) {
+    const { data, error } = await supabase
+      .from('bulletin_categories_config')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteBulletinCategoryConfig(id: string) {
+    const { error } = await supabase
+      .from('bulletin_categories_config')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
   },
 
   // Enhanced Products API

@@ -10,6 +10,7 @@ import {
   Settings,
   Layout,
   Tags,
+  Filter,
   LogOut,
   Menu,
   X
@@ -34,6 +35,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
     { name: 'Dashboard', href: '/admin', icon: Home },
     { name: 'Products', href: '/admin/products', icon: Package },
     { name: 'Categories', href: '/admin/categories', icon: Tags },
+    { name: 'Product Filters', href: '/admin/product-filters', icon: Filter },
+    { name: 'System Categories', href: '/admin/system-categories', icon: Settings },
     { name: 'Bulletins', href: '/admin/bulletins', icon: FileText },
     { name: 'FAQ', href: '/admin/faq', icon: HelpCircle },
     { name: 'Troubleshooting', href: '/admin/troubleshooting', icon: Settings },
