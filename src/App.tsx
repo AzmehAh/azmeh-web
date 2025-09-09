@@ -133,6 +133,21 @@ function App() {
               <ProductsManager />
             </ProtectedRoute>
           } />
+          <Route path="categories" element={
+            <ProtectedRoute>
+              <ProductCategoriesManager />
+            </ProtectedRoute>
+          } />
+          <Route path="bulletins" element={
+            <ProtectedRoute>
+              <BulletinsManager />
+            </ProtectedRoute>
+          } />
+          <Route path="content" element={
+            <ProtectedRoute>
+              <ContentManager />
+            </ProtectedRoute>
+          } />
           <Route path="messages" element={
             <ProtectedRoute>
               <ContactMessages />

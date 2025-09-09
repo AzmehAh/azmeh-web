@@ -2,14 +2,33 @@ import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Palette, Wrench, Shield, Building, Car, Layers, Hammer, Droplets, Settings, Factory, Home, Flame,ChevronDown } from 'lucide-react';
-import { bulletinsData, systemCategories } from '../data/bulletinsData';
+import { systemCategories } from '../data/bulletinsData';
+import { supabase, api, Bulletin } from '../lib/supabase';
+import { useState, useEffect } from 'react';
 
 const Systems = () => {
   const navigate = useNavigate();
+  const [bulletins, setBulletins] = useState<Bulletin[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
 
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchBulletins();
+  }, []);
+
+  const fetchBulletins = async () => {
+    try {
+      const data = await api.getBulletins();
+      setBulletins(data || []);
+    } catch (error) {
+      console.error('Error fetching bulletins:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Toggle subcategory filter
   const toggleFilter = (category: string, subcategory: string) => {
@@ -29,7 +48,7 @@ const Systems = () => {
 
   // Filter bulletins based on selectedFilters and search term
   const filteredBulletins = useMemo(() => {
-    let filtered = bulletinsData;
+    let filtered = bulletins;
 
     Object.entries(selectedFilters).forEach(([category, subcategories]) => {
       if (subcategories.length > 0) {

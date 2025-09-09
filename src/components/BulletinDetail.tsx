@@ -7,8 +7,43 @@ import { bulletinsData, BulletinItem, BulletinContent } from '../data/bulletinsD
 const BulletinDetail = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  
-  const bulletin = bulletinsData.find(b => b.id === id);
+  const [bulletin, setBulletin] = useState<Bulletin | null>(null);
+  const [relatedBulletins, setRelatedBulletins] = useState<Bulletin[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (id) {
+      fetchBulletin(id);
+    }
+  }, [id]);
+
+  const fetchBulletin = async (bulletinId: string) => {
+    try {
+      const data = await api.getBulletin(bulletinId);
+      setBulletin(data);
+      
+      // Fetch related bulletins
+      const relatedData = await api.getBulletins();
+      const related = relatedData?.filter(b => 
+        b.id !== bulletinId && 
+        (b.category === data.category || b.subcategory === data.subcategory)
+      ).slice(0, 4) || [];
+      setRelatedBulletins(related);
+    } catch (error) {
+      console.error('Error fetching bulletin:', error);
+      setBulletin(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+      </div>
+    );
+  }
 
   if (!bulletin) {
     return (
@@ -180,13 +215,7 @@ const BulletinDetail = () => {
             </h3>
             
             <div className="grid md:grid-cols-2 gap-6">
-              {bulletinsData
-                .filter(b => 
-                  b.id !== bulletin.id && 
-                  (b.category === bulletin.category || b.subcategory === bulletin.subcategory)
-                )
-                .slice(0, 4)
-                .map((relatedBulletin) => (
+              {relatedBulletins.map((relatedBulletin) => (
                   <div
                     key={relatedBulletin.id}
                     onClick={() => navigate(`/bulletin/${relatedBulletin.id}`)}

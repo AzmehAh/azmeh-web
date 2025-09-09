@@ -8,6 +8,8 @@ import {
   MessageSquare, 
   Users, 
   Settings,
+  Layout,
+  Tags,
   LogOut,
   Menu,
   X
@@ -31,8 +33,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: Home },
     { name: 'Products', href: '/admin/products', icon: Package },
+    { name: 'Categories', href: '/admin/categories', icon: Tags },
+    { name: 'Bulletins', href: '/admin/bulletins', icon: FileText },
     { name: 'FAQ', href: '/admin/faq', icon: HelpCircle },
     { name: 'Troubleshooting', href: '/admin/troubleshooting', icon: Settings },
+    { name: 'Content', href: '/admin/content', icon: Layout },
     { name: 'Contact Messages', href: '/admin/messages', icon: MessageSquare },
     { name: 'Job Applications', href: '/admin/applications', icon: Users },
   ];
