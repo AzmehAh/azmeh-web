@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock, LogIn, AlertCircle } from 'lucide-react';
 import { auth } from '../../lib/auth';
@@ -8,6 +9,7 @@ interface AdminLoginProps {
 }
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -26,6 +28,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
       setError(loginError);
     } else if (user) {
       onLogin();
+      navigate('/admin');
     }
     
     setIsLoading(false);

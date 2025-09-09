@@ -1,11 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminLogin from './components/admin/AdminLogin';
+import ProtectedRoute from './components/admin/ProtectedRoute';
 import FAQManager from './components/admin/FAQManager';
 import TroubleshootingManager from './components/admin/TroubleshootingManager';
 import JobApplicationsManager from './components/admin/JobApplicationsManager';
@@ -45,9 +47,11 @@ const HomePage = () => (
 function App() {
   const location = useLocation();
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
     setIsAdminAuthenticated(auth.isAuthenticated());
+    setAuthChecked(true);
   }, []);
 
   const handleAdminLogin = () => {
@@ -64,6 +68,14 @@ function App() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
+  // Don't render anything until auth check is complete
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+      </div>
+    );
+  }
   return (
     <div className="min-h-screen">
       <Header /> 
@@ -82,18 +94,52 @@ function App() {
         <Route path="/troubleshooting/:category" element={<Troubleshooting />} />
         
         {/* Admin Routes */}
-        <Route path="/admin/login" element={
-          isAdminAuthenticated ? 
-            <AdminLayout onLogout={handleAdminLogout} /> : 
-            <AdminLogin onLogin={handleAdminLogin} />
-        } />
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="products" element={<ProductsManager />} />
-          <Route path="messages" element={<ContactMessages />} />
-          <Route path="faq" element={<FAQManager />} />
-          <Route path="troubleshooting" element={<TroubleshootingManager />} />
-          <Route path="applications" element={<JobApplicationsManager />} />
+        <Route 
+          path="/admin/login" 
+          element={
+            isAdminAuthenticated ? 
+              <Navigate to="/admin" replace /> : 
+              <AdminLogin onLogin={handleAdminLogin} />
+          } 
+        />
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute>
+              <AdminLayout onLogout={handleAdminLogout} />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="products" element={
+            <ProtectedRoute>
+              <ProductsManager />
+            </ProtectedRoute>
+          } />
+          <Route path="messages" element={
+            <ProtectedRoute>
+              <ContactMessages />
+            </ProtectedRoute>
+          } />
+          <Route path="faq" element={
+            <ProtectedRoute>
+              <FAQManager />
+            </ProtectedRoute>
+          } />
+          <Route path="troubleshooting" element={
+            <ProtectedRoute>
+              <TroubleshootingManager />
+            </ProtectedRoute>
+          } />
+          <Route path="applications" element={
+            <ProtectedRoute>
+              <JobApplicationsManager />
+            </ProtectedRoute>
+          } />
         </Route>
       </Routes>
       <Footer />
