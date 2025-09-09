@@ -73,12 +73,13 @@ const SocialMedia = () => {
         {/* Social Follow Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-5
 ">
-              <a
+            {/* Instagram */}
+<a
   href="#" 
-  className="flex items-center bg-[#0055a3] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
- group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+  className="flex items-center bg-[#E1306C] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
+  group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
 >
-  <div className="flex items-center  flex justify-start w-full "> 
+  <div className="flex items-center justify-start w-full"> 
     <Instagram className="w-5 h-5 flex-shrink-0 " />
     <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
         Follow on Instagram
@@ -86,13 +87,12 @@ const SocialMedia = () => {
   </div>
 </a> 
 
-
-
-   <a
+{/* Facebook */}
+<a
   href="#" 
-  className="flex items-center bg-[#0055a3] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px]  group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+  className="flex items-center bg-[#1877F2] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px]  group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
 >
-  <div className="flex items-center  flex justify-start w-full "> 
+  <div className="flex items-center justify-start w-full"> 
     <Facebook className="w-5 h-5 flex-shrink-0 " />
     <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
        Like on Facebook
@@ -100,18 +100,19 @@ const SocialMedia = () => {
   </div>
 </a> 
 
-
-           <a
+{/* WhatsApp */}
+<a
   href="#" 
-  className="flex items-center bg-[#0055a3] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px]  group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+  className="flex items-center bg-[#25D366] text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px]  group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
 >
-  <div className="flex items-center  flex justify-start w-full "> 
+  <div className="flex items-center justify-start w-full"> 
     <MessageCircle className="w-5 h-5 flex-shrink-0 " />
     <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
         WhatsApp Support
     </span>
   </div>
-</a> 
+</a>
+
 
         </div>
       </div>
