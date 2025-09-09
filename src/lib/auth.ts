@@ -19,7 +19,15 @@ export const auth = {
         .eq('email', email)
         .single();
 
-      if (error || !data) {
+      if (error) {
+        // Handle case when no user is found (PGRST116 error)
+        if (error.code === 'PGRST116') {
+          return { user: null, error: 'Invalid email or password' };
+        }
+        return { user: null, error: 'Invalid email or password' };
+      }
+
+      if (!data) {
         return { user: null, error: 'Invalid email or password' };
       }
 
