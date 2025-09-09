@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, X, ChevronDown, Grid, List, SortAsc } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -175,24 +175,24 @@ const Products = () => {
               </div>
 
              {/* Filter Categories */}
-{filterTypes.map((filterType) => (
+{Object.entries(filterOptions).map(([category, options]) => (
   <div key={category} className="mb-6">
     <button
       onClick={() =>
-        setActiveFilterCategory(activeFilterCategory === filterType.name.toLowerCase() ? null : filterType.name.toLowerCase())
+        setActiveFilterCategory(activeFilterCategory === category ? null : category)
       }
       className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-[#2C5DB6] transition-colors"
     >
-      <span className="capitalize">By {filterType.name}</span>
+      <span className="capitalize">By {category}</span>
       <ChevronDown
         className={`w-4 h-4 transition-transform ${
-          activeFilterCategory === filterType.name.toLowerCase() ? 'rotate-180' : ''
+          activeFilterCategory === category ? 'rotate-180' : ''
         }`}
       />
     </button>
 
     <AnimatePresence>
-      {activeFilterCategory === filterType.name.toLowerCase() && (
+      {activeFilterCategory === category && (
         <motion.div
           initial={{ height: 0, opacity: 0 }}
           animate={{ height: 'auto', opacity: 1 }}
@@ -201,23 +201,20 @@ const Products = () => {
           className="overflow-hidden"
         >
           <div className="space-y-2">
-            {filterType.product_filter_values
-              .filter(value => value.is_active)
-              .sort((a, b) => a.sort_order - b.sort_order)
-              .map((filterValue) => (
-                <label
-                  key={filterValue.id}
+            {options.map((option) => (
+              <label
+                key={option}
                 className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
               >
                 <input
                   type="checkbox"
-                  checked={selectedFilters[filterType.name.toLowerCase()]?.includes(filterValue.value) || false}
-                  onChange={() => toggleFilter(filterType.name.toLowerCase(), filterValue.value)}
+                  checked={selectedFilters[category].includes(option)}
+                  onChange={() => toggleFilter(category, option)}
                   className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
                 />
-                <span className="text-sm text-gray-700">{filterValue.display_name || filterValue.value}</span>
+                <span className="text-sm text-gray-700">{option}</span>
               </label>
-              ))}
+            ))}
           </div>
         </motion.div>
       )}
