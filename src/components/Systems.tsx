@@ -157,7 +157,7 @@ const Systems = () => {
                           className="overflow-hidden space-y-2"
                         >
                           {subcategories.map(sub => {
-                            const count = bulletinsData.filter(b => b.subcategory === sub).length;
+                            const count = bulletins.filter(b => b.subcategory === sub).length;
                             return (
                               <label
                                 key={sub}
@@ -237,15 +237,15 @@ const Systems = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.1 }}
                       className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
-                      onClick={() => handleBulletinClick(b.id)}
+                      onClick={() => handleBulletinClick(b.slug)}
                     >
                       <div className="h-48 overflow-hidden">
-                        <img src={b.coverImage} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <img src={b.cover_image} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                       </div>
                       <div className="p-6">
                         <span className="inline-block px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">{b.subcategory}</span>
                         <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">{b.title}</h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">{b.shortDescription}</p>
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">{b.short_description}</p>
                         <button className="w-full bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium group-hover:shadow-lg">Read More</button>
                       </div>
                     </motion.div>
