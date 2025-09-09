@@ -95,7 +95,7 @@ const BrandsSection = () => {
     : { left: -totalWidth + windowWidth, right: 0 };
 
   return (
-    <section className="bg-gray-50 pt-24 pb-24 relative">
+    <section className="bg-white pt-15 pb-15 relative">
       <div className="pt-10 max-w-screen-2xl mx-auto relative">
        <div className="text-center mb-10">
   {/* العنوان الصغير */}
