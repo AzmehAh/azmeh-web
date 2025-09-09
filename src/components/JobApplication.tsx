@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { User, Mail, Phone, FileText, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { supabase } from '../lib/supabase';
 
 interface FormData {
   fullName: string;
@@ -95,14 +96,22 @@ const JobApplication = () => {
     setSubmitStatus('idle');
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Simulate success
+      const { error } = await supabase
+        .from('job_applications')
+        .insert([{
+          full_name: formData.fullName,
+          email: formData.email,
+          phone: formData.phone,
+          cover_letter: formData.coverLetter
+        }]);
+
+      if (error) throw error;
+
       setSubmitStatus('success');
       setFormData({ fullName: '', email: '', phone: '', coverLetter: '' });
       setErrors({});
     } catch (error) {
+      console.error('Error submitting job application:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
