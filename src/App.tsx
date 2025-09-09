@@ -4,6 +4,10 @@ import { Routes, Route } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import Header from './components/Header';
 import Hero from './components/Hero';
+import AdminLayout from './components/admin/AdminLayout';
+import Dashboard from './components/admin/Dashboard';
+import ProductsManager from './components/admin/ProductsManager';
+import ContactMessages from './components/admin/ContactMessages';
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
 import Products from './components/Products';
@@ -57,6 +61,13 @@ function App() {
         <Route path="/faq/:category" element={<FAQ />} />
         <Route path="/troubleshooting" element={<Troubleshooting />} />
         <Route path="/troubleshooting/:category" element={<Troubleshooting />} />
+        
+        {/* Admin Routes */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="products" element={<ProductsManager />} />
+          <Route path="messages" element={<ContactMessages />} />
+        </Route>
       </Routes>
       <Footer />
     </div>
