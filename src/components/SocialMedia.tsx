@@ -75,7 +75,7 @@ const SocialMedia = () => {
 ">
               <a
   href="#" 
-  className="flex items-center bg-[#0055a3] text-white rounded-full px-3 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-[60px] hover:w-[200px] 
+  className="flex items-center bg-[#0055a3] text-white rounded-full px-3 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out w-[50px] hover:w-[200px] 
  group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
 >
   <div className="flex items-center  flex justify-start w-full "> 
