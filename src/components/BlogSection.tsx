@@ -68,7 +68,7 @@ const BlogSection = () => {
     initial={{ width: 0 }}
     whileInView={{ width: "80%" }}
     transition={{ duration: 0.6, delay: 0.2 }}
-    className="h-1 bg-[#0055A3] mx-auto rounded max-w-50 sm:max-w-32"
+    className="h-1 bg-[#0055A3] mx-auto rounded max-w-80 sm:max-w-32"
   />
 </div>
 
