@@ -136,7 +136,8 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
               <div className="text-right">
                 <div className="text-sm font-medium text-gray-900">Admin User</div>
                 <div className="text-xs text-gray-500">Administrator</div>
-              <div className="text-xs text-gray-500">{adminUser?.email || 'Administrator'}</div>
+                <div className="text-xs text-gray-500">{adminUser?.email || 'Administrator'}</div>
+              </div>
             </div>
           </div>
         </header>
