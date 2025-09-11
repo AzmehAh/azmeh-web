@@ -25,7 +25,7 @@ import ContactMessages from './components/admin/ContactMessages';
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
 import Products from './components/Products';
-import ProductDetail from './components/ProductDetails';
+import ProductDetails from './components/ProductDetails';
 import Systems from './components/Systems';
 import BulletinDetail from './components/BulletinDetail';
 import FAQ from './components/FAQ';
