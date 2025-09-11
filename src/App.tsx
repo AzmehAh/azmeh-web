@@ -25,7 +25,6 @@ import ContactMessages from './components/admin/ContactMessages';
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
 import Products from './components/Products';
-import ProductDetails from './components/ProductDetails';
 import Systems from './components/Systems';
 import BulletinDetail from './components/BulletinDetail';
 import FAQ from './components/FAQ';
@@ -107,7 +106,7 @@ function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/job-application" element={<JobApplication />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
+
         <Route path="/product-details/:id" element={<ProductDetails />} />
         <Route path="/systems" element={<Systems />} />
         <Route path="/bulletin/:id" element={<BulletinDetail />} />
