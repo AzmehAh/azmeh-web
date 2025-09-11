@@ -34,7 +34,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: Home },
     { name: 'Products', href: '/admin/products', icon: Package },
-    { name: 'Product Details', href: '/admin/product-details', icon: FileText },
     { name: 'Product Bulletins', href: '/admin/product-bulletins', icon: FileText },
     { name: 'Categories', href: '/admin/categories', icon: Tags },
     { name: 'Product Filters', href: '/admin/product-filters', icon: Filter },
