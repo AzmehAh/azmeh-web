@@ -201,6 +201,101 @@ export interface BulletinCategoryConfig {
   updated_at: string;
 }
 
+// Product Bulletin Interfaces
+export interface ProductBulletin {
+  id: string;
+  product_id: string;
+  title: string;
+  short_description?: string;
+  cover_image_url?: string;
+  datasheet_url?: string;
+  manual_url?: string;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+  created_by?: string;
+  updated_by?: string;
+}
+
+export interface ProductTechnicalSpec {
+  id: string;
+  product_bulletin_id: string;
+  property: string;
+  value: string;
+  standard?: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ProductKeyFeature {
+  id: string;
+  product_bulletin_id: string;
+  feature: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ProductApplication {
+  id: string;
+  product_bulletin_id: string;
+  application: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ProductInstruction {
+  id: string;
+  product_bulletin_id: string;
+  content: Record<string, any>;
+  content_type: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProductStorageRequirement {
+  id: string;
+  product_bulletin_id: string;
+  requirement: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ProductSafetyInfo {
+  id: string;
+  product_bulletin_id: string;
+  info_type: 'precaution' | 'first_aid';
+  information: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface SystemDetail {
+  id: string;
+  system_id: string;
+  title: string;
+  content: Record<string, any>;
+  content_type: string;
+  meta_description?: string;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+  created_by?: string;
+  updated_by?: string;
+}
+
+export interface ContentAuditLog {
+  id: string;
+  table_name: string;
+  record_id: string;
+  operation: 'INSERT' | 'UPDATE' | 'DELETE';
+  old_data?: Record<string, any>;
+  new_data?: Record<string, any>;
+  changed_by?: string;
+  changed_at: string;
+  ip_address?: string;
+  user_agent?: string;
+}
+
 // API Functions
 export const api = {
   // Products
@@ -695,6 +790,344 @@ export const api = {
     query = query.order('created_at', { ascending: false });
     
     const { data, error } = await query;
+    if (error) throw error;
+    return data;
+  },
+
+  // Product Bulletins API
+  async getProductBulletin(productId: string) {
+    const { data, error } = await supabase
+      .from('product_bulletins')
+      .select(`
+        *,
+        product_technical_specs (*),
+        product_key_features (*),
+        product_applications (*),
+        product_instructions (*),
+        product_storage_requirements (*),
+        product_safety_info (*)
+      `)
+      .eq('product_id', productId)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error;
+    return data;
+  },
+
+  async createProductBulletin(bulletin: Omit<ProductBulletin, 'id' | 'created_at' | 'updated_at'>) {
+    const { data, error } = await supabase
+      .from('product_bulletins')
+      .insert([{ ...bulletin, updated_at: new Date().toISOString() }])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateProductBulletin(id: string, updates: Partial<ProductBulletin>) {
+    const { data, error } = await supabase
+      .from('product_bulletins')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteProductBulletin(id: string) {
+    const { error } = await supabase
+      .from('product_bulletins')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Technical Specs API
+  async createTechnicalSpec(spec: Omit<ProductTechnicalSpec, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_technical_specs')
+      .insert([spec])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateTechnicalSpec(id: string, updates: Partial<ProductTechnicalSpec>) {
+    const { data, error } = await supabase
+      .from('product_technical_specs')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteTechnicalSpec(id: string) {
+    const { error } = await supabase
+      .from('product_technical_specs')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Key Features API
+  async createKeyFeature(feature: Omit<ProductKeyFeature, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_key_features')
+      .insert([feature])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateKeyFeature(id: string, updates: Partial<ProductKeyFeature>) {
+    const { data, error } = await supabase
+      .from('product_key_features')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteKeyFeature(id: string) {
+    const { error } = await supabase
+      .from('product_key_features')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Applications API
+  async createApplication(application: Omit<ProductApplication, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_applications')
+      .insert([application])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateApplication(id: string, updates: Partial<ProductApplication>) {
+    const { data, error } = await supabase
+      .from('product_applications')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteApplication(id: string) {
+    const { error } = await supabase
+      .from('product_applications')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Instructions API
+  async updateInstructions(bulletinId: string, content: Record<string, any>, contentType = 'html') {
+    const { data, error } = await supabase
+      .from('product_instructions')
+      .upsert({
+        product_bulletin_id: bulletinId,
+        content: content,
+        content_type: contentType,
+        updated_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  // Storage Requirements API
+  async createStorageRequirement(requirement: Omit<ProductStorageRequirement, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_storage_requirements')
+      .insert([requirement])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateStorageRequirement(id: string, updates: Partial<ProductStorageRequirement>) {
+    const { data, error } = await supabase
+      .from('product_storage_requirements')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteStorageRequirement(id: string) {
+    const { error } = await supabase
+      .from('product_storage_requirements')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Safety Info API
+  async createSafetyInfo(safetyInfo: Omit<ProductSafetyInfo, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_safety_info')
+      .insert([safetyInfo])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateSafetyInfo(id: string, updates: Partial<ProductSafetyInfo>) {
+    const { data, error } = await supabase
+      .from('product_safety_info')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteSafetyInfo(id: string) {
+    const { error } = await supabase
+      .from('product_safety_info')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // System Details API
+  async getSystemDetail(systemId: string) {
+    const { data, error } = await supabase
+      .from('system_details')
+      .select('*')
+      .eq('system_id', systemId)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error;
+    return data;
+  },
+
+  async createSystemDetail(systemDetail: Omit<SystemDetail, 'id' | 'created_at' | 'updated_at'>) {
+    const { data, error } = await supabase
+      .from('system_details')
+      .insert([{ ...systemDetail, updated_at: new Date().toISOString() }])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateSystemDetail(id: string, updates: Partial<SystemDetail>) {
+    const { data, error } = await supabase
+      .from('system_details')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteSystemDetail(id: string) {
+    const { error } = await supabase
+      .from('system_details')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // File Upload API
+  async uploadFile(bucket: string, path: string, file: File) {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `${path}/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(filePath, file);
+    
+    if (error) throw error;
+    
+    const { data: urlData } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(filePath);
+    
+    return urlData.publicUrl;
+  },
+
+  // Audit Log API
+  async logContentChange(
+    tableName: string, 
+    recordId: string, 
+    operation: 'INSERT' | 'UPDATE' | 'DELETE',
+    oldData?: Record<string, any>,
+    newData?: Record<string, any>
+  ) {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const { error } = await supabase
+        .from('content_audit_log')
+        .insert([{
+          table_name: tableName,
+          record_id: recordId,
+          operation: operation,
+          old_data: oldData,
+          new_data: newData,
+          changed_by: user?.id
+        }]);
+      
+      if (error) console.error('Audit log error:', error);
+    } catch (error) {
+      console.error('Audit log error:', error);
+    }
+  },
+
+  // Get audit log for a record
+  async getAuditLog(tableName: string, recordId: string) {
+    const { data, error } = await supabase
+      .from('content_audit_log')
+      .select('*')
+      .eq('table_name', tableName)
+      .eq('record_id', recordId)
+      .order('changed_at', { ascending: false });
+    
     if (error) throw error;
     return data;
   }
