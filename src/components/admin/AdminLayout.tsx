@@ -34,11 +34,11 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
   const navigation = [
     { name: 'Dashboard', href: '/admin', icon: Home },
     { name: 'Products', href: '/admin/products', icon: Package },
-    { name: 'Product Bulletins', href: '/admin/product-bulletins', icon: FileText },
+   
     { name: 'Categories', href: '/admin/categories', icon: Tags },
     { name: 'Product Filters', href: '/admin/product-filters', icon: Filter },
     { name: 'System Categories', href: '/admin/system-categories', icon: Settings },
-    { name: 'System Details', href: '/admin/system-details', icon: Layout },
+   
     { name: 'Bulletins', href: '/admin/bulletins', icon: FileText },
     { name: 'FAQ', href: '/admin/faq', icon: HelpCircle },
     { name: 'Troubleshooting', href: '/admin/troubleshooting', icon: Settings },
