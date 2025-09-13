@@ -346,12 +346,7 @@ const ProductModal = ({
         features: Array.isArray(product.features) ? product.features : [],
         applications: Array.isArray(product.applications) ? product.applications : [],
         instructions: product.instructions || '',
-       packaging: Array.isArray(product.packaging)
-  ? product.packaging
-  : product.packaging
-  ? JSON.parse(product.packaging)
-  : [],
-
+        packaging: product.packaging || '',
         storage: product.storage || '',
         safety_precautions: product.safety_precautions || '',
         safety_first_aid: product.safety_first_aid || '',
@@ -758,8 +753,7 @@ const ProductModal = ({
                   <p className="text-gray-900 whitespace-pre-line">{formData.instructions}</p>
                 )}
               </div>
-
-           {/* Packaging */}
+{/* Packaging */}
 <div className="mt-6">
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Packaging
@@ -770,23 +764,35 @@ const ProductModal = ({
         <div key={idx} className="flex gap-2">
           <input
             type="text"
-            value={item}
-            onChange={(e) => handleArrayInputChange('packaging', idx, e.target.value)}
+            value={item.name || ''}  // استبدل item مباشرة بـ item.name
+            onChange={(e) => {
+              const newPackaging = [...(formData.packaging || [])];
+              newPackaging[idx] = { ...newPackaging[idx], name: e.target.value };
+              setFormData(prev => ({ ...prev, packaging: newPackaging }));
+            }}
             className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+            placeholder="Packaging Name"
           />
           <button
             type="button"
-            onClick={() => removeArrayItem('packaging', idx)}
+            onClick={() => {
+              const newPackaging = (formData.packaging || []).filter((_, i) => i !== idx);
+              setFormData(prev => ({ ...prev, packaging: newPackaging }));
+            }}
             className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
           >
             Remove
           </button>
         </div>
       ))}
+
       <button
         type="button"
-        onClick={() => addArrayItem('packaging')}
         className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+        onClick={() => {
+          const newPackaging = [...(formData.packaging || []), { name: '' }];
+          setFormData(prev => ({ ...prev, packaging: newPackaging }));
+        }}
       >
         + Add Packaging
       </button>
@@ -794,7 +800,7 @@ const ProductModal = ({
   ) : (
     <ul className="list-disc pl-5 text-gray-900">
       {(formData.packaging || []).map((p, i) => (
-        <li key={i}>{p}</li>
+        <li key={i}>{p.name}</li>  // عرض اسم التغليف بدل [object Object]
       ))}
     </ul>
   )}
