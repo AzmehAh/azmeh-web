@@ -285,7 +285,6 @@ const ProductModal = ({
     status: 'active'
   });
   const [saving, setSaving] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (product) {
@@ -323,71 +322,16 @@ const ProductModal = ({
         status: 'active'
       });
     }
-    setErrors({});
   }, [product]);
 
-  // دالة مساعدة لتحويل النص إلى JSON
-  const tryParseJSON = (jsonString: any) => {
-    if (typeof jsonString === 'object') return jsonString;
-    if (!jsonString) return null;
-    
-    try {
-      return JSON.parse(jsonString);
-    } catch (e) {
-      // إذا فشل التحليل، نعيد النص كما هو
-      return jsonString;
-    }
-  };
-
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
-    
-    if (!formData.name?.trim()) newErrors.name = 'Product name is required';
-    if (!formData.code?.trim()) newErrors.code = 'Product code is required';
-    if (!formData.brand?.trim()) newErrors.brand = 'Brand is required';
-    if (!formData.type?.trim()) newErrors.type = 'Type is required';
-    if (!formData.material?.trim()) newErrors.material = 'Material is required';
-    if (!formData.usage?.trim()) newErrors.usage = 'Usage is required';
-    if (!formData.description?.trim()) newErrors.description = 'Description is required';
-    
-    // التحقق من صحة حقلي packaging و technical_specs إذا كانا يحتويان على JSON
-    if (formData.packaging) {
-      try {
-        JSON.parse(formData.packaging as string);
-      } catch (e) {
-        newErrors.packaging = 'Packaging must be valid JSON';
-      }
-    }
-    
-    if (formData.technical_specs) {
-      try {
-        JSON.parse(formData.technical_specs as string);
-      } catch (e) {
-        newErrors.technical_specs = 'Technical specs must be valid JSON';
-      }
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSave = async () => {
-    if (!validateForm()) return;
-    
     setSaving(true);
     try {
-      // معالجة الحقول المعقدة (JSON)
-      const processedData = {
-        ...formData,
-        packaging: tryParseJSON(formData.packaging),
-        technical_specs: tryParseJSON(formData.technical_specs)
-      };
-
       if (product) {
         // Update existing product
         const { error } = await supabase
           .from('products')
-          .update(processedData)
+          .update(formData)
           .eq('id', product.id);
         
         if (error) throw error;
@@ -395,7 +339,7 @@ const ProductModal = ({
         // Create new product
         const { error } = await supabase
           .from('products')
-          .insert([processedData]);
+          .insert([formData]);
         
         if (error) throw error;
       }
@@ -412,10 +356,6 @@ const ProductModal = ({
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    // مسح الخطأ عند تعديل الحقل
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
-    }
   };
 
   const handleArrayInputChange = (field: string, index: number, value: string) => {
@@ -438,33 +378,6 @@ const ProductModal = ({
       const currentArray = Array.isArray(prev[field]) ? [...(prev[field] as string[])] : [];
       return { ...prev, [field]: currentArray.filter((_, i) => i !== index) };
     });
-  };
-
-  // دالة لعرض البيانات المعقدة (JSON) بشكل مقروء
-  const renderComplexField = (data: any) => {
-    if (!data) return <p className="text-gray-500 italic">No data</p>;
-    
-    if (typeof data === 'object') {
-      return (
-        <div className="bg-gray-50 p-3 rounded text-sm">
-          {Object.entries(data).map(([key, value]) => (
-            <div key={key} className="flex border-b border-gray-200 py-1">
-              <span className="font-medium text-gray-700 w-1/3 capitalize">{key.replace(/_/g, ' ')}:</span>
-              <span className="text-gray-900 flex-1">{String(value)}</span>
-            </div>
-          ))}
-        </div>
-      );
-    }
-    
-    // إذا كان نصًا، نحاول تحويله إلى كائن
-    try {
-      const parsedData = JSON.parse(data);
-      return renderComplexField(parsedData);
-    } catch (e) {
-      // إذا فشل التحليل، نعرضه كنص عادي
-      return <p className="text-gray-900">{data}</p>;
-    }
   };
 
   if (!isOpen) return null;
@@ -510,17 +423,12 @@ const ProductModal = ({
                       Product Name *
                     </label>
                     {isEditing ? (
-                      <>
-                        <input
-                          type="text"
-                          value={formData.name || ''}
-                          onChange={(e) => handleInputChange('name', e.target.value)}
-                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#0055A3] ${
-                            errors.name ? 'border-red-500' : 'border-gray-200'
-                          }`}
-                        />
-                        {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-                      </>
+                      <input
+                        type="text"
+                        value={formData.name || ''}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
                     ) : (
                       <p className="text-gray-900">{formData.name}</p>
                     )}
@@ -531,17 +439,12 @@ const ProductModal = ({
                       Product Code *
                     </label>
                     {isEditing ? (
-                      <>
-                        <input
-                          type="text"
-                          value={formData.code || ''}
-                          onChange={(e) => handleInputChange('code', e.target.value)}
-                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#0055A3] ${
-                            errors.code ? 'border-red-500' : 'border-gray-200'
-                          }`}
-                        />
-                        {errors.code && <p className="text-red-500 text-xs mt-1">{errors.code}</p>}
-                      </>
+                      <input
+                        type="text"
+                        value={formData.code || ''}
+                        onChange={(e) => handleInputChange('code', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
                     ) : (
                       <p className="text-gray-900">{formData.code}</p>
                     )}
@@ -552,17 +455,12 @@ const ProductModal = ({
                       Brand *
                     </label>
                     {isEditing ? (
-                      <>
-                        <input
-                          type="text"
-                          value={formData.brand || ''}
-                          onChange={(e) => handleInputChange('brand', e.target.value)}
-                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#0055A3] ${
-                            errors.brand ? 'border-red-500' : 'border-gray-200'
-                          }`}
-                        />
-                        {errors.brand && <p className="text-red-500 text-xs mt-1">{errors.brand}</p>}
-                      </>
+                      <input
+                        type="text"
+                        value={formData.brand || ''}
+                        onChange={(e) => handleInputChange('brand', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
                     ) : (
                       <p className="text-gray-900">{formData.brand}</p>
                     )}
@@ -573,17 +471,12 @@ const ProductModal = ({
                       Type *
                     </label>
                     {isEditing ? (
-                      <>
-                        <input
-                          type="text"
-                          value={formData.type || ''}
-                          onChange={(e) => handleInputChange('type', e.target.value)}
-                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#0055A3] ${
-                            errors.type ? 'border-red-500' : 'border-gray-200'
-                          }`}
-                        />
-                        {errors.type && <p className="text-red-500 text-xs mt-1">{errors.type}</p>}
-                      </>
+                      <input
+                        type="text"
+                        value={formData.type || ''}
+                        onChange={(e) => handleInputChange('type', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
                     ) : (
                       <p className="text-gray-900">{formData.type}</p>
                     )}
@@ -597,17 +490,12 @@ const ProductModal = ({
                       Material *
                     </label>
                     {isEditing ? (
-                      <>
-                        <input
-                          type="text"
-                          value={formData.material || ''}
-                          onChange={(e) => handleInputChange('material', e.target.value)}
-                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#0055A3] ${
-                            errors.material ? 'border-red-500' : 'border-gray-200'
-                          }`}
-                        />
-                        {errors.material && <p className="text-red-500 text-xs mt-1">{errors.material}</p>}
-                      </>
+                      <input
+                        type="text"
+                        value={formData.material || ''}
+                        onChange={(e) => handleInputChange('material', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
                     ) : (
                       <p className="text-gray-900">{formData.material}</p>
                     )}
@@ -618,17 +506,12 @@ const ProductModal = ({
                       Usage *
                     </label>
                     {isEditing ? (
-                      <>
-                        <input
-                          type="text"
-                          value={formData.usage || ''}
-                          onChange={(e) => handleInputChange('usage', e.target.value)}
-                          className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#0055A3] ${
-                            errors.usage ? 'border-red-500' : 'border-gray-200'
-                          }`}
-                        />
-                        {errors.usage && <p className="text-red-500 text-xs mt-1">{errors.usage}</p>}
-                      </>
+                      <input
+                        type="text"
+                        value={formData.usage || ''}
+                        onChange={(e) => handleInputChange('usage', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
                     ) : (
                       <p className="text-gray-900">{formData.usage}</p>
                     )}
@@ -667,17 +550,12 @@ const ProductModal = ({
                   Description *
                 </label>
                 {isEditing ? (
-                  <>
-                    <textarea
-                      value={formData.description || ''}
-                      onChange={(e) => handleInputChange('description', e.target.value)}
-                      rows={3}
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#0055A3] ${
-                        errors.description ? 'border-red-500' : 'border-gray-200'
-                      }`}
-                    />
-                    {errors.description && <p className="text-red-500 text-xs mt-1">{errors.description}</p>}
-                  </>
+                  <textarea
+                    value={formData.description || ''}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
                 ) : (
                   <p className="text-gray-900">{formData.description}</p>
                 )}
@@ -799,30 +677,24 @@ const ProductModal = ({
                 )}
               </div>
 
-              {/* Packaging */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Packaging
-                </label>
-                {isEditing ? (
-                  <>
-                    <textarea
-                      value={typeof formData.packaging === 'object' 
-                        ? JSON.stringify(formData.packaging, null, 2) 
-                        : formData.packaging || ''}
-                      onChange={(e) => handleInputChange('packaging', e.target.value)}
-                      rows={4}
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#0055A3] ${
-                        errors.packaging ? 'border-red-500' : 'border-gray-200'
-                      }`}
-                      placeholder='Enter packaging info as JSON (e.g., {"weight": "1kg", "dimensions": "10x10x10cm"})'
-                    />
-                    {errors.packaging && <p className="text-red-500 text-xs mt-1">{errors.packaging}</p>}
-                  </>
-                ) : (
-                  renderComplexField(formData.packaging)
-                )}
-              </div>
+            <div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Packaging
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.packaging ? JSON.stringify(formData.packaging, null, 2) : ''}
+      onChange={(e) => handleInputChange('packaging', e.target.value)}
+      rows={4}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto">
+      {formData.packaging ? JSON.stringify(formData.packaging, null, 2) : 'No packaging info'}
+    </pre>
+  )}
+</div>
+
 
               {/* Storage */}
               <div className="mt-6">
@@ -875,31 +747,24 @@ const ProductModal = ({
                 )}
               </div>
 
-              {/* Technical Specs */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Technical Specs
-                </label>
-                {isEditing ? (
-                  <>
-                    <textarea
-                      value={typeof formData.technical_specs === 'object' 
-                        ? JSON.stringify(formData.technical_specs, null, 2) 
-                        : formData.technical_specs || ''}
-                      onChange={(e) => handleInputChange('technical_specs', e.target.value)}
-                      rows={6}
-                      className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#0055A3] ${
-                        errors.technical_specs ? 'border-red-500' : 'border-gray-200'
-                      }`}
-                      placeholder='Enter technical specs as JSON (e.g., {"size": "10x20cm", "weight": "500g", "color": "blue"})'
-                    />
-                    {errors.technical_specs && <p className="text-red-500 text-xs mt-1">{errors.technical_specs}</p>}
-                  </>
-                ) : (
-                  renderComplexField(formData.technical_specs)
-                )}
-              </div>
-            </div>
+            <div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Technical Specs
+  </label> 
+  {isEditing ? (
+    <textarea
+      value={formData.technical_specs ? JSON.stringify(formData.technical_specs, null, 2) : ''}
+      onChange={(e) => handleInputChange('technical_specs', e.target.value)}
+      rows={6}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto">
+      {formData.technical_specs ? JSON.stringify(formData.technical_specs, null, 2) : 'No technical specs'}
+    </pre>
+  )} 
+</div>
+
 
             {/* Footer */} 
             {isEditing && (
@@ -929,11 +794,12 @@ const ProductModal = ({
                 </button>
               </div>
             )} 
+               </div>
           </motion.div>
         </div>
       </div>
     </AnimatePresence> 
-  );
+  ); 
 };
 
 export default ProductsManager;
