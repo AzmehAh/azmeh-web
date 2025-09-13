@@ -369,7 +369,7 @@ const ProductDetail = () => {
               ))}
             </div>
           </div>
-        </div>
+        </div> 
       </section>
     </div>
   );
