@@ -67,7 +67,7 @@ const ProductDetail = () => {
     try {
       setLoading(true);
       // استدعاء API لجلب بيانات المنتج
-      const productData = await api.getProductById(productId);
+      const productData = await api.getProduct(productId);
       
       if (productData) {
         // تحويل البيانات المسترجعة إلى الهيكل المتوقع
