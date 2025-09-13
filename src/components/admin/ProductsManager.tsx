@@ -283,7 +283,7 @@ const ProductModal = ({
     storage: '',
     safety_precautions: '',
     safety_first_aid: '',
-    technical_specs: '',
+   technical_specs: { key: string; value: string }[];
     status: 'active'
   });
   const [saving, setSaving] = useState(false);
