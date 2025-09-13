@@ -11,23 +11,6 @@ import {
   X
 } from 'lucide-react';
 import { supabase, Product, ProductImage } from '../../lib/supabase';
- const { data, error } = await supabase
-  .from("products")
-  .select(`*, product_images (*)`);
- const { data: imageData, error: imageError } = await supabase
-  .from("product_images")
-  .insert([{ 
-    product_id: product.id, 
-    image_url: formData.image_url 
-  }]);
-const { data: product, error } = await supabase
-  .from("products")
-  .insert([{ 
-    name: formData.name, 
-    description: formData.description 
-  }])
-  .select()
-  .single();
 
 const ProductsManager = () => {
   const [products, setProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
@@ -112,7 +95,7 @@ const ProductsManager = () => {
       </div>
     );
   }
- 
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -745,56 +728,7 @@ const ProductModal = ({
                 ) : (
                   <p className="text-gray-900 whitespace-pre-line">{formData.safety_precautions}</p>
                 )}
-              </div>
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Product Image
-  </label>
-
-  {isEditing ? (
-    <input
-      type="file"
-      accept="image/*"
-      onChange={async (e) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
-
-        // رفع الصورة على Supabase Storage
-        const { data, error } = await supabase.storage
-          .from("products") // لازم يكون عندك bucket اسمه "products"
-          .upload(`images/${Date.now()}-${file.name}`, file);
-
-        if (error) {
-          console.error("Upload error:", error);
-          return;
-        }
-
-        // جلب رابط الصورة
-        const { data: urlData } = supabase.storage
-          .from("products")
-          .getPublicUrl(data.path);
-
-        // خزّن رابط الصورة بجدول product_images مع ID المنتج
-        if (formData.id) {
-          const { error: imgError } = await supabase
-            .from("product_images")
-            .insert([
-              { product_id: formData.id, image_url: urlData.publicUrl }
-            ]);
-
-          if (imgError) {
-            console.error("Image insert error:", imgError);
-          } else {
-            console.log("✅ Image saved successfully!");
-          }
-        }
-      }}
-      className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
-  ) : (
-    <p className="text-gray-500">اختر صورة للمنتج</p>
-  )}
-</div>
+              </div> 
 
               {/* Safety First Aid */}
               <div className="mt-6">
