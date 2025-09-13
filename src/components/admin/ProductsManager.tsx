@@ -303,7 +303,7 @@ const ProductsManager = () => {
   );
 };
 
-// Product Modal Component
+// Product Modal Component - النسخة المعدلة
 const ProductModal = ({ 
   isOpen, 
   onClose, 
@@ -525,29 +525,30 @@ const ProductModal = ({
             </div>
 
             {/* Content */}
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Basic Info */}
-                <div className="space-y-4">
-                 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Product Name *
-  </label>
-  {isEditing ? (
-    <input
-      type="text"
-      value={formData.name || ''}
-      onChange={(e) => handleInputChange('name', e.target.value)}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-      required
-    />
-  ) : (
-    <p className="text-gray-900">{formData.name}</p>
-  )}
-</div>
+            <div className="p-6 space-y-6">
+              {/* Basic Information Section */}
+              <div>
+                <h4 className="text-md font-medium text-gray-900 mb-4">Basic Information</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Product Name *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.name || ''}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        required
+                      />
+                    ) : (
+                      <p className="text-gray-900 py-2">{formData.name}</p>
+                    )}
+                  </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Product Code *
                     </label>
                     {isEditing ? (
@@ -559,12 +560,12 @@ const ProductModal = ({
                         required
                       />
                     ) : (
-                      <p className="text-gray-900">{formData.code}</p>
+                      <p className="text-gray-900 py-2">{formData.code}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Brand *
                     </label>
                     {isEditing ? (
@@ -576,12 +577,12 @@ const ProductModal = ({
                         required
                       />
                     ) : (
-                      <p className="text-gray-900">{formData.brand}</p>
+                      <p className="text-gray-900 py-2">{formData.brand}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Type *
                     </label>
                     {isEditing ? (
@@ -593,12 +594,12 @@ const ProductModal = ({
                         required
                       />
                     ) : (
-                      <p className="text-gray-900">{formData.type}</p>
+                      <p className="text-gray-900 py-2">{formData.type}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Material
                     </label>
                     {isEditing ? (
@@ -609,12 +610,12 @@ const ProductModal = ({
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                       />
                     ) : (
-                      <p className="text-gray-900">{formData.material || '-'}</p>
+                      <p className="text-gray-900 py-2">{formData.material || '-'}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Usage
                     </label>
                     {isEditing ? (
@@ -625,12 +626,12 @@ const ProductModal = ({
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                       />
                     ) : (
-                      <p className="text-gray-900">{formData.usage || '-'}</p>
+                      <p className="text-gray-900 py-2">{formData.usage || '-'}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Status
                     </label>
                     {isEditing ? (
@@ -644,16 +645,19 @@ const ProductModal = ({
                         <option value="draft">Draft</option>
                       </select>
                     ) : (
-                      <p className="text-gray-900 capitalize">{formData.status}</p>
+                      <p className="text-gray-900 py-2 capitalize">{formData.status}</p>
                     )}
                   </div>
                 </div>
+              </div>
 
-                {/* Description & Technical Info */}
-                <div className="space-y-4">
+              {/* Description Section */}
+              <div>
+                <h4 className="text-md font-medium text-gray-900 mb-4">Description</h4>
+                <div className="grid grid-cols-1 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Description
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Product Description
                     </label>
                     {isEditing ? (
                       <textarea
@@ -663,12 +667,12 @@ const ProductModal = ({
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                       />
                     ) : (
-                      <p className="text-gray-900 whitespace-pre-wrap">{formData.description || '-'}</p>
+                      <p className="text-gray-900 whitespace-pre-wrap py-2">{formData.description || '-'}</p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
                       Technical Description
                     </label>
                     {isEditing ? (
@@ -679,176 +683,172 @@ const ProductModal = ({
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                       />
                     ) : (
-                      <p className="text-gray-900 whitespace-pre-wrap">{formData.technical_description || '-'}</p>
-                    )}
-                  </div>
-
-                  {/* Features */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Features
-                    </label>
-                    {isEditing ? (
-                      <div className="space-y-2">
-                        {formData.features?.map((feature, index) => (
-                          <div key={index} className="flex items-center gap-2">
-                            <input
-                              type="text"
-                              value={feature}
-                              onChange={(e) => handleArrayInputChange('features', index, e.target.value)}
-                              className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                              placeholder="Enter feature"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeArrayItem('features', index)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => addArrayItem('features')}
-                          className="flex items-center text-sm text-[#0055A3] hover:text-blue-700"
-                        >
-                          <Plus className="w-4 h-4 mr-1" />
-                          Add Feature
-                        </button>
-                      </div>
-                    ) : (
-                      <ul className="list-disc list-inside text-gray-900">
-                        {formData.features?.map((feature, index) => (
-                          <li key={index}>{feature}</li>
-                        ))}
-                        {(!formData.features || formData.features.length === 0) && <li>-</li>}
-                      </ul>
-                    )}
-                  </div>
-
-                  {/* Applications */}
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Applications
-                    </label>
-                    {isEditing ? (
-                      <div className="space-y-2">
-                        {formData.applications?.map((application, index) => (
-                          <div key={index} className="flex items-center gap-2">
-                            <input
-                              type="text"
-                              value={application}
-                              onChange={(e) => handleArrayInputChange('applications', index, e.target.value)}
-                              className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                              placeholder="Enter application"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => removeArrayItem('applications', index)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
-                        <button
-                          type="button"
-                          onClick={() => addArrayItem('applications')}
-                          className="flex items-center text-sm text-[#0055A3] hover:text-blue-700"
-                        >
-                          <Plus className="w-4 h-4 mr-1" />
-                          Add Application
-                        </button>
-                      </div>
-                    ) : (
-                      <ul className="list-disc list-inside text-gray-900">
-                        {formData.applications?.map((application, index) => (
-                          <li key={index}>{application}</li>
-                        ))}
-                        {(!formData.applications || formData.applications.length === 0) && <li>-</li>}
-                      </ul>
+                      <p className="text-gray-900 whitespace-pre-wrap py-2">{formData.technical_description || '-'}</p>
                     )}
                   </div>
                 </div>
               </div>
 
-              {/* Additional Sections */}
-              <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Instructions */}
+              {/* Features & Applications Section */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Features */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Instructions
-                  </label>
+                  <h4 className="text-md font-medium text-gray-900 mb-4">Features</h4>
                   {isEditing ? (
-                    <textarea
-                      value={formData.instructions || ''}
-                      onChange={(e) => handleInputChange('instructions', e.target.value)}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
+                    <div className="space-y-2">
+                      {formData.features?.map((feature, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={feature}
+                            onChange={(e) => handleArrayInputChange('features', index, e.target.value)}
+                            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                            placeholder="Enter feature"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeArrayItem('features', index)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => addArrayItem('features')}
+                        className="flex items-center text-sm text-[#0055A3] hover:text-blue-700 mt-2"
+                      >
+                        <Plus className="w-4 h-4 mr-1" />
+                        Add Feature
+                      </button>
+                    </div>
                   ) : (
-                    <p className="text-gray-900 whitespace-pre-wrap">{formData.instructions || '-'}</p>
+                    <ul className="list-disc list-inside text-gray-900 pl-4">
+                      {formData.features?.map((feature, index) => (
+                        <li key={index}>{feature}</li>
+                      ))}
+                      {(!formData.features || formData.features.length === 0) && <li>-</li>}
+                    </ul>
                   )}
                 </div>
 
-                {/* Storage */}
+                {/* Applications */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Storage
-                  </label>
+                  <h4 className="text-md font-medium text-gray-900 mb-4">Applications</h4>
                   {isEditing ? (
-                    <textarea
-                      value={formData.storage || ''}
-                      onChange={(e) => handleInputChange('storage', e.target.value)}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
+                    <div className="space-y-2">
+                      {formData.applications?.map((application, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <input
+                            type="text"
+                            value={application}
+                            onChange={(e) => handleArrayInputChange('applications', index, e.target.value)}
+                            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                            placeholder="Enter application"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeArrayItem('applications', index)}
+                            className="p-2 text-red-600 hover:bg-red-50 rounded"
+                          >
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => addArrayItem('applications')}
+                        className="flex items-center text-sm text-[#0055A3] hover:text-blue-700 mt-2"
+                      >
+                        <Plus className="w-4 h-4 mr-1" />
+                        Add Application
+                      </button>
+                    </div>
                   ) : (
-                    <p className="text-gray-900 whitespace-pre-wrap">{formData.storage || '-'}</p>
-                  )}
-                </div>
-
-                {/* Safety Precautions */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Safety Precautions
-                  </label>
-                  {isEditing ? (
-                    <textarea
-                      value={formData.safety_precautions || ''}
-                      onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                  ) : (
-                    <p className="text-gray-900 whitespace-pre-wrap">{formData.safety_precautions || '-'}</p>
-                  )}
-                </div>
-
-                {/* First Aid */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    First Aid Measures
-                  </label>
-                  {isEditing ? (
-                    <textarea
-                      value={formData.safety_first_aid || ''}
-                      onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                  ) : (
-                    <p className="text-gray-900 whitespace-pre-wrap">{formData.safety_first_aid || '-'}</p>
+                    <ul className="list-disc list-inside text-gray-900 pl-4">
+                      {formData.applications?.map((application, index) => (
+                        <li key={index}>{application}</li>
+                      ))}
+                      {(!formData.applications || formData.applications.length === 0) && <li>-</li>}
+                    </ul>
                   )}
                 </div>
               </div>
 
-              {/* Product Images */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Images
-                </label>
+              {/* Technical Specifications Section */}
+              <div>
+                <h4 className="text-md font-medium text-gray-900 mb-4">Technical Specifications</h4>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Instructions
+                    </label>
+                    {isEditing ? (
+                      <textarea
+                        value={formData.instructions || ''}
+                        onChange={(e) => handleInputChange('instructions', e.target.value)}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900 whitespace-pre-wrap py-2">{formData.instructions || '-'}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Storage
+                    </label>
+                    {isEditing ? (
+                      <textarea
+                        value={formData.storage || ''}
+                        onChange={(e) => handleInputChange('storage', e.target.value)}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900 whitespace-pre-wrap py-2">{formData.storage || '-'}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Safety Precautions
+                    </label>
+                    {isEditing ? (
+                      <textarea
+                        value={formData.safety_precautions || ''}
+                        onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900 whitespace-pre-wrap py-2">{formData.safety_precautions || '-'}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      First Aid Measures
+                    </label>
+                    {isEditing ? (
+                      <textarea
+                        value={formData.safety_first_aid || ''}
+                        onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
+                        rows={3}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900 whitespace-pre-wrap py-2">{formData.safety_first_aid || '-'}</p>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Product Images Section */}
+              <div>
+                <h4 className="text-md font-medium text-gray-900 mb-4">Product Images</h4>
                 {isEditing ? (
                   <div className="space-y-3">
                     {formData.product_images?.map((image, index) => (
@@ -884,7 +884,7 @@ const ProductModal = ({
                           product_images: [...prev.product_images, { id: '', product_id: '', image_url: '', created_at: '' }]
                         }));
                       }}
-                      className="flex items-center text-sm text-[#0055A3] hover:text-blue-700"
+                      className="flex items-center text-sm text-[#0055A3] hover:text-blue-700 mt-2"
                     >
                       <Plus className="w-4 h-4 mr-1" />
                       Add Image URL
@@ -899,7 +899,7 @@ const ProductModal = ({
                           alt={`Product image ${index + 1}`}
                           className="w-full h-32 object-cover rounded-lg"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zMiAxNlY0OCIgc3Ryb2tlPSIjQ0RDRUNGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8cGF0aCBkPSJNMTYgMzJINDgiIHN0cm9rZT0iI0NEQ0VDRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+';
+                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zMiAxNlY0OCIgc3Ryb2tlPSIjQ0RDRUNGIiBzdHJva2Utd2lkdGg9IjIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHwYXRoIGQ9Ik0xNiAzMkg0OCIgc3Ryb2tlPSIjQ0RDRUNGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4=';
                           }}
                         />
                       </div>
@@ -948,6 +948,8 @@ const ProductModal = ({
         </div>
       </div>
     </AnimatePresence>
+  );
+};
   );
 };
 
