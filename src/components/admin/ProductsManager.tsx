@@ -348,8 +348,7 @@ const ProductModal = ({
 
   if (!isOpen) return null;
 
-  return (
-    return (
+ return (
   <AnimatePresence>
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <motion.div
@@ -590,7 +589,6 @@ const ProductModal = ({
   </AnimatePresence>
 );
 
-
-
+};
 
 export default ProductsManager;
