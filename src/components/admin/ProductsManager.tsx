@@ -591,6 +591,6 @@ const ProductModal = ({
 );
 
 
-};
+
 
 export default ProductsManager;
