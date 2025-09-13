@@ -26,7 +26,7 @@ export interface Product {
   features?: string[];
   applications?: string[];
   instructions?: string;
-  packaging?: any;
+  packaging?: string;
   storage?: string;
   safety_precautions?: string;
   safety_first_aid?: string;
@@ -529,22 +529,22 @@ const ProductModal = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Basic Info */}
                 <div className="space-y-4">
-                 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Product Name *
-  </label>
-  {isEditing ? (
-    <input
-      type="text"
-      value={formData.name || ''}
-      onChange={(e) => handleInputChange('name', e.target.value)}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-      required
-    />
-  ) : (
-    <p className="text-gray-900">{formData.name}</p>
-  )}
-</div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Product Name *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.name || ''}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        required
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.name}</p>
+                    )}
+                  </div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -726,59 +726,6 @@ const ProductModal = ({
                       </ul>
                     )}
                   </div>
-{/* Technical Specs */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Technical Specs
-  </label>
-  {isEditing ? (
-    <div className="space-y-2">
-      {Array.isArray(formData.technical_specs) ? formData.technical_specs.map((spec, index) => (
-        <div key={index} className="flex items-center gap-2">
-          <input
-            type="text"
-            value={spec}
-            onChange={(e) => {
-              const newSpecs = [...(formData.technical_specs as string[])];
-              newSpecs[index] = e.target.value;
-              setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
-            }}
-            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-            placeholder="Enter specification"
-          />
-          <button
-            type="button"
-            onClick={() => {
-              const newSpecs = (formData.technical_specs as string[]).filter((_, i) => i !== index);
-              setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
-            }}
-            className="p-2 text-red-600 hover:bg-red-50 rounded"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-      )) : null}
-      <button
-        type="button"
-        onClick={() => {
-          const currentSpecs = Array.isArray(formData.technical_specs) ? [...formData.technical_specs] : [];
-          setFormData(prev => ({ ...prev, technical_specs: [...currentSpecs, ''] }));
-        }}
-        className="flex items-center text-sm text-[#0055A3] hover:text-blue-700"
-      >
-        <Plus className="w-4 h-4 mr-1" />
-        Add Spec
-      </button>
-    </div>
-  ) : (
-    <ul className="list-disc list-inside text-gray-900">
-      {(formData.technical_specs as string[])?.map((spec, index) => (
-        <li key={index}>{spec}</li>
-      ))}
-      {(!formData.technical_specs || (formData.technical_specs as string[]).length === 0) && <li>-</li>}
-    </ul>
-  )}
-</div>
 
                   {/* Applications */}
                   <div>
@@ -828,20 +775,20 @@ const ProductModal = ({
 
               {/* Additional Sections */}
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Instructions */}
+                {/* Packaging */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Instructions
+                    Packaging
                   </label>
                   {isEditing ? (
                     <textarea
-                      value={formData.instructions || ''}
-                      onChange={(e) => handleInputChange('instructions', e.target.value)}
+                      value={formData.packaging || ''}
+                      onChange={(e) => handleInputChange('packaging', e.target.value)}
                       rows={3}
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                     />
                   ) : (
-                    <p className="text-gray-900 whitespace-pre-wrap">{formData.instructions || '-'}</p>
+                    <p className="text-gray-900 whitespace-pre-wrap">{formData.packaging || '-'}</p>
                   )}
                 </div>
 
@@ -859,6 +806,40 @@ const ProductModal = ({
                     />
                   ) : (
                     <p className="text-gray-900 whitespace-pre-wrap">{formData.storage || '-'}</p>
+                  )}
+                </div>
+
+                {/* Technical Specs */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Technical Specifications
+                  </label>
+                  {isEditing ? (
+                    <textarea
+                      value={formData.technical_specs || ''}
+                      onChange={(e) => handleInputChange('technical_specs', e.target.value)}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                    />
+                  ) : (
+                    <p className="text-gray-900 whitespace-pre-wrap">{formData.technical_specs || '-'}</p>
+                  )}
+                </div>
+
+                {/* Instructions */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Instructions
+                  </label>
+                  {isEditing ? (
+                    <textarea
+                      value={formData.instructions || ''}
+                      onChange={(e) => handleInputChange('instructions', e.target.value)}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                    />
+                  ) : (
+                    <p className="text-gray-900 whitespace-pre-wrap">{formData.instructions || '-'}</p>
                   )}
                 </div>
 
@@ -900,7 +881,7 @@ const ProductModal = ({
               {/* Product Images */}
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Images
+                  Product Images (URLs)
                 </label>
                 {isEditing ? (
                   <div className="space-y-3">
@@ -915,7 +896,7 @@ const ProductModal = ({
                             setFormData(prev => ({ ...prev, product_images: newImages }));
                           }}
                           className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                          placeholder="Enter image URL"
+                          placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
                         />
                         <button
                           type="button"
@@ -952,7 +933,7 @@ const ProductModal = ({
                           alt={`Product image ${index + 1}`}
                           className="w-full h-32 object-cover rounded-lg"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zMiAxNlY0OCIgc3Ryb2tlPSIjQ0RDRUNGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8cGF0aCBkPSJNMTYgMzJINDgiIHN0cm9rZT0iI0NEQ0VDRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+';
+                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zMiAxNlY0OCIgc3Ryb2tlPSIjQ0RDRUNGIiBzdHJva2Utd2lkdGgPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHBhdGggZD0iTTE2IDMySDQ4IiBzdHJva2U9IiNENkQ4REIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPg==';
                           }}
                         />
                       </div>
@@ -967,6 +948,25 @@ const ProductModal = ({
                 )}
               </div>
             </div>
+
+            {/* Footer */}
+            <div className="flex items-center justify-between p-6 border-t">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                Cancel
+              </button>
+              
+              {isEditing && (
+                <button
+                  onClick={handleSave}
+                  disabled={saving || !formData.name || !formData.code || !formData.brand || !formData.type}
+                  className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                >
+                  {saving ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w
 
             {/* Footer */}
             <div className="flex items-center justify-between p-6 border-t">
