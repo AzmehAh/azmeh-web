@@ -729,23 +729,47 @@ const ProductModal = ({
                 )}
               </div>
 
-            <div className="mt-6">
+           {/* Packaging */}
+<div className="mt-6">
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Packaging
   </label>
   {isEditing ? (
-    <textarea
-      value={formData.packaging ? JSON.stringify(formData.packaging, null, 2) : ''}
-      onChange={(e) => handleInputChange('packaging', e.target.value)}
-      rows={4}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
+    <div className="space-y-2">
+      {(formData.packaging || []).map((item, idx) => (
+        <div key={idx} className="flex gap-2">
+          <input
+            type="text"
+            value={item}
+            onChange={(e) => handleArrayInputChange('packaging', idx, e.target.value)}
+            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+          />
+          <button
+            type="button"
+            onClick={() => removeArrayItem('packaging', idx)}
+            className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => addArrayItem('packaging')}
+        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+      >
+        + Add Packaging
+      </button>
+    </div>
   ) : (
-    <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto">
-      {formData.packaging ? JSON.stringify(formData.packaging, null, 2) : 'No packaging info'}
-    </pre>
+    <ul className="list-disc pl-5 text-gray-900">
+      {(formData.packaging || []).map((p, i) => (
+        <li key={i}>{p}</li>
+      ))}
+    </ul>
   )}
 </div>
+
 
 
               {/* Storage */}
