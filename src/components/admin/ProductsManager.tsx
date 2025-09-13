@@ -642,7 +642,41 @@ const ProductModal = ({
       )}
     </div>
 {/* Applications */}
-
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Applications
+  </label>
+  {isEditing ? (
+    <div className="space-y-2">
+      {(formData.applications || []).map((item, idx) => (
+        <input
+          key={idx}
+          type="text"
+          value={item}
+          onChange={(e) => {
+            const updated = [...(formData.applications || [])];
+            updated[idx] = e.target.value;
+            handleInputChange('applications', updated);
+          }}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+        />
+      ))}
+      <button
+        type="button"
+        onClick={() => handleInputChange('applications', [...(formData.applications || []), ''])}
+        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+      >
+        + Add Application
+      </button>
+    </div>
+  ) : (
+    <ul className="list-disc pl-5 text-gray-900">
+      {(formData.applications || []).map((a, i) => (
+        <li key={i}>{a}</li>
+      ))}
+    </ul>
+  )}
+</div>
 
             {/* Instructions */}
 <div className="mt-6">
