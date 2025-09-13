@@ -925,10 +925,33 @@ const ProductModal = ({
         <div key={idx} className="flex gap-2">
           <input
             type="text"
-            value={item.spec || ''}
+            placeholder="Property"
+            value={item.property || ''}
             onChange={(e) => {
               const newSpecs = [...(formData.technical_specs || [])];
-              newSpecs[idx] = { spec: e.target.value };
+              newSpecs[idx] = { ...newSpecs[idx], property: e.target.value };
+              setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+            }}
+            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+          />
+          <input
+            type="text"
+            placeholder="Value"
+            value={item.value || ''}
+            onChange={(e) => {
+              const newSpecs = [...(formData.technical_specs || [])];
+              newSpecs[idx] = { ...newSpecs[idx], value: e.target.value };
+              setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+            }}
+            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+          />
+          <input
+            type="text"
+            placeholder="Standard"
+            value={item.standard || ''}
+            onChange={(e) => {
+              const newSpecs = [...(formData.technical_specs || [])];
+              newSpecs[idx] = { ...newSpecs[idx], standard: e.target.value };
               setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
             }}
             className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
@@ -948,7 +971,7 @@ const ProductModal = ({
       <button
         type="button"
         onClick={() => {
-          const newSpecs = [...(formData.technical_specs || []), { spec: '' }];
+          const newSpecs = [...(formData.technical_specs || []), { property: '', value: '', standard: '' }];
           setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
         }}
         className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
@@ -957,11 +980,24 @@ const ProductModal = ({
       </button>
     </div>
   ) : (
-    <ul className="list-disc pl-5 text-gray-900">
-      {(formData.technical_specs || []).map((item, i) => (
-        <li key={i}>{item.spec}</li>
-      ))}
-    </ul>
+    <table className="w-full border border-gray-200 rounded text-sm">
+      <thead className="bg-gray-50">
+        <tr>
+          <th className="border px-3 py-2 text-left">Property</th>
+          <th className="border px-3 py-2 text-left">Value</th>
+          <th className="border px-3 py-2 text-left">Standard</th>
+        </tr>
+      </thead>
+      <tbody>
+        {(formData.technical_specs || []).map((item, i) => (
+          <tr key={i}>
+            <td className="border px-3 py-2">{item.property}</td>
+            <td className="border px-3 py-2">{item.value}</td>
+            <td className="border px-3 py-2">{item.standard}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
   )}
 </div>
 
