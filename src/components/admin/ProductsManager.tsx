@@ -379,409 +379,173 @@ const ProductModal = ({
               </button>
             </div>
 
-         {/* Content */}
-<div className="overflow-y-auto max-h-[calc(90vh-140px)] p-6">
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-    {/* Left Column - Basic Info */}
-    <div className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Product Name *
-        </label>
-        {isEditing ? (
-          <input
-            type="text"
-            value={formData.name || ''}
-            onChange={(e) => handleInputChange('name', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        ) : (
-          <p className="text-gray-900">{formData.name}</p>
-        )}
-      </div>
+            {/* Content */}
+            <div className="overflow-y-auto max-h-[calc(90vh-140px)] p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Basic Info */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Product Name *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.name || ''}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.name}</p>
+                    )}
+                  </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Product Code *
-        </label>
-        {isEditing ? (
-          <input
-            type="text"
-            value={formData.code || ''}
-            onChange={(e) => handleInputChange('code', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        ) : (
-          <p className="text-gray-900">{formData.code}</p>
-        )}
-      </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Product Code *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.code || ''}
+                        onChange={(e) => handleInputChange('code', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.code}</p>
+                    )}
+                  </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Brand *
-        </label>
-        {isEditing ? (
-          <input
-            type="text"
-            value={formData.brand || ''}
-            onChange={(e) => handleInputChange('brand', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        ) : (
-          <p className="text-gray-900">{formData.brand}</p>
-        )}
-      </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Brand *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.brand || ''}
+                        onChange={(e) => handleInputChange('brand', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.brand}</p>
+                    )}
+                  </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Type *
-        </label>
-        {isEditing ? (
-          <input
-            type="text"
-            value={formData.type || ''}
-            onChange={(e) => handleInputChange('type', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        ) : (
-          <p className="text-gray-900">{formData.type}</p>
-        )}
-      </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Type *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.type || ''}
+                        onChange={(e) => handleInputChange('type', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.type}</p>
+                    )}
+                  </div>
+                </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Material *
-        </label>
-        {isEditing ? (
-          <input
-            type="text"
-            value={formData.material || ''}
-            onChange={(e) => handleInputChange('material', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        ) : (
-          <p className="text-gray-900">{formData.material}</p>
-        )}
-      </div>
+                {/* Additional Info */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Material *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.material || ''}
+                        onChange={(e) => handleInputChange('material', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.material}</p>
+                    )}
+                  </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Usage *
-        </label>
-        {isEditing ? (
-          <input
-            type="text"
-            value={formData.usage || ''}
-            onChange={(e) => handleInputChange('usage', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        ) : (
-          <p className="text-gray-900">{formData.usage}</p>
-        )}
-      </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Usage *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.usage || ''}
+                        onChange={(e) => handleInputChange('usage', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.usage}</p>
+                    )}
+                  </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Status
-        </label>
-        {isEditing ? (
-          <select
-            value={formData.status || 'active'}
-            onChange={(e) => handleInputChange('status', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          >
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="draft">Draft</option>
-          </select>
-        ) : (
-          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-            formData.status === 'active' 
-              ? 'bg-green-100 text-green-800' 
-              : 'bg-red-100 text-red-800'
-          }`}>
-            {formData.status}
-          </span>
-        )}
-      </div>
-    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Status
+                    </label>
+                    {isEditing ? (
+                      <select
+                        value={formData.status || 'active'}
+                        onChange={(e) => handleInputChange('status', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="draft">Draft</option>
+                      </select>
+                    ) : (
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        formData.status === 'active' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {formData.status}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
 
-    {/* Right Column - Additional Info */}
-    <div className="space-y-4">
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Description *
-        </label>
-        {isEditing ? (
-          <textarea
-            value={formData.description || ''}
-            onChange={(e) => handleInputChange('description', e.target.value)}
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        ) : (
-          <p className="text-gray-900">{formData.description}</p>
-        )}
-      </div>
+              {/* Description */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description *
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.description || ''}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900">{formData.description}</p>
+                )}
+              </div>
 
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Technical Description
-        </label>
-        {isEditing ? (
-          <textarea
-            value={formData.technical_description || ''}
-            onChange={(e) => handleInputChange('technical_description', e.target.value)}
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        ) : (
-          <p className="text-gray-900">{formData.technical_description}</p>
-        )}
-      </div>
-    </div>
-  </div>
-
-  {/* Full-width sections below the two columns */}
-  <div className="mt-6 space-y-6">
-    {/* Features */}
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        Features
-      </label>
-      {isEditing ? (
-        <div className="space-y-2">
-          {(formData.features || []).map((item, idx) => (
-            <div key={idx} className="flex gap-2">
-              <input
-                type="text"
-                value={item}
-                onChange={(e) => {
-                  const updated = [...(formData.features || [])];
-                  updated[idx] = e.target.value;
-                  handleInputChange('features', updated);
-                }}
-                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const updated = (formData.features || []).filter((_, i) => i !== idx);
-                  handleInputChange('features', updated);
-                }}
-                className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-              >
-                Remove
-              </button>
+              {/* Technical Description */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Technical Description
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.technical_description || ''}
+                    onChange={(e) => handleInputChange('technical_description', e.target.value)}
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900">{formData.technical_description}</p>
+                )}
+              </div>
             </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => handleInputChange('features', [...(formData.features || []), ''])}
-            className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-          >
-            + Add Feature
-          </button>
-        </div>
-      ) : (
-        <ul className="list-disc pl-5 text-gray-900">
-          {(formData.features || []).map((f, i) => (
-            <li key={i}>{f}</li>
-          ))}
-        </ul>
-      )}
-    </div>
 
-    {/* Continue with the rest of your fields (Applications, Instructions, etc.) */}
-    {/* Make sure to add all the other fields here in the same structure */}
-    
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        Applications
-      </label>
-      {isEditing ? (
-        <div className="space-y-2">
-          {(formData.applications || []).map((item, idx) => (
-            <div key={idx} className="flex gap-2">
-              <input
-                type="text"
-                value={item}
-                onChange={(e) => {
-                  const updated = [...(formData.applications || [])];
-                  updated[idx] = e.target.value;
-                  handleInputChange('applications', updated);
-                }}
-                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const updated = (formData.applications || []).filter((_, i) => i !== idx);
-                  handleInputChange('applications', updated);
-                }}
-                className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-              >
-                Remove
-              </button>
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => handleInputChange('applications', [...(formData.applications || []), ''])}
-            className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-          >
-            + Add Application
-          </button>
-        </div>
-      ) : (
-        <ul className="list-disc pl-5 text-gray-900">
-          {(formData.applications || []).map((a, i) => (
-            <li key={i}>{a}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-{/* Applications */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Applications
-  </label>
-  {isEditing ? (
-    <div className="space-y-2">
-      {(formData.applications || []).map((item, idx) => (
-        <input
-          key={idx}
-          type="text"
-          value={item}
-          onChange={(e) => {
-            const updated = [...(formData.applications || [])];
-            updated[idx] = e.target.value;
-            handleInputChange('applications', updated);
-          }}
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-        />
-      ))}
-      <button
-        type="button"
-        onClick={() => handleInputChange('applications', [...(formData.applications || []), ''])}
-        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-      >
-        + Add Application
-      </button>
-    </div>
-  ) : (
-    <ul className="list-disc pl-5 text-gray-900">
-      {(formData.applications || []).map((a, i) => (
-        <li key={i}>{a}</li>
-      ))}
-    </ul>
-  )}
-</div>
-
-            {/* Instructions */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Instructions
-  </label>
-  {isEditing ? (
-    <textarea
-      value={formData.instructions || ''}
-      onChange={(e) => handleInputChange('instructions', e.target.value)}
-      rows={3}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
-  ) : (
-    <p className="text-gray-900 whitespace-pre-line">{formData.instructions}</p>
-  )}
-</div>
-
-{/* Packaging */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Packaging
-  </label>
-  {isEditing ? (
-    <textarea
-      value={formData.packaging || ''}
-      onChange={(e) => handleInputChange('packaging', e.target.value)}
-      rows={2}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
-  ) : (
-    <p className="text-gray-900 whitespace-pre-line">{formData.packaging}</p>
-  )}
-</div>
-
-{/* Storage */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Storage
-  </label>
-  {isEditing ? (
-    <textarea
-      value={formData.storage || ''}
-      onChange={(e) => handleInputChange('storage', e.target.value)}
-      rows={2}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
-  ) : (
-    <p className="text-gray-900 whitespace-pre-line">{formData.storage}</p>
-  )}
-</div>
-
-{/* Safety Precautions */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Safety Precautions
-  </label>
-  {isEditing ? (
-    <textarea
-      value={formData.safety_precautions || ''}
-      onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
-      rows={3}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
-  ) : (
-    <p className="text-gray-900 whitespace-pre-line">{formData.safety_precautions}</p>
-  )}
-</div>
-
-{/* Safety First Aid */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Safety First Aid
-  </label>
-  {isEditing ? (
-    <textarea
-      value={formData.safety_first_aid || ''}
-      onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
-      rows={3}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
-  ) : (
-    <p className="text-gray-900 whitespace-pre-line">{formData.safety_first_aid}</p>
-  )}
-</div>
-
-{/* Technical Specs */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Technical Specs
-  </label>
-  {isEditing ? (
-    <textarea
-      value={formData.technical_specs || ''}
-      onChange={(e) => handleInputChange('technical_specs', e.target.value)}
-      rows={4}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
-  ) : (
-    <p className="text-gray-900 whitespace-pre-line">{formData.technical_specs}</p>
-  )}
-</div>
-
-
-            {/* Footer */}
+            {/* Footer */} 
             {isEditing && (
               <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
                 <button
@@ -789,7 +553,7 @@ const ProductModal = ({
                   className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Cancel
-                </button> 
+                </button>
                 <button
                   onClick={handleSave}
                   disabled={saving}
