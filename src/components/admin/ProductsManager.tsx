@@ -11,6 +11,23 @@ import {
   X
 } from 'lucide-react';
 import { supabase, Product, ProductImage } from '../../lib/supabase';
+ const { data, error } = await supabase
+  .from("products")
+  .select(`*, product_images (*)`);
+ const { data: imageData, error: imageError } = await supabase
+  .from("product_images")
+  .insert([{ 
+    product_id: product.id, 
+    image_url: formData.image_url 
+  }]);
+const { data: product, error } = await supabase
+  .from("products")
+  .insert([{ 
+    name: formData.name, 
+    description: formData.description 
+  }])
+  .select()
+  .single();
 
 const ProductsManager = () => {
   const [products, setProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
@@ -95,24 +112,7 @@ const ProductsManager = () => {
       </div>
     );
   }
- const { data, error } = await supabase
-  .from("products")
-  .select(`*, product_images (*)`);
-const { data: imageData, error: imageError } = await supabase
-  .from("product_images")
-  .insert([{ 
-    product_id: product.id, 
-    image_url: formData.image_url 
-  }]);
-const { data: product, error } = await supabase
-  .from("products")
-  .insert([{ 
-    name: formData.name, 
-    description: formData.description 
-  }])
-  .select()
-  .single();
-
+ 
   return (
     <div className="space-y-6">
       {/* Header */}
