@@ -543,7 +543,194 @@ const ProductModal = ({
                   <p className="text-gray-900">{formData.technical_description}</p>
                 )}
               </div>
-            </div>
+            </div> 
+{/* Features */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Features
+  </label>
+  {isEditing ? (
+    <div className="space-y-2">
+      {(formData.features || []).map((item, idx) => (
+        <div key={idx} className="flex gap-2">
+          <input
+            type="text"
+            value={item}
+            onChange={(e) => {
+              const updated = [...(formData.features || [])];
+              updated[idx] = e.target.value;
+              handleInputChange('features', updated);
+            }}
+            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              const updated = (formData.features || []).filter((_, i) => i !== idx);
+              handleInputChange('features', updated);
+            }}
+            className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => handleInputChange('features', [...(formData.features || []), ''])}
+        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+      >
+        + Add Feature
+      </button>
+    </div>
+  ) : (
+    <ul className="list-disc pl-5 text-gray-900">
+      {(formData.features || []).map((f, i) => (
+        <li key={i}>{f}</li>
+      ))}
+    </ul>
+  )}
+</div>
+
+{/* Applications */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Applications
+  </label>
+  {isEditing ? (
+    <div className="space-y-2">
+      {(formData.applications || []).map((item, idx) => (
+        <input
+          key={idx}
+          type="text"
+          value={item}
+          onChange={(e) => {
+            const updated = [...(formData.applications || [])];
+            updated[idx] = e.target.value;
+            handleInputChange('applications', updated);
+          }}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+        />
+      ))}
+      <button
+        type="button"
+        onClick={() => handleInputChange('applications', [...(formData.applications || []), ''])}
+        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+      >
+        + Add Application
+      </button>
+    </div>
+  ) : (
+    <ul className="list-disc pl-5 text-gray-900">
+      {(formData.applications || []).map((a, i) => (
+        <li key={i}>{a}</li>
+      ))}
+    </ul>
+  )}
+</div>
+
+            {/* Instructions */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Instructions
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.instructions || ''}
+      onChange={(e) => handleInputChange('instructions', e.target.value)}
+      rows={3}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.instructions}</p>
+  )}
+</div>
+
+{/* Packaging */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Packaging
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.packaging || ''}
+      onChange={(e) => handleInputChange('packaging', e.target.value)}
+      rows={2}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.packaging}</p>
+  )}
+</div>
+
+{/* Storage */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Storage
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.storage || ''}
+      onChange={(e) => handleInputChange('storage', e.target.value)}
+      rows={2}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.storage}</p>
+  )}
+</div>
+
+{/* Safety Precautions */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Safety Precautions
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.safety_precautions || ''}
+      onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
+      rows={3}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.safety_precautions}</p>
+  )}
+</div>
+
+{/* Safety First Aid */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Safety First Aid
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.safety_first_aid || ''}
+      onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
+      rows={3}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.safety_first_aid}</p>
+  )}
+</div>
+
+{/* Technical Specs */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Technical Specs
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.technical_specs || ''}
+      onChange={(e) => handleInputChange('technical_specs', e.target.value)}
+      rows={4}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.technical_specs}</p>
+  )}
+</div>
+
 
             {/* Footer */}
             {isEditing && (
@@ -553,7 +740,7 @@ const ProductModal = ({
                   className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
                   Cancel
-                </button>
+                </button> 
                 <button
                   onClick={handleSave}
                   disabled={saving}
