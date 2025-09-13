@@ -677,22 +677,24 @@ const ProductModal = ({
                 )}
               </div>
 
-              {/* Packaging */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Packaging
-                </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.packaging || ''}
-                    onChange={(e) => handleInputChange('packaging', e.target.value)}
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.packaging}</p>
-                )}
-              </div>
+            <div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Packaging
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.packaging ? JSON.stringify(formData.packaging, null, 2) : ''}
+      onChange={(e) => handleInputChange('packaging', e.target.value)}
+      rows={4}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto">
+      {formData.packaging ? JSON.stringify(formData.packaging, null, 2) : 'No packaging info'}
+    </pre>
+  )}
+</div>
+
 
               {/* Storage */}
               <div className="mt-6">
