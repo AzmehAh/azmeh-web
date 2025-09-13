@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { 
   Plus, 
   Search, 
@@ -247,7 +245,7 @@ const ProductsManager = () => {
         onClose={closeModal}
         product={selectedProduct}
         isEditing={isEditing}
-        onSave={fetchProducts} 
+        onSave={fetchProducts}
       />
     </div>
   );
@@ -283,7 +281,7 @@ const ProductModal = ({
     storage: '',
     safety_precautions: '',
     safety_first_aid: '',
-   technical_specs: [],
+    technical_specs: '',
     status: 'active'
   });
   const [saving, setSaving] = useState(false);
@@ -747,25 +745,23 @@ const ProductModal = ({
                 )}
               </div>
 
-            <div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Technical Specs
-  </label>
-
-  {isEditing ? (
-    <ReactQuill
-      theme="snow"
-      value={formData.technical_specs || ''}
-      onChange={(value) => handleInputChange('technical_specs', value)}
-      className="bg-white"
-    />
-  ) : (
-    <div
-      className="prose max-w-full"
-      dangerouslySetInnerHTML={{ __html: formData.technical_specs || '<p>No technical specs</p>' }}
-    />
-  )}
-</div>
+              {/* Technical Specs */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Technical Specs
+                </label> 
+                {isEditing ? (
+                  <textarea
+                    value={formData.technical_specs || ''}
+                    onChange={(e) => handleInputChange('technical_specs', e.target.value)}
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900 whitespace-pre-line">{formData.technical_specs}</p>
+                )}
+              </div>
+            </div>
 
             {/* Footer */} 
             {isEditing && (
@@ -794,14 +790,11 @@ const ProductModal = ({
                   )}
                 </button>
               </div>
-            
             )} 
-                         </div>
           </motion.div>
         </div>
       </div>
     </AnimatePresence> 
-      
   );
 };
 
