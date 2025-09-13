@@ -376,35 +376,60 @@ const ProductModal = ({
     }
   }, [product]);
 
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      if (product) {
-        // Update existing product
-        const { error } = await supabase
-          .from('products')
-          .update(formData)
-          .eq('id', product.id);
-        
-        if (error) throw error;
-      } else {
-        // Create new product
-        const { error } = await supabase
-          .from('products')
-          .insert([formData]);
-        
-        if (error) throw error;
-      }
+ const handleSave = async () => {
+  setSaving(true);
+  try {
+    let productId = product?.id;
 
-      onSave();
-      onClose();
-    } catch (error) {
-      console.error('Error saving product:', error);
-      alert('Error saving product');
-    } finally {
-      setSaving(false);
+    // نسخ formData بدون product_images
+    const productData = { ...formData };
+    delete productData.product_images;
+
+    if (product) {
+      // تحديث المنتج
+      const { error } = await supabase
+        .from('products')
+        .update(productData)
+        .eq('id', product.id);
+      if (error) throw error;
+    } else {
+      // إنشاء منتج جديد
+      const { data, error } = await supabase
+        .from('products')
+        .insert([productData])
+        .select();
+      if (error) throw error;
+      productId = data?.[0]?.id;
     }
-  };
+
+    // إدارة الصور
+    if (productId && formData.product_images) {
+      for (const img of formData.product_images) {
+        if (img.id) {
+          // تعديل صورة موجودة
+          await supabase
+            .from('product_images')
+            .update({ image_url: img.image_url })
+            .eq('id', img.id);
+        } else {
+          // إضافة صورة جديدة
+          await supabase
+            .from('product_images')
+            .insert([{ product_id: productId, image_url: img.image_url }]);
+        }
+      }
+    }
+
+    onSave();
+    onClose();
+  } catch (error) {
+    console.error('Error saving product:', error);
+    alert('Error saving product');
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
