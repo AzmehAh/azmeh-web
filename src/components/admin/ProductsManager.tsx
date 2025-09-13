@@ -795,11 +795,11 @@ const ProductModal = ({
                 </button>
               </div>
             )} 
-      </motion.div>
+          </motion.div>
+        </div>
+           </div>
       </div>
-    </div>
-  )}
-</AnimatePresence>
+    </AnimatePresence> 
   );
 };
 
