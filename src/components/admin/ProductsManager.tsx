@@ -538,7 +538,7 @@ const ProductModal = ({
                         type="text"
                         value={formData.name || ''}
                         onChange={(e) => handleInputChange('name', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]" }
                         required
                       />
                     ) : (
