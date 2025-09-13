@@ -745,23 +745,34 @@ const ProductModal = ({
                 )}
               </div>
 
-              {/* Technical Specs */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Technical Specs
-                </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.technical_specs || ''}
-                    onChange={(e) => handleInputChange('technical_specs', e.target.value)}
-                    rows={4}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.technical_specs}</p>
-                )}
-              </div>
-            </div>
+            <div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Technical Specs
+  </label>
+
+  {Array.isArray(formData.technical_specs) && formData.technical_specs.length > 0 ? (
+    <table className="w-full text-left border border-gray-200 rounded-lg overflow-hidden">
+      <thead className="bg-gray-100">
+        <tr>
+          <th className="px-3 py-2 border-b">Property</th>
+          <th className="px-3 py-2 border-b">Value</th>
+          <th className="px-3 py-2 border-b">Standard</th>
+        </tr>
+      </thead>
+      <tbody>
+        {formData.technical_specs.map((spec, idx) => (
+          <tr key={idx} className="hover:bg-gray-50">
+            <td className="px-3 py-2 border-b">{spec.property}</td>
+            <td className="px-3 py-2 border-b">{spec.value}</td>
+            <td className="px-3 py-2 border-b">{spec.standard}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  ) : (
+    <p className="text-gray-900">No technical specs available.</p>
+  )}
+</div>
 
             {/* Footer */} 
             {isEditing && (
