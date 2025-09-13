@@ -62,48 +62,6 @@ const handleSave = async () => {
     setSaving(false);
   }
 };
-useEffect(() => {
-  if (product) {
-    const productData = {
-      ...product,
-      features: Array.isArray(product.features) ? product.features : [],
-      applications: Array.isArray(product.applications) ? product.applications : [],
-      packaging: Array.isArray(product.packaging)
-        ? product.packaging
-        : product.packaging
-        ? JSON.parse(product.packaging)
-        : [],
-      instructions: product.instructions || '',
-      storage: product.storage || '',
-      safety_precautions: product.safety_precautions || '',
-      safety_first_aid: product.safety_first_aid || '',
-      technical_specs: product.technical_specs || '',
-      product_images: Array.isArray(product.product_images) ? product.product_images : []
-    };
-    setFormData(productData);
-  } else {
-    setFormData({
-      name: '',
-      code: '',
-      brand: '',
-      type: '',
-      material: '',
-      usage: '',
-      description: '',
-      technical_description: '',
-      features: [],
-      applications: [],
-      packaging: [],
-      instructions: '',
-      storage: '',
-      safety_precautions: '',
-      safety_first_aid: '',
-      technical_specs: '',
-      status: 'active',
-      product_images: []
-    });
-  }
-}, [product]);
 
 
 const ProductsManager = () => {
@@ -363,7 +321,7 @@ const ProductModal = ({
     name: '',
     code: '',
     brand: '',
-    type: '',
+    type: '', 
     material: '',
     usage: '',
     description: '',
