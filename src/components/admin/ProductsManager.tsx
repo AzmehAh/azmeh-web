@@ -948,25 +948,7 @@ const ProductModal = ({
                 )}
               </div>
             </div>
-
-            {/* Footer */}
-            <div className="flex items-center justify-between p-6 border-t">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
-              >
-                Cancel
-              </button>
-              
-              {isEditing && (
-                <button
-                  onClick={handleSave}
-                  disabled={saving || !formData.name || !formData.code || !formData.brand || !formData.type}
-                  className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                >
-                  {saving ? (
-                    <>
-                      <div className="animate-spin rounded-full h-4 w
+ w
 
             {/* Footer */}
             <div className="flex items-center justify-between p-6 border-t">
