@@ -2,27 +2,37 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, X, ChevronDown, Grid, List, SortAsc } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { productsData, Product } from '../data/productsData';
 import { api, ProductFilterType, ProductFilterValue } from '../lib/supabase';
+
+// تعريف واجهة المنتج
+interface Product {
+  id: string;
+  name: string;
+  code: string;
+  description: string;
+  image: string;
+  type: string;
+  brand: string;
+  material: string;
+  usage: string;
+}
 
 const Products = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const [products, setProducts] = useState<Product[]>([]);
   const [filterOptions, setFilterOptions] = useState<Record<string, string[]>>({});
   const [filterTypes, setFilterTypes] = useState<(ProductFilterType & { product_filter_values: ProductFilterValue[] })[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({
-    type: [],
-    brand: [],
-    material: [],
-    usage: []
-  });
+  const [productsLoading, setProductsLoading] = useState(true);
+  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [activeFilterCategory, setActiveFilterCategory] = useState<string | null>(null);
 
   useEffect(() => {
     fetchFilterData();
+    fetchProducts();
   }, []);
 
   const fetchFilterData = async () => {
@@ -56,9 +66,22 @@ const Products = () => {
     }
   };
 
+  const fetchProducts = async () => {
+    try {
+      setProductsLoading(true);
+      // استدعاء API لجلب المنتجات
+      const productsData = await api.getProducts();
+      setProducts(productsData || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setProductsLoading(false);
+    }
+  };
+
   // Filter and sort products
   const filteredProducts = useMemo(() => {
-    let filtered = productsData.filter(product => {
+    let filtered = products.filter(product => {
       // Search filter
       const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                            product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -80,7 +103,7 @@ const Products = () => {
     });
 
     return filtered;
-  }, [searchTerm, selectedFilters, sortOrder]);
+  }, [searchTerm, selectedFilters, sortOrder, products]);
 
   const toggleFilter = (category: string, value: string) => {
     setSelectedFilters(prev => ({
@@ -118,7 +141,7 @@ const Products = () => {
         </div>
       </div>
 
-      {loading ? (
+      {loading || productsLoading ? (
         <div className="flex items-center justify-center h-64">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
         </div>
@@ -126,9 +149,9 @@ const Products = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
-         <div className="lg:w-80 flex-shrink-0">
-  <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24  
-                  max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
+          <div className="lg:w-80 flex-shrink-0">
+            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24  
+                          max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900 flex items-center">
                   <Filter className="w-5 h-5 text-[#2C5DB6] mr-2" />
@@ -174,54 +197,53 @@ const Products = () => {
                 </button>
               </div>
 
-             {/* Filter Categories */}
-{Object.entries(filterOptions).map(([category, options]) => (
-  <div key={category} className="mb-6">
-    <button
-      onClick={() =>
-        setActiveFilterCategory(activeFilterCategory === category ? null : category)
-      }
-      className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-[#2C5DB6] transition-colors"
-    >
-      <span className="capitalize">By {category}</span>
-      <ChevronDown
-        className={`w-4 h-4 transition-transform ${
-          activeFilterCategory === category ? 'rotate-180' : ''
-        }`}
-      />
-    </button>
+              {/* Filter Categories */}
+              {Object.entries(filterOptions).map(([category, options]) => (
+                <div key={category} className="mb-6">
+                  <button
+                    onClick={() =>
+                      setActiveFilterCategory(activeFilterCategory === category ? null : category)
+                    }
+                    className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-[#2C5DB6] transition-colors"
+                  >
+                    <span className="capitalize">By {category}</span>
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${
+                        activeFilterCategory === category ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
 
-    <AnimatePresence>
-      {activeFilterCategory === category && (
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: 'auto', opacity: 1 }}
-          exit={{ height: 0, opacity: 0 }}
-          transition={{ duration: 0.3 }}
-          className="overflow-hidden"
-        >
-          <div className="space-y-2">
-            {options.map((option) => (
-              <label
-                key={option}
-                className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedFilters[category].includes(option)}
-                  onChange={() => toggleFilter(category, option)}
-                  className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
-                />
-                <span className="text-sm text-gray-700">{option}</span>
-              </label>
-            ))}
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
-  </div>
-))}
-
+                  <AnimatePresence>
+                    {activeFilterCategory === category && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="space-y-2">
+                          {options.map((option) => (
+                            <label
+                              key={option}
+                              className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedFilters[category]?.includes(option) || false}
+                                onChange={() => toggleFilter(category, option)}
+                                className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
+                              />
+                              <span className="text-sm text-gray-700">{option}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ))}
 
               {/* Active Filters */}
               {getActiveFiltersCount() > 0 && (
