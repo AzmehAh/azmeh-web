@@ -914,24 +914,57 @@ const ProductModal = ({
                   <p className="text-gray-900 whitespace-pre-line">{formData.safety_first_aid}</p>
                 )}
               </div>
-
-            <div className="mt-6">
+{/* Technical Specs */}
+<div className="mt-6">
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Technical Specs
-  </label> 
+  </label>
   {isEditing ? (
-    <textarea
-      value={formData.technical_specs ? JSON.stringify(formData.technical_specs, null, 2) : ''}
-      onChange={(e) => handleInputChange('technical_specs', e.target.value)}
-      rows={6}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
+    <div className="space-y-2">
+      {(formData.technical_specs || []).map((item, idx) => (
+        <div key={idx} className="flex gap-2">
+          <input
+            type="text"
+            value={item.spec || ''}
+            onChange={(e) => {
+              const newSpecs = [...(formData.technical_specs || [])];
+              newSpecs[idx] = { spec: e.target.value };
+              setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+            }}
+            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              const newSpecs = (formData.technical_specs || []).filter((_, i) => i !== idx);
+              setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+            }}
+            className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => {
+          const newSpecs = [...(formData.technical_specs || []), { spec: '' }];
+          setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+        }}
+        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+      >
+        + Add Spec
+      </button>
+    </div>
   ) : (
-    <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto">
-      {formData.technical_specs ? JSON.stringify(formData.technical_specs, null, 2) : 'No technical specs'}
-    </pre>
-  )} 
+    <ul className="list-disc pl-5 text-gray-900">
+      {(formData.technical_specs || []).map((item, i) => (
+        <li key={i}>{item.spec}</li>
+      ))}
+    </ul>
+  )}
 </div>
+
 
 
             {/* Footer */} 
