@@ -950,7 +950,6 @@ const ProductModal = ({
     </AnimatePresence>
   );
 };
-  );
-};
+
 
 export default ProductsManager;
