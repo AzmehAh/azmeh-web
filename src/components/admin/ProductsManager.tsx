@@ -729,6 +729,51 @@ const ProductModal = ({
                   <p className="text-gray-900 whitespace-pre-line">{formData.safety_precautions}</p>
                 )}
               </div>
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Product Image
+  </label>
+
+  {isEditing ? (
+    <input
+      type="file"
+      accept="image/*"
+      onChange={async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        // رفع الصورة على Supabase Storage
+        const { data, error } = await supabase.storage
+          .from("products") // اسم الباكيت (bucket) لازم تكون عامله من قبل
+          .upload(`images/${Date.now()}-${file.name}`, file);
+
+        if (error) {
+          console.error("Upload error:", error);
+          return;
+        }
+
+        // جلب رابط الصورة
+        const { data: urlData } = supabase.storage
+          .from("products")
+          .getPublicUrl(data.path);
+
+        // حفظ الرابط بالفورم
+        handleInputChange("image_url", urlData.publicUrl);
+      }}
+      className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    formData.image_url ? (
+      <img
+        src={formData.image_url}
+        alt="Product"
+        className="w-32 h-32 object-cover rounded"
+      />
+    ) : (
+      <p className="text-gray-500">No image uploaded</p>
+    )
+  )}
+</div>
 
               {/* Safety First Aid */}
               <div className="mt-6">
