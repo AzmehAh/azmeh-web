@@ -747,8 +747,7 @@ const ProductModal = ({
                 )}
               </div>
 
-            {/* داخل الـ Modal */}
-<div className="mt-6">
+            <div className="mt-6">
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Technical Specs
   </label>
@@ -756,17 +755,18 @@ const ProductModal = ({
   {isEditing ? (
     <ReactQuill
       theme="snow"
-      value={formData.technical_description || ''}
-      onChange={(value) => handleInputChange('technical_description', value)}
+      value={formData.technical_specs || ''}
+      onChange={(value) => handleInputChange('technical_specs', value)}
       className="bg-white"
     />
   ) : (
     <div
       className="prose max-w-full"
-      dangerouslySetInnerHTML={{ __html: formData.technical_description || '<p>No technical specs</p>' }}
+      dangerouslySetInnerHTML={{ __html: formData.technical_specs || '<p>No technical specs</p>' }}
     />
   )}
 </div>
+
             {/* Footer */} 
             {isEditing && (
               <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
