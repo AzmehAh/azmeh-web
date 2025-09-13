@@ -544,6 +544,107 @@ const ProductModal = ({
                 )}
               </div>
             </div>
+{/* Instructions */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Instructions
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.instructions || ''}
+      onChange={(e) => handleInputChange('instructions', e.target.value)}
+      rows={3}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.instructions}</p>
+  )}
+</div>
+
+{/* Packaging */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Packaging
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.packaging || ''}
+      onChange={(e) => handleInputChange('packaging', e.target.value)}
+      rows={2}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.packaging}</p>
+  )}
+</div>
+
+{/* Storage */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Storage
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.storage || ''}
+      onChange={(e) => handleInputChange('storage', e.target.value)}
+      rows={2}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.storage}</p>
+  )}
+</div>
+
+{/* Safety Precautions */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Safety Precautions
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.safety_precautions || ''}
+      onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
+      rows={3}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.safety_precautions}</p>
+  )}
+</div>
+
+{/* Safety First Aid */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Safety First Aid
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.safety_first_aid || ''}
+      onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
+      rows={3}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.safety_first_aid}</p>
+  )}
+</div>
+
+{/* Technical Specs */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Technical Specs
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.technical_specs || ''}
+      onChange={(e) => handleInputChange('technical_specs', e.target.value)}
+      rows={4}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.technical_specs}</p>
+  )}
+</div>
 
             {/* Footer */} 
             {isEditing && (
