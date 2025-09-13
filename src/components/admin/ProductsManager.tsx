@@ -744,7 +744,7 @@ const ProductModal = ({
 
         // رفع الصورة على Supabase Storage
         const { data, error } = await supabase.storage
-          .from("products") // اسم الباكيت (bucket) لازم تكون عامله من قبل
+          .from("product") // اسم الباكيت (bucket) لازم تكون عامله من قبل
           .upload(`images/${Date.now()}-${file.name}`, file);
 
         if (error) {
@@ -754,7 +754,7 @@ const ProductModal = ({
 
         // جلب رابط الصورة
         const { data: urlData } = supabase.storage
-          .from("products")
+          .from("product")
           .getPublicUrl(data.path);
 
         // حفظ الرابط بالفورم
