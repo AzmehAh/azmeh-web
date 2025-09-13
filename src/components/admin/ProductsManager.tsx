@@ -247,7 +247,7 @@ const ProductsManager = () => {
         onClose={closeModal}
         product={selectedProduct}
         isEditing={isEditing}
-        onSave={fetchProducts}
+        onSave={fetchProducts} 
       />
     </div>
   );
