@@ -795,11 +795,8 @@ const ProductModal = ({
                 </button>
               </div>
             )} 
-          </motion.div>
-        </div>
+        </motion.div>
       </div>
-    </AnimatePresence> 
-  );
-};
-
-export default ProductsManager;
+    </div>
+  )}
+</AnimatePresence>
