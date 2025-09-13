@@ -346,7 +346,12 @@ const ProductModal = ({
         features: Array.isArray(product.features) ? product.features : [],
         applications: Array.isArray(product.applications) ? product.applications : [],
         instructions: product.instructions || '',
-        packaging: product.packaging || '',
+       packaging: Array.isArray(product.packaging)
+  ? product.packaging
+  : product.packaging
+  ? JSON.parse(product.packaging)
+  : [],
+
         storage: product.storage || '',
         safety_precautions: product.safety_precautions || '',
         safety_first_aid: product.safety_first_aid || '',
