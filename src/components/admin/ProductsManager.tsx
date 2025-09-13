@@ -12,27 +12,6 @@ import {
 } from 'lucide-react';
 import { supabase, Product, ProductImage } from '../../lib/supabase';
 
-// Type مخصص للنموذج
-type ProductFormData = {
-  name: string;
-  code: string;
-  brand: string;
-  type: string;
-  material: string;
-  usage: string;
-  description: string[];
-  technical_description: string[];
-  features: string[];
-  applications: string[];
-  instructions: string[];
-  packaging: string[];
-  storage: string[];
-  safety_precautions: string[];
-  safety_first_aid: string[];
-  technical_specs: string[];
-  status: 'active' | 'inactive' | 'draft';
-};
-
 const ProductsManager = () => {
   const [products, setProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
@@ -42,14 +21,16 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => { fetchProducts(); }, []);
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   useEffect(() => {
     if (searchTerm) {
-      const filtered = products.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.brand.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredProducts(filtered);
     } else {
@@ -61,8 +42,12 @@ const ProductsManager = () => {
     try {
       const { data, error } = await supabase
         .from('products')
-        .select(`*, product_images (*)`)
+        .select(`
+          *,
+          product_images (*)
+        `)
         .order('created_at', { ascending: false });
+
       if (error) throw error;
       setProducts(data || []);
       setFilteredProducts(data || []);
@@ -75,9 +60,15 @@ const ProductsManager = () => {
 
   const deleteProduct = async (id: string) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
+
     try {
-      const { error } = await supabase.from('products').delete().eq('id', id);
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', id);
+
       if (error) throw error;
+      
       setProducts(products.filter(p => p.id !== id));
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -171,32 +162,57 @@ const ProductsManager = () => {
             {/* Product Info */}
             <div className="p-6">
               <div className="flex items-start justify-between mb-2">
-                <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">{product.name}</h3>
-                <span className="text-xs bg-blue-100 text-[#0055A3] px-2 py-1 rounded">{product.brand}</span>
+                <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
+                  {product.name}
+                </h3>
+                <span className="text-xs bg-blue-100 text-[#0055A3] px-2 py-1 rounded">
+                  {product.brand}
+                </span>
               </div>
               
               <p className="text-sm text-gray-500 mb-2">{product.code}</p>
-              <p className="text-sm text-gray-600 line-clamp-2 mb-4">{product.description?.[0]}</p>
+              
+              <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+                {product.description}
+              </p>
 
               <div className="flex flex-wrap gap-1 mb-4">
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">{product.type}</span>
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">{product.usage}</span>
+                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                  {product.type}
+                </span>
+                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                  {product.usage}
+                </span>
               </div>
 
               {/* Actions */}
               <div className="flex items-center justify-between">
                 <div className="flex space-x-2">
-                  <button onClick={() => openModal(product, false)} className="p-2 text-gray-600 hover:text-[#0055A3] hover:bg-blue-50 rounded transition-colors" title="View">
+                  <button
+                    onClick={() => openModal(product, false)}
+                    className="p-2 text-gray-600 hover:text-[#0055A3] hover:bg-blue-50 rounded transition-colors"
+                    title="View"
+                  >
                     <Eye className="w-4 h-4" />
                   </button>
-                  <button onClick={() => openModal(product, true)} className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors" title="Edit">
+                  <button
+                    onClick={() => openModal(product, true)}
+                    className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors"
+                    title="Edit"
+                  >
                     <Edit className="w-4 h-4" />
                   </button>
-                  <button onClick={() => deleteProduct(product.id)} className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete">
+                  <button
+                    onClick={() => deleteProduct(product.id)}
+                    className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                    title="Delete"
+                  >
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
-                <div className="text-xs text-gray-400">{product.product_images?.length || 0} images</div>
+                <div className="text-xs text-gray-400">
+                  {product.product_images?.length || 0} images
+                </div>
               </div>
             </div>
           </motion.div>
@@ -212,7 +228,10 @@ const ProductsManager = () => {
             {searchTerm ? 'Try adjusting your search terms' : 'Get started by adding your first product'}
           </p>
           {!searchTerm && (
-            <button onClick={() => openModal(null, true)} className="flex items-center mx-auto px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <button
+              onClick={() => openModal(null, true)}
+              className="flex items-center mx-auto px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors"
+            >
               <Plus className="w-5 h-5 mr-2" />
               Add Product
             </button>
@@ -232,25 +251,29 @@ const ProductsManager = () => {
   );
 };
 
-// ------------------ ProductModal ------------------
-type ProductModalProps = {
+// Product Modal Component
+const ProductModal = ({ 
+  isOpen, 
+  onClose, 
+  product, 
+  isEditing, 
+  onSave 
+}: {
   isOpen: boolean;
   onClose: () => void;
   product: Product | null;
   isEditing: boolean;
   onSave: () => void;
-};
-
-const ProductModal = ({ isOpen, onClose, product, isEditing, onSave }: ProductModalProps) => {
-  const [formData, setFormData] = useState<ProductFormData>({
+}) => {
+  const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
     code: '',
     brand: '',
     type: '',
     material: '',
     usage: '',
-    description: [],
-    technical_description: [],
+    description: '',
+    technical_description: '',
     features: [],
     applications: [],
     instructions: [],
@@ -265,25 +288,7 @@ const ProductModal = ({ isOpen, onClose, product, isEditing, onSave }: ProductMo
 
   useEffect(() => {
     if (product) {
-      setFormData({
-        name: product.name || '',
-        code: product.code || '',
-        brand: product.brand || '',
-        type: product.type || '',
-        material: product.material || '',
-        usage: product.usage || '',
-        description: product.description || [],
-        technical_description: product.technical_description || [],
-        features: product.features || [],
-        applications: product.applications || [],
-        instructions: product.instructions || [],
-        packaging: product.packaging || [],
-        storage: product.storage || [],
-        safety_precautions: product.safety_precautions || [],
-        safety_first_aid: product.safety_first_aid || [],
-        technical_specs: product.technical_specs || [],
-        status: product.status || 'active'
-      });
+      setFormData(product);
     } else {
       setFormData({
         name: '',
@@ -292,8 +297,8 @@ const ProductModal = ({ isOpen, onClose, product, isEditing, onSave }: ProductMo
         type: '',
         material: '',
         usage: '',
-        description: [],
-        technical_description: [],
+        description: '',
+        technical_description: '',
         features: [],
         applications: [],
         instructions: [],
@@ -307,26 +312,38 @@ const ProductModal = ({ isOpen, onClose, product, isEditing, onSave }: ProductMo
     }
   }, [product]);
 
-  const handleInputChange = (field: keyof ProductFormData, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
   const handleSave = async () => {
     setSaving(true);
     try {
       if (product) {
-        const { error } = await supabase.from('products').update(formData).eq('id', product.id);
+        // Update existing product
+        const { error } = await supabase
+          .from('products')
+          .update(formData)
+          .eq('id', product.id);
+        
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('products').insert([formData]);
+        // Create new product
+        const { error } = await supabase
+          .from('products')
+          .insert([formData]);
+        
         if (error) throw error;
       }
+
       onSave();
       onClose();
     } catch (error) {
       console.error('Error saving product:', error);
       alert('Error saving product');
-    } finally { setSaving(false); }
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleInputChange = (field: string, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   if (!isOpen) return null;
@@ -335,101 +352,417 @@ const ProductModal = ({ isOpen, onClose, product, isEditing, onSave }: ProductMo
     <AnimatePresence>
       <div className="fixed inset-0 z-50 overflow-y-auto">
         <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-50"
+          onClick={onClose}
         />
+
         <div className="flex min-h-full items-center justify-center p-4">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
-            className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b">
               <h3 className="text-lg font-semibold text-gray-900">
                 {isEditing ? (product ? 'Edit Product' : 'Add Product') : 'View Product'}
               </h3>
-              <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Content */}
-            <div className="p-6 space-y-6">
-              {/* Basic Fields */}
+            <div className="overflow-y-auto max-h-[calc(90vh-140px)] p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {['name','code','brand','type','material','usage'].map((field) => (
-                  <div key={field}>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{field.charAt(0).toUpperCase() + field.slice(1)} *</label>
+                {/* Basic Info */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Product Name *
+                    </label>
                     {isEditing ? (
-                      <input type="text" value={formData[field as keyof ProductFormData] as string} onChange={(e) => handleInputChange(field as keyof ProductFormData, e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]" />
+                      <input
+                        type="text"
+                        value={formData.name || ''}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
                     ) : (
-                      <p className="text-gray-900">{formData[field as keyof ProductFormData]}</p>
+                      <p className="text-gray-900">{formData.name}</p>
                     )}
                   </div>
-                ))}
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Product Code *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.code || ''}
+                        onChange={(e) => handleInputChange('code', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.code}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Brand *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.brand || ''}
+                        onChange={(e) => handleInputChange('brand', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.brand}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Type *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.type || ''}
+                        onChange={(e) => handleInputChange('type', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.type}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Additional Info */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Material *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.material || ''}
+                        onChange={(e) => handleInputChange('material', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.material}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Usage *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.usage || ''}
+                        onChange={(e) => handleInputChange('usage', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.usage}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Status
+                    </label>
+                    {isEditing ? (
+                      <select
+                        value={formData.status || 'active'}
+                        onChange={(e) => handleInputChange('status', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="draft">Draft</option>
+                      </select>
+                    ) : (
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        formData.status === 'active' 
+                          ? 'bg-green-100 text-green-800' 
+                          : 'bg-red-100 text-red-800'
+                      }`}>
+                        {formData.status}
+                      </span>
+                    )}
+                  </div>
+                </div>
               </div>
 
-              {/* Array Fields */}
-              {['description','technical_description','instructions','packaging','storage','safety_precautions','safety_first_aid','technical_specs','features','applications'].map((field) => (
-                <div key={field}>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {field.split('_').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}
-                  </label>
-                  {isEditing ? (
-                    <div className="space-y-2">
-                      {(formData[field as keyof ProductFormData] as string[]).map((item, idx) => (
-                        <div key={idx} className="flex gap-2">
-                          <input type="text" value={item} onChange={(e) => {
-                            const updated = [...(formData[field as keyof ProductFormData] as string[])];
-                            updated[idx] = e.target.value;
-                            handleInputChange(field as keyof ProductFormData, updated);
-                          }} className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]" />
-                          <button type="button" onClick={() => {
-                            const updated = (formData[field as keyof ProductFormData] as string[]).filter((_, i) => i !== idx);
-                            handleInputChange(field as keyof ProductFormData, updated);
-                          }} className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50">Remove</button>
-                        </div>
-                      ))}
-                      <button type="button" onClick={() => handleInputChange(field as keyof ProductFormData, [...(formData[field as keyof ProductFormData] as string[]), ''])} className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
-                        + Add {field.split('_').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}
-                      </button>
-                    </div>
-                  ) : (
-                    <ul className="list-disc pl-5 text-gray-900">
-                      {(formData[field as keyof ProductFormData] as string[]).map((f, i) => <li key={i}>{f}</li>)}
-                    </ul>
-                  )}
-                </div>
-              ))}
-
-              {/* Status */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              {/* Description */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description *
+                </label>
                 {isEditing ? (
-                  <select value={formData.status} onChange={(e) => handleInputChange('status', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]">
-                    <option value="active">Active</option>
-                    <option value="inactive">Inactive</option>
-                    <option value="draft">Draft</option>
-                  </select>
+                  <textarea
+                    value={formData.description || ''}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
                 ) : (
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${formData.status==='active'?'bg-green-100 text-green-800':'bg-red-100 text-red-800'}`}>{formData.status}</span>
+                  <p className="text-gray-900">{formData.description}</p>
                 )}
               </div>
-            </div>
 
-            {/* Footer */}
+              {/* Technical Description */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Technical Description
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.technical_description || ''}
+                    onChange={(e) => handleInputChange('technical_description', e.target.value)}
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900">{formData.technical_description}</p>
+                )}
+              </div>
+            </div> 
+            {/* Features */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Features
+  </label>
+  {isEditing ? (
+    <div className="space-y-2">
+      {(formData.features || []).map((item, idx) => (
+        <div key={idx} className="flex gap-2">
+          <input
+            type="text"
+            value={item}
+            onChange={(e) => {
+              const updated = [...(formData.features || [])];
+              updated[idx] = e.target.value;
+              handleInputChange('features', updated);
+            }}
+            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+          />
+          <button
+            type="button"
+            onClick={() => {
+              const updated = (formData.features || []).filter((_, i) => i !== idx);
+              handleInputChange('features', updated);
+            }}
+            className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => handleInputChange('features', [...(formData.features || []), ''])}
+        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+      >
+        + Add Feature
+      </button>
+    </div>
+  ) : (
+    <ul className="list-disc pl-5 text-gray-900">
+      {(formData.features || []).map((f, i) => (
+        <li key={i}>{f}</li>
+      ))}
+    </ul>
+  )}
+</div>
+
+{/* Applications */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Applications
+  </label>
+  {isEditing ? (
+    <div className="space-y-2">
+      {(formData.applications || []).map((item, idx) => (
+        <input
+          key={idx}
+          type="text"
+          value={item}
+          onChange={(e) => {
+            const updated = [...(formData.applications || [])];
+            updated[idx] = e.target.value;
+            handleInputChange('applications', updated);
+          }}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+        />
+      ))}
+      <button
+        type="button"
+        onClick={() => handleInputChange('applications', [...(formData.applications || []), ''])}
+        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+      >
+        + Add Application
+      </button>
+    </div>
+  ) : (
+    <ul className="list-disc pl-5 text-gray-900">
+      {(formData.applications || []).map((a, i) => (
+        <li key={i}>{a}</li>
+      ))}
+    </ul>
+  )}
+</div>
+
+{/* Instructions */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Instructions
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.instructions || ''}
+      onChange={(e) => handleInputChange('instructions', e.target.value)}
+      rows={3}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.instructions}</p>
+  )}
+</div>
+
+{/* Packaging */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Packaging
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.packaging || ''}
+      onChange={(e) => handleInputChange('packaging', e.target.value)}
+      rows={2}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.packaging}</p>
+  )}
+</div>
+
+{/* Storage */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Storage
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.storage || ''}
+      onChange={(e) => handleInputChange('storage', e.target.value)}
+      rows={2}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.storage}</p>
+  )}
+</div>
+
+{/* Safety Precautions */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Safety Precautions
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.safety_precautions || ''}
+      onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
+      rows={3}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.safety_precautions}</p>
+  )}
+</div>
+
+{/* Safety First Aid */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Safety First Aid
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.safety_first_aid || ''}
+      onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
+      rows={3}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.safety_first_aid}</p>
+  )}
+</div>
+
+{/* Technical Specs */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Technical Specs
+  </label>
+  {isEditing ? (
+    <textarea
+      value={formData.technical_specs || ''}
+      onChange={(e) => handleInputChange('technical_specs', e.target.value)}
+      rows={4}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    />
+  ) : (
+    <p className="text-gray-900 whitespace-pre-line">{formData.technical_specs}</p>
+  )}
+</div>
+
+            {/* Footer */} 
             {isEditing && (
               <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
-                <button onClick={onClose} className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
-                <button onClick={handleSave} disabled={saving} className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors">
-                  {saving ? 'Saving...' : 'Save'}
+                <button
+                  onClick={onClose}
+                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
+                >
+                  {saving ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Product
+                    </>
+                  )}
                 </button>
               </div>
-            )}
+            )} 
           </motion.div>
         </div>
       </div>
-    </AnimatePresence>
+    </AnimatePresence> 
   );
 };
 
