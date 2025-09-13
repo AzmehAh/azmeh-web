@@ -760,7 +760,7 @@ const ProductModal = ({
     <pre className="bg-gray-50 p-3 rounded text-sm overflow-x-auto">
       {formData.technical_specs ? JSON.stringify(formData.technical_specs, null, 2) : 'No technical specs'}
     </pre>
-  )}
+  )} 
 </div>
 
 
