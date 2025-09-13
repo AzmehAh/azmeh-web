@@ -8,7 +8,7 @@ import {
   Eye, 
   Image as ImageIcon,
   Save,
-  X
+  X 
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -26,11 +26,12 @@ export interface Product {
   features?: string[];
   applications?: string[];
   instructions?: string;
-  packaging?: string;
+  packaging?: any;
   storage?: string;
   safety_precautions?: string;
   safety_first_aid?: string;
   technical_specs?: any;
+  sizes?: string[];
   status: 'active' | 'inactive' | 'draft';
   created_at: string;
   updated_at: string;
@@ -44,31 +45,8 @@ export interface ProductImage {
 }
 
 const ProductsManager = () => {
-  const [products, setProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  useEffect(() => {
-    if (searchTerm) {
-      const filtered = products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.brand.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredProducts(filtered);
-    } else {
-      setFilteredProducts(products);
-    }
-  }, [searchTerm, products]);
-
+  // ... (الكود السابق يبقى كما هو حتى useEffect)
+  
   const fetchProducts = async () => {
     try {
       // جلب المنتجات
@@ -89,6 +67,19 @@ const ProductsManager = () => {
       // دمج البيانات
       const productsWithImages = productsData.map(product => ({
         ...product,
+        // تحويل الحقول النصية إلى مصفوفات إذا لزم الأمر
+        features: typeof product.features === 'string' ? 
+          (product.features ? JSON.parse(product.features) : []) : 
+          (product.features || []),
+        applications: typeof product.applications === 'string' ? 
+          (product.applications ? JSON.parse(product.applications) : []) : 
+          (product.applications || []),
+        sizes: typeof product.sizes === 'string' ? 
+          (product.sizes ? JSON.parse(product.sizes) : []) : 
+          (product.sizes || []),
+        technical_specs: typeof product.technical_specs === 'string' ? 
+          (product.technical_specs ? JSON.parse(product.technical_specs) : {}) : 
+          (product.technical_specs || {}),
         product_images: imagesData.filter(img => img.product_id === product.id)
       }));
 
@@ -100,6 +91,7 @@ const ProductsManager = () => {
       setLoading(false);
     }
   };
+
 
   const deleteProduct = async (id: string) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
@@ -303,7 +295,6 @@ const ProductsManager = () => {
   );
 };
 
-// Product Modal Component
 const ProductModal = ({ 
   isOpen, 
   onClose, 
@@ -328,16 +319,19 @@ const ProductModal = ({
     technical_description: '',
     features: [],
     applications: [],
+    sizes: [],
     instructions: '',
     packaging: '',
     storage: '',
     safety_precautions: '',
     safety_first_aid: '',
-    technical_specs: '',
+    technical_specs: {},
     status: 'active',
     product_images: []
   });
   const [saving, setSaving] = useState(false);
+  const [newTechSpecKey, setNewTechSpecKey] = useState('');
+  const [newTechSpecValue, setNewTechSpecValue] = useState('');
 
   useEffect(() => {
     const fetchProductData = async () => {
@@ -351,17 +345,22 @@ const ProductModal = ({
           
           if (error) throw error;
 
-          // تعيين بيانات النموذج
+          // تعيين بيانات النموذج مع التحويل المناسب للحقول
           setFormData({
             ...product,
-            features: Array.isArray(product.features) ? product.features : [],
-            applications: Array.isArray(product.applications) ? product.applications : [],
+            features: Array.isArray(product.features) ? product.features : 
+                     (typeof product.features === 'string' && product.features ? JSON.parse(product.features) : []),
+            applications: Array.isArray(product.applications) ? product.applications : 
+                         (typeof product.applications === 'string' && product.applications ? JSON.parse(product.applications) : []),
+            sizes: Array.isArray(product.sizes) ? product.sizes : 
+                  (typeof product.sizes === 'string' && product.sizes ? JSON.parse(product.sizes) : []),
+            technical_specs: typeof product.technical_specs === 'object' ? product.technical_specs : 
+                            (typeof product.technical_specs === 'string' && product.technical_specs ? JSON.parse(product.technical_specs) : {}),
             instructions: product.instructions || '',
             packaging: product.packaging || '',
             storage: product.storage || '',
             safety_precautions: product.safety_precautions || '',
             safety_first_aid: product.safety_first_aid || '',
-            technical_specs: product.technical_specs || '',
             product_images: images || []
           });
         } catch (error) {
@@ -380,12 +379,13 @@ const ProductModal = ({
           technical_description: '',
           features: [],
           applications: [],
+          sizes: [],
           instructions: '',
           packaging: '',
           storage: '',
           safety_precautions: '',
           safety_first_aid: '',
-          technical_specs: '',
+          technical_specs: {},
           status: 'active',
           product_images: []
         });
@@ -398,12 +398,25 @@ const ProductModal = ({
   }, [product, isOpen]);
 
   const handleSave = async () => {
+    // التحقق من الحقول المطلوبة
+    if (!formData.name || !formData.code || !formData.brand || !formData.type) {
+      alert('Please fill in all required fields (Name, Code, Brand, Type)');
+      return;
+    }
+    
     setSaving(true);
     try {
       let productId = product?.id;
 
       // فصل بيانات المنتج عن الصور
-      const productData = { ...formData };
+      const productData = { 
+        ...formData,
+        // تحويل المصفوفات إلى نصوص JSON للتخزين في supabase
+        features: JSON.stringify(formData.features),
+        applications: JSON.stringify(formData.applications),
+        sizes: JSON.stringify(formData.sizes),
+        technical_specs: JSON.stringify(formData.technical_specs)
+      };
       delete productData.product_images;
 
       if (product) {
@@ -438,9 +451,9 @@ const ProductModal = ({
           if (deleteError) throw deleteError;
         }
 
-        // إضافة الصور الجديدة
+        // إضافة الصور الجديدة (فقط تلك التي تحتوي على روابط)
         const imagesToInsert = formData.product_images
-          .filter(img => img.image_url.trim() !== '')
+          .filter(img => img.image_url && img.image_url.trim() !== '')
           .map(img => ({
             product_id: productId,
             image_url: img.image_url
@@ -459,12 +472,11 @@ const ProductModal = ({
       onClose();
     } catch (error) {
       console.error('Error saving product:', error);
-      alert('Error saving product');
+      alert('Error saving product: ' + error.message);
     } finally {
       setSaving(false);
     }
   };
-
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
@@ -488,6 +500,29 @@ const ProductModal = ({
     setFormData(prev => {
       const currentArray = Array.isArray(prev[field]) ? [...(prev[field] as string[])] : [];
       return { ...prev, [field]: currentArray.filter((_, i) => i !== index) };
+    });
+  };
+
+  const addTechSpec = () => {
+    if (newTechSpecKey && newTechSpecValue) {
+      setFormData(prev => ({
+        ...prev,
+        technical_specs: {
+          ...prev.technical_specs,
+          [newTechSpecKey]: newTechSpecValue
+        }
+      }));
+      setNewTechSpecKey('');
+      setNewTechSpecValue('');
+    }
+  };
+
+  // دالة لحذف مواصفة تقنية
+  const removeTechSpec = (key: string) => {
+    setFormData(prev => {
+      const newTechSpecs = { ...prev.technical_specs };
+      delete newTechSpecs[key];
+      return { ...prev, technical_specs: newTechSpecs };
     });
   };
 
@@ -529,22 +564,22 @@ const ProductModal = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Basic Info */}
                 <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Product Name *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.name || ''}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        required
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.name}</p>
-                    )}
-                  </div>
+                 <div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Product Name *
+  </label>
+  {isEditing ? (
+    <input
+      type="text"
+      value={formData.name || ''}
+      onChange={(e) => handleInputChange('name', e.target.value)}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+      required
+    />
+  ) : (
+    <p className="text-gray-900">{formData.name}</p>
+  )}
+</div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -775,20 +810,20 @@ const ProductModal = ({
 
               {/* Additional Sections */}
               <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Packaging */}
+                {/* Instructions */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Packaging
+                    Instructions
                   </label>
                   {isEditing ? (
                     <textarea
-                      value={formData.packaging || ''}
-                      onChange={(e) => handleInputChange('packaging', e.target.value)}
+                      value={formData.instructions || ''}
+                      onChange={(e) => handleInputChange('instructions', e.target.value)}
                       rows={3}
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                     />
                   ) : (
-                    <p className="text-gray-900 whitespace-pre-wrap">{formData.packaging || '-'}</p>
+                    <p className="text-gray-900 whitespace-pre-wrap">{formData.instructions || '-'}</p>
                   )}
                 </div>
 
@@ -806,40 +841,6 @@ const ProductModal = ({
                     />
                   ) : (
                     <p className="text-gray-900 whitespace-pre-wrap">{formData.storage || '-'}</p>
-                  )}
-                </div>
-
-                {/* Technical Specs */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Technical Specifications
-                  </label>
-                  {isEditing ? (
-                    <textarea
-                      value={formData.technical_specs || ''}
-                      onChange={(e) => handleInputChange('technical_specs', e.target.value)}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                  ) : (
-                    <p className="text-gray-900 whitespace-pre-wrap">{formData.technical_specs || '-'}</p>
-                  )}
-                </div>
-
-                {/* Instructions */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Instructions
-                  </label>
-                  {isEditing ? (
-                    <textarea
-                      value={formData.instructions || ''}
-                      onChange={(e) => handleInputChange('instructions', e.target.value)}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                  ) : (
-                    <p className="text-gray-900 whitespace-pre-wrap">{formData.instructions || '-'}</p>
                   )}
                 </div>
 
@@ -881,7 +882,7 @@ const ProductModal = ({
               {/* Product Images */}
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Images (URLs)
+                  Product Images
                 </label>
                 {isEditing ? (
                   <div className="space-y-3">
@@ -896,7 +897,7 @@ const ProductModal = ({
                             setFormData(prev => ({ ...prev, product_images: newImages }));
                           }}
                           className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                          placeholder="Enter image URL (e.g., https://example.com/image.jpg)"
+                          placeholder="Enter image URL"
                         />
                         <button
                           type="button"
@@ -933,7 +934,7 @@ const ProductModal = ({
                           alt={`Product image ${index + 1}`}
                           className="w-full h-32 object-cover rounded-lg"
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zMiAxNlY0OCIgc3Ryb2tlPSIjQ0RDRUNGIiBzdHJva2Utd2lkdGgPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPHBhdGggZD0iTTE2IDMySDQ4IiBzdHJva2U9IiNENkQ4REIiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPg==';
+                            (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0zMiAxNlY0OCIgc3Ryb2tlPSIjQ0RDRUNGIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8cGF0aCBkPSJNMTYgMzJINDgiIHN0cm9rZT0iI0NEQ0VDRiIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+';
                           }}
                         />
                       </div>
@@ -948,7 +949,6 @@ const ProductModal = ({
                 )}
               </div>
             </div>
- w
 
             {/* Footer */}
             <div className="flex items-center justify-between p-6 border-t">
