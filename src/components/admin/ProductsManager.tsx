@@ -12,6 +12,27 @@ import {
 } from 'lucide-react';
 import { supabase, Product, ProductImage } from '../../lib/supabase';
 
+// Type مخصص للنموذج
+type ProductFormData = {
+  name: string;
+  code: string;
+  brand: string;
+  type: string;
+  material: string;
+  usage: string;
+  description: string[];
+  technical_description: string[];
+  features: string[];
+  applications: string[];
+  instructions: string[];
+  packaging: string[];
+  storage: string[];
+  safety_precautions: string[];
+  safety_first_aid: string[];
+  technical_specs: string[];
+  status: 'active' | 'inactive' | 'draft';
+};
+
 const ProductsManager = () => {
   const [products, setProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
@@ -21,16 +42,14 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  useEffect(() => { fetchProducts(); }, []);
 
   useEffect(() => {
     if (searchTerm) {
-      const filtered = products.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.brand.toLowerCase().includes(searchTerm.toLowerCase())
+      const filtered = products.filter(p =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.brand.toLowerCase().includes(searchTerm.toLowerCase())
       );
       setFilteredProducts(filtered);
     } else {
@@ -42,12 +61,8 @@ const ProductsManager = () => {
     try {
       const { data, error } = await supabase
         .from('products')
-        .select(`
-          *,
-          product_images (*)
-        `)
+        .select(`*, product_images (*)`)
         .order('created_at', { ascending: false });
-
       if (error) throw error;
       setProducts(data || []);
       setFilteredProducts(data || []);
@@ -60,15 +75,9 @@ const ProductsManager = () => {
 
   const deleteProduct = async (id: string) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
-
     try {
-      const { error } = await supabase
-        .from('products')
-        .delete()
-        .eq('id', id);
-
+      const { error } = await supabase.from('products').delete().eq('id', id);
       if (error) throw error;
-      
       setProducts(products.filter(p => p.id !== id));
     } catch (error) {
       console.error('Error deleting product:', error);
@@ -162,57 +171,32 @@ const ProductsManager = () => {
             {/* Product Info */}
             <div className="p-6">
               <div className="flex items-start justify-between mb-2">
-                <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
-                  {product.name}
-                </h3>
-                <span className="text-xs bg-blue-100 text-[#0055A3] px-2 py-1 rounded">
-                  {product.brand}
-                </span>
+                <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">{product.name}</h3>
+                <span className="text-xs bg-blue-100 text-[#0055A3] px-2 py-1 rounded">{product.brand}</span>
               </div>
               
               <p className="text-sm text-gray-500 mb-2">{product.code}</p>
-              
-              <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-                {product.description}
-              </p>
+              <p className="text-sm text-gray-600 line-clamp-2 mb-4">{product.description?.[0]}</p>
 
               <div className="flex flex-wrap gap-1 mb-4">
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                  {product.type}
-                </span>
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                  {product.usage}
-                </span>
+                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">{product.type}</span>
+                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">{product.usage}</span>
               </div>
 
               {/* Actions */}
               <div className="flex items-center justify-between">
                 <div className="flex space-x-2">
-                  <button
-                    onClick={() => openModal(product, false)}
-                    className="p-2 text-gray-600 hover:text-[#0055A3] hover:bg-blue-50 rounded transition-colors"
-                    title="View"
-                  >
+                  <button onClick={() => openModal(product, false)} className="p-2 text-gray-600 hover:text-[#0055A3] hover:bg-blue-50 rounded transition-colors" title="View">
                     <Eye className="w-4 h-4" />
                   </button>
-                  <button
-                    onClick={() => openModal(product, true)}
-                    className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors"
-                    title="Edit"
-                  >
+                  <button onClick={() => openModal(product, true)} className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors" title="Edit">
                     <Edit className="w-4 h-4" />
                   </button>
-                  <button
-                    onClick={() => deleteProduct(product.id)}
-                    className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                    title="Delete"
-                  >
+                  <button onClick={() => deleteProduct(product.id)} className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors" title="Delete">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
-                <div className="text-xs text-gray-400">
-                  {product.product_images?.length || 0} images
-                </div>
+                <div className="text-xs text-gray-400">{product.product_images?.length || 0} images</div>
               </div>
             </div>
           </motion.div>
@@ -228,10 +212,7 @@ const ProductsManager = () => {
             {searchTerm ? 'Try adjusting your search terms' : 'Get started by adding your first product'}
           </p>
           {!searchTerm && (
-            <button
-              onClick={() => openModal(null, true)}
-              className="flex items-center mx-auto px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors"
-            >
+            <button onClick={() => openModal(null, true)} className="flex items-center mx-auto px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors">
               <Plus className="w-5 h-5 mr-2" />
               Add Product
             </button>
@@ -251,29 +232,25 @@ const ProductsManager = () => {
   );
 };
 
-// Product Modal Component
-const ProductModal = ({ 
-  isOpen, 
-  onClose, 
-  product, 
-  isEditing, 
-  onSave 
-}: {
+// ------------------ ProductModal ------------------
+type ProductModalProps = {
   isOpen: boolean;
   onClose: () => void;
   product: Product | null;
   isEditing: boolean;
   onSave: () => void;
-}) => {
-  const [formData, setFormData] = useState<Partial<Product>>({
+};
+
+const ProductModal = ({ isOpen, onClose, product, isEditing, onSave }: ProductModalProps) => {
+  const [formData, setFormData] = useState<ProductFormData>({
     name: '',
     code: '',
     brand: '',
     type: '',
     material: '',
     usage: '',
-    description: '',
-    technical_description: '',
+    description: [],
+    technical_description: [],
     features: [],
     applications: [],
     instructions: [],
@@ -288,7 +265,25 @@ const ProductModal = ({
 
   useEffect(() => {
     if (product) {
-      setFormData(product);
+      setFormData({
+        name: product.name || '',
+        code: product.code || '',
+        brand: product.brand || '',
+        type: product.type || '',
+        material: product.material || '',
+        usage: product.usage || '',
+        description: product.description || [],
+        technical_description: product.technical_description || [],
+        features: product.features || [],
+        applications: product.applications || [],
+        instructions: product.instructions || [],
+        packaging: product.packaging || [],
+        storage: product.storage || [],
+        safety_precautions: product.safety_precautions || [],
+        safety_first_aid: product.safety_first_aid || [],
+        technical_specs: product.technical_specs || [],
+        status: product.status || 'active'
+      });
     } else {
       setFormData({
         name: '',
@@ -297,8 +292,8 @@ const ProductModal = ({
         type: '',
         material: '',
         usage: '',
-        description: '',
-        technical_description: '',
+        description: [],
+        technical_description: [],
         features: [],
         applications: [],
         instructions: [],
@@ -312,283 +307,130 @@ const ProductModal = ({
     }
   }, [product]);
 
+  const handleInputChange = (field: keyof ProductFormData, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
       if (product) {
-        // Update existing product
-        const { error } = await supabase
-          .from('products')
-          .update(formData)
-          .eq('id', product.id);
-        
+        const { error } = await supabase.from('products').update(formData).eq('id', product.id);
         if (error) throw error;
       } else {
-        // Create new product
-        const { error } = await supabase
-          .from('products')
-          .insert([formData]);
-        
+        const { error } = await supabase.from('products').insert([formData]);
         if (error) throw error;
       }
-
       onSave();
       onClose();
     } catch (error) {
       console.error('Error saving product:', error);
       alert('Error saving product');
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleInputChange = (field: string, value: any) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    } finally { setSaving(false); }
   };
 
   if (!isOpen) return null;
 
- return (
-  <AnimatePresence>
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black bg-opacity-50"
-        onClick={onClose}
-      />
-
-      <div className="flex min-h-full items-center justify-center p-4">
+  return (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-50 overflow-y-auto">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b">
-            <h3 className="text-lg font-semibold text-gray-900">
-              {isEditing ? (product ? 'Edit Product' : 'Add Product') : 'View Product'}
-            </h3>
-            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose}
+        />
+        <div className="flex min-h-full items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+            className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <h3 className="text-lg font-semibold text-gray-900">
+                {isEditing ? (product ? 'Edit Product' : 'Add Product') : 'View Product'}
+              </h3>
+              <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
 
-          {/* Content */}
-          <div className="p-6 space-y-6">
-            {/* Basic Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {['name','code','brand','type','material','usage'].map((field) => (
+            {/* Content */}
+            <div className="p-6 space-y-6">
+              {/* Basic Fields */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {['name','code','brand','type','material','usage'].map((field) => (
+                  <div key={field}>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{field.charAt(0).toUpperCase() + field.slice(1)} *</label>
+                    {isEditing ? (
+                      <input type="text" value={formData[field as keyof ProductFormData] as string} onChange={(e) => handleInputChange(field as keyof ProductFormData, e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]" />
+                    ) : (
+                      <p className="text-gray-900">{formData[field as keyof ProductFormData]}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              {/* Array Fields */}
+              {['description','technical_description','instructions','packaging','storage','safety_precautions','safety_first_aid','technical_specs','features','applications'].map((field) => (
                 <div key={field}>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    {field.charAt(0).toUpperCase() + field.slice(1)} *
+                    {field.split('_').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}
                   </label>
                   {isEditing ? (
-                    <input
-                      type="text"
-                      value={formData[field] || ''}
-                      onChange={(e) => handleInputChange(field, e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
+                    <div className="space-y-2">
+                      {(formData[field as keyof ProductFormData] as string[]).map((item, idx) => (
+                        <div key={idx} className="flex gap-2">
+                          <input type="text" value={item} onChange={(e) => {
+                            const updated = [...(formData[field as keyof ProductFormData] as string[])];
+                            updated[idx] = e.target.value;
+                            handleInputChange(field as keyof ProductFormData, updated);
+                          }} className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]" />
+                          <button type="button" onClick={() => {
+                            const updated = (formData[field as keyof ProductFormData] as string[]).filter((_, i) => i !== idx);
+                            handleInputChange(field as keyof ProductFormData, updated);
+                          }} className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50">Remove</button>
+                        </div>
+                      ))}
+                      <button type="button" onClick={() => handleInputChange(field as keyof ProductFormData, [...(formData[field as keyof ProductFormData] as string[]), ''])} className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
+                        + Add {field.split('_').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}
+                      </button>
+                    </div>
                   ) : (
-                    <p className="text-gray-900">{formData[field]}</p>
+                    <ul className="list-disc pl-5 text-gray-900">
+                      {(formData[field as keyof ProductFormData] as string[]).map((f, i) => <li key={i}>{f}</li>)}
+                    </ul>
                   )}
                 </div>
               ))}
-            </div>
 
-            {/* Array Fields */}
-            {['description','technical_description','instructions','packaging','storage','safety_precautions','safety_first_aid','technical_specs'].map((field) => (
-              <div key={field}>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  {field.split('_').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}
-                </label>
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
                 {isEditing ? (
-                  <div className="space-y-2">
-                    {(formData[field] || []).map((item, idx) => (
-                      <div key={idx} className="flex gap-2">
-                        <input
-                          type="text"
-                          value={item}
-                          onChange={(e) => {
-                            const updated = [...(formData[field] || [])];
-                            updated[idx] = e.target.value;
-                            handleInputChange(field, updated);
-                          }}
-                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = (formData[field] || []).filter((_, i) => i !== idx);
-                            handleInputChange(field, updated);
-                          }}
-                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => handleInputChange(field, [...(formData[field] || []), ''])}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                    >
-                      + Add {field.split('_').map(w => w.charAt(0).toUpperCase()+w.slice(1)).join(' ')}
-                    </button>
-                  </div>
+                  <select value={formData.status} onChange={(e) => handleInputChange('status', e.target.value)} className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]">
+                    <option value="active">Active</option>
+                    <option value="inactive">Inactive</option>
+                    <option value="draft">Draft</option>
+                  </select>
                 ) : (
-                  <ul className="list-disc pl-5 text-gray-900">
-                    {(formData[field] || []).map((f, i) => <li key={i}>{f}</li>)}
-                  </ul>
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${formData.status==='active'?'bg-green-100 text-green-800':'bg-red-100 text-red-800'}`}>{formData.status}</span>
                 )}
               </div>
-            ))}
-
-            {/* Features */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Features
-              </label>
-              {isEditing ? (
-                <div className="space-y-2">
-                  {(formData.features || []).map((item, idx) => (
-                    <div key={idx} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={item}
-                        onChange={(e) => {
-                          const updated = [...(formData.features || [])];
-                          updated[idx] = e.target.value;
-                          handleInputChange('features', updated);
-                        }}
-                        className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => {
-                          const updated = (formData.features || []).filter((_, i) => i !== idx);
-                          handleInputChange('features', updated);
-                        }}
-                        className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => handleInputChange('features', [...(formData.features || []), ''])}
-                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                  >
-                    + Add Feature
-                  </button>
-                </div>
-              ) : (
-                <ul className="list-disc pl-5 text-gray-900">
-                  {(formData.features || []).map((f, i) => <li key={i}>{f}</li>)}
-                </ul>
-              )}
             </div>
 
-            {/* Applications */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Applications
-              </label>
-              {isEditing ? (
-                <div className="space-y-2">
-                  {(formData.applications || []).map((item, idx) => (
-                    <input
-                      key={idx}
-                      type="text"
-                      value={item}
-                      onChange={(e) => {
-                        const updated = [...(formData.applications || [])];
-                        updated[idx] = e.target.value;
-                        handleInputChange('applications', updated);
-                      }}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => handleInputChange('applications', [...(formData.applications || []), ''])}
-                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                  >
-                    + Add Application
-                  </button>
-                </div>
-              ) : (
-                <ul className="list-disc pl-5 text-gray-900">
-                  {(formData.applications || []).map((a, i) => <li key={i}>{a}</li>)}
-                </ul>
-              )}
-            </div>
-
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Status
-              </label>
-              {isEditing ? (
-                <select
-                  value={formData.status || 'active'}
-                  onChange={(e) => handleInputChange('status', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
-                  <option value="draft">Draft</option>
-                </select>
-              ) : (
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                  formData.status === 'active' 
-                    ? 'bg-green-100 text-green-800' 
-                    : 'bg-red-100 text-red-800'
-                }`}>
-                  {formData.status}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Footer */}
-          {isEditing && (
-            <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
-              >
-                {saving ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Product
-                  </>
-                )}
-              </button>
-            </div>
-          )}
-        </motion.div>
+            {/* Footer */}
+            {isEditing && (
+              <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+                <button onClick={onClose} className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Cancel</button>
+                <button onClick={handleSave} disabled={saving} className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors">
+                  {saving ? 'Saving...' : 'Save'}
+                </button>
+              </div>
+            )}
+          </motion.div>
+        </div>
       </div>
-    </div>
-  </AnimatePresence>
-);
-
+    </AnimatePresence>
+  );
 };
 
 export default ProductsManager;
