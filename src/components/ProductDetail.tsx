@@ -488,7 +488,7 @@ const ProductDetail = () => {
                   Contact Technical Support
                 </button>
               </div>
-            </div> 
+            </div>  
           </section>
         </>
       )}
