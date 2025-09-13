@@ -756,7 +756,7 @@ const ProductModal = ({
 {/* Packaging */}
 <div className="mt-6">
   <label className="block text-sm font-medium text-gray-700 mb-2">
-    Packaging
+    Packaging Sizes
   </label>
   {isEditing ? (
     <div className="space-y-2">
@@ -764,10 +764,10 @@ const ProductModal = ({
         <div key={idx} className="flex gap-2">
           <input
             type="text"
-            value={item.name || ''}
+            value={item.size || ''}
             onChange={(e) => {
               const newPackaging = [...(formData.packaging || [])];
-              newPackaging[idx] = { ...newPackaging[idx], name: e.target.value };
+              newPackaging[idx] = { size: e.target.value };
               setFormData(prev => ({ ...prev, packaging: newPackaging }));
             }}
             className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
@@ -787,18 +787,18 @@ const ProductModal = ({
       <button
         type="button"
         onClick={() => {
-          const newPackaging = [...(formData.packaging || []), { name: '' }];
+          const newPackaging = [...(formData.packaging || []), { size: '' }];
           setFormData(prev => ({ ...prev, packaging: newPackaging }));
         }}
         className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
       >
-        + Add Packaging
+        + Add Size
       </button>
     </div>
   ) : (
     <ul className="list-disc pl-5 text-gray-900">
       {(formData.packaging || []).map((p, i) => (
-        <li key={i}>{p.name}</li>
+        <li key={i}>{p.size}</li>
       ))}
     </ul>
   )}
