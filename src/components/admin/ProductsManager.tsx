@@ -796,11 +796,12 @@ const ProductModal = ({
               </div>
             
             )} 
+                         </div>
           </motion.div>
         </div>
       </div>
     </AnimatePresence> 
-                 </div>
+      
   );
 };
 
