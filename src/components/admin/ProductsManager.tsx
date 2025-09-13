@@ -16,34 +16,36 @@ const handleSave = async () => {
   try {
     let productId = product?.id;
 
+    // نسخ formData بدون product_images
+    const productData = { ...formData };
+    delete productData.product_images;
+
     if (product) {
       // تحديث المنتج
       const { error } = await supabase
         .from('products')
-        .update(formData)
+        .update(productData)
         .eq('id', product.id);
       if (error) throw error;
     } else {
       // إنشاء منتج جديد
       const { data, error } = await supabase
         .from('products')
-        .insert([formData])
+        .insert([productData])
         .select();
       if (error) throw error;
       productId = data?.[0]?.id;
     }
 
-    // تحديث الصور
+    // إدارة الصور
     if (productId && formData.product_images) {
       for (const img of formData.product_images) {
         if (img.id) {
-          // تحديث صورة موجودة
           await supabase
             .from('product_images')
             .update({ image_url: img.image_url })
             .eq('id', img.id);
         } else {
-          // إضافة صورة جديدة
           await supabase
             .from('product_images')
             .insert([{ product_id: productId, image_url: img.image_url }]);
@@ -60,6 +62,7 @@ const handleSave = async () => {
     setSaving(false);
   }
 };
+
 
 const ProductsManager = () => {
   const [products, setProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
