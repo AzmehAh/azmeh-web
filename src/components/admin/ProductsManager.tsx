@@ -11,6 +11,55 @@ import {
   X
 } from 'lucide-react';
 import { supabase, Product, ProductImage } from '../../lib/supabase';
+const handleSave = async () => {
+  setSaving(true);
+  try {
+    let productId = product?.id;
+
+    if (product) {
+      // تحديث المنتج
+      const { error } = await supabase
+        .from('products')
+        .update(formData)
+        .eq('id', product.id);
+      if (error) throw error;
+    } else {
+      // إنشاء منتج جديد
+      const { data, error } = await supabase
+        .from('products')
+        .insert([formData])
+        .select();
+      if (error) throw error;
+      productId = data?.[0]?.id;
+    }
+
+    // تحديث الصور
+    if (productId && formData.product_images) {
+      for (const img of formData.product_images) {
+        if (img.id) {
+          // تحديث صورة موجودة
+          await supabase
+            .from('product_images')
+            .update({ image_url: img.image_url })
+            .eq('id', img.id);
+        } else {
+          // إضافة صورة جديدة
+          await supabase
+            .from('product_images')
+            .insert([{ product_id: productId, image_url: img.image_url }]);
+        }
+      }
+    }
+
+    onSave();
+    onClose();
+  } catch (error) {
+    console.error('Error saving product:', error);
+    alert('Error saving product');
+  } finally {
+    setSaving(false);
+  }
+};
 
 const ProductsManager = () => {
   const [products, setProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
@@ -712,6 +761,64 @@ const ProductModal = ({
                   <p className="text-gray-900 whitespace-pre-line">{formData.storage}</p>
                 )}
               </div>
+{/* داخل ProductModal، بعد باقي الحقول، نضيف قسم الصور */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Product Images
+  </label>
+
+  {isEditing ? (
+    <div className="space-y-2">
+      {(formData.product_images || []).map((img, idx) => (
+        <div key={img.id || idx} className="flex items-center gap-2">
+          <input
+            type="text"
+            value={img.image_url}
+            onChange={(e) => {
+              const newImages = [...(formData.product_images || [])];
+              newImages[idx] = { ...newImages[idx], image_url: e.target.value };
+              setFormData(prev => ({ ...prev, product_images: newImages }));
+            }}
+            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+            placeholder="Image URL"
+          />
+          <button
+            type="button"
+            className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+            onClick={() => {
+              const newImages = (formData.product_images || []).filter((_, i) => i !== idx);
+              setFormData(prev => ({ ...prev, product_images: newImages }));
+            }}
+          >
+            Remove
+          </button>
+        </div>
+      ))}
+
+      <button
+        type="button"
+        className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+        onClick={() => {
+          const newImages = [...(formData.product_images || []), { id: '', image_url: '' }];
+          setFormData(prev => ({ ...prev, product_images: newImages }));
+        }}
+      >
+        + Add Image
+      </button>
+    </div>
+  ) : (
+    <div className="grid grid-cols-3 gap-2">
+      {(formData.product_images || []).map((img, i) => (
+        <img
+          key={i}
+          src={img.image_url}
+          alt={`Product Image ${i + 1}`}
+          className="w-full h-24 object-cover rounded border"
+        />
+      ))}
+    </div>
+  )}
+</div>
 
               {/* Safety Precautions */}
               <div className="mt-6">
