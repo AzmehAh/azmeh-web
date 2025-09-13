@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 import { 
   Plus, 
   Search, 
@@ -745,35 +747,26 @@ const ProductModal = ({
                 )}
               </div>
 
-            <div className="mt-6">
+            {/* داخل الـ Modal */}
+<div className="mt-6">
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Technical Specs
   </label>
 
-  {Array.isArray(formData.technical_specs) && formData.technical_specs.length > 0 ? (
-    <table className="w-full text-left border border-gray-200 rounded-lg overflow-hidden">
-      <thead className="bg-gray-100">
-        <tr>
-          <th className="px-3 py-2 border-b">Property</th>
-          <th className="px-3 py-2 border-b">Value</th>
-          <th className="px-3 py-2 border-b">Standard</th>
-        </tr>
-      </thead>
-      <tbody>
-        {formData.technical_specs.map((spec, idx) => (
-          <tr key={idx} className="hover:bg-gray-50">
-            <td className="px-3 py-2 border-b">{spec.property}</td>
-            <td className="px-3 py-2 border-b">{spec.value}</td>
-            <td className="px-3 py-2 border-b">{spec.standard}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+  {isEditing ? (
+    <ReactQuill
+      theme="snow"
+      value={formData.technical_description || ''}
+      onChange={(value) => handleInputChange('technical_description', value)}
+      className="bg-white"
+    />
   ) : (
-    <p className="text-gray-900">No technical specs available.</p>
+    <div
+      className="prose max-w-full"
+      dangerouslySetInnerHTML={{ __html: formData.technical_description || '<p>No technical specs</p>' }}
+    />
   )}
 </div>
-
             {/* Footer */} 
             {isEditing && (
               <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
