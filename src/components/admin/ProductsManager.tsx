@@ -744,7 +744,7 @@ const ProductModal = ({
 
         // رفع الصورة على Supabase Storage
         const { data, error } = await supabase.storage
-          .from("product") // اسم الباكيت (bucket) لازم تكون عامله من قبل
+          .from("products") // لازم يكون عندك bucket اسمه "products"
           .upload(`images/${Date.now()}-${file.name}`, file);
 
         if (error) {
@@ -754,24 +754,28 @@ const ProductModal = ({
 
         // جلب رابط الصورة
         const { data: urlData } = supabase.storage
-          .from("product")
+          .from("products")
           .getPublicUrl(data.path);
 
-        // حفظ الرابط بالفورم
-        handleInputChange("image_url", urlData.publicUrl);
+        // خزّن رابط الصورة بجدول product_images مع ID المنتج
+        if (formData.id) {
+          const { error: imgError } = await supabase
+            .from("product_images")
+            .insert([
+              { product_id: formData.id, image_url: urlData.publicUrl }
+            ]);
+
+          if (imgError) {
+            console.error("Image insert error:", imgError);
+          } else {
+            console.log("✅ Image saved successfully!");
+          }
+        }
       }}
       className="w-full border px-3 py-2 rounded-lg focus:outline-none focus:border-[#0055A3]"
     />
   ) : (
-    formData.image_url ? (
-      <img
-        src={formData.image_url}
-        alt="Product"
-        className="w-32 h-32 object-cover rounded"
-      />
-    ) : (
-      <p className="text-gray-500">No image uploaded</p>
-    )
+    <p className="text-gray-500">اختر صورة للمنتج</p>
   )}
 </div>
 
