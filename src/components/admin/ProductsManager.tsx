@@ -399,21 +399,18 @@ const ProductModal = ({
   useEffect(() => {
     if (product) {
       // Ensure all array fields are properly initialized
-   const productData = {
-  name: formData.name,
-  description: formData.description,
-  features: formData.features || [],       // إذا هذا text[]
-  applications: formData.applications || [], // إذا هذا text[]
-  packaging: formData.packaging || [],      // jsonb
-  technical_specs: formData.technical_specs || [], // jsonb
-  product_images: undefined // سيتم التعامل معها في جدول منفصل
-};
-
-// إرسال عبر Supabase
-const { data, error } = await supabase
-  .from('products')
-  .insert([productData]);
-
+      const productData = {
+        ...product,
+        features: Array.isArray(product.features) ? product.features : [],
+        applications: Array.isArray(product.applications) ? product.applications : [],
+        packaging: Array.isArray(product.packaging) ? product.packaging : [],
+        technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
+        instructions: product.instructions || '',
+        storage: product.storage || '',
+        safety_precautions: product.safety_precautions || '',
+        safety_first_aid: product.safety_first_aid || '',
+        product_images: product.product_images || []
+      }; 
       setFormData(productData);
     } else {
       setFormData({
