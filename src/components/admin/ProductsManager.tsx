@@ -459,21 +459,6 @@ const ProductModal = ({
       setImages([]);
     }
   }, [product, productImages]);
-
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      let productId = product?.id;
-
-      // Prepare product data without images
-      const productData = { 
-        ...formData,
-        // Ensure arrays are properly formatted for Supabase
-        features: JSON.stringify(formData.features || []),
-        applications: JSON.stringify(formData.applications || []),
-        packaging: JSON.stringify(formData.packaging || []),
-        technical_specs: JSON.stringify(formData.technical_specs || [])
-      };
 // جهّز البيانات بشكل صحيح
 const payload = {
   // نصوص
@@ -519,6 +504,21 @@ if (isEditing) {
   if (error) throw error;
   productId = data?.[0]?.id;
 }
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      let productId = product?.id;
+
+      // Prepare product data without images
+      const productData = { 
+        ...formData,
+        // Ensure arrays are properly formatted for Supabase
+        features: JSON.stringify(formData.features || []),
+        applications: JSON.stringify(formData.applications || []),
+        packaging: JSON.stringify(formData.packaging || []),
+        technical_specs: JSON.stringify(formData.technical_specs || [])
+      };
 
       if (product) {
         // Update product
