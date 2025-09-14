@@ -341,19 +341,21 @@ const ProductModal = ({
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (product) {
-      // Ensure all array fields are properly initialized
-      const productData = {
-        ...product,
-        features: Array.isArray(product.features) ? product.features : [],
-        applications: Array.isArray(product.applications) ? product.applications : [],
-        instructions: product.instructions || '',
-        packaging: product.packaging || '',
-        storage: product.storage || '',
-        safety_precautions: product.safety_precautions || '',
-        safety_first_aid: product.safety_first_aid || '',
-        technical_specs: product.technical_specs || ''
-      };
+  if (product) {
+    setFormData({
+      ...initialFormData,
+      ...product,
+      features: Array.isArray(product.features) ? product.features : [],
+      applications: Array.isArray(product.applications) ? product.applications : [],
+      packaging: Array.isArray(product.packaging) ? product.packaging : [],
+      technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
+      product_images: Array.isArray(product.product_images) ? product.product_images : []
+    });
+  } else {
+    setFormData(initialFormData);
+  }
+}, [product]);
+
       setFormData(productData);
     } else {
       setFormData({
