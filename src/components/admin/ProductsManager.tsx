@@ -446,10 +446,11 @@ const ProductModal = ({
         ...formData,
         // Ensure arrays are properly formatted for Supabase
        features: formData.features || [],
-technical_specs: formData.technical_specs || [],
+applications: formData.applications || [],
 packaging: formData.packaging || [],
-applications: formData.applications || []
-        product_images: undefined // Remove images from product data
+technical_specs: formData.technical_specs || [],
+product_images: undefined // لا تغيّر إذا الصور محفوظة في جدول منفصل
+
       };
 
       if (product) {
