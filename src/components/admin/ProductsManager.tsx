@@ -38,15 +38,15 @@ interface Product {
   type: string;
   material: string;
   usage: string;
-  description: string; 
+  description: string;
   technical_description: string;
   features: string[];
   applications: string[];
-  instructions:  string[];
+  instructions: string;
   packaging: PackagingSize[];
-  storage:  string[];
-  safety_precautions: string[];
-  safety_first_aid: string[];
+  storage: string;
+  safety_precautions: string;
+  safety_first_aid: string;
   technical_specs: TechnicalSpec[];
   status: 'active' | 'inactive' | 'draft';
   created_at?: string;
@@ -409,11 +409,11 @@ const ProductModal = ({
     technical_description: '',
     features: [],
     applications: [],
-    instructions:  [], 
+    instructions: '',
     packaging: [],
-    storage:  [],
-    safety_precautions:  [],
-    safety_first_aid:  [],
+    storage: '',
+    safety_precautions: '',
+    safety_first_aid: '',
     technical_specs: [],
     status: 'active'
   });
@@ -421,21 +421,21 @@ const ProductModal = ({
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-   if (product) {
-  setFormData({
-    ...product,
-    features: product.features || [],
-    applications: product.applications || [],
-    instructions: product.instructions || [],
-    packaging: product.packaging || [],
-    storage: product.storage || [],
-    safety_precautions: product.safety_precautions || [],
-    safety_first_aid: product.safety_first_aid || [],
-    technical_specs: product.technical_specs || [],
-  });
-  setImages(productImages[product.id] || []);
-}
-
+    if (product) {
+      // Ensure all array fields are properly initialized
+      const productData = {
+        ...product,
+        features: Array.isArray(product.features) ? product.features : [],
+        applications: Array.isArray(product.applications) ? product.applications : [],
+        packaging: Array.isArray(product.packaging) ? product.packaging : [],
+        technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
+        instructions: product.instructions || '',
+        storage: product.storage || '',
+        safety_precautions: product.safety_precautions || '',
+        safety_first_aid: product.safety_first_aid || ''
+      };
+      setFormData(productData);
+      setImages(productImages[product.id] || []);
     } else {
       setFormData({
         name: '',
@@ -448,11 +448,11 @@ const ProductModal = ({
         technical_description: '',
         features: [],
         applications: [],
-        instructions: [],
+        instructions: '',
         packaging: [],
-        storage: [],
-        safety_precautions: [],
-        safety_first_aid: [],
+        storage: '',
+        safety_precautions: '',
+        safety_first_aid: '',
         technical_specs: [],
         status: 'active'
       });
@@ -1165,7 +1165,7 @@ const ProductModal = ({
                       <Save className="w-4 h-4 mr-2" />
                       Save Product
                     </> 
-                  )}
+                  )} 
                 </button>
               </div>
             )}
@@ -1176,4 +1176,4 @@ const ProductModal = ({
   );
 };
 
-export default ProductsManager; 
+export default ProductsManager;
