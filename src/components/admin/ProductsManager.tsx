@@ -9,8 +9,7 @@ import {
   Image as ImageIcon,
   Save,
   X,
-  Upload,
-  Download
+  Upload
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -92,13 +91,36 @@ const ProductsManager = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setProducts(data || []);
-      setFilteredProducts(data || []);
+      
+      // Parse array fields that might be stored as strings
+      const parsedData = (data || []).map(item => ({
+        ...item,
+        features: parseArrayField(item.features),
+        applications: parseArrayField(item.applications),
+        packaging: parseArrayField(item.packaging),
+        technical_specs: parseArrayField(item.technical_specs)
+      }));
+      
+      setProducts(parsedData);
+      setFilteredProducts(parsedData);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Helper function to parse array fields that might be stored as strings
+  const parseArrayField = (field: any): any[] => {
+    if (Array.isArray(field)) return field;
+    if (typeof field === 'string') {
+      try {
+        return JSON.parse(field);
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
   };
 
   const deleteProduct = async (id: string) => {
@@ -422,6 +444,11 @@ const ProductModal = ({
       // Prepare product data without images
       const productData = { 
         ...formData,
+        // Ensure arrays are properly formatted for Supabase
+        features: JSON.stringify(formData.features || []),
+        applications: JSON.stringify(formData.applications || []),
+        packaging: JSON.stringify(formData.packaging || []),
+        technical_specs: JSON.stringify(formData.technical_specs || []),
         product_images: undefined // Remove images from product data
       };
 
