@@ -883,22 +883,34 @@ const ProductModal = ({
                 )}
               </div>
 
-              {/* Instructions */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Instructions
-                </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.instructions || ''}
-                    onChange={(e) => handleInputChange('instructions', e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.instructions}</p>
-                )}
-              </div>
+           {/* Instructions */}
+<div>
+  <label className="block font-semibold mb-1 mt-4">Instructions</label>
+  {formData.instructions.map((item, index) => (
+    <div key={index} className="flex gap-2 mb-2">
+      <input
+        type="text"
+        className="border rounded p-2 flex-1"
+        value={item}
+        onChange={(e) => handleArrayChange("instructions", e.target.value, index)}
+      />
+      <button
+        type="button"
+        className="px-2 py-1 bg-red-500 text-white rounded"
+        onClick={() => removeArrayItem("instructions", index)}
+      >
+        X
+      </button>
+    </div>
+  ))}
+  <button
+    type="button"
+    className="px-3 py-1 bg-green-600 text-white rounded"
+    onClick={() => addArrayItem("instructions")}
+  >
+    + Add Instruction
+  </button>
+</div>
 
               {/* Packaging */}
               <div className="mt-6">
