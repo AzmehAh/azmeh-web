@@ -317,25 +317,27 @@ const ProductModal = ({
   isEditing: boolean;
   onSave: () => void;
 }) => {
-  const [formData, setFormData] = useState<Partial<Product>>({
-    name: '',
-    code: '',
-    brand: '',
-    type: '', 
-    material: '',
-    usage: '',
-    description: '',
-    technical_description: '',
-    features: [],
-    applications: [],
-    instructions: '',
-    packaging: '',
-    storage: '',
-    safety_precautions: '',
-    safety_first_aid: '',
-    technical_specs: '',
-    status: 'active'
-  });
+  const initialFormData: Partial<Product & { product_images?: ProductImage[] }> = {
+  name: '',
+  code: '',
+  brand: '',
+  type: '',
+  material: '',
+  usage: '',
+  description: '',
+  technical_description: '',
+  features: [],
+  applications: [],
+  instructions: '',
+  packaging: [],
+  storage: '',
+  safety_precautions: '',
+  safety_first_aid: '',
+  technical_specs: [],
+  status: 'active',
+  product_images: []
+};
+
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
