@@ -459,51 +459,6 @@ const ProductModal = ({
       setImages([]);
     }
   }, [product, productImages]);
-// جهّز البيانات بشكل صحيح
-const payload = {
-  // نصوص
-  name: productData.name || "",
-  code: productData.code || "",
-  brand_id: productData.brand_id || null,
-  type: productData.type || "",
-  material: productData.material || "",
-  usage: productData.usage || "",
-  description: productData.description || "",
-  technical_description: productData.technical_description || "",
-  instructions: productData.instructions || "",
-
-  // Arrays (TEXT[])
-  features: productData.features ? productData.features.split("\n") : [],
-  safety_first_aid: productData.safety_first_aid ? productData.safety_first_aid.split("\n") : [],
-  safety_precautions: productData.safety_precautions ? productData.safety_precautions.split("\n") : [],
-  storage: productData.storage ? productData.storage.split("\n") : [],
-
-  // JSONB
-  packaging: productData.packaging ? JSON.parse(productData.packaging) : {},
-  technical_specs: productData.technical_specs ? JSON.parse(productData.technical_specs) : {},
-};
-
-let productId;
-
-if (isEditing) {
-  // Update
-  const { error } = await supabase
-    .from("products")
-    .update(payload)
-    .eq("id", product.id);
-
-  if (error) throw error;
-  productId = product.id;
-} else {
-  // Insert
-  const { data, error } = await supabase
-    .from("products")
-    .insert([payload])
-    .select();
-
-  if (error) throw error;
-  productId = data?.[0]?.id;
-}
 
   const handleSave = async () => {
     setSaving(true);
@@ -511,14 +466,28 @@ if (isEditing) {
       let productId = product?.id;
 
       // Prepare product data without images
-      const productData = { 
-        ...formData,
-        // Ensure arrays are properly formatted for Supabase
-        features: JSON.stringify(formData.features || []),
-        applications: JSON.stringify(formData.applications || []),
-        packaging: JSON.stringify(formData.packaging || []),
-        technical_specs: JSON.stringify(formData.technical_specs || [])
-      };
+    const productData = {
+  ...formData,
+
+  // Arrays (TEXT[])
+  features: Array.isArray(formData.features) ? formData.features : [],
+  applications: Array.isArray(formData.applications) ? formData.applications : [],
+  safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
+  safety_precautions: Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
+  storage: Array.isArray(formData.storage) ? formData.storage : [],
+
+  // JSONB
+  packaging:
+    typeof formData.packaging === "string"
+      ? JSON.parse(formData.packaging || "{}")
+      : formData.packaging || {},
+
+  technical_specs:
+    typeof formData.technical_specs === "string"
+      ? JSON.parse(formData.technical_specs || "{}")
+      : formData.technical_specs || {},
+};
+
 
       if (product) {
         // Update product
