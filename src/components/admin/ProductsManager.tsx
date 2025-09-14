@@ -445,10 +445,10 @@ const ProductModal = ({
       const productData = { 
         ...formData,
         // Ensure arrays are properly formatted for Supabase
-        features: JSON.stringify(formData.features || []),
-        applications: JSON.stringify(formData.applications || []),
-        packaging: JSON.stringify(formData.packaging || []),
-        technical_specs: JSON.stringify(formData.technical_specs || []),
+       features: formData.features || [],
+technical_specs: formData.technical_specs || [],
+packaging: formData.packaging || [],
+applications: formData.applications || []
         product_images: undefined // Remove images from product data
       };
 
