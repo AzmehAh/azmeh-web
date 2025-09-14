@@ -421,22 +421,21 @@ const ProductModal = ({
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    if (product) {
-      // Ensure all array fields are properly initialized
-  const productData = { 
-  ...formData,
-  features: JSON.stringify(formData.features || []),
-  applications: JSON.stringify(formData.applications || []),
-  packaging: JSON.stringify(formData.packaging || []),
-  technical_specs: JSON.stringify(formData.technical_specs || []),
-  instructions: JSON.stringify(formData.instructions || []),
-  storage: JSON.stringify(formData.storage || []),
-  safety_precautions: JSON.stringify(formData.safety_precautions || []),
-  safety_first_aid: JSON.stringify(formData.safety_first_aid || [])
-};
+   if (product) {
+  setFormData({
+    ...product,
+    features: product.features || [],
+    applications: product.applications || [],
+    instructions: product.instructions || [],
+    packaging: product.packaging || [],
+    storage: product.storage || [],
+    safety_precautions: product.safety_precautions || [],
+    safety_first_aid: product.safety_first_aid || [],
+    technical_specs: product.technical_specs || [],
+  });
+  setImages(productImages[product.id] || []);
+}
 
-      setFormData(productData);
-      setImages(productImages[product.id] || []);
     } else {
       setFormData({
         name: '',
