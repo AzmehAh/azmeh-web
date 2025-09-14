@@ -449,11 +449,11 @@ const ProductModal = ({
         technical_description: '',
         features: [],
         applications: [],
-        instructions: '',
+        instructions: [],
         packaging: [],
-        storage: '',
-        safety_precautions: '',
-        safety_first_aid: '',
+        storage: [],
+        safety_precautions: [],
+        safety_first_aid: [],
         technical_specs: [],
         status: 'active'
       });
