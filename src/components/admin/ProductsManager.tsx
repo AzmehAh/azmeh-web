@@ -50,12 +50,12 @@ interface Product {
   technical_specs: TechnicalSpec[];
   status: 'active' | 'inactive' | 'draft';
   created_at?: string;
-  product_images?: ProductImage[];
 }
 
 const ProductsManager = () => {
-  const [products, setProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<(Product & { product_images: ProductImage[] })[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [productImages, setProductImages] = useState<Record<string, ProductImage[]>>({});
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -82,18 +82,23 @@ const ProductsManager = () => {
 
   const fetchProducts = async () => {
     try {
-      const { data, error } = await supabase
+      // جلب جميع المنتجات
+      const { data: productsData, error: productsError } = await supabase
         .from('products')
-        .select(`
-          *,
-          product_images (*)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (productsError) throw productsError;
+      
+      // جلب جميع الصور
+      const { data: imagesData, error: imagesError } = await supabase
+        .from('product_images')
+        .select('*');
+
+      if (imagesError) throw imagesError;
       
       // Parse array fields that might be stored as strings
-      const parsedData = (data || []).map(item => ({
+      const parsedData = (productsData || []).map(item => ({
         ...item,
         features: parseArrayField(item.features),
         applications: parseArrayField(item.applications),
@@ -103,6 +108,17 @@ const ProductsManager = () => {
       
       setProducts(parsedData);
       setFilteredProducts(parsedData);
+      
+      // تنظيم الصور حسب product_id
+      const imagesByProduct: Record<string, ProductImage[]> = {};
+      (imagesData || []).forEach(image => {
+        if (!imagesByProduct[image.product_id]) {
+          imagesByProduct[image.product_id] = [];
+        }
+        imagesByProduct[image.product_id].push(image);
+      });
+      
+      setProductImages(imagesByProduct);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -228,98 +244,101 @@ const ProductsManager = () => {
 
       {/* Products Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredProducts.map((product, index) => (
-          <motion.div
-            key={product.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: index * 0.05 }}
-            className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
-          >
-            {/* Product Image */}
-            <div className="h-48 bg-gray-100 relative">
-              {product.product_images?.[0] ? (
-                <img
-                  src={product.product_images[0].image_url}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="flex items-center justify-center h-full">
-                  <ImageIcon className="w-12 h-12 text-gray-400" />
-                </div>
-              )}
-              <div className="absolute top-2 right-2">
-                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                  product.status === 'active' 
-                    ? 'bg-green-100 text-green-800' 
-                    : product.status === 'inactive'
-                    ? 'bg-red-100 text-red-800'
-                    : 'bg-yellow-100 text-yellow-800'
-                }`}>
-                  {product.status}
-                </span>
-              </div>
-            </div>
-
-            {/* Product Info */}
-            <div className="p-6">
-              <div className="flex items-start justify-between mb-2">
-                <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
-                  {product.name}
-                </h3>
-                <span className="text-xs bg-blue-100 text-[#0055A3] px-2 py-1 rounded">
-                  {product.brand}
-                </span>
-              </div>
-              
-              <p className="text-sm text-gray-500 mb-2">{product.code}</p>
-              
-              <p className="text-sm text-gray-600 line-clamp-2 mb-4">
-                {product.description}
-              </p>
-
-              <div className="flex flex-wrap gap-1 mb-4">
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                  {product.type}
-                </span>
-                <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                  {product.usage}
-                </span>
-              </div>
-
-              {/* Actions */}
-              <div className="flex items-center justify-between">
-                <div className="flex space-x-2">
-                  <button
-                    onClick={() => openModal(product, false)}
-                    className="p-2 text-gray-600 hover:text-[#0055A3] hover:bg-blue-50 rounded transition-colors"
-                    title="View"
-                  >
-                    <Eye className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => openModal(product, true)}
-                    className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors"
-                    title="Edit"
-                  >
-                    <Edit className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => deleteProduct(product.id)}
-                    className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
-                    title="Delete"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-                <div className="text-xs text-gray-400">
-                  {product.product_images?.length || 0} images
+        {filteredProducts.map((product, index) => {
+          const images = productImages[product.id] || [];
+          return (
+            <motion.div
+              key={product.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.05 }}
+              className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
+            >
+              {/* Product Image */}
+              <div className="h-48 bg-gray-100 relative">
+                {images[0] ? (
+                  <img
+                    src={images[0].image_url}
+                    alt={product.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center h-full">
+                    <ImageIcon className="w-12 h-12 text-gray-400" />
+                  </div>
+                )}
+                <div className="absolute top-2 right-2">
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                    product.status === 'active' 
+                      ? 'bg-green-100 text-green-800' 
+                      : product.status === 'inactive'
+                      ? 'bg-red-100 text-red-800'
+                      : 'bg-yellow-100 text-yellow-800'
+                  }`}>
+                    {product.status}
+                  </span>
                 </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+
+              {/* Product Info */}
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-2">
+                  <h3 className="text-lg font-semibold text-gray-900 line-clamp-1">
+                    {product.name}
+                  </h3>
+                  <span className="text-xs bg-blue-100 text-[#0055A3] px-2 py-1 rounded">
+                    {product.brand}
+                  </span>
+                </div>
+                
+                <p className="text-sm text-gray-500 mb-2">{product.code}</p>
+                
+                <p className="text-sm text-gray-600 line-clamp-2 mb-4">
+                  {product.description}
+                </p>
+
+                <div className="flex flex-wrap gap-1 mb-4">
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                    {product.type}
+                  </span>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                    {product.usage}
+                  </span>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center justify-between">
+                  <div className="flex space-x-2">
+                    <button
+                      onClick={() => openModal(product, false)}
+                      className="p-2 text-gray-600 hover:text-[#0055A3] hover:bg-blue-50 rounded transition-colors"
+                      title="View"
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => openModal(product, true)}
+                      className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors"
+                      title="Edit"
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => deleteProduct(product.id)}
+                      className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition-colors"
+                      title="Delete"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <div className="text-xs text-gray-400">
+                    {images.length} images
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* No products message */}
@@ -343,15 +362,18 @@ const ProductsManager = () => {
       )}
 
       {/* Product Modal */}
-      <ProductModal
-        isOpen={isModalOpen}
-        onClose={closeModal}
-        product={selectedProduct}
-        isEditing={isEditing}
-        onSave={fetchProducts}
-        onUploadImage={uploadImage}
-        uploading={uploading}
-      />
+      {isModalOpen && (
+        <ProductModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          product={selectedProduct}
+          isEditing={isEditing}
+          onSave={fetchProducts}
+          onUploadImage={uploadImage}
+          uploading={uploading}
+          productImages={productImages}
+        />
+      )}
     </div>
   );
 };
@@ -364,7 +386,8 @@ const ProductModal = ({
   isEditing, 
   onSave,
   onUploadImage,
-  uploading
+  uploading,
+  productImages
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -373,6 +396,7 @@ const ProductModal = ({
   onSave: () => void;
   onUploadImage: (file: File) => Promise<string | null>;
   uploading: boolean;
+  productImages: Record<string, ProductImage[]>;
 }) => {
   const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
@@ -391,9 +415,9 @@ const ProductModal = ({
     safety_precautions: '',
     safety_first_aid: '',
     technical_specs: [],
-    status: 'active',
-    product_images: []
+    status: 'active'
   });
+  const [images, setImages] = useState<ProductImage[]>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -408,10 +432,10 @@ const ProductModal = ({
         instructions: product.instructions || '',
         storage: product.storage || '',
         safety_precautions: product.safety_precautions || '',
-        safety_first_aid: product.safety_first_aid || '',
-        product_images: product.product_images || []
-      }; 
+        safety_first_aid: product.safety_first_aid || ''
+      };
       setFormData(productData);
+      setImages(productImages[product.id] || []);
     } else {
       setFormData({
         name: '',
@@ -430,11 +454,11 @@ const ProductModal = ({
         safety_precautions: '',
         safety_first_aid: '',
         technical_specs: [],
-        status: 'active',
-        product_images: []
+        status: 'active'
       });
+      setImages([]);
     }
-  }, [product]);
+  }, [product, productImages]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -445,12 +469,10 @@ const ProductModal = ({
       const productData = { 
         ...formData,
         // Ensure arrays are properly formatted for Supabase
-       features: formData.features || [],
-applications: formData.applications || [],
-packaging: formData.packaging || [],
-technical_specs: formData.technical_specs || [],
-product_images: undefined // لا تغيّر إذا الصور محفوظة في جدول منفصل
-
+        features: JSON.stringify(formData.features || []),
+        applications: JSON.stringify(formData.applications || []),
+        packaging: JSON.stringify(formData.packaging || []),
+        technical_specs: JSON.stringify(formData.technical_specs || [])
       };
 
       if (product) {
@@ -471,8 +493,8 @@ product_images: undefined // لا تغيّر إذا الصور محفوظة في
         productId = data?.[0]?.id;
       }
 
-      // Manage images
-      if (productId && formData.product_images) {
+      // Manage images only if we have a product ID
+      if (productId) {
         // Get current images to compare
         const { data: existingImages } = await supabase
           .from('product_images')
@@ -480,7 +502,7 @@ product_images: undefined // لا تغيّر إذا الصور محفوظة في
           .eq('product_id', productId);
 
         // Delete images that were removed
-        const imagesToKeep = formData.product_images.filter(img => img.id).map(img => img.id);
+        const imagesToKeep = images.filter(img => img.id).map(img => img.id);
         const imagesToDelete = existingImages?.filter(img => !imagesToKeep.includes(img.id)) || [];
         
         for (const img of imagesToDelete) {
@@ -491,7 +513,7 @@ product_images: undefined // لا تغيّر إذا الصور محفوظة في
         }
 
         // Add/update images
-        for (const img of formData.product_images) {
+        for (const img of images) {
           if (img.id) {
             // Update existing image
             await supabase
@@ -547,7 +569,7 @@ product_images: undefined // لا تغيّر إذا الصور محفوظة في
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const newImages = [...(formData.product_images || [])];
+    const newImages = [...images];
     
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
@@ -557,8 +579,12 @@ product_images: undefined // لا تغيّر إذا الصور محفوظة في
       }
     }
     
-    setFormData(prev => ({ ...prev, product_images: newImages }));
+    setImages(newImages);
     e.target.value = ''; // Reset file input
+  };
+
+  const removeImage = (index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
   };
 
   if (!isOpen) return null;
@@ -948,7 +974,7 @@ product_images: undefined // لا تغيّر إذا الصور محفوظة في
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                      {(formData.product_images || []).map((img, idx) => (
+                      {images.map((img, idx) => (
                         <div key={img.id || idx} className="relative group">
                           <img
                             src={img.image_url}
@@ -958,7 +984,7 @@ product_images: undefined // لا تغيّر إذا الصور محفوظة في
                           <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                             <button
                               type="button"
-                              onClick={() => removeArrayItem('product_images', idx)}
+                              onClick={() => removeImage(idx)}
                               className="p-1 bg-red-500 text-white rounded"
                             >
                               <Trash2 className="w-4 h-4" />
@@ -970,7 +996,7 @@ product_images: undefined // لا تغيّر إذا الصور محفوظة في
                   </div>
                 ) : (
                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {(formData.product_images || []).map((img, i) => (
+                    {images.map((img, i) => (
                       <img
                         key={i}
                         src={img.image_url}
@@ -999,6 +1025,7 @@ product_images: undefined // لا تغيّر إذا الصور محفوظة في
                 )}
               </div>
 
+              {/* Safety First Aid
               {/* Safety First Aid */}
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
