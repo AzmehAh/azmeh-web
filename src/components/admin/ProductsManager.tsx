@@ -426,14 +426,18 @@ const ProductModal = ({
       const productData = {
         ...product,
         features: Array.isArray(product.features) ? product.features : [],
-        applications: Array.isArray(product.applications) ? product.applications : [],
-        packaging: Array.isArray(product.packaging) ? product.packaging : [],
-        technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
-        instructions: product.instructions || '',
-        storage: product.storage || '',
-        safety_precautions: product.safety_precautions || '',
-        safety_first_aid: product.safety_first_aid || ''
-      };
+        applicatconst productData = { 
+  ...formData,
+  features: JSON.stringify(formData.features || []),
+  applications: JSON.stringify(formData.applications || []),
+  packaging: JSON.stringify(formData.packaging || []),
+  technical_specs: JSON.stringify(formData.technical_specs || []),
+  instructions: JSON.stringify(formData.instructions || []),
+  storage: JSON.stringify(formData.storage || []),
+  safety_precautions: JSON.stringify(formData.safety_precautions || []),
+  safety_first_aid: JSON.stringify(formData.safety_first_aid || [])
+};
+
       setFormData(productData);
       setImages(productImages[product.id] || []);
     } else {
