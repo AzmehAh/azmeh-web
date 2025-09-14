@@ -317,81 +317,102 @@ const ProductModal = ({
   isEditing: boolean;
   onSave: () => void;
 }) => {
-  const initialFormData: Partial<Product & { product_images?: ProductImage[] }> = {
-  name: '',
-  code: '',
-  brand: '',
-  type: '',
-  material: '',
-  usage: '',
-  description: '',
-  technical_description: '',
-  features: [],
-  applications: [],
-  instructions: '',
-  packaging: [],
-  storage: '',
-  safety_precautions: '',
-  safety_first_aid: '',
-  technical_specs: [],
-  status: 'active',
-  product_images: []
-};
-
+  const [formData, setFormData] = useState<Partial<Product>>({
+    name: '',
+    code: '',
+    brand: '',
+    type: '', 
+    material: '',
+    usage: '',
+    description: '',
+    technical_description: '',
+    features: [],
+    applications: [],
+    instructions: '',
+    packaging: '',
+    storage: '',
+    safety_precautions: '',
+    safety_first_aid: '',
+    technical_specs: '',
+    status: 'active'
+  });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-  if (product) {
-    setFormData({
-      ...initialFormData,
-      ...product,
-      features: Array.isArray(product.features) ? product.features : [],
-      applications: Array.isArray(product.applications) ? product.applications : [],
-      packaging: Array.isArray(product.packaging) ? product.packaging : [],
-      technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
-      product_images: Array.isArray(product.product_images) ? product.product_images : []
-    });
-  } else {
-    setFormData(initialFormData);
-  }
-}, [product]);
+    if (product) {
+      // Ensure all array fields are properly initialized
+      const productData = {
+        ...product,
+        features: Array.isArray(product.features) ? product.features : [],
+        applications: Array.isArray(product.applications) ? product.applications : [],
+        instructions: product.instructions || '',
+        packaging: product.packaging || '',
+        storage: product.storage || '',
+        safety_precautions: product.safety_precautions || '',
+        safety_first_aid: product.safety_first_aid || '',
+        technical_specs: product.technical_specs || ''
+      };
+      setFormData(productData);
+    } else {
+      setFormData({
+        name: '',
+        code: '',
+        brand: '',
+        type: '',
+        material: '',
+        usage: '',
+        description: '',
+        technical_description: '',
+        features: [],
+        applications: [],
+        instructions: '',
+        packaging: '',
+        storage: '',
+        safety_precautions: '',
+        safety_first_aid: '',
+        technical_specs: '',
+        status: 'active'
+      });
+    }
+  }, [product]);
 
-     
-
- // Inside ProductModal
-const handleSave = async () => {
+ const handleSave = async () => {
   setSaving(true);
   try {
     let productId = product?.id;
 
-    const fetchProducts = async () => {
-  setLoading(true);
-  try {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*, product_images(*)')
-      .order('created_at', { ascending: false });
-    if (error) throw error;
-    setProducts(data || []);
-    setFilteredProducts(data || []);
-  } catch (error) {
-    console.error('Error fetching products:', error);
-  } finally {
-    setLoading(false);
-  }
-};
+    // نسخ formData بدون product_images
+    const productData = { ...formData };
+    delete productData.product_images;
 
- 
+    if (product) {
+      // تحديث المنتج
+      const { error } = await supabase
+        .from('products')
+        .update(productData)
+        .eq('id', product.id);
+      if (error) throw error;
+    } else {
+      // إنشاء منتج جديد
+      const { data, error } = await supabase
+        .from('products')
+        .insert([productData])
+        .select();
+      if (error) throw error;
+      productId = data?.[0]?.id;
+    }
 
-    // Handle images
-    if (productId && formData.product_images?.length) {
+    // إدارة الصور
+    if (productId && formData.product_images) {
       for (const img of formData.product_images) {
         if (img.id) {
+          // تعديل صورة موجودة
           await supabase
             .from('product_images')
             .update({ image_url: img.image_url })
             .eq('id', img.id);
         } else {
+          // إضافة صورة جديدة
           await supabase
             .from('product_images')
             .insert([{ product_id: productId, image_url: img.image_url }]);
@@ -399,7 +420,6 @@ const handleSave = async () => {
       }
     }
 
-    // Update parent state optimistically
     onSave();
     onClose();
   } catch (error) {
@@ -409,7 +429,7 @@ const handleSave = async () => {
     setSaving(false);
   }
 };
-
+ 
 
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
