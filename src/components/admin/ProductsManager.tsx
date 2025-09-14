@@ -356,7 +356,23 @@ const ProductModal = ({
   }
 }, [product]);
 
-     
+     const fetchProducts = async () => {
+  setLoading(true);
+  try {
+    const { data, error } = await supabase
+      .from('products')
+      .select('*, product_images(*)')
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    setProducts(data || []);
+    setFilteredProducts(data || []);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
  // Inside ProductModal
 const handleSave = async () => {
