@@ -474,6 +474,51 @@ const ProductModal = ({
         packaging: JSON.stringify(formData.packaging || []),
         technical_specs: JSON.stringify(formData.technical_specs || [])
       };
+// جهّز البيانات بشكل صحيح
+const payload = {
+  // نصوص
+  name: productData.name || "",
+  code: productData.code || "",
+  brand_id: productData.brand_id || null,
+  type: productData.type || "",
+  material: productData.material || "",
+  usage: productData.usage || "",
+  description: productData.description || "",
+  technical_description: productData.technical_description || "",
+  instructions: productData.instructions || "",
+
+  // Arrays (TEXT[])
+  features: productData.features ? productData.features.split("\n") : [],
+  safety_first_aid: productData.safety_first_aid ? productData.safety_first_aid.split("\n") : [],
+  safety_precautions: productData.safety_precautions ? productData.safety_precautions.split("\n") : [],
+  storage: productData.storage ? productData.storage.split("\n") : [],
+
+  // JSONB
+  packaging: productData.packaging ? JSON.parse(productData.packaging) : {},
+  technical_specs: productData.technical_specs ? JSON.parse(productData.technical_specs) : {},
+};
+
+let productId;
+
+if (isEditing) {
+  // Update
+  const { error } = await supabase
+    .from("products")
+    .update(payload)
+    .eq("id", product.id);
+
+  if (error) throw error;
+  productId = product.id;
+} else {
+  // Insert
+  const { data, error } = await supabase
+    .from("products")
+    .insert([payload])
+    .select();
+
+  if (error) throw error;
+  productId = data?.[0]?.id;
+}
 
       if (product) {
         // Update product
