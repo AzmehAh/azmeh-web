@@ -423,10 +423,7 @@ const ProductModal = ({
   useEffect(() => {
     if (product) {
       // Ensure all array fields are properly initialized
-      const productData = {
-        ...product,
-        features: Array.isArray(product.features) ? product.features : [],
-        applicatconst productData = { 
+  const productData = { 
   ...formData,
   features: JSON.stringify(formData.features || []),
   applications: JSON.stringify(formData.applications || []),
