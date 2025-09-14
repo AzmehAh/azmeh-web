@@ -552,7 +552,6 @@ const ProductModal = ({
   };
 
   const handleArrayInputChange = (field: string, index: number, value: string) => {
-   const handleArrayInputChange = (field: string, index: number, value: string) => {
   setFormData(prev => ({
     ...prev,
     [field]: (prev[field as keyof Product] as any[]).map((item, i) => 
@@ -890,6 +889,7 @@ return (
     )}
   </AnimatePresence>
 );
+   
 
 };
 
