@@ -356,29 +356,7 @@ const ProductModal = ({
   }
 }, [product]);
 
-      setFormData(productData);
-    } else {
-      setFormData({
-        name: '',
-        code: '',
-        brand: '',
-        type: '',
-        material: '',
-        usage: '',
-        description: '',
-        technical_description: '',
-        features: [],
-        applications: [],
-        instructions: '',
-        packaging: '',
-        storage: '',
-        safety_precautions: '',
-        safety_first_aid: '',
-        technical_specs: '',
-        status: 'active'
-      });
-    }
-  }, [product]);
+     
 
  // Inside ProductModal
 const handleSave = async () => {
