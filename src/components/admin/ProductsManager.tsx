@@ -356,7 +356,15 @@ const ProductModal = ({
   }
 }, [product]);
 
-     const fetchProducts = async () => {
+     
+
+ // Inside ProductModal
+const handleSave = async () => {
+  setSaving(true);
+  try {
+    let productId = product?.id;
+
+    const fetchProducts = async () => {
   setLoading(true);
   try {
     const { data, error } = await supabase
@@ -373,39 +381,7 @@ const ProductModal = ({
   }
 };
 
-
- // Inside ProductModal
-const handleSave = async () => {
-  setSaving(true);
-  try {
-    let productId = product?.id;
-
-    // Prepare productData
-    const productData = {
-      ...formData,
-      features: formData.features || [],
-      applications: formData.applications || [],
-      packaging: formData.packaging || [],
-      technical_specs: formData.technical_specs || [],
-    };
-    delete productData.product_images;
-
-    if (product) {
-      // Update existing product
-      const { error } = await supabase
-        .from('products')
-        .update(productData)
-        .eq('id', product.id);
-      if (error) throw error;
-    } else {
-      // Insert new product
-      const { data, error } = await supabase
-        .from('products')
-        .insert([productData])
-        .select();
-      if (error) throw error;
-      productId = data?.[0]?.id;
-    }
+ 
 
     // Handle images
     if (productId && formData.product_images?.length) {
