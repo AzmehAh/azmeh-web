@@ -376,24 +376,31 @@ const ProductModal = ({
     }
   }, [product]);
 
- const handleSave = async () => {
+ // Inside ProductModal
+const handleSave = async () => {
   setSaving(true);
   try {
     let productId = product?.id;
 
-    // نسخ formData بدون product_images
-    const productData = { ...formData };
+    // Prepare productData
+    const productData = {
+      ...formData,
+      features: formData.features || [],
+      applications: formData.applications || [],
+      packaging: formData.packaging || [],
+      technical_specs: formData.technical_specs || [],
+    };
     delete productData.product_images;
 
     if (product) {
-      // تحديث المنتج
+      // Update existing product
       const { error } = await supabase
         .from('products')
         .update(productData)
         .eq('id', product.id);
       if (error) throw error;
     } else {
-      // إنشاء منتج جديد
+      // Insert new product
       const { data, error } = await supabase
         .from('products')
         .insert([productData])
@@ -402,17 +409,15 @@ const ProductModal = ({
       productId = data?.[0]?.id;
     }
 
-    // إدارة الصور
-    if (productId && formData.product_images) {
+    // Handle images
+    if (productId && formData.product_images?.length) {
       for (const img of formData.product_images) {
         if (img.id) {
-          // تعديل صورة موجودة
           await supabase
             .from('product_images')
             .update({ image_url: img.image_url })
             .eq('id', img.id);
         } else {
-          // إضافة صورة جديدة
           await supabase
             .from('product_images')
             .insert([{ product_id: productId, image_url: img.image_url }]);
@@ -420,6 +425,7 @@ const ProductModal = ({
       }
     }
 
+    // Update parent state optimistically
     onSave();
     onClose();
   } catch (error) {
