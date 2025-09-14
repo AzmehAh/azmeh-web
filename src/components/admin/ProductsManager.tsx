@@ -28,6 +28,8 @@ interface TechnicalSpec {
 
 interface PackagingSize {
   size: string;
+  type?: string;
+  coverage?: string;
 }
 
 interface Product {
@@ -63,6 +65,24 @@ const ProductsManager = () => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
 
+  // دالة مساعدة لتحويل الحقول
+  const parseField = (field: any, defaultValue: any = []): any => {
+    if (Array.isArray(field)) return field;
+    if (typeof field === 'string' && field.trim() !== '') {
+      try {
+        const parsed = JSON.parse(field);
+        return Array.isArray(parsed) ? parsed : defaultValue;
+      } catch (e) {
+        // إذا فشل التحويل، حاول تقسيم النص بفواصل
+        if (typeof field === 'string') {
+          return field.split(',').map(item => item.trim()).filter(item => item !== '');
+        }
+        return defaultValue;
+      }
+    }
+    return defaultValue;
+  };
+
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -82,7 +102,6 @@ const ProductsManager = () => {
 
   const fetchProducts = async () => {
     try {
-      // جلب جميع المنتجات
       const { data: productsData, error: productsError } = await supabase
         .from('products')
         .select('*')
@@ -90,26 +109,28 @@ const ProductsManager = () => {
 
       if (productsError) throw productsError;
       
-      // جلب جميع الصور
       const { data: imagesData, error: imagesError } = await supabase
         .from('product_images')
         .select('*');
 
       if (imagesError) throw imagesError;
       
-      // Parse array fields that might be stored as strings
+      // Parse all fields correctly
       const parsedData = (productsData || []).map(item => ({
         ...item,
-        features: parseArrayField(item.features),
-        applications: parseArrayField(item.applications),
-        packaging: parseArrayField(item.packaging),
-        technical_specs: parseArrayField(item.technical_specs)
-      }));
+        features: parseField(item.features, []),
+        applications: parseField(item.applications, []),
+        packaging: parseField(item.packaging, []),
+        technical_specs: parseField(item.technical_specs, []),
+        instructions: item.instructions || '',
+        storage: item.storage || '',
+        safety_precautions: item.safety_precautions || '',
+        safety_first_aid: item.safety_first_aid || ''
+      })) as Product[];
       
       setProducts(parsedData);
       setFilteredProducts(parsedData);
       
-      // تنظيم الصور حسب product_id
       const imagesByProduct: Record<string, ProductImage[]> = {};
       (imagesData || []).forEach(image => {
         if (!imagesByProduct[image.product_id]) {
@@ -126,24 +147,10 @@ const ProductsManager = () => {
     }
   };
 
-  // Helper function to parse array fields that might be stored as strings
-  const parseArrayField = (field: any): any[] => {
-    if (Array.isArray(field)) return field;
-    if (typeof field === 'string') {
-      try {
-        return JSON.parse(field);
-      } catch (e) {
-        return [];
-      }
-    }
-    return [];
-  };
-
   const deleteProduct = async (id: string) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
     try {
-      // First delete related images
       const { error: imageError } = await supabase
         .from('product_images')
         .delete()
@@ -151,7 +158,6 @@ const ProductsManager = () => {
       
       if (imageError) throw imageError;
       
-      // Then delete the product
       const { error } = await supabase
         .from('products')
         .delete()
@@ -372,6 +378,7 @@ const ProductsManager = () => {
           onUploadImage={uploadImage}
           uploading={uploading}
           productImages={productImages}
+          parseField={parseField}
         />
       )}
     </div>
@@ -387,7 +394,8 @@ const ProductModal = ({
   onSave,
   onUploadImage,
   uploading,
-  productImages
+  productImages,
+  parseField
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -397,6 +405,7 @@ const ProductModal = ({
   onUploadImage: (file: File) => Promise<string | null>;
   uploading: boolean;
   productImages: Record<string, ProductImage[]>;
+  parseField: (field: any, defaultValue: any) => any;
 }) => {
   const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
@@ -422,13 +431,12 @@ const ProductModal = ({
 
   useEffect(() => {
     if (product) {
-      // Ensure all array fields are properly initialized
       const productData = {
         ...product,
-        features: Array.isArray(product.features) ? product.features : [],
-        applications: Array.isArray(product.applications) ? product.applications : [],
-        packaging: Array.isArray(product.packaging) ? product.packaging : [],
-        technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
+        features: parseField(product.features, []),
+        applications: parseField(product.applications, []),
+        packaging: parseField(product.packaging, []),
+        technical_specs: parseField(product.technical_specs, []),
         instructions: product.instructions || '',
         storage: product.storage || '',
         safety_precautions: product.safety_precautions || '',
@@ -458,17 +466,15 @@ const ProductModal = ({
       });
       setImages([]);
     }
-  }, [product, productImages]);
+  }, [product, productImages, parseField]);
 
   const handleSave = async () => {
     setSaving(true);
     try {
       let productId = product?.id;
 
-      // Prepare product data without images
       const productData = { 
         ...formData,
-        // Ensure arrays are properly formatted for Supabase
         features: JSON.stringify(formData.features || []),
         applications: JSON.stringify(formData.applications || []),
         packaging: JSON.stringify(formData.packaging || []),
@@ -476,7 +482,6 @@ const ProductModal = ({
       };
 
       if (product) {
-        // Update product
         const { error } = await supabase
           .from('products')
           .update(productData)
@@ -484,7 +489,6 @@ const ProductModal = ({
         if (error) throw error;
         productId = product.id;
       } else {
-        // Create new product
         const { data, error } = await supabase
           .from('products')
           .insert([productData])
@@ -493,40 +497,8 @@ const ProductModal = ({
         productId = data?.[0]?.id;
       }
 
-      // Manage images only if we have a product ID
       if (productId) {
-        // Get current images to compare
-        const { data: existingImages } = await supabase
-          .from('product_images')
-          .select('*')
-          .eq('product_id', productId);
-
-        // Delete images that were removed
-        const imagesToKeep = images.filter(img => img.id).map(img => img.id);
-        const imagesToDelete = existingImages?.filter(img => !imagesToKeep.includes(img.id)) || [];
-        
-        for (const img of imagesToDelete) {
-          await supabase
-            .from('product_images')
-            .delete()
-            .eq('id', img.id);
-        }
-
-        // Add/update images
-        for (const img of images) {
-          if (img.id) {
-            // Update existing image
-            await supabase
-              .from('product_images')
-              .update({ image_url: img.image_url })
-              .eq('id', img.id);
-          } else {
-            // Add new image
-            await supabase
-              .from('product_images')
-              .insert([{ product_id: productId, image_url: img.image_url }]);
-          }
-        }
+        await manageProductImages(productId);
       }
 
       onSave();
@@ -539,607 +511,516 @@ const ProductModal = ({
     }
   };
 
+  const manageProductImages = async (productId: string) => {
+    const { data: existingImages } = await supabase
+      .from('product_images')
+      .select('*')
+      .eq('product_id', productId);
+
+    const imagesToKeep = images.filter(img => img.id).map(img => img.id);
+    const imagesToDelete = existingImages?.filter(img => !imagesToKeep.includes(img.id)) || [];
+    
+    for (const img of imagesToDelete) {
+      await supabase
+        .from('product_images')
+        .delete()
+        .eq('id', img.id);
+    }
+
+    for (const img of images) {
+      if (img.id) {
+        await supabase
+          .from('product_images')
+          .update({ image_url: img.image_url })
+          .eq('id', img.id);
+      } else {
+        await supabase
+          .from('product_images')
+          .insert([{ product_id: productId, image_url: img.image_url }]);
+      }
+    }
+  };
+
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleArrayInputChange = (field: string, index: number, value: string) => {
     setFormData(prev => {
-      const currentArray = Array.isArray(prev[field]) ? [...(prev[field] as string[])] : [];
+      const currentArray = Array.isArray(prev[field]) ? [...(prev[field] as any[])] : [];
       currentArray[index] = value;
       return { ...prev, [field]: currentArray };
     });
   };
 
-  const addArrayItem = (field: string, defaultValue: any = '') => {
+   const handlePackagingChange = (index: number, field: keyof PackagingSize, value: string) => {
     setFormData(prev => {
-      const currentArray = Array.isArray(prev[field]) ? [...(prev[field] as any[])] : [];
-      return { ...prev, [field]: [...currentArray, defaultValue] };
+      const currentPackaging = Array.isArray(prev.packaging) ? [...prev.packaging] : [];
+      if (!currentPackaging[index]) {
+        currentPackaging[index] = { size: '', type: '', coverage: '' };
+      }
+      currentPackaging[index] = { ...currentPackaging[index], [field]: value };
+      return { ...prev, packaging: currentPackaging };
     });
   };
 
-  const removeArrayItem = (field: string, index: number) => {
+  const addPackagingItem = () => {
+    setFormData(prev => ({
+      ...prev,
+      packaging: [...(prev.packaging || []), { size: '', type: '', coverage: '' }]
+    }));
+  };
+
+  const removePackagingItem = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      packaging: (prev.packaging || []).filter((_, i) => i !== index)
+    }));
+  };
+
+  const handleSpecChange = (index: number, field: keyof TechnicalSpec, value: string) => {
     setFormData(prev => {
-      const currentArray = Array.isArray(prev[field]) ? [...(prev[field] as any[])] : [];
-      return { ...prev, [field]: currentArray.filter((_, i) => i !== index) };
+      const currentSpecs = Array.isArray(prev.technical_specs) ? [...prev.technical_specs] : [];
+      if (!currentSpecs[index]) {
+        currentSpecs[index] = { property: '', value: '', standard: '' };
+      }
+      currentSpecs[index] = { ...currentSpecs[index], [field]: value };
+      return { ...prev, technical_specs: currentSpecs };
     });
+  };
+
+  const addSpecItem = () => {
+    setFormData(prev => ({
+      ...prev,
+      technical_specs: [...(prev.technical_specs || []), { property: '', value: '', standard: '' }]
+    }));
+  };
+
+  const removeSpecItem = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      technical_specs: (prev.technical_specs || []).filter((_, i) => i !== index)
+    }));
   };
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
 
-    const newImages = [...images];
-    
     for (let i = 0; i < files.length; i++) {
       const file = files[i];
       const imageUrl = await onUploadImage(file);
       if (imageUrl) {
-        newImages.push({ image_url: imageUrl });
+        setImages(prev => [...prev, { image_url: imageUrl }]);
       }
     }
-    
-    setImages(newImages);
-    e.target.value = ''; // Reset file input
   };
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  if (!isOpen) return null;
-
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 overflow-y-auto">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black bg-opacity-50"
-          onClick={onClose}
-        />
-
-        <div className="flex min-h-full items-center justify-center p-4">
+      {isOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b">
-              <h3 className="text-lg font-semibold text-gray-900">
-                {isEditing ? (product ? 'Edit Product' : 'Add Product') : 'View Product'}
-              </h3>
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h2 className="text-2xl font-bold text-gray-900">
+                {isEditing ? (product ? 'Edit Product' : 'Add Product') : 'Product Details'}
+              </h2>
               <button
                 onClick={onClose}
-                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+                className="p-2 text-gray-400 hover:text-gray-600 transition-colors"
               >
-                <X className="w-5 h-5" />
+                <X className="w-6 h-6" />
               </button>
             </div>
 
             {/* Content */}
-            <div className="p-6">
+            <div className="p-6 space-y-6">
+              {/* Basic Information */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Basic Info */}
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Product Name *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.name || ''}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.name}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Product Code *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.code || ''}
-                        onChange={(e) => handleInputChange('code', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.code}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Brand *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.brand || ''}
-                        onChange={(e) => handleInputChange('brand', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.brand}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Type *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.type || ''}
-                        onChange={(e) => handleInputChange('type', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.type}</p>
-                    )}
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Product Name *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name || ''}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
                 </div>
-
-                {/* Additional Info */}
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Material *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.material || ''}
-                        onChange={(e) => handleInputChange('material', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.material}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Usage *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.usage || ''}
-                        onChange={(e) => handleInputChange('usage', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.usage}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Status
-                    </label>
-                    {isEditing ? (
-                      <select
-                        value={formData.status || 'active'}
-                        onChange={(e) => handleInputChange('status', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      >
-                        <option value="active">Active</option>
-                        <option value="inactive">Inactive</option>
-                        <option value="draft">Draft</option>
-                      </select>
-                    ) : (
-                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        formData.status === 'active' 
-                          ? 'bg-green-100 text-green-800' 
-                          : formData.status === 'inactive'
-                          ? 'bg-red-100 text-red-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
-                        {formData.status}
-                      </span>
-                    )}
-                  </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Product Code *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.code || ''}
+                    onChange={(e) => handleInputChange('code', e.target.value)}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Brand *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.brand || ''}
+                    onChange={(e) => handleInputChange('brand', e.target.value)}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Type *
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.type || ''}
+                    onChange={(e) => handleInputChange('type', e.target.value)}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Material
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.material || ''}
+                    onChange={(e) => handleInputChange('material', e.target.value)}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Usage
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.usage || ''}
+                    onChange={(e) => handleInputChange('usage', e.target.value)}
+                    disabled={!isEditing}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
                 </div>
               </div>
 
               {/* Description */}
-              <div className="mt-6">
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description *
+                  Description
                 </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.description || ''}
-                    onChange={(e) => handleInputChange('description', e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900">{formData.description}</p>
-                )}
+                <textarea
+                  value={formData.description || ''}
+                  onChange={(e) => handleInputChange('description', e.target.value)}
+                  disabled={!isEditing}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                />
               </div>
 
               {/* Technical Description */}
-              <div className="mt-6">
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Technical Description
                 </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.technical_description || ''}
-                    onChange={(e) => handleInputChange('technical_description', e.target.value)}
-                    rows={4}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900">{formData.technical_description}</p>
-                )}
+                <textarea
+                  value={formData.technical_description || ''}
+                  onChange={(e) => handleInputChange('technical_description', e.target.value)}
+                  disabled={!isEditing}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                />
               </div>
 
               {/* Features */}
-              <div className="mt-6">
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Features
+                  Features (one per line)
                 </label>
-                {isEditing ? (
-                  <div className="space-y-2">
-                    {(formData.features || []).map((item, idx) => (
-                      <div key={idx} className="flex gap-2">
-                        <input
-                          type="text"
-                          value={item}
-                          onChange={(e) => handleArrayInputChange('features', idx, e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeArrayItem('features', idx)}
-                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => addArrayItem('features', '')}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                    >
-                      + Add Feature
-                    </button>
-                  </div>
-                ) : (
-                  <ul className="list-disc pl-5 text-gray-900">
-                    {(formData.features || []).map((f, i) => (
-                      <li key={i}>{f}</li>
-                    ))}
-                  </ul>
-                )}
+                <textarea
+                  value={(formData.features || []).join('\n')}
+                  onChange={(e) => handleInputChange('features', e.target.value.split('\n').filter(line => line.trim() !== ''))}
+                  disabled={!isEditing}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                />
               </div>
 
               {/* Applications */}
-              <div className="mt-6">
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Applications
+                  Applications (one per line)
                 </label>
-                {isEditing ? (
-                  <div className="space-y-2">
-                    {(formData.applications || []).map((item, idx) => (
-                      <div key={idx} className="flex gap-2">
-                        <input
-                          type="text"
-                          value={item}
-                          onChange={(e) => handleArrayInputChange('applications', idx, e.target.value)}
-                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeArrayItem('applications', idx)}
-                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => addArrayItem('applications', '')}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                    >
-                      + Add Application
-                    </button>
-                  </div>
-                ) : (
-                  <ul className="list-disc pl-5 text-gray-900">
-                    {(formData.applications || []).map((a, i) => (
-                      <li key={i}>{a}</li>
-                    ))}
-                  </ul>
-                )}
+                <textarea
+                  value={(formData.applications || []).join('\n')}
+                  onChange={(e) => handleInputChange('applications', e.target.value.split('\n').filter(line => line.trim() !== ''))}
+                  disabled={!isEditing}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                />
               </div>
 
-              {/* Instructions */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Instructions
-                </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.instructions || ''}
-                    onChange={(e) => handleInputChange('instructions', e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.instructions}</p>
-                )}
-              </div>
-
-              {/* Packaging */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Packaging Sizes
-                </label>
-                {isEditing ? (
-                  <div className="space-y-2">
-                    {(formData.packaging || []).map((item, idx) => (
-                      <div key={idx} className="flex gap-2">
-                        <input
-                          type="text"
-                          value={item.size || ''}
-                          onChange={(e) => {
-                            const newPackaging = [...(formData.packaging || [])];
-                            newPackaging[idx] = { ...newPackaging[idx], size: e.target.value };
-                            setFormData(prev => ({ ...prev, packaging: newPackaging }));
-                          }}
-                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                          placeholder="Size (e.g., 1L, 5kg)"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeArrayItem('packaging', idx)}
-                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                        >
-                          Remove
-                        </button>
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => addArrayItem('packaging', { size: '' })}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                    >
-                      + Add Size
-                    </button>
-                  </div>
-                ) : (
-                  <ul className="list-disc pl-5 text-gray-900">
-                    {(formData.packaging || []).map((p, i) => (
-                      <li key={i}>{p.size}</li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-
-              {/* Storage */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Storage
-                </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.storage || ''}
-                    onChange={(e) => handleInputChange('storage', e.target.value)}
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.storage}</p>
-                )}
-              </div>
-
-              {/* Product Images */}
-              <div className="mt-6">
+              {/* Images */}
+              <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Product Images
                 </label>
-
-                {isEditing ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
-                        <Upload className="w-4 h-4 mr-2" />
-                        Upload Images
-                        <input
-                          type="file"
-                          multiple
-                          accept="image/*"
-                          onChange={handleImageUpload}
-                          className="hidden"
-                          disabled={uploading}
-                        />
-                      </label>
-                      {uploading && <span className="text-gray-500">Uploading...</span>}
-                    </div>
-
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                      {images.map((img, idx) => (
-                        <div key={img.id || idx} className="relative group">
-                          <img
-                            src={img.image_url}
-                            alt={`Product ${idx + 1}`}
-                            className="w-full h-32 object-cover rounded border"
-                          />
-                          <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <button
-                              type="button"
-                              onClick={() => removeImage(idx)}
-                              className="p-1 bg-red-500 text-white rounded"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {images.map((img, i) => (
-                      <img
-                        key={i}
-                        src={img.image_url}
-                        alt={`Product Image ${i + 1}`}
-                        className="w-full h-32 object-cover rounded border"
+                {isEditing && (
+                  <div className="mb-4">
+                    <label className="flex items-center justify-center px-4 py-2 bg-gray-100 border border-gray-300 rounded-md cursor-pointer hover:bg-gray-200 transition-colors">
+                      <Upload className="w-4 h-4 mr-2" />
+                      Upload Images
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        disabled={uploading}
                       />
-                    ))}
+                    </label>
+                    {uploading && <p className="text-sm text-gray-500 mt-2">Uploading...</p>}
                   </div>
                 )}
-              </div>
-
-              {/* Safety Precautions */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Safety Precautions
-                </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.safety_precautions || ''}
-                    onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.safety_precautions}</p>
-                )}
-              </div>
-
-              {/* Safety First Aid
-              {/* Safety First Aid */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Safety First Aid
-                </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.safety_first_aid || ''}
-                    onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.safety_first_aid}</p>
-                )}
-              </div>
-
-              {/* Technical Specs */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Technical Specifications
-                </label>
-                {isEditing ? (
-                  <div className="space-y-2">
-                    {(formData.technical_specs || []).map((item, idx) => (
-                      <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
-                        <input
-                          type="text"
-                          placeholder="Property"
-                          value={item.property || ''}
-                          onChange={(e) => {
-                            const newSpecs = [...(formData.technical_specs || [])];
-                            newSpecs[idx] = { ...newSpecs[idx], property: e.target.value };
-                            setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
-                          }}
-                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Value"
-                          value={item.value || ''}
-                          onChange={(e) => {
-                            const newSpecs = [...(formData.technical_specs || [])];
-                            newSpecs[idx] = { ...newSpecs[idx], value: e.target.value };
-                            setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
-                          }}
-                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Standard"
-                          value={item.standard || ''}
-                          onChange={(e) => {
-                            const newSpecs = [...(formData.technical_specs || [])];
-                            newSpecs[idx] = { ...newSpecs[idx], standard: e.target.value };
-                            setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
-                          }}
-                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                  {images.map((image, index) => (
+                    <div key={index} className="relative group">
+                      <img
+                        src={image.image_url}
+                        alt={`Product image ${index + 1}`}
+                        className="w-full h-32 object-cover rounded-md"
+                      />
+                      {isEditing && (
                         <button
-                          type="button"
-                          onClick={() => removeArrayItem('technical_specs', idx)}
-                          className="px-2 py-2 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                          onClick={() => removeImage(index)}
+                          className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
                         >
-                          Remove
+                          <X className="w-3 h-3" />
                         </button>
-                      </div>
-                    ))}
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Technical Specifications */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Technical Specifications
+                  </label>
+                  {isEditing && (
                     <button
                       type="button"
-                      onClick={() => addArrayItem('technical_specs', { property: '', value: '', standard: '' })}
-                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                      onClick={addSpecItem}
+                      className="text-sm text-[#0055A3] hover:text-blue-700"
                     >
                       + Add Specification
                     </button>
-                  </div>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full border border-gray-200 rounded text-sm">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="border px-3 py-2 text-left">Property</th>
-                          <th className="border px-3 py-2 text-left">Value</th>
-                          <th className="border px-3 py-2 text-left">Standard</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {(formData.technical_specs || []).map((item, i) => (
-                          <tr key={i}>
-                            <td className="border px-3 py-2">{item.property}</td>
-                            <td className="border px-3 py-2">{item.value}</td>
-                            <td className="border px-3 py-2">{item.standard}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
+                  )}
+                </div>
+                <div className="space-y-3">
+                  {(formData.technical_specs || []).map((spec, index) => (
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+                      <input
+                        type="text"
+                        placeholder="Property"
+                        value={spec.property}
+                        onChange={(e) => handleSpecChange(index, 'property', e.target.value)}
+                        disabled={!isEditing}
+                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Value"
+                        value={spec.value}
+                        onChange={(e) => handleSpecChange(index, 'value', e.target.value)}
+                        disabled={!isEditing}
+                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                      />
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Standard"
+                          value={spec.standard}
+                          onChange={(e) => handleSpecChange(index, 'standard', e.target.value)}
+                          disabled={!isEditing}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                        />
+                        {isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => removeSpecItem(index)}
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Packaging */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Packaging Sizes
+                  </label>
+                  {isEditing && (
+                    <button
+                      type="button"
+                      onClick={addPackagingItem}
+                      className="text-sm text-[#0055A3] hover:text-blue-700"
+                    >
+                      + Add Packaging
+                    </button>
+                  )}
+                </div>
+                <div className="space-y-3">
+                  {(formData.packaging || []).map((pkg, index) => (
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
+                      <input
+                        type="text"
+                        placeholder="Size"
+                        value={pkg.size}
+                        onChange={(e) => handlePackagingChange(index, 'size', e.target.value)}
+                        disabled={!isEditing}
+                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                      />
+                      <input
+                        type="text"
+                        placeholder="Type"
+                        value={pkg.type || ''}
+                        onChange={(e) => handlePackagingChange(index, 'type', e.target.value)}
+                        disabled={!isEditing}
+                        className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                      />
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Coverage"
+                          value={pkg.coverage || ''}
+                          onChange={(e) => handlePackagingChange(index, 'coverage', e.target.value)}
+                          disabled={!isEditing}
+                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                        />
+                        {isEditing && (
+                          <button
+                            type="button"
+                            onClick={() => removePackagingItem(index)}
+                            className="p-2 text-red-500 hover:bg-red-50 rounded-md transition-colors"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Additional Information */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Usage Instructions
+                  </label>
+                  <textarea
+                    value={formData.instructions || ''}
+                    onChange={(e) => handleInputChange('instructions', e.target.value)}
+                    disabled={!isEditing}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Storage Conditions
+                  </label>
+                  <textarea
+                    value={formData.storage || ''}
+                    onChange={(e) => handleInputChange('storage', e.target.value)}
+                    disabled={!isEditing}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Safety Precautions
+                  </label>
+                  <textarea
+                    value={formData.safety_precautions || ''}
+                    onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
+                    disabled={!isEditing}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    First Aid Measures
+                  </label>
+                  <textarea
+                    value={formData.safety_first_aid || ''}
+                    onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
+                    disabled={!isEditing}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                  />
+                </div>
+              </div>
+
+              {/* Status */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Status
+                </label>
+                <select
+                  value={formData.status || 'active'}
+                  onChange={(e) => handleInputChange('status', e.target.value as 'active' | 'inactive' | 'draft')}
+                  disabled={!isEditing}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0055A3] disabled:bg-gray-100"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="draft">Draft</option>
+                </select>
               </div>
             </div>
 
             {/* Footer */}
             {isEditing && (
-              <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+              <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200">
                 <button
                   onClick={onClose}
-                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                  className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSave}
-                  disabled={saving}
-                  className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
+                  disabled={saving || uploading}
+                  className="flex items-center px-6 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
                   {saving ? (
                     <>
@@ -1156,8 +1037,8 @@ const ProductModal = ({
               </div>
             )}
           </motion.div>
-        </div> 
-      </div>
+        </div>
+      )}
     </AnimatePresence>
   );
 };
