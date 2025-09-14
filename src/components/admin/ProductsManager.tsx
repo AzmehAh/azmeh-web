@@ -28,8 +28,6 @@ interface TechnicalSpec {
 
 interface PackagingSize {
   size: string;
-  type?: string;
-  coverage?: string;
 }
 
 interface Product {
@@ -65,24 +63,6 @@ const ProductsManager = () => {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
 
-  // دالة مساعدة لتحويل الحقول
-  const parseField = (field: any, defaultValue: any = []): any => {
-    if (Array.isArray(field)) return field;
-    if (typeof field === 'string' && field.trim() !== '') {
-      try {
-        const parsed = JSON.parse(field);
-        return Array.isArray(parsed) ? parsed : defaultValue;
-      } catch (e) {
-        // إذا فشل التحويل، حاول تقسيم النص بفواصل
-        if (typeof field === 'string') {
-          return field.split(',').map(item => item.trim()).filter(item => item !== '');
-        }
-        return defaultValue;
-      }
-    }
-    return defaultValue;
-  };
-
   useEffect(() => {
     fetchProducts();
   }, []);
@@ -102,6 +82,7 @@ const ProductsManager = () => {
 
   const fetchProducts = async () => {
     try {
+      // جلب جميع المنتجات
       const { data: productsData, error: productsError } = await supabase
         .from('products')
         .select('*')
@@ -109,28 +90,26 @@ const ProductsManager = () => {
 
       if (productsError) throw productsError;
       
+      // جلب جميع الصور
       const { data: imagesData, error: imagesError } = await supabase
         .from('product_images')
         .select('*');
 
       if (imagesError) throw imagesError;
       
-      // Parse all fields correctly
+      // Parse array fields that might be stored as strings
       const parsedData = (productsData || []).map(item => ({
         ...item,
-        features: parseField(item.features, []),
-        applications: parseField(item.applications, []),
-        packaging: parseField(item.packaging, []),
-        technical_specs: parseField(item.technical_specs, []),
-        instructions: item.instructions || '',
-        storage: item.storage || '',
-        safety_precautions: item.safety_precautions || '',
-        safety_first_aid: item.safety_first_aid || ''
-      })) as Product[];
+        features: parseArrayField(item.features),
+        applications: parseArrayField(item.applications),
+        packaging: parseArrayField(item.packaging),
+        technical_specs: parseArrayField(item.technical_specs)
+      }));
       
       setProducts(parsedData);
       setFilteredProducts(parsedData);
       
+      // تنظيم الصور حسب product_id
       const imagesByProduct: Record<string, ProductImage[]> = {};
       (imagesData || []).forEach(image => {
         if (!imagesByProduct[image.product_id]) {
@@ -147,10 +126,24 @@ const ProductsManager = () => {
     }
   };
 
+  // Helper function to parse array fields that might be stored as strings
+  const parseArrayField = (field: any): any[] => {
+    if (Array.isArray(field)) return field;
+    if (typeof field === 'string') {
+      try {
+        return JSON.parse(field);
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  };
+
   const deleteProduct = async (id: string) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
     try {
+      // First delete related images
       const { error: imageError } = await supabase
         .from('product_images')
         .delete()
@@ -158,6 +151,7 @@ const ProductsManager = () => {
       
       if (imageError) throw imageError;
       
+      // Then delete the product
       const { error } = await supabase
         .from('products')
         .delete()
@@ -378,7 +372,6 @@ const ProductsManager = () => {
           onUploadImage={uploadImage}
           uploading={uploading}
           productImages={productImages}
-          parseField={parseField}
         />
       )}
     </div>
@@ -394,8 +387,7 @@ const ProductModal = ({
   onSave,
   onUploadImage,
   uploading,
-  productImages,
-  parseField
+  productImages
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -405,7 +397,6 @@ const ProductModal = ({
   onUploadImage: (file: File) => Promise<string | null>;
   uploading: boolean;
   productImages: Record<string, ProductImage[]>;
-  parseField: (field: any, defaultValue: any) => any;
 }) => {
   const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
@@ -431,12 +422,13 @@ const ProductModal = ({
 
   useEffect(() => {
     if (product) {
+      // Ensure all array fields are properly initialized
       const productData = {
         ...product,
-        features: parseField(product.features, []),
-        applications: parseField(product.applications, []),
-        packaging: parseField(product.packaging, []),
-        technical_specs: parseField(product.technical_specs, []),
+        features: Array.isArray(product.features) ? product.features : [],
+        applications: Array.isArray(product.applications) ? product.applications : [],
+        packaging: Array.isArray(product.packaging) ? product.packaging : [],
+        technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
         instructions: product.instructions || '',
         storage: product.storage || '',
         safety_precautions: product.safety_precautions || '',
@@ -466,28 +458,39 @@ const ProductModal = ({
       });
       setImages([]);
     }
-  }, [product, productImages, parseField]);
+  }, [product, productImages]);
 
   const handleSave = async () => {
     setSaving(true);
     try {
       let productId = product?.id;
 
-      const productData = { 
-        ...formData,
-        // الحقول النصية العادية تبقى كما هي
-        instructions: formData.instructions || '',
-        storage: formData.storage || '',
-        safety_precautions: formData.safety_precautions || '',
-        safety_first_aid: formData.safety_first_aid || '',
-        // الحقول المصفوفة يتم تحويلها لـ JSON
-        features: JSON.stringify(formData.features || []),
-        applications: JSON.stringify(formData.applications || []),
-        packaging: JSON.stringify(formData.packaging || []),
-        technical_specs: JSON.stringify(formData.technical_specs || [])
-      };
+      // Prepare product data without images
+    const productData = {
+  ...formData,
+
+  // Arrays (TEXT[])
+  features: Array.isArray(formData.features) ? formData.features : [],
+  applications: Array.isArray(formData.applications) ? formData.applications : [],
+  safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
+  safety_precautions: Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
+  storage: Array.isArray(formData.storage) ? formData.storage : [],
+
+  // JSONB
+  packaging:
+    typeof formData.packaging === "string"
+      ? JSON.parse(formData.packaging || "{}")
+      : formData.packaging || {},
+
+  technical_specs:
+    typeof formData.technical_specs === "string"
+      ? JSON.parse(formData.technical_specs || "{}")
+      : formData.technical_specs || {},
+};
+
 
       if (product) {
+        // Update product
         const { error } = await supabase
           .from('products')
           .update(productData)
@@ -495,6 +498,7 @@ const ProductModal = ({
         if (error) throw error;
         productId = product.id;
       } else {
+        // Create new product
         const { data, error } = await supabase
           .from('products')
           .insert([productData])
@@ -503,8 +507,40 @@ const ProductModal = ({
         productId = data?.[0]?.id;
       }
 
+      // Manage images only if we have a product ID
       if (productId) {
-        await manageProductImages(productId);
+        // Get current images to compare
+        const { data: existingImages } = await supabase
+          .from('product_images')
+          .select('*')
+          .eq('product_id', productId);
+
+        // Delete images that were removed
+        const imagesToKeep = images.filter(img => img.id).map(img => img.id);
+        const imagesToDelete = existingImages?.filter(img => !imagesToKeep.includes(img.id)) || [];
+        
+        for (const img of imagesToDelete) {
+          await supabase
+            .from('product_images')
+            .delete()
+            .eq('id', img.id);
+        }
+
+        // Add/update images
+        for (const img of images) {
+          if (img.id) {
+            // Update existing image
+            await supabase
+              .from('product_images')
+              .update({ image_url: img.image_url })
+              .eq('id', img.id);
+          } else {
+            // Add new image
+            await supabase
+              .from('product_images')
+              .insert([{ product_id: productId, image_url: img.image_url }]);
+          }
+        }
       }
 
       onSave();
@@ -517,380 +553,627 @@ const ProductModal = ({
     }
   };
 
-  const manageProductImages = async (productId: string) => {
-    const { data: existingImages } = await supabase
-      .from('product_images')
-      .select('*')
-      .eq('product_id', productId);
-
-    const imagesToKeep = images.filter(img => img.id).map(img => img.id);
-    const imagesToDelete = existingImages?.filter(img => !imagesToKeep.includes(img.id)) || [];
-    
-    for (const img of imagesToDelete) {
-      await supabase
-        .from('product_images')
-        .delete()
-        .eq('id', img.id);
-    }
-
-    for (const img of images) {
-      if (img.id) {
-        await supabase
-          .from('product_images')
-          .update({ image_url: img.image_url })
-          .eq('id', img.id);
-      } else {
-        await supabase
-          .from('product_images')
-          .insert([{ product_id: productId, image_url: img.image_url }]);
-      }
-    }
-  };
-
   const handleInputChange = (field: string, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
   const handleArrayInputChange = (field: string, index: number, value: string) => {
-  setFormData(prev => ({
-    ...prev,
-    [field]: (prev[field as keyof Product] as any[]).map((item, i) => 
-      i === index ? value : item
-    )
-  }));
-};
+    setFormData(prev => {
+      const currentArray = Array.isArray(prev[field]) ? [...(prev[field] as string[])] : [];
+      currentArray[index] = value;
+      return { ...prev, [field]: currentArray };
+    });
+  };
 
-const addArrayItem = (field: string, defaultValue: any = '') => {
-  setFormData(prev => ({
-    ...prev,
-    [field]: [...(prev[field as keyof Product] as any[]), defaultValue]
-  }));
-};
+  const addArrayItem = (field: string, defaultValue: any = '') => {
+    setFormData(prev => {
+      const currentArray = Array.isArray(prev[field]) ? [...(prev[field] as any[])] : [];
+      return { ...prev, [field]: [...currentArray, defaultValue] };
+    });
+  };
 
-const removeArrayItem = (field: string, index: number) => {
-  setFormData(prev => ({
-    ...prev,
-    [field]: (prev[field as keyof Product] as any[]).filter((_, i) => i !== index)
-  }));
-};
+  const removeArrayItem = (field: string, index: number) => {
+    setFormData(prev => {
+      const currentArray = Array.isArray(prev[field]) ? [...(prev[field] as any[])] : [];
+      return { ...prev, [field]: currentArray.filter((_, i) => i !== index) };
+    });
+  };
 
-const handleSpecChange = (index: number, field: keyof TechnicalSpec, value: string) => {
-  setFormData(prev => ({
-    ...prev,
-    technical_specs: (prev.technical_specs || []).map((spec, i) => 
-      i === index ? { ...spec, [field]: value } : spec
-    )
-  }));
-};
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
-const handlePackagingChange = (index: number, field: keyof PackagingSize, value: string) => {
-  setFormData(prev => ({
-    ...prev,
-    packaging: (prev.packaging || []).map((pkg, i) => 
-      i === index ? { ...pkg, [field]: value } : pkg
-    )
-  }));
-};
-
-const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  const files = e.target.files;
-  if (!files || files.length === 0) return;
-
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    const imageUrl = await onUploadImage(file);
-    if (imageUrl) {
-      setImages(prev => [...prev, { image_url: imageUrl }]);
+    const newImages = [...images];
+    
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      const imageUrl = await onUploadImage(file);
+      if (imageUrl) {
+        newImages.push({ image_url: imageUrl });
+      }
     }
-  }
-};
+    
+    setImages(newImages);
+    e.target.value = ''; // Reset file input
+  };
 
-const removeImage = (index: number) => {
-  setImages(prev => prev.filter((_, i) => i !== index));
-};
+  const removeImage = (index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+  };
 
-return (
-  <AnimatePresence>
-    {isOpen && (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+  if (!isOpen) return null;
+
+  return (
+    <AnimatePresence>
+      <div className="fixed inset-0 z-50 overflow-y-auto">
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          className="bg-white rounded-lg shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto"
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-900">
-              {isEditing ? (product ? 'Edit Product' : 'Add Product') : 'View Product'}
-            </h2>
-            <button
-              onClick={onClose}
-              className="p-2 text-gray-400 hover:text-gray-600 rounded-full hover:bg-gray-100"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black bg-opacity-50"
+          onClick={onClose}
+        />
 
-          {/* Content */}
-          <div className="p-6 space-y-6">
-            {/* Basic Information */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Name *
-                </label>
-                <input
-                  type="text"
-                  value={formData.name || ''}
-                  onChange={(e) => handleInputChange('name', e.target.value)}
-                  disabled={!isEditing}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Code *
-                </label>
-                <input
-                  type="text"
-                  value={formData.code || ''}
-                  onChange={(e) => handleInputChange('code', e.target.value)}
-                  disabled={!isEditing}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Brand *
-                </label>
-                <input
-                  type="text"
-                  value={formData.brand || ''}
-                  onChange={(e) => handleInputChange('brand', e.target.value)}
-                  disabled={!isEditing}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Type *
-                </label>
-                <input
-                  type="text"
-                  value={formData.type || ''}
-                  onChange={(e) => handleInputChange('type', e.target.value)}
-                  disabled={!isEditing}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-                />
-              </div>
-            </div>
-
-            {/* Description */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Description
-              </label>
-              <textarea
-                value={formData.description || ''}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-                disabled={!isEditing}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-              />
-            </div>
-
-            {/* Features */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Features
-              </label>
-              <div className="space-y-2">
-                {(formData.features || []).map((feature, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={feature}
-                      onChange={(e) => handleArrayInputChange('features', index, e.target.value)}
-                      disabled={!isEditing}
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-                      placeholder="Enter feature"
-                    />
-                    {isEditing && (
-                      <button
-                        type="button"
-                        onClick={() => removeArrayItem('features', index)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-md"
-                      >
-                        <X className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-                {isEditing && (
-                  <button
-                    type="button"
-                    onClick={() => addArrayItem('features', '')}
-                    className="flex items-center text-sm text-[#0055A3] hover:text-blue-700"
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Add Feature
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Images */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Product Images
-              </label>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-                {images.map((image, index) => (
-                  <div key={index} className="relative group">
-                    <img
-                      src={image.image_url}
-                      alt={`Product image ${index + 1}`}
-                      className="w-full h-24 object-cover rounded-md"
-                    />
-                    {isEditing && (
-                      <button
-                        onClick={() => removeImage(index)}
-                        className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
-              {isEditing && (
-                <label className="flex items-center justify-center px-4 py-2 border border-dashed border-gray-300 rounded-md cursor-pointer hover:border-[#0055A3]">
-                  <Upload className="w-4 h-4 mr-2" />
-                  Upload Images
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                    disabled={uploading}
-                  />
-                </label>
-              )}
-            </div>
-
-            {/* Technical Specifications */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Technical Specifications
-              </label>
-              <div className="space-y-3">
-                {(formData.technical_specs || []).map((spec, index) => (
-                  <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-3 items-start">
-                    <input
-                      type="text"
-                      value={spec.property}
-                      onChange={(e) => handleSpecChange(index, 'property', e.target.value)}
-                      disabled={!isEditing}
-                      placeholder="Property"
-                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-                    />
-                    <input
-                      type="text"
-                      value={spec.value}
-                      onChange={(e) => handleSpecChange(index, 'value', e.target.value)}
-                      disabled={!isEditing}
-                      placeholder="Value"
-                      className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-                    />
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={spec.standard}
-                        onChange={(e) => handleSpecChange(index, 'standard', e.target.value)}
-                        disabled={!isEditing}
-                        placeholder="Standard"
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-                      />
-                      {isEditing && (
-                        <button
-                          type="button"
-                          onClick={() => removeArrayItem('technical_specs', index)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded-md"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-                {isEditing && (
-                  <button
-                    type="button"
-                    onClick={() => addArrayItem('technical_specs', { property: '', value: '', standard: '' })}
-                    className="flex items-center text-sm text-[#0055A3] hover:text-blue-700"
-                  >
-                    <Plus className="w-4 h-4 mr-1" />
-                    Add Specification
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Status */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Status
-              </label>
-              <select
-                value={formData.status || 'active'}
-                onChange={(e) => handleInputChange('status', e.target.value as 'active' | 'inactive' | 'draft')}
-                disabled={!isEditing}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#0055A3] disabled:bg-gray-100"
-              >
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-                <option value="draft">Draft</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Footer */}
-          {isEditing && (
-            <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200">
+        <div className="flex min-h-full items-center justify-center p-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b">
+              <h3 className="text-lg font-semibold text-gray-900">
+                {isEditing ? (product ? 'Edit Product' : 'Add Product') : 'View Product'}
+              </h3>
               <button
                 onClick={onClose}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 rounded-md hover:bg-gray-100"
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={saving || uploading}
-                className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {saving ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Product
-                  </>
-                )}
+                <X className="w-5 h-5" />
               </button>
             </div>
-          )}
-        </motion.div>
-      </div>
-    )}
-  </AnimatePresence>
-);
-   
 
+            {/* Content */}
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Basic Info */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Product Name *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.name || ''}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.name}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Product Code *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.code || ''}
+                        onChange={(e) => handleInputChange('code', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.code}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Brand *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.brand || ''}
+                        onChange={(e) => handleInputChange('brand', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.brand}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Type *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.type || ''}
+                        onChange={(e) => handleInputChange('type', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.type}</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Additional Info */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Material *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.material || ''}
+                        onChange={(e) => handleInputChange('material', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.material}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Usage *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.usage || ''}
+                        onChange={(e) => handleInputChange('usage', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.usage}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Status
+                    </label>
+                    {isEditing ? (
+                      <select
+                        value={formData.status || 'active'}
+                        onChange={(e) => handleInputChange('status', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      >
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="draft">Draft</option>
+                      </select>
+                    ) : (
+                      <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                        formData.status === 'active' 
+                          ? 'bg-green-100 text-green-800' 
+                          : formData.status === 'inactive'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      }`}>
+                        {formData.status}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description *
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.description || ''}
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900">{formData.description}</p>
+                )}
+              </div>
+
+              {/* Technical Description */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Technical Description
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.technical_description || ''}
+                    onChange={(e) => handleInputChange('technical_description', e.target.value)}
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900">{formData.technical_description}</p>
+                )}
+              </div>
+
+              {/* Features */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Features
+                </label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {(formData.features || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('features', idx, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('features', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('features', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add Feature
+                    </button>
+                  </div>
+                ) : (
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.features || []).map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Applications */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Applications
+                </label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {(formData.applications || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('applications', idx, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('applications', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('applications', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add Application
+                    </button>
+                  </div>
+                ) : (
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.applications || []).map((a, i) => (
+                      <li key={i}>{a}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Instructions */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Instructions
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.instructions || ''}
+                    onChange={(e) => handleInputChange('instructions', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900 whitespace-pre-line">{formData.instructions}</p>
+                )}
+              </div> 
+ 
+              {/* Packaging */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Packaging Sizes
+                </label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {(formData.packaging || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item.size || ''}
+                          onChange={(e) => {
+                            const newPackaging = [...(formData.packaging || [])];
+                            newPackaging[idx] = { ...newPackaging[idx], size: e.target.value };
+                            setFormData(prev => ({ ...prev, packaging: newPackaging }));
+                          }}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                          placeholder="Size (e.g., 1L, 5kg)"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('packaging', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('packaging', { size: '' })}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add Size
+                    </button>
+                  </div>
+                ) : (
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.packaging || []).map((p, i) => (
+                      <li key={i}>{p.size}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Storage */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Storage
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.storage || ''}
+                    onChange={(e) => handleInputChange('storage', e.target.value)}
+                    rows={2}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900 whitespace-pre-line">{formData.storage}</p>
+                )}
+              </div>
+
+              {/* Product Images */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Product Images
+                </label>
+
+                {isEditing ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Images
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                          disabled={uploading}
+                        />
+                      </label>
+                      {uploading && <span className="text-gray-500">Uploading...</span>}
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                      {images.map((img, idx) => (
+                        <div key={img.id || idx} className="relative group">
+                          <img
+                            src={img.image_url}
+                            alt={`Product ${idx + 1}`}
+                            className="w-full h-32 object-cover rounded border"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <button
+                              type="button"
+                              onClick={() => removeImage(idx)}
+                              className="p-1 bg-red-500 text-white rounded"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {images.map((img, i) => (
+                      <img
+                        key={i}
+                        src={img.image_url}
+                        alt={`Product Image ${i + 1}`}
+                        className="w-full h-32 object-cover rounded border"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Safety Precautions */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Safety Precautions
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.safety_precautions || ''}
+                    onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900 whitespace-pre-line">{formData.safety_precautions}</p>
+                )}
+              </div>
+
+              {/* Safety First Aid
+              {/* Safety First Aid */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Safety First Aid
+                </label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.safety_first_aid || ''}
+                    onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900 whitespace-pre-line">{formData.safety_first_aid}</p>
+                )}
+              </div>
+
+              {/* Technical Specs */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Technical Specifications
+                </label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {(formData.technical_specs || []).map((item, idx) => (
+                      <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
+                        <input
+                          type="text"
+                          placeholder="Property"
+                          value={item.property || ''}
+                          onChange={(e) => {
+                            const newSpecs = [...(formData.technical_specs || [])];
+                            newSpecs[idx] = { ...newSpecs[idx], property: e.target.value };
+                            setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+                          }}
+                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Value"
+                          value={item.value || ''}
+                          onChange={(e) => {
+                            const newSpecs = [...(formData.technical_specs || [])];
+                            newSpecs[idx] = { ...newSpecs[idx], value: e.target.value };
+                            setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+                          }}
+                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Standard"
+                          value={item.standard || ''}
+                          onChange={(e) => {
+                            const newSpecs = [...(formData.technical_specs || [])];
+                            newSpecs[idx] = { ...newSpecs[idx], standard: e.target.value };
+                            setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+                          }}
+                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('technical_specs', idx)}
+                          className="px-2 py-2 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('technical_specs', { property: '', value: '', standard: '' })}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add Specification
+                    </button>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full border border-gray-200 rounded text-sm">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="border px-3 py-2 text-left">Property</th>
+                          <th className="border px-3 py-2 text-left">Value</th>
+                          <th className="border px-3 py-2 text-left">Standard</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {(formData.technical_specs || []).map((item, i) => (
+                          <tr key={i}>
+                            <td className="border px-3 py-2">{item.property}</td>
+                            <td className="border px-3 py-2">{item.value}</td>
+                            <td className="border px-3 py-2">{item.standard}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer */}
+            {isEditing && (
+              <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+                <button
+                  onClick={onClose}
+                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
+                >
+                  {saving ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-4 h-4 mr-2" />
+                      Save Product
+                    </> 
+                  )}
+                </button>
+              </div>
+            )}
+          </motion.div>
+        </div> 
+      </div>
+    </AnimatePresence>
+  );
 };
 
-export default ProductsManager;
+export default ProductsManager; 
