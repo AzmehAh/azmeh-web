@@ -13,7 +13,7 @@ import {
   X,
   Upload
 } from 'lucide-react';
-import { supabase,  ProductFilterType, ProductFilterValue } from '../../lib/supabase';
+import { supabase } from '../../lib/supabase';
 
 // Types
 interface ProductImage {
@@ -385,7 +385,6 @@ const ProductsManager = () => {
   );
 };
 
-
 // Product Modal Component
 const ProductModal = ({ 
   isOpen, 
@@ -427,28 +426,7 @@ const ProductModal = ({
   });
   const [images, setImages] = useState<ProductImage[]>([]);
   const [saving, setSaving] = useState(false);
-const ProductModal = ({ ...props }) => {
-  const [brands, setBrands] = useState<ProductFilterValue[]>([]);
 
-  useEffect(() => {
-    fetchBrands();
-  }, []);
-
-  const fetchBrands = async () => {
-    try {
-      const { data } = await supabase
-        .from('product_filter_types')
-        .select('id, name, product_filter_values(*)')
-        .eq('name', 'Brand')
-        .single();
-
-      if (data?.product_filter_values) {
-        setBrands(data.product_filter_values);
-      }
-    } catch (error) {
-      console.error('Error fetching brands:', error);
-    }
-  };
   useEffect(() => {
     if (product) {
       // Ensure all array fields are properly initialized
@@ -635,7 +613,6 @@ const ProductModal = ({ ...props }) => {
 
   if (!isOpen) return null;
 
-
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -691,8 +668,7 @@ const ProductModal = ({ ...props }) => {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Product Code *
-                    </label>
-                    {isEditing ? (
+                     {isEditing ? (
                       <input
                         type="text"
                         value={formData.code || ''}
@@ -702,29 +678,23 @@ const ProductModal = ({ ...props }) => {
                     ) : (
                       <p className="text-gray-900">{formData.code}</p>
                     )}
-                   </div>
+                  </div>
    
-                 <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2">
-        Brand *
-      </label> 
-      {isEditing ? (
-        <select
-          value={formData.brand || ''}
-          onChange={(e) => handleInputChange('brand', e.target.value)}
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-        >
-          <option value="">Select a brand</option>
-          {brands.map((b) => (
-            <option key={b.id} value={b.value}>
-              {b.display_name || b.value}
-            </option>
-          ))}
-        </select>
-      ) : (
-        <p className="text-gray-900">{formData.brand}</p>
-      )}
-    </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Brand *
+                    </label> 
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.brand || ''}
+                        onChange={(e) => handleInputChange('brand', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                       <p className="text-gray-900">{formData.brand}</p>
+                    )}
+                  </div> 
 
                   <div> 
                     <label className="block text-sm font-medium text-gray-700 mb-2">
