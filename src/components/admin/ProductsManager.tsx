@@ -16,7 +16,7 @@ import {
 import { supabase } from '../../lib/supabase';
 
 // Types
-interface ProductImage {
+interface ProductImage { 
   id?: string;
   image_url: string;
   product_id?: string;
@@ -64,11 +64,10 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  
 
   useEffect(() => {
     fetchProducts();
-  }, []); 
+  }, []);
 
   useEffect(() => {
     if (searchTerm) {
@@ -87,7 +86,7 @@ const ProductsManager = () => {
     try {
       // جلب جميع المنتجات
       const { data: productsData, error: productsError } = await supabase
-        .from('products') 
+        .from('products')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -643,7 +642,7 @@ const ProductModal = ({
                 <X className="w-5 h-5" />
               </button>
             </div>
- 
+
             {/* Content */}
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -668,7 +667,8 @@ const ProductModal = ({
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Product Code *
-                     {isEditing ? (
+                    </label>
+                    {isEditing ? (
                       <input
                         type="text"
                         value={formData.code || ''}
@@ -679,11 +679,11 @@ const ProductModal = ({
                       <p className="text-gray-900">{formData.code}</p>
                     )}
                   </div>
-   
+
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Brand *
-                    </label> 
+                    </label>
                     {isEditing ? (
                       <input
                         type="text"
@@ -692,11 +692,11 @@ const ProductModal = ({
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                       />
                     ) : (
-                       <p className="text-gray-900">{formData.brand}</p>
+                      <p className="text-gray-900">{formData.brand}</p>
                     )}
-                  </div> 
+                  </div>
 
-                  <div> 
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Type *
                     </label>
@@ -1272,4 +1272,4 @@ const ProductModal = ({
   );
 };
 
-export default ProductsManager; 
+export default ProductsManager;
