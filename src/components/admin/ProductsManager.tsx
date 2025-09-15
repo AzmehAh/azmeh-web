@@ -1401,10 +1401,14 @@ const ProductModal = ({
                 </button>
               </div>
             )}
-          </motion.div>
+          
+          </motion.div >
+          
         </div> 
       </div>
+    
     </AnimatePresence>
+    
   );
 };
 
