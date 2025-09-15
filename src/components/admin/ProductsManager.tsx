@@ -1046,7 +1046,8 @@ const ProductModal = ({
                         formData.status === 'active' 
                           ? 'bg-green-100 text-green-800' 
                           : formData.status === 'inactive'
-                          ? 'bg-red-100 text-red                          : 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-red-100 text-red
+                                                  : 'bg-yellow-100 text-yellow-800'
                       }`}>
                         {formData.status}
                       </span>
