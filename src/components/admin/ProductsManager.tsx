@@ -1096,23 +1096,47 @@ const ProductModal = ({
               </div>
 
 
-              {/* Safety First Aid
-              {/* Safety First Aid */}
+              {/* safety_first_aid*/}
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Safety First Aid
+                safety_first_aid
                 </label>
                 {isEditing ? (
-                  <textarea
-                    value={formData.safety_first_aid || ''}
-                    onChange={(e) => handleInputChange('safety_first_aid', e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
+                  <div className="space-y-2">
+                    {(formData.features || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('safety_first_aid', idx, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('safety_first_aid', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('safety_first_aid', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add safety_first_aid
+                    </button>
+                  </div>
                 ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.safety_first_aid}</p>
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.safety_first_aid || []).map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
+
 
               {/* Technical Specs */}
               <div className="mt-6">
