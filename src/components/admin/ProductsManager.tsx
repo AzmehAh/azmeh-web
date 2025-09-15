@@ -131,7 +131,7 @@ const ProductsManager = () => {
       setLoading(false);
     }
   };
- 
+
   // Helper function to parse array fields that might be stored as strings
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
@@ -609,26 +609,7 @@ const ProductModal = ({
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
- const getFilterValuesByType = (typeName: string): ProductFilterValue[] => {
-  const filterType = filterTypes.find(ft => 
-    ft.name.toLowerCase().includes(typeName.toLowerCase()) ||
-    ft.description?.toLowerCase().includes(typeName.toLowerCase())
-  );
-  
-  if (!filterType) return [];
-  
-  return filterValues.filter(fv => fv.filter_type_id === filterType.id);
-}; // جلب كل الـ Brands
-const brands = getFilterValuesByType('brand');
 
-// جلب كل الـ Types  
-const types = getFilterValuesByType('type');
-
-// جلب كل الـ Materials
-const materials = getFilterValuesByType('material');
-
-// جلب كل الـ Usages
-const usages = getFilterValuesByType('usage');
   if (!isOpen) return null;
 
   return (
@@ -698,17 +679,22 @@ const usages = getFilterValuesByType('usage');
                       <p className="text-gray-900">{formData.code}</p>
                     )}
                   </div>
-<select
-  value={formData.brand_id || ''}
-  onChange={(e) => handleInputChange('brand_id', e.target.value)}
->
-  <option value="">Select a brand</option>
-  {brands.map(brand => (
-    <option key={brand.id} value={brand.id}>
-      {brand.display_name || brand.value}
-    </option>
-  ))}
-</select> 
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Brand *
+                    </label> 
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.brand || ''}
+                        onChange={(e) => handleInputChange('brand', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.brand}</p>
+                    )}
+                  </div>
 
                   <div> 
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1280,7 +1266,7 @@ const usages = getFilterValuesByType('usage');
               </div>
             )}
           </motion.div>
-        </div>  
+        </div> 
       </div>
     </AnimatePresence>
   );
