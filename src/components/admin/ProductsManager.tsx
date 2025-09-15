@@ -1054,22 +1054,47 @@ const ProductModal = ({
                 )}
               </div>
 
-              {/* Safety Precautions */}
+                {/* safety_precautions */}
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Safety Precautions
+                 safety_precautions
                 </label>
                 {isEditing ? (
-                  <textarea
-                    value={formData.safety_precautions || ''}
-                    onChange={(e) => handleInputChange('safety_precautions', e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
+                  <div className="space-y-2">
+                    {(formData.safety_precautions|| []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('safety_precautions', idx, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('safety_precautions', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('safety_precautions', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add safety_precautions
+                    </button>
+                  </div>
                 ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.safety_precautions}</p>
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.safety_precautions || []).map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
                 )}
               </div>
+
 
               {/* Safety First Aid
               {/* Safety First Aid */}
