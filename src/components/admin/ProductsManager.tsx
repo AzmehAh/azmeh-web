@@ -428,13 +428,15 @@ const ProductModal = ({
   const [images, setImages] = useState<ProductImage[]>([]);
   const [saving, setSaving] = useState(false);
   const [brands, setBrands] = useState<ProductFilterValue[]>([]);
+   const [Material ,setMaterial] = useState<ProductFilterValue[]>([]);
   const [types, setTypes] = useState<ProductFilterValue[]>([]); // إضافة حالة للأنواع
   const [usages, setUsages] = useState<ProductFilterValue[]>([]); // إضافة حالة للاستخدامات
 
   useEffect(() => {
     fetchBrands();
     fetchTypes(); // جلب الأنواع
-    fetchUsages(); // جلب الاستخدامات
+    fetchUsages();
+    fetchMaterials();// جلب الاستخدامات
     
     if (product) {
       // تهيئة بيانات المنتج
