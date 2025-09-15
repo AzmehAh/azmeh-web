@@ -13,10 +13,10 @@ import {
   X,
   Upload
 } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
+import { supabase,  ProductFilterType, ProductFilterValue } from '../../lib/supabase';
 
 // Types
-interface ProductImage { 
+interface ProductImage {
   id?: string;
   image_url: string;
   product_id?: string;
@@ -64,10 +64,11 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, []); 
 
   useEffect(() => {
     if (searchTerm) {
@@ -86,7 +87,7 @@ const ProductsManager = () => {
     try {
       // جلب جميع المنتجات
       const { data: productsData, error: productsError } = await supabase
-        .from('products')
+        .from('products') 
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -367,7 +368,7 @@ const ProductsManager = () => {
         </div>
       )}
 
-      {/* Product Modal */}
+     {/* Product Modal */}
       {isModalOpen && (
         <ProductModal
           isOpen={isModalOpen}
@@ -384,7 +385,7 @@ const ProductsManager = () => {
   );
 };
 
-// Product Modal Component
+// Product Modal Component - التصحيح هنا
 const ProductModal = ({ 
   isOpen, 
   onClose, 
@@ -425,6 +426,64 @@ const ProductModal = ({
   });
   const [images, setImages] = useState<ProductImage[]>([]);
   const [saving, setSaving] = useState(false);
+  const [brands, setBrands] = useState<ProductFilterValue[]>([]); // إضافة حالة للبراندات
+
+  useEffect(() => {
+    fetchBrands();
+    if (product) {
+      // تهيئة بيانات المنتج
+      const productData = {
+        ...product,
+        features: Array.isArray(product.features) ? product.features : [],
+        applications: Array.isArray(product.applications) ? product.applications : [],
+        packaging: Array.isArray(product.packaging) ? product.packaging : [],
+        technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
+        instructions: Array.isArray(product.instructions) ? product.instructions : [],
+        safety_first_aid: Array.isArray(product.safety_first_aid) ? product.safety_first_aid : [],
+        safety_precautions: Array.isArray(product.safety_precautions) ? product.safety_precautions : [],
+      };
+      setFormData(productData);
+      setImages(productImages[product.id] || []);
+    } else {
+      setFormData({
+        name: '',
+        code: '',
+        brand: '',
+        type: '',
+        material: '',
+        usage: '',
+        description: '',
+        technical_description: '',
+        features: [],
+        applications: [],
+        instructions: [],
+        packaging: [],
+        storage: '',
+        safety_precautions: [],
+        safety_first_aid: [],
+        technical_specs: [],
+        status: 'active'
+      });
+      setImages([]);
+    }
+  }, [product, productImages]);
+
+  // دالة جلب البراندات من قاعدة البيانات
+  const fetchBrands = async () => {
+    try {
+      const { data } = await supabase
+        .from('product_filter_types')
+        .select('id, name, product_filter_values(*)')
+        .eq('name', 'Brand')
+        .single();
+
+      if (data?.product_filter_values) {
+        setBrands(data.product_filter_values);
+      }
+    } catch (error) {
+      console.error('Error fetching brands:', error);
+    }
+  };
 
   useEffect(() => {
     if (product) {
@@ -612,6 +671,7 @@ const ProductModal = ({
 
   if (!isOpen) return null;
 
+
   return (
     <AnimatePresence>
       <div className="fixed inset-0 z-50 overflow-y-auto">
@@ -642,7 +702,7 @@ const ProductModal = ({
                 <X className="w-5 h-5" />
               </button>
             </div>
-
+ 
             {/* Content */}
             <div className="p-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -678,25 +738,31 @@ const ProductModal = ({
                     ) : (
                       <p className="text-gray-900">{formData.code}</p>
                     )}
-                  </div>
+                   </div>
+   
+                 <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Brand *
+      </label> 
+      {isEditing ? (
+        <select
+          value={formData.brand || ''}
+          onChange={(e) => handleInputChange('brand', e.target.value)}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+        >
+          <option value="">Select a brand</option>
+          {brands.map((b) => (
+            <option key={b.id} value={b.value}>
+              {b.display_name || b.value}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <p className="text-gray-900">{formData.brand}</p>
+      )}
+    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Brand *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.brand || ''}
-                        onChange={(e) => handleInputChange('brand', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.brand}</p>
-                    )}
-                  </div>
-
-                  <div>
+                  <div> 
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Type *
                     </label>
@@ -1272,4 +1338,4 @@ const ProductModal = ({
   );
 };
 
-export default ProductsManager;
+export default ProductsManager; 
