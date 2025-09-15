@@ -552,7 +552,7 @@ const ProductModal = ({
         technical_description: '',
         features: [],
         applications: [],
-        instructions: [], 
+        instructions: [],
         packaging: [],
         storage: '',
         safety_precautions: [],
@@ -824,30 +824,23 @@ const ProductModal = ({
                   </div>
                 </div>
 
-           
-                  {/* حقل المادة (Material) المعتمد على البيانات من قاعدة البيانات */}
+                {/* Additional Info */}
+                <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Material *
                     </label>
                     {isEditing ? (
-                      <select
+                      <input 
+                        type="text"
                         value={formData.material || ''}
                         onChange={(e) => handleInputChange('material', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      >
-                        <option value="">Select a material</option>
-                        {materials.map((m) => (
-                          <option key={m.id} value={m.value}>
-                            {m.display_name || m.value}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     ) : (
                       <p className="text-gray-900">{formData.material}</p>
                     )}
                   </div>
-
 
                   {/* حقل الاستخدام (Usage) المعتمد على البيانات من قاعدة البيانات */}
                   <div>
