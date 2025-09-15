@@ -1099,11 +1099,11 @@ const ProductModal = ({
               {/* safety_first_aid*/}
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                safety_first_aid
+                safety first aid
                 </label>
                 {isEditing ? (
                   <div className="space-y-2">
-                    {(formData.features || []).map((item, idx) => (
+                    {(formData.safety_first_aid || []).map((item, idx) => (
                       <div key={idx} className="flex gap-2">
                         <input
                           type="text"
@@ -1125,7 +1125,7 @@ const ProductModal = ({
                       onClick={() => addArrayItem('safety_first_aid', '')}
                       className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
                     >
-                      + Add safety_first_aid
+                      + Add safety first aid
                     </button>
                   </div>
                 ) : (
