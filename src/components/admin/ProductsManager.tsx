@@ -64,6 +64,78 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [activeFilters, setActiveFilters] = useState({
+    brand: [],
+    type: [],
+    material: [],
+    usage: [],
+    status: []
+  });
+
+  // استخراج القيم الفريدة لكل حقل
+  const filterOptions = {
+    brand: Array.from(new Set(products.map(p => p.brand))).filter(Boolean),
+    type: Array.from(new Set(products.map(p => p.type))).filter(Boolean),
+    material: Array.from(new Set(products.map(p => p.material))).filter(Boolean),
+    usage: Array.from(new Set(products.map(p => p.usage))).filter(Boolean),
+    status: Array.from(new Set(products.map(p => p.status))).filter(Boolean)
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    let filtered = [...products];
+    
+    // تطبيق البحث
+    if (searchTerm) {
+      filtered = filtered.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+    
+    // تطبيق الفلاتر
+    Object.entries(activeFilters).forEach(([key, values]) => {
+      if (values.length > 0) {
+        filtered = filtered.filter(product => 
+          values.includes(product[key])
+        );
+      }
+    });
+    
+    setFilteredProducts(filtered);
+  }, [searchTerm, products, activeFilters]);
+
+  const handleFilterChange = (filterType, value) => {
+    setActiveFilters(prev => {
+      const newFilters = {...prev};
+      
+      if (newFilters[filterType].includes(value)) {
+        // إزالة الفلتر إذا كان موجوداً
+        newFilters[filterType] = newFilters[filterType].filter(v => v !== value);
+      } else {
+        // إضافة الفلتر
+        newFilters[filterType] = [...newFilters[filterType], value];
+      }
+      
+      return newFilters;
+    });
+  };
+
+  const clearAllFilters = () => {
+    setActiveFilters({
+      brand: [],
+      type: [],
+      material: [],
+      usage: [],
+      status: []
+    });
+  };
+
 
   useEffect(() => {
     fetchProducts();
