@@ -609,16 +609,7 @@ const ProductModal = ({
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
- const getFilterValuesByType = (typeName: string): ProductFilterValue[] => {
-  const filterType = filterTypes.find(ft => 
-    ft.name.toLowerCase().includes(typeName.toLowerCase()) ||
-    ft.description?.toLowerCase().includes(typeName.toLowerCase())
-  );
-  
-  if (!filterType) return [];
-  
-  return filterValues.filter(fv => fv.filter_type_id === filterType.id);
-}; // جلب كل الـ Brands
+ // جلب كل الـ Brands
 const brands = getFilterValuesByType('brand');
 
 // جلب كل الـ Types  
@@ -629,6 +620,16 @@ const materials = getFilterValuesByType('material');
 
 // جلب كل الـ Usages
 const usages = getFilterValuesByType('usage'); 
+  const getFilterValuesByType = (typeName: string): ProductFilterValue[] => {
+  const filterType = filterTypes.find(ft => 
+    ft.name.toLowerCase().includes(typeName.toLowerCase()) ||
+    ft.description?.toLowerCase().includes(typeName.toLowerCase())
+  );
+  
+  if (!filterType) return [];
+  
+  return filterValues.filter(fv => fv.filter_type_id === filterType.id);
+};
   if (!isOpen) return null;
 
   return (
