@@ -426,29 +426,6 @@ const ProductModal = ({
   });
   const [images, setImages] = useState<ProductImage[]>([]);
   const [saving, setSaving] = useState(false);
-const ProductModal = ({ ...props }) => {
-  const [brands, setBrands] = useState<ProductFilterValue[]>([]);
-
-  useEffect(() => {
-    fetchBrands();
-  }, []);
-
-  const fetchBrands = async () => {
-    try {
-      const { data } = await supabase
-        .from('product_filter_types')
-        .select('id, name, product_filter_values(*)')
-        .eq('name', 'Brand')
-        .single();
-
-      if (data?.product_filter_values) {
-        setBrands(data.product_filter_values);
-      }
-    } catch (error) {
-      console.error('Error fetching brands:', error);
-    }
-  };
-
 
   useEffect(() => {
     if (product) {
@@ -632,7 +609,30 @@ const ProductModal = ({ ...props }) => {
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
+  }; const ProductModal = ({ ...props }) => {
+  const [brands, setBrands] = useState<ProductFilterValue[]>([]);
+
+  useEffect(() => {
+    fetchBrands();
+  }, []);
+
+  const fetchBrands = async () => {
+    try {
+      const { data } = await supabase
+        .from('product_filter_types')
+        .select('id, name, product_filter_values(*)')
+        .eq('name', 'Brand')
+        .single();
+
+      if (data?.product_filter_values) {
+        setBrands(data.product_filter_values);
+      }
+    } catch (error) {
+      console.error('Error fetching brands:', error);
+    }
   };
+
+
 
   if (!isOpen) return null;
 
