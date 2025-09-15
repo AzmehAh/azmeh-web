@@ -44,9 +44,9 @@ interface Product {
   applications: string[];
   instructions:  string[];
   packaging: PackagingSize[];
-  storage: string;
-  safety_precautions: string;
-  safety_first_aid: string;
+  storage: string[];
+  safety_precautions: string[];
+  safety_first_aid:  string[];
   technical_specs: TechnicalSpec[];
   status: 'active' | 'inactive' | 'draft';
   created_at?: string;
@@ -100,8 +100,11 @@ const ProductsManager = () => {
       // Parse array fields that might be stored as strings
       const parsedData = (productsData || []).map(item => ({
         ...item,
-      instructions: parseArrayField(item.instructions),
+        instructions: parseArrayField(item.instructions),
         features: parseArrayField(item.features),
+        storage: parseArrayField(item.storage),
+        safety_precautions: parseArrayField(item. safety_precautions),
+        safety_first_aid: parseArrayField(item.safety_first_aid),
         applications: parseArrayField(item.applications),
         packaging: parseArrayField(item.packaging),
         technical_specs: parseArrayField(item.technical_specs)
@@ -412,9 +415,9 @@ const ProductModal = ({
     applications: [],
     instructions: [],
     packaging: [],
-    storage: '',
-    safety_precautions: '',
-    safety_first_aid: '',
+    storage: [],
+    safety_precautions: [],
+    safety_first_aid: [],
     technical_specs: [],
     status: 'active'
   });
@@ -430,10 +433,10 @@ const ProductModal = ({
         applications: Array.isArray(product.applications) ? product.applications : [],
         packaging: Array.isArray(product.packaging) ? product.packaging : [],
         technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
-      instructions: Array.isArray(product.instructions) ? product.instructions : [],
-        storage: product.storage || '',
-        safety_precautions: product.safety_precautions || '',
-        safety_first_aid: product.safety_first_aid || ''
+        instructions: Array.isArray(product.instructions) ? product.instructions : [],
+        storage: Array.isArray(product.storage) ? product.storage : [],
+        safety_first_aid: Array.isArray(product.safety_first_aid) ? product.safety_first_aid : [],
+        safety_precautions: Array.isArray(product.safety_precautions) ? product.safety_precautions : [],
       };
       setFormData(productData);
       setImages(productImages[product.id] || []);
@@ -451,9 +454,9 @@ const ProductModal = ({
         applications: [],
         instructions: [],
         packaging: [],
-        storage: '',
-        safety_precautions: '',
-        safety_first_aid: '',
+        storage: [],
+        safety_precautions: [],
+        safety_first_aid: [],
         technical_specs: [],
         status: 'active'
       });
@@ -472,11 +475,14 @@ const ProductModal = ({
 
   // Arrays (TEXT[])
   features: Array.isArray(formData.features) ? formData.features : [],
-       instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
-  applications: Array.isArray(formData.applications) ? formData.applications : [],
-  safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
-  safety_precautions: Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
-  storage: Array.isArray(formData.storage) ? formData.storage : [],
+      storage: Array.isArray(formData.storage) ? formData.storage : [],
+      safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
+      safety_precautions : Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
+      instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
+      applications: Array.isArray(formData.applications) ? formData.applications : [],
+      safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
+      safety_precautions: Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
+      storage: Array.isArray(formData.storage) ? formData.storage : [],
 
   // JSONB
   packaging:
@@ -892,7 +898,7 @@ const ProductModal = ({
                 </label>
                 {isEditing ? (
                   <div className="space-y-2">
-                    {(formData.features || []).map((item, idx) => (
+                    {(formData.instructions || []).map((item, idx) => (
                       <div key={idx} className="flex gap-2">
                         <input
                           type="text"
