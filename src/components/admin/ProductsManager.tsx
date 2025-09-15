@@ -64,10 +64,6 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-const brandOptions = Array.from(new Set(products.map(p => p.brand)));
-  const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
-const [activeFilters, setActiveFilters] = useState<{ [key: string]: string[] }>({});
-
 
   useEffect(() => {
     fetchProducts();
@@ -612,15 +608,7 @@ const ProductModal = ({
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
-  }; 
-  const brandOptions = Array.from(new Set(products.map(p => p.brand)));
-const brandOptions = Array.from(new Set(products.map(p => p.brand)));
-
- const filteredProducts = products.filter((p) => {
-  if (selectedBrand && p.brand !== selectedBrand) return false;
-  // هنا تضيف أي فلاتر ثانية إذا موجودة
-  return true;
-});
+  };
 
   if (!isOpen) return null;
 
@@ -691,22 +679,22 @@ const brandOptions = Array.from(new Set(products.map(p => p.brand)));
                       <p className="text-gray-900">{formData.code}</p>
                     )}
                   </div>
-<div className="mb-6">
-  <label className="block text-sm font-medium mb-1">Brand</label>
-  <select
-    value={selectedBrand || ""}
-    onChange={(e) => setSelectedBrand(e.target.value || null)}
-    className="w-full border rounded px-3 py-2 bg-white"
-  >
-    <option value="">All Brands</option>
-    {brandOptions.map((brand) => (
-      <option key={brand} value={brand}>
-        {brand}
-      </option>
-    ))}
-  </select>
-</div>
-
+ 
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Brand *
+                    </label> 
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.brand || ''}
+                        onChange={(e) => handleInputChange('brand', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                       <p className="text-gray-900">{formData.brand}</p>
+                    )}
+                  </div>
 
                   <div> 
                     <label className="block text-sm font-medium text-gray-700 mb-2">
