@@ -842,17 +842,24 @@ const ProductModal = ({
                     )}
                   </div>
 
+                  {/* حقل الاستخدام (Usage) المعتمد على البيانات من قاعدة البيانات */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Usage *
                     </label>
                     {isEditing ? (
-                      <input
-                        type="text"
+                      <select
                         value={formData.usage || ''}
                         onChange={(e) => handleInputChange('usage', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
+                      >
+                        <option value="">Select a usage</option>
+                        {usages.map((u) => (
+                          <option key={u.id} value={u.value}>
+                            {u.display_name || u.value}
+                          </option>
+                        ))}
+                      </select>
                     ) : (
                       <p className="text-gray-900">{formData.usage}</p>
                     )}
