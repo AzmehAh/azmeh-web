@@ -53,6 +53,29 @@ interface Product {
   status: 'active' | 'inactive' | 'draft';
   created_at?: string;
 }
+const [brands, setBrands] = useState<ProductFilterValue[]>([]);
+const [loadingBrands, setLoadingBrands] = useState(true);
+
+useEffect(() => {
+  const fetchBrands = async () => {
+    try {
+      // جلب نوع الفلتر الخاص بالبراند فقط
+      const { data, error } = await supabase
+        .from('product_filter_values')
+        .select('id, value, display_name')
+        .eq('filter_type_id', 'ID_البراند'); // حط هنا id الخاص بالبراند من جدول filter types
+
+      if (error) throw error;
+      setBrands(data || []);
+    } catch (error) {
+      console.error('Error fetching brands:', error);
+    } finally {
+      setLoadingBrands(false);
+    }
+  };
+
+  fetchBrands();
+}, []);
 
 const ProductsManager = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -680,29 +703,18 @@ const ProductModal = ({
                     )}
                   </div>
 
-                 {/* Brand */}
-<div className="mt-4">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Brand
-  </label>
-
-  {loadingBrands ? (
-    <p>Loading brands...</p>
-  ) : (
-    <select
-      value={formData.brand_id || ''}
-      onChange={(e) => handleInputChange('brand_id', e.target.value)}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    >
-      <option value="">Select a brand</option>
-      {brands.map(brand => (
-        <option key={brand.id} value={brand.id}>
-          {brand.display_name || brand.value}
-        </option>
-      ))}
-    </select>
-  )}
-</div>
+                 <select
+  value={formData.brand_id || ''}
+  onChange={(e) => handleInputChange('brand_id', e.target.value)}
+  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+>
+  <option value="">Select a brand</option>
+  {brands.map(brand => (
+    <option key={brand.id} value={brand.id}>
+      {brand.display_name || brand.value}
+    </option>
+  ))}
+</select>
 
 
                   <div>
