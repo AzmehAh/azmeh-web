@@ -824,29 +824,30 @@ const ProductModal = ({
                   </div>
                 </div>
 
-               {/* حقل النوع (Type) المعتمد على البيانات من قاعدة البيانات */}
+           
+                  {/* حقل المادة (Material) المعتمد على البيانات من قاعدة البيانات */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                       Material *
+                      Material *
                     </label>
                     {isEditing ? (
                       <select
-                        value={formData.type || ''}
-                        onChange={(e) => handleInputChange('type', e.target.value)}
+                        value={formData.material || ''}
+                        onChange={(e) => handleInputChange('material', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                       >
-                        <option value="">Select a  Material *</option>
-                        {types.map((t) => (
-                          <option key={t.id} value={t.value}>
-                            {t.display_name || t.value}
+                        <option value="">Select a material</option>
+                        {materials.map((m) => (
+                          <option key={m.id} value={m.value}>
+                            {m.display_name || m.value}
                           </option>
                         ))}
                       </select>
                     ) : (
-                      <p className="text-gray-900">{formData.Material}</p>
+                      <p className="text-gray-900">{formData.material}</p>
                     )}
                   </div>
-                </div>
+
 
                   {/* حقل الاستخدام (Usage) المعتمد على البيانات من قاعدة البيانات */}
                   <div>
