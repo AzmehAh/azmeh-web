@@ -609,61 +609,7 @@ const ProductModal = ({
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
-const [brands, setBrands] = useState<ProductFilterValue[]>([]);
-const [loadingBrands, setLoadingBrands] = useState(true);
 
-useEffect(() => {
-  const fetchBrands = async () => {
-    try {
-      // نبحث عن نوع الفلتر الخاص بالبراند باستخدام الاسم أو الوصف
-      const { data: filterTypes, error: filterError } = await supabase
-        .from('filter_types')
-        .select('id, name, description')
-        .or('description.ilike.%brand%, description.ilike.%براند%, name.ilike.%brand%, name.ilike.%براند%');
-
-      if (filterError) throw filterError;
-
-      let brandFilterTypeId = null;
-      if (filterTypes && filterTypes.length > 0) {
-        // نستخدم أول نتيجة نجدها (من المحتمل أن تكون "Product brand categories")
-        brandFilterTypeId = filterTypes[0].id;
-      } else {
-        // إذا لم نجد، نحاول البحث باستخدام sort_order = 2 كما في الصورة
-        const { data: fallbackFilter, error: fallbackError } = await supabase
-          .from('filter_types')
-          .select('id')
-          .eq('sort_order', 2)
-          .single();
-
-        if (!fallbackError && fallbackFilter) {
-          brandFilterTypeId = fallbackFilter.id;
-        } else {
-          console.error('Cannot find brand filter type');
-          return;
-        }
-      }
-
-      // الآن نجلب قيم الفلتر للبراند
-      const { data: filterValues, error: valuesError } = await supabase
-        .from('product_filter_values')
-        .select('id, value, display_name')
-        .eq('filter_type_id', brandFilterTypeId)
-        .eq('is_active', true) // فقط القيم النشطة
-        .order('sort_order', { ascending: true });
-
-      if (valuesError) throw valuesError;
-      setBrands(filterValues || []);
-    } catch (error) {
-      console.error('Error fetching brands:', error);
-    } finally {
-      setLoadingBrands(false);
-    }
-  };
-
-  if (isOpen) {
-    fetchBrands();
-  }
-}, [isOpen]);
   if (!isOpen) return null;
 
   return (
@@ -734,41 +680,23 @@ useEffect(() => {
                     )}
                   </div>
 
-                 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Brand *
-  </label>
-  {isEditing ? (
-    loadingBrands ? (
-      <div className="flex items-center justify-center py-2">
-        <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-[#0055A3]"></div>
-        <span className="ml-2 text-gray-500">Loading brands...</span>
-      </div>
-    ) : (
-      <select
-        value={formData.brand_id || ''}
-        onChange={(e) => handleInputChange('brand_id', e.target.value)}
-        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-        required
-      >
-        <option value="">Select a brand</option>
-        {brands.map(brand => (
-          <option key={brand.id} value={brand.id}>
-            {brand.display_name || brand.value}
-          </option>
-        ))}
-      </select>
-    )
-  ) : (
-    <p className="text-gray-900">
-      {brands.find(b => b.id === formData.brand_id)?.display_name || 
-       brands.find(b => b.id === formData.brand_id)?.value || 
-       'No brand selected'}
-    </p>
-  )}
-</div>
-
                   <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Brand *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.brand || ''}
+                        onChange={(e) => handleInputChange('brand', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.brand}</p>
+                    )}
+                  </div>
+
+                  <div> 
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Type *
                     </label>
