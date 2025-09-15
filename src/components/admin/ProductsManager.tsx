@@ -1334,7 +1334,7 @@ const ProductModal = ({
               </button>
               {isEditing && (
                 <button
-                  onClick={handleSave}
+                  onClick={handleSave} 
                   disabled={saving}
                   className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
                 >
