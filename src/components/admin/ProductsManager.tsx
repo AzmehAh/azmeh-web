@@ -46,7 +46,7 @@ interface Product {
   applications: string[];
   instructions:  string[];
   packaging: PackagingSize[];
-  storage: string[];
+  storage: string;
   safety_precautions: string[];
   safety_first_aid:  string[];
   technical_specs: TechnicalSpec[];
@@ -104,7 +104,7 @@ const ProductsManager = () => {
         ...item,
         instructions: parseArrayField(item.instructions),
         features: parseArrayField(item.features),
-        storage: parseArrayField(item.storage),
+
         safety_precautions: parseArrayField(item. safety_precautions),
         safety_first_aid: parseArrayField(item.safety_first_aid),
         applications: parseArrayField(item.applications),
@@ -417,7 +417,7 @@ const ProductModal = ({
     applications: [],
     instructions: [],
     packaging: [],
-    storage: [],
+    storage: '',
     safety_precautions: [],
     safety_first_aid: [],
     technical_specs: [],
@@ -436,7 +436,7 @@ const ProductModal = ({
         packaging: Array.isArray(product.packaging) ? product.packaging : [],
         technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
         instructions: Array.isArray(product.instructions) ? product.instructions : [],
-        storage: Array.isArray(product.storage) ? product.storage : [],
+       
         safety_first_aid: Array.isArray(product.safety_first_aid) ? product.safety_first_aid : [],
         safety_precautions: Array.isArray(product.safety_precautions) ? product.safety_precautions : [],
       };
@@ -456,7 +456,7 @@ const ProductModal = ({
         applications: [],
         instructions: [],
         packaging: [],
-        storage: [],
+        storage: '',
         safety_precautions: [],
         safety_first_aid: [],
         technical_specs: [],
@@ -477,14 +477,13 @@ const ProductModal = ({
 
   // Arrays (TEXT[])
   features: Array.isArray(formData.features) ? formData.features : [],
-      storage: Array.isArray(formData.storage) ? formData.storage : [],
-      safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
+   
       safety_precautions : Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
       instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
       applications: Array.isArray(formData.applications) ? formData.applications : [],
       safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
-      safety_precautions: Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
-      storage: Array.isArray(formData.storage) ? formData.storage : [],
+   
+ 
 
   // JSONB
   packaging:
@@ -984,14 +983,14 @@ const ProductModal = ({
 {/* Storage */}
 <div className="mt-6">
   <label className="block text-sm font-medium text-gray-700 mb-2">
-    Storage
+       Storage
   </label>
   {isEditing ? (
     <ReactQuill
       value={formData.storage || ""}
       onChange={(value) => handleInputChange("storage", value)}
       className="bg-white rounded-lg border border-gray-200"
-      theme="snow" 
+      theme="snow"
       modules={{
         toolbar: [
           [{ header: [1, 2, 3, false] }],
@@ -1009,6 +1008,7 @@ const ProductModal = ({
     />
   )}
 </div>
+
 
               {/* Product Images */}
               <div className="mt-6">
