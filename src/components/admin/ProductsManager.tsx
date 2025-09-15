@@ -680,21 +680,31 @@ const ProductModal = ({
                     )}
                   </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Brand *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.brand || ''}
-                        onChange={(e) => handleInputChange('brand', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.brand}</p>
-                    )}
-                  </div>
+                 {/* Branch */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Branch
+  </label>
+  {isEditing ? (
+    <select
+      value={formData.branch || ""}
+      onChange={(e) => handleInputChange("branch", e.target.value)}
+      className="w-full px-3 py-2 border border-gray-200 rounded"
+    >
+      <option value="">Select branch</option>
+      {filterTypes
+        .find(ft => ft.name.toLowerCase() === 'branch')?.product_filter_values
+        .map(value => (
+          <option key={value.id} value={value.value}>
+            {value.display_name || value.value}
+          </option>
+        ))
+      }
+    </select>
+  ) : (
+    <p>{formData.branch}</p>
+  )}
+</div>
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
