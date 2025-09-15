@@ -680,31 +680,30 @@ const ProductModal = ({
                     )}
                   </div>
 
-                 {/* Branch */}
-<div className="mt-6">
+                 {/* Brand */}
+<div className="mt-4">
   <label className="block text-sm font-medium text-gray-700 mb-2">
-    Branch
+    Brand
   </label>
-  {isEditing ? (
-    <select
-      value={formData.branch || ""}
-      onChange={(e) => handleInputChange("branch", e.target.value)}
-      className="w-full px-3 py-2 border border-gray-200 rounded"
-    >
-      <option value="">Select branch</option>
-      {filterTypes
-        .find(ft => ft.name.toLowerCase() === 'branch')?.product_filter_values
-        .map(value => (
-          <option key={value.id} value={value.value}>
-            {value.display_name || value.value}
-          </option>
-        ))
-      }
-    </select>
+
+  {loadingBrands ? (
+    <p>Loading brands...</p>
   ) : (
-    <p>{formData.branch}</p>
+    <select
+      value={formData.brand_id || ''}
+      onChange={(e) => handleInputChange('brand_id', e.target.value)}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    >
+      <option value="">Select a brand</option>
+      {brands.map(brand => (
+        <option key={brand.id} value={brand.id}>
+          {brand.display_name || brand.value}
+        </option>
+      ))}
+    </select>
   )}
 </div>
+
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
