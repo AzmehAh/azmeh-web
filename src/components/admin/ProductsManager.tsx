@@ -612,7 +612,10 @@ const ProductModal = ({
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
-  };
+  }; 
+  const brandOptions = Array.from(new Set(products.map(p => p.brand)));
+const brandOptions = Array.from(new Set(products.map(p => p.brand)));
+
  const filteredProducts = products.filter((p) => {
   if (selectedBrand && p.brand !== selectedBrand) return false;
   // هنا تضيف أي فلاتر ثانية إذا موجودة
