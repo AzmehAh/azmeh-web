@@ -523,7 +523,22 @@ const ProductModal = ({
     } catch (error) {
       console.error('Error fetching usages:', error);
     }
-  };
+  }; 
+  const fetchMaterials = async () => {
+  try {
+    const { data } = await supabase
+      .from('product_filter_types')
+      .select('id, name, product_filter_values(*)')
+      .eq('name', 'Material')
+      .single();
+
+    if (data?.product_filter_values) {
+      setMaterials(data.product_filter_values);
+    }
+  } catch (error) {
+    console.error('Error fetching materials:', error);
+  }
+};
   useEffect(() => {
     if (product) {
       // Ensure all array fields are properly initialized
