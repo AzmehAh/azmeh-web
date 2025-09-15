@@ -989,9 +989,9 @@ const ProductModal = ({
   {isEditing ? (
     <ReactQuill
       value={formData.storage || ""}
-      onChange={(value) => handleArrayInputChange("storage", value)}
+      onChange={(value) => handleInputChange("storage", value)}
       className="bg-white rounded-lg border border-gray-200"
-      theme="snow"
+      theme="snow" 
       modules={{
         toolbar: [
           [{ header: [1, 2, 3, false] }],
