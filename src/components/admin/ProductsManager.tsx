@@ -13,7 +13,7 @@ import {
   X,
   Upload
 } from 'lucide-react';
-import { supabase } from '../../lib/supabase';
+import { supabase,  ProductFilterType, ProductFilterValue } from '../../lib/supabase';
 
 // Types
 interface ProductImage {
