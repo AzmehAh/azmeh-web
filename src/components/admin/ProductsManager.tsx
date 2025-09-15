@@ -840,7 +840,7 @@ const ProductModal = ({
                 </div>
 
                 {/* Additional Info */}
-                <div className="space-y-4">
+                
                  {/* Additional Info */}
 <div className="space-y-4">
   <div>
