@@ -919,7 +919,7 @@ const ProductModal = ({
                   </div>
                 ) : (
                   <ul className="list-disc pl-5 text-gray-900">
-                    {(formData.features || []).map((f, i) => (
+                    {(formData.instructions || []).map((f, i) => (
                       <li key={i}>{f}</li>
                     ))}
                   </ul>
