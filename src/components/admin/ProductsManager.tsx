@@ -751,36 +751,7 @@ const ProductModal = ({
                       <p className="text-gray-900">{formData.code}</p>
                     )}
                   </div>
-   {/* Filter Toggle */}
-        <div className="border rounded-lg overflow-hidden">
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="w-full flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 transition-colors"
-          >
-            <div className="flex items-center">
-              <Filter className="w-5 h-5 mr-2 text-gray-600" />
-              <span className="font-medium text-gray-700">Filters</span>
-              {Object.values(activeFilters).flat().length > 0 && (
-                <span className="ml-2 bg-[#0055A3] text-white text-xs px-2 py-1 rounded-full">
-                  {Object.values(activeFilters).flat().length}
-                </span>
-              )}
-            </div>
-            {showFilters ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
-          </button>
-
-          {/* Filter Options */}
-          <AnimatePresence>
-            {showFilters && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                className="border-t"
-              >
-                <div className="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
-                  {/* Brand Filter */}
-                  <div>
+     <div>
                     <h4 className="font-medium text-gray-700 mb-2">Brand</h4>
                     <div className="space-y-2 max-h-40 overflow-y-auto">
                       {filterOptions.brand.map(brand => (
@@ -792,60 +763,6 @@ const ProductModal = ({
                             className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
                           />
                           <span className="ml-2 text-sm text-gray-600">{brand}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Type Filter */}
-                  <div>
-                    <h4 className="font-medium text-gray-700 mb-2">Type</h4>
-                    <div className="space-y-2 max-h-40 overflow-y-auto">
-                      {filterOptions.type.map(type => (
-                        <label key={type} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={activeFilters.type.includes(type)}
-                            onChange={() => handleFilterChange('type', type)}
-                            className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
-                          />
-                          <span className="ml-2 text-sm text-gray-600">{type}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Material Filter */}
-                  <div>
-                    <h4 className="font-medium text-gray-700 mb-2">Material</h4>
-                    <div className="space-y-2 max-h-40 overflow-y-auto">
-                      {filterOptions.material.map(material => (
-                        <label key={material} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={activeFilters.material.includes(material)}
-                            onChange={() => handleFilterChange('material', material)}
-                            className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
-                          />
-                          <span className="ml-2 text-sm text-gray-600">{material}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Usage Filter */}
-                  <div>
-                    <h4 className="font-medium text-gray-700 mb-2">Usage</h4>
-                    <div className="space-y-2 max-h-40 overflow-y-auto">
-                      {filterOptions.usage.map(usage => (
-                        <label key={usage} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={activeFilters.usage.includes(usage)}
-                            onChange={() => handleFilterChange('usage', usage)}
-                            className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
-                          />
-                          <span className="ml-2 text-sm text-gray-600">{usage}</span>
                         </label>
                       ))}
                     </div>
