@@ -609,7 +609,8 @@ const ProductModal = ({
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
-  }; const ProductModal = ({ ...props }) => {
+  }; 
+  const ProductModal = ({ ...props }) => {
   const [brands, setBrands] = useState<ProductFilterValue[]>([]);
 
   useEffect(() => {
