@@ -11,8 +11,7 @@ import {
   Image as ImageIcon,
   Save,
   X,
-  Upload,
-  Filter
+  Upload
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -33,47 +32,26 @@ interface PackagingSize {
   size: string;
 }
 
-interface ProductFilterValue {
-  id: string;
-  value: string;
-  display_name: string;
-  filter_type_id: string;
-  is_active: boolean;
-  sort_order: number;
-}
-
-interface ProductFilterType {
-  id: string;
-  name: string;
-  description: string;
-  sort_order: number;
-  is_active: boolean;
-}
-
 interface Product {
   id: string;
   name: string;
   code: string;
-  brand_id?: string;
-  type_id?: string;
-  material_id?: string;
-  usage_id?: string;
+  brand: string;
+  type: string;
+  material: string;
+  usage: string;
   description: string;
   technical_description: string;
   features: string[];
   applications: string[];
-  instructions: string[];
+  instructions:  string[];
   packaging: PackagingSize[];
   storage: string;
   safety_precautions: string[];
-  safety_first_aid: string[];
+  safety_first_aid:  string[];
   technical_specs: TechnicalSpec[];
   status: 'active' | 'inactive' | 'draft';
   created_at?: string;
-  brand?: ProductFilterValue;
-  type?: ProductFilterValue;
-  material?: ProductFilterValue;
-  usage?: ProductFilterValue;
 }
 
 const ProductsManager = () => {
@@ -86,82 +64,48 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [filterTypes, setFilterTypes] = useState<ProductFilterType[]>([]);
-  const [filterValues, setFilterValues] = useState<ProductFilterValue[]>([]);
-  const [loadingFilters, setLoadingFilters] = useState(true);
-  const [activeFilters, setActiveFilters] = useState<{
-    brand: string[];
-    type: string[];
-    material: string[];
-    usage: string[];
-  }>({
-    brand: [],
-    type: [],
-    material: [],
-    usage: []
-  });
 
   useEffect(() => {
-    fetchFilters();
     fetchProducts();
   }, []);
 
   useEffect(() => {
-    filterProducts();
-  }, [searchTerm, products, activeFilters]);
-
-  const fetchFilters = async () => {
-    try {
-      const { data: typesData, error: typesError } = await supabase
-        .from('product_filter_types')
-        .select('*')
-        .order('sort_order');
-
-      if (typesError) throw typesError;
-
-      const { data: valuesData, error: valuesError } = await supabase
-        .from('product_filter_values')
-        .select('*')
-        .eq('is_active', true)
-        .order('sort_order');
-
-      if (valuesError) throw valuesError;
-
-      setFilterTypes(typesData || []);
-      setFilterValues(valuesData || []);
-    } catch (error) {
-      console.error('Error fetching filters:', error);
-    } finally {
-      setLoadingFilters(false);
+    if (searchTerm) {
+      const filtered = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredProducts(filtered);
+    } else {
+      setFilteredProducts(products);
     }
-  };
+  }, [searchTerm, products]);
 
   const fetchProducts = async () => {
     try {
+      // جلب جميع المنتجات
       const { data: productsData, error: productsError } = await supabase
         .from('products')
-        .select(`
-          *,
-          brand:brand_id (*),
-          type:type_id (*),
-          material:material_id (*),
-          usage:usage_id (*)
-        `)
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (productsError) throw productsError;
       
+      // جلب جميع الصور
       const { data: imagesData, error: imagesError } = await supabase
         .from('product_images')
         .select('*');
 
       if (imagesError) throw imagesError;
       
+      // Parse array fields that might be stored as strings
       const parsedData = (productsData || []).map(item => ({
         ...item,
         instructions: parseArrayField(item.instructions),
         features: parseArrayField(item.features),
-        safety_precautions: parseArrayField(item.safety_precautions),
+
+        safety_precautions: parseArrayField(item. safety_precautions),
         safety_first_aid: parseArrayField(item.safety_first_aid),
         applications: parseArrayField(item.applications),
         packaging: parseArrayField(item.packaging),
@@ -169,7 +113,9 @@ const ProductsManager = () => {
       }));
       
       setProducts(parsedData);
+      setFilteredProducts(parsedData);
       
+      // تنظيم الصور حسب product_id
       const imagesByProduct: Record<string, ProductImage[]> = {};
       (imagesData || []).forEach(image => {
         if (!imagesByProduct[image.product_id]) {
@@ -186,6 +132,7 @@ const ProductsManager = () => {
     }
   };
 
+  // Helper function to parse array fields that might be stored as strings
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
     if (typeof field === 'string') {
@@ -198,79 +145,11 @@ const ProductsManager = () => {
     return [];
   };
 
-  const filterProducts = () => {
-    let filtered = products;
-
-    if (searchTerm) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (product.brand?.display_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-         product.brand?.value?.toLowerCase().includes(searchTerm.toLowerCase()))
-      );
-    }
-
-    // تطبيق الفلاتر
-    if (activeFilters.brand.length > 0) {
-      filtered = filtered.filter(product => 
-        product.brand_id && activeFilters.brand.includes(product.brand_id)
-      );
-    }
-
-    if (activeFilters.type.length > 0) {
-      filtered = filtered.filter(product => 
-        product.type_id && activeFilters.type.includes(product.type_id)
-      );
-    }
-
-    if (activeFilters.material.length > 0) {
-      filtered = filtered.filter(product => 
-        product.material_id && activeFilters.material.includes(product.material_id)
-      );
-    }
-
-    if (activeFilters.usage.length > 0) {
-      filtered = filtered.filter(product => 
-        product.usage_id && activeFilters.usage.includes(product.usage_id)
-      );
-    }
-
-    setFilteredProducts(filtered);
-  };
-
-  const getFilterValuesByType = (typeName: string): ProductFilterValue[] => {
-    const filterType = filterTypes.find(ft => 
-      ft.name.toLowerCase().includes(typeName.toLowerCase()) ||
-      ft.description?.toLowerCase().includes(typeName.toLowerCase())
-    );
-    
-    if (!filterType) return [];
-    
-    return filterValues.filter(fv => fv.filter_type_id === filterType.id);
-  };
-
-  const toggleFilter = (filterType: keyof typeof activeFilters, value: string) => {
-    setActiveFilters(prev => ({
-      ...prev,
-      [filterType]: prev[filterType].includes(value)
-        ? prev[filterType].filter(v => v !== value)
-        : [...prev[filterType], value]
-    }));
-  };
-
-  const clearFilters = () => {
-    setActiveFilters({
-      brand: [],
-      type: [],
-      material: [],
-      usage: []
-    });
-  };
-
   const deleteProduct = async (id: string) => {
     if (!confirm('Are you sure you want to delete this product?')) return;
 
     try {
+      // First delete related images
       const { error: imageError } = await supabase
         .from('product_images')
         .delete()
@@ -278,6 +157,7 @@ const ProductsManager = () => {
       
       if (imageError) throw imageError;
       
+      // Then delete the product
       const { error } = await supabase
         .from('products')
         .delete()
@@ -331,18 +211,13 @@ const ProductsManager = () => {
     }
   };
 
-  if (loading || loadingFilters) {
+  if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
       </div>
     );
   }
-
-  const brands = getFilterValuesByType('brand');
-  const types = getFilterValuesByType('type');
-  const materials = getFilterValuesByType('material');
-  const usages = getFilterValuesByType('usage');
 
   return (
     <div className="space-y-6">
@@ -361,116 +236,16 @@ const ProductsManager = () => {
         </button>
       </div>
 
-      {/* Search and Filters */}
-      <div className="space-y-4">
-        <div className="relative">
-          <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        </div>
-
-        {/* Filter Section */}
-        <div className="bg-white p-4 rounded-lg border border-gray-200">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900 flex items-center">
-              <Filter className="w-5 h-5 mr-2 text-[#0055A3]" />
-              Filters
-            </h3>
-            <button
-              onClick={clearFilters}
-              className="text-sm text-[#0055A3] hover:underline"
-            >
-              Clear all
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* Brand Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Brand</label>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {brands.map(brand => (
-                  <label key={brand.id} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={activeFilters.brand.includes(brand.id)}
-                      onChange={() => toggleFilter('brand', brand.id)}
-                      className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">
-                      {brand.display_name || brand.value}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Type Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Type</label>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {types.map(type => (
-                  <label key={type.id} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={activeFilters.type.includes(type.id)}
-                      onChange={() => toggleFilter('type', type.id)}
-                      className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">
-                      {type.display_name || type.value}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Material Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Material</label>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {materials.map(material => (
-                  <label key={material.id} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={activeFilters.material.includes(material.id)}
-                      onChange={() => toggleFilter('material', material.id)}
-                      className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">
-                      {material.display_name || material.value}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Usage Filter */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Usage</label>
-              <div className="space-y-2 max-h-40 overflow-y-auto">
-                {usages.map(usage => (
-                  <label key={usage.id} className="flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={activeFilters.usage.includes(usage.id)}
-                      onChange={() => toggleFilter('usage', usage.id)}
-                      className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
-                    />
-                    <span className="ml-2 text-sm text-gray-700">
-                      {usage.display_name || usage.value}
-                    </span>
-                  </label>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+        />
       </div>
 
       {/* Products Grid */}
@@ -518,7 +293,7 @@ const ProductsManager = () => {
                     {product.name}
                   </h3>
                   <span className="text-xs bg-blue-100 text-[#0055A3] px-2 py-1 rounded">
-                    {product.brand?.display_name || product.brand?.value || 'No brand'}
+                    {product.brand}
                   </span>
                 </div>
                 
@@ -529,21 +304,12 @@ const ProductsManager = () => {
                 </p>
 
                 <div className="flex flex-wrap gap-1 mb-4">
-                  {product.type && (
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                      {product.type.display_name || product.type.value}
-                    </span>
-                  )}
-                  {product.usage && (
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                      {product.usage.display_name || product.usage.value}
-                    </span>
-                  )}
-                  {product.material && (
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                      {product.material.display_name || product.material.value}
-                    </span>
-                  )}
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                    {product.type}
+                  </span>
+                  <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                    {product.usage}
+                  </span>
                 </div>
 
                 {/* Actions */}
@@ -587,11 +353,9 @@ const ProductsManager = () => {
           <ImageIcon className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
           <p className="text-gray-600 mb-6">
-            {searchTerm || Object.values(activeFilters).some(arr => arr.length > 0) 
-              ? 'Try adjusting your search or filter terms' 
-              : 'Get started by adding your first product'}
+            {searchTerm ? 'Try adjusting your search terms' : 'Get started by adding your first product'}
           </p>
-          {!searchTerm && Object.values(activeFilters).every(arr => arr.length === 0) && (
+          {!searchTerm && (
             <button
               onClick={() => openModal(null, true)}
               className="flex items-center mx-auto px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -614,8 +378,6 @@ const ProductsManager = () => {
           onUploadImage={uploadImage}
           uploading={uploading}
           productImages={productImages}
-          filterValues={filterValues}
-          filterTypes={filterTypes}
         />
       )}
     </div>
@@ -631,9 +393,7 @@ const ProductModal = ({
   onSave,
   onUploadImage,
   uploading,
-  productImages,
-  filterValues,
-  filterTypes
+  productImages
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -643,16 +403,14 @@ const ProductModal = ({
   onUploadImage: (file: File) => Promise<string | null>;
   uploading: boolean;
   productImages: Record<string, ProductImage[]>;
-  filterValues: ProductFilterValue[];
-  filterTypes: ProductFilterType[];
 }) => {
   const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
     code: '',
-    brand_id: '',
-    type_id: '',
-    material_id: '',
-    usage_id: '',
+    brand: '',
+    type: '', 
+    material: '',
+    usage: '',
     description: '',
     technical_description: '',
     features: [],
@@ -670,6 +428,7 @@ const ProductModal = ({
 
   useEffect(() => {
     if (product) {
+      // Ensure all array fields are properly initialized
       const productData = {
         ...product,
         features: Array.isArray(product.features) ? product.features : [],
@@ -677,6 +436,7 @@ const ProductModal = ({
         packaging: Array.isArray(product.packaging) ? product.packaging : [],
         technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
         instructions: Array.isArray(product.instructions) ? product.instructions : [],
+       
         safety_first_aid: Array.isArray(product.safety_first_aid) ? product.safety_first_aid : [],
         safety_precautions: Array.isArray(product.safety_precautions) ? product.safety_precautions : [],
       };
@@ -686,10 +446,10 @@ const ProductModal = ({
       setFormData({
         name: '',
         code: '',
-        brand_id: '',
-        type_id: '',
-        material_id: '',
-        usage_id: '',
+        brand: '',
+        type: '',
+        material: '',
+        usage: '',
         description: '',
         technical_description: '',
         features: [],
@@ -706,38 +466,40 @@ const ProductModal = ({
     }
   }, [product, productImages]);
 
-  const getFilterValuesByType = (typeName: string): ProductFilterValue[] => {
-    const filterType = filterTypes.find(ft => 
-      ft.name.toLowerCase().includes(typeName.toLowerCase()) ||
-      ft.description?.toLowerCase().includes(typeName.toLowerCase())
-    );
-    
-    if (!filterType) return [];
-    
-    return filterValues.filter(fv => fv.filter_type_id === filterType.id && fv.is_active);
-  };
-
   const handleSave = async () => {
     setSaving(true);
     try {
       let productId = product?.id;
 
-      const productData = {
-        ...formData,
-        features: Array.isArray(formData.features) ? formData.features : [],
-        safety_precautions: Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
-        instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
-        applications: Array.isArray(formData.applications) ? formData.applications : [],
-        safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
-        packaging: typeof formData.packaging === "string"
-          ? JSON.parse(formData.packaging || "{}")
-          : formData.packaging || {},
-        technical_specs: typeof formData.technical_specs === "string"
-          ? JSON.parse(formData.technical_specs || "{}")
-          : formData.technical_specs || {},
-      };
+      // Prepare product data without images
+    const productData = {
+  ...formData,
+
+  // Arrays (TEXT[])
+  features: Array.isArray(formData.features) ? formData.features : [],
+   
+      safety_precautions : Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
+      instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
+      applications: Array.isArray(formData.applications) ? formData.applications : [],
+      safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
+   
+ 
+
+  // JSONB
+  packaging:
+    typeof formData.packaging === "string"
+      ? JSON.parse(formData.packaging || "{}")
+      : formData.packaging || {},
+
+  technical_specs:
+    typeof formData.technical_specs === "string"
+      ? JSON.parse(formData.technical_specs || "{}")
+      : formData.technical_specs || {},
+};
+
 
       if (product) {
+        // Update product
         const { error } = await supabase
           .from('products')
           .update(productData)
@@ -745,6 +507,7 @@ const ProductModal = ({
         if (error) throw error;
         productId = product.id;
       } else {
+        // Create new product
         const { data, error } = await supabase
           .from('products')
           .insert([productData])
@@ -753,12 +516,15 @@ const ProductModal = ({
         productId = data?.[0]?.id;
       }
 
+      // Manage images only if we have a product ID
       if (productId) {
+        // Get current images to compare
         const { data: existingImages } = await supabase
           .from('product_images')
           .select('*')
           .eq('product_id', productId);
 
+        // Delete images that were removed
         const imagesToKeep = images.filter(img => img.id).map(img => img.id);
         const imagesToDelete = existingImages?.filter(img => !imagesToKeep.includes(img.id)) || [];
         
@@ -769,13 +535,16 @@ const ProductModal = ({
             .eq('id', img.id);
         }
 
+        // Add/update images
         for (const img of images) {
           if (img.id) {
+            // Update existing image
             await supabase
               .from('product_images')
               .update({ image_url: img.image_url })
               .eq('id', img.id);
           } else {
+            // Add new image
             await supabase
               .from('product_images')
               .insert([{ product_id: productId, image_url: img.image_url }]);
@@ -834,7 +603,7 @@ const ProductModal = ({
     }
     
     setImages(newImages);
-    e.target.value = '';
+    e.target.value = ''; // Reset file input
   };
 
   const removeImage = (index: number) => {
@@ -842,11 +611,6 @@ const ProductModal = ({
   };
 
   if (!isOpen) return null;
-
-  const brands = getFilterValuesByType('brand');
-  const types = getFilterValuesByType('type');
-  const materials = getFilterValuesByType('material');
-  const usages = getFilterValuesByType('usage');
 
   return (
     <AnimatePresence>
@@ -921,52 +685,30 @@ const ProductModal = ({
                       Brand *
                     </label>
                     {isEditing ? (
-                      <select
-                        value={formData.brand_id || ''}
-                        onChange={(e) => handleInputChange('brand_id', e.target.value)}
+                      <input
+                        type="text"
+                        value={formData.brand || ''}
+                        onChange={(e) => handleInputChange('brand', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        required
-                      >
-                        <option value="">Select a brand</option>
-                        {brands.map(brand => (
-                          <option key={brand.id} value={brand.id}>
-                            {brand.display_name || brand.value}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     ) : (
-                      <p className="text-gray-900">
-                        {brands.find(b => b.id === formData.brand_id)?.display_name || 
-                         brands.find(b => b.id === formData.brand_id)?.value || 
-                         'No brand selected'}
-                      </p>
+                      <p className="text-gray-900">{formData.brand}</p>
                     )}
                   </div>
 
-                  <div>
+                  <div> 
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Type *
                     </label>
                     {isEditing ? (
-                      <select
-                        value={formData.type_id || ''}
-                        onChange={(e) => handleInputChange('type_id', e.target.value)}
+                      <input
+                        type="text"
+                        value={formData.type || ''}
+                        onChange={(e) => handleInputChange('type', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        required
-                      >
-                        <option value="">Select a type</option>
-                        {types.map(type => (
-                          <option key={type.id} value={type.id}>
-                            {type.display_name || type.value}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     ) : (
-                      <p className="text-gray-900">
-                        {types.find(t => t.id === formData.type_id)?.display_name || 
-                         types.find(t => t.id === formData.type_id)?.value || 
-                         'No type selected'}
-                      </p>
+                      <p className="text-gray-900">{formData.type}</p>
                     )}
                   </div>
                 </div>
@@ -978,25 +720,14 @@ const ProductModal = ({
                       Material *
                     </label>
                     {isEditing ? (
-                      <select
-                        value={formData.material_id || ''}
-                        onChange={(e) => handleInputChange('material_id', e.target.value)}
+                      <input
+                        type="text"
+                        value={formData.material || ''}
+                        onChange={(e) => handleInputChange('material', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        required
-                      >
-                        <option value="">Select a material</option>
-                        {materials.map(material => (
-                          <option key={material.id} value={material.id}>
-                            {material.display_name || material.value}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     ) : (
-                      <p className="text-gray-900">
-                        {materials.find(m => m.id === formData.material_id)?.display_name || 
-                         materials.find(m => m.id === formData.material_id)?.value || 
-                         'No material selected'}
-                      </p>
+                      <p className="text-gray-900">{formData.material}</p>
                     )}
                   </div>
 
@@ -1005,25 +736,14 @@ const ProductModal = ({
                       Usage *
                     </label>
                     {isEditing ? (
-                      <select
-                        value={formData.usage_id || ''}
-                        onChange={(e) => handleInputChange('usage_id', e.target.value)}
+                      <input
+                        type="text"
+                        value={formData.usage || ''}
+                        onChange={(e) => handleInputChange('usage', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        required
-                      >
-                        <option value="">Select a usage</option>
-                        {usages.map(usage => (
-                          <option key={usage.id} value={usage.id}>
-                            {usage.display_name || usage.value}
-                          </option>
-                        ))}
-                      </select>
+                      />
                     ) : (
-                      <p className="text-gray-900">
-                        {usages.find(u => u.id === formData.usage_id)?.display_name || 
-                         usages.find(u => u.id === formData.usage_id)?.value || 
-                         'No usage selected'}
-                      </p>
+                      <p className="text-gray-900">{formData.usage}</p>
                     )}
                   </div>
 
@@ -1046,8 +766,8 @@ const ProductModal = ({
                         formData.status === 'active' 
                           ? 'bg-green-100 text-green-800' 
                           : formData.status === 'inactive'
-                          ? 'bg-red-100 text-red'
-                         : 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
                       }`}>
                         {formData.status}
                       </span>
@@ -1059,20 +779,17 @@ const ProductModal = ({
               {/* Description */}
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description
+                  Description *
                 </label>
                 {isEditing ? (
-                  <ReactQuill
+                  <textarea
                     value={formData.description || ''}
-                    onChange={(value) => handleInputChange('description', value)}
-                    theme="snow"
-                    className="rounded-lg border-gray-200 focus:border-[#0055A3]"
+                    onChange={(e) => handleInputChange('description', e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                   />
                 ) : (
-                  <div 
-                    className="text-gray-900 prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: formData.description || '' }}
-                  />
+                  <p className="text-gray-900">{formData.description}</p>
                 )}
               </div>
 
@@ -1082,61 +799,53 @@ const ProductModal = ({
                   Technical Description
                 </label>
                 {isEditing ? (
-                  <ReactQuill
+                  <textarea
                     value={formData.technical_description || ''}
-                    onChange={(value) => handleInputChange('technical_description', value)}
-                    theme="snow"
-                    className="rounded-lg border-gray-200 focus:border-[#0055A3]"
+                    onChange={(e) => handleInputChange('technical_description', e.target.value)}
+                    rows={4}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                   />
                 ) : (
-                  <div 
-                    className="text-gray-900 prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: formData.technical_description || '' }}
-                  />
+                  <p className="text-gray-900">{formData.technical_description}</p>
                 )}
               </div>
 
               {/* Features */}
               <div className="mt-6">
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Features
-                  </label>
-                  {isEditing && (
-                    <button
-                      type="button"
-                      onClick={() => addArrayItem('features', '')}
-                      className="text-sm text-[#0055A3] hover:underline"
-                    >
-                      + Add Feature
-                    </button>
-                  )}
-                </div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Features
+                </label>
                 {isEditing ? (
                   <div className="space-y-2">
-                    {formData.features?.map((feature, index) => (
-                      <div key={index} className="flex items-center gap-2">
+                    {(formData.features || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
                         <input
                           type="text"
-                          value={feature}
-                          onChange={(e) => handleArrayInputChange('features', index, e.target.value)}
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('features', idx, e.target.value)}
                           className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                          placeholder="Enter feature"
                         />
                         <button
                           type="button"
-                          onClick={() => removeArrayItem('features', index)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded"
+                          onClick={() => removeArrayItem('features', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
                         >
-                          <X className="w-4 h-4" />
+                          Remove
                         </button>
                       </div>
                     ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('features', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add Feature
+                    </button>
                   </div>
                 ) : (
-                  <ul className="list-disc list-inside text-gray-900 space-y-1">
-                    {formData.features?.map((feature, index) => (
-                      <li key={index}>{feature}</li>
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.features || []).map((f, i) => (
+                      <li key={i}>{f}</li>
                     ))}
                   </ul>
                 )}
@@ -1144,131 +853,381 @@ const ProductModal = ({
 
               {/* Applications */}
               <div className="mt-6">
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Applications
-                  </label>
-                  {isEditing && (
-                    <button
-                      type="button"
-                      onClick={() => addArrayItem('applications', '')}
-                      className="text-sm text-[#0055A3] hover:underline"
-                    >
-                      + Add Application
-                    </button>
-                  )}
-                </div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Applications
+                </label>
                 {isEditing ? (
                   <div className="space-y-2">
-                    {formData.applications?.map((application, index) => (
-                      <div key={index} className="flex items-center gap-2">
+                    {(formData.applications || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
                         <input
                           type="text"
-                          value={application}
-                          onChange={(e) => handleArrayInputChange('applications', index, e.target.value)}
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('applications', idx, e.target.value)}
                           className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                          placeholder="Enter application"
                         />
                         <button
                           type="button"
-                          onClick={() => removeArrayItem('applications', index)}
-                          className="p-2 text-red-600 hover:bg-red-50 rounded"
+                          onClick={() => removeArrayItem('applications', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
                         >
-                          <X className="w-4 h-4" />
+                          Remove
                         </button>
                       </div>
                     ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('applications', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add Application
+                    </button>
                   </div>
                 ) : (
-                  <ul className="list-disc list-inside text-gray-900 space-y-1">
-                    {formData.applications?.map((application, index) => (
-                      <li key={index}>{application}</li>
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.applications || []).map((a, i) => (
+                      <li key={i}>{a}</li>
                     ))}
                   </ul>
                 )}
               </div>
 
-              {/* Technical Specifications */}
+              {/*instructions*/}
               <div className="mt-6">
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-700">
-                    Technical Specifications
-                  </label>
-                  {isEditing && (
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                instructions
+                </label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {(formData.instructions || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('instructions', idx, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('instructions', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('instructions', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add instructions
+                    </button>
+                  </div>
+                ) : (
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.instructions || []).map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+ 
+              {/* Packaging */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Packaging Sizes
+                </label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {(formData.packaging || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item.size || ''}
+                          onChange={(e) => {
+                            const newPackaging = [...(formData.packaging || [])];
+                            newPackaging[idx] = { ...newPackaging[idx], size: e.target.value };
+                            setFormData(prev => ({ ...prev, packaging: newPackaging }));
+                          }}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                          placeholder="Size (e.g., 1L, 5kg)"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('packaging', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('packaging', { size: '' })}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add Size
+                    </button>
+                  </div>
+                ) : (
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.packaging || []).map((p, i) => (
+                      <li key={i}>{p.size}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+          
+{/* Storage */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+       Storage
+  </label>
+  {isEditing ? (
+    <ReactQuill
+      value={formData.storage || ""}
+      onChange={(value) => handleInputChange("storage", value)}
+      className="bg-white rounded-lg border border-gray-200"
+      theme="snow"
+      modules={{
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["link", "image"],
+          ["clean"],
+        ],
+      }}
+    />
+  ) : (
+    <div
+      className="prose max-w-none text-gray-900"
+      dangerouslySetInnerHTML={{ __html: formData.storage }}
+    />
+  )}
+</div>
+
+
+              {/* Product Images */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Product Images
+                </label>
+
+                {isEditing ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Images
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                          disabled={uploading}
+                        />
+                      </label>
+                      {uploading && <span className="text-gray-500">Uploading...</span>}
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                      {images.map((img, idx) => (
+                        <div key={img.id || idx} className="relative group">
+                          <img
+                            src={img.image_url}
+                            alt={`Product ${idx + 1}`}
+                            className="w-full h-32 object-cover rounded border"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <button
+                              type="button"
+                              onClick={() => removeImage(idx)}
+                              className="p-1 bg-red-500 text-white rounded"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {images.map((img, i) => (
+                      <img
+                        key={i}
+                        src={img.image_url}
+                        alt={`Product Image ${i + 1}`}
+                        className="w-full h-32 object-cover rounded border"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+
+                {/* safety_precautions */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                 safety_precautions
+                </label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {(formData.safety_precautions|| []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('safety_precautions', idx, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('safety_precautions', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('safety_precautions', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add safety_precautions
+                    </button>
+                  </div>
+                ) : (
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.safety_precautions || []).map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+
+              {/* safety_first_aid*/}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                safety first aid
+                </label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {(formData.safety_first_aid || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('safety_first_aid', idx, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('safety_first_aid', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('safety_first_aid', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add safety first aid
+                    </button>
+                  </div>
+                ) : (
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.safety_first_aid || []).map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+
+              {/* Technical Specs */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Technical Specifications
+                </label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {(formData.technical_specs || []).map((item, idx) => (
+                      <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
+                        <input
+                          type="text"
+                          placeholder="Property"
+                          value={item.property || ''}
+                          onChange={(e) => {
+                            const newSpecs = [...(formData.technical_specs || [])];
+                            newSpecs[idx] = { ...newSpecs[idx], property: e.target.value };
+                            setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+                          }}
+                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Value"
+                          value={item.value || ''}
+                          onChange={(e) => {
+                            const newSpecs = [...(formData.technical_specs || [])];
+                            newSpecs[idx] = { ...newSpecs[idx], value: e.target.value };
+                            setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+                          }}
+                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Standard"
+                          value={item.standard || ''}
+                          onChange={(e) => {
+                            const newSpecs = [...(formData.technical_specs || [])];
+                            newSpecs[idx] = { ...newSpecs[idx], standard: e.target.value };
+                            setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
+                          }}
+                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('technical_specs', idx)}
+                          className="px-2 py-2 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
                     <button
                       type="button"
                       onClick={() => addArrayItem('technical_specs', { property: '', value: '', standard: '' })}
-                      className="text-sm text-[#0055A3] hover:underline"
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
                     >
                       + Add Specification
                     </button>
-                  )}
-                </div>
-                {isEditing ? (
-                  <div className="space-y-3">
-                    {formData.technical_specs?.map((spec, index) => (
-                      <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-2 p-3 border border-gray-200 rounded-lg">
-                        <input
-                          type="text"
-                          value={spec.property}
-                          onChange={(e) => {
-                            const newSpecs = [...(formData.technical_specs || [])];
-                            newSpecs[index] = { ...spec, property: e.target.value };
-                            handleInputChange('technical_specs', newSpecs);
-                          }}
-                          placeholder="Property"
-                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        />
-                        <input
-                          type="text"
-                          value={spec.value}
-                          onChange={(e) => {
-                            const newSpecs = [...(formData.technical_specs || [])];
-                            newSpecs[index] = { ...spec, value: e.target.value };
-                            handleInputChange('technical_specs', newSpecs);
-                          }}
-                          placeholder="Value"
-                          className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                        />
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="text"
-                            value={spec.standard}
-                            onChange={(e) => {
-                              const newSpecs = [...(formData.technical_specs || [])];
-                              newSpecs[index] = { ...spec, standard: e.target.value };
-                              handleInputChange('technical_specs', newSpecs);
-                            }}
-                            placeholder="Standard"
-                            className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => removeArrayItem('technical_specs', index)}
-                            className="p-2 text-red-600 hover:bg-red-50 rounded"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </div>
-                    ))}
                   </div>
                 ) : (
                   <div className="overflow-x-auto">
-                    <table className="min-w-full divide-y divide-gray-200">
+                    <table className="w-full border border-gray-200 rounded text-sm">
                       <thead className="bg-gray-50">
                         <tr>
-                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Property</th>
-                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Value</th>
-                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-700">Standard</th>
+                          <th className="border px-3 py-2 text-left">Property</th>
+                          <th className="border px-3 py-2 text-left">Value</th>
+                          <th className="border px-3 py-2 text-left">Standard</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {formData.technical_specs?.map((spec, index) => (
-                          <tr key={index}>
-                            <td className="px-4 py-2 text-sm text-gray-900">{spec.property}</td>
-                            <td className="px-4 py-2 text-sm text-gray-900">{spec.value}</td>
-                            <td className="px-4 py-2 text-sm text-gray-900">{spec.standard}</td>
+                      <tbody>
+                        {(formData.technical_specs || []).map((item, i) => (
+                          <tr key={i}>
+                            <td className="border px-3 py-2">{item.property}</td>
+                            <td className="border px-3 py-2">{item.value}</td>
+                            <td className="border px-3 py-2">{item.standard}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -1276,67 +1235,21 @@ const ProductModal = ({
                   </div>
                 )}
               </div>
-
-              {/* Images */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Images
-                </label>
-                {isEditing && (
-                  <div className="mb-4">
-                    <label className="flex items-center justify-center px-4 py-2 border border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-[#0055A3] transition-colors">
-                      <Upload className="w-5 h-5 mr-2 text-gray-400" />
-                      <span className="text-sm text-gray-600">Upload Images</span>
-                      <input
-                        type="file"
-                        multiple
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                        disabled={uploading}
-                      />
-                    </label>
-                    {uploading && (
-                      <p className="text-sm text-gray-500 mt-2">Uploading images...</p>
-                    )}
-                  </div>
-                )}
-                
-                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {images.map((image, index) => (
-                    <div key={index} className="relative group">
-                      <img
-                        src={image.image_url}
-                        alt={`Product image ${index + 1}`}
-                        className="w-full h-32 object-cover rounded-lg"
-                      />
-                      {isEditing && (
-                        <button
-                          onClick={() => removeImage(index)}
-                          className="absolute top-1 right-1 p-1 bg-red-600 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                        >
-                          <X className="w-3 h-3" />
-                        </button>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
 
             {/* Footer */}
-            <div className="flex items-center justify-end space-x-3 p-6 border-t">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                Cancel
-              </button>
-              {isEditing && (
+            {isEditing && (
+              <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
                 <button
-                  onClick={handleSave} 
+                  onClick={onClose}
+                  className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
                   disabled={saving}
-                  className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                  className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center"
                 >
                   {saving ? (
                     <>
@@ -1347,16 +1260,16 @@ const ProductModal = ({
                     <>
                       <Save className="w-4 h-4 mr-2" />
                       Save Product
-                    </>
-                  )}
+                    </> 
+                  )} 
                 </button>
-              )}
-            </div>
+              </div>
+            )}
           </motion.div>
-        </div>
+        </div> 
       </div>
     </AnimatePresence>
   );
 };
 
-export default ProductsManager;
+export default ProductsManager; 
