@@ -67,22 +67,7 @@ const ProductsManager = () => {
 const brandOptions = Array.from(new Set(products.map(p => p.brand)));
   const [filters, setFilters] = useState<{ [key: string]: string[] }>({});
 const [activeFilters, setActiveFilters] = useState<{ [key: string]: string[] }>({});
- 
-useEffect(() => {
-  const newFilters: { [key: string]: string[] } = {
-    brand: [],
-    type: [],
-    status: [],
-  };
 
-  products.forEach(p => {
-    if (!newFilters.brand.includes(p.brand)) newFilters.brand.push(p.brand);
-    if (!newFilters.type.includes(p.type)) newFilters.type.push(p.type);
-    if (!newFilters.status.includes(p.status)) newFilters.status.push(p.status);
-  });
-
-  setFilters(newFilters);
-}, [products]);
 
   useEffect(() => {
     fetchProducts();
@@ -628,7 +613,12 @@ const ProductModal = ({
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
- 
+ const filteredProducts = products.filter((p) => {
+  if (selectedBrand && p.brand !== selectedBrand) return false;
+  // هنا تضيف أي فلاتر ثانية إذا موجودة
+  return true;
+});
+
   if (!isOpen) return null;
 
   return (
