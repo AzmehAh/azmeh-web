@@ -800,18 +800,24 @@ const ProductModal = ({
         <p className="text-gray-900">{formData.brand}</p>
       )}
     </div>
-
-                  <div> 
+ {/* حقل النوع (Type) المعتمد على البيانات من قاعدة البيانات */}
+                  <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Type *
                     </label>
                     {isEditing ? (
-                      <input
-                        type="text"
+                      <select
                         value={formData.type || ''}
                         onChange={(e) => handleInputChange('type', e.target.value)}
                         className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
+                      >
+                        <option value="">Select a type</option>
+                        {types.map((t) => (
+                          <option key={t.id} value={t.value}>
+                            {t.display_name || t.value}
+                          </option>
+                        ))}
+                      </select>
                     ) : (
                       <p className="text-gray-900">{formData.type}</p>
                     )}
