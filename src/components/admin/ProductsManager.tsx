@@ -52,30 +52,7 @@ interface Product {
   technical_specs: TechnicalSpec[];
   status: 'active' | 'inactive' | 'draft';
   created_at?: string;
-}
-const [brands, setBrands] = useState<ProductFilterValue[]>([]);
-const [loadingBrands, setLoadingBrands] = useState(true);
-
-useEffect(() => {
-  const fetchBrands = async () => {
-    try {
-      // جلب نوع الفلتر الخاص بالبراند فقط
-      const { data, error } = await supabase
-        .from('product_filter_values')
-        .select('id, value, display_name')
-        .eq('filter_type_id', 'ID_البراند'); // حط هنا id الخاص بالبراند من جدول filter types
-
-      if (error) throw error;
-      setBrands(data || []);
-    } catch (error) {
-      console.error('Error fetching brands:', error);
-    } finally {
-      setLoadingBrands(false);
-    }
-  };
-
-  fetchBrands();
-}, []);
+} 
 
 const ProductsManager = () => {
   const [products, setProducts] = useState<Product[]>([]);
