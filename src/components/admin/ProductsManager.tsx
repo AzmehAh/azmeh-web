@@ -13,7 +13,7 @@ import {
   X,
   Upload
 } from 'lucide-react';
-import { supabase, ProductFilterType, ProductFilterValue } from '../../lib/supabase';
+import { supabase,  ProductFilterType, ProductFilterValue } from '../../lib/supabase';
 
 // Types
 interface ProductImage {
@@ -426,28 +426,7 @@ const ProductModal = ({
   });
   const [images, setImages] = useState<ProductImage[]>([]);
   const [saving, setSaving] = useState(false);
-const ProductModal = ({ ...props }) => {
-  const [brands, setBrands] = useState<ProductFilterValue[]>([]);
 
-  useEffect(() => {
-    fetchBrands();
-  }, []);
-
-  const fetchBrands = async () => {
-    try {
-      const { data } = await supabase
-        .from('product_filter_types')
-        .select('id, name, product_filter_values(*)')
-        .eq('name', 'Brand')
-        .single();
-
-      if (data?.product_filter_values) {
-        setBrands(data.product_filter_values);
-      }
-    } catch (error) {
-      console.error('Error fetching brands:', error);
-    }
-  };
   useEffect(() => {
     if (product) {
       // Ensure all array fields are properly initialized
@@ -702,21 +681,7 @@ const ProductModal = ({ ...props }) => {
                     )}
                    </div>
    
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Brand *
-                    </label> 
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.brand || ''}
-                        onChange={(e) => handleInputChange('brand', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                       <p className="text-gray-900">{formData.brand}</p>
-                    )}
-                  </div> <div>
+                 <div>
       <label className="block text-sm font-medium text-gray-700 mb-2">
         Brand *
       </label> 
