@@ -643,7 +643,43 @@ const ProductModal = ({
               </button>
             </div>
  
-        {/* Filter Toggle */}
+            {/* Content */}
+            <div className="p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Basic Info */}
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Product Name *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.name || ''}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.name}</p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Product Code *
+                    </label>
+                    {isEditing ? (
+                      <input
+                        type="text"
+                        value={formData.code || ''}
+                        onChange={(e) => handleInputChange('code', e.target.value)}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      />
+                    ) : (
+                      <p className="text-gray-900">{formData.code}</p>
+                    )}
+                  </div>
+   {/* Filter Toggle */}
         <div className="border rounded-lg overflow-hidden">
           <button
             onClick={() => setShowFilters(!showFilters)}
@@ -742,102 +778,6 @@ const ProductModal = ({
                       ))}
                     </div>
                   </div>
-
-                  {/* Status Filter */}
-                  <div>
-                    <h4 className="font-medium text-gray-700 mb-2">Status</h4>
-                    <div className="space-y-2 max-h-40 overflow-y-auto">
-                      {filterOptions.status.map(status => (
-                        <label key={status} className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={activeFilters.status.includes(status)}
-                            onChange={() => handleFilterChange('status', status)}
-                            className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
-                          />
-                          <span className="ml-2 text-sm text-gray-600 capitalize">{status}</span>
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* Clear Filters Button */}
-                {Object.values(activeFilters).flat().length > 0 && (
-                  <div className="border-t p-4 bg-gray-50">
-                    <button
-                      onClick={clearAllFilters}
-                      className="text-sm text-[#0055A3] hover:text-blue-700 font-medium"
-                    >
-                      Clear all filters
-                    </button>
-                  </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Active Filters Display */}
-        {Object.values(activeFilters).flat().length > 0 && (
-          <div className="flex flex-wrap gap-2">
-            {Object.entries(activeFilters).map(([filterType, values]) =>
-              values.map(value => (
-                <span
-                  key={`${filterType}-${value}`}
-                  className="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
-                >
-                  {filterType}: {value}
-                  <button
-                    onClick={() => handleFilterChange(filterType, value)}
-                    className="ml-2 text-blue-600 hover:text-blue-800"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </span>
-              ))
-            )}
-          </div>
-        )}
-      </div>
-
-            {/* Content */}
-            <div className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Basic Info */}
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Product Name *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.name || ''}
-                        onChange={(e) => handleInputChange('name', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.name}</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Product Code *
-                    </label>
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={formData.code || ''}
-                        onChange={(e) => handleInputChange('code', e.target.value)}
-                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      />
-                    ) : (
-                      <p className="text-gray-900">{formData.code}</p>
-                    )}
-                  </div>
-  
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Brand *
