@@ -695,7 +695,27 @@ const ProductModal = ({
                     ) : (
                        <p className="text-gray-900">{formData.brand}</p>
                     )}
-                  </div> 
+                  </div> <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Brand *
+      </label> 
+      {isEditing ? (
+        <select
+          value={formData.brand || ''}
+          onChange={(e) => handleInputChange('brand', e.target.value)}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+        >
+          <option value="">Select a brand</option>
+          {brands.map((b) => (
+            <option key={b.id} value={b.value}>
+              {b.display_name || b.value}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <p className="text-gray-900">{formData.brand}</p>
+      )}
+    </div>
 
                   <div> 
                     <label className="block text-sm font-medium text-gray-700 mb-2">
