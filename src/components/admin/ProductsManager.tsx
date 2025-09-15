@@ -368,8 +368,7 @@ const ProductsManager = () => {
         </div>
       )}
 
-     
-      {/* Product Modal */}
+       {/* Product Modal */}
       {isModalOpen && (
         <ProductModal
           isOpen={isModalOpen}
@@ -428,13 +427,15 @@ const ProductModal = ({
   const [images, setImages] = useState<ProductImage[]>([]);
   const [saving, setSaving] = useState(false);
   const [brands, setBrands] = useState<ProductFilterValue[]>([]);
-  const [types, setTypes] = useState<ProductFilterValue[]>([]); // إضافة حالة للأنواع
-  const [usages, setUsages] = useState<ProductFilterValue[]>([]); // إضافة حالة للاستخدامات
+  const [types, setTypes] = useState<ProductFilterValue[]>([]);
+  const [materials, setMaterials] = useState<ProductFilterValue[]>([]); // إضافة حالة للمواد
+  const [usages, setUsages] = useState<ProductFilterValue[]>([]);
 
   useEffect(() => {
     fetchBrands();
-    fetchTypes(); // جلب الأنواع
-    fetchUsages(); // جلب الاستخدامات
+    fetchTypes();
+    fetchMaterials(); // جلب المواد
+    fetchUsages();
     
     if (product) {
       // تهيئة بيانات المنتج
@@ -508,6 +509,23 @@ const ProductModal = ({
     }
   };
 
+  // دالة جلب المواد من قاعدة البيانات
+  const fetchMaterials = async () => {
+    try {
+      const { data } = await supabase
+        .from('product_filter_types')
+        .select('id, name, product_filter_values(*)')
+        .eq('name', 'Material')
+        .single();
+
+      if (data?.product_filter_values) {
+        setMaterials(data.product_filter_values);
+      }
+    } catch (error) {
+      console.error('Error fetching materials:', error);
+    }
+  };
+
   // دالة جلب الاستخدامات من قاعدة البيانات
   const fetchUsages = async () => {
     try {
@@ -524,46 +542,6 @@ const ProductModal = ({
       console.error('Error fetching usages:', error);
     }
   };
-  useEffect(() => {
-    if (product) {
-      // Ensure all array fields are properly initialized
-      const productData = {
-        ...product,
-        features: Array.isArray(product.features) ? product.features : [],
-        applications: Array.isArray(product.applications) ? product.applications : [],
-        packaging: Array.isArray(product.packaging) ? product.packaging : [],
-        technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
-        instructions: Array.isArray(product.instructions) ? product.instructions : [],
-       
-        safety_first_aid: Array.isArray(product.safety_first_aid) ? product.safety_first_aid : [],
-        safety_precautions: Array.isArray(product.safety_precautions) ? product.safety_precautions : [],
-      };
-      setFormData(productData);
-      setImages(productImages[product.id] || []);
-    } else {
-      setFormData({
-        name: '',
-        code: '',
-        brand: '',
-        type: '',
-        material: '',
-        usage: '',
-        description: '',
-        technical_description: '',
-        features: [],
-        applications: [],
-        instructions: [],
-        packaging: [],
-        storage: '',
-        safety_precautions: [],
-        safety_first_aid: [],
-        technical_specs: [],
-        status: 'active'
-      });
-      setImages([]);
-    }
-  }, [product, productImages]);
-
   const handleSave = async () => {
     setSaving(true);
     try {
