@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css"; 
 import { 
   Plus, 
   Search, 
@@ -978,22 +980,35 @@ const ProductModal = ({
                 )}
               </div>
 
-              {/* Storage */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Storage
-                </label>
-                {isEditing ? (
-                  <textarea
-                    value={formData.storage || ''}
-                    onChange={(e) => handleInputChange('storage', e.target.value)}
-                    rows={2}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.storage}</p>
-                )}
-              </div>
+          
+{/* Storage */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Storage
+  </label>
+  {isEditing ? (
+    <ReactQuill
+      value={formData.storage || ""}
+      onChange={(value) => handleArrayInputChange("storage", value)}
+      className="bg-white rounded-lg border border-gray-200"
+      theme="snow"
+      modules={{
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ["bold", "italic", "underline", "strike"],
+          [{ list: "ordered" }, { list: "bullet" }],
+          ["link", "image"],
+          ["clean"],
+        ],
+      }}
+    />
+  ) : (
+    <div
+      className="prose max-w-none text-gray-900"
+      dangerouslySetInnerHTML={{ __html: formData.storage }}
+    />
+  )}
+</div>
 
               {/* Product Images */}
               <div className="mt-6">
