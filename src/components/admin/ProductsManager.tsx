@@ -426,7 +426,7 @@ const ProductModal = ({
   });
   const [images, setImages] = useState<ProductImage[]>([]);
   const [saving, setSaving] = useState(false);
-const ProductModal = ({ ...props }) => {
+ const ProductModal = ({ ...props }) => {
   const [brands, setBrands] = useState<ProductFilterValue[]>([]);
 
   useEffect(() => {
