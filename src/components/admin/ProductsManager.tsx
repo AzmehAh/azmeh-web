@@ -1280,7 +1280,7 @@ const usages = getFilterValuesByType('usage');
               </div>
             )}
           </motion.div>
-        </div> 
+        </div>  
       </div>
     </AnimatePresence>
   );
