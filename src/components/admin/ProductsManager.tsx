@@ -1371,7 +1371,8 @@ const ProductModal = ({
                   </div>
                 )}
               </div>
-            </div>
+           </motion.div>
+
 
             {/* Footer */}
             {isEditing && (
