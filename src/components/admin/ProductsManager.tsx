@@ -42,7 +42,7 @@ interface Product {
   technical_description: string;
   features: string[];
   applications: string[];
-  instructions: string;
+  instructions:  string[];
   packaging: PackagingSize[];
   storage: string;
   safety_precautions: string;
@@ -100,6 +100,7 @@ const ProductsManager = () => {
       // Parse array fields that might be stored as strings
       const parsedData = (productsData || []).map(item => ({
         ...item,
+      instructions: parseArrayField(item.instructions),
         features: parseArrayField(item.features),
         applications: parseArrayField(item.applications),
         packaging: parseArrayField(item.packaging),
@@ -409,7 +410,7 @@ const ProductModal = ({
     technical_description: '',
     features: [],
     applications: [],
-    instructions: '',
+    instructions: [],
     packaging: [],
     storage: '',
     safety_precautions: '',
@@ -429,7 +430,7 @@ const ProductModal = ({
         applications: Array.isArray(product.applications) ? product.applications : [],
         packaging: Array.isArray(product.packaging) ? product.packaging : [],
         technical_specs: Array.isArray(product.technical_specs) ? product.technical_specs : [],
-        instructions: product.instructions || '',
+      instructions: Array.isArray(product.instructions) ? product.instructions : [],
         storage: product.storage || '',
         safety_precautions: product.safety_precautions || '',
         safety_first_aid: product.safety_first_aid || ''
@@ -448,7 +449,7 @@ const ProductModal = ({
         technical_description: '',
         features: [],
         applications: [],
-        instructions: '',
+        instructions: [],
         packaging: [],
         storage: '',
         safety_precautions: '',
@@ -471,6 +472,7 @@ const ProductModal = ({
 
   // Arrays (TEXT[])
   features: Array.isArray(formData.features) ? formData.features : [],
+       instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
   applications: Array.isArray(formData.applications) ? formData.applications : [],
   safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
   safety_precautions: Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
@@ -883,22 +885,46 @@ const ProductModal = ({
                 )}
               </div>
 
-              {/* Instructions */}
+              {/*instructions*/}
               <div className="mt-6">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Instructions
+                instructions
                 </label>
                 {isEditing ? (
-                  <textarea
-                    value={formData.instructions || ''}
-                    onChange={(e) => handleInputChange('instructions', e.target.value)}
-                    rows={3}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
+                  <div className="space-y-2">
+                    {(formData.features || []).map((item, idx) => (
+                      <div key={idx} className="flex gap-2">
+                        <input
+                          type="text"
+                          value={item}
+                          onChange={(e) => handleArrayInputChange('instructions', idx, e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeArrayItem('instructions', idx)}
+                          className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => addArrayItem('instructions', '')}
+                      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                    >
+                      + Add instructions
+                    </button>
+                  </div>
                 ) : (
-                  <p className="text-gray-900 whitespace-pre-line">{formData.instructions}</p>
+                  <ul className="list-disc pl-5 text-gray-900">
+                    {(formData.features || []).map((f, i) => (
+                      <li key={i}>{f}</li>
+                    ))}
+                  </ul>
                 )}
-              </div> 
+              </div>
  
               {/* Packaging */}
               <div className="mt-6">
