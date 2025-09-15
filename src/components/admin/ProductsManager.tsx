@@ -385,7 +385,7 @@ const ProductsManager = () => {
   );
 };
 
-/
+
 // Product Modal Component
 const ProductModal = ({ 
   isOpen, 
