@@ -87,7 +87,7 @@ const ProductsManager = () => {
     try {
       // جلب جميع المنتجات
       const { data: productsData, error: productsError } = await supabase
-        .from('products')
+        .from('products') 
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -679,7 +679,7 @@ const ProductModal = ({
                     ) : (
                       <p className="text-gray-900">{formData.code}</p>
                     )}
-                  </div>
+                   </div>
    
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
