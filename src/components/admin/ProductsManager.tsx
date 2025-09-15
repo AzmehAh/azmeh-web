@@ -368,7 +368,8 @@ const ProductsManager = () => {
         </div>
       )}
 
-     {/* Product Modal */}
+     
+      {/* Product Modal */}
       {isModalOpen && (
         <ProductModal
           isOpen={isModalOpen}
@@ -426,10 +427,15 @@ const ProductModal = ({
   });
   const [images, setImages] = useState<ProductImage[]>([]);
   const [saving, setSaving] = useState(false);
-  const [brands, setBrands] = useState<ProductFilterValue[]>([]); // إضافة حالة للبراندات
+  const [brands, setBrands] = useState<ProductFilterValue[]>([]);
+  const [types, setTypes] = useState<ProductFilterValue[]>([]); // إضافة حالة للأنواع
+  const [usages, setUsages] = useState<ProductFilterValue[]>([]); // إضافة حالة للاستخدامات
 
   useEffect(() => {
     fetchBrands();
+    fetchTypes(); // جلب الأنواع
+    fetchUsages(); // جلب الاستخدامات
+    
     if (product) {
       // تهيئة بيانات المنتج
       const productData = {
@@ -485,6 +491,39 @@ const ProductModal = ({
     }
   };
 
+  // دالة جلب الأنواع من قاعدة البيانات
+  const fetchTypes = async () => {
+    try {
+      const { data } = await supabase
+        .from('product_filter_types')
+        .select('id, name, product_filter_values(*)')
+        .eq('name', 'Type')
+        .single();
+
+      if (data?.product_filter_values) {
+        setTypes(data.product_filter_values);
+      }
+    } catch (error) {
+      console.error('Error fetching types:', error);
+    }
+  };
+
+  // دالة جلب الاستخدامات من قاعدة البيانات
+  const fetchUsages = async () => {
+    try {
+      const { data } = await supabase
+        .from('product_filter_types')
+        .select('id, name, product_filter_values(*)')
+        .eq('name', 'Usage')
+        .single();
+
+      if (data?.product_filter_values) {
+        setUsages(data.product_filter_values);
+      }
+    } catch (error) {
+      console.error('Error fetching usages:', error);
+    }
+  };
   useEffect(() => {
     if (product) {
       // Ensure all array fields are properly initialized
