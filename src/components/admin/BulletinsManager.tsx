@@ -121,21 +121,11 @@ const BulletinsManager = () => {
       </div>
     );
   }
-  useEffect(() => {
-  if (bulletin) {
-    setFormData({
-      ...
-      contact: bulletin.contact || '',
-    });
-  } else {
-    setFormData(prev => ({ ...prev, contact: '' }));
-  }
-}, [bulletin]);
-
+  
 const bulletinData = {
   ...
   contact: formData.contact,
-  updated_at: new Date().toISOString()
+  updated_at: new Date().toISOString() 
 };
  
   return (
