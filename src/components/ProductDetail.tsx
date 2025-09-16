@@ -11,7 +11,7 @@ interface Product {
   name: string;
   code: string;
   description: string;
-  technical_description: string;
+  technical_description: string; 
   image_url: string;
   images: string[];
   type: string;
