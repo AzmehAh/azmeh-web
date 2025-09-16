@@ -1129,102 +1129,80 @@ const ProductModal = ({
   )}
 </div>
 
+{/* Product Images */}
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Product Images
+  </label>
 
-              {/* Product Images */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Images
-                </label>
+  {isEditing ? (
+    <div className="space-y-4">
+      <div className="flex items-center gap-4">
+        <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
+          <Upload className="w-4 h-4 mr-2" />
+          Upload Images
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            disabled={uploading}
+          />
+        </label>
+        {uploading && <span className="text-gray-500">Uploading...</span>}
+      </div>
 
-                {isEditing ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
-                        <Upload className="w-4 h-4 mr-2" />
-                        Upload Images
-                        <input
-                          type="file"
-                          multiple
-                          accept="image/*"
-                          onChange={handleImageUpload}
-                          className="hidden"
-                          disabled={uploading}
-                        />
-                      </label>
-                      {uploading && <span className="text-gray-500">Uploading...</span>}
-                    </div>
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+        {images.map((img, idx) => (
+          <div key={img.id || idx} className="flex flex-col items-center">
+            {/* الصورة */}
+            <img
+              src={img.image_url}
+              alt={`Product ${idx + 1}`}
+              className="w-full h-32 object-cover rounded border"
+            />
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                      {images.map((img, idx) => (
-                        <div key={img.id || idx} className="relative group">
-                          <img
-                             src={img.image_url}
-                            alt={`Product ${idx + 1}`}
-                            className="w-full h-32 object-cover rounded border"
-                          />
-                          <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <button
-                              type="button"
-                              onClick={() => removeImage(idx)}
-                              className="p-1 bg-red-500 text-white rounded"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                            {/* Product Image */}
-<div className="h-48 bg-gray-100 relative">
-  {/* Checkbox */}
-  <div className="absolute top-2 left-2 z-10">
-    <input
-      type="checkbox"
-      checked={product.selected || false} // حالة محددة لكل منتج
-      onChange={(e) => handleCheckboxChange(product.id, e.target.checked)}
-      className="w-5 h-5 accent-[#0055A3]"
-    />
-  </div>
+            {/* الشيك بوكس لتحديد الصورة الرئيسية */}
+            <label className="mt-2 flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="radio"
+                name="mainImage" // اختيار صورة واحدة فقط
+                checked={img.isMain || false}
+                onChange={() => setMainImage(idx)} // دالة لتعيين الصورة الرئيسية
+                className="w-5 h-5 accent-[#0055A3]"
+              />
+              Main Image
+            </label>
 
-  {images[0] ? (
-    <img
-      src={images[0].image_url}
-      alt={product.name}
-      className="w-full h-full object-cover"
-    />
+            {/* زر الحذف عند hover */}
+            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100">
+              <button
+                type="button"
+                onClick={() => removeImage(idx)}
+                className="p-1 bg-red-500 text-white rounded"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   ) : (
-    <div className="flex items-center justify-center h-full">
-      <ImageIcon className="w-12 h-12 text-gray-400" />
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {images.map((img, i) => (
+        <img
+          key={i}
+          src={img.image_url}
+          alt={`Product Image ${i + 1}`}
+          className="w-full h-32 object-cover rounded border"
+        />
+      ))}
     </div>
   )}
-
-  <div className="absolute top-2 right-2">
-    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-      product.status === 'active' 
-        ? 'bg-green-100 text-green-800' 
-        : product.status === 'inactive'
-        ? 'bg-red-100 text-red-800'
-        : 'bg-yellow-100 text-yellow-800'
-    }`}>
-      {product.status}
-    </span>
-  </div>
 </div>
 
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {images.map((img, i) => (
-                      <img
-                        key={i}
-                        src={img.image_url}
-                        alt={`Product Image ${i + 1}`}
-                        className="w-full h-32 object-cover rounded border"
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
 
                 {/* safety_precautions */}
               <div className="mt-6">
