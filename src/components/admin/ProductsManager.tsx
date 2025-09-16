@@ -1161,17 +1161,18 @@ const ProductModal = ({
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         {images.map((img, idx) => (
-          <div key={img.id || idx} className="relative flex flex-col items-center">
+          <div key={img.id || idx} className="relative flex flex-col items-center group">
+            
             {/* الصورة */}
-            <div className="relative w-full h-32">
+            <div className="relative w-full h-32 rounded border overflow-hidden">
               <img
                 src={img.image_url}
                 alt={`Product ${idx + 1}`}
-                className="w-full h-full object-cover rounded border"
+                className="w-full h-full object-cover"
               />
 
               {/* زر الحذف عند hover */}
-              <div className="absolute top-2 right-2 opacity-0 hover:opacity-100 transition-opacity">
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   type="button"
                   onClick={() => removeImage(idx)}
