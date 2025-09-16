@@ -1119,65 +1119,95 @@ const ProductModal = ({
 
 
               {/* Product Images */}
-              <div className="mt-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Product Images
-                </label>
+<div className="mt-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Product Images
+  </label>
 
-                {isEditing ? (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-4">
-                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
-                        <Upload className="w-4 h-4 mr-2" />
-                        Upload Images
-                        <input
-                          type="file"
-                          multiple
-                          accept="image/*"
-                          onChange={handleImageUpload}
-                          className="hidden"
-                          disabled={uploading}
-                        />
-                      </label>
-                      {uploading && <span className="text-gray-500">Uploading...</span>}
-                    </div>
-
-                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-  {images.map((img, idx) => (
-    <div key={img.id || idx} className="relative group">
-      <img
-        src={img.image_url}
-        alt={`Product ${idx + 1}`}
-        className="w-full h-32 object-cover rounded border"
-      />
-      <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-        <button
-          type="button"
-          onClick={() => setPrimaryImage(idx)}
-          className={`p-1 rounded ${
-            img.is_primary ? 'bg-green-500 text-white' : 'bg-white text-gray-700'
-          }`}
-          title={img.is_primary ? 'Primary Image' : 'Set as Primary'}
-        >
-          {img.is_primary ? '✓ Primary' : 'Set Primary'}
-        </button>
-        <button
-          type="button"
-          onClick={() => removeImage(idx)}
-          className="p-1 bg-red-500 text-white rounded"
-          title="Remove"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
+  {isEditing ? (
+    <div className="space-y-4">
+      <div className="flex items-center gap-4">
+        <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
+          <Upload className="w-4 h-4 mr-2" />
+          Upload Images
+          <input
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleImageUpload}
+            className="hidden"
+            disabled={uploading}
+          />
+        </label>
+        {uploading && <span className="text-gray-500">Uploading...</span>}
       </div>
-      {img.is_primary && (
-        <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
-          Primary
-        </div>
-      )}
+
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+        {images.map((img, idx) => (
+          <div key={img.id || idx} className="relative group">
+            <img
+              src={img.image_url}
+              alt={`Product ${idx + 1}`}
+              className="w-full h-32 object-cover rounded border"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => setPrimaryImage(idx)}
+                className={`p-1 rounded ${
+                  img.is_primary ? 'bg-green-500 text-white' : 'bg-white text-gray-700'
+                }`}
+                title={img.is_primary ? 'Primary Image' : 'Set as Primary'}
+              >
+                {img.is_primary ? (
+                  <span className="text-xs">✓ Primary</span>
+                ) : (
+                  <span className="text-xs">Set Primary</span>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => removeImage(idx)}
+                className="p-1 bg-red-500 text-white rounded"
+                title="Remove"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+            {img.is_primary && (
+              <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
+                Primary
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      
+      {/* تعليمات حول الصورة الأساسية */}
+      <div className="text-sm text-gray-500 mt-2">
+        <p>• الصورة الأساسية سيتم عرضها في قائمة المنتجات</p>
+        <p>• يمكنك تحديد صورة واحدة كصورة أساسية</p>
+      </div>
     </div>
-
-
+  ) : (
+    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+      {images.map((img, i) => (
+        <div key={i} className="relative">
+          <img
+            src={img.image_url}
+            alt={`Product Image ${i + 1}`}
+            className="w-full h-32 object-cover rounded border"
+          />
+          {img.is_primary && (
+            <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
+              Primary
+            </div>
+          )}
+        </div>
+      ))}
+    </div>
+  )}
+</div>
 
                 {/* safety_precautions */}
               <div className="mt-6">
