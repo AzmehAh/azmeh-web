@@ -1161,25 +1161,13 @@ const ProductModal = ({
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         {images.map((img, idx) => (
-          <div key={img.id || idx} className="flex flex-col items-center">
+          <div key={img.id || idx} className="relative group flex flex-col items-center">
             {/* الصورة */}
             <img
               src={img.image_url}
               alt={`Product ${idx + 1}`}
               className="w-full h-32 object-cover rounded border"
             />
-
-            {/* الشيك بوكس لتحديد الصورة الرئيسية */}
-            <label className="mt-2 flex items-center gap-2 text-sm cursor-pointer">
-              <input
-                type="radio"
-                name="mainImage" // اختيار صورة واحدة فقط
-                checked={img.isMain || false}
-                onChange={() => setMainImage(idx)} // دالة لتعيين الصورة الرئيسية
-                className="w-5 h-5 accent-[#0055A3]"
-              />
-              Main Image
-            </label>
 
             {/* زر الحذف عند hover */}
             <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100">
@@ -1191,6 +1179,18 @@ const ProductModal = ({
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>
+
+            {/* الشيك بوكس لتحديد الصورة الرئيسية */}
+            <label className="mt-2 flex items-center gap-2 text-sm cursor-pointer">
+              <input
+                type="radio" // اختر صورة واحدة فقط كالرئيسية
+                name="mainImage"
+                checked={img.isMain || false}
+                onChange={() => setMainImage(idx)}
+                className="w-5 h-5 accent-[#0055A3]"
+              />
+              Main Image
+            </label>
           </div>
         ))}
       </div>
@@ -1208,6 +1208,7 @@ const ProductModal = ({
     </div>
   )}
 </div>
+
 
                 {/* safety_precautions */}
               <div className="mt-6">
