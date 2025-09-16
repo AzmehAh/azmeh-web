@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Download, Package, Info, FileText, CheckCircle, Wrench, Shield } from "lucide-react";
-import { api } from "../lib/supabase";
+import { supabase } from "../../lib/supabase";
 import DOMPurify from 'dompurify';
 
 // تعريف واجهة المنتج
@@ -11,23 +11,21 @@ interface Product {
   name: string;
   code: string;
   description: string;
-  technicalDescription: string;
-  image: string;
+  technical_description: string;
+  image_url: string;
   images: string[];
   type: string;
   brand: string;
   material: string;
   usage: string;
   packaging: { size: string }[];
-  technicalSpecs: { property: string; value: string; standard: string }[];
+  technical_specs: { property: string; value: string; standard: string }[];
   features: string[];
   applications: string[];
   instructions: string[];
   storage: string;
-  safety: {
-    precautions: string[];
-    firstAid: string[];
-  };
+  safety_precautions: string[];
+  safety_first_aid: string[];
 }
 
 const brands = [
@@ -64,42 +62,68 @@ const ProductDetail = () => {
     }
   }, [product]);
 
+  // دالة مساعدة لتحليل الحقول المصفوفة
+  const parseArrayField = (field: any): any[] => {
+    if (Array.isArray(field)) return field;
+    if (typeof field === 'string') {
+      try {
+        return JSON.parse(field);
+      } catch (e) {
+        return [];
+      }
+    }
+    return [];
+  };
+
   const fetchProduct = async (productId: string) => {
     try {
       setLoading(true);
-      const productData = await api.getProduct(productId);
+      
+      // جلب بيانات المنتج
+      const { data: productData, error: productError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', productId)
+        .single();
 
-      if (productData) {
-      const formattedProduct: Product = {
-  id: productData.id,
-  name: productData.name,
-  code: productData.code,
-  description: productData.description,
-  technicalDescription: productData.technical_description || "",
-  image: productData.main_image,
-  images: productData.images || [productData.main_image],
-  type: productData.type,
-  brand: productData.brand,
-  material: productData.material,
-  usage: productData.usage,
-  packaging: productData.packaging || [],
-  technicalSpecs: productData.technical_specs || [],
-  features: productData.features || [],
-  applications: productData.applications || [],
-  instructions: productData.instructions || [],
-  storage: productData.storage || "",  // <- تعديل هنا
-  safety: {
-    precautions: productData.safety_precautions || [],
-    firstAid: productData.safety_first_aid || []  // <- تعديل هنا
-  }
-};
-
-       
-
-        setProduct(formattedProduct);
-      } else {
+      if (productError) throw productError;
+      if (!productData) {
         setProduct(null);
+        return;
       }
+
+      // جلب صور المنتج
+      const { data: imagesData, error: imagesError } = await supabase
+        .from('product_images')
+        .select('image_url')
+        .eq('product_id', productId)
+        .order('created_at');
+
+      if (imagesError) throw imagesError;
+
+      const formattedProduct: Product = {
+        id: productData.id,
+        name: productData.name,
+        code: productData.code,
+        description: productData.description,
+        technical_description: productData.technical_description || "",
+        image_url: imagesData && imagesData.length > 0 ? imagesData[0].image_url : "",
+        images: imagesData ? imagesData.map(img => img.image_url) : [],
+        type: productData.type,
+        brand: productData.brand,
+        material: productData.material,
+        usage: productData.usage,
+        packaging: parseArrayField(productData.packaging),
+        technical_specs: parseArrayField(productData.technical_specs),
+        features: parseArrayField(productData.features),
+        applications: parseArrayField(productData.applications),
+        instructions: parseArrayField(productData.instructions),
+        storage: productData.storage || "",
+        safety_precautions: parseArrayField(productData.safety_precautions),
+        safety_first_aid: parseArrayField(productData.safety_first_aid)
+      };
+
+      setProduct(formattedProduct);
     } catch (error) {
       console.error('Error fetching product:', error);
       setProduct(null);
@@ -109,9 +133,8 @@ const ProductDetail = () => {
   };
 
   const handleDownloadDatasheet = () => {
-    if (product) {
-      api.downloadProductDatasheet(product.id, product.name);
-    }
+    // يمكنك تنفيذ هذه الوظيفة لاحقاً
+    console.log("Download datasheet for product:", product?.id);
   };
 
   const brandLogo =
@@ -155,9 +178,9 @@ const ProductDetail = () => {
           {/* Breadcrumb */}
           <div className="relative z-50 mb-8">
             <div className="flex items-center text-sm text-white">
-              <Link to="/" className="nav-link">Home</Link>
+              <Link to="/" className="hover:underline">Home</Link>
               <span className="mx-2">/</span>
-              <Link to="/products" className="nav-link">Products</Link>
+              <Link to="/products" className="hover:underline">Products</Link>
               {product && (
                 <>
                   <span className="mx-2">/</span>
@@ -179,7 +202,7 @@ const ProductDetail = () => {
                 <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.usage}</span>
               </div>
 
-              <p className="text-blue-100/90 mb-6 leading-relaxed">{product.technicalDescription}</p>
+              <p className="text-blue-100/90 mb-6 leading-relaxed">{product.technical_description}</p>
 
               <div className="mb-8">
                 <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
@@ -212,7 +235,7 @@ const ProductDetail = () => {
                 </div>
               )}
 
-              {product.images.length > 0 && (
+              {product.images.length > 0 ? (
                 <>
                   <motion.img
                     key={currentImageIndex}
@@ -238,6 +261,10 @@ const ProductDetail = () => {
                     </div>
                   )}
                 </>
+              ) : (
+                <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center">
+                  <p className="text-gray-500">No images available</p>
+                </div>
               )}
             </div>
           </div>
@@ -245,7 +272,7 @@ const ProductDetail = () => {
       </section>
 
       {/* Technical Specifications */}
-      {product.technicalSpecs.length > 0 && (
+      {product.technical_specs.length > 0 && (
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-16">
@@ -265,7 +292,7 @@ const ProductDetail = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {product.technicalSpecs.map((spec, index) => (
+                    {product.technical_specs.map((spec, index) => (
                       <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                         <td className="px-8 py-4 font-medium text-gray-800">{spec.property}</td>
                         <td className="px-8 py-4 text-[#2C5DB6] font-semibold">{spec.value}</td>
@@ -375,10 +402,10 @@ const ProductDetail = () => {
               <Shield className="w-8 h-8 text-green-600 mr-3" />
               Storage Requirements
             </h2>
-           <div
-  className="max-w-4xl mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
-  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storage) }}
-/>
+            <div
+              className="max-w-4xl mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storage) }}
+            />
           </div>
         </section>
       )}
@@ -402,9 +429,9 @@ const ProductDetail = () => {
                 <h3 className="text-xl font-bold text-white">Safety Precautions</h3>
               </div>
               <div className="p-6">
-                {product.safety.precautions.length > 0 ? (
+                {product.safety_precautions.length > 0 ? (
                   <div className="space-y-3">
-                    {product.safety.precautions.map((precaution, index) => (
+                    {product.safety_precautions.map((precaution, index) => (
                       <div key={index} className="flex items-start">
                         <div className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-4 flex-shrink-0" />
                         <p className="text-gray-700">{precaution}</p>
@@ -428,9 +455,9 @@ const ProductDetail = () => {
                 <h3 className="text-xl font-bold text-white">First Aid</h3>
               </div>
               <div className="p-6">
-                {product.safety.firstAid.length > 0 ? (
+                {product.safety_first_aid.length > 0 ? (
                   <div className="space-y-3">
-                    {product.safety.firstAid.map((aid, index) => (
+                    {product.safety_first_aid.map((aid, index) => (
                       <div key={index} className="flex items-start">
                         <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0" />
                         <p className="text-gray-700">{aid}</p>
