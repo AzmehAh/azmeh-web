@@ -22,7 +22,7 @@ interface Product {
   features: string[];
   applications: string[];
   instructions: string[];
-  storage: string[];
+  storage: string;
   safety: {
     precautions: string[];
     firstAid: string[];
@@ -88,10 +88,12 @@ const ProductDetail = () => {
           features: productData.features || [],
           applications: productData.applications || [],
           instructions: productData.instructions || [],
-          storage: productData.storage,
-          safety: {
-            precautions: productData.safety_precautions || [],
-            firstAid: productData.first_aid_measures || []
+         storage: productData.storage_requirements || "",
+safety: {
+  precautions: productData.safety_precautions || [],
+  firstAid: productData.first_aid_measures || []
+}
+
           }
         };
         
@@ -394,27 +396,22 @@ const ProductDetail = () => {
             </section>
           )}
 
-          {/* Storage Information */}
-          {product.storage && product.storage.length > 0 && (
-            <section className="py-16 bg-white">
-              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <h2 className="text-3xl font-bold text-center text-gray-800 mb-12 flex items-center justify-center">
-                  <Shield className="w-8 h-8 text-green-600 mr-3" />
-                  Storage Requirements
-                </h2>
-                <div className="max-w-4xl mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8">
-                  <div className="grid md:grid-cols-2 gap-8">
-                    {product.storage.map((requirement, index) => (
-                      <div key={index} className="flex items-start">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mt-2 mr-4 flex-shrink-0" />
-                        <p className="text-gray-700">{requirement}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </section>
-          )}
+      {/* Storage Information */}
+{product.storage && (
+  <section className="py-16 bg-white">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 className="text-3xl font-bold text-center text-gray-800 mb-12 flex items-center justify-center">
+        <Shield className="w-8 h-8 text-green-600 mr-3" />
+        Storage Requirements
+      </h2>
+      <div
+        className="prose max-w-4xl mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
+        dangerouslySetInnerHTML={{ __html: product.storage }}
+      />
+    </div>
+  </section>
+)}
+
 
           {/* Safety Information */}
           {product.safety && (product.safety.precautions.length > 0 || product.safety.firstAid.length > 0) && (
