@@ -692,16 +692,9 @@ const handleMainImageSelect = (selectedIdx: number) => {
     isMain: idx === selectedIdx // فقط الصورة المختارة تصبح رئيسية
   })));
 };
- const [images, setImages] = useState<ProductImage[]>([]);
- const handleMainImageSelect = (selectedIdx: number) => {
-  setImages(prev => prev.map((img, idx) => ({
-    ...img,
-    isMain: idx === selectedIdx // فقط الصورة المختارة تصبح رئيسية
-  })));
-};
-
+ 
   if (!isOpen) return null;
-
+ 
 
   return (
     <AnimatePresence>
