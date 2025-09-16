@@ -88,7 +88,7 @@ const ProductDetail = () => {
           features: productData.features || [],
           applications: productData.applications || [],
           instructions: productData.instructions || [],
-          storage: productData.storage_requirements || [],
+          storage: productData.storage,
           safety: {
             precautions: productData.safety_precautions || [],
             firstAid: productData.first_aid_measures || []
