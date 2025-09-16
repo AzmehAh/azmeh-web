@@ -697,7 +697,13 @@ const ProductModal = ({
       p.id === productId ? { ...p, selected: checked } : p
     )
   );
+}; 
+  const setMainImage = (index: number) => {
+  setImages(prev =>
+    prev.map((img, i) => ({ ...img, isMain: i === index }))
+  );
 };
+
 
   if (!isOpen) return null;
 
