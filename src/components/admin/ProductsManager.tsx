@@ -692,18 +692,13 @@ const handleMainImageSelect = (selectedIdx: number) => {
     isMain: idx === selectedIdx // فقط الصورة المختارة تصبح رئيسية
   })));
 };
- for (const img of images) {
-  if (img.id) {
-    await supabase
-      .from('product_images')
-      .update({ image_url: img.image_url, isMain: img.isMain })
-      .eq('id', img.id);
-  } else {
-    await supabase
-      .from('product_images')
-      .insert([{ product_id: productId, image_url: img.image_url, isMain: img.isMain }]);
-  }
-}
+ const [images, setImages] = useState<ProductImage[]>([]);
+ const handleMainImageSelect = (selectedIdx: number) => {
+  setImages(prev => prev.map((img, idx) => ({
+    ...img,
+    isMain: idx === selectedIdx // فقط الصورة المختارة تصبح رئيسية
+  })));
+};
 
   if (!isOpen) return null;
 
