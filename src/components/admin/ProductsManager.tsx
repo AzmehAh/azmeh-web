@@ -63,8 +63,7 @@ const ProductsManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false); 
-  
+  const [uploading, setUploading] = useState(false);
   
 
   useEffect(() => {
@@ -686,15 +685,9 @@ const ProductModal = ({
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
-const handleMainImageSelect = (selectedIdx: number) => {
-  setImages(prev => prev.map((img, idx) => ({
-    ...img,
-    isMain: idx === selectedIdx // فقط الصورة المختارة تصبح رئيسية
-  })));
-};
- 
+
   if (!isOpen) return null;
- 
+
 
   return (
     <AnimatePresence>
@@ -1149,39 +1142,24 @@ const handleMainImageSelect = (selectedIdx: number) => {
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                     {images.map((img, idx) => (
-  <div key={img.id || idx} className="relative group">
-    <img
-      src={img.image_url}
-      alt={`Product ${idx + 1}`}
-      className="w-full h-32 object-cover rounded border"
-    />
-
-    {/* شريط الأدوات عند المرور */}
-    <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-      {/* زر الحذف */}
-      <button
-        type="button"
-        onClick={() => removeImage(idx)}
-        className="p-1 bg-red-500 text-white rounded"
-      >
-        <Trash2 className="w-4 h-4" />
-      </button>
-
-      {/* شيك بوكس لتحديد الصورة الرئيسية */}
-      <label className="flex items-center gap-1 bg-white text-black px-2 py-1 rounded cursor-pointer">
-        <input
-          type="checkbox"
-          checked={img.isMain || false}
-          onChange={() => handleMainImageSelect(idx)}
-        />
-        Main
-      </label>
-    </div>
-  </div>
-))}
-
-
+                      {images.map((img, idx) => (
+                        <div key={img.id || idx} className="relative group">
+                          <img
+                             src={img.image_url}
+                            alt={`Product ${idx + 1}`}
+                            className="w-full h-32 object-cover rounded border"
+                          />
+                          <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <button
+                              type="button"
+                              onClick={() => removeImage(idx)}
+                              className="p-1 bg-red-500 text-white rounded"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ) : (
