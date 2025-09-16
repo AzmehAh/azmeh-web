@@ -591,23 +591,39 @@ const BulletinModal = ({
               )}
             </div>
 
-            {/* Content */}
-            <div className="px-6 pb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Content (JSON) *</label>
-              {isEditing ? (
-                <textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                  rows={12}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] font-mono text-sm"
-                />
-              ) : (
-                <div className="bg-gray-50 p-4 rounded-lg max-h-60 overflow-y-auto">
-                  <pre className="text-xs text-gray-700">{formData.content}</pre>
-                </div>
-              )}
-            </div>
-          </div>
+           {/* Contact Rich Text */}
+<div className="px-6 pb-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Contact Details
+  </label>
+  {isEditing ? (
+    <ReactQuill
+      value={formData.contact}
+      onChange={(value) => setFormData(prev => ({ ...prev, contact: value }))}
+      modules={{
+        toolbar: [
+          [{ header: [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['link', 'image', 'video'],
+          ['clean'],
+          [{ table: [] }] // بعض النسخ تدعم الإضافات للجداول
+        ]
+      }}
+      formats={[
+        'header',
+        'bold', 'italic', 'underline', 'strike',
+        'list', 'bullet',
+        'link', 'image', 'video',
+        'table'
+      ]}
+      className="bg-white"
+    />
+  ) : (
+    <div className="bg-gray-50 p-4 rounded-lg max-h-60 overflow-y-auto" dangerouslySetInnerHTML={{ __html: formData.contact }} />
+  )}
+</div>
+
 
           {/* Footer */}
           {isEditing && (
