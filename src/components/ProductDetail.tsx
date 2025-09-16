@@ -94,7 +94,7 @@ safety: {
   firstAid: productData.first_aid_measures || []
 }
 
-          }
+       
         };
         
         setProduct(formattedProduct);
