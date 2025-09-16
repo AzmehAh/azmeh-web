@@ -1170,6 +1170,43 @@ const ProductModal = ({
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
+                            {/* Product Image */}
+<div className="h-48 bg-gray-100 relative">
+  {/* Checkbox */}
+  <div className="absolute top-2 left-2 z-10">
+    <input
+      type="checkbox"
+      checked={product.selected || false} // حالة محددة لكل منتج
+      onChange={(e) => handleCheckboxChange(product.id, e.target.checked)}
+      className="w-5 h-5 accent-[#0055A3]"
+    />
+  </div>
+
+  {images[0] ? (
+    <img
+      src={images[0].image_url}
+      alt={product.name}
+      className="w-full h-full object-cover"
+    />
+  ) : (
+    <div className="flex items-center justify-center h-full">
+      <ImageIcon className="w-12 h-12 text-gray-400" />
+    </div>
+  )}
+
+  <div className="absolute top-2 right-2">
+    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+      product.status === 'active' 
+        ? 'bg-green-100 text-green-800' 
+        : product.status === 'inactive'
+        ? 'bg-red-100 text-red-800'
+        : 'bg-yellow-100 text-yellow-800'
+    }`}>
+      {product.status}
+    </span>
+  </div>
+</div>
+
                           </div>
                         </div>
                       ))}
