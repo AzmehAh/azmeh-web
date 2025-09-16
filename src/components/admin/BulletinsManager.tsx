@@ -121,12 +121,6 @@ const BulletinsManager = () => {
       </div>
     );
   }
-  
-const bulletinData = {
-  ...
-  contact: formData.contact,
-  updated_at: new Date().toISOString() 
-};
  
   return (
     <div className="space-y-6">
