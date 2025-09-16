@@ -64,8 +64,6 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [mainImage, setMainImage] = useState<string>("");
-
   
 
   useEffect(() => {
@@ -1119,82 +1117,79 @@ const ProductModal = ({
 </div>
 
 
-            {/* Product Images */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Product Images
-  </label>
+              {/* Product Images */}
+              <div className="mt-6">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Product Images
+                </label>
 
-  {isEditing ? (
-    <div className="space-y-4">
-      {/* رفع الصور */}
-      <div className="flex items-center gap-4">
-        <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
-          <Upload className="w-4 h-4 mr-2" />
-          Upload Images
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="hidden"
-            disabled={uploading}
-          />
-        </label>
-        {uploading && <span className="text-gray-500">Uploading...</span>}
-      </div>
+                {isEditing ? (
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-4">
+                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
+                        <Upload className="w-4 h-4 mr-2" />
+                        Upload Images
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                          disabled={uploading}
+                        />
+                      </label>
+                      {uploading && <span className="text-gray-500">Uploading...</span>}
+                    </div>
 
-      {/* صور المنتج مع اختيار الصورة الرئيسية */}
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-        {images.map((img, idx) => (
-          <div key={img.id || idx} className="relative group border rounded overflow-hidden">
-            <img
-              src={img.image_url}
-              alt={`Product ${idx + 1}`}
-              className="w-full h-32 object-cover"
-            />
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+                     {images.map((img, idx) => (
+  <div key={img.id || idx} className="relative group">
+    <img
+      src={img.image_url}
+      alt={`Product ${idx + 1}`}
+      className="w-full h-32 object-cover rounded border"
+    />
 
-            {/* اختيار الصورة الرئيسية */}
-            <div className="absolute top-2 left-2 bg-white p-1 rounded flex items-center gap-1">
-              <input
-                type="radio"
-                name="mainImage"
-                checked={img.image_url === mainImage}
-                onChange={() => setMainImage(img.image_url)}
-              />
-              <span className="text-xs">Main</span>
-            </div>
+    {/* شريط الأدوات عند المرور */}
+    <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+      {/* زر الحذف */}
+      <button
+        type="button"
+        onClick={() => removeImage(idx)}
+        className="p-1 bg-red-500 text-white rounded"
+      >
+        <Trash2 className="w-4 h-4" />
+      </button>
 
-            {/* زر الحذف */}
-            <div className="absolute top-2 right-2">
-              <button
-                type="button"
-                onClick={() => removeImage(idx)}
-                className="p-1 bg-red-500 text-white rounded"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  ) : (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-      {images.map((img, i) => (
-        <img
-          key={i}
-          src={img.image_url}
-          alt={`Product Image ${i + 1}`}
-          className={`w-full h-32 object-cover rounded border ${
-            img.image_url === mainImage ? "border-2 border-[#2C5DB6]" : ""
-          }`}
+      {/* شيك بوكس لتحديد الصورة الرئيسية */}
+      <label className="flex items-center gap-1 bg-white text-black px-2 py-1 rounded cursor-pointer">
+        <input
+          type="checkbox"
+          checked={img.isMain || false}
+          onChange={() => handleMainImageSelect(idx)}
         />
-      ))}
+        Main
+      </label>
     </div>
-  )}
-</div>
+  </div>
+))}
 
+
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    {images.map((img, i) => (
+                      <img
+                        key={i}
+                        src={img.image_url}
+                        alt={`Product Image ${i + 1}`}
+                        className="w-full h-32 object-cover rounded border"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
 
                 {/* safety_precautions */}
               <div className="mt-6">
