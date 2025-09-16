@@ -73,6 +73,18 @@ const ProductsManager = () => {
   })));
 };
 
+for (const img of images) {
+  if (img.id) {
+    await supabase
+      .from('product_images')
+      .update({ image_url: img.image_url, isMain: img.isMain })
+      .eq('id', img.id);
+  } else {
+    await supabase
+      .from('product_images')
+      .insert([{ product_id: productId, image_url: img.image_url, isMain: img.isMain }]);
+  }
+}
 
   useEffect(() => {
     fetchProducts();
