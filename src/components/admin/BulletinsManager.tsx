@@ -342,7 +342,7 @@ const BulletinModal = ({ isOpen, onClose, bulletin, isEditing, onSave }: {
             </div>
           </div>
 
-          {/* Footer */}
+          {/* Footer */} 
           {isEditing && (
             <div className="flex items-center justify-end p-6 border-t space-x-3">
               <button onClick={onClose} className="px-4 py-2 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">Cancel</button>
@@ -352,7 +352,7 @@ const BulletinModal = ({ isOpen, onClose, bulletin, isEditing, onSave }: {
         </motion.div>
       </div>
     </div>
-  ); 
+  );
 };
 
 export default BulletinsManager;
