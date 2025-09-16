@@ -1177,7 +1177,7 @@ const ProductModal = ({
       )}
     </div>
   ))}
-</div>
+
 
                 {/* safety_precautions */}
               <div className="mt-6">
