@@ -685,6 +685,19 @@ const ProductModal = ({
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
+ const handleCheckboxChange = (productId: string, checked: boolean) => {
+  setFilteredProducts(prev =>
+    prev.map(p =>
+      p.id === productId ? { ...p, selected: checked } : p
+    )
+  );
+
+  setProducts(prev =>
+    prev.map(p =>
+      p.id === productId ? { ...p, selected: checked } : p
+    )
+  );
+};
 
   if (!isOpen) return null;
 
