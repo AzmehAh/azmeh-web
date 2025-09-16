@@ -688,7 +688,7 @@ const ProductModal = ({
     setImages(prev => 
       prev.map((img, i) => ({ 
         ...img, 
-        isMain: i === index 
+        isMain: i === index  
       }))
     );
   };
