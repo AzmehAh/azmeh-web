@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, Package, Info, FileText, CheckCircle, Wrench, Shield } from "lucide-react";
-import { supabase } from "../../lib/supabase";
+import { Download, Package, FileText, CheckCircle, Wrench, Shield } from "lucide-react";
+import { supabase } from "../lib/supabase"; // مسار معدل
 import DOMPurify from 'dompurify';
 
 // تعريف واجهة المنتج
@@ -11,7 +11,7 @@ interface Product {
   name: string;
   code: string;
   description: string;
-  technical_description: string; 
+  technical_description: string;
   image_url: string;
   images: string[];
   type: string;
@@ -135,6 +135,7 @@ const ProductDetail = () => {
   const handleDownloadDatasheet = () => {
     // يمكنك تنفيذ هذه الوظيفة لاحقاً
     console.log("Download datasheet for product:", product?.id);
+    alert("سيتم تنزيل ورقة البيانات الفنية قريباً");
   };
 
   const brandLogo =
@@ -176,7 +177,7 @@ const ProductDetail = () => {
       <section className="py-24 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <div className="relative z-50 mb-8">
+          <div className="relative mb-8">
             <div className="flex items-center text-sm text-white">
               <Link to="/" className="hover:underline">Home</Link>
               <span className="mx-2">/</span>
