@@ -404,10 +404,10 @@ safety: {
         <Shield className="w-8 h-8 text-green-600 mr-3" />
         Storage Requirements
       </h2>
-      <div
-        className="prose max-w-4xl mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
-        dangerouslySetInnerHTML={{ __html: product.storage }}
-      />
+    <div className="max-w-4xl mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8">
+  <p className="text-gray-700">{product.storage}</p>
+</div>
+
     </div>
   </section>
 )}
