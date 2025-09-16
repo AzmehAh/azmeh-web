@@ -13,13 +13,14 @@ import {
   X,
   Upload
 } from 'lucide-react';
-import { supabase,  ProductFilterType, ProductFilterValue } from '../../lib/supabase';
+import { supabase, ProductFilterType, ProductFilterValue } from '../../lib/supabase';
 
 // Types
 interface ProductImage {
   id?: string;
   image_url: string;
   product_id?: string;
+  isMain?: boolean;
 }
 
 interface TechnicalSpec { 
@@ -105,8 +106,7 @@ const ProductsManager = () => {
         ...item,
         instructions: parseArrayField(item.instructions),
         features: parseArrayField(item.features),
-
-        safety_precautions: parseArrayField(item. safety_precautions),
+        safety_precautions: parseArrayField(item.safety_precautions),
         safety_first_aid: parseArrayField(item.safety_first_aid),
         applications: parseArrayField(item.applications),
         packaging: parseArrayField(item.packaging),
@@ -368,7 +368,7 @@ const ProductsManager = () => {
         </div>
       )}
 
-   {isModalOpen && (
+      {isModalOpen && (
         <ProductModal
           isOpen={isModalOpen}
           onClose={closeModal}
@@ -384,7 +384,7 @@ const ProductsManager = () => {
   );
 };
 
-// Product Modal Component - التصحيح هنا
+// Product Modal Component
 const ProductModal = ({ 
   isOpen, 
   onClose, 
@@ -427,13 +427,13 @@ const ProductModal = ({
   const [saving, setSaving] = useState(false);
   const [brands, setBrands] = useState<ProductFilterValue[]>([]);
   const [types, setTypes] = useState<ProductFilterValue[]>([]);
-  const [materials, setMaterials] = useState<ProductFilterValue[]>([]); // إضافة حالة للمواد
+  const [materials, setMaterials] = useState<ProductFilterValue[]>([]);
   const [usages, setUsages] = useState<ProductFilterValue[]>([]);
 
   useEffect(() => {
     fetchBrands();
     fetchTypes();
-    fetchMaterials(); // جلب المواد
+    fetchMaterials();
     fetchUsages();
     
     if (product) {
@@ -449,7 +449,10 @@ const ProductModal = ({
         safety_precautions: Array.isArray(product.safety_precautions) ? product.safety_precautions : [],
       };
       setFormData(productData);
-      setImages(productImages[product.id] || []);
+      
+      // تحميل الصور مع تحديد الصورة الرئيسية
+      const productImgs = productImages[product.id] || [];
+      setImages(productImgs);
     } else {
       setFormData({
         name: '',
@@ -548,31 +551,16 @@ const ProductModal = ({
       let productId = product?.id;
 
       // Prepare product data without images
-    const productData = {
-  ...formData,
-
-  // Arrays (TEXT[])
-  features: Array.isArray(formData.features) ? formData.features : [],
-   
-      safety_precautions : Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
-      instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
-      applications: Array.isArray(formData.applications) ? formData.applications : [],
-      safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
-   
- 
-
-  // JSONB
-  packaging:
-    typeof formData.packaging === "string"
-      ? JSON.parse(formData.packaging || "{}")
-      : formData.packaging || {},
-
-  technical_specs:
-    typeof formData.technical_specs === "string"
-      ? JSON.parse(formData.technical_specs || "{}")
-      : formData.technical_specs || {},
-};
-
+      const productData = {
+        ...formData,
+        features: Array.isArray(formData.features) ? formData.features : [],
+        safety_precautions: Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
+        instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
+        applications: Array.isArray(formData.applications) ? formData.applications : [],
+        safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
+        packaging: Array.isArray(formData.packaging) ? formData.packaging : [],
+        technical_specs: Array.isArray(formData.technical_specs) ? formData.technical_specs : [],
+      };
 
       if (product) {
         // Update product
@@ -617,13 +605,20 @@ const ProductModal = ({
             // Update existing image
             await supabase
               .from('product_images')
-              .update({ image_url: img.image_url })
+              .update({ 
+                image_url: img.image_url,
+                isMain: img.isMain || false 
+              })
               .eq('id', img.id);
           } else {
             // Add new image
             await supabase
               .from('product_images')
-              .insert([{ product_id: productId, image_url: img.image_url }]);
+              .insert([{ 
+                product_id: productId, 
+                image_url: img.image_url,
+                isMain: img.isMain || false 
+              }]);
           }
         }
       }
@@ -674,7 +669,10 @@ const ProductModal = ({
       const file = files[i];
       const imageUrl = await onUploadImage(file);
       if (imageUrl) {
-        newImages.push({ image_url: imageUrl });
+        newImages.push({ 
+          image_url: imageUrl,
+          isMain: newImages.length === 0 // إذا كانت هذه أول صورة، اجعلها رئيسية
+        });
       }
     }
     
@@ -685,28 +683,17 @@ const ProductModal = ({
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
- const handleCheckboxChange = (productId: string, checked: boolean) => {
-  setFilteredProducts(prev =>
-    prev.map(p =>
-      p.id === productId ? { ...p, selected: checked } : p
-    )
-  );
 
-  setProducts(prev =>
-    prev.map(p =>
-      p.id === productId ? { ...p, selected: checked } : p
-    )
-  );
-}; 
   const setMainImage = (index: number) => {
-  setImages(prev =>
-    prev.map((img, i) => ({ ...img, isMain: i === index }))
-  );
-};
-
+    setImages(prev => 
+      prev.map((img, i) => ({ 
+        ...img, 
+        isMain: i === index 
+      }))
+    );
+  };
 
   if (!isOpen) return null;
-
 
   return (
     <AnimatePresence>
@@ -822,8 +809,6 @@ const ProductModal = ({
                 </div>
 
                 {/* Additional Info */}
-                
-{/* Additional Info */}
                 <div className="space-y-4">
                   {/* حقل المادة (Material) المعتمد على البيانات من قاعدة البيانات */}
                   <div>
@@ -847,8 +832,6 @@ const ProductModal = ({
                       <p className="text-gray-900">{formData.material}</p>
                     )}
                   </div>
-
-
 
                   {/* حقل الاستخدام (Usage) المعتمد على البيانات من قاعدة البيانات */}
                   <div>
@@ -1183,17 +1166,18 @@ const ProductModal = ({
               </div>
             </div>
 
-            {/* الشيك بوكس لتحديد الصورة الرئيسية */}
-            <label className="mt-2 flex items-center gap-2 text-sm cursor-pointer">
-              <input
-                type="radio"
-                name="mainImage"
-                checked={img.isMain || false}
-                onChange={() => setMainImage(idx)}
-                className="w-5 h-5 accent-[#0055A3]"
-              />
-              Main Image
-            </label>
+            {/* زر اختيار الصورة الرئيسية */}
+            <button
+              type="button"
+              onClick={() => setMainImage(idx)}
+              className={`mt-2 px-2 py-1 text-xs rounded ${
+                img.isMain 
+                  ? 'bg-[#0055A3] text-white' 
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              {img.isMain ? 'Main Image' : 'Set as Main'}
+            </button>
           </div>
         ))}
       </div>
@@ -1201,12 +1185,18 @@ const ProductModal = ({
   ) : (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
       {images.map((img, i) => (
-        <img
-          key={i}
-          src={img.image_url}
-          alt={`Product Image ${i + 1}`}
-          className="w-full h-32 object-cover rounded border"
-        />
+        <div key={i} className="relative">
+          <img
+            src={img.image_url}
+            alt={`Product Image ${i + 1}`}
+            className="w-full h-32 object-cover rounded border"
+          />
+          {img.isMain && (
+            <span className="absolute top-2 left-2 bg-[#0055A3] text-white text-xs px-2 py-1 rounded">
+              Main
+            </span>
+          )}
+        </div>
       ))}
     </div>
   )}
@@ -1416,4 +1406,4 @@ const ProductModal = ({
   );
 };
 
-export default ProductsManager; 
+export default ProductsManager;
