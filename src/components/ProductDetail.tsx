@@ -69,29 +69,31 @@ const ProductDetail = () => {
       const productData = await api.getProduct(productId);
 
       if (productData) {
-        const formattedProduct: Product = {
-          id: productData.id,
-          name: productData.name,
-          code: productData.code,
-          description: productData.description,
-          technicalDescription: productData.technical_description || "",
-          image: productData.main_image,
-          images: productData.images || [productData.main_image],
-          type: productData.type,
-          brand: productData.brand,
-          material: productData.material,
-          usage: productData.usage,
-          packaging: productData.packaging || [],
-          technicalSpecs: productData.technical_specs || [],
-          features: productData.features || [],
-          applications: productData.applications || [],
-          instructions: productData.instructions || [],
-          storage: productData.storage_requirements || "",
-          safety: {
-            precautions: productData.safety_precautions || [],
-            firstAid: productData.first_aid_measures || []
-          }
-        };
+      const formattedProduct: Product = {
+  id: productData.id,
+  name: productData.name,
+  code: productData.code,
+  description: productData.description,
+  technicalDescription: productData.technical_description || "",
+  image: productData.main_image,
+  images: productData.images || [productData.main_image],
+  type: productData.type,
+  brand: productData.brand,
+  material: productData.material,
+  usage: productData.usage,
+  packaging: productData.packaging || [],
+  technicalSpecs: productData.technical_specs || [],
+  features: productData.features || [],
+  applications: productData.applications || [],
+  instructions: productData.instructions || [],
+  storage: productData.storage || "",  // <- تعديل هنا
+  safety: {
+    precautions: productData.safety_precautions || [],
+    firstAid: productData.safety_first_aid || []  // <- تعديل هنا
+  }
+};
+
+       
 
         setProduct(formattedProduct);
       } else {
