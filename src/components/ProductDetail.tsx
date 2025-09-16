@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Download, Package, Info, FileText, CheckCircle, Wrench, Shield } from "lucide-react";
 import { api } from "../lib/supabase";
+import DOMPurify from 'dompurify';
 
 // تعريف واجهة المنتج
 interface Product {
