@@ -1161,29 +1161,31 @@ const ProductModal = ({
 
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
         {images.map((img, idx) => (
-          <div key={img.id || idx} className="relative group flex flex-col items-center">
+          <div key={img.id || idx} className="relative flex flex-col items-center">
             {/* الصورة */}
-            <img
-              src={img.image_url}
-              alt={`Product ${idx + 1}`}
-              className="w-full h-32 object-cover rounded border"
-            />
+            <div className="relative w-full h-32">
+              <img
+                src={img.image_url}
+                alt={`Product ${idx + 1}`}
+                className="w-full h-full object-cover rounded border"
+              />
 
-            {/* زر الحذف عند hover */}
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity flex items-center justify-center opacity-0 group-hover:opacity-100">
-              <button
-                type="button"
-                onClick={() => removeImage(idx)}
-                className="p-1 bg-red-500 text-white rounded"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+              {/* زر الحذف عند hover */}
+              <div className="absolute top-2 right-2 opacity-0 hover:opacity-100 transition-opacity">
+                <button
+                  type="button"
+                  onClick={() => removeImage(idx)}
+                  className="p-1 bg-red-500 text-white rounded"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
             </div>
 
             {/* الشيك بوكس لتحديد الصورة الرئيسية */}
             <label className="mt-2 flex items-center gap-2 text-sm cursor-pointer">
               <input
-                type="radio" // اختر صورة واحدة فقط كالرئيسية
+                type="radio"
                 name="mainImage"
                 checked={img.isMain || false}
                 onChange={() => setMainImage(idx)}
