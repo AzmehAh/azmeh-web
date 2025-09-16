@@ -20,6 +20,7 @@ interface ProductImage {
   id?: string;
   image_url: string;
   product_id?: string;
+  is_primary?: boolean;
 }
 
 interface TechnicalSpec {
@@ -83,55 +84,55 @@ const ProductsManager = () => {
     }
   }, [searchTerm, products]);
 
-  const fetchProducts = async () => {
-    try {
-      // جلب جميع المنتجات
-      const { data: productsData, error: productsError } = await supabase
-        .from('products') 
-        .select('*')
-        .order('created_at', { ascending: false });
+ const fetchProducts = async () => {
+  try {
+    // جلب جميع المنتجات
+    const { data: productsData, error: productsError } = await supabase
+      .from('products') 
+      .select('*')
+      .order('created_at', { ascending: false });
 
-      if (productsError) throw productsError;
-      
-      // جلب جميع الصور
-      const { data: imagesData, error: imagesError } = await supabase
-        .from('product_images')
-        .select('*');
+    if (productsError) throw productsError;
+    
+    // جلب جميع الصور مع حقل is_primary
+    const { data: imagesData, error: imagesError } = await supabase
+      .from('product_images')
+      .select('*')
+      .order('is_primary', { ascending: false }); // ترتيب بحيث تكون الصورة الأساسية أولاً
 
-      if (imagesError) throw imagesError;
-      
-      // Parse array fields that might be stored as strings
-      const parsedData = (productsData || []).map(item => ({
-        ...item,
-        instructions: parseArrayField(item.instructions),
-        features: parseArrayField(item.features),
-
-        safety_precautions: parseArrayField(item. safety_precautions),
-        safety_first_aid: parseArrayField(item.safety_first_aid),
-        applications: parseArrayField(item.applications),
-        packaging: parseArrayField(item.packaging),
-        technical_specs: parseArrayField(item.technical_specs)
-      }));
-      
-      setProducts(parsedData);
-      setFilteredProducts(parsedData);
-      
-      // تنظيم الصور حسب product_id
-      const imagesByProduct: Record<string, ProductImage[]> = {};
-      (imagesData || []).forEach(image => {
-        if (!imagesByProduct[image.product_id]) {
-          imagesByProduct[image.product_id] = [];
-        }
-        imagesByProduct[image.product_id].push(image);
-      });
-      
-      setProductImages(imagesByProduct);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    if (imagesError) throw imagesError;
+    
+    // Parse array fields that might be stored as strings
+    const parsedData = (productsData || []).map(item => ({
+      ...item,
+      instructions: parseArrayField(item.instructions),
+      features: parseArrayField(item.features),
+      safety_precautions: parseArrayField(item.safety_precautions),
+      safety_first_aid: parseArrayField(item.safety_first_aid),
+      applications: parseArrayField(item.applications),
+      packaging: parseArrayField(item.packaging),
+      technical_specs: parseArrayField(item.technical_specs)
+    }));
+    
+    setProducts(parsedData);
+    setFilteredProducts(parsedData);
+    
+    // تنظيم الصور حسب product_id
+    const imagesByProduct: Record<string, ProductImage[]> = {};
+    (imagesData || []).forEach(image => {
+      if (!imagesByProduct[image.product_id]) {
+        imagesByProduct[image.product_id] = [];
+      }
+      imagesByProduct[image.product_id].push(image);
+    });
+    
+    setProductImages(imagesByProduct);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Helper function to parse array fields that might be stored as strings
   const parseArrayField = (field: any): any[] => {
@@ -1141,40 +1142,42 @@ const ProductModal = ({
                       {uploading && <span className="text-gray-500">Uploading...</span>}
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-                      {images.map((img, idx) => (
-                        <div key={img.id || idx} className="relative group">
-                          <img
-                             src={img.image_url}
-                            alt={`Product ${idx + 1}`}
-                            className="w-full h-32 object-cover rounded border"
-                          />
-                          <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                            <button
-                              type="button"
-                              onClick={() => removeImage(idx)}
-                              className="p-1 bg-red-500 text-white rounded"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                    {images.map((img, i) => (
-                      <img
-                        key={i}
-                        src={img.image_url}
-                        alt={`Product Image ${i + 1}`}
-                        className="w-full h-32 object-cover rounded border"
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
+                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+  {images.map((img, idx) => (
+    <div key={img.id || idx} className="relative group">
+      <img
+        src={img.image_url}
+        alt={`Product ${idx + 1}`}
+        className="w-full h-32 object-cover rounded border"
+      />
+      <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+        <button
+          type="button"
+          onClick={() => setPrimaryImage(idx)}
+          className={`p-1 rounded ${
+            img.is_primary ? 'bg-green-500 text-white' : 'bg-white text-gray-700'
+          }`}
+          title={img.is_primary ? 'Primary Image' : 'Set as Primary'}
+        >
+          {img.is_primary ? '✓ Primary' : 'Set Primary'}
+        </button>
+        <button
+          type="button"
+          onClick={() => removeImage(idx)}
+          className="p-1 bg-red-500 text-white rounded"
+          title="Remove"
+        >
+          <Trash2 className="w-4 h-4" />
+        </button>
+      </div>
+      {img.is_primary && (
+        <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded">
+          Primary
+        </div>
+      )}
+    </div>
+  ))}
+</div>
 
                 {/* safety_precautions */}
               <div className="mt-6">
