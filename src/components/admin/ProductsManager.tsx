@@ -64,7 +64,15 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  
+  const [images, setImages] = useState<ProductImage[]>([]);
+
+  const handleMainImageSelect = (selectedIdx: number) => {
+  setImages(prev => prev.map((img, idx) => ({
+    ...img,
+    isMain: idx === selectedIdx // فقط الصورة المختارة تصبح رئيسية
+  })));
+};
+
 
   useEffect(() => {
     fetchProducts();
