@@ -64,6 +64,8 @@ const ProductsManager = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
+  const [mainImage, setMainImage] = useState<string>("");
+
   
 
   useEffect(() => {
