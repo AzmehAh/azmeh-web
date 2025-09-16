@@ -14,6 +14,9 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase, Bulletin } from '../../lib/supabase';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
 
 const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
@@ -118,6 +121,21 @@ const BulletinsManager = () => {
       </div>
     );
   }
+const bulletinData = {
+  ...
+  contact: formData.contact,
+  updated_at: new Date().toISOString()
+};
+ useEffect(() => {
+  if (bulletin) {
+    setFormData({
+      ...
+      contact: bulletin.contact || '',
+    });
+  } else {
+    setFormData(prev => ({ ...prev, contact: '' }));
+  }
+}, [bulletin]);
 
   return (
     <div className="space-y-6">
