@@ -121,12 +121,7 @@ const BulletinsManager = () => {
       </div>
     );
   }
-const bulletinData = {
-  ...
-  contact: formData.contact,
-  updated_at: new Date().toISOString()
-};
- useEffect(() => {
+  useEffect(() => {
   if (bulletin) {
     setFormData({
       ...
@@ -137,6 +132,12 @@ const bulletinData = {
   }
 }, [bulletin]);
 
+const bulletinData = {
+  ...
+  contact: formData.contact,
+  updated_at: new Date().toISOString()
+};
+ 
   return (
     <div className="space-y-6">
       {/* Header */}
