@@ -27,6 +27,21 @@ const BulletinsManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
+const bulletinData = {
+  ...
+  contact: formData.contact,
+  updated_at: new Date().toISOString()
+};
+ useEffect(() => {
+  if (bulletin) {
+    setFormData({
+      ...
+      contact: bulletin.contact || '',
+    });
+  } else {
+    setFormData(prev => ({ ...prev, contact: '' }));
+  }
+}, [bulletin]);
 
   useEffect(() => {
     fetchBulletins();
