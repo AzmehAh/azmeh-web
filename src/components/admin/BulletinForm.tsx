@@ -289,7 +289,7 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
                     >
                       Remove
                     </button>
-                  </div>
+                  </div> 
                 )}
               </div>
             </div>
