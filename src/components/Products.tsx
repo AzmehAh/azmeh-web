@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, X, ChevronDown, Grid, List, SortAsc } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { api, ProductFilterType, ProductFilterValue } from '../lib/supabase';
+import { supabase, api, ProductFilterType, ProductFilterValue } from '../lib/supabase';
 
 // تعريف واجهة المنتج
 interface Product {
