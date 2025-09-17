@@ -334,7 +334,7 @@ const BulletinModal = ({
         cover_image: bulletin.cover_image || '',
         category: bulletin.category,
         subcategory: bulletin.subcategory,
-        content: bulletin.content || '',
+        content: typeof bulletin.content === 'string' ? bulletin.content : JSON.stringify(bulletin.content || ''),
 
         status: bulletin.status as 'draft' | 'published',
         featured: bulletin.featured || false,
@@ -349,7 +349,7 @@ const BulletinModal = ({
         cover_image: '',
         category: '',
         subcategory: '',
-        content: '[]',
+        content: '',
         status: 'draft',
         featured: false,
         author: 'Al Azmeh Paints',
