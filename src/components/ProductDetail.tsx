@@ -28,6 +28,173 @@ interface Product {
   safety_first_aid: string[];
 }
 
+interface ProductDetailProps {
+  productId: string;
+}
+
+export const ProductDetail: React.FC<ProductDetailProps> = ({ productId }) => {
+  const [product, setProduct] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchProduct();
+  }, [productId]);
+
+  const fetchProduct = async () => {
+    try {
+      setLoading(true);
+      const { data: productData, error: productError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', productId)
+        .single();
+
+      if (productError) throw productError;
+      setProduct(productData);
+    } catch (err) {
+      console.error('Error fetching product:', err);
+      setError('Failed to load product details');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="container mx-auto px-4">
+          <div className="animate-pulse">
+            <div className="h-8 bg-gray-300 rounded w-1/4 mb-4"></div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                <div className="aspect-square bg-gray-300 rounded-lg mb-4"></div>
+                <div className="grid grid-cols-4 gap-2">
+                  {[...Array(4)].map((_, i) => (
+                    <div key={i} className="aspect-square bg-gray-300 rounded-md"></div>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="h-8 bg-gray-300 rounded"></div>
+                <div className="h-4 bg-gray-300 rounded w-3/4"></div>
+                <div className="h-4 bg-gray-300 rounded w-1/2"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !product) {
+    return (
+      <div className="min-h-screen bg-gray-50 py-8">
+        <div className="container mx-auto px-4">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">
+              {error || 'Product not found'}
+            </h1>
+            <Link
+              to="/products"
+              className="text-blue-600 hover:text-blue-800 underline"
+            >
+              Back to Products
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="container mx-auto px-4">
+        <nav className="mb-8">
+          <Link to="/products" className="text-blue-600 hover:text-blue-800">
+            ← Back to Products
+          </Link>
+        </nav>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2">
+            <div className="aspect-square bg-white rounded-lg shadow-md overflow-hidden mb-4">
+              <img
+                src={`https://images.pexels.com/photos/3731256/pexels-photo-3731256.jpeg?auto=compress&cs=tinysrgb&w=800`}
+                alt={product.name}
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-md p-6">
+              <h1 className="text-3xl font-bold text-gray-800 mb-4">
+                {product.name}
+              </h1>
+              
+              {product.code && (
+                <p className="text-gray-600 mb-4">
+                  Product Code: <span className="font-mono">{product.code}</span>
+                </p>
+              )}
+
+              {product.description && (
+                <p className="text-gray-700 mb-6 leading-relaxed">
+                  {product.description}
+                </p>
+              )}
+
+              <div className="space-y-4">
+                {product.type && (
+                  <div>
+                    <span className="font-semibold text-gray-800">Type:</span>
+                    <span className="ml-2 text-gray-600">{product.type}</span>
+                  </div>
+                )}
+
+                {product.brand && (
+                  <div>
+                    <span className="font-semibold text-gray-800">Brand:</span>
+                    <span className="ml-2 text-gray-600">{product.brand}</span>
+                  </div>
+                )}
+
+                {product.material && (
+                  <div>
+                    <span className="font-semibold text-gray-800">Material:</span>
+                    <span className="ml-2 text-gray-600">{product.material}</span>
+                  </div>
+                )}
+              </div>
+
+              <button className="w-full mt-6 bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center">
+                <Download className="h-5 w-5 mr-2" />
+                Download Datasheet
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {product.technical_description && (
+          <div className="mt-12 bg-white rounded-lg shadow-md p-6">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4 flex items-center">
+              <FileText className="h-6 w-6 mr-2" />
+              Technical Description
+            </h2>
+            <div 
+              className="prose max-w-none text-gray-700"
+              dangerouslySetInnerHTML={{ 
+                __html: DOMPurify.sanitize(product.technical_description) 
+              }}
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 const brands = [
   { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
   { name: "SRT",         logo: "/images/SRT-.gif" },
@@ -42,7 +209,7 @@ const brands = [
 ];
 
 
-const ProductDetail = () => {
+const ProductDetailOld = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -482,4 +649,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default ProductDetailOld;
