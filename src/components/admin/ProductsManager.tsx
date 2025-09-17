@@ -13,13 +13,14 @@ import {
   X,
   Upload
 } from 'lucide-react';
-import { supabase,  ProductFilterType, ProductFilterValue } from '../../lib/supabase';
+import { supabase, ProductFilterType, ProductFilterValue } from '../../lib/supabase';
 
 // Types
 interface ProductImage {
   id?: string;
   image_url: string;
   product_id?: string;
+  is_main?: boolean;
 }
 
 interface TechnicalSpec { 
@@ -105,8 +106,7 @@ const ProductsManager = () => {
         ...item,
         instructions: parseArrayField(item.instructions),
         features: parseArrayField(item.features),
-
-        safety_precautions: parseArrayField(item. safety_precautions),
+        safety_precautions: parseArrayField(item.safety_precautions),
         safety_first_aid: parseArrayField(item.safety_first_aid),
         applications: parseArrayField(item.applications),
         packaging: parseArrayField(item.packaging),
@@ -368,7 +368,7 @@ const ProductsManager = () => {
         </div>
       )}
 
-   {isModalOpen && (
+      {isModalOpen && (
         <ProductModal
           isOpen={isModalOpen}
           onClose={closeModal}
@@ -384,7 +384,7 @@ const ProductsManager = () => {
   );
 };
 
-// Product Modal Component - التصحيح هنا
+// Product Modal Component - الإصلاح هنا
 const ProductModal = ({ 
   isOpen, 
   onClose, 
@@ -427,13 +427,13 @@ const ProductModal = ({
   const [saving, setSaving] = useState(false);
   const [brands, setBrands] = useState<ProductFilterValue[]>([]);
   const [types, setTypes] = useState<ProductFilterValue[]>([]);
-  const [materials, setMaterials] = useState<ProductFilterValue[]>([]); // إضافة حالة للمواد
+  const [materials, setMaterials] = useState<ProductFilterValue[]>([]);
   const [usages, setUsages] = useState<ProductFilterValue[]>([]);
 
   useEffect(() => {
     fetchBrands();
     fetchTypes();
-    fetchMaterials(); // جلب المواد
+    fetchMaterials();
     fetchUsages();
     
     if (product) {
@@ -449,7 +449,14 @@ const ProductModal = ({
         safety_precautions: Array.isArray(product.safety_precautions) ? product.safety_precautions : [],
       };
       setFormData(productData);
-      setImages(productImages[product.id] || []);
+      
+      // تحديد الصورة الرئيسية بشكل صحيح
+      const productImgs = productImages[product.id] || [];
+      const imagesWithMainFlag = productImgs.map(img => ({
+        ...img,
+        isMain: img.is_main || false
+      }));
+      setImages(imagesWithMainFlag);
     } else {
       setFormData({
         name: '',
@@ -548,31 +555,22 @@ const ProductModal = ({
       let productId = product?.id;
 
       // Prepare product data without images
-    const productData = {
-  ...formData,
-
-  // Arrays (TEXT[])
-  features: Array.isArray(formData.features) ? formData.features : [],
-   
-      safety_precautions : Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
-      instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
-      applications: Array.isArray(formData.applications) ? formData.applications : [],
-      safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
-   
- 
-
-  // JSONB
-  packaging:
-    typeof formData.packaging === "string"
-      ? JSON.parse(formData.packaging || "{}")
-      : formData.packaging || {},
-
-  technical_specs:
-    typeof formData.technical_specs === "string"
-      ? JSON.parse(formData.technical_specs || "{}")
-      : formData.technical_specs || {},
-};
-
+      const productData = {
+        ...formData,
+        // Arrays (TEXT[])
+        features: Array.isArray(formData.features) ? formData.features : [],
+        safety_precautions: Array.isArray(formData.safety_precautions) ? formData.safety_precautions : [],
+        instructions: Array.isArray(formData.instructions) ? formData.instructions : [],
+        applications: Array.isArray(formData.applications) ? formData.applications : [],
+        safety_first_aid: Array.isArray(formData.safety_first_aid) ? formData.safety_first_aid : [],
+        // JSONB
+        packaging: typeof formData.packaging === "string"
+          ? JSON.parse(formData.packaging || "{}")
+          : formData.packaging || {},
+        technical_specs: typeof formData.technical_specs === "string"
+          ? JSON.parse(formData.technical_specs || "{}")
+          : formData.technical_specs || {},
+      };
 
       if (product) {
         // Update product
@@ -611,19 +609,26 @@ const ProductModal = ({
             .eq('id', img.id);
         }
 
-        // Add/update images
+        // Add/update images - الإصلاح هنا
         for (const img of images) {
           if (img.id) {
             // Update existing image
             await supabase
               .from('product_images')
-              .update({ image_url: img.image_url })
+              .update({ 
+                image_url: img.image_url,
+                is_main: img.isMain || false // حفظ حالة الصورة الرئيسية
+              })
               .eq('id', img.id);
           } else {
             // Add new image
             await supabase
               .from('product_images')
-              .insert([{ product_id: productId, image_url: img.image_url }]);
+              .insert([{ 
+                product_id: productId, 
+                image_url: img.image_url,
+                is_main: img.isMain || false // حفظ حالة الصورة الرئيسية
+              }]);
           }
         }
       }
@@ -674,7 +679,10 @@ const ProductModal = ({
       const file = files[i];
       const imageUrl = await onUploadImage(file);
       if (imageUrl) {
-        newImages.push({ image_url: imageUrl });
+        newImages.push({ 
+          image_url: imageUrl,
+          isMain: newImages.length === 0 // إذا كانت هذه أول صورة، اجعلها الرئيسية
+        });
       }
     }
     
@@ -683,30 +691,29 @@ const ProductModal = ({
   };
 
   const removeImage = (index: number) => {
-    setImages(prev => prev.filter((_, i) => i !== index));
+    const newImages = [...images];
+    const isRemovingMain = newImages[index]?.isMain;
+    
+    newImages.splice(index, 1);
+    
+    // إذا كنا نحذف الصورة الرئيسية، اجعل الصورة الأولى الجديدة هي الرئيسية
+    if (isRemovingMain && newImages.length > 0) {
+      newImages[0].isMain = true;
+    }
+    
+    setImages(newImages);
   };
- const handleCheckboxChange = (productId: string, checked: boolean) => {
-  setFilteredProducts(prev =>
-    prev.map(p =>
-      p.id === productId ? { ...p, selected: checked } : p
-    )
-  );
 
-  setProducts(prev =>
-    prev.map(p =>
-      p.id === productId ? { ...p, selected: checked } : p
-    )
-  );
-}; 
   const setMainImage = (index: number) => {
-  setImages(prev =>
-    prev.map((img, i) => ({ ...img, isMain: i === index }))
-  );
-};
-
+    setImages(prev => 
+      prev.map((img, i) => ({ 
+        ...img, 
+        isMain: i === index 
+      }))
+    );
+  };
 
   if (!isOpen) return null;
-
 
   return (
     <AnimatePresence>
@@ -1135,7 +1142,7 @@ const ProductModal = ({
   )}
 </div>
 
-{/* Product Images */}
+{/* Product Images - الإصلاح هنا */}
 <div className="mt-6">
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Product Images
@@ -1171,19 +1178,24 @@ const ProductModal = ({
                 className="w-full h-full object-cover"
               />
 
-              {/* زر الحذف عند hover */}
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button
-                  type="button"
-                  onClick={() => removeImage(idx)}
-                  className="p-1 bg-red-500 text-white rounded"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
-              </div>
+              {/* زر الحذف - الإصلاح هنا */}
+              <button
+                type="button"
+                onClick={() => removeImage(idx)}
+                className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+
+              {/* مؤشر الصورة الرئيسية */}
+              {img.isMain && (
+                <div className="absolute top-2 left-2 px-2 py-1 bg-[#0055A3] text-white text-xs rounded">
+                  Main
+                </div>
+              )}
             </div>
 
-            {/* الشيك بوكس لتحديد الصورة الرئيسية */}
+            {/* زر اختيار الصورة الرئيسية - الإصلاح هنا */}
             <label className="mt-2 flex items-center gap-2 text-sm cursor-pointer">
               <input
                 type="radio"
@@ -1201,12 +1213,18 @@ const ProductModal = ({
   ) : (
     <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
       {images.map((img, i) => (
-        <img
-          key={i}
-          src={img.image_url}
-          alt={`Product Image ${i + 1}`}
-          className="w-full h-32 object-cover rounded border"
-        />
+        <div key={i} className="relative">
+          <img
+            src={img.image_url}
+            alt={`Product Image ${i + 1}`}
+            className="w-full h-32 object-cover rounded border"
+          />
+          {img.isMain && (
+            <div className="absolute top-2 left-2 px-2 py-1 bg-[#0055A3] text-white text-xs rounded">
+              Main
+            </div>
+          )}
+        </div>
       ))}
     </div>
   )}
@@ -1416,4 +1434,4 @@ const ProductModal = ({
   );
 };
 
-export default ProductsManager;  
+export default ProductsManager;
