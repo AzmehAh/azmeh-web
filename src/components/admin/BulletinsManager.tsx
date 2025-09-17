@@ -334,7 +334,8 @@ const BulletinModal = ({
         cover_image: bulletin.cover_image || '',
         category: bulletin.category,
         subcategory: bulletin.subcategory,
-content: formData.content, 
+        content: bulletin.content || '',
+
         status: bulletin.status as 'draft' | 'published',
         featured: bulletin.featured || false,
         author: bulletin.author || 'Al Azmeh Paints',
