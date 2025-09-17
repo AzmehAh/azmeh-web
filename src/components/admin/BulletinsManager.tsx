@@ -16,8 +16,11 @@ import {
 import { supabase, Bulletin } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-// Import additional Quill modules for table support
-import 'quill/dist/quill.snow.css';
+import Quill from 'quill';
+import { BetterTable } from 'quill-better-table';
+
+// Register the table module with Quill
+Quill.register({ 'modules/better-table': BetterTable }, true);
 
 
 const BulletinsManager = () => {
@@ -426,14 +429,21 @@ const BulletinModal = ({
         ['blockquote', 'code-block'],
         ['link', 'image', 'video'],
         ['clean'],
-        // Table support
-        [{ 'table': 'TD' }]
+        ['better-table']
       ],
       handlers: {
         image: imageHandler
       }
     },
-    table: true,
+    'better-table': {
+      operationMenu: {
+        items: {
+          unmergeCells: {
+            text: 'Unmerge cells'
+          }
+        }
+      }
+    },
     clipboard: {
       matchVisual: false
     }
@@ -447,7 +457,7 @@ const BulletinModal = ({
     'direction', 'align',
     'blockquote', 'code-block',
     'link', 'image', 'video',
-    'table'
+    'better-table'
   ];
 
   const handleSave = async () => {

@@ -2,6 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import Quill from 'quill';
+import { BetterTable } from 'quill-better-table';
+
+// Register the table module with Quill
+Quill.register({ 'modules/better-table': BetterTable }, true);
 
 interface BulletinFormProps {
   bulletin?: any;
@@ -195,13 +200,21 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
         ['blockquote', 'code-block'],
         ['link', 'image', 'video'],
         ['clean'],
-        [{ 'table': 'TD' }]
+        ['better-table']
       ],
       handlers: {
         image: imageHandler
       }
     },
-    table: true
+    'better-table': {
+      operationMenu: {
+        items: {
+          unmergeCells: {
+            text: 'Unmerge cells'
+          }
+        }
+      }
+    }
   };
 
   const formats = [
@@ -211,7 +224,7 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
     'list', 'bullet', 'indent',
     'align', 'blockquote', 'code-block',
     'link', 'image', 'video',
-    'table'
+    'better-table'
   ];
 
   return (
