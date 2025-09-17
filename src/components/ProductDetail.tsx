@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Download, Package, FileText, CheckCircle, Wrench, Shield } from "lucide-react";
-import { supabase } from "../lib/supabase"; // مسار معدل
+import { supabase, api } from "../lib/supabase"; // مسار معدل
 import DOMPurify from 'dompurify';
 
 // تعريف واجهة المنتج
