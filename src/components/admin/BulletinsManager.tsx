@@ -14,8 +14,10 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase, Bulletin } from '../../lib/supabase';
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+// Import additional Quill modules for table support
+import 'quill/dist/quill.snow.css';
 
 
 const BulletinsManager = () => {
@@ -27,6 +29,7 @@ const BulletinsManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     fetchBulletins();
@@ -334,8 +337,7 @@ const BulletinModal = ({
         cover_image: bulletin.cover_image || '',
         category: bulletin.category,
         subcategory: bulletin.subcategory,
-        content: typeof bulletin.content === 'string' ? bulletin.content : JSON.stringify(bulletin.content || ''),
-
+        content: typeof bulletin.content === 'string' ? bulletin.content : '',
         status: bulletin.status as 'draft' | 'published',
         featured: bulletin.featured || false,
         author: bulletin.author || 'Al Azmeh Paints',
@@ -358,6 +360,95 @@ const BulletinModal = ({
     }
   }, [bulletin]);
 
+  // Custom image handler for rich text editor
+  const imageHandler = async () => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        await uploadImageToEditor(file);
+      }
+    };
+  };
+
+  // Upload image for rich text editor
+  const uploadImageToEditor = async (file: File) => {
+    try {
+      setUploadingImage(true);
+      const fileExt = file.name.split('.').pop();
+      const fileName = `bulletin-content-${Date.now()}.${fileExt}`;
+      const filePath = `bulletins/content/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(filePath);
+
+      // Insert image into editor at cursor position
+      const quill = (document.querySelector('.ql-editor') as any)?.__quill;
+      if (quill) {
+        const range = quill.getSelection(true);
+        quill.insertEmbed(range.index, 'image', publicUrl);
+        quill.setSelection(range.index + 1);
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Error uploading image to editor');
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  // Quill modules configuration for rich text editing
+  const quillModules = {
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'font': [] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'indent': '-1'}, { 'indent': '+1' }],
+        [{ 'direction': 'rtl' }],
+        [{ 'align': [] }],
+        ['blockquote', 'code-block'],
+        ['link', 'image', 'video'],
+        ['clean'],
+        // Table support
+        [{ 'table': 'TD' }]
+      ],
+      handlers: {
+        image: imageHandler
+      }
+    },
+    table: true,
+    clipboard: {
+      matchVisual: false
+    }
+  };
+
+  const quillFormats = [
+    'header', 'font', 'size',
+    'bold', 'italic', 'underline', 'strike',
+    'color', 'background',
+    'script', 'list', 'bullet', 'indent',
+    'direction', 'align',
+    'blockquote', 'code-block',
+    'link', 'image', 'video',
+    'table'
+  ];
+
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -377,7 +468,7 @@ const BulletinModal = ({
         cover_image: formData.cover_image || null,
         category: formData.category,
         subcategory: formData.subcategory,
-        content: contentObj,
+        content: formData.content, // Store as HTML string
         status: formData.status,
         featured: formData.featured,
         author: formData.author,
@@ -594,29 +685,42 @@ const BulletinModal = ({
                 <p className="text-gray-900">{formData.short_description}</p>
               )}
             </div>
-{/* Content */}
-<div className="px-6 pb-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Content *
-  </label>
-  {isEditing ? (
-    <ReactQuill
-      theme="snow"
-      value={formData.content}
-      onChange={(value) =>
-        setFormData((prev) => ({ ...prev, content: value }))
-      }
-      className="bg-white rounded-lg"
-    />
-  ) : (
-    <div
-      className="prose max-w-none bg-gray-50 p-4 rounded-lg"
-      dangerouslySetInnerHTML={{ __html: formData.content }}
-    />
-  )}
-</div>
-            </div>
 
+            {/* Content */}
+            <div className="px-6 pb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Content *
+              </label>
+              {isEditing ? (
+                <div className="border border-gray-200 rounded-lg overflow-hidden">
+                  {uploadingImage && (
+                    <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                        Uploading image...
+                      </div>
+                    </div>
+                  )}
+                  <ReactQuill
+                    theme="snow"
+                    value={formData.content}
+                    onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+                    modules={quillModules}
+                    formats={quillFormats}
+                    style={{ height: '400px' }}
+                    placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
+                  />
+                </div>
+              ) : (
+                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                </div>
+              )}
+            </div>
+            
+            {/* Add padding after content to account for quill editor height */}
+            {isEditing && <div className="pt-16"></div>}
+          </div>
 
           {/* Footer */}
           {isEditing && (
