@@ -296,23 +296,6 @@ export interface ContentAuditLog {
   user_agent?: string;
 }
 
-// Product Details Interface
-export interface ProductDetails {
-  id: string;
-  title: string;
-  description: string;
-  recommended_uses: string;
-  features: string;
-  application_instruction: string;
-  technical_info: Record<string, any>;
-  surface_preparation: string;
-  drying_time: string;
-  storing_conditions: string;
-  notice: string;
-  created_at: string;
-  updated_at: string;
-}
-
 // API Functions
 export const api = {
   // Products
@@ -1147,59 +1130,5 @@ export const api = {
     
     if (error) throw error;
     return data;
-  },
-
-  // Product Details API
-  async getProductDetails(id: string) {
-    const { data, error } = await supabase
-      .from('product_details')
-      .select('*')
-      .eq('id', id)
-      .single();
-    
-    if (error) throw error;
-    return data;
-  },
-
-  async getAllProductDetails() {
-    const { data, error } = await supabase
-      .from('product_details')
-      .select('*')
-      .order('created_at', { ascending: false });
-    
-    if (error) throw error;
-    return data;
-  },
-
-  async createProductDetails(details: Omit<ProductDetails, 'id' | 'created_at' | 'updated_at'>) {
-    const { data, error } = await supabase
-      .from('product_details')
-      .insert([{ ...details, updated_at: new Date().toISOString() }])
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data;
-  },
-
-  async updateProductDetails(id: string, updates: Partial<ProductDetails>) {
-    const { data, error } = await supabase
-      .from('product_details')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('id', id)
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data;
-  },
-
-  async deleteProductDetails(id: string) {
-    const { error } = await supabase
-      .from('product_details')
-      .delete()
-      .eq('id', id);
-    
-    if (error) throw error;
   }
 };

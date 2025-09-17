@@ -20,7 +20,6 @@ import BulletinsManager from './components/admin/BulletinsManager';
 import ContentManager from './components/admin/ContentManager';
 import ProductFiltersManager from './components/admin/ProductFiltersManager';
 import SystemCategoriesManager from './components/admin/SystemCategoriesManager';
-import ProductDetailsManager from './components/admin/ProductDetailsManager';
 import ContactMessages from './components/admin/ContactMessages';
 import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
@@ -37,7 +36,6 @@ import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
 import Contact from './components/Contact';
 import JobApplication from './components/JobApplication';
-import ProductDetails from './components/ProductDetails';
 import About from './ComponentAbout/About.tsx'; // تم إصلاح هذا السطر
 import { auth } from './lib/auth';
 
@@ -108,7 +106,6 @@ function App() {
         <Route path="/job-application" element={<JobApplication />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/product-details/:id" element={<ProductDetails />} />
         <Route path="/systems" element={<Systems />} />
         <Route path="/bulletin/:id" element={<BulletinDetail />} />
         <Route path="/faq" element={<FAQ />} />
@@ -141,11 +138,6 @@ function App() {
           <Route path="products" element={
             <ProtectedRoute>
               <ProductsManager />
-            </ProtectedRoute>
-          } />
-          <Route path="product-details" element={
-            <ProtectedRoute>
-              <ProductDetailsManager />
             </ProtectedRoute>
           } />
           <Route path="product-bulletins" element={
