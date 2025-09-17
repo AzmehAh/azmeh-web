@@ -18,6 +18,7 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
     category: '',
     subcategory: '',
     content: '',
+    contact: '', // إضافة حقل contact
     status: 'published',
     featured: false,
     author: 'Al Azmeh Paints',
@@ -28,34 +29,38 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
   const [uploadingImage, setUploadingImage] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const quillRef = useRef<ReactQuill>(null);
+  const contactQuillRef = useRef<ReactQuill>(null); // مرجع لمحرر contact
 
   useEffect(() => {
     if (bulletin) {
       setFormData({
         ...bulletin,
         content: typeof bulletin.content === 'string' ? bulletin.content : JSON.stringify(bulletin.content),
+        contact: bulletin.contact || '', // تهيئة حقل contact
         tags: bulletin.tags || []
       });
     }
   }, [bulletin]);
 
   // Custom image handler for Quill editor
-  const imageHandler = () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
+  const imageHandler = (quillRef: React.RefObject<ReactQuill>) => {
+    return () => {
+      const input = document.createElement('input');
+      input.setAttribute('type', 'file');
+      input.setAttribute('accept', 'image/*');
+      input.click();
 
-    input.onchange = async () => {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        await uploadImageToEditor(file);
-      }
+      input.onchange = async () => {
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+          await uploadImageToEditor(file, quillRef);
+        }
+      };
     };
   };
 
   // Upload image for rich text editor
-  const uploadImageToEditor = async (file: File) => {
+  const uploadImageToEditor = async (file: File, quillRef: React.RefObject<ReactQuill>) => {
     try {
       setUploadingImage(true);
       const fileExt = file.name.split('.').pop();
@@ -150,7 +155,8 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
     try {
       const bulletinData = {
         ...formData,
-        content: formData.content || ''
+        content: formData.content || '',
+        contact: formData.contact || '' // تضمين حقل contact
       };
 
       if (bulletin) {
@@ -179,7 +185,7 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
   };
 
   // Quill modules configuration
-  const modules = {
+  const getModules = (quillRef: React.RefObject<ReactQuill>) => ({
     toolbar: {
       container: [
         [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -196,11 +202,11 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
         [{ 'table': 'TD' }]
       ],
       handlers: {
-        image: imageHandler
+        image: imageHandler(quillRef)
       }
     },
     table: true
-  };
+  });
 
   const formats = [
     'header', 'font', 'size',
@@ -214,7 +220,7 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg max-w-6xl w-full max-h-[95vh] overflow-y-auto">
         <div className="p-6">
           <h2 className="text-xl font-bold mb-4">
             {bulletin ? 'Edit Bulletin' : 'Create New Bulletin'}
@@ -337,11 +343,31 @@ export default function BulletinForm({ bulletin, onClose, onSave }: BulletinForm
                   ref={quillRef}
                   value={formData.content}
                   onChange={(content) => setFormData(prev => ({ ...prev, content }))}
-                  modules={modules}
+                  modules={getModules(quillRef)}
                   formats={formats}
                   style={{ height: '300px' }}
                 />
               </div>
+            </div>
+
+            {/* إضافة محرر Contact */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Contact Information
+              </label>
+              <div className="border border-gray-300 rounded-md">
+                <ReactQuill
+                  ref={contactQuillRef}
+                  value={formData.contact}
+                  onChange={(contact) => setFormData(prev => ({ ...prev, contact }))}
+                  modules={getModules(contactQuillRef)}
+                  formats={formats}
+                  style={{ height: '250px' }}
+                />
+              </div>
+              <p className="text-sm text-gray-500 mt-1">
+                Add contact information, addresses, phone numbers, maps, or any other contact details here.
+              </p>
             </div>
 
             <div className="pt-12">
