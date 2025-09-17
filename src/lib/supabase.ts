@@ -787,4 +787,5 @@ export const api = {
       .single();
     
     if (error) throw error;
-};
+  };
+}
