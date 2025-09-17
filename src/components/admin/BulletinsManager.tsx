@@ -327,6 +327,7 @@ const BulletinModal = ({
     tags: ''
   });
   const [saving, setSaving] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     if (bulletin) {
