@@ -14,8 +14,6 @@ import JobApplicationsManager from './components/admin/JobApplicationsManager';
 import Dashboard from './components/admin/Dashboard';
 import ProductsManager from './components/admin/ProductsManager';
 import ProductCategoriesManager from './components/admin/ProductCategoriesManager';
-import ProductBulletinManager from './components/admin/ProductBulletinManager';
-import SystemDetailsManager from './components/admin/SystemDetailsManager';
 import BulletinsManager from './components/admin/BulletinsManager';
 import ContentManager from './components/admin/ContentManager';
 import ProductFiltersManager from './components/admin/ProductFiltersManager';
@@ -140,11 +138,6 @@ function App() {
               <ProductsManager />
             </ProtectedRoute>
           } />
-          <Route path="product-bulletins" element={
-            <ProtectedRoute>
-              <ProductBulletinManager />
-            </ProtectedRoute>
-          } />
           <Route path="categories" element={
             <ProtectedRoute>
               <ProductCategoriesManager />
@@ -158,11 +151,6 @@ function App() {
           <Route path="system-categories" element={
             <ProtectedRoute>
               <SystemCategoriesManager />
-            </ProtectedRoute>
-          } />
-          <Route path="system-details" element={
-            <ProtectedRoute>
-              <SystemDetailsManager />
             </ProtectedRoute>
           } />
           <Route path="bulletins" element={
