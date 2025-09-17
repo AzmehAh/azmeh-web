@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Tag, FileText } from 'lucide-react';
-import { bulletinsData, BulletinItem, BulletinContent } from '../data/bulletinsData';
+import { bulletinsData, BulletinItem, BulletinContent, Bulletin } from '../data/bulletinsData';
+import { api } from '../lib/supabase';
 
 const BulletinDetail = () => {
   const { id } = useParams<{ id: string }>();
