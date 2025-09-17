@@ -10,6 +10,97 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Database types
+export interface Database {
+  public: {
+    Tables: {
+      homepage_sections: {
+        Row: {
+          id: string;
+          section_name: string;
+          title: string;
+          subtitle: string | null;
+          content: any;
+          is_active: boolean | null;
+          sort_order: number | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          section_name: string;
+          title: string;
+          subtitle?: string | null;
+          content?: any;
+          is_active?: boolean | null;
+          sort_order?: number | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          section_name?: string;
+          title?: string;
+          subtitle?: string | null;
+          content?: any;
+          is_active?: boolean | null;
+          sort_order?: number | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+      };
+      product_details: {
+        Row: {
+          id: string;
+          title: string;
+          description: string | null;
+          recommended_uses: string | null;
+          features: string | null;
+          application_instruction: string | null;
+          technical_info: any;
+          surface_preparation: string | null;
+          drying_time: string | null;
+          storing_conditions: string | null;
+          notice: string | null;
+          created_at: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          description?: string | null;
+          recommended_uses?: string | null;
+          features?: string | null;
+          application_instruction?: string | null;
+          technical_info?: any;
+          surface_preparation?: string | null;
+          drying_time?: string | null;
+          storing_conditions?: string | null;
+          notice?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          description?: string | null;
+          recommended_uses?: string | null;
+          features?: string | null;
+          application_instruction?: string | null;
+          technical_info?: any;
+          surface_preparation?: string | null;
+          drying_time?: string | null;
+          storing_conditions?: string | null;
+          notice?: string | null;
+          created_at?: string | null;
+          updated_at?: string | null;
+        };
+      };
+      // Add other existing tables as needed
+    };
+  };
+}
+
+// Database types
 export interface Product {
   id: string;
   name: string;
@@ -696,126 +787,5 @@ export const api = {
       .single();
     
     if (error) throw error;
-    return data;
-  },
-
-  // Bulletin Category Management
-  async getBulletinCategoriesConfig() {
-    const { data, error } = await supabase
-      .from('bulletin_categories_config')
-      .select('*')
-      .eq('is_active', true)
-      .order('sort_order', { ascending: true });
-    
-    if (error) throw error;
-    return data;
-  },
-
-  async createBulletinCategoryConfig(category: Omit<BulletinCategoryConfig, 'id' | 'created_at' | 'updated_at'>) {
-    const { data, error } = await supabase
-      .from('bulletin_categories_config')
-      .insert([{ ...category, updated_at: new Date().toISOString() }])
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data;
-  },
-
-  async updateBulletinCategoryConfig(id: string, updates: Partial<BulletinCategoryConfig>) {
-    const { data, error } = await supabase
-      .from('bulletin_categories_config')
-      .update({ ...updates, updated_at: new Date().toISOString() })
-      .eq('id', id)
-      .select()
-      .single();
-    
-    if (error) throw error;
-    return data;
-  },
-
-  async deleteBulletinCategoryConfig(id: string) {
-    const { error } = await supabase
-      .from('bulletin_categories_config')
-      .delete()
-      .eq('id', id);
-    
-    if (error) throw error;
-  },
-
-  // Enhanced Products API
-  async getProductsWithFilters(filters: {
-    category?: string;
-    brand?: string;
-    type?: string;
-    material?: string;
-    usage?: string;
-    search?: string;
-  } = {}) {
-    let query = supabase
-      .from('products')
-      .select(`
-        *,
-        product_images (*),
-        product_categories (name)
-      `)
-      .eq('status', 'active');
-
-    if (filters.category) {
-      query = query.eq('category_id', filters.category);
-    }
-    if (filters.brand) {
-      query = query.eq('brand', filters.brand);
-    }
-    if (filters.type) {
-      query = query.eq('type', filters.type);
-    }
-    if (filters.material) {
-      query = query.eq('material', filters.material);
-    }
-    if (filters.usage) {
-      query = query.eq('usage', filters.usage);
-    }
-    if (filters.search) {
-      query = query.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%,code.ilike.%${filters.search}%`);
-    }
-
-    query = query.order('created_at', { ascending: false });
-    
-    const { data, error } = await query;
-    if (error) throw error;
-    return data;
-  },
-
-  // Enhanced Bulletins API
-  async getBulletinsWithFilters(filters: {
-    category?: string;
-    subcategory?: string;
-    featured?: boolean;
-    search?: string;
-  } = {}) {
-    let query = supabase
-      .from('bulletins')
-      .select('*')
-      .eq('status', 'published');
-
-    if (filters.category) {
-      query = query.eq('category', filters.category);
-    }
-    if (filters.subcategory) {
-      query = query.eq('subcategory', filters.subcategory);
-    }
-    if (filters.featured !== undefined) {
-      query = query.eq('featured', filters.featured);
-    }
-    if (filters.search) {
-      query = query.or(`title.ilike.%${filters.search}%,short_description.ilike.%${filters.search}%`);
-    }
-
-    query = query.order('created_at', { ascending: false });
-    
-    const { data, error } = await query;
-    if (error) throw error;
-    return data;
-  }
-};
+  };
+}
