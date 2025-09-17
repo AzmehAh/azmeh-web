@@ -579,6 +579,126 @@ export const api = {
     if (error) throw error;
   },
 
+  // Product Images Management
+  async getProductImages(productId: string) {
+    const { data, error } = await supabase
+      .from('product_images')
+      .select('*')
+      .eq('product_id', productId)
+      .order('sort_order', { ascending: true });
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async uploadProductImage(productId: string, file: File, altText?: string) {
+    // Upload file to Supabase Storage
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+    const filePath = `products/${productId}/${fileName}`;
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('product-images')
+      .upload(filePath, file);
+
+    if (uploadError) throw uploadError;
+
+    // Get public URL
+    const { data: urlData } = supabase.storage
+      .from('product-images')
+      .getPublicUrl(filePath);
+
+    // Save image record to database
+    const { data, error } = await supabase
+      .from('product_images')
+      .insert([{
+        product_id: productId,
+        image_url: urlData.publicUrl,
+        alt_text: altText || null,
+        sort_order: 0,
+        is_main: false
+      }])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteProductImage(imageId: string) {
+    // Get image info first to delete from storage
+    const { data: imageData, error: fetchError } = await supabase
+      .from('product_images')
+      .select('image_url')
+      .eq('id', imageId)
+      .single();
+
+    if (fetchError) throw fetchError;
+
+    // Extract file path from URL for storage deletion
+    if (imageData.image_url) {
+      const url = new URL(imageData.image_url);
+      const pathParts = url.pathname.split('/');
+      const filePath = pathParts.slice(-3).join('/'); // products/{productId}/{fileName}
+      
+      // Delete from storage (ignore errors if file doesn't exist)
+      await supabase.storage
+        .from('product-images')
+        .remove([filePath]);
+    }
+
+    // Delete from database
+    const { error } = await supabase
+      .from('product_images')
+      .delete()
+      .eq('id', imageId);
+    
+    if (error) throw error;
+  },
+
+  async setMainProductImage(productId: string, imageId: string) {
+    // First, unset all main images for this product
+    await supabase
+      .from('product_images')
+      .update({ is_main: false })
+      .eq('product_id', productId);
+
+    // Then set the selected image as main
+    const { data, error } = await supabase
+      .from('product_images')
+      .update({ is_main: true })
+      .eq('id', imageId)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async getMainProductImage(productId: string) {
+    const { data, error } = await supabase
+      .from('product_images')
+      .select('*')
+      .eq('product_id', productId)
+      .eq('is_main', true)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows returned
+    return data;
+  },
+
+  async updateProductImageOrder(imageId: string, sortOrder: number) {
+    const { data, error } = await supabase
+      .from('product_images')
+      .update({ sort_order: sortOrder })
+      .eq('id', imageId)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
   // Bulletin Category Management
   async getBulletinCategoriesConfig() {
     const { data, error } = await supabase

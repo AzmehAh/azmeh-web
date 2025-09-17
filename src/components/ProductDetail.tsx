@@ -93,14 +93,18 @@ const ProductDetail = () => {
         return;
       }
 
-      // جلب صور المنتج
+      // جلب صور المنتج مع ترتيب الصورة الرئيسية أولاً
       const { data: imagesData, error: imagesError } = await supabase
         .from('product_images')
-        .select('image_url')
+        .select('*')
         .eq('product_id', productId)
-        .order('created_at');
+        .order('is_main', { ascending: false })
+        .order('sort_order', { ascending: true });
 
       if (imagesError) throw imagesError;
+
+      // جلب الصورة الرئيسية
+      const mainImage = await api.getMainProductImage(productId);
 
       const formattedProduct: Product = {
         id: productData.id,
@@ -108,7 +112,7 @@ const ProductDetail = () => {
         code: productData.code,
         description: productData.description,
         technical_description: productData.technical_description || "",
-        image_url: imagesData && imagesData.length > 0 ? imagesData[0].image_url : "",
+        image_url: mainImage?.image_url || (imagesData && imagesData.length > 0 ? imagesData[0].image_url : ""),
         images: imagesData ? imagesData.map(img => img.image_url) : [],
         type: productData.type,
         brand: productData.brand,

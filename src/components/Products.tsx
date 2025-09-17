@@ -69,9 +69,37 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setProductsLoading(true);
-      // استدعاء API لجلب المنتجات
-      const productsData = await api.getProducts();
-      setProducts(productsData || []);
+      // استدعاء API لجلب المنتجات مع الصور
+      const { data: productsData, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          product_images!inner(*)
+        `)
+        .eq('status', 'active')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // تحويل البيانات لتتضمن الصورة الرئيسية
+      const formattedProducts = (productsData || []).map(product => {
+        const mainImage = product.product_images.find((img: any) => img.is_main) || 
+                          product.product_images[0];
+        
+        return {
+          id: product.id,
+          name: product.name,
+          code: product.code,
+          description: product.description,
+          image: mainImage?.image_url || '',
+          type: product.type,
+          brand: product.brand,
+          material: product.material,
+          usage: product.usage
+        };
+      });
+
+      setProducts(formattedProducts);
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
