@@ -14,6 +14,9 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase, Bulletin } from '../../lib/supabase';
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
 
 const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
@@ -331,7 +334,7 @@ const BulletinModal = ({
         cover_image: bulletin.cover_image || '',
         category: bulletin.category,
         subcategory: bulletin.subcategory,
-        content: JSON.stringify(bulletin.content, null, 2),
+content: formData.content, 
         status: bulletin.status as 'draft' | 'published',
         featured: bulletin.featured || false,
         author: bulletin.author || 'Al Azmeh Paints',
@@ -590,24 +593,28 @@ const BulletinModal = ({
                 <p className="text-gray-900">{formData.short_description}</p>
               )}
             </div>
+{/* Content */}
+<div className="px-6 pb-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Content *
+  </label>
+  {isEditing ? (
+    <ReactQuill
+      theme="snow"
+      value={formData.content}
+      onChange={(value) =>
+        setFormData((prev) => ({ ...prev, content: value }))
+      }
+      className="bg-white rounded-lg"
+    />
+  ) : (
+    <div
+      className="prose max-w-none bg-gray-50 p-4 rounded-lg"
+      dangerouslySetInnerHTML={{ __html: formData.content }}
+    />
+  )}
+</div>
 
-            {/* Content */}
-            <div className="px-6 pb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Content (JSON) *</label>
-              {isEditing ? (
-                <textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                  rows={12}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] font-mono text-sm"
-                />
-              ) : (
-                <div className="bg-gray-50 p-4 rounded-lg max-h-60 overflow-y-auto">
-                  <pre className="text-xs text-gray-700">{formData.content}</pre>
-                </div>
-              )}
-            </div>
-          </div>
 
           {/* Footer */}
           {isEditing && (
