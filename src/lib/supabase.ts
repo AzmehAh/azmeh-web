@@ -10,97 +10,6 @@ if (!supabaseUrl || !supabaseAnonKey) {
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Database types
-export interface Database {
-  public: {
-    Tables: {
-      homepage_sections: {
-        Row: {
-          id: string;
-          section_name: string;
-          title: string;
-          subtitle: string | null;
-          content: any;
-          is_active: boolean | null;
-          sort_order: number | null;
-          created_at: string | null;
-          updated_at: string | null;
-        };
-        Insert: {
-          id?: string;
-          section_name: string;
-          title: string;
-          subtitle?: string | null;
-          content?: any;
-          is_active?: boolean | null;
-          sort_order?: number | null;
-          created_at?: string | null;
-          updated_at?: string | null;
-        };
-        Update: {
-          id?: string;
-          section_name?: string;
-          title?: string;
-          subtitle?: string | null;
-          content?: any;
-          is_active?: boolean | null;
-          sort_order?: number | null;
-          created_at?: string | null;
-          updated_at?: string | null;
-        };
-      };
-      product_details: {
-        Row: {
-          id: string;
-          title: string;
-          description: string | null;
-          recommended_uses: string | null;
-          features: string | null;
-          application_instruction: string | null;
-          technical_info: any;
-          surface_preparation: string | null;
-          drying_time: string | null;
-          storing_conditions: string | null;
-          notice: string | null;
-          created_at: string | null;
-          updated_at: string | null;
-        };
-        Insert: {
-          id?: string;
-          title: string;
-          description?: string | null;
-          recommended_uses?: string | null;
-          features?: string | null;
-          application_instruction?: string | null;
-          technical_info?: any;
-          surface_preparation?: string | null;
-          drying_time?: string | null;
-          storing_conditions?: string | null;
-          notice?: string | null;
-          created_at?: string | null;
-          updated_at?: string | null;
-        };
-        Update: {
-          id?: string;
-          title?: string;
-          description?: string | null;
-          recommended_uses?: string | null;
-          features?: string | null;
-          application_instruction?: string | null;
-          technical_info?: any;
-          surface_preparation?: string | null;
-          drying_time?: string | null;
-          storing_conditions?: string | null;
-          notice?: string | null;
-          created_at?: string | null;
-          updated_at?: string | null;
-        };
-      };
-      // Add other existing tables as needed
-    };
-  };
-}
-
-// Database types
 export interface Product {
   id: string;
   name: string;
@@ -290,6 +199,101 @@ export interface BulletinCategoryConfig {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+}
+
+// Product Bulletin Interfaces
+export interface ProductBulletin {
+  id: string;
+  product_id: string;
+  title: string;
+  short_description?: string;
+  cover_image_url?: string;
+  datasheet_url?: string;
+  manual_url?: string;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+  created_by?: string;
+  updated_by?: string;
+}
+
+export interface ProductTechnicalSpec {
+  id: string;
+  product_bulletin_id: string;
+  property: string;
+  value: string;
+  standard?: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ProductKeyFeature {
+  id: string;
+  product_bulletin_id: string;
+  feature: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ProductApplication {
+  id: string;
+  product_bulletin_id: string;
+  application: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ProductInstruction {
+  id: string;
+  product_bulletin_id: string;
+  content: Record<string, any>;
+  content_type: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProductStorageRequirement {
+  id: string;
+  product_bulletin_id: string;
+  requirement: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface ProductSafetyInfo {
+  id: string;
+  product_bulletin_id: string;
+  info_type: 'precaution' | 'first_aid';
+  information: string;
+  sort_order: number;
+  created_at: string;
+}
+
+export interface SystemDetail {
+  id: string;
+  system_id: string;
+  title: string;
+  content: Record<string, any>;
+  content_type: string;
+  meta_description?: string;
+  is_published: boolean;
+  created_at: string;
+  updated_at: string;
+  created_by?: string;
+  updated_by?: string;
+}
+
+export interface ContentAuditLog {
+  id: string;
+  table_name: string;
+  record_id: string;
+  operation: 'INSERT' | 'UPDATE' | 'DELETE';
+  old_data?: Record<string, any>;
+  new_data?: Record<string, any>;
+  changed_by?: string;
+  changed_at: string;
+  ip_address?: string;
+  user_agent?: string;
 }
 
 // API Functions
@@ -670,122 +674,461 @@ export const api = {
     if (error) throw error;
   },
 
-  // Product Images Management
-  async getProductImages(productId: string) {
+  // Bulletin Category Management
+  async getBulletinCategoriesConfig() {
     const { data, error } = await supabase
-      .from('product_images')
+      .from('bulletin_categories_config')
       .select('*')
-      .eq('product_id', productId)
+      .eq('is_active', true)
       .order('sort_order', { ascending: true });
     
     if (error) throw error;
     return data;
   },
 
-  async uploadProductImage(productId: string, file: File, altText?: string) {
-    // Upload file to Supabase Storage
-    const fileExt = file.name.split('.').pop();
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-    const filePath = `products/${productId}/${fileName}`;
-
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('product-images')
-      .upload(filePath, file);
-
-    if (uploadError) throw uploadError;
-
-    // Get public URL
-    const { data: urlData } = supabase.storage
-      .from('product-images')
-      .getPublicUrl(filePath);
-
-    // Save image record to database
+  async createBulletinCategoryConfig(category: Omit<BulletinCategoryConfig, 'id' | 'created_at' | 'updated_at'>) {
     const { data, error } = await supabase
-      .from('product_images')
-      .insert([{
-        product_id: productId,
-        image_url: urlData.publicUrl,
-        alt_text: altText || null,
-        sort_order: 0,
-        is_main: false
-      }])
+      .from('bulletin_categories_config')
+      .insert([{ ...category, updated_at: new Date().toISOString() }])
       .select()
       .single();
-
+    
     if (error) throw error;
     return data;
   },
 
-  async deleteProductImage(imageId: string) {
-    // Get image info first to delete from storage
-    const { data: imageData, error: fetchError } = await supabase
-      .from('product_images')
-      .select('image_url')
-      .eq('id', imageId)
+  async updateBulletinCategoryConfig(id: string, updates: Partial<BulletinCategoryConfig>) {
+    const { data, error } = await supabase
+      .from('bulletin_categories_config')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
       .single();
+    
+    if (error) throw error;
+    return data;
+  },
 
-    if (fetchError) throw fetchError;
+  async deleteBulletinCategoryConfig(id: string) {
+    const { error } = await supabase
+      .from('bulletin_categories_config')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
 
-    // Extract file path from URL for storage deletion
-    if (imageData.image_url) {
-      const url = new URL(imageData.image_url);
-      const pathParts = url.pathname.split('/');
-      const filePath = pathParts.slice(-3).join('/'); // products/{productId}/{fileName}
-      
-      // Delete from storage (ignore errors if file doesn't exist)
-      await supabase.storage
-        .from('product-images')
-        .remove([filePath]);
+  // Enhanced Products API
+  async getProductsWithFilters(filters: {
+    category?: string;
+    brand?: string;
+    type?: string;
+    material?: string;
+    usage?: string;
+    search?: string;
+  } = {}) {
+    let query = supabase
+      .from('products')
+      .select(`
+        *,
+        product_images (*),
+        product_categories (name)
+      `)
+      .eq('status', 'active');
+
+    if (filters.category) {
+      query = query.eq('category_id', filters.category);
+    }
+    if (filters.brand) {
+      query = query.eq('brand', filters.brand);
+    }
+    if (filters.type) {
+      query = query.eq('type', filters.type);
+    }
+    if (filters.material) {
+      query = query.eq('material', filters.material);
+    }
+    if (filters.usage) {
+      query = query.eq('usage', filters.usage);
+    }
+    if (filters.search) {
+      query = query.or(`name.ilike.%${filters.search}%,description.ilike.%${filters.search}%,code.ilike.%${filters.search}%`);
     }
 
-    // Delete from database
-    const { error } = await supabase
-      .from('product_images')
-      .delete()
-      .eq('id', imageId);
+    query = query.order('created_at', { ascending: false });
     
-    if (error) throw error;
-  },
-
-  async setMainProductImage(productId: string, imageId: string) {
-    // First, unset all main images for this product
-    await supabase
-      .from('product_images')
-      .update({ is_main: false })
-      .eq('product_id', productId);
-
-    // Then set the selected image as main
-    const { data, error } = await supabase
-      .from('product_images')
-      .update({ is_main: true })
-      .eq('id', imageId)
-      .select()
-      .single();
-    
+    const { data, error } = await query;
     if (error) throw error;
     return data;
   },
 
-  async getMainProductImage(productId: string) {
-    const { data, error } = await supabase
-      .from('product_images')
+  // Enhanced Bulletins API
+  async getBulletinsWithFilters(filters: {
+    category?: string;
+    subcategory?: string;
+    featured?: boolean;
+    search?: string;
+  } = {}) {
+    let query = supabase
+      .from('bulletins')
       .select('*')
-      .eq('product_id', productId)
-      .eq('is_main', true)
-      .single();
+      .eq('status', 'published');
+
+    if (filters.category) {
+      query = query.eq('category', filters.category);
+    }
+    if (filters.subcategory) {
+      query = query.eq('subcategory', filters.subcategory);
+    }
+    if (filters.featured !== undefined) {
+      query = query.eq('featured', filters.featured);
+    }
+    if (filters.search) {
+      query = query.or(`title.ilike.%${filters.search}%,short_description.ilike.%${filters.search}%`);
+    }
+
+    query = query.order('created_at', { ascending: false });
     
-    if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows returned
+    const { data, error } = await query;
+    if (error) throw error;
     return data;
   },
 
-  async updateProductImageOrder(imageId: string, sortOrder: number) {
+  // Product Bulletins API
+  async getProductBulletin(productId: string) {
     const { data, error } = await supabase
-      .from('product_images')
-      .update({ sort_order: sortOrder })
-      .eq('id', imageId)
+      .from('product_bulletins')
+      .select(`
+        *,
+        product_technical_specs (*),
+        product_key_features (*),
+        product_applications (*),
+        product_instructions (*),
+        product_storage_requirements (*),
+        product_safety_info (*)
+      `)
+      .eq('product_id', productId)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error;
+    return data;
+  },
+
+  async createProductBulletin(bulletin: Omit<ProductBulletin, 'id' | 'created_at' | 'updated_at'>) {
+    const { data, error } = await supabase
+      .from('product_bulletins')
+      .insert([{ ...bulletin, updated_at: new Date().toISOString() }])
       .select()
       .single();
     
     if (error) throw error;
-  };
-}
+    return data;
+  },
+
+  async updateProductBulletin(id: string, updates: Partial<ProductBulletin>) {
+    const { data, error } = await supabase
+      .from('product_bulletins')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteProductBulletin(id: string) {
+    const { error } = await supabase
+      .from('product_bulletins')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Technical Specs API
+  async createTechnicalSpec(spec: Omit<ProductTechnicalSpec, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_technical_specs')
+      .insert([spec])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateTechnicalSpec(id: string, updates: Partial<ProductTechnicalSpec>) {
+    const { data, error } = await supabase
+      .from('product_technical_specs')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteTechnicalSpec(id: string) {
+    const { error } = await supabase
+      .from('product_technical_specs')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Key Features API
+  async createKeyFeature(feature: Omit<ProductKeyFeature, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_key_features')
+      .insert([feature])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateKeyFeature(id: string, updates: Partial<ProductKeyFeature>) {
+    const { data, error } = await supabase
+      .from('product_key_features')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteKeyFeature(id: string) {
+    const { error } = await supabase
+      .from('product_key_features')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Applications API
+  async createApplication(application: Omit<ProductApplication, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_applications')
+      .insert([application])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateApplication(id: string, updates: Partial<ProductApplication>) {
+    const { data, error } = await supabase
+      .from('product_applications')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteApplication(id: string) {
+    const { error } = await supabase
+      .from('product_applications')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Instructions API
+  async updateInstructions(bulletinId: string, content: Record<string, any>, contentType = 'html') {
+    const { data, error } = await supabase
+      .from('product_instructions')
+      .upsert({
+        product_bulletin_id: bulletinId,
+        content: content,
+        content_type: contentType,
+        updated_at: new Date().toISOString()
+      })
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  // Storage Requirements API
+  async createStorageRequirement(requirement: Omit<ProductStorageRequirement, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_storage_requirements')
+      .insert([requirement])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateStorageRequirement(id: string, updates: Partial<ProductStorageRequirement>) {
+    const { data, error } = await supabase
+      .from('product_storage_requirements')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteStorageRequirement(id: string) {
+    const { error } = await supabase
+      .from('product_storage_requirements')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // Safety Info API
+  async createSafetyInfo(safetyInfo: Omit<ProductSafetyInfo, 'id' | 'created_at'>) {
+    const { data, error } = await supabase
+      .from('product_safety_info')
+      .insert([safetyInfo])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateSafetyInfo(id: string, updates: Partial<ProductSafetyInfo>) {
+    const { data, error } = await supabase
+      .from('product_safety_info')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteSafetyInfo(id: string) {
+    const { error } = await supabase
+      .from('product_safety_info')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // System Details API
+  async getSystemDetail(systemId: string) {
+    const { data, error } = await supabase
+      .from('system_details')
+      .select('*')
+      .eq('system_id', systemId)
+      .single();
+    
+    if (error && error.code !== 'PGRST116') throw error;
+    return data;
+  },
+
+  async createSystemDetail(systemDetail: Omit<SystemDetail, 'id' | 'created_at' | 'updated_at'>) {
+    const { data, error } = await supabase
+      .from('system_details')
+      .insert([{ ...systemDetail, updated_at: new Date().toISOString() }])
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async updateSystemDetail(id: string, updates: Partial<SystemDetail>) {
+    const { data, error } = await supabase
+      .from('system_details')
+      .update({ ...updates, updated_at: new Date().toISOString() })
+      .eq('id', id)
+      .select()
+      .single();
+    
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteSystemDetail(id: string) {
+    const { error } = await supabase
+      .from('system_details')
+      .delete()
+      .eq('id', id);
+    
+    if (error) throw error;
+  },
+
+  // File Upload API
+  async uploadFile(bucket: string, path: string, file: File) {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Math.random()}.${fileExt}`;
+    const filePath = `${path}/${fileName}`;
+
+    const { data, error } = await supabase.storage
+      .from(bucket)
+      .upload(filePath, file);
+    
+    if (error) throw error;
+    
+    const { data: urlData } = supabase.storage
+      .from(bucket)
+      .getPublicUrl(filePath);
+    
+    return urlData.publicUrl;
+  },
+
+  // Audit Log API
+  async logContentChange(
+    tableName: string, 
+    recordId: string, 
+    operation: 'INSERT' | 'UPDATE' | 'DELETE',
+    oldData?: Record<string, any>,
+    newData?: Record<string, any>
+  ) {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      const { error } = await supabase
+        .from('content_audit_log')
+        .insert([{
+          table_name: tableName,
+          record_id: recordId,
+          operation: operation,
+          old_data: oldData,
+          new_data: newData,
+          changed_by: user?.id
+        }]);
+      
+      if (error) console.error('Audit log error:', error);
+    } catch (error) {
+      console.error('Audit log error:', error);
+    }
+  },
+
+  // Get audit log for a record
+  async getAuditLog(tableName: string, recordId: string) {
+    const { data, error } = await supabase
+      .from('content_audit_log')
+      .select('*')
+      .eq('table_name', tableName)
+      .eq('record_id', recordId)
+      .order('changed_at', { ascending: false });
+    
+    if (error) throw error;
+    return data;
+  }
+};
