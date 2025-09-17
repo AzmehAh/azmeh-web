@@ -681,7 +681,7 @@ export const api = {
       .select('*')
       .eq('product_id', productId)
       .eq('is_main', true)
-      .single();
+      .maybeSingle();
     
     if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows returned
     return data;

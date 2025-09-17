@@ -74,7 +74,7 @@ const Products = () => {
         .from('products')
         .select(`
           *,
-          product_images!inner(*)
+          product_images(*)
         `)
         .eq('status', 'active')
         .order('created_at', { ascending: false });
