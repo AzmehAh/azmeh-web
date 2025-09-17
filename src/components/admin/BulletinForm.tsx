@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import Quill from 'quill';
+import ReactQuill, { Quill } from 'react-quill';
 import { BetterTable } from 'quill-better-table';
 
 // Register the table module with Quill
