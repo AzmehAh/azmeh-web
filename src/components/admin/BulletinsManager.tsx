@@ -129,6 +129,30 @@ const BulletinsManager = () => {
       </div>
     );
   }
+const quillModules = {
+  toolbar: {
+    container: [
+      [{ header: [1, 2, 3, false] }],
+      ["bold", "italic", "underline", "strike"],
+      [{ list: "ordered" }, { list: "bullet" }],
+      ["link", "image", "video"],
+      ["clean"],
+      ["better-table"], // ← لازم نفس الاسم اللي سجلناه
+    ],
+  },
+  "better-table": {
+    operationMenu: {
+      items: {
+        unmergeCells: {
+          text: "Unmerge cells",
+        },
+      },
+    },
+  },
+  keyboard: {
+    bindings: Quill.import("modules/keyboard").DEFAULTS.bindings,
+  },
+};
 
   return (
     <div className="space-y-6">
@@ -413,6 +437,24 @@ const BulletinModal = ({
       setUploadingImage(false);
     }
   };
+<ReactQuill
+  value={formData.content}
+  onChange={(val) => setFormData((prev) => ({ ...prev, content: val }))}
+  modules={quillModules}
+  formats={[
+    "header",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "list",
+    "bullet",
+    "link",
+    "image",
+    "video",
+    "better-table",
+  ]}
+/>
 
   // Quill modules configuration for rich text editing
   const quillModules = {
