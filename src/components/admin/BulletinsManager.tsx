@@ -748,7 +748,7 @@ const BulletinsManager = () => {
             className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
           >
             {/* Bulletin Image */}
-            <div className="h-32 bg-gray-100 relative">
+            <div className=" w-40 h-24  bg-gray-100 relative">
               {bulletin.cover_image ? (
                 <img
                   src={bulletin.cover_image}
