@@ -719,41 +719,43 @@ const BulletinModal = ({
               )}
             </div>
 
-            {/* Content */}
-            <div className="px-6 pb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Content *
-              </label>
-              {isEditing ? (
-                <div className="border border-gray-200 rounded-lg overflow-hidden">
-                  {uploadingImage && (
-                    <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
-                      <div className="flex items-center">
-                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                        Uploading image...
-                      </div>
-                    </div>
-                  )}
-                  <ReactQuill
-                    theme="snow"
-                    value={formData.content}
-                    onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
-                    modules={quillModules}
-                    formats={quillFormats}
-                    style={{ height: '400px' }}
-                    placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
-                  />
-                </div>
-              ) : (
-                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <div dangerouslySetInnerHTML={{ __html: formData.content }} />
-                </div>
-              )}
-            </div>
-            
-            {/* Add padding after content to account for quill editor height */}
-            {isEditing && <div className="pt-16"></div>}
+          {/* Content */}
+<div className="px-6 pb-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Content *
+  </label>
+  {isEditing ? (
+    <div className="border border-gray-200 rounded-lg overflow-hidden">
+      {uploadingImage && (
+        <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
+          <div className="flex items-center">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+            Uploading image...
           </div>
+        </div>
+      )}
+      <ReactQuill
+        theme="snow"
+        value={formData.content}
+        onChange={(value) =>
+          setFormData((prev) => ({ ...prev, content: value }))
+        }
+        modules={quillModules}   {/* ✅ إضافة modules */}
+        formats={quillFormats}   {/* ✅ إضافة formats */}
+        className="h-96"         {/* ارتفاع مناسب بدل style */}
+        placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
+      />
+    </div>
+  ) : (
+    <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+      <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+    </div>
+  )}
+</div>
+
+{/* Padding إضافي وقت التحرير */}
+{isEditing && <div className="pt-16"></div>}
+
 
           {/* Footer */}
           {isEditing && (
