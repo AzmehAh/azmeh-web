@@ -22,7 +22,6 @@ import 'quill-better-table/dist/quill-better-table.css';
 
 
 
-
 const BulletinModal = ({ 
   isOpen, 
   onClose, 
@@ -68,6 +67,7 @@ const BulletinModal = ({
 
     loadBetterTable();
   }, []);
+
 
 
 
