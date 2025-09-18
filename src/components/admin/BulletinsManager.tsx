@@ -358,23 +358,7 @@ const BulletinModal = ({
 
   const handleSave = async () => {
     setSaving(true);
-    try {
-     const bulletinData = {
-  slug: formData.slug,
-  title: formData.title,
-  short_description: formData.short_description || null,
-  cover_image: formData.cover_image || null,
-  category: formData.category,
-  subcategory: formData.subcategory,
-  content: formData.content, // HTML string
-  status: formData.status,
-  featured: formData.featured,
-  author: formData.author,
-  tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
-  updated_at: new Date().toISOString()
-};
-
-
+    
       const bulletinData = {
         slug: formData.slug,
         title: formData.title,
