@@ -46,27 +46,28 @@ const BulletinModal = ({
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
 
-const [betterTableLoaded, setBetterTableLoaded] = useState(false);
+  // ✅ هنا الحالة الوحيدة التي نحتاجها
+  const [betterTableLoaded, setBetterTableLoaded] = useState(false);
 
-useEffect(() => {
-  const loadBetterTable = async () => {
-    try {
-      const module = await import('quill-better-table');
-      const BetterTable = module.default;
+  useEffect(() => {
+    const loadBetterTable = async () => {
+      try {
+        const module = await import('quill-better-table');
+        const BetterTable = module.default;
 
-      if (Quill && !Quill.imports['modules/better-table']) {
-        Quill.register('modules/better-table', BetterTable, true);
+        if (Quill && !Quill.imports['modules/better-table']) {
+          Quill.register('modules/better-table', BetterTable, true);
+        }
+
+        // ✅ استخدم الحالة الموجودة
+        setBetterTableLoaded(true);
+      } catch (error) {
+        console.error('فشل تحميل quill-better-table:', error);
       }
+    };
 
-      setBetterTableAvailable(true); // هنا نعلم أنه جاهز
-      setBetterTableLoaded(true); // تم التحميل
-    } catch (error) {
-      console.error('فشل تحميل quill-better-table:', error);
-    }
-  };
-
-  loadBetterTable();
-}, []);
+    loadBetterTable();
+  }, []);
 
 
 
