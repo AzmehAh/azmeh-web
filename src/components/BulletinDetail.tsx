@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Tag, FileText } from 'lucide-react';
-import { bulletinsData, BulletinItem, BulletinContent, Bulletin } from '../data/bulletinsData';
+import DOMPurify from 'dompurify';
+import { Bulletin } from '../lib/supabase';
 import { api } from '../lib/supabase';
 
 const BulletinDetail = () => {
@@ -60,94 +61,6 @@ const BulletinDetail = () => {
     );
   }
 
-  const renderContent = (item: BulletinContent, index: number) => {
-    switch (item.type) {
-      case 'heading':
-        const HeadingTag = `h${item.level}` as keyof JSX.IntrinsicElements;
-        const headingStyles = {
-          1: 'text-4xl font-bold text-gray-900 mb-6 mt-8 first:mt-0',
-          2: 'text-3xl font-bold text-gray-900 mb-4 mt-8',
-          3: 'text-2xl font-semibold text-gray-900 mb-4 mt-6',
-          4: 'text-xl font-semibold text-gray-900 mb-3 mt-6'
-        };
-        return (
-          <HeadingTag key={index} className={headingStyles[item.level as keyof typeof headingStyles] || headingStyles[4]}>
-            {item.content}
-          </HeadingTag>
-        );
-
-      case 'paragraph':
-        return (
-          <p key={index} className="text-gray-700 leading-relaxed mb-6 text-lg">
-            {item.content}
-          </p>
-        );
-
-      case 'list':
-        return (
-          <ul key={index} className="space-y-3 mb-6">
-            {item.items?.map((listItem, listIndex) => (
-              <li key={listIndex} className="flex items-start text-gray-700">
-                <div className="w-2 h-2 bg-[#2C5DB6] rounded-full mt-2 mr-4 flex-shrink-0" />
-                <span className="leading-relaxed">{listItem}</span>
-              </li>
-            ))}
-          </ul>
-        );
-
-      case 'table':
-        return (
-          <div key={index} className="mb-8 overflow-x-auto">
-            <div className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-              <table className="w-full">
-                <thead className="bg-gradient-to-r from-[#2C5DB6] to-blue-700">
-                  <tr>
-                    {item.headers?.map((header, headerIndex) => (
-                      <th key={headerIndex} className="px-6 py-4 text-left font-semibold text-white">
-                        {header}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {item.rows?.map((row, rowIndex) => (
-                    <tr key={rowIndex} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                      {row.map((cell, cellIndex) => (
-                        <td key={cellIndex} className="px-6 py-4 text-gray-700">
-                          {cell}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
-
-      case 'image':
-        return (
-          <div key={index} className="mb-8">
-            <div className="rounded-xl overflow-hidden shadow-lg">
-              <img
-                src={item.content}
-                alt={item.caption || 'Bulletin image'}
-                className="w-full h-auto object-cover"
-              />
-              {item.caption && (
-                <div className="bg-gray-100 px-6 py-3 border-t border-gray-200">
-                  <p className="text-sm text-gray-600 italic">{item.caption}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        );
-
-      default:
-        return null;
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
       {/* Breadcrumb */}
@@ -203,8 +116,10 @@ const BulletinDetail = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(bulletin.content)
+              }}
             >
-              {bulletin.content.map((item, index) => renderContent(item, index))}
             </motion.div>
           </article>
 

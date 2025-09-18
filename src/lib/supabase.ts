@@ -57,7 +57,7 @@ export interface Bulletin {
   cover_image?: string;
   category: string;
   subcategory: string;
-  content: BulletinContent[];
+  content: string;
   status: string;
   created_at: string;
   updated_at: string;
