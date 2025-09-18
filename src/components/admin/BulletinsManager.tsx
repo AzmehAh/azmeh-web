@@ -149,31 +149,38 @@ const BulletinModal = ({
   };
 
   // Upload image for rich text editor
-// Upload image for rich text editor
 const uploadImageToEditor = async (file) => {
   try {
+    if (!file) return;
+
     setUploadingImage(true);
     const imageUrl = await uploadImage(file, 'bulletins/content');
 
-    if (imageUrl && quillRef.current) {
-      const quill = quillRef.current.getEditor();
-      let range = quill.getSelection(true);
+    if (!imageUrl) return;
 
-      if (!range) {
-        // إذا لم يكن هناك اختيار، ضع الصورة في آخر المحتوى
-        range = { index: quill.getLength(), length: 0 };
-      }
-
-      quill.insertEmbed(range.index, 'image', imageUrl, 'user');
-      quill.setSelection(range.index + 1, 0);
+    // التأكد من وجود المحرر
+    const quill = quillRef.current?.getEditor();
+    if (!quill) {
+      alert("Editor not ready. Please try again.");
+      return;
     }
+
+    let range = quill.getSelection();
+    if (!range) {
+      range = { index: quill.getLength(), length: 0 };
+    }
+
+    quill.insertEmbed(range.index, 'image', imageUrl, 'user');
+    quill.setSelection(range.index + 1, 0);
+
   } catch (error) {
-    console.error('Error uploading image:', error);
+    console.error('Error uploading image to editor:', error);
     alert('Error uploading image to editor');
   } finally {
     setUploadingImage(false);
   }
 };
+
 
   // Quill modules configuration for rich text editing
   const quillModules = {
@@ -486,11 +493,13 @@ const uploadImageToEditor = async (file) => {
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                 <div 
-  className="prose max-w-none bg-gray-50 p-6 rounded-lg border" 
-  style={{ whiteSpace: 'pre-wrap' }} // هذا الجديد
-  dangerouslySetInnerHTML={{ __html: formData.content }} // حذف replace
-/>
+                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+  <div 
+    dangerouslySetInnerHTML={{ __html: formData.content }} 
+    className="whitespace-pre-wrap"
+  />
+</div>
+
 
                 </div>
               )}
