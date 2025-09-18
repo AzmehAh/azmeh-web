@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, 
@@ -11,12 +11,17 @@ import {
   Eye,
   Star,
   Calendar,
-  Tag,
-  Upload
+  Tag
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import 'quill-better-table/dist/quill-better-table.css';
+
+
+
+
+
 
 const BulletinModal = ({ 
   isOpen, 
@@ -34,14 +39,55 @@ const BulletinModal = ({
     subcategory: '',
     content: '',
     status: 'draft',
-    featured: false,
+    featured: false, 
     author: 'Al Azmeh Paints',
     tags: ''
   });
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [uploadingCover, setUploadingCover] = useState(false);
-  const quillRef = useRef(null);
+
+const [betterTableLoaded, setBetterTableLoaded] = useState(false);
+
+useEffect(() => {
+  const loadBetterTable = async () => {
+    try {
+      const module = await import('quill-better-table');
+      const BetterTable = module.default;
+
+      if (Quill && !Quill.imports['modules/better-table']) {
+        Quill.register('modules/better-table', BetterTable, true);
+      }
+
+      setBetterTableAvailable(true); // هنا نعلم أنه جاهز
+      setBetterTableLoaded(true); // تم التحميل
+    } catch (error) {
+      console.error('فشل تحميل quill-better-table:', error);
+    }
+  };
+
+  loadBetterTable();
+}, []);
+
+  // Check for BetterTable availability
+  useEffect(() => {
+    const checkBetterTable = () => {
+      if (BetterTable && !betterTableAvailable) {
+        setBetterTableAvailable(true);
+      }
+    };
+    
+    if (!betterTableAvailable) {
+      const interval = setInterval(checkBetterTable, 100);
+      const timeout = setTimeout(() => {
+        clearInterval(interval);
+      }, 5000);
+      
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
+    }
+  }, [betterTableAvailable]);
 
   useEffect(() => {
     if (bulletin) {
@@ -75,64 +121,6 @@ const BulletinModal = ({
     }
   }, [bulletin]);
 
-  // Upload image to storage
-  const uploadImage = async (file, path) => {
-    try {
-      // التحقق من وجود الملف
-      if (!file || !file.type.startsWith('image/')) {
-        alert('Please select a valid image file');
-        return null;
-      }
-      
-      // التحقق من حجم الملف (5MB كحد أقصى)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Image size should be less than 5MB');
-        return null;
-      }
-      
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${path}/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('system-media')
-        .upload(filePath, file);
-
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw uploadError;
-      }
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('system-media')
-        .getPublicUrl(filePath);
-
-      return publicUrl;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Error uploading image: ' + error.message);
-      return null;
-    }
-  };
-
-  // Handle cover image upload
-  const handleCoverImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      setUploadingCover(true);
-      const imageUrl = await uploadImage(file, 'bulletins/covers');
-      if (imageUrl) {
-        setFormData(prev => ({ ...prev, cover_image: imageUrl }));
-      }
-    } catch (error) {
-      console.error('Error uploading cover image:', error);
-    } finally {
-      setUploadingCover(false);
-    }
-  };
-
   // Custom image handler for rich text editor
   const imageHandler = async () => {
     const input = document.createElement('input');
@@ -148,68 +136,42 @@ const BulletinModal = ({
     };
   };
 
-  const deleteImageHandler = () => {
-  const quill = quillRef.current?.getEditor();
-  if (!quill) return;
-  
-  const range = quill.getSelection();
-  if (!range) return;
-
-  if (range.length > 0) {
-    // إذا كان هناك نص أو صورة محددة
-    quill.deleteText(range.index, range.length);
-  } else {
-    // إذا لم يكن هناك تحديد، تحقق من العنصر الحالي
-    const format = quill.getFormat(range.index);
-    if (format.image) {
-      // إذا كان هناك صورة عند المؤشر
-      quill.deleteText(range.index, 1);
-    }
-  }
-};
+  // Upload image for rich text editor
   const uploadImageToEditor = async (file) => {
     try {
       setUploadingImage(true);
-      const imageUrl = await uploadImage(file, 'bulletins/content');
+      const fileExt = file.name.split('.').pop();
+      const fileName = `bulletin-content-${Date.now()}.${fileExt}`;
+      const filePath = `bulletins/content/${fileName}`;
 
-      if (!imageUrl) {
-        alert('Failed to upload image.');
-        return;
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(filePath);
+
+      // Insert image into editor at cursor position
+      const quill = (document.querySelector('.ql-editor')?.__quill);
+      if (quill) {
+        const range = quill.getSelection(true);
+        quill.insertEmbed(range.index, 'image', publicUrl);
+        quill.setSelection(range.index + 1);
       }
-
-      // تأكد من أن quill جاهز
-      if (!quillRef.current) {
-        console.warn('Quill reference is not ready');
-        return; 
-      }
-
-      const quill = quillRef.current.getEditor();
-      if (!quill) {
-        console.warn('Quill editor instance not found');
-        return;
-      }
-
-      // احصل على الموقع الحالي للكرسور
-      let range = quill.getSelection();
-      if (!range) { 
-        // إذا لم يكن هناك تحديد، ضع الصورة في النهاية
-        range = { index: quill.getLength(), length: 0 };
-      }
-
-      // أدخل الصورة في الموقع المحدد
-      quill.insertEmbed(range.index, 'image', imageUrl, 'user');
-      // حرّك الكرسور بعد الصورة
-      quill.setSelection(range.index + 1, 0);
     } catch (error) {
-      console.error('Error uploading image to editor:', error);
-      alert('Error uploading image: ' + (error.message || 'Unknown error'));
+      console.error('Error uploading image:', error);
+      alert('Error uploading image to editor');
     } finally {
       setUploadingImage(false);
     }
   };
 
   // Quill modules configuration for rich text editing
-  const quillModules = {
+ const quillModules = React.useMemo(() => {
+  const baseModules = {
     toolbar: {
       container: [
         [{ 'header': [1, 2, 3, false] }],
@@ -217,31 +179,59 @@ const BulletinModal = ({
         [{ 'list': 'ordered' }, { 'list': 'bullet' }],
         ['blockquote', 'code-block'],
         ['link', 'image'],
-        ['clean']
+        ['clean'],
+        ...(betterTableLoaded ? [['better-table']] : []) // إضافة زر الجدول فقط بعد التحميل
       ],
       handlers: {
         image: imageHandler
       }
-    },
-    clipboard: {
-      // تحسين معالجة المحتوى المنقول للحفاظ على التنسيق
-      matchVisual: false
     }
   };
 
-  const quillFormats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'blockquote', 'code-block',
-    'link', 'image'
-  ]; 
+  // إذا لم تُحمّل بعد، أعد الإعدادات الأساسية فقط
+  if (!betterTableLoaded) return baseModules;
 
-const handleContentChange = (value) => {
-  // احتفظ بالمحتوى كما هو دون تنظيف يزيل الفقرات أو المسافات
-  setFormData(prev => ({ ...prev, content: value }));
-};
+  // بعد التحميل، استخدم Quill.import للحصول على الوحدة بأمان
+  const BetterTable = Quill.import('modules/better-table');
 
+  return {
+    ...baseModules,
+    'better-table': {
+      operationMenu: {
+        color: {
+          colors: ['#000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'],
+          text: 'Background Colors:'
+        },
+        items: {
+          unmergeCells: { text: 'Unmerge cells' },
+          insertColumnRight: { text: 'Insert column right' },
+          insertColumnLeft: { text: 'Insert column left' },
+          insertRowUp: { text: 'Insert row above' },
+          insertRowDown: { text: 'Insert row below' },
+          mergeCells: { text: 'Merge cells' },
+          deleteColumn: { text: 'Delete column' },
+          deleteRow: { text: 'Delete row' },
+          deleteTable: { text: 'Delete table' }
+        }
+      },
+      toolbarTable: {
+        tip: 'Insert Table',
+        tipSize: 'Size'
+      },
+      keyboard: {
+        bindings: BetterTable?.keyboardBindings || {} // الآن آمنة!
+      }
+    }
+  };
+}, [betterTableLoaded]);
+const quillFormats = React.useMemo(() => [
+  'header',
+  'bold', 'italic', 'underline', 'strike',
+  'list', 'bullet',
+  'blockquote', 'code-block',
+  'link', 'image',
+  ...(betterTableLoaded ? ['better-table'] : []) // أضف التنسيق فقط إذا تم التحميل
+], [betterTableLoaded]); 
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -372,49 +362,16 @@ const handleContentChange = (value) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Cover Image
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image URL</label>
                   {isEditing ? (
-                    <div className="space-y-2">
-                      {formData.cover_image && (
-                        <div className="relative w-full h-32 rounded border overflow-hidden">
-                          <img
-                            src={formData.cover_image}
-                            alt="Cover preview"
-                            className="w-full h-full object-cover"
-                          />
-                          <button
-                            onClick={() => setFormData(prev => ({ ...prev, cover_image: '' }))}
-                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
-                            title="Remove image"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </div>
-                      )}
-                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
-                        <Upload className="w-4 h-4 mr-2" />
-                        {uploadingCover ? 'Uploading...' : 'Upload Cover Image'}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleCoverImageUpload}
-                          className="hidden"
-                          disabled={uploadingCover}
-                        />
-                      </label>
-                    </div>
+                    <input
+                      type="url"
+                      value={formData.cover_image}
+                      onChange={(e) => setFormData(prev => ({ ...prev, cover_image: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                    />
                   ) : (
-                    formData.cover_image ? (
-                      <img
-                        src={formData.cover_image}
-                        alt="Cover"
-                        className="w-full h-32 object-cover rounded border"
-                      />
-                    ) : (
-                      <p className="text-gray-500">No cover image</p>
-                    )
+                    <p className="text-gray-900">{formData.cover_image}</p>
                   )}
                 </div>
               </div>
@@ -519,34 +476,32 @@ const handleContentChange = (value) => {
                         </div>
                       </div>
                     )}
-                    <div className="flex items-center justify-between p-2 bg-gray-50 border-b">
-                      <span className="text-sm text-gray-600">Tip: To delete an image, select it and press Delete key</span>
-                      <button
-                        onClick={deleteImageHandler}
-                        className="px-3 py-1 text-sm text-red-600 bg-red-50 rounded hover:bg-red-100"
-                      >
-                        Delete Selected Image
-                      </button>
-                    </div>
                     <ReactQuill
-                      ref={quillRef}
                       theme="snow"
                       value={formData.content}
-                      onChange={handleContentChange}
+                      onChange={(value) =>
+                        setFormData((prev) => ({ ...prev, content: value }))
+                      }
                       modules={quillModules}
                       formats={quillFormats}
                       className="h-96"         
-                      placeholder="Start writing your bulletin content..."
+                      placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
                     />
                   </div> 
+                  <div className="mt-2 text-sm text-gray-500">
+                    <p>
+                      {betterTableAvailable 
+                        ? 'To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.'
+                        : 'Table functionality will be available once the module loads.'}
+                    </p>
+                  </div>
                 </>
               ) : (
-           <div className="whitespace-pre-wrap break-words bg-gray-50 p-6 rounded-lg border border-gray-200">
-  <div dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-500 italic">No content</p>' }} />
-</div>
-
+                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                </div>
               )}
-            </div> 
+            </div>
 
             {/* Padding إضافي وقت التحرير */}
             {isEditing && <div className="pt-16"></div>}
@@ -585,9 +540,6 @@ const handleContentChange = (value) => {
     </div>
   );
 };
-
-// Main BulletinsManager Component (باقي الكود يبقى كما هو)
-// ... (باقي الكود يبقى دون تغيير)
 
 // Main BulletinsManager Component
 const BulletinsManager = () => {
@@ -746,7 +698,7 @@ const BulletinsManager = () => {
             className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
           >
             {/* Bulletin Image */}
-            <div className=" w-40 h-24  bg-gray-100 relative">
+            <div className="h-32 bg-gray-100 relative">
               {bulletin.cover_image ? (
                 <img
                   src={bulletin.cover_image}
@@ -764,7 +716,7 @@ const BulletinsManager = () => {
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-yellow-100 text-yellow-800'
                 }`}>
-                  {bulletin.status} 
+                  {bulletin.status}
                 </span>
                 {bulletin.featured && (
                   <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
