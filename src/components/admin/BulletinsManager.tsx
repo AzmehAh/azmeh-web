@@ -180,13 +180,9 @@ const BulletinModal = ({
       // تأكد من أن quill جاهز
       if (!quillRef.current) {
         console.warn('Quill reference is not ready');
-        return;
+        return; 
       }
-  const [img] = quill.root.querySelectorAll(`img[src="${imageUrl}"]`);
-    if (img) {
-      img.style.width = '200px';
-      img.style.height = '100px';
-    }
+
       const quill = quillRef.current.getEditor();
       if (!quill) {
         console.warn('Quill editor instance not found');
