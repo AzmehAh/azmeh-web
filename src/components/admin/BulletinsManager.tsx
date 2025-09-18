@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, 
@@ -41,6 +41,7 @@ const BulletinModal = ({
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const quillRef = useRef(null);
 
   useEffect(() => {
     if (bulletin) {
@@ -77,6 +78,18 @@ const BulletinModal = ({
   // Upload image to storage
   const uploadImage = async (file, path) => {
     try {
+      // التحقق من وجود الملف
+      if (!file || !file.type.startsWith('image/')) {
+        alert('Please select a valid image file');
+        return null;
+      }
+      
+      // التحقق من حجم الملف (5MB كحد أقصى)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('Image size should be less than 5MB');
+        return null;
+      }
+      
       const fileExt = file.name.split('.').pop();
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `${path}/${fileName}`;
@@ -85,7 +98,10 @@ const BulletinModal = ({
         .from('system-media')
         .upload(filePath, file);
 
-      if (uploadError) throw uploadError;
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        throw uploadError;
+      }
 
       const { data: { publicUrl } } = supabase.storage
         .from('system-media')
@@ -94,7 +110,7 @@ const BulletinModal = ({
       return publicUrl;
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Error uploading image');
+      alert('Error uploading image: ' + error.message);
       return null;
     }
   };
@@ -138,14 +154,12 @@ const BulletinModal = ({
       setUploadingImage(true);
       const imageUrl = await uploadImage(file, 'bulletins/content');
       
-      if (imageUrl) {
-        // Insert image into editor at cursor position
-        const quill = (document.querySelector('.ql-editor')?.__quill);
-        if (quill) {
-          const range = quill.getSelection(true);
-          quill.insertEmbed(range.index, 'image', imageUrl);
-          quill.setSelection(range.index + 1);
-        }
+      if (imageUrl && quillRef.current) {
+        // إدراج الصورة في المحرر عند موضع المؤشر
+        const quill = quillRef.current.getEditor();
+        const range = quill.getSelection(true);
+        quill.insertEmbed(range.index, 'image', imageUrl);
+        quill.setSelection(range.index + 1);
       }
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -451,6 +465,7 @@ const BulletinModal = ({
                       </div>
                     )}
                     <ReactQuill
+                      ref={quillRef}
                       theme="snow"
                       value={formData.content}
                       onChange={(value) =>
@@ -465,7 +480,12 @@ const BulletinModal = ({
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                  <div 
+                    className="ql-editor" 
+                    dangerouslySetInnerHTML={{ 
+                      __html: formData.content.replace(/\n/g, '<br/>') 
+                    }} 
+                  />
                 </div>
               )}
             </div>
@@ -508,7 +528,7 @@ const BulletinModal = ({
   );
 };
 
-// Main BulletinsManager Component (يبقى كما هو)
+// Main BulletinsManager Component
 const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState([]);
   const [filteredBulletins, setFilteredBulletins] = useState([]);
