@@ -16,14 +16,12 @@ import {
 import { supabase } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import 'quill-better-table/dist/quill-better-table.css';
 
-// Initialize Quill and BetterTable only on client side
-let Quill;
+// Initialize BetterTable on client side
 let BetterTable;
 
 if (typeof window !== 'undefined') {
-  Quill = ReactQuill.Quill || window.Quill;
-  
   // Import and register better-table
   import('quill-better-table').then(module => {
     BetterTable = module.default;
@@ -33,8 +31,11 @@ if (typeof window !== 'undefined') {
   }).catch(error => {
     console.warn('Failed to load quill-better-table:', error);
   });
-  
-  import('quill-better-table/dist/quill-better-table.css');
+}
+
+// Register better-table with Quill
+if (typeof window !== 'undefined' && Quill && BetterTable) {
+  Quill.register('modules/better-table', BetterTable, true);
 }
 
 // Bulletin Modal Component - MOVED OUTSIDE OF BulletinsManager
@@ -60,6 +61,28 @@ const BulletinModal = ({
   });
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [betterTableAvailable, setBetterTableAvailable] = useState(!!BetterTable);
+
+  // Check for BetterTable availability
+  useEffect(() => {
+    const checkBetterTable = () => {
+      if (BetterTable && !betterTableAvailable) {
+        setBetterTableAvailable(true);
+      }
+    };
+    
+    if (!betterTableAvailable) {
+      const interval = setInterval(checkBetterTable, 100);
+      const timeout = setTimeout(() => {
+        clearInterval(interval);
+      }, 5000);
+      
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
+    }
+  }, [betterTableAvailable]);
 
   useEffect(() => {
     if (bulletin) {
@@ -151,16 +174,17 @@ const BulletinModal = ({
           [{ 'list': 'ordered' }, { 'list': 'bullet' }],
           ['blockquote', 'code-block'],
           ['link', 'image'],
-          ['clean']
+          ['clean'],
+          ...(betterTableAvailable ? [['better-table']] : [])
         ],
         handlers: {
           image: imageHandler
         }
-      }
+      },
+      table: false
     };
     
-    // Only add better-table if it's available
-    if (BetterTable) {
+    if (betterTableAvailable) {
       return {
         ...baseModules,
         'better-table': {
@@ -170,33 +194,15 @@ const BulletinModal = ({
               text: 'Background Colors:'
             },
             items: {
-              unmergeCells: {
-                text: 'Unmerge cells'
-              },
-              insertColumnRight: {
-                text: 'Insert column right'
-              },
-              insertColumnLeft: {
-                text: 'Insert column left'
-              },
-              insertRowUp: {
-                text: 'Insert row above'
-              },
-              insertRowDown: {
-                text: 'Insert row below'
-              },
-              mergeCells: {
-                text: 'Merge cells'
-              },
-              deleteColumn: {
-                text: 'Delete column'
-              },
-              deleteRow: {
-                text: 'Delete row'
-              },
-              deleteTable: {
-                text: 'Delete table'
-              }
+              unmergeCells: { text: 'Unmerge cells' },
+              insertColumnRight: { text: 'Insert column right' },
+              insertColumnLeft: { text: 'Insert column left' },
+              insertRowUp: { text: 'Insert row above' },
+              insertRowDown: { text: 'Insert row below' },
+              mergeCells: { text: 'Merge cells' },
+              deleteColumn: { text: 'Delete column' },
+              deleteRow: { text: 'Delete row' },
+              deleteTable: { text: 'Delete table' }
             }
           },
           toolbarTable: {
@@ -206,13 +212,13 @@ const BulletinModal = ({
         },
         keyboard: {
           bindings: BetterTable?.keyboardBindings || {}
-        },
-        table: false
+        }
       };
-    }
+      }
+    };
     
     return baseModules;
-  }, []);
+  }, [betterTableAvailable]);
 
   const quillFormats = [
     'header',
@@ -220,7 +226,7 @@ const BulletinModal = ({
     'list', 'bullet',
     'blockquote', 'code-block',
     'link', 'image',
-    ...(BetterTable ? ['better-table'] : [])
+    ...(betterTableAvailable ? ['better-table'] : [])
   ];
 
   const handleSave = async () => {
@@ -480,7 +486,11 @@ const BulletinModal = ({
                     />
                   </div>
                   <div className="mt-2 text-sm text-gray-500">
-                    <p>To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.</p>
+                    <p>
+                      {betterTableAvailable 
+                        ? 'To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.'
+                        : 'Table functionality will be available once the module loads.'}
+                    </p>
                   </div>
                 </>
               ) : (
@@ -538,7 +548,6 @@ const BulletinsManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [uploadingImage, setUploadingImage] = useState(false);
 
   useEffect(() => {
     fetchBulletins();
@@ -633,43 +642,6 @@ const BulletinsManager = () => {
       </div>
     );
   }
-
-  const quillModules = React.useMemo(() => {
-    const baseModules = {
-      toolbar: {
-        container: [
-          [{ header: [1, 2, 3, false] }],
-          ["bold", "italic", "underline", "strike"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          ["link", "image", "video"],
-          ["clean"],
-          ...(BetterTable ? [["table"]] : []), // Use "table" instead of "better-table"
-        ],
-      },
-    };
-    
-    // Only add better-table if it's available
-    if (BetterTable) {
-      return {
-        ...baseModules,
-        table: false, // Disable default table module
-        "better-table": {
-          operationMenu: {
-            items: {
-              unmergeCells: {
-                text: "Unmerge cells",
-              },
-            },
-          },
-        },
-        keyboard: {
-          bindings: BetterTable.keyboardBindings,
-        },
-      };
-    }
-    
-    return baseModules;
-  }, []);
 
   return (
     <div className="space-y-6">
