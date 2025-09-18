@@ -191,7 +191,7 @@ const BulletinModal = ({
 
       // احصل على الموقع الحالي للكرسور
       let range = quill.getSelection();
-      if (!range) {
+      if (!range) { 
         // إذا لم يكن هناك تحديد، ضع الصورة في النهاية
         range = { index: quill.getLength(), length: 0 };
       }
