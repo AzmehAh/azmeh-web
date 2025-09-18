@@ -1,4 +1,4 @@
- import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, 
@@ -148,46 +148,63 @@ const BulletinModal = ({
     };
   };
 
+  // Function to delete image from editor
+  const deleteImageHandler = () => {
+    const quill = quillRef.current?.getEditor();
+    if (!quill) return;
+    
+    const range = quill.getSelection();
+    if (!range) return;
+    
+    // Check if the selected content is an image
+    const formats = quill.getFormat(range);
+    if (formats.image) {
+      // Delete the image
+      quill.deleteText(range.index, range.length);
+    }
+  };
+
   const uploadImageToEditor = async (file) => {
-  try {
-    setUploadingImage(true);
-    const imageUrl = await uploadImage(file, 'bulletins/content');
+    try {
+      setUploadingImage(true);
+      const imageUrl = await uploadImage(file, 'bulletins/content');
 
-    if (!imageUrl) {
-      alert('Failed to upload image.');
-      return;
+      if (!imageUrl) {
+        alert('Failed to upload image.');
+        return;
+      }
+
+      // تأكد من أن quill جاهز
+      if (!quillRef.current) {
+        console.warn('Quill reference is not ready');
+        return;
+      }
+
+      const quill = quillRef.current.getEditor();
+      if (!quill) {
+        console.warn('Quill editor instance not found');
+        return;
+      }
+
+      // احصل على الموقع الحالي للكرسور
+      let range = quill.getSelection();
+      if (!range) {
+        // إذا لم يكن هناك تحديد، ضع الصورة في النهاية
+        range = { index: quill.getLength(), length: 0 };
+      }
+
+      // أدخل الصورة في الموقع المحدد
+      quill.insertEmbed(range.index, 'image', imageUrl, 'user');
+      // حرّك الكرسور بعد الصورة
+      quill.setSelection(range.index + 1, 0);
+    } catch (error) {
+      console.error('Error uploading image to editor:', error);
+      alert('Error uploading image: ' + (error.message || 'Unknown error'));
+    } finally {
+      setUploadingImage(false);
     }
+  };
 
-    // تأكد من أن quill جاهز
-    if (!quillRef.current) {
-      console.warn('Quill reference is not ready');
-      return;
-    }
-
-    const quill = quillRef.current.getEditor();
-    if (!quill) {
-      console.warn('Quill editor instance not found');
-      return;
-    }
-
-    // احصل على الموقع الحالي للكرسور
-    let range = quill.getSelection();
-    if (!range) {
-      // إذا لم يكن هناك تحديد، ضع الصورة في النهاية
-      range = { index: quill.getLength(), length: 0 };
-    }
-
-    // أدخل الصورة في الموقع المحدد
-    quill.insertEmbed(range.index, 'image', imageUrl, 'user');
-    // حرّك الكرسور بعد الصورة
-    quill.setSelection(range.index + 1, 0);
-  } catch (error) {
-    console.error('Error uploading image to editor:', error);
-    alert('Error uploading image: ' + (error.message || 'Unknown error'));
-  } finally {
-    setUploadingImage(false);
-  }
-};
   // Quill modules configuration for rich text editing
   const quillModules = {
     toolbar: {
@@ -202,6 +219,10 @@ const BulletinModal = ({
       handlers: {
         image: imageHandler
       }
+    },
+    clipboard: {
+      // تحسين معالجة المحتوى المنقول للحفاظ على التنسيق
+      matchVisual: false
     }
   };
 
@@ -212,6 +233,17 @@ const BulletinModal = ({
     'blockquote', 'code-block',
     'link', 'image'
   ];
+
+  // تحسين معالجة المحتوى لضمان الحفاظ على التنسيق
+  const handleContentChange = (value) => {
+    // تنظيف المحتوى من المسافات الزائدة مع الحفاظ على التنسيق الأساسي
+    let cleanedContent = value
+      .replace(/(<br>\s*){3,}/gi, '<br><br>') // تقليل المسافات المتعددة
+      .replace(/(<p><\/p>)+/g, '') // إزالة الفقرات الفارغة
+      .replace(/(&nbsp;)+/g, ' '); // تقليل مسافات &nbsp; المتعددة
+    
+    setFormData(prev => ({ ...prev, content: cleanedContent }));
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -355,6 +387,13 @@ const BulletinModal = ({
                             alt="Cover preview"
                             className="w-full h-full object-cover"
                           />
+                          <button
+                            onClick={() => setFormData(prev => ({ ...prev, cover_image: '' }))}
+                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full hover:bg-red-600"
+                            title="Remove image"
+                          >
+                            <X className="w-3 h-3" />
+                          </button>
                         </div>
                       )}
                       <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
@@ -483,13 +522,20 @@ const BulletinModal = ({
                         </div>
                       </div>
                     )}
+                    <div className="flex items-center justify-between p-2 bg-gray-50 border-b">
+                      <span className="text-sm text-gray-600">Tip: To delete an image, select it and press Delete key</span>
+                      <button
+                        onClick={deleteImageHandler}
+                        className="px-3 py-1 text-sm text-red-600 bg-red-50 rounded hover:bg-red-100"
+                      >
+                        Delete Selected Image
+                      </button>
+                    </div>
                     <ReactQuill
                       ref={quillRef}
                       theme="snow"
                       value={formData.content}
-                      onChange={(value) =>
-                        setFormData((prev) => ({ ...prev, content: value }))
-                      }
+                      onChange={handleContentChange}
                       modules={quillModules}
                       formats={quillFormats}
                       className="h-96"         
@@ -499,11 +545,10 @@ const BulletinModal = ({
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <div 
-  className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200"
-  dangerouslySetInnerHTML={{ __html: formData.content || '<p><em>No content</em></p>' }} 
-/>
-
+                  <div 
+                    className="prose max-w-none"
+                    dangerouslySetInnerHTML={{ __html: formData.content || '<p><em>No content</em></p>' }} 
+                  />
                 </div>
               )}
             </div> 
@@ -545,6 +590,9 @@ const BulletinModal = ({
     </div>
   );
 };
+
+// Main BulletinsManager Component (باقي الكود يبقى كما هو)
+// ... (باقي الكود يبقى دون تغيير)
 
 // Main BulletinsManager Component
 const BulletinsManager = () => {
