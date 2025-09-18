@@ -712,6 +712,7 @@ const BulletinModal = ({
                     <label className="flex items-center">
                       <input
                         type="checkbox"
+           <>
                         checked={formData.featured}
                         onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
                         className="w-4 h-4 text-[#0055A3] border-gray-300 rounded focus:ring-[#0055A3]"
@@ -802,6 +803,7 @@ const BulletinModal = ({
                   <>
                     <Save className="w-4 h-4 mr-2" />
                     Save Bulletin 
+           </>
                   </>
                 )}
               </button> 
