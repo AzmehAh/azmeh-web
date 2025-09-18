@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -18,159 +17,156 @@ import { supabase, Bulletin } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-// Initialize Quill and BetterTable only on client side
-let Quill;
-let BetterTable;
+// Import BetterTable dynamically to ensure Quill is available
+let BetterTable = null;
+let Quill = null;
 
 if (typeof window !== 'undefined') {
-  Quill = ReactQuill.Quill || window.Quill;
-  
-  // Import and register better-table
   import('quill-better-table').then(module => {
     BetterTable = module.default;
+    Quill = ReactQuill.Quill || window.Quill;
+    
     if (Quill && BetterTable) {
-      Quill.register('modules/better-table', BetterTable, true);
+      Quill.register({
+        'modules/better-table': BetterTable
+      }, true);
     }
-  }).catch(error => {
-    console.warn('Failed to load quill-better-table:', error);
   });
-  
   import('quill-better-table/dist/quill-better-table.css');
 }
 
 const BulletinsManager = () => {
-  // ... (rest of your component code remains the same until the quillModules definition)
-  
-  const quillModules = React.useMemo(() => {
-    const baseModules = {
-      toolbar: {
-        container: [
-          [{ header: [1, 2, 3, false] }],
-          ["bold", "italic", "underline", "strike"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          ["link", "image", "video"],
-          ["clean"],
-          ...(BetterTable ? [["table"]] : []), // Use "table" instead of "better-table"
-        ],
-      },
-    };
-    
-    // Only add better-table if it's available
-    if (BetterTable) {
-      return {
-        ...baseModules,
-        table: false, // Disable default table module
-        "better-table": {
-          operationMenu: {
-            items: {
-              unmergeCells: {
-                text: "Unmerge cells",
-              },
+  const [bulletins, setBulletins] = useState([]);
+  const [filteredBulletins, setFilteredBulletins] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [selectedBulletin, setSelectedBulletin] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [uploadingImage, setUploadingImage] = useState(false);
+
+  useEffect(() => {
+    fetchBulletins();
+  }, []);
+
+  useEffect(() => {
+    let filtered = bulletins;
+
+    if (searchTerm) {
+      filtered = filtered.filter(bulletin =>
+        bulletin.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        bulletin.short_description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        bulletin.subcategory.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (categoryFilter !== 'all') {
+      filtered = filtered.filter(bulletin => bulletin.category === categoryFilter);
+    }
+
+    setFilteredBulletins(filtered);
+  }, [searchTerm, categoryFilter, bulletins]);
+
+  const fetchBulletins = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('bulletins')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setBulletins(data || []);
+    } catch (error) {
+      console.error('Error fetching bulletins:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteBulletin = async (id) => {
+    if (!confirm('Are you sure you want to delete this bulletin?')) return;
+
+    try {
+      const { error } = await supabase
+        .from('bulletins')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+      setBulletins(bulletins.filter(b => b.id !== id));
+    } catch (error) {
+      console.error('Error deleting bulletin:', error);
+      alert('Error deleting bulletin');
+    }
+  };
+
+  const toggleFeatured = async (id, featured) => {
+    try {
+      const { error } = await supabase
+        .from('bulletins')
+        .update({ featured: !featured, updated_at: new Date().toISOString() })
+        .eq('id', id);
+
+      if (error) throw error;
+      
+      setBulletins(bulletins.map(b => 
+        b.id === id ? { ...b, featured: !featured } : b
+      ));
+    } catch (error) {
+      console.error('Error updating featured status:', error);
+    }
+  };
+
+  const openModal = (bulletin = null, editing = false) => {
+    setSelectedBulletin(bulletin);
+    setIsEditing(editing);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setSelectedBulletin(null);
+    setIsEditing(false);
+    setIsModalOpen(false);
+  };
+
+  const categories = [...new Set(bulletins.map(b => b.category))];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+      </div>
+    );
+  }
+
+  const quillModules = {
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link", "image", "video"],
+        ["clean"],
+        ...(BetterTable ? [["better-table"]] : []),
+      ],
+    },
+    ...(BetterTable ? {
+      "better-table": {
+        operationMenu: {
+          items: {
+            unmergeCells: {
+              text: "Unmerge cells",
             },
           },
         },
-        keyboard: {
-          bindings: BetterTable.keyboardBindings,
-        },
-      };
-    }
-    
-    return baseModules;
-  }, []);
+      },
+      keyboard: {
+        bindings: BetterTable.keyboardBindings,
+      },
+    } : {}),
+  };
 
-  // ... (rest of your component code remains the same)
-};
-
-// Bulletin Modal Component
-const BulletinModal = ({ 
-  isOpen, 
-  onClose, 
-  bulletin, 
-  isEditing, 
-  onSave 
-}) => {
-  // ... (rest of your modal code remains the same until the quillModules definition)
-
-  // Quill modules configuration for rich text editing
-  const quillModules = React.useMemo(() => {
-    const baseModules = {
-      toolbar: {
-        container: [
-          [{ 'header': [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-          ['blockquote', 'code-block'],
-          ['link', 'image'],
-          ['clean'],
-          ...(BetterTable ? [['table']] : []) // Use "table" instead of "better-table"
-        ],
-        handlers: {
-          image: imageHandler
-        }
-      }
-    };
-    
-    // Only add better-table if it's available
-    if (BetterTable) {
-      return {
-        ...baseModules,
-        table: false, // Disable default table module
-        'better-table': {
-          operationMenu: {
-            color: {
-              colors: ['#000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'],
-              text: 'Background Colors:'
-            },
-            items: {
-              unmergeCells: {
-                text: 'Unmerge cells'
-              },
-              insertColumnRight: {
-                text: 'Insert column right'
-              },
-              insertColumnLeft: {
-                text: 'Insert column left'
-              },
-              insertRowUp: {
-                text: 'Insert row above'
-              },
-              insertRowDown: {
-                text: 'Insert row below'
-              },
-              mergeCells: {
-                text: 'Merge cells'
-              },
-              deleteColumn: {
-                text: 'Delete column'
-              },
-              deleteRow: {
-                text: 'Delete row'
-              },
-              deleteTable: {
-                text: 'Delete table'
-              }
-            }
-          }
-        },
-        keyboard: {
-          bindings: BetterTable.keyboardBindings
-        }
-      };
-    }
-    
-    return baseModules;
-  }, []);
-
-  const quillFormats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'blockquote', 'code-block',
-    'link', 'image',
-    ...(BetterTable ? ['table'] : []) // Use "table" instead of "better-table"
-  ];
-
-    
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -400,7 +396,7 @@ const BulletinModal = ({
       });
     }
   }, [bulletin]);
-
+ 
   // Custom image handler for rich text editor
   const imageHandler = async () => {
     const input = document.createElement('input');
