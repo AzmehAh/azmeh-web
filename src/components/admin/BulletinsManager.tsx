@@ -17,6 +17,9 @@ import { supabase, Bulletin } from '../../lib/supabase';
 import 'react-quill/dist/quill.snow.css';
 import ReactQuill, { Quill } from 'react-quill';
 import { BetterTable } from 'quill-better-table';
+import BetterTable from "quill-better-table";
+import "quill-better-table/dist/quill-better-table.css";
+
 
 // Register the table module with Quill
 Quill.register({ 'modules/better-table': BetterTable }, true);
