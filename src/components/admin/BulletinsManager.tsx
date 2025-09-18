@@ -484,7 +484,7 @@ useEffect(() => {
   'list', 'bullet',
   'blockquote', 'code-block',
   'link', 'image',
-  ...(betterTableLoaded ? ['better-table'] : []) // أضف التنسيق فقط إذا تم التحميل
+  ...(betterTableLoaded ? ['better-table'] : []) 
 ], [betterTableLoaded]) 
                       className="h-96"         
                       placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
