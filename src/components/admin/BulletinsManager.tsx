@@ -473,6 +473,10 @@ const BulletinModal = ({
     },
     clipboard: {
       matchVisual: false
+    },
+    table: false,
+    keyboard: {
+      bindings: BetterTable.keyboardBindings
     }
   };
 
