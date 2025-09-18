@@ -740,9 +740,9 @@ const BulletinModal = ({
         onChange={(value) =>
           setFormData((prev) => ({ ...prev, content: value }))
         }
-        modules={quillModules}   {/* ✅ إضافة modules */}
-        formats={quillFormats}   {/* ✅ إضافة formats */}
-        className="h-96"         {/* ارتفاع مناسب بدل style */}
+        modules={quillModules}  
+        formats={quillFormats}   
+        className="h-96"         
         placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
       />
     </div>
