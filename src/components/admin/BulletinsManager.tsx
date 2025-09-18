@@ -68,26 +68,7 @@ useEffect(() => {
   loadBetterTable();
 }, []);
 
-  // Check for BetterTable availability
-  useEffect(() => {
-    const checkBetterTable = () => {
-      if (BetterTable && !betterTableAvailable) {
-        setBetterTableAvailable(true);
-      }
-    };
-    
-    if (!betterTableAvailable) {
-      const interval = setInterval(checkBetterTable, 100);
-      const timeout = setTimeout(() => {
-        clearInterval(interval);
-      }, 5000);
-      
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timeout);
-      };
-    }
-  }, [betterTableAvailable]);
+
 
   useEffect(() => {
     if (bulletin) {
