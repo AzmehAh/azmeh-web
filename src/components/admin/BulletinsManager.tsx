@@ -228,14 +228,14 @@ useEffect(() => {
   };
 }, [betterTableLoaded]);
 
-  const quillFormats = React.useMemo(() => [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'blockquote', 'code-block',
-    'link', 'image',
-    ...(betterTableLoaded ? ['better-table'] : []) 
-  ], [betterTableLoaded]);
+const quillFormats = React.useMemo(() => [
+  'header',
+  'bold', 'italic', 'underline', 'strike',
+  'list', 'bullet',
+  'blockquote', 'code-block',
+  'link', 'image',
+  ...(betterTableLoaded ? ['better-table'] : []) 
+], [betterTableLoaded]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -825,4 +825,4 @@ const BulletinsManager = () => {
   );
 };
 
-export default BulletinsManager;
+export default BulletinsManager; 
