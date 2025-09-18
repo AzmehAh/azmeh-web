@@ -448,122 +448,51 @@ const BulletinModal = ({
               )}
             </div>
 
-          {/* Storage */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-       Storage
-  </label>
-  {isEditing ? (
-    <ReactQuill
-      value={formData.storage || ""}
-      onChange={(value) => handleInputChange("storage", value)}
-      className="bg-white rounded-lg border border-gray-200"
-      theme="snow"
-      modules={{
-        toolbar: [
-          [{ header: [1, 2, 3, false] }],
-          ["bold", "italic", "underline", "strike"],
-          [{ list: "ordered" }, { list: "bullet" }],
-          ["link", "image"],
-          ["clean"],
-        ],
-      }}
-    />
-  ) : (
-    <div
-      className="prose max-w-none text-gray-900"
-      dangerouslySetInnerHTML={{ __html: formData.storage }}
-    />
-  )}
-</div>
-
-{/* Product Images - الإصلاح هنا */}
-<div className="mt-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Product Images
-  </label>
-
-  {isEditing ? (
-    <div className="space-y-4">
-      <div className="flex items-center gap-4">
-        <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors">
-          <Upload className="w-4 h-4 mr-2" />
-          Upload Images
-          <input
-            type="file"
-            multiple
-            accept="image/*"
-            onChange={handleImageUpload}
-            className="hidden"
-            disabled={uploading}
-          />
-        </label>
-        {uploading && <span className="text-gray-500">Uploading...</span>}
-      </div>
-
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
-        {images.map((img, idx) => (
-          <div key={img.id || idx} className="relative flex flex-col items-center group">
-            
-            {/* الصورة */}
-            <div className="relative w-full h-32 rounded border overflow-hidden">
-              <img
-                src={img.image_url}
-                alt={`Product ${idx + 1}`}
-                className="w-full h-full object-cover"
-              />
-
-              {/* زر الحذف - الإصلاح هنا */}
-              <button
-                type="button"
-                onClick={() => removeImage(idx)}
-                className="absolute top-2 right-2 p-1 bg-red-500 text-white rounded opacity-0 group-hover:opacity-100 transition-opacity"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
-
-              {/* مؤشر الصورة الرئيسية */}
-              {img.isMain && (
-                <div className="absolute top-2 left-2 px-2 py-1 bg-[#0055A3] text-white text-xs rounded">
-                  Main
+            {/* Content */}
+            <div className="px-6 pb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Content *
+              </label>
+              {isEditing ? (
+                <>
+                  <div className="border border-gray-200 rounded-lg overflow-hidden">
+                    {uploadingImage && (
+                      <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
+                        <div className="flex items-center">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                          Uploading image...
+                        </div>
+                      </div>
+                    )}
+                    <ReactQuill
+                      ref={quillRef}
+                      theme="snow"
+                      value={formData.content}
+                      onChange={(value) =>
+                        setFormData((prev) => ({ ...prev, content: value }))
+                      }
+                      modules={quillModules}
+                      formats={quillFormats}
+                      className="h-96"         
+                      placeholder="Start writing your bulletin content..."
+                    />
+                  </div> 
+                </>
+              ) : (
+                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  <div 
+                    className="ql-editor" 
+                    dangerouslySetInnerHTML={{ 
+                      __html: formData.content.replace(/\n/g, '<br/>') 
+                    }} 
+                  />
                 </div>
               )}
-            </div>
+            </div> 
 
-            {/* زر اختيار الصورة الرئيسية - الإصلاح هنا */}
-            <label className="mt-2 flex items-center gap-2 text-sm cursor-pointer">
-              <input
-                type="radio"
-                name="mainImage"
-                checked={img.isMain || false}
-                onChange={() => setMainImage(idx)}
-                className="w-5 h-5 accent-[#0055A3]"
-              />
-              Main Image
-            </label>
+            {/* Padding إضافي وقت التحرير */}
+            {isEditing && <div className="pt-16"></div>}
           </div>
-        ))}
-      </div>
-    </div>
-  ) : (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-      {images.map((img, i) => (
-        <div key={i} className="relative">
-          <img
-            src={img.image_url}
-            alt={`Product Image ${i + 1}`}
-            className="w-full h-32 object-cover rounded border"
-          />
-          {img.isMain && (
-            <div className="absolute top-2 left-2 px-2 py-1 bg-[#0055A3] text-white text-xs rounded">
-              Main
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  )}
-</div>
 
           {/* Footer */}
           {isEditing && (
