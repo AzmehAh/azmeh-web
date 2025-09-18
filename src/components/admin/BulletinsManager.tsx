@@ -237,16 +237,10 @@ const BulletinModal = ({
     'link', 'image'
   ]; 
 
-  // تحسين معالجة المحتوى لضمان الحفاظ على التنسيق
-  const handleContentChange = (value) => {
-    // تنظيف المحتوى من المسافات الزائدة مع الحفاظ على التنسيق الأساسي
-    let cleanedContent = value
-      .replace(/(<br>\s*){3,}/gi, '<br><br>') // تقليل المسافات المتعددة
-      .replace(/(<p><\/p>)+/g, '') 
-      .replace(/(&nbsp;)+/g, ' '); 
-    
-    setFormData(prev => ({ ...prev, content: cleanedContent }));
-  };
+const handleContentChange = (value) => {
+  // احتفظ بالمحتوى كما هو دون تنظيف يزيل الفقرات أو المسافات
+  setFormData(prev => ({ ...prev, content: value }));
+};
 
   const handleSave = async () => {
     setSaving(true);
