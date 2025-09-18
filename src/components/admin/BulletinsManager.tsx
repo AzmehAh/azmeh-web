@@ -185,7 +185,7 @@ const BulletinModal = ({
   const [img] = quill.root.querySelectorAll(`img[src="${imageUrl}"]`);
     if (img) {
       img.style.width = '200px';
-      img.style.height = 'auto';
+      img.style.height = '100px';
     }
       const quill = quillRef.current.getEditor();
       if (!quill) {
