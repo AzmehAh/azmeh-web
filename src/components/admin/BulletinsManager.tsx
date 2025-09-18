@@ -19,19 +19,7 @@ import 'react-quill/dist/quill.snow.css';
 import 'quill-better-table/dist/quill-better-table.css';
 
 // Initialize BetterTable on client side
-let BetterTable;
 
-if (typeof window !== 'undefined') {
-  // Import and register better-table
-  import('quill-better-table').then(module => {
-    BetterTable = module.default;
-    if (Quill && BetterTable) {
-      Quill.register('modules/better-table', BetterTable, true);
-    }
-  }).catch(error => {
-    console.warn('Failed to load quill-better-table:', error);
-  });
-}
 
 // Register better-table with Quill
 if (typeof window !== 'undefined' && Quill && BetterTable) {
@@ -62,7 +50,27 @@ const BulletinModal = ({
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [betterTableAvailable, setBetterTableAvailable] = useState(!!BetterTable);
+const [betterTableLoaded, setBetterTableLoaded] = useState(false);
 
+useEffect(() => {
+  const loadBetterTable = async () => {
+    try {
+      const module = await import('quill-better-table');
+      const BetterTable = module.default;
+      
+      // تسجيل الوحدة فقط إذا لم تكن مسجلة من قبل
+      if (Quill && !Quill.imports['modules/better-table']) {
+        Quill.register('modules/better-table', BetterTable, true);
+      }
+      
+      setBetterTableLoaded(true); // تم التحميل بنجاح!
+    } catch (error) {
+      console.error('فشل تحميل quill-better-table:', error);
+    }
+  };
+
+  loadBetterTable();
+}, []);
   // Check for BetterTable availability
   useEffect(() => {
     const checkBetterTable = () => {
@@ -165,69 +173,60 @@ const BulletinModal = ({
   };
 
   // Quill modules configuration for rich text editing
-  const quillModules = React.useMemo(() => {
-    const baseModules = {
-      toolbar: {
-        container: [
-          [{ 'header': [1, 2, 3, false] }],
-          ['bold', 'italic', 'underline', 'strike'],
-          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-          ['blockquote', 'code-block'],
-          ['link', 'image'],
-          ['clean'],
-          ...(betterTableAvailable ? [['better-table']] : [])
-        ],
-        handlers: {
-          image: imageHandler
+ const quillModules = React.useMemo(() => {
+  const baseModules = {
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['link', 'image'],
+        ['clean'],
+        ...(betterTableLoaded ? [['better-table']] : []) // إضافة زر الجدول فقط بعد التحميل
+      ],
+      handlers: {
+        image: imageHandler
+      }
+    }
+  };
+
+  // إذا لم تُحمّل بعد، أعد الإعدادات الأساسية فقط
+  if (!betterTableLoaded) return baseModules;
+
+  // بعد التحميل، استخدم Quill.import للحصول على الوحدة بأمان
+  const BetterTable = Quill.import('modules/better-table');
+
+  return {
+    ...baseModules,
+    'better-table': {
+      operationMenu: {
+        color: {
+          colors: ['#000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'],
+          text: 'Background Colors:'
+        },
+        items: {
+          unmergeCells: { text: 'Unmerge cells' },
+          insertColumnRight: { text: 'Insert column right' },
+          insertColumnLeft: { text: 'Insert column left' },
+          insertRowUp: { text: 'Insert row above' },
+          insertRowDown: { text: 'Insert row below' },
+          mergeCells: { text: 'Merge cells' },
+          deleteColumn: { text: 'Delete column' },
+          deleteRow: { text: 'Delete row' },
+          deleteTable: { text: 'Delete table' }
         }
       },
-      table: false
-    };
-    
-    if (betterTableAvailable) {
-      return {
-        ...baseModules,
-        'better-table': {
-          operationMenu: {
-            color: {
-              colors: ['#000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'],
-              text: 'Background Colors:'
-            },
-            items: {
-              unmergeCells: { text: 'Unmerge cells' },
-              insertColumnRight: { text: 'Insert column right' },
-              insertColumnLeft: { text: 'Insert column left' },
-              insertRowUp: { text: 'Insert row above' },
-              insertRowDown: { text: 'Insert row below' },
-              mergeCells: { text: 'Merge cells' },
-              deleteColumn: { text: 'Delete column' },
-              deleteRow: { text: 'Delete row' },
-              deleteTable: { text: 'Delete table' }
-            }
-          },
-          toolbarTable: {
-            tip: 'Insert Table',
-            tipSize: 'Size'
-          }
-        },
-        keyboard: {
-          bindings: BetterTable?.keyboardBindings || {}
-        }
-      };
+      toolbarTable: {
+        tip: 'Insert Table',
+        tipSize: 'Size'
+      },
+      keyboard: {
+        bindings: BetterTable?.keyboardBindings || {} // الآن آمنة!
+      }
     }
-    
-    return baseModules;
-  }, [betterTableAvailable]);
-
-  const quillFormats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'blockquote', 'code-block',
-    'link', 'image',
-    ...(betterTableAvailable ? ['better-table'] : [])
-  ];
-
+  };
+}, [betterTableLoaded]);
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -479,7 +478,14 @@ const BulletinModal = ({
                         setFormData((prev) => ({ ...prev, content: value }))
                       }
                       modules={quillModules}  
-                      formats={quillFormats}   
+                      const quillFormats = React.useMemo(() => [
+  'header',
+  'bold', 'italic', 'underline', 'strike',
+  'list', 'bullet',
+  'blockquote', 'code-block',
+  'link', 'image',
+  ...(betterTableLoaded ? ['better-table'] : []) // أضف التنسيق فقط إذا تم التحميل
+], [betterTableLoaded]);  
                       className="h-96"         
                       placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
                     />
