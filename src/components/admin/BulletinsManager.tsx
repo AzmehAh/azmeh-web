@@ -149,25 +149,31 @@ const BulletinModal = ({
   };
 
   // Upload image for rich text editor
-  const uploadImageToEditor = async (file) => {
-    try {
-      setUploadingImage(true);
-      const imageUrl = await uploadImage(file, 'bulletins/content');
-      
-      if (imageUrl && quillRef.current) {
-        // إدراج الصورة في المحرر عند موضع المؤشر
-        const quill = quillRef.current.getEditor();
-        const range = quill.getSelection(true);
-        quill.insertEmbed(range.index, 'image', imageUrl);
-        quill.setSelection(range.index + 1);
+// Upload image for rich text editor
+const uploadImageToEditor = async (file) => {
+  try {
+    setUploadingImage(true);
+    const imageUrl = await uploadImage(file, 'bulletins/content');
+
+    if (imageUrl && quillRef.current) {
+      const quill = quillRef.current.getEditor();
+      let range = quill.getSelection(true);
+
+      if (!range) {
+        // إذا لم يكن هناك اختيار، ضع الصورة في آخر المحتوى
+        range = { index: quill.getLength(), length: 0 };
       }
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Error uploading image to editor');
-    } finally {
-      setUploadingImage(false);
+
+      quill.insertEmbed(range.index, 'image', imageUrl, 'user');
+      quill.setSelection(range.index + 1, 0);
     }
-  };
+  } catch (error) {
+    console.error('Error uploading image:', error);
+    alert('Error uploading image to editor');
+  } finally {
+    setUploadingImage(false);
+  }
+};
 
   // Quill modules configuration for rich text editing
   const quillModules = {
@@ -480,12 +486,12 @@ const BulletinModal = ({
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  <div 
-                    className="ql-editor" 
-                    dangerouslySetInnerHTML={{ 
-                      __html: formData.content.replace(/\n/g, '<br/>') 
-                    }} 
-                  />
+                 <div 
+  className="prose max-w-none bg-gray-50 p-6 rounded-lg border" 
+  style={{ whiteSpace: 'pre-wrap' }} // هذا الجديد
+  dangerouslySetInnerHTML={{ __html: formData.content }} // حذف replace
+/>
+
                 </div>
               )}
             </div> 
