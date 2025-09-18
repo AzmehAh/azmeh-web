@@ -14,13 +14,8 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import 'quill-better-table/dist/quill-better-table.css';
-
-
-
-
 
 const BulletinModal = ({ 
   isOpen, 
@@ -44,32 +39,6 @@ const BulletinModal = ({
   });
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
-
-  // ✅ هنا الحالة الوحيدة التي نحتاجها
-  const [betterTableLoaded, setBetterTableLoaded] = useState(false);
-
-  useEffect(() => {
-    const loadBetterTable = async () => {
-      try {
-        const module = await import('quill-better-table');
-        const BetterTable = module.default;
-
-        if (Quill && !Quill.imports['modules/better-table']) {
-          Quill.register('modules/better-table', BetterTable, true);
-        }
-
-        // ✅ استخدم الحالة الموجودة
-        setBetterTableLoaded(true);
-      } catch (error) {
-        console.error('فشل تحميل quill-better-table:', error);
-      }
-    };
-
-    loadBetterTable();
-  }, []);
-
-
-
 
   useEffect(() => {
     if (bulletin) {
@@ -152,8 +121,7 @@ const BulletinModal = ({
   };
 
   // Quill modules configuration for rich text editing
- const quillModules = React.useMemo(() => {
-  const baseModules = {
+  const quillModules = {
     toolbar: {
       container: [
         [{ 'header': [1, 2, 3, false] }],
@@ -161,8 +129,7 @@ const BulletinModal = ({
         [{ 'list': 'ordered' }, { 'list': 'bullet' }],
         ['blockquote', 'code-block'],
         ['link', 'image'],
-        ['clean'],
-        ...(betterTableLoaded ? [['better-table']] : []) // إضافة زر الجدول فقط بعد التحميل
+        ['clean']
       ],
       handlers: {
         image: imageHandler
@@ -170,50 +137,14 @@ const BulletinModal = ({
     }
   };
 
-  // إذا لم تُحمّل بعد، أعد الإعدادات الأساسية فقط
-  if (!betterTableLoaded) return baseModules;
+  const quillFormats = [
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'list', 'bullet',
+    'blockquote', 'code-block',
+    'link', 'image'
+  ];
 
-  // بعد التحميل، استخدم Quill.import للحصول على الوحدة بأمان
-  const BetterTable = Quill.import('modules/better-table');
-
-  return {
-    ...baseModules,
-    'better-table': {
-      operationMenu: {
-        color: {
-          colors: ['#000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'],
-          text: 'Background Colors:'
-        },
-        items: {
-          unmergeCells: { text: 'Unmerge cells' },
-          insertColumnRight: { text: 'Insert column right' },
-          insertColumnLeft: { text: 'Insert column left' },
-          insertRowUp: { text: 'Insert row above' },
-          insertRowDown: { text: 'Insert row below' },
-          mergeCells: { text: 'Merge cells' },
-          deleteColumn: { text: 'Delete column' },
-          deleteRow: { text: 'Delete row' },
-          deleteTable: { text: 'Delete table' }
-        }
-      },
-      toolbarTable: {
-        tip: 'Insert Table',
-        tipSize: 'Size'
-      },
-      keyboard: {
-        bindings: BetterTable?.keyboardBindings || {} // الآن آمنة!
-      }
-    }
-  };
-}, [betterTableLoaded]);
-const quillFormats = React.useMemo(() => [
-  'header',
-  'bold', 'italic', 'underline', 'strike',
-  'list', 'bullet',
-  'blockquote', 'code-block',
-  'link', 'image',
-  ...(betterTableLoaded ? ['better-table'] : []) // أضف التنسيق فقط إذا تم التحميل
-], [betterTableLoaded]); 
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -467,16 +398,9 @@ const quillFormats = React.useMemo(() => [
                       modules={quillModules}
                       formats={quillFormats}
                       className="h-96"         
-                      placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
+                      placeholder="Start writing your bulletin content..."
                     />
                   </div> 
-                  <div className="mt-2 text-sm text-gray-500">
-                    <p>
-                      {betterTableLoaded
-                        ? 'To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.'
-                        : 'Table functionality will be available once the module loads.'}
-                    </p>
-                  </div>
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
@@ -802,4 +726,4 @@ const BulletinsManager = () => {
   );
 };
 
-export default BulletinsManager; 
+export default BulletinsManager;
