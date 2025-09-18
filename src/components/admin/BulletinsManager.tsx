@@ -356,48 +356,38 @@ const BulletinModal = ({
     }
   }, [bulletin]);
 
-  const handleSave = async () => {
-    setSaving(true);
-    
-      const bulletinData = {
-        slug: formData.slug,
-        title: formData.title,
-        short_description: formData.short_description || null,
-        cover_image: formData.cover_image || null,
-        category: formData.category,
-        subcategory: formData.subcategory,
-        content: contentObj,
-        status: formData.status,
-        featured: formData.featured,
-        author: formData.author,
-        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
-        updated_at: new Date().toISOString()
-      };
+ const handleSave = async () => {
+  setSaving(true);
+  try {
+    const bulletinData = {
+      slug: formData.slug,
+      title: formData.title,
+      short_description: formData.short_description || null,
+      cover_image: formData.cover_image || null,
+      category: formData.category,
+      subcategory: formData.subcategory,
+      content: formData.content, // HTML string مباشر
+      status: formData.status,
+      featured: formData.featured,
+      author: formData.author,
+      tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
+      updated_at: new Date().toISOString(),
+    };
 
-      if (bulletin) {
-        const { error } = await supabase
-          .from('bulletins')
-          .update(bulletinData)
-          .eq('id', bulletin.id);
-        
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('bulletins')
-          .insert([bulletinData]);
-        
-        if (error) throw error;
-      }
+    const { error } = await supabase
+      .from('bulletins')
+      .upsert(bulletinData);
 
-      onSave();
-      onClose();
-    } catch (error) {
-      console.error('Error saving bulletin:', error);
-      alert('Error saving bulletin');
-    } finally {
-      setSaving(false);
-    }
-  };
+    if (error) throw error;
+    alert('Bulletin saved successfully!');
+  } catch (err) {
+    console.error(err);
+    alert('Error saving bulletin');
+  } finally {
+    setSaving(false);
+  }
+};
+
 
   if (!isOpen) return null;
 
