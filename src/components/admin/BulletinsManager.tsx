@@ -478,14 +478,14 @@ useEffect(() => {
                         setFormData((prev) => ({ ...prev, content: value }))
                       }
                       modules={quillModules}  
-                      const quillFormats = React.useMemo(() => [
+                    const quillFormats = React.useMemo(() => [
   'header',
   'bold', 'italic', 'underline', 'strike',
   'list', 'bullet',
   'blockquote', 'code-block',
   'link', 'image',
   ...(betterTableLoaded ? ['better-table'] : []) // أضف التنسيق فقط إذا تم التحميل
-], [betterTableLoaded]);  
+], [betterTableLoaded]) 
                       className="h-96"         
                       placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
                     />
