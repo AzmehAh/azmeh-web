@@ -541,12 +541,10 @@ const handleContentChange = (value) => {
                   </div> 
                 </>
               ) : (
-                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-<div 
-  className="bg-gray-50 p-6 rounded-lg border border-gray-200"
-  dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-500 italic">No content</p>' }} 
-/>
-                </div>
+           <div className="whitespace-pre-wrap break-words bg-gray-50 p-6 rounded-lg border border-gray-200">
+  <div dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-500 italic">No content</p>' }} />
+</div>
+
               )}
             </div> 
 
