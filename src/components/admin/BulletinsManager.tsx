@@ -148,7 +148,7 @@ const BulletinModal = ({
     };
   };
 
-  /const uploadImageToEditor = async (file) => {
+  const uploadImageToEditor = async (file) => {
   try {
     setUploadingImage(true);
     const imageUrl = await uploadImage(file, 'bulletins/content');
