@@ -490,7 +490,7 @@ const quillFormats = React.useMemo(() => [
                   </div> 
                   <div className="mt-2 text-sm text-gray-500">
                     <p>
-                      {betterTableAvailable 
+                      {betterTableLoaded
                         ? 'To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.'
                         : 'Table functionality will be available once the module loads.'}
                     </p>
