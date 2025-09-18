@@ -14,7 +14,7 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'quill-better-table/dist/quill-better-table.css';
 
