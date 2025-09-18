@@ -748,7 +748,7 @@ const BulletinsManager = () => {
             className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
           >
             {/* Bulletin Image */}
-            <div className="h-10 bg-gray-100 relative">
+            <div className="h-32 bg-gray-100 relative">
               {bulletin.cover_image ? (
                 <img
                   src={bulletin.cover_image}
@@ -766,7 +766,7 @@ const BulletinsManager = () => {
                     ? 'bg-green-100 text-green-800' 
                     : 'bg-yellow-100 text-yellow-800'
                 }`}>
-                  {bulletin.status}
+                  {bulletin.status} 
                 </span>
                 {bulletin.featured && (
                   <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800">
