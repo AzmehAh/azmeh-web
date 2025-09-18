@@ -15,15 +15,15 @@ import {
 } from 'lucide-react';
 import { supabase, Bulletin } from '../../lib/supabase';
 import 'react-quill/dist/quill.snow.css';
-import ReactQuill, { Quill } from 'react-quill';
-import { BetterTable } from 'quill-better-table';
-import BetterTable from "quill-better-table";
+import ReactQuill from 'react-quill';
+import Quill from 'quill';
+import BetterTable from 'quill-better-table';
 import "quill-better-table/dist/quill-better-table.css";
 
-
-// Register the table module with Quill
-Quill.register({ 'modules/better-table': BetterTable }, true);
-
+// تسجيل وحدة الجداول مع Quill بشكل صحيح
+Quill.register({
+  'modules/better-table': BetterTable
+}, true);
 
 const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
@@ -129,30 +129,31 @@ const BulletinsManager = () => {
       </div>
     );
   }
-const quillModules = {
-  toolbar: {
-    container: [
-      [{ header: [1, 2, 3, false] }],
-      ["bold", "italic", "underline", "strike"],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["link", "image", "video"],
-      ["clean"],
-      ["better-table"], // ← لازم نفس الاسم اللي سجلناه
-    ],
-  },
-  "better-table": {
-    operationMenu: {
-      items: {
-        unmergeCells: {
-          text: "Unmerge cells",
+
+  const quillModules = {
+    toolbar: {
+      container: [
+        [{ header: [1, 2, 3, false] }],
+        ["bold", "italic", "underline", "strike"],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["link", "image", "video"],
+        ["clean"],
+        ["better-table"],
+      ],
+    },
+    "better-table": {
+      operationMenu: {
+        items: {
+          unmergeCells: {
+            text: "Unmerge cells",
+          },
         },
       },
     },
-  },
-  keyboard: {
-    bindings: Quill.import("modules/keyboard").DEFAULTS.bindings,
-  },
-};
+    keyboard: {
+      bindings: BetterTable.keyboardBindings,
+    },
+  };
 
   return (
     <div className="space-y-6">
@@ -349,7 +350,7 @@ const BulletinModal = ({
     cover_image: '',
     category: '',
     subcategory: '',
-    content: '[]',
+    content: '',
     status: 'draft' as const,
     featured: false,
     author: 'Al Azmeh Paints',
@@ -437,24 +438,6 @@ const BulletinModal = ({
       setUploadingImage(false);
     }
   };
-<ReactQuill
-  value={formData.content}
-  onChange={(val) => setFormData((prev) => ({ ...prev, content: val }))}
-  modules={quillModules}
-  formats={[
-    "header",
-    "bold",
-    "italic",
-    "underline",
-    "strike",
-    "list",
-    "bullet",
-    "link",
-    "image",
-    "video",
-    "better-table",
-  ]}
-/>
 
   // Quill modules configuration for rich text editing
   const quillModules = {
@@ -507,15 +490,6 @@ const BulletinModal = ({
   const handleSave = async () => {
     setSaving(true);
     try {
-      let contentObj;
-      try {
-        contentObj = JSON.parse(formData.content);
-      } catch {
-        alert('Invalid JSON in content field');
-        setSaving(false);
-        return;
-      }
-
       const bulletinData = {
         slug: formData.slug,
         title: formData.title,
@@ -523,7 +497,7 @@ const BulletinModal = ({
         cover_image: formData.cover_image || null,
         category: formData.category,
         subcategory: formData.subcategory,
-        content: formData.content, // Store as HTML string
+        content: formData.content,
         status: formData.status,
         featured: formData.featured,
         author: formData.author,
