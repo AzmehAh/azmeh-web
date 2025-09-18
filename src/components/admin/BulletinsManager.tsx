@@ -227,6 +227,16 @@ useEffect(() => {
     }
   };
 }, [betterTableLoaded]);
+
+  const quillFormats = React.useMemo(() => [
+    'header',
+    'bold', 'italic', 'underline', 'strike',
+    'list', 'bullet',
+    'blockquote', 'code-block',
+    'link', 'image',
+    ...(betterTableLoaded ? ['better-table'] : []) 
+  ], [betterTableLoaded]);
+
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -477,15 +487,8 @@ useEffect(() => {
                       onChange={(value) =>
                         setFormData((prev) => ({ ...prev, content: value }))
                       }
-                      modules={quillModules}  
-                    const quillFormats = React.useMemo(() => [
-  'header',
-  'bold', 'italic', 'underline', 'strike',
-  'list', 'bullet',
-  'blockquote', 'code-block',
-  'link', 'image',
-  ...(betterTableLoaded ? ['better-table'] : []) 
-], [betterTableLoaded]) 
+                      modules={quillModules}
+                      formats={quillFormats}
                       className="h-96"         
                       placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
                     />
@@ -822,4 +825,4 @@ const BulletinsManager = () => {
   );
 };
 
-export default BulletinsManager; 
+export default BulletinsManager;
