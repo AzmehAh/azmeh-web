@@ -148,33 +148,46 @@ const BulletinModal = ({
     };
   };
 
-  // Upload image for rich text editor
-// Upload image for rich text editor
-const uploadImageToEditor = async (file) => {
+  /const uploadImageToEditor = async (file) => {
   try {
     setUploadingImage(true);
     const imageUrl = await uploadImage(file, 'bulletins/content');
 
-    if (imageUrl && quillRef.current) {
-      const quill = quillRef.current.getEditor();
-      let range = quill.getSelection(true);
-
-      if (!range) {
-        // إذا لم يكن هناك اختيار، ضع الصورة في آخر المحتوى
-        range = { index: quill.getLength(), length: 0 };
-      }
-
-      quill.insertEmbed(range.index, 'image', imageUrl, 'user');
-      quill.setSelection(range.index + 1, 0);
+    if (!imageUrl) {
+      alert('Failed to upload image.');
+      return;
     }
+
+    // تأكد من أن quill جاهز
+    if (!quillRef.current) {
+      console.warn('Quill reference is not ready');
+      return;
+    }
+
+    const quill = quillRef.current.getEditor();
+    if (!quill) {
+      console.warn('Quill editor instance not found');
+      return;
+    }
+
+    // احصل على الموقع الحالي للكرسور
+    let range = quill.getSelection();
+    if (!range) {
+      // إذا لم يكن هناك تحديد، ضع الصورة في النهاية
+      range = { index: quill.getLength(), length: 0 };
+    }
+
+    // أدخل الصورة في الموقع المحدد
+    quill.insertEmbed(range.index, 'image', imageUrl, 'user');
+    // حرّك الكرسور بعد الصورة
+    quill.setSelection(range.index + 1, 0);
   } catch (error) {
-    console.error('Error uploading image:', error);
-    alert('Error uploading image to editor');
+    console.error('Error uploading image to editor:', error);
+    alert('Error uploading image: ' + (error.message || 'Unknown error'));
   } finally {
     setUploadingImage(false);
   }
 };
-
   // Quill modules configuration for rich text editing
   const quillModules = {
     toolbar: {
@@ -486,10 +499,9 @@ const uploadImageToEditor = async (file) => {
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                 <div 
-  className="prose max-w-none bg-gray-50 p-6 rounded-lg border" 
-  style={{ whiteSpace: 'pre-wrap' }} // هذا الجديد
-  dangerouslySetInnerHTML={{ __html: formData.content }} // حذف replace
+                <div 
+  className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200"
+  dangerouslySetInnerHTML={{ __html: formData.content || '<p><em>No content</em></p>' }} 
 />
 
                 </div>
