@@ -96,13 +96,13 @@ const BulletinModal = ({
       const filePath = `bulletins/content/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('images')
+        .from('system-media')
         .upload(filePath, file);
 
       if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('images')
+        .from('system-media')
         .getPublicUrl(filePath);
 
       // Insert image into editor at cursor position
