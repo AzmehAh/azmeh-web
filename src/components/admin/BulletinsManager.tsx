@@ -551,7 +551,9 @@ const BulletinModal = ({
 <div 
   className="bg-gray-50 p-6 rounded-lg border border-gray-200"
   dangerouslySetInnerHTML={{ __html: formData.content || '<p class="text-gray-500 italic">No content</p>' }} 
-/>)}
+/>
+                </div>
+              )}
             </div> 
 
             {/* Padding إضافي وقت التحرير */}
