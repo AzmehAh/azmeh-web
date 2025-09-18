@@ -744,30 +744,32 @@ const BulletinModal = ({
     Content *
   </label>
   {isEditing ? (
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
-      {uploadingImage && (
-        <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
-          <div className="flex items-center">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-            Uploading image...
+    <>
+      <div className="border border-gray-200 rounded-lg overflow-hidden">
+        {uploadingImage && (
+          <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
+            <div className="flex items-center">
+              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+              Uploading image...
+            </div>
           </div>
-        </div>
-      )}
-      <ReactQuill
-        theme="snow"
-        value={formData.content}
-        onChange={(value) =>
-          setFormData((prev) => ({ ...prev, content: value }))
-        }
-        modules={quillModules}  
-        formats={quillFormats}   
-        className="h-96"         
-        placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
-      />
-    </div>
-              <div className="mt-2 text-sm text-gray-500">
-                <p>To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.</p>
-              </div>
+        )}
+        <ReactQuill
+          theme="snow"
+          value={formData.content}
+          onChange={(value) =>
+            setFormData((prev) => ({ ...prev, content: value }))
+          }
+          modules={quillModules}  
+          formats={quillFormats}   
+          className="h-96"         
+          placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
+        />
+      </div>
+      <div className="mt-2 text-sm text-gray-500">
+        <p>To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.</p>
+      </div>
+    </>
   ) : (
     <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
       <div dangerouslySetInnerHTML={{ __html: formData.content }} />
