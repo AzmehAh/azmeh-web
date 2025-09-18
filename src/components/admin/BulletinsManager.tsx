@@ -845,4 +845,4 @@ const BulletinsManager = () => {
   );
 };
 
-export default BulletinsManager;
+export default BulletinsManager; 
