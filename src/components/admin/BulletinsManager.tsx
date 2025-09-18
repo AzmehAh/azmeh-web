@@ -224,16 +224,14 @@ useEffect(() => {
     }
   };
 }, [betterTableLoaded]);
-
 const quillFormats = React.useMemo(() => [
   'header',
   'bold', 'italic', 'underline', 'strike',
   'list', 'bullet',
   'blockquote', 'code-block',
   'link', 'image',
-  ...(betterTableLoaded ? ['better-table'] : []) 
-], [betterTableLoaded]);
-
+  ...(betterTableLoaded ? ['better-table'] : []) // أضف التنسيق فقط إذا تم التحميل
+], [betterTableLoaded]); 
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -489,7 +487,7 @@ const quillFormats = React.useMemo(() => [
                       className="h-96"         
                       placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
                     />
-                  </div>
+                  </div> 
                   <div className="mt-2 text-sm text-gray-500">
                     <p>
                       {betterTableAvailable 
