@@ -21,10 +21,7 @@ import 'quill-better-table/dist/quill-better-table.css';
 // Initialize BetterTable on client side
 
 
-// Register better-table with Quill
-if (typeof window !== 'undefined' && Quill && BetterTable) {
-  Quill.register('modules/better-table', BetterTable, true);
-}
+
 
 // Bulletin Modal Component - MOVED OUTSIDE OF BulletinsManager
 const BulletinModal = ({ 
