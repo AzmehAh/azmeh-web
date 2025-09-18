@@ -214,8 +214,7 @@ const BulletinModal = ({
           bindings: BetterTable?.keyboardBindings || {}
         }
       };
-      }
-    };
+    }
     
     return baseModules;
   }, [betterTableAvailable]);
