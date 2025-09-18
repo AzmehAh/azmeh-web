@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRef } from 'react'; // تأكد من استيراد useRef
 import { 
   Plus, 
   Search, 
@@ -17,8 +18,9 @@ import { supabase } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
+
 const BulletinModal = ({ 
-  isOpen, 
+  isOpen,  
   onClose, 
   bulletin, 
   isEditing, 
@@ -106,12 +108,19 @@ const BulletinModal = ({
         .getPublicUrl(filePath);
 
       // Insert image into editor at cursor position
-      const quill = (document.querySelector('.ql-editor')?.__quill);
-      if (quill) {
-        const range = quill.getSelection(true);
-        quill.insertEmbed(range.index, 'image', publicUrl);
-        quill.setSelection(range.index + 1);
-      }
+      cconst quillRef = useRef(null);
+     if (quillRef.current) {
+  const editor = quillRef.current.getEditor(); // 👈 الطريقة الرسمية للحصول على مثيل Quill
+  const range = editor.getSelection(true);
+  if (range) {
+    editor.insertEmbed(range.index, 'image', publicUrl);
+    editor.setSelection(range.index + 1);
+  } else {
+    // إذا لم يكن هناك تحديد (مثلاً عند التركيز خارج المحرر)، أضف في النهاية
+    const length = editor.getLength();
+    editor.insertEmbed(length, 'image', publicUrl);
+  }
+}
     } catch (error) {
       console.error('Error uploading image:', error);
       alert('Error uploading image to editor');
@@ -390,6 +399,7 @@ const BulletinModal = ({
                       </div>
                     )}
                     <ReactQuill
+                      ref={quillRef}
                       theme="snow"
                       value={formData.content}
                       onChange={(value) =>
