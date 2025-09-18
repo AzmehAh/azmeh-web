@@ -785,6 +785,7 @@ const BulletinModal = ({
               </button> 
             </div>
           )}
+            </div>
         </motion.div>
       </div>
     </div>
