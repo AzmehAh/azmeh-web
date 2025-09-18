@@ -14,22 +14,33 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase, Bulletin } from '../../lib/supabase';
-import ReactQuill, { Quill } from 'react-quill';
+import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import { BetterTable } from 'quill-better-table';
-import 'quill-better-table/dist/quill-better-table.css';
 
-// Register the better-table module with Quill
-Quill.register({
-  'modules/better-table': BetterTable
-}, true);
+// Import BetterTable dynamically to ensure Quill is available
+let BetterTable = null;
+let Quill = null;
+
+if (typeof window !== 'undefined') {
+  import('quill-better-table').then(module => {
+    BetterTable = module.default;
+    Quill = ReactQuill.Quill || window.Quill;
+    
+    if (Quill && BetterTable) {
+      Quill.register({
+        'modules/better-table': BetterTable
+      }, true);
+    }
+  });
+  import('quill-better-table/dist/quill-better-table.css');
+}
 
 const BulletinsManager = () => {
-  const [bulletins, setBulletins] = useState<Bulletin[]>([]);
-  const [filteredBulletins, setFilteredBulletins] = useState<Bulletin[]>([]);
+  const [bulletins, setBulletins] = useState([]);
+  const [filteredBulletins, setFilteredBulletins] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [categoryFilter, setCategoryFilter] = useState('all');
-  const [selectedBulletin, setSelectedBulletin] = useState<Bulletin | null>(null);
+  const [selectedBulletin, setSelectedBulletin] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -73,7 +84,7 @@ const BulletinsManager = () => {
     }
   };
 
-  const deleteBulletin = async (id: string) => {
+  const deleteBulletin = async (id) => {
     if (!confirm('Are you sure you want to delete this bulletin?')) return;
 
     try {
@@ -90,7 +101,7 @@ const BulletinsManager = () => {
     }
   };
 
-  const toggleFeatured = async (id: string, featured: boolean) => {
+  const toggleFeatured = async (id, featured) => {
     try {
       const { error } = await supabase
         .from('bulletins')
@@ -107,7 +118,7 @@ const BulletinsManager = () => {
     }
   };
 
-  const openModal = (bulletin: Bulletin | null = null, editing = false) => {
+  const openModal = (bulletin = null, editing = false) => {
     setSelectedBulletin(bulletin);
     setIsEditing(editing);
     setIsModalOpen(true);
@@ -137,21 +148,23 @@ const BulletinsManager = () => {
         [{ list: "ordered" }, { list: "bullet" }],
         ["link", "image", "video"],
         ["clean"],
-        ["better-table"],
+        ...(BetterTable ? [["better-table"]] : []),
       ],
     },
-    "better-table": {
-      operationMenu: {
-        items: {
-          unmergeCells: {
-            text: "Unmerge cells",
+    ...(BetterTable ? {
+      "better-table": {
+        operationMenu: {
+          items: {
+            unmergeCells: {
+              text: "Unmerge cells",
+            },
           },
         },
       },
-    },
-    keyboard: {
-      bindings: BetterTable.keyboardBindings,
-    },
+      keyboard: {
+        bindings: BetterTable.keyboardBindings,
+      },
+    } : {}),
   };
 
   return (
@@ -335,12 +348,6 @@ const BulletinModal = ({
   bulletin, 
   isEditing, 
   onSave 
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  bulletin: Bulletin | null;
-  isEditing: boolean;
-  onSave: () => void;
 }) => {
   const [formData, setFormData] = useState({
     slug: '',
@@ -350,7 +357,7 @@ const BulletinModal = ({
     category: '',
     subcategory: '',
     content: '',
-    status: 'draft' as const,
+    status: 'draft',
     featured: false,
     author: 'Al Azmeh Paints',
     tags: ''
@@ -368,7 +375,7 @@ const BulletinModal = ({
         category: bulletin.category,
         subcategory: bulletin.subcategory,
         content: typeof bulletin.content === 'string' ? bulletin.content : '',
-        status: bulletin.status as 'draft' | 'published',
+        status: bulletin.status || 'draft',
         featured: bulletin.featured || false,
         author: bulletin.author || 'Al Azmeh Paints',
         tags: bulletin.tags ? bulletin.tags.join(', ') : ''
@@ -406,7 +413,7 @@ const BulletinModal = ({
   };
 
   // Upload image for rich text editor
-  const uploadImageToEditor = async (file: File) => {
+  const uploadImageToEditor = async (file) => {
     try {
       setUploadingImage(true);
       const fileExt = file.name.split('.').pop();
@@ -424,7 +431,7 @@ const BulletinModal = ({
         .getPublicUrl(filePath);
 
       // Insert image into editor at cursor position
-      const quill = (document.querySelector('.ql-editor') as any)?.__quill;
+      const quill = (document.querySelector('.ql-editor')?.__quill);
       if (quill) {
         const range = quill.getSelection(true);
         quill.insertEmbed(range.index, 'image', publicUrl);
@@ -439,67 +446,77 @@ const BulletinModal = ({
   };
 
   // Quill modules configuration for rich text editing
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean'],
-        ['better-table'] // Add table functionality
-      ],
-      handlers: {
-        image: imageHandler
-      }
-    },
-    'better-table': {
-      operationMenu: {
-        color: {
-          colors: ['#000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'],
-          text: 'Background Colors:'
-        },
-        items: {
-          unmergeCells: {
-            text: 'Unmerge cells'
-          },
-          insertColumnRight: {
-            text: 'Insert column right'
-          },
-          insertColumnLeft: {
-            text: 'Insert column left'
-          },
-          insertRowUp: {
-            text: 'Insert row above'
-          },
-          insertRowDown: {
-            text: 'Insert row below'
-          },
-          mergeCells: {
-            text: 'Merge cells'
-          },
-          deleteColumn: {
-            text: 'Delete column'
-          },
-          deleteRow: {
-            text: 'Delete row'
-          },
-          deleteTable: {
-            text: 'Delete table'
-          }
+  const quillModules = React.useMemo(() => {
+    const baseModules = {
+      toolbar: {
+        container: [
+          [{ 'header': [1, 2, 3, false] }],
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+          ['blockquote', 'code-block'],
+          ['link', 'image'],
+          ['clean']
+        ],
+        handlers: {
+          image: imageHandler
         }
-      },
-      toolbarTable: {
-        tip: 'Insert Table',
-        tipSize: 'Size'
       }
-    },
-    keyboard: {
-      bindings: BetterTable.keyboardBindings
-    },
-    table: false // Disable default table module
-  };
+    };
+    
+    // Only add better-table if it's available
+    if (BetterTable) {
+      return {
+        ...baseModules,
+        'better-table': {
+          operationMenu: {
+            color: {
+              colors: ['#000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'],
+              text: 'Background Colors:'
+            },
+            items: {
+              unmergeCells: {
+                text: 'Unmerge cells'
+              },
+              insertColumnRight: {
+                text: 'Insert column right'
+              },
+              insertColumnLeft: {
+                text: 'Insert column left'
+              },
+              insertRowUp: {
+                text: 'Insert row above'
+              },
+              insertRowDown: {
+                text: 'Insert row below'
+              },
+              mergeCells: {
+                text: 'Merge cells'
+              },
+              deleteColumn: {
+                text: 'Delete column'
+              },
+              deleteRow: {
+                text: 'Delete row'
+              },
+              deleteTable: {
+                text: 'Delete table'
+              }
+            }
+          },
+          toolbarTable: {
+            tip: 'Insert Table',
+            tipSize: 'Size'
+          }
+        },
+        keyboard: {
+          bindings: BetterTable?.keyboardBindings || {}
+        },
+        table: false
+      };
+    }
+    
+    return baseModules;
+  }, []);
 
   const quillFormats = [
     'header',
@@ -507,7 +524,7 @@ const BulletinModal = ({
     'list', 'bullet',
     'blockquote', 'code-block',
     'link', 'image',
-    'better-table'
+    ...(BetterTable ? ['better-table'] : [])
   ];
 
   const handleSave = async () => {
@@ -690,7 +707,7 @@ const BulletinModal = ({
                   {isEditing ? (
                     <select
                       value={formData.status}
-                      onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value as 'draft' | 'published' }))}
+                      onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                     >
                       <option value="draft">Draft</option>
@@ -738,48 +755,47 @@ const BulletinModal = ({
               )}
             </div>
 
-          {/* Content */}
-<div className="px-6 pb-6">
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Content *
-  </label>
-  {isEditing ? (
-    <>
-      <div className="border border-gray-200 rounded-lg overflow-hidden">
-        {uploadingImage && (
-          <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
-            <div className="flex items-center">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-              Uploading image...
+            {/* Content */}
+            <div className="px-6 pb-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Content *
+              </label>
+              {isEditing ? (
+                <>
+                  <div className="border border-gray-200 rounded-lg overflow-hidden">
+                    {uploadingImage && (
+                      <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
+                        <div className="flex items-center">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                          Uploading image...
+                        </div>
+                      </div>
+                    )}
+                    <ReactQuill
+                      theme="snow"
+                      value={formData.content}
+                      onChange={(value) =>
+                        setFormData((prev) => ({ ...prev, content: value }))
+                      }
+                      modules={quillModules}  
+                      formats={quillFormats}   
+                      className="h-96"         
+                      placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
+                    />
+                  </div>
+                  <div className="mt-2 text-sm text-gray-500">
+                    <p>To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.</p>
+                  </div>
+                </>
+              ) : (
+                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                </div>
+              )}
             </div>
-          </div>
-        )}
-        <ReactQuill
-          theme="snow"
-          value={formData.content}
-          onChange={(value) =>
-            setFormData((prev) => ({ ...prev, content: value }))
-          }
-          modules={quillModules}  
-          formats={quillFormats}   
-          className="h-96"         
-          placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
-        />
-      </div>
-      <div className="mt-2 text-sm text-gray-500">
-        <p>To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.</p>
-      </div>
-    </>
-  ) : (
-    <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-      <div dangerouslySetInnerHTML={{ __html: formData.content }} />
-    </div>
-  )}
-</div>
 
-{/* Padding إضافي وقت التحرير */}
-{isEditing && <div className="pt-16"></div>}
-
+            {/* Padding إضافي وقت التحرير */}
+            {isEditing && <div className="pt-16"></div>}
           </div>
 
           {/* Footer */}
