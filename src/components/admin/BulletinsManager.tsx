@@ -14,6 +14,8 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase, Bulletin } from '../../lib/supabase';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
@@ -357,14 +359,21 @@ const BulletinModal = ({
   const handleSave = async () => {
     setSaving(true);
     try {
-      let contentObj;
-      try {
-        contentObj = JSON.parse(formData.content);
-      } catch {
-        alert('Invalid JSON in content field');
-        setSaving(false);
-        return;
-      }
+     const bulletinData = {
+  slug: formData.slug,
+  title: formData.title,
+  short_description: formData.short_description || null,
+  cover_image: formData.cover_image || null,
+  category: formData.category,
+  subcategory: formData.subcategory,
+  content: formData.content, // HTML string
+  status: formData.status,
+  featured: formData.featured,
+  author: formData.author,
+  tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
+  updated_at: new Date().toISOString()
+};
+
 
       const bulletinData = {
         slug: formData.slug,
@@ -591,23 +600,25 @@ const BulletinModal = ({
               )}
             </div>
 
-            {/* Content */}
-            <div className="px-6 pb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Content (JSON) *</label>
-              {isEditing ? (
-                <textarea
-                  value={formData.content}
-                  onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                  rows={12}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] font-mono text-sm"
-                />
-              ) : (
-                <div className="bg-gray-50 p-4 rounded-lg max-h-60 overflow-y-auto">
-                  <pre className="text-xs text-gray-700">{formData.content}</pre>
-                </div>
-              )}
-            </div>
-          </div>
+           {/* Content */}
+<div className="px-6 pb-6">
+  <label className="block text-sm font-medium text-gray-700 mb-2">Content *</label>
+  {isEditing ? (
+    <ReactQuill
+      value={formData.content}
+      onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+      theme="snow"
+      className="bg-white rounded-lg"
+      style={{ height: '300px', marginBottom: '40px' }}
+    />
+  ) : (
+    <div
+      className="prose max-w-none bg-gray-50 p-4 rounded-lg"
+      dangerouslySetInnerHTML={{ __html: formData.content }}
+    />
+  )}
+</div>
+
 
           {/* Footer */}
           {isEditing && (
