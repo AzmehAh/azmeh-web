@@ -14,13 +14,12 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase, Bulletin } from '../../lib/supabase';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import ReactQuill from 'react-quill';
-import Quill from 'quill';
-import BetterTable from 'quill-better-table';
-import "quill-better-table/dist/quill-better-table.css";
+import { BetterTable } from 'quill-better-table';
+import 'quill-better-table/dist/quill-better-table.css';
 
-// تسجيل وحدة الجداول مع Quill بشكل صحيح
+// Register the better-table module with Quill
 Quill.register({
   'modules/better-table': BetterTable
 }, true);
@@ -443,20 +442,13 @@ const BulletinModal = ({
   const quillModules = {
     toolbar: {
       container: [
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        [{ 'font': [] }],
-        [{ 'size': ['small', false, 'large', 'huge'] }],
+        [{ 'header': [1, 2, 3, false] }],
         ['bold', 'italic', 'underline', 'strike'],
-        [{ 'color': [] }, { 'background': [] }],
-        [{ 'script': 'sub'}, { 'script': 'super' }],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],
-        [{ 'direction': 'rtl' }],
-        [{ 'align': [] }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
         ['blockquote', 'code-block'],
-        ['link', 'image', 'video'],
+        ['link', 'image'],
         ['clean'],
-        ['better-table']
+        ['better-table'] // Add table functionality
       ],
       handlers: {
         image: imageHandler
@@ -464,30 +456,57 @@ const BulletinModal = ({
     },
     'better-table': {
       operationMenu: {
+        color: {
+          colors: ['#000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'],
+          text: 'Background Colors:'
+        },
         items: {
           unmergeCells: {
             text: 'Unmerge cells'
+          },
+          insertColumnRight: {
+            text: 'Insert column right'
+          },
+          insertColumnLeft: {
+            text: 'Insert column left'
+          },
+          insertRowUp: {
+            text: 'Insert row above'
+          },
+          insertRowDown: {
+            text: 'Insert row below'
+          },
+          mergeCells: {
+            text: 'Merge cells'
+          },
+          deleteColumn: {
+            text: 'Delete column'
+          },
+          deleteRow: {
+            text: 'Delete row'
+          },
+          deleteTable: {
+            text: 'Delete table'
           }
         }
+      },
+      toolbarTable: {
+        tip: 'Insert Table',
+        tipSize: 'Size'
       }
     },
-    clipboard: {
-      matchVisual: false
-    },
-    table: false,
     keyboard: {
       bindings: BetterTable.keyboardBindings
-    }
+    },
+    table: false // Disable default table module
   };
 
   const quillFormats = [
-    'header', 'font', 'size',
+    'header',
     'bold', 'italic', 'underline', 'strike',
-    'color', 'background',
-    'script', 'list', 'bullet', 'indent',
-    'direction', 'align',
+    'list', 'bullet',
     'blockquote', 'code-block',
-    'link', 'image', 'video',
+    'link', 'image',
     'better-table'
   ];
 
@@ -746,6 +765,9 @@ const BulletinModal = ({
         placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
       />
     </div>
+              <div className="mt-2 text-sm text-gray-500">
+                <p>To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.</p>
+              </div>
   ) : (
     <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
       <div dangerouslySetInnerHTML={{ __html: formData.content }} />
