@@ -12,10 +12,11 @@ import {
   Star,
   Calendar,
   Tag,
-  Upload
+  Upload,
+  Image as ImageIcon
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const BulletinModal = ({ 
@@ -42,6 +43,7 @@ const BulletinModal = ({
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
   const quillRef = useRef(null);
+  const coverImageInputRef = useRef(null);
 
   useEffect(() => {
     if (bulletin) {
@@ -75,66 +77,102 @@ const BulletinModal = ({
     }
   }, [bulletin]);
 
-  // Upload image to storage
-  const uploadImage = async (file, path) => {
-    try {
-      // التحقق من وجود الملف
-      if (!file || !file.type.startsWith('image/')) {
-        alert('Please select a valid image file');
-        return null;
-      }
-      
-      // التحقق من حجم الملف (5MB كحد أقصى)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Image size should be less than 5MB');
-        return null;
-      }
-      
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${path}/${fileName}`;
+  // Generate slug from title
+  const generateSlug = (title) => {
+    return title
+      .toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .trim();
+  };
 
-      const { error: uploadError } = await supabase.storage
-        .from('system-media')
-        .upload(filePath, file);
+  const handleTitleChange = (e) => {
+    const title = e.target.value;
+    setFormData(prev => ({
+      ...prev,
+      title,
+      slug: !bulletin ? generateSlug(title) : prev.slug
+    }));
+  };
+
+  // Upload image to Supabase Storage with better error handling
+  const uploadImage = async (file, folder = 'bulletins') => {
+    try {
+      if (!file || !file.type.startsWith('image/')) {
+        throw new Error('Please select a valid image file (JPEG, PNG, etc.)');
+      }
+      
+      if (file.size > 10 * 1024 * 1024) {
+        throw new Error('Image size should be less than 10MB');
+      }
+      
+      const fileExt = file.name.split('.').pop()?.toLowerCase();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `${folder}/${fileName}`;
+
+      console.log('Uploading to path:', filePath);
+
+      // First, try to upload to product-images bucket
+      let bucket = 'product-images';
+      let { data: uploadData, error: uploadError } = await supabase.storage
+        .from(bucket)
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      // If product-images doesn't work, try system-media
+      if (uploadError && uploadError.message.includes('not found')) {
+        console.log('Trying system-media bucket...');
+        bucket = 'system-media';
+        const result = await supabase.storage
+          .from(bucket)
+          .upload(filePath, file, {
+            cacheControl: '3600',
+            upsert: false
+          });
+        uploadData = result.data;
+        uploadError = result.error;
+      }
 
       if (uploadError) {
         console.error('Upload error:', uploadError);
-        throw uploadError;
+        throw new Error(`Upload failed: ${uploadError.message}`);
       }
 
+      // Get public URL
       const { data: { publicUrl } } = supabase.storage
-        .from('system-media')
+        .from(bucket)
         .getPublicUrl(filePath);
 
+      console.log('Upload successful, URL:', publicUrl);
       return publicUrl;
+
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Error uploading image: ' + error.message);
-      return null;
+      throw error;
     }
   };
 
   // Handle cover image upload
   const handleCoverImageUpload = async (e) => {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
 
     try {
       setUploadingCover(true);
       const imageUrl = await uploadImage(file, 'bulletins/covers');
-      if (imageUrl) {
-        setFormData(prev => ({ ...prev, cover_image: imageUrl }));
-      }
+      setFormData(prev => ({ ...prev, cover_image: imageUrl }));
     } catch (error) {
       console.error('Error uploading cover image:', error);
+      alert(`Error uploading cover image: ${error.message}`);
     } finally {
       setUploadingCover(false);
     }
   };
 
   // Custom image handler for rich text editor
-  const imageHandler = async () => {
+  const imageHandler = () => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -149,65 +187,86 @@ const BulletinModal = ({
   };
 
   // Upload image for rich text editor
-const uploadImageToEditor = async (file) => {
-  try {
-    if (!file) return;
+  const uploadImageToEditor = async (file) => {
+    try {
+      if (!file) return;
 
-    setUploadingImage(true);
-    const imageUrl = await uploadImage(file, 'bulletins/content');
+      setUploadingImage(true);
+      const imageUrl = await uploadImage(file, 'bulletins/content');
 
-    if (!imageUrl) return;
+      // Get the Quill editor instance
+      const quill = quillRef.current?.getEditor();
+      if (!quill) {
+        throw new Error("Editor not ready. Please try again.");
+      }
 
-    // التأكد من وجود المحرر
-    const quill = quillRef.current?.getEditor();
-    if (!quill) {
-      alert("Editor not ready. Please try again.");
-      return;
+      // Get current selection or place at end
+      let range = quill.getSelection();
+      if (!range) {
+        range = { index: quill.getLength(), length: 0 };
+      }
+
+      // Insert the image
+      quill.insertEmbed(range.index, 'image', imageUrl, 'user');
+      quill.setSelection(range.index + 1, 0);
+
+    } catch (error) {
+      console.error('Error uploading image to editor:', error);
+      alert(`Error uploading image: ${error.message}`);
+    } finally {
+      setUploadingImage(false);
     }
+  };
 
-    let range = quill.getSelection();
-    if (!range) {
-      range = { index: quill.getLength(), length: 0 };
-    }
-
-    quill.insertEmbed(range.index, 'image', imageUrl, 'user');
-    quill.setSelection(range.index + 1, 0);
-
-  } catch (error) {
-    console.error('Error uploading image to editor:', error);
-    alert('Error uploading image to editor');
-  } finally {
-    setUploadingImage(false);
-  }
-};
-
-
-  // Quill modules configuration for rich text editing
-  const quillModules = {
+  // Enhanced Quill modules configuration for better text editing
+  const quillModules = React.useMemo(() => ({
     toolbar: {
       container: [
-        [{ 'header': [1, 2, 3, false] }],
+        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+        [{ 'font': [] }],
+        [{ 'size': ['small', false, 'large', 'huge'] }],
         ['bold', 'italic', 'underline', 'strike'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'script': 'sub'}, { 'script': 'super' }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        [{ 'indent': '-1'}, { 'indent': '+1' }],
+        [{ 'direction': 'rtl' }],
+        [{ 'align': [] }],
         ['blockquote', 'code-block'],
-        ['link', 'image'],
+        ['link', 'image', 'video'],
         ['clean']
       ],
       handlers: {
         image: imageHandler
       }
+    },
+    history: {
+      delay: 2000,
+      maxStack: 500,
+      userOnly: true
+    },
+    clipboard: {
+      matchVisual: false
     }
-  };
+  }), []);
 
   const quillFormats = [
-    'header',
+    'header', 'font', 'size',
     'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
+    'color', 'background',
+    'script',
+    'list', 'bullet', 'indent',
+    'direction', 'align',
     'blockquote', 'code-block',
-    'link', 'image'
+    'link', 'image', 'video'
   ];
 
   const handleSave = async () => {
+    if (!formData.title.trim() || !formData.slug.trim() || !formData.category || !formData.subcategory) {
+      alert('Please fill in all required fields (Title, Slug, Category, Subcategory)');
+      return;
+    }
+
     setSaving(true);
     try {
       const bulletinData = {
@@ -221,7 +280,7 @@ const uploadImageToEditor = async (file) => {
         status: formData.status,
         featured: formData.featured,
         author: formData.author,
-        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
+        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(Boolean) : [],
         updated_at: new Date().toISOString()
       };
 
@@ -244,7 +303,7 @@ const uploadImageToEditor = async (file) => {
       onClose();
     } catch (error) {
       console.error('Error saving bulletin:', error);
-      alert('Error saving bulletin');
+      alert(`Error saving bulletin: ${error.message}`);
     } finally {
       setSaving(false);
     }
@@ -260,34 +319,35 @@ const uploadImageToEditor = async (file) => {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+          className="relative bg-white rounded-lg shadow-xl max-w-5xl w-full max-h-[90vh] overflow-hidden"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b">
-            <h3 className="text-lg font-semibold text-gray-900">
-              {isEditing ? (bulletin ? 'Edit Bulletin' : 'Add Bulletin') : 'View Bulletin'}
+          <div className="flex items-center justify-between p-6 border-b bg-gray-50">
+            <h3 className="text-xl font-semibold text-gray-900">
+              {isEditing ? (bulletin ? 'Edit Bulletin' : 'Create New Bulletin') : 'View Bulletin'}
             </h3>
-            <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-lg">
+            <button onClick={onClose} className="p-2 hover:bg-gray-200 rounded-lg transition-colors">
               <X className="w-5 h-5" />
             </button>
           </div>
 
           {/* Content */}
           <div className="overflow-y-auto max-h-[calc(90vh-140px)] p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Basic Info */}
-              <div className="space-y-4">
+            <div className="space-y-6">
+              {/* Basic Information Row */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Title *</label>
                   {isEditing ? (
                     <input
                       type="text"
                       value={formData.title}
-                      onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      onChange={handleTitleChange}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
+                      placeholder="Enter bulletin title..."
                     />
                   ) : (
-                    <p className="text-gray-900">{formData.title}</p>
+                    <p className="text-gray-900 p-3 bg-gray-50 rounded-lg">{formData.title}</p>
                   )}
                 </div>
 
@@ -298,27 +358,31 @@ const uploadImageToEditor = async (file) => {
                       type="text"
                       value={formData.slug}
                       onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
+                      placeholder="url-friendly-slug"
                     />
                   ) : (
-                    <p className="text-gray-900">{formData.slug}</p>
+                    <p className="text-gray-900 p-3 bg-gray-50 rounded-lg">{formData.slug}</p>
                   )}
                 </div>
+              </div>
 
+              {/* Category and Subcategory */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
                   {isEditing ? (
                     <select
                       value={formData.category}
                       onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
                     >
                       <option value="">Select Category</option>
                       <option value="Paint Systems">Paint Systems</option>
                       <option value="Technical Solutions">Technical Solutions</option>
                     </select>
                   ) : (
-                    <p className="text-gray-900">{formData.category}</p>
+                    <p className="text-gray-900 p-3 bg-gray-50 rounded-lg">{formData.category}</p>
                   )}
                 </div>
 
@@ -329,56 +393,149 @@ const uploadImageToEditor = async (file) => {
                       type="text"
                       value={formData.subcategory}
                       onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
+                      placeholder="e.g., Car Coating Systems"
                     />
                   ) : (
-                    <p className="text-gray-900">{formData.subcategory}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Cover Image
-                  </label>
-                  {isEditing ? (
-                    <div className="space-y-2">
-                      {formData.cover_image && (
-                        <div className="relative w-full h-32 rounded border overflow-hidden">
-                          <img
-                            src={formData.cover_image}
-                            alt="Cover preview"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
-                        <Upload className="w-4 h-4 mr-2" />
-                        {uploadingCover ? 'Uploading...' : 'Upload Cover Image'}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleCoverImageUpload}
-                          className="hidden"
-                          disabled={uploadingCover}
-                        />
-                      </label>
-                    </div>
-                  ) : (
-                    formData.cover_image ? (
-                      <img
-                        src={formData.cover_image}
-                        alt="Cover"
-                        className="w-full h-32 object-cover rounded border"
-                      />
-                    ) : (
-                      <p className="text-gray-500">No cover image</p>
-                    )
+                    <p className="text-gray-900 p-3 bg-gray-50 rounded-lg">{formData.subcategory}</p>
                   )}
                 </div>
               </div>
 
-              {/* Additional Info */}
-              <div className="space-y-4">
+              {/* Cover Image Upload */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image</label>
+                {isEditing ? (
+                  <div className="space-y-4">
+                    {formData.cover_image && (
+                      <div className="relative w-full h-48 rounded-lg border-2 border-dashed border-gray-200 overflow-hidden">
+                        <img
+                          src={formData.cover_image}
+                          alt="Cover preview"
+                          className="w-full h-full object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setFormData(prev => ({ ...prev, cover_image: '' }))}
+                          className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    )}
+                    
+                    <div className="flex items-center space-x-4">
+                      <button
+                        type="button"
+                        onClick={() => coverImageInputRef.current?.click()}
+                        disabled={uploadingCover}
+                        className="flex items-center px-6 py-3 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {uploadingCover ? (
+                          <>
+                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-5 h-5 mr-2" />
+                            Upload Cover Image
+                          </>
+                        )}
+                      </button>
+                      
+                      <input
+                        ref={coverImageInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleCoverImageUpload}
+                        className="hidden"
+                      />
+                      
+                      <span className="text-sm text-gray-500">
+                        Recommended: 800x600px, max 10MB
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div>
+                    {formData.cover_image ? (
+                      <img
+                        src={formData.cover_image}
+                        alt="Cover"
+                        className="w-full h-48 object-cover rounded-lg border border-gray-200"
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200 flex items-center justify-center">
+                        <div className="text-center">
+                          <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-2" />
+                          <p className="text-gray-500">No cover image</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Short Description */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
+                {isEditing ? (
+                  <textarea
+                    value={formData.short_description}
+                    onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
+                    rows={3}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
+                    placeholder="Brief description of the bulletin..."
+                  />
+                ) : (
+                  <p className="text-gray-900 p-3 bg-gray-50 rounded-lg">{formData.short_description}</p>
+                )}
+              </div>
+
+              {/* Content Editor */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Content *</label>
+                {isEditing ? (
+                  <div className="space-y-2">
+                    {uploadingImage && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                        <div className="flex items-center text-blue-700">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                          <span className="text-sm">Uploading image...</span>
+                        </div>
+                      </div>
+                    )}
+                    
+                    <div className="border border-gray-200 rounded-lg overflow-hidden">
+                      <ReactQuill
+                        ref={quillRef}
+                        theme="snow"
+                        value={formData.content}
+                        onChange={(content) => setFormData(prev => ({ ...prev, content }))}
+                        modules={quillModules}
+                        formats={quillFormats}
+                        style={{ minHeight: '400px' }}
+                        placeholder="Start writing your bulletin content... Press Enter for new lines, use the toolbar for formatting, and click the image icon to upload images."
+                      />
+                    </div>
+                    
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                      <p className="text-sm text-blue-700">
+                        <strong>Tips:</strong> Press Enter for line breaks, use Shift+Enter for single line breaks. 
+                        Click the image icon (📷) in the toolbar to upload images directly into your content.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="prose prose-lg max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+                    <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                  </div>
+                )}
+              </div>
+
+              {/* Metadata Row */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Author</label>
                   {isEditing ? (
@@ -386,25 +543,10 @@ const uploadImageToEditor = async (file) => {
                       type="text"
                       value={formData.author}
                       onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
                     />
                   ) : (
-                    <p className="text-gray-900">{formData.author}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Tags (comma-separated)</label>
-                  {isEditing ? (
-                    <input
-                      type="text"
-                      value={formData.tags}
-                      onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      placeholder="coating, automotive, protection"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{formData.tags}</p>
+                    <p className="text-gray-900 p-3 bg-gray-50 rounded-lg">{formData.author}</p>
                   )}
                 </div>
 
@@ -414,13 +556,13 @@ const uploadImageToEditor = async (file) => {
                     <select
                       value={formData.status}
                       onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
                     >
                       <option value="draft">Draft</option>
                       <option value="published">Published</option>
                     </select>
                   ) : (
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                    <span className={`inline-block px-3 py-2 text-sm font-medium rounded-full ${
                       formData.status === 'published' 
                         ? 'bg-green-100 text-green-800' 
                         : 'bg-yellow-100 text-yellow-800'
@@ -430,111 +572,77 @@ const uploadImageToEditor = async (file) => {
                   )}
                 </div>
 
-                {isEditing && (
-                  <div>
-                    <label className="flex items-center">
+                <div className="flex items-end">
+                  {isEditing ? (
+                    <label className="flex items-center space-x-2 p-3">
                       <input
                         type="checkbox"
                         checked={formData.featured}
                         onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
                         className="w-4 h-4 text-[#0055A3] border-gray-300 rounded focus:ring-[#0055A3]"
                       />
-                      <span className="ml-2 text-sm text-gray-700">Featured bulletin</span>
+                      <span className="text-sm font-medium text-gray-700">Featured bulletin</span>
                     </label>
-                  </div>
+                  ) : (
+                    formData.featured && (
+                      <span className="inline-block px-3 py-2 text-sm font-medium rounded-full bg-blue-100 text-blue-800">
+                        <Star className="w-4 h-4 inline mr-1" />
+                        Featured
+                      </span>
+                    )
+                  )}
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tags (comma-separated)</label>
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={formData.tags}
+                    onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] focus:ring-2 focus:ring-[#0055A3]/20"
+                    placeholder="coating, automotive, protection, maintenance"
+                  />
+                ) : (
+                  <p className="text-gray-900 p-3 bg-gray-50 rounded-lg">{formData.tags || 'No tags'}</p>
                 )}
               </div>
             </div>
-
-            {/* Short Description */}
-            <div className="px-6 pb-4">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
-              {isEditing ? (
-                <textarea
-                  value={formData.short_description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                />
-              ) : (
-                <p className="text-gray-900">{formData.short_description}</p>
-              )}
-            </div>
-
-            {/* Content */}
-            <div className="px-6 pb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Content *
-              </label>
-              {isEditing ? (
-                <>
-                  <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    {uploadingImage && (
-                      <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
-                        <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                          Uploading image...
-                        </div>
-                      </div>
-                    )}
-                    <ReactQuill
-                      ref={quillRef}
-                      theme="snow"
-                      value={formData.content}
-                      onChange={(value) =>
-                        setFormData((prev) => ({ ...prev, content: value }))
-                      }
-                      modules={quillModules}
-                      formats={quillFormats}
-                      className="h-96"         
-                      placeholder="Start writing your bulletin content..."
-                    />
-                  </div> 
-                </>
-              ) : (
-                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-  <div 
-    dangerouslySetInnerHTML={{ __html: formData.content }} 
-    className="whitespace-pre-wrap"
-  />
-</div>
-
-
-                </div>
-              )}
-            </div> 
-
-            {/* Padding إضافي وقت التحرير */}
-            {isEditing && <div className="pt-16"></div>}
           </div>
 
           {/* Footer */}
           {isEditing && (
-            <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
-              >
-                {saving ? (
-                  <>
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                    Saving...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Bulletin 
-                  </>
-                )}
-              </button> 
+            <div className="flex items-center justify-between p-6 border-t bg-gray-50">
+              <div className="text-sm text-gray-600">
+                * Required fields
+              </div>
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={onClose}
+                  className="px-6 py-3 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={saving}
+                  className="px-6 py-3 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center transition-colors"
+                >
+                  {saving ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                      Saving...
+                    </>
+                  ) : (
+                    <>
+                      <Save className="w-5 h-5 mr-2" />
+                      Save Bulletin 
+                    </>
+                  )}
+                </button> 
+              </div>
             </div>
           )}
         </motion.div>
