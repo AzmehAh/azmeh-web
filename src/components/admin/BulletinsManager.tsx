@@ -182,7 +182,11 @@ const BulletinModal = ({
         console.warn('Quill reference is not ready');
         return;
       }
-
+  const [img] = quill.root.querySelectorAll(`img[src="${imageUrl}"]`);
+    if (img) {
+      img.style.width = '200px';
+      img.style.height = 'auto';
+    }
       const quill = quillRef.current.getEditor();
       if (!quill) {
         console.warn('Quill editor instance not found');
