@@ -235,9 +235,18 @@ const BulletinModal = ({
     'list', 'bullet',
     'blockquote', 'code-block',
     'link', 'image'
-  ];
+  ]; 
 
-
+  // تحسين معالجة المحتوى لضمان الحفاظ على التنسيق
+  const handleContentChange = (value) => {
+    // تنظيف المحتوى من المسافات الزائدة مع الحفاظ على التنسيق الأساسي
+    let cleanedContent = value
+      .replace(/(<br>\s*){3,}/gi, '<br><br>') // تقليل المسافات المتعددة
+      .replace(/(<p><\/p>)+/g, '') 
+      .replace(/(&nbsp;)+/g, ' '); 
+    
+    setFormData(prev => ({ ...prev, content: cleanedContent }));
+  };
 
   const handleSave = async () => {
     setSaving(true);
