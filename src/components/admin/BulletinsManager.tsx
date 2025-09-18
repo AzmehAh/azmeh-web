@@ -15,11 +15,8 @@ import {
 } from 'lucide-react';
 import { supabase, Bulletin } from '../../lib/supabase';
 import 'react-quill/dist/quill.snow.css';
-import ReactQuill from 'react-quill';
+import ReactQuill, { Quill } from 'react-quill';
 import { BetterTable } from 'quill-better-table';
-
-// Access Quill from ReactQuill
-const Quill = ReactQuill.Quill;
 
 // Register the table module with Quill
 Quill.register({ 'modules/better-table': BetterTable }, true);
