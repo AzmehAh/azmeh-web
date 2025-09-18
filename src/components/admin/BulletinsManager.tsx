@@ -108,7 +108,7 @@ const BulletinModal = ({
         .getPublicUrl(filePath);
 
       // Insert image into editor at cursor position
-      cconst quillRef = useRef(null);
+      const quillRef = useRef(null);
      if (quillRef.current) {
   const editor = quillRef.current.getEditor(); // 👈 الطريقة الرسمية للحصول على مثيل Quill
   const range = editor.getSelection(true);
