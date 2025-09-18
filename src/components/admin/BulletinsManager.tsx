@@ -11,7 +11,8 @@ import {
   Eye,
   Star,
   Calendar,
-  Tag
+  Tag,
+  Upload
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
@@ -39,6 +40,7 @@ const BulletinModal = ({
   });
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingCover, setUploadingCover] = useState(false);
 
   useEffect(() => {
     if (bulletin) {
@@ -72,6 +74,49 @@ const BulletinModal = ({
     }
   }, [bulletin]);
 
+  // Upload image to storage
+  const uploadImage = async (file, path) => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random()}.${fileExt}`;
+      const filePath = `${path}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('system-media')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('system-media')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      alert('Error uploading image');
+      return null;
+    }
+  };
+
+  // Handle cover image upload
+  const handleCoverImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    try {
+      setUploadingCover(true);
+      const imageUrl = await uploadImage(file, 'bulletins/covers');
+      if (imageUrl) {
+        setFormData(prev => ({ ...prev, cover_image: imageUrl }));
+      }
+    } catch (error) {
+      console.error('Error uploading cover image:', error);
+    } finally {
+      setUploadingCover(false);
+    }
+  };
+
   // Custom image handler for rich text editor
   const imageHandler = async () => {
     const input = document.createElement('input');
@@ -91,26 +136,16 @@ const BulletinModal = ({
   const uploadImageToEditor = async (file) => {
     try {
       setUploadingImage(true);
-      const fileExt = file.name.split('.').pop();
-      const fileName = `bulletin-content-${Date.now()}.${fileExt}`;
-      const filePath = `bulletins/content/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('system-media')
-        .upload(filePath, file);
-
-      if (uploadError) throw uploadError;
-
-      const { data: { publicUrl } } = supabase.storage
-        .from('system-media')
-        .getPublicUrl(filePath);
-
-      // Insert image into editor at cursor position
-      const quill = (document.querySelector('.ql-editor')?.__quill);
-      if (quill) {
-        const range = quill.getSelection(true);
-        quill.insertEmbed(range.index, 'image', publicUrl);
-        quill.setSelection(range.index + 1);
+      const imageUrl = await uploadImage(file, 'bulletins/content');
+      
+      if (imageUrl) {
+        // Insert image into editor at cursor position
+        const quill = (document.querySelector('.ql-editor')?.__quill);
+        if (quill) {
+          const range = quill.getSelection(true);
+          quill.insertEmbed(range.index, 'image', imageUrl);
+          quill.setSelection(range.index + 1);
+        }
       }
     } catch (error) {
       console.error('Error uploading image:', error);
@@ -275,16 +310,42 @@ const BulletinModal = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image URL</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Cover Image
+                  </label>
                   {isEditing ? (
-                    <input
-                      type="url"
-                      value={formData.cover_image}
-                      onChange={(e) => setFormData(prev => ({ ...prev, cover_image: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
+                    <div className="space-y-2">
+                      {formData.cover_image && (
+                        <div className="relative w-full h-32 rounded border overflow-hidden">
+                          <img
+                            src={formData.cover_image}
+                            alt="Cover preview"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
+                        <Upload className="w-4 h-4 mr-2" />
+                        {uploadingCover ? 'Uploading...' : 'Upload Cover Image'}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleCoverImageUpload}
+                          className="hidden"
+                          disabled={uploadingCover}
+                        />
+                      </label>
+                    </div>
                   ) : (
-                    <p className="text-gray-900">{formData.cover_image}</p>
+                    formData.cover_image ? (
+                      <img
+                        src={formData.cover_image}
+                        alt="Cover"
+                        className="w-full h-32 object-cover rounded border"
+                      />
+                    ) : (
+                      <p className="text-gray-500">No cover image</p>
+                    )
                   )}
                 </div>
               </div>
@@ -447,7 +508,7 @@ const BulletinModal = ({
   );
 };
 
-// Main BulletinsManager Component
+// Main BulletinsManager Component (يبقى كما هو)
 const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState([]);
   const [filteredBulletins, setFilteredBulletins] = useState([]);
