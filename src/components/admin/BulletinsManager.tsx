@@ -148,22 +148,25 @@ const BulletinModal = ({
     };
   };
 
-  // Function to delete image from editor
   const deleteImageHandler = () => {
-    const quill = quillRef.current?.getEditor();
-    if (!quill) return;
-    
-    const range = quill.getSelection();
-    if (!range) return;
-    
-    // Check if the selected content is an image
-    const formats = quill.getFormat(range);
-    if (formats.image) {
-      // Delete the image
-      quill.deleteText(range.index, range.length);
-    }
-  };
+  const quill = quillRef.current?.getEditor();
+  if (!quill) return;
+  
+  const range = quill.getSelection();
+  if (!range) return;
 
+  if (range.length > 0) {
+    // إذا كان هناك نص أو صورة محددة
+    quill.deleteText(range.index, range.length);
+  } else {
+    // إذا لم يكن هناك تحديد، تحقق من العنصر الحالي
+    const format = quill.getFormat(range.index);
+    if (format.image) {
+      // إذا كان هناك صورة عند المؤشر
+      quill.deleteText(range.index, 1);
+    }
+  }
+};
   const uploadImageToEditor = async (file) => {
     try {
       setUploadingImage(true);
