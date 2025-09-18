@@ -18,12 +18,11 @@ import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import 'quill-better-table/dist/quill-better-table.css';
 
-// Initialize BetterTable on client side
 
 
 
 
-// Bulletin Modal Component - MOVED OUTSIDE OF BulletinsManager
+
 const BulletinModal = ({ 
   isOpen, 
   onClose, 
@@ -46,7 +45,7 @@ const BulletinModal = ({
   });
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [betterTableAvailable, setBetterTableAvailable] = useState(!!BetterTable);
+
 const [betterTableLoaded, setBetterTableLoaded] = useState(false);
 
 useEffect(() => {
@@ -54,13 +53,13 @@ useEffect(() => {
     try {
       const module = await import('quill-better-table');
       const BetterTable = module.default;
-      
-      // تسجيل الوحدة فقط إذا لم تكن مسجلة من قبل
+
       if (Quill && !Quill.imports['modules/better-table']) {
         Quill.register('modules/better-table', BetterTable, true);
       }
-      
-      setBetterTableLoaded(true); // تم التحميل بنجاح!
+
+      setBetterTableAvailable(true); // هنا نعلم أنه جاهز
+      setBetterTableLoaded(true); // تم التحميل
     } catch (error) {
       console.error('فشل تحميل quill-better-table:', error);
     }
@@ -68,6 +67,7 @@ useEffect(() => {
 
   loadBetterTable();
 }, []);
+
   // Check for BetterTable availability
   useEffect(() => {
     const checkBetterTable = () => {
