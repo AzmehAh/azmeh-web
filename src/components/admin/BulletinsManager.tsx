@@ -135,20 +135,37 @@ const BulletinModal = ({
     }
   };
 
-  // Custom image handler for rich text editor
   const imageHandler = async () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
+  const input = document.createElement('input');
+  input.setAttribute('type', 'file');
+  input.setAttribute('accept', 'image/*');
+  input.click();
 
-    input.onchange = async () => {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        await uploadImageToEditor(file);
+  input.onchange = async () => {
+    const file = input.files[0];
+    if (file) {
+      // ارفع الصورة على Supabase
+      const { data, error } = await supabase.storage
+        .from('bulletins')
+        .upload(`content/${Date.now()}_${file.name}`, file);
+
+      if (error) {
+        console.error("Upload error:", error.message);
+        return;
       }
-    };
+
+      const { data: publicUrlData } = supabase.storage
+        .from('bulletins')
+        .getPublicUrl(data.path);
+
+      const quill = quillRef.current.getEditor();
+      const range = quill.getSelection();
+
+      quill.insertEmbed(range.index, 'image', publicUrlData.publicUrl);
+    }
   };
+};
+
 
   const uploadImageToEditor = async (file) => {
   try {
