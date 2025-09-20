@@ -30,7 +30,7 @@ const BulletinDetail = () => {
       setBulletin(data);
 
       // ✅ جلب المقالات المرتبطة مباشرة من قاعدة البيانات
-      const related = await api.getRelatedBulletins(bulletinId, data.category, data.subcategory);
+      const related = await api.getRelatedBulletins(data.id, data.category, data.subcategory);
       setRelatedBulletins(related);
     } catch (error) {
       console.error('Error fetching bulletin:', error);
