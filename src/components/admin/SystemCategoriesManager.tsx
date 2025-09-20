@@ -352,12 +352,16 @@ const CategoryModal = ({
                   Sort Order
                 </label>
                 {isEditing ? (
-                  <input
-                    type="number"
-                    value={formData.sort_order}
-                    onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
+                 <input
+  type="number"
+  value={formData.sort_order ?? 0} // fallback لو كانت undefined
+  onChange={(e) => {
+    const value = parseInt(e.target.value);
+    setFormData(prev => ({ ...prev, sort_order: isNaN(value) ? 0 : value }));
+  }}
+  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+/>
+
                 ) : (
                   <p className="text-gray-900">{formData.sort_order}</p>
                 )}
