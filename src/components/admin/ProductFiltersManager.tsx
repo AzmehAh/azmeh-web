@@ -50,7 +50,80 @@ const ProductFiltersManager = () => {
       setLoading(false);
     }
   };
+   // إعادة ترتيب أنواع الفلاتر
+const reorderFilterTypes = async () => {
+  try {
+    const { data: filterTypesData, error } = await supabase
+      .from('product_filter_types')
+      .select('*')
+      .order('sort_order', { ascending: true });
 
+    if (error) throw error;
+    if (!filterTypesData || filterTypesData.length === 0) return;
+
+    const activeTypes = filterTypesData.filter(t => t.is_active); // اختياري
+    const sorted = [...activeTypes].sort((a, b) => a.sort_order - b.sort_order);
+
+    const updates = sorted.map((type, index) => ({
+      id: type.id,
+      sort_order: index
+    }));
+
+    await Promise.all(
+      updates.map(update =>
+        supabase
+          .from('product_filter_types')
+          .update({ sort_order: update.sort_order })
+          .eq('id', update.id)
+      )
+    );
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+    await fetchFilterData(); // لتحديث الواجهة
+
+  } catch (error) {
+    console.error('Error reordering filter types:', error);
+    alert('Failed to reorder filter types');
+  }
+};
+
+// إعادة ترتيب قيم الفلتر حسب نوع الفلتر
+const reorderFilterValues = async (filterTypeId: string) => {
+  try {
+    const { data: filterValuesData, error } = await supabase
+      .from('product_filter_values')
+      .select('*')
+      .eq('filter_type_id', filterTypeId)
+      .order('sort_order', { ascending: true });
+
+    if (error) throw error;
+    if (!filterValuesData || filterValuesData.length === 0) return;
+
+    const activeValues = filterValuesData.filter(v => v.is_active); // اختياري
+    const sorted = [...activeValues].sort((a, b) => a.sort_order - b.sort_order);
+
+    const updates = sorted.map((value, index) => ({
+      id: value.id,
+      sort_order: index
+    }));
+
+    await Promise.all(
+      updates.map(update =>
+        supabase
+          .from('product_filter_values')
+          .update({ sort_order: update.sort_order })
+          .eq('id', update.id)
+      )
+    );
+
+    await new Promise(resolve => setTimeout(resolve, 300));
+    await fetchFilterData(); // لتحديث الواجهة
+
+  } catch (error) {
+    console.error('Error reordering filter values:', error);
+    alert('Failed to reorder filter values');
+  }
+};
   const toggleFilterType = (typeId: string) => {
     setExpandedTypes(prev => 
       prev.includes(typeId)
@@ -59,17 +132,26 @@ const ProductFiltersManager = () => {
     );
   };
 
-  const deleteFilterType = async (id: string) => {
-    if (!confirm('Are you sure? This will delete the filter type and all its values.')) return;
+  const deleteFilterValue = async (id: string) => {
+  if (!confirm('Are you sure you want to delete this filter value?')) return;
 
-    try {
-      await api.deleteProductFilterType(id);
-      await fetchFilterData();
-    } catch (error) {
-      console.error('Error deleting filter type:', error);
-      alert('Error deleting filter type');
-    }
-  };
+  try {
+    // جلب filter_type_id قبل الحذف (لأننا سنحتاجه لإعادة الترتيب)
+    const { data: valueData, error: fetchError } = await supabase
+      .from('product_filter_values')
+      .select('filter_type_id')
+      .eq('id', id)
+      .single();
+
+    if (fetchError) throw fetchError;
+
+    await api.deleteProductFilterValue(id);
+    await reorderFilterValues(valueData.filter_type_id); // 👈 إعادة ترتيب بعد الحذف
+  } catch (error) {
+    console.error('Error deleting filter value:', error);
+    alert('Error deleting filter value');
+  }
+};
 
   const deleteFilterValue = async (id: string) => {
     if (!confirm('Are you sure you want to delete this filter value?')) return;
@@ -284,6 +366,7 @@ const ProductFiltersManager = () => {
         filterType={selectedFilterType}
         isEditing={isEditing}
         onSave={fetchFilterData}
+         reorderFilterTypes={reorderFilterTypes}
       />
 
       <FilterValueModal
@@ -304,13 +387,15 @@ const FilterTypeModal = ({
   onClose, 
   filterType, 
   isEditing, 
-  onSave 
+  onSave,
+  reorderFilterTypes
 }: {
   isOpen: boolean;
   onClose: () => void;
   filterType: ProductFilterType | null;
   isEditing: boolean;
   onSave: () => void;
+  reorderFilterTypes: () => Promise<void>;
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -337,25 +422,30 @@ const FilterTypeModal = ({
       });
     }
   }, [filterType]);
+const handleSave = async () => {
+  if (!formData.filter_type_id || !formData.value) {
+    alert('Please fill in all required fields');
+    return;
+  }
 
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      if (filterType) {
-        await api.updateProductFilterType(filterType.id, formData);
-      } else {
-        await api.createProductFilterType(formData);
-      }
-
-      onSave();
-      onClose();
-    } catch (error) {
-      console.error('Error saving filter type:', error);
-      alert('Error saving filter type');
-    } finally {
-      setSaving(false);
+  setSaving(true);
+  try {
+    if (filterValue && filterValue.id) {
+      await api.updateProductFilterValue(filterValue.id, formData);
+    } else {
+      await api.createProductFilterValue(formData);
     }
-  };
+
+    onSave();
+    await reorderFilterValues(formData.filter_type_id); // 👈 إعادة ترتيب القيم التابعة لهذا النوع
+    onClose();
+  } catch (error) {
+    console.error('Error saving filter value:', error);
+    alert('Error saving filter value');
+  } finally {
+    setSaving(false);
+  }
+};
 
   if (!isOpen) return null;
 
