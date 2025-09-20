@@ -23,7 +23,9 @@ const BulletinModal = ({
   onClose, 
   bulletin, 
   isEditing, 
-  onSave 
+  onSave,
+  categories = [],  // ← القيمة الافتراضية لتجنب أي خطأ
+  setCategories
   
 }) => {
   const [formData, setFormData] = useState({
@@ -677,29 +679,16 @@ const BulletinModal = ({
         </button>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search bulletins..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        </div>
-        <select
-          value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
-          className="px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-        >
-          <option value="all">All Categories</option>
-          {categories.map(category => (
-            <option key={category} value={category}>{category}</option>
-          ))}
-        </select>
-      </div>
+     <select
+  value={categoryFilter}
+  onChange={(e) => setCategoryFilter(e.target.value)}
+  className="px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+>
+  <option value="all">All Categories</option>
+  {categories.map(category => (
+    <option key={category} value={category}>{category}</option>
+  ))}
+</select>
 
       {/* Bulletins Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
