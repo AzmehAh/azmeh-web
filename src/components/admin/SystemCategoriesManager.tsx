@@ -247,6 +247,7 @@ const reorderCategories = async () => {
         category={selectedCategory}
         isEditing={isEditing}
         onSave={fetchData}
+      reorderCategories={reorderCategories} 
       />
     </div>
   );
@@ -258,13 +259,15 @@ const CategoryModal = ({
   onClose, 
   category, 
   isEditing, 
-  onSave 
+  onSave,
+  reorderCategories
 }: {
   isOpen: boolean;
   onClose: () => void;
   category: BulletinCategoryConfig | null;
   isEditing: boolean;
   onSave: () => void;
+   reorderCategories: () => Promise<void>;
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -315,7 +318,32 @@ const CategoryModal = ({
       setSaving(false);
     }
   };
+const handleSave = async () => {
+  if (!formData.name.trim()) {
+    alert('Category name is required');
+    return;
+  }
 
+  setSaving(true);
+  try {
+    if (category) {
+      await api.updateBulletinCategoryConfig(category.id, formData);
+    } else {
+      await api.createBulletinCategoryConfig(formData);
+    }
+
+    // 👇 إعادة الترتيب التلقائي بعد الحفظ
+    await reorderCategories();
+
+    onSave(); // تحديث الواجهة
+    onClose();
+  } catch (error) {
+    console.error('Error saving category:', error);
+    alert('Error saving category');
+  } finally {
+    setSaving(false);
+  }
+};
   if (!isOpen) return null;
 
   return (
