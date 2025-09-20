@@ -204,7 +204,9 @@
     scroll-behavior: smooth;
   }
 }
-.prose {
-  white-space: pre-wrap; /* يحافظ على السطور الجديدة */
-  word-wrap: break-word; /* يلتف النص تلقائيًا */
+.prose img {
+  max-width: 200px; /* أو أي حجم مناسب */
+  height: auto;
+  border-radius: 8px; /* لو حابب corners */
 }
+
