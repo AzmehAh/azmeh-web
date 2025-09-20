@@ -511,10 +511,11 @@ const BulletinModal = ({
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <div 
-  className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200"
+             <div 
+  className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200 prose-img:max-w-[200px] prose-img:rounded-lg"
   dangerouslySetInnerHTML={{ __html: formData.content || '<p><em>No content</em></p>' }} 
 />
+
 
                 </div>
               )}
