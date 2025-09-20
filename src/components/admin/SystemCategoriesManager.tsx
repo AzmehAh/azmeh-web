@@ -46,7 +46,7 @@ const reorderCategories = async () => {
       await api.updateBulletinCategoryConfig(update.id, { sort_order: update.sort_order });
     }
 
-    // إعادة تحميل البيانات لتحديث الواجهة
+    // إعادة تحميل البيانات لتحديث الواجهة 
     await fetchData();
   } catch (error) {
     console.error('Error reordering categories:', error);
@@ -265,7 +265,7 @@ const CategoryModal = ({
   isOpen: boolean;
   onClose: () => void;
   category: BulletinCategoryConfig | null;
-  isEditing: boolean; 
+  isEditing: boolean;
   onSave: () => void;
    reorderCategories: () => Promise<void>;
 }) => {
