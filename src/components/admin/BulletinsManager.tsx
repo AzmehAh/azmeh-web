@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, 
@@ -11,12 +11,10 @@ import {
   Eye,
   Star,
   Calendar,
-  Tag,
-  Upload
+  Tag
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { Editor } from '@tinymce/tinymce-react';
 
 const BulletinModal = ({ 
   isOpen, 
@@ -34,15 +32,13 @@ const BulletinModal = ({
     subcategory: '',
     content: '',
     status: 'draft',
-    featured: false,
+    featured: false, 
     author: 'Al Azmeh Paints',
     tags: ''
   });
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [uploadingCover, setUploadingCover] = useState(false);
-  const quillRef = useRef(null);
- 
+
   useEffect(() => {
     if (bulletin) {
       setFormData({
@@ -75,143 +71,32 @@ const BulletinModal = ({
     }
   }, [bulletin]);
 
-  // Upload image to storage
-  const uploadImage = async (file, path) => {
+  // Upload image for rich text editor
+  const uploadImageToEditor = async (file, success, failure) => {
     try {
-      // التحقق من وجود الملف
-      if (!file || !file.type.startsWith('image/')) {
-        alert('Please select a valid image file');
-        return null;
-      }
-      
-      // التحقق من حجم الملف (5MB كحد أقصى)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Image size should be less than 5MB');
-        return null;
-      }
-      
+      setUploadingImage(true);
       const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
-      const filePath = `${path}/${fileName}`;
+      const fileName = `bulletin-content-${Date.now()}.${fileExt}`;
+      const filePath = `bulletins/content/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('system-media')
+        .from('images')
         .upload(filePath, file);
 
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw uploadError;
-      }
+      if (uploadError) throw uploadError;
 
       const { data: { publicUrl } } = supabase.storage
-        .from('system-media')
+        .from('images')
         .getPublicUrl(filePath);
 
-      return publicUrl;
+      success(publicUrl);
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Error uploading image: ' + error.message);
-      return null;
-    }
-  };
-
-  // Handle cover image upload
-  const handleCoverImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      setUploadingCover(true);
-      const imageUrl = await uploadImage(file, 'bulletins/covers');
-      if (imageUrl) {
-        setFormData(prev => ({ ...prev, cover_image: imageUrl }));
-      }
-    } catch (error) {
-      console.error('Error uploading cover image:', error);
+      failure('Error uploading image');
     } finally {
-      setUploadingCover(false);
+      setUploadingImage(false);
     }
   };
-
-  // Custom image handler for rich text editor
-  const imageHandler = async () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        await uploadImageToEditor(file);
-      }
-    };
-  };
-
-  const uploadImageToEditor = async (file) => {
-  try {
-    setUploadingImage(true);
-    const imageUrl = await uploadImage(file, 'bulletins/content');
-
-    if (!imageUrl) {
-      alert('Failed to upload image.');
-      return;
-    }
-
-    // تأكد من أن quill جاهز
-    if (!quillRef.current) {
-      console.warn('Quill reference is not ready');
-      return;
-    }
-
-    const quill = quillRef.current.getEditor();
-    if (!quill) {
-      console.warn('Quill editor instance not found');
-      return;
-    }
-
-    // احصل على الموقع الحالي للكرسور
-    let range = quill.getSelection();
-    if (!range) {
-      // إذا لم يكن هناك تحديد، ضع الصورة في النهاية
-      range = { index: quill.getLength(), length: 0 };
-    }
-
-    // أدخل الصورة في الموقع المحدد
-    quill.insertEmbed(range.index, 'image', imageUrl, 'user');
-    // حرّك الكرسور بعد الصورة
-    quill.setSelection(range.index + 1, 0);
-  } catch (error) {
-    console.error('Error uploading image to editor:', error);
-    alert('Error uploading image: ' + (error.message || 'Unknown error'));
-  } finally {
-    setUploadingImage(false);
-  }
-};
-  // Quill modules configuration for rich text editing
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean']
-      ],
-      handlers: {
-        image: imageHandler
-      }
-    }
-  };
-
-  const quillFormats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'blockquote', 'code-block',
-    'link', 'image'
-  ];
 
   const handleSave = async () => {
     setSaving(true);
@@ -343,42 +228,16 @@ const BulletinModal = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Cover Image
-                  </label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image URL</label>
                   {isEditing ? (
-                    <div className="space-y-2">
-                      {formData.cover_image && (
-                        <div className="relative w-full h-32 rounded border overflow-hidden">
-                          <img
-                            src={formData.cover_image}
-                            alt="Cover preview"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
-                        <Upload className="w-4 h-4 mr-2" />
-                        {uploadingCover ? 'Uploading...' : 'Upload Cover Image'}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleCoverImageUpload}
-                          className="hidden"
-                          disabled={uploadingCover}
-                        />
-                      </label>
-                    </div>
+                    <input
+                      type="url"
+                      value={formData.cover_image}
+                      onChange={(e) => setFormData(prev => ({ ...prev, cover_image: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                    />
                   ) : (
-                    formData.cover_image ? (
-                      <img
-                        src={formData.cover_image}
-                        alt="Cover"
-                        className="w-full h-32 object-cover rounded border"
-                      />
-                    ) : (
-                      <p className="text-gray-500">No cover image</p>
-                    )
+                    <p className="text-gray-900">{formData.cover_image}</p>
                   )}
                 </div>
               </div>
@@ -474,39 +333,45 @@ const BulletinModal = ({
               </label>
               {isEditing ? (
                 <>
-                  <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    {uploadingImage && (
-                      <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
-                        <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                          Uploading image...
-                        </div>
+                  {uploadingImage && (
+                    <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                        Uploading image...
                       </div>
-                    )}
-                    <ReactQuill
-                      ref={quillRef}
-                      theme="snow"
-                      value={formData.content}
-                      onChange={(value) =>
-                        setFormData((prev) => ({ ...prev, content: value }))
-                      }
-                      modules={quillModules}
-                      formats={quillFormats}
-                      className="h-96"         
-                      placeholder="Start writing your bulletin content..."
-                    />
-                  </div> 
+                    </div>
+                  )}
+                  <Editor
+                    apiKey="your-api-key-here" // استبدل بمفتاح API الخاص بك
+                    value={formData.content}
+                    onEditorChange={(content) => {
+                      setFormData(prev => ({ ...prev, content }));
+                    }}
+                    init={{
+                      height: 500,
+                      menubar: 'file edit view insert format tools table help',
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                      ],
+                      toolbar: 'undo redo | formatselect | bold italic underline strikethrough | \
+                               alignleft aligncenter alignright alignjustify | \
+                               bullist numlist outdent indent | link image media table | \
+                               removeformat | help',
+                      images_upload_handler: function (blobInfo, success, failure) {
+                        uploadImageToEditor(blobInfo.blob(), success, failure);
+                      },
+                      content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; }'
+                    }}
+                  />
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                <div 
-  className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200"
-  dangerouslySetInnerHTML={{ __html: formData.content || '<p><em>No content</em></p>' }} 
-/>
-
+                  <div dangerouslySetInnerHTML={{ __html: formData.content }} />
                 </div>
               )}
-            </div> 
+            </div>
 
             {/* Padding إضافي وقت التحرير */}
             {isEditing && <div className="pt-16"></div>}
@@ -546,7 +411,7 @@ const BulletinModal = ({
   );
 };
 
-// Main BulletinsManager Component
+// Main BulletinsManager Component (يبقى كما هو بدون تغيير)
 const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState([]);
   const [filteredBulletins, setFilteredBulletins] = useState([]);
@@ -809,7 +674,7 @@ const BulletinsManager = () => {
               <Plus className="w-5 h-5 mr-2" />
               Add Bulletin
             </button>
-          )} 
+          )}
         </div>
       )}
 
@@ -825,4 +690,4 @@ const BulletinsManager = () => {
   );
 };
 
-export default BulletinsManager;  
+export default BulletinsManager;
