@@ -16,15 +16,8 @@ import { supabase } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-// ✅ تثبيت: npm install quill-table-ui
-import 'quill-table-ui/dist/index.css';
-import QuillTableUI from 'quill-table-ui';
 
-// ✅ تسجيل وحدة الجداول في Quill
-if (typeof window !== 'undefined') {
-  const Quill = ReactQuill.Quill;
-  Quill.register('modules/table', QuillTableUI);
-}
+
 
 // ✅ BulletinModal — مدمج داخل الملف
 const BulletinModal = ({
@@ -198,14 +191,14 @@ const BulletinModal = ({
         [{ 'align': [] }],
         ['blockquote', 'code-block'],
         ['link', 'image'],
-        [{ 'table': 'insert-table' }], // ✅ دعم الجداول
+     
         ['clean']
       ],
       handlers: {
         image: imageHandler
       }
     },
-    table: true // ✅ تمكين وحدة الجداول
+  
   };
 
   const quillFormats = [
@@ -214,7 +207,7 @@ const BulletinModal = ({
     'list', 'bullet', 'align',
     'blockquote', 'code-block',
     'link', 'image',
-    'table' // ✅ دعم الجداول
+ 
   ];
 
   // ✅ حفظ النموذج
