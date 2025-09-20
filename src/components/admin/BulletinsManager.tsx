@@ -135,37 +135,20 @@ const BulletinModal = ({
     }
   };
 
+  // Custom image handler for rich text editor
   const imageHandler = async () => {
-  const input = document.createElement('input');
-  input.setAttribute('type', 'file');
-  input.setAttribute('accept', 'image/*');
-  input.click();
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
 
-  input.onchange = async () => {
-    const file = input.files[0];
-    if (file) {
-      // ارفع الصورة على Supabase
-      const { data, error } = await supabase.storage
-        .from('bulletins')
-        .upload(`content/${Date.now()}_${file.name}`, file);
-
-      if (error) {
-        console.error("Upload error:", error.message);
-        return;
+    input.onchange = async () => {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        await uploadImageToEditor(file);
       }
-
-      const { data: publicUrlData } = supabase.storage
-        .from('bulletins')
-        .getPublicUrl(data.path);
-
-      const quill = quillRef.current.getEditor();
-      const range = quill.getSelection();
-
-      quill.insertEmbed(range.index, 'image', publicUrlData.publicUrl);
-    }
+    };
   };
-};
-
 
   const uploadImageToEditor = async (file) => {
   try {
@@ -207,23 +190,20 @@ const BulletinModal = ({
     setUploadingImage(false);
   }
 };
- // ⚡️ إعداد الـ modules مع ربط زر الصورة
-const quillModules = {
-  toolbar: {
-    container: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      ['blockquote', 'code-block'],
-      ['link', 'image'], // لازم يبقى موجود
-      ['clean']
-    ],
-    handlers: {
-      image: () => imageHandler(), // ⬅️ استدعاء الدالة
-    },
-  },
-};
+  // Quill modules configuration for rich text editing
+  const quillModules = {
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'], 
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['link', 'image'],
+        ['clean']
+      ],
 
+    }
+  };
 
   const quillFormats = [
     'header',
