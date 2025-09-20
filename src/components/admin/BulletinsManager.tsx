@@ -190,22 +190,22 @@ const BulletinModal = ({
     setUploadingImage(false);
   }
 };
-  // Quill modules configuration for rich text editing
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean']
-      ],
-      handlers: {
-        image: imageHandler, // ⬅️ ربطنا زر الصورة مع دالتك
-      },
+ // ⚡️ إعداد الـ modules مع ربط زر الصورة
+const quillModules = {
+  toolbar: {
+    container: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      ['blockquote', 'code-block'],
+      ['link', 'image'], // لازم يبقى موجود
+      ['clean']
+    ],
+    handlers: {
+      image: () => imageHandler(), // ⬅️ استدعاء الدالة
     },
-  };
+  },
+};
 
 
   const quillFormats = [
