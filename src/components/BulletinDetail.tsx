@@ -15,21 +15,22 @@ const BulletinDetail = () => {
 
   useEffect(() => {
     if (id) {
-      fetchBulletin(id); 
+      fetchBulletin(id);
     }
   }, [id]);
 
   const fetchBulletin = async (bulletinId: string) => {
     try {
+      setLoading(true);
       const data = await api.getBulletin(bulletinId);
+      if (!data) {
+        setBulletin(null);
+        return;
+      }
       setBulletin(data);
-      
-      // Fetch related bulletins
-      const relatedData = await api.getBulletins();
-      const related = relatedData?.filter(b => 
-        b.id !== bulletinId && 
-        (b.category === data.category || b.subcategory === data.subcategory)
-      ).slice(0, 4) || [];
+
+      // ✅ جلب المقالات المرتبطة مباشرة من قاعدة البيانات
+      const related = await api.getRelatedBulletins(bulletinId, data.category, data.subcategory);
       setRelatedBulletins(related);
     } catch (error) {
       console.error('Error fetching bulletin:', error);
@@ -88,7 +89,7 @@ const BulletinDetail = () => {
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Systems
           </button>
-          
+
           <div className="flex items-center space-x-3 mb-4">
             <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
               {bulletin.category}
@@ -97,11 +98,11 @@ const BulletinDetail = () => {
               {bulletin.subcategory}
             </span>
           </div>
-          
+
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
             {bulletin.title}
           </h1>
-          
+
           <p className="text-xl text-blue-100 leading-relaxed">
             {bulletin.shortDescription}
           </p>
@@ -119,8 +120,7 @@ const BulletinDetail = () => {
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(bulletin.content)
               }}
-            >
-            </motion.div>
+            />
           </article>
 
           {/* Related Articles */}
@@ -129,9 +129,10 @@ const BulletinDetail = () => {
               <FileText className="w-6 h-6 text-[#2C5DB6] mr-3" />
               Related Technical Bulletins
             </h3>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {relatedBulletins.map((relatedBulletin) => (
+
+            {relatedBulletins.length > 0 ? (
+              <div className="grid md:grid-cols-2 gap-6">
+                {relatedBulletins.map((relatedBulletin) => (
                   <div
                     key={relatedBulletin.id}
                     onClick={() => navigate(`/bulletin/${relatedBulletin.id}`)}
@@ -139,9 +140,12 @@ const BulletinDetail = () => {
                   >
                     <div className="h-32 overflow-hidden">
                       <img
-                        src={relatedBulletin.coverImage}
+                        src={relatedBulletin.coverImage || '/placeholder-image.jpg'}
                         alt={relatedBulletin.title}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
+                        }}
                       />
                     </div>
                     <div className="p-4">
@@ -157,7 +161,10 @@ const BulletinDetail = () => {
                     </div>
                   </div>
                 ))}
-            </div>
+              </div>
+            ) : (
+              <p className="text-gray-500 text-center py-8 italic">No related bulletins available at this time.</p>
+            )}
           </div>
 
           {/* Contact Section */}
