@@ -572,6 +572,7 @@ const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchBulletins();
+     fetchCategories(); // 👈 أضف هذا
   }, []);
 
   useEffect(() => {
@@ -592,24 +593,18 @@ const [categories, setCategories] = useState([]);
     setFilteredBulletins(filtered);
   }, [searchTerm, categoryFilter, bulletins]);
 
- const fetchBulletins = async () => {
+ const fetchCategories = async () => {
   try {
     const { data, error } = await supabase
-      .from('bulletins')
-      .select('*')
-      .order('created_at', { ascending: false });
+      .from('bulletin_categories_config')
+      .select('name')
+      .eq('is_active', true) // فقط الفئات النشطة
+      .order('sort_order', { ascending: true });
 
     if (error) throw error;
-    setBulletins(data || []);
-
-    // تحديث قائمة الفئات
-    const cats = [...new Set((data || []).map(b => b.category))];
-    setCategories(cats);
-
+    setCategories(data.map(cat => cat.name));
   } catch (error) {
-    console.error('Error fetching bulletins:', error);
-  } finally {
-    setLoading(false);
+    console.error('Error fetching categories:', error);
   }
 };
 
