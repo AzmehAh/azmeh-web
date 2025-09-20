@@ -334,8 +334,8 @@ const CategoryModal = ({
       if (error) throw error;
     }
 
-    onSave(); // لتحديث القائمة مباشرة (قد يحتوي بيانات قديمة)
-    await reorderCategories(); // 👈 هذا هو المفتاح! يعيد الترتيب ويحدث القائمة مجددًا
+    onSave(); 
+    await reorderCategories(); 
     onClose();
   } catch (error) {
     console.error('Error saving category:', error);
