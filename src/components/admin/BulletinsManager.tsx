@@ -201,9 +201,12 @@ const BulletinModal = ({
         ['link', 'image'],
         ['clean']
       ],
-
-    }
+      handlers: {
+        image: imageHandler, // ⬅️ ربطنا زر الصورة مع دالتك
+      },
+    },
   };
+
 
   const quillFormats = [
     'header',
