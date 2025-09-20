@@ -27,7 +27,7 @@ const BulletinModal = ({
     slug: '',
     title: '',
     short_description: '',
-    cover_image: '',
+    cover_image: '', 
     category: '',
     subcategory: '',
     content: '',
