@@ -25,7 +25,7 @@ const BulletinModal = ({
   isEditing, 
   onSave ,
   categories = [],
-   setCategories  
+  setCategories 
 }) => {
   const [formData, setFormData] = useState({
     slug: '',
@@ -559,7 +559,7 @@ const BulletinModal = ({
 };
 
 // Main BulletinsManager Component
-  const BulletinsManager = () => {
+const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState([]);
   const [filteredBulletins, setFilteredBulletins] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -568,14 +568,14 @@ const BulletinModal = ({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
+ useEffect(() => {
     fetchBulletins();
-     fetchCategories(); 
+    fetchCategories(); 
   }, []);
 
-  useEffect(() => {
+ useEffect(() => {
     let filtered = bulletins;
 
     if (searchTerm) {
@@ -593,21 +593,70 @@ const [categories, setCategories] = useState([]);
     setFilteredBulletins(filtered);
   }, [searchTerm, categoryFilter, bulletins]);
 
- const fetchCategories = async () => {
-  try {
-    const { data, error } = await supabase
-      .from('bulletin_categories_config')
-      .select('name')
-      .eq('is_active', true) // فقط الفئات النشطة
-      .order('sort_order', { ascending: true });
+   const fetchBulletins = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('bulletins')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-    if (error) throw error;
-    setCategories(data.map(cat => cat.name));
-  } catch (error) {
-    console.error('Error fetching categories:', error);
-  }
-};
+      if (error) throw error;
+      setBulletins(data || []);
+    } catch (error) {
+      console.error('Error fetching bulletins:', error);
+      alert('Error loading bulletins');
+    } finally {
+      setLoading(false);
+    }
+  };
+  const fetchCategories = async () => {
+    try {
+      // جلب الفئات من جدول الفئات الخاص بالبوستات
+      const { data, error } = await supabase
+        .from('bulletin_categories_config')
+        .select('name')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
 
+      if (error) throw error;
+      
+      // إذا كان الجدول فارغاً أو غير موجود، نستخدم الفئات الموجودة في البوستات
+      if (!data || data.length === 0) {
+        // جلب الفئات الفريدة من البوستات الحالية
+        const { data: bulletinsData } = await supabase
+          .from('bulletins')
+          .select('category')
+          .not('category', 'is', null);
+        
+        if (bulletinsData) {
+          const uniqueCategories = [...new Set(bulletinsData.map(b => b.category))].filter(Boolean);
+          setCategories(uniqueCategories);
+        }
+      } else {
+        // استخدام الفئات من جدول الإعدادات
+        setCategories(data.map(cat => cat.name));
+      }
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      
+      // Fallback: جلب الفئات من البوستات في حالة حدوث خطأ
+      try {
+        const { data: bulletinsData } = await supabase
+          .from('bulletins')
+          .select('category')
+          .not('category', 'is', null);
+        
+        if (bulletinsData) {
+          const uniqueCategories = [...new Set(bulletinsData.map(b => b.category))].filter(Boolean);
+          setCategories(uniqueCategories);
+        }
+      } catch (fallbackError) {
+        console.error('Fallback category fetch failed:', fallbackError);
+        setCategories([]);
+      }
+    }
+  };
   const deleteBulletin = async (id) => {
     if (!confirm('Are you sure you want to delete this bulletin?')) return;
 
