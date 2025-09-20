@@ -24,7 +24,7 @@ const BulletinDetail = () => {
       const data = await api.getBulletin(bulletinId);
       setBulletin(data);
       
-      // Fetch related bulletins من Supabase مباشرة
+// Fetch related bulletins من Supabase مباشرة
 const { data: related, error: relatedError } = await supabase
   .from('bulletins')
   .select('*')
@@ -39,6 +39,13 @@ if (relatedError) {
   setRelatedBulletins(related || []);
 }
 
+    } catch (error) {
+      console.error('Error fetching bulletin:', error);
+      setBulletin(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   if (loading) {
     return (
