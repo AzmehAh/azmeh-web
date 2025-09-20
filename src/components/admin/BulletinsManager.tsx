@@ -23,7 +23,10 @@ const BulletinModal = ({
   onClose, 
   bulletin, 
   isEditing, 
-  onSave 
+  onSave,
+ categories,   // ← أضف هذا
+  setCategories // ← أضف هذا إذا كنت ستعدل الفئات
+}) => {
 }) => {
   const [formData, setFormData] = useState({
     slug: '',
