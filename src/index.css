@@ -205,8 +205,8 @@
   }
 }
 .prose img {
-  max-width: 200px; /* أو أي حجم مناسب */
-  height: auto;
+  max-width: 10px; /* أو أي حجم مناسب */
+  height: 10px;
   border-radius: 8px; /* لو حابب corners */
 }
 
