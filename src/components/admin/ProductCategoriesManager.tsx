@@ -9,7 +9,7 @@ import {
   X,
   Package,
   ChevronDown,
-  ChevronUp
+  ChevronUp 
 } from 'lucide-react';
 import { supabase, ProductCategory } from '../../lib/supabase';
 
@@ -21,64 +21,7 @@ const ProductCategoriesManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-const reorderCategories = async () => {
-  try {
-    // جلب أحدث البيانات
-    const { data: categoriesData, error: fetchError } = await supabase
-      .from('product_categories')
-      .select('*')
-      .order('sort_order', { ascending: true });
 
-    if (fetchError) throw fetchError;
-    if (!categoriesData || categoriesData.length === 0) return;
-
-    // فقط الفئات النشطة (اختياري - يمكنك إزالة هذا السطر إذا أردت ترتيب الجميع)
-    const activeCategories = categoriesData.filter(c => c.is_active);
-
-    // فرز حسب sort_order الحالي (للتأكد)
-    const sorted = [...activeCategories].sort((a, b) => a.sort_order - b.sort_order);
-
-    // تحديث الترتيب ليكون 0, 1, 2...
-    const updates = sorted.map((category, index) => ({
-      id: category.id,
-      sort_order: index
-    }));
-
-    // تحديث جميع الفئات معًا
-    const updatePromises = updates.map(update =>
-      supabase
-        .from('product_categories')
-        .update({ sort_order: update.sort_order })
-        .eq('id', update.id)
-    );
-
-    await Promise.all(updatePromises);
-
-    // تأخير بسيط لضمان استقرار البيانات (اختياري لكن مفيد)
-    await new Promise(resolve => setTimeout(resolve, 300));
-
-    // إعادة جلب البيانات لتحديث الواجهة
-    await fetchCategories();
-
-    // ✅ اختياري: التحقق من أن الترتيب تم تطبيقه
-    const { data: finalData } = await supabase
-      .from('product_categories')
-      .select('id, sort_order, is_active')
-      .order('sort_order', { ascending: true });
-
-    const checkSorted = finalData
-      .filter(c => c.is_active)
-      .every((cat, idx) => cat.sort_order === idx);
-
-    if (!checkSorted) {
-      console.warn("Warning: Product categories may not be correctly reordered.");
-    }
-
-  } catch (error) {
-    console.error('Error reordering product categories:', error);
-    alert('Failed to reorder categories. Please refresh the page.');
-  }
-};
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -267,8 +210,7 @@ const reorderCategories = async () => {
         onClose={closeModal}
         category={selectedCategory}
         isEditing={isEditing}
-        onSave={fetchCategories}  
-        reorderCategories={reorderCategories}
+        onSave={fetchCategories}
       />
     </div>
   );
@@ -280,15 +222,13 @@ const CategoryModal = ({
   onClose, 
   category, 
   isEditing, 
-  onSave ,
-  reorderCategories
+  onSave 
 }: {
   isOpen: boolean;
   onClose: () => void;
   category: ProductCategory | null;
   isEditing: boolean;
   onSave: () => void;
-  reorderCategories: () => Promise<void>; 
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -317,33 +257,32 @@ const CategoryModal = ({
   }, [category]);
 
   const handleSave = async () => {
-  setSaving(true);
-  try {
-    if (category) {
-      const { error } = await supabase
-        .from('product_categories')
-        .update(formData)
-        .eq('id', category.id);
-      
-      if (error) throw error;
-    } else {
-      const { error } = await supabase
-        .from('product_categories')
-        .insert([formData]);
-      
-      if (error) throw error;
-    }
+    setSaving(true);
+    try {
+      if (category) {
+        const { error } = await supabase
+          .from('product_categories')
+          .update(formData)
+          .eq('id', category.id);
+        
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('product_categories')
+          .insert([formData]);
+        
+        if (error) throw error;
+      }
 
-    onSave(); 
-    await reorderCategories(); 
-    onClose();
-  } catch (error) {
-    console.error('Error saving category:', error);
-    alert('Error saving category');
-  } finally {
-    setSaving(false);
-  }
-};
+      onSave();
+      onClose();
+    } catch (error) {
+      console.error('Error saving category:', error);
+      alert('Error saving category');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   if (!isOpen) return null;
 
