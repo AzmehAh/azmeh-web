@@ -798,6 +798,21 @@ export const api = {
     return data;
   },
 
+  async getRelatedBulletins(currentBulletinId: string, category: string, subcategory: string) {
+    const { data, error } = await supabase
+      .from('bulletins')
+      .select('*')
+      .eq('status', 'published')
+      .eq('category', category)
+      .eq('subcategory', subcategory)
+      .neq('id', currentBulletinId)
+      .order('created_at', { ascending: false })
+      .limit(3);
+    
+    if (error) throw error;
+    return data;
+  },
+
   // Enhanced Bulletins API
   async getBulletinsWithFilters(filters: {
     category?: string;
