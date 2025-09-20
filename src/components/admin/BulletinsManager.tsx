@@ -1,31 +1,27 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
-import {
-  Plus,
-  Search,
-  Edit,
-  Trash2,
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Plus, 
+  Search, 
+  Edit, 
+  Trash2, 
   Save,
   X,
   FileText,
   Eye,
   Star,
-  Upload
+  Calendar,
+  Tag
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { Editor } from '@tinymce/tinymce-react';
 
-
-
-
-// ✅ BulletinModal — مدمج داخل الملف
-const BulletinModal = ({
-  isOpen,
-  onClose,
-  bulletin,
-  isEditing,
-  onSave
+const BulletinModal = ({ 
+  isOpen, 
+  onClose, 
+  bulletin, 
+  isEditing, 
+  onSave 
 }) => {
   const [formData, setFormData] = useState({
     slug: '',
@@ -36,30 +32,27 @@ const BulletinModal = ({
     subcategory: '',
     content: '',
     status: 'draft',
-    featured: false,
+    featured: false, 
     author: 'Al Azmeh Paints',
     tags: ''
   });
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
-  const [uploadingCover, setUploadingCover] = useState(false);
-  const quillRef = useRef(null);
 
-  // ✅ عند تحميل bulletin جديد، نعيد تعيين formData
   useEffect(() => {
     if (bulletin) {
       setFormData({
-        slug: bulletin.slug || '',
-        title: bulletin.title || '',
+        slug: bulletin.slug,
+        title: bulletin.title,
         short_description: bulletin.short_description || '',
         cover_image: bulletin.cover_image || '',
-        category: bulletin.category || '',
-        subcategory: bulletin.subcategory || '',
+        category: bulletin.category,
+        subcategory: bulletin.subcategory,
         content: typeof bulletin.content === 'string' ? bulletin.content : '',
         status: bulletin.status || 'draft',
         featured: bulletin.featured || false,
         author: bulletin.author || 'Al Azmeh Paints',
-        tags: Array.isArray(bulletin.tags) ? bulletin.tags.join(', ') : ''
+        tags: bulletin.tags ? bulletin.tags.join(', ') : ''
       });
     } else {
       setFormData({
@@ -78,145 +71,39 @@ const BulletinModal = ({
     }
   }, [bulletin]);
 
-  // ✅ رفع الصورة إلى Supabase Storage
-  const uploadImage = async (file, path) => {
-    try {
-      if (!file || !file.type.startsWith('image/')) {
-        alert('Please select a valid image file');
-        return null;
-      }
-
-      if (file.size > 5 * 1024 * 1024) {
-        alert('Image size should be less than 5MB');
-        return null;
-      }
-
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-      const filePath = `${path}/${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('system-media')
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: false
-        });
-
-      if (uploadError) {
-        console.error('Upload error:', uploadError);
-        throw uploadError;
-      }
-
-      const { data } = supabase.storage
-        .from('system-media')
-        .getPublicUrl(filePath);
-
-      return data?.publicUrl || null;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      alert('Error uploading image: ' + (error.message || 'Unknown error'));
-      return null;
-    }
-  };
-
-  // ✅ رفع صورة الغلاف
-  const handleCoverImageUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    try {
-      setUploadingCover(true);
-      const imageUrl = await uploadImage(file, 'bulletins/covers');
-      if (imageUrl) {
-        setFormData(prev => ({ ...prev, cover_image: imageUrl }));
-      }
-    } catch (error) {
-      console.error('Error uploading cover image:', error);
-    } finally {
-      setUploadingCover(false);
-    }
-  };
-
-  // ✅ معالج رفع الصورة داخل المحرر
-  const imageHandler = () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      const file = input.files?.[0];
-      if (!file) return;
-      await uploadImageToEditor(file);
-    };
-  };
-
-  // ✅ رفع الصورة وإدراجها في المحرر
-  const uploadImageToEditor = async (file) => {
+  // Upload image for rich text editor
+  const uploadImageToEditor = async (file, success, failure) => {
     try {
       setUploadingImage(true);
-      const imageUrl = await uploadImage(file, 'bulletins/content');
+      const fileExt = file.name.split('.').pop();
+      const fileName = `bulletin-content-${Date.now()}.${fileExt}`;
+      const filePath = `bulletins/content/${fileName}`;
 
-      if (!imageUrl) {
-        alert('Failed to upload image.');
-        return;
-      }
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(filePath, file);
 
-      const editor = quillRef.current?.getEditor();
-      if (!editor) {
-        console.warn('Quill editor not ready');
-        return;
-      }
+      if (uploadError) throw uploadError;
 
-      const range = editor.getSelection();
-      const index = range ? range.index : editor.getLength();
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(filePath);
 
-      editor.insertEmbed(index, 'image', imageUrl, 'user');
-      editor.setSelection(index + 1, 0);
+      success(publicUrl);
     } catch (error) {
-      console.error('Error uploading image to editor:', error);
-      alert('Error uploading image: ' + (error.message || 'Unknown error'));
+      console.error('Error uploading image:', error);
+      failure('Error uploading image');
     } finally {
       setUploadingImage(false);
     }
   };
 
-  // ✅ إعدادات أدوات المحرر (بما في ذلك الجداول)
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        [{ 'align': [] }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-     
-        ['clean']
-      ],
-      handlers: {
-        image: imageHandler
-      }
-    },
-  
-  };
-
-  const quillFormats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet', 'align',
-    'blockquote', 'code-block',
-    'link', 'image',
- 
-  ];
-
-  // ✅ حفظ النموذج
   const handleSave = async () => {
     setSaving(true);
     try {
       const bulletinData = {
-        slug: formData.slug.trim(),
-        title: formData.title.trim(),
+        slug: formData.slug,
+        title: formData.title,
         short_description: formData.short_description || null,
         cover_image: formData.cover_image || null,
         category: formData.category,
@@ -225,27 +112,22 @@ const BulletinModal = ({
         status: formData.status,
         featured: formData.featured,
         author: formData.author,
-        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(t => t) : [],
+        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
         updated_at: new Date().toISOString()
       };
-
-      if (!bulletinData.slug || !bulletinData.title || !bulletinData.category || !bulletinData.subcategory) {
-        alert('Please fill all required fields');
-        return;
-      }
 
       if (bulletin) {
         const { error } = await supabase
           .from('bulletins')
           .update(bulletinData)
           .eq('id', bulletin.id);
-
+        
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('bulletins')
           .insert([bulletinData]);
-
+        
         if (error) throw error;
       }
 
@@ -253,7 +135,7 @@ const BulletinModal = ({
       onClose();
     } catch (error) {
       console.error('Error saving bulletin:', error);
-      alert('Error saving bulletin: ' + error.message);
+      alert('Error saving bulletin');
     } finally {
       setSaving(false);
     }
@@ -264,7 +146,7 @@ const BulletinModal = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="fixed inset-0 bg-black bg-opacity-50" onClick={onClose} />
-
+      
       <div className="flex min-h-full items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -346,40 +228,16 @@ const BulletinModal = ({
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Cover Image URL</label>
                   {isEditing ? (
-                    <div className="space-y-2">
-                      {formData.cover_image && (
-                        <div className="relative w-full h-32 rounded border overflow-hidden">
-                          <img
-                            src={formData.cover_image}
-                            alt="Cover preview"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
-                        <Upload className="w-4 h-4 mr-2" />
-                        {uploadingCover ? 'Uploading...' : 'Upload Cover Image'}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleCoverImageUpload}
-                          className="hidden"
-                          disabled={uploadingCover}
-                        />
-                      </label>
-                    </div>
+                    <input
+                      type="url"
+                      value={formData.cover_image}
+                      onChange={(e) => setFormData(prev => ({ ...prev, cover_image: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                    />
                   ) : (
-                    formData.cover_image ? (
-                      <img
-                        src={formData.cover_image}
-                        alt="Cover"
-                        className="w-full h-32 object-cover rounded border"
-                      />
-                    ) : (
-                      <p className="text-gray-500">No cover image</p>
-                    )
+                    <p className="text-gray-900">{formData.cover_image}</p>
                   )}
                 </div>
               </div>
@@ -428,8 +286,8 @@ const BulletinModal = ({
                     </select>
                   ) : (
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      formData.status === 'published'
-                        ? 'bg-green-100 text-green-800'
+                      formData.status === 'published' 
+                        ? 'bg-green-100 text-green-800' 
                         : 'bg-yellow-100 text-yellow-800'
                     }`}>
                       {formData.status}
@@ -470,9 +328,11 @@ const BulletinModal = ({
 
             {/* Content */}
             <div className="px-6 pb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Content *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Content *
+              </label>
               {isEditing ? (
-                <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <>
                   {uploadingImage && (
                     <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
                       <div className="flex items-center">
@@ -481,26 +341,39 @@ const BulletinModal = ({
                       </div>
                     </div>
                   )}
-                  <ReactQuill
-                    ref={quillRef}
-                    theme="snow"
+                  <Editor
+                    apiKey="your-api-key-here" // استبدل بمفتاح API الخاص بك
                     value={formData.content}
-                    onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
-                    modules={quillModules}
-                    formats={quillFormats}
-                    className="h-96"
-                    placeholder="Start writing your bulletin content..."
-                    key={bulletin?.id || 'new'} // ✅ مهم جدًا لإعادة تهيئة المحرر عند تغيير المحتوى
+                    onEditorChange={(content) => {
+                      setFormData(prev => ({ ...prev, content }));
+                    }}
+                    init={{
+                      height: 500,
+                      menubar: 'file edit view insert format tools table help',
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                      ],
+                      toolbar: 'undo redo | formatselect | bold italic underline strikethrough | \
+                               alignleft aligncenter alignright alignjustify | \
+                               bullist numlist outdent indent | link image media table | \
+                               removeformat | help',
+                      images_upload_handler: function (blobInfo, success, failure) {
+                        uploadImageToEditor(blobInfo.blob(), success, failure);
+                      },
+                      content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; }'
+                    }}
                   />
-                </div>
+                </>
               ) : (
-                <div
-                  className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200"
-                  dangerouslySetInnerHTML={{ __html: formData.content || '<p><em>No content</em></p>' }}
-                />
+                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                </div>
               )}
             </div>
 
+            {/* Padding إضافي وقت التحرير */}
             {isEditing && <div className="pt-16"></div>}
           </div>
 
@@ -526,10 +399,10 @@ const BulletinModal = ({
                 ) : (
                   <>
                     <Save className="w-4 h-4 mr-2" />
-                    Save Bulletin
+                    Save Bulletin 
                   </>
                 )}
-              </button>
+              </button> 
             </div>
           )}
         </motion.div>
@@ -538,7 +411,7 @@ const BulletinModal = ({
   );
 };
 
-// ✅ المكون الرئيسي
+// Main BulletinsManager Component (يبقى كما هو بدون تغيير)
 const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState([]);
   const [filteredBulletins, setFilteredBulletins] = useState([]);
@@ -559,7 +432,7 @@ const BulletinsManager = () => {
     if (searchTerm) {
       filtered = filtered.filter(bulletin =>
         bulletin.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (bulletin.short_description?.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        bulletin.short_description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         bulletin.subcategory.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -612,8 +485,8 @@ const BulletinsManager = () => {
         .eq('id', id);
 
       if (error) throw error;
-
-      setBulletins(bulletins.map(b =>
+      
+      setBulletins(bulletins.map(b => 
         b.id === id ? { ...b, featured: !featured } : b
       ));
     } catch (error) {
@@ -709,8 +582,8 @@ const BulletinsManager = () => {
               )}
               <div className="absolute top-2 left-2 flex space-x-1">
                 <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                  bulletin.status === 'published'
-                    ? 'bg-green-100 text-green-800'
+                  bulletin.status === 'published' 
+                    ? 'bg-green-100 text-green-800' 
                     : 'bg-yellow-100 text-yellow-800'
                 }`}>
                   {bulletin.status}
@@ -733,7 +606,7 @@ const BulletinsManager = () => {
                   <p className="text-xs text-gray-500 mb-2">{bulletin.subcategory}</p>
                 </div>
               </div>
-
+              
               {bulletin.short_description && (
                 <p className="text-sm text-gray-600 line-clamp-3 mb-4">
                   {bulletin.short_description}
@@ -757,8 +630,8 @@ const BulletinsManager = () => {
                 <button
                   onClick={() => toggleFeatured(bulletin.id, bulletin.featured || false)}
                   className={`p-2 rounded transition-colors ${
-                    bulletin.featured
-                      ? 'text-yellow-600 hover:bg-yellow-50'
+                    bulletin.featured 
+                      ? 'text-yellow-600 hover:bg-yellow-50' 
                       : 'text-gray-600 hover:text-yellow-600 hover:bg-yellow-50'
                   }`}
                   title="Toggle Featured"
