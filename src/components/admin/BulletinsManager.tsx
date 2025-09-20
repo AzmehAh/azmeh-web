@@ -318,22 +318,17 @@ const BulletinModal = ({
                   )}
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
-                  {isEditing ? (
-                    <select
-                      value={formData.category}
-                      onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    >
-                      <option value="">Select Category</option>
-                      <option value="Paint Systems">Paint Systems</option>
-                      <option value="Technical Solutions">Technical Solutions</option>
-                    </select>
-                  ) : (
-                    <p className="text-gray-900">{formData.category}</p>
-                  )}
-                </div>
+               <select
+  value={formData.category}
+  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+>
+  <option value="">Select Category</option>
+  {categories.map(category => (
+    <option key={category} value={category}>{category}</option>
+  ))}
+</select>
+
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Subcategory *</label>
