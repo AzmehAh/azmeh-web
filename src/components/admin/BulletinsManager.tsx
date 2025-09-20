@@ -24,8 +24,8 @@ const BulletinModal = ({
   bulletin, 
   isEditing, 
   onSave,
- categories,   // ← أضف هذا
-  setCategories // ← أضف هذا إذا كنت ستعدل الفئات
+ categories,   
+  setCategories 
 }) => {
 }) => {
   const [formData, setFormData] = useState({
