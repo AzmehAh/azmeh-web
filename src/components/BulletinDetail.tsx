@@ -24,21 +24,13 @@ const BulletinDetail = () => {
       const data = await api.getBulletin(bulletinId);
       setBulletin(data);
       
-// Fetch related bulletins من Supabase مباشرة
-const { data: related, error: relatedError } = await supabase
-  .from('bulletins')
-  .select('*')
-  .neq('id', bulletinId) // استبعد المقالة الحالية
-  .or(`category.eq.${data.category},subcategory.eq.${data.subcategory}`) // شرط الفئة أو الفرعية
-  .limit(4);
-
-if (relatedError) {
-  console.error('Error fetching related bulletins:', relatedError);
-  setRelatedBulletins([]);
-} else {
-  setRelatedBulletins(related || []);
-}
-
+      // Fetch related bulletins
+      const relatedData = await api.getBulletins();
+      const related = relatedData?.filter(b => 
+        b.id !== bulletinId && 
+        (b.category === data.category || b.subcategory === data.subcategory)
+      ).slice(0, 4) || [];
+      setRelatedBulletins(related);
     } catch (error) {
       console.error('Error fetching bulletin:', error);
       setBulletin(null);
