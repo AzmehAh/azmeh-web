@@ -572,7 +572,7 @@ const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchBulletins();
-     fetchCategories(); // 👈 أضف هذا
+     fetchCategories(); 
   }, []);
 
   useEffect(() => {
