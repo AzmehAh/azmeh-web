@@ -59,7 +59,7 @@ useEffect(() => {
         Quill.register('modules/better-table', BetterTable, true);
       }
 
-      setBetterTableAvailable(true); // هنا نعلم أنه جاهز
+    // هنا نعلم أنه جاهز
       setBetterTableLoaded(true); // تم التحميل
     } catch (error) {
       console.error('فشل تحميل quill-better-table:', error);
