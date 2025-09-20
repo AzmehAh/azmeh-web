@@ -252,6 +252,11 @@ const BulletinModal = ({
     } finally {
       setSaving(false);
     }
+    // أضف الفئة الجديدة إلى القائمة إذا لم تكن موجودة
+if (!categories.includes(formData.category)) {
+  setCategories(prev => [...prev, formData.category]);
+}
+
   };
 
   if (!isOpen) return null;
@@ -545,7 +550,7 @@ const BulletinModal = ({
 };
 
 // Main BulletinsManager Component
-const BulletinsManager = () => {
+  const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState([]);
   const [filteredBulletins, setFilteredBulletins] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -554,6 +559,7 @@ const BulletinsManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     fetchBulletins();
@@ -577,21 +583,26 @@ const BulletinsManager = () => {
     setFilteredBulletins(filtered);
   }, [searchTerm, categoryFilter, bulletins]);
 
-  const fetchBulletins = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('bulletins')
-        .select('*')
-        .order('created_at', { ascending: false });
+ const fetchBulletins = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('bulletins')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setBulletins(data || []);
-    } catch (error) {
-      console.error('Error fetching bulletins:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    if (error) throw error;
+    setBulletins(data || []);
+
+    // تحديث قائمة الفئات
+    const cats = [...new Set((data || []).map(b => b.category))];
+    setCategories(cats);
+
+  } catch (error) {
+    console.error('Error fetching bulletins:', error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const deleteBulletin = async (id) => {
     if (!confirm('Are you sure you want to delete this bulletin?')) return;
