@@ -328,12 +328,12 @@ const BulletinModal = ({
       onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
     >
-      <option value="">Select Category</option>
       {categories.map(cat => (
-        <option key={cat} value={cat}>
-          {cat}
-        </option>
-      ))}
+  <option key={cat.id || cat} value={typeof cat === 'string' ? cat : cat.name}>
+    {typeof cat === 'string' ? cat : cat.name}
+  </option>
+))}
+     
     </select> 
   ) : (
     <p className="text-gray-900">{formData.category}</p>
