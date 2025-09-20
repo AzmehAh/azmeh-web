@@ -405,7 +405,7 @@ const ProductDetail = () => {
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-12 flex items-center justify-center">
-              <Shield className="w-8 h-8 text-green-600 mr-3" />
+              <Shield className=" prose prose-lg w-8 h-8 text-green-600 mr-3" />
               Storage Requirements
             </h2>
             <div
