@@ -838,6 +838,7 @@ const [categories, setCategories] = useState([]);
         bulletin={selectedBulletin} 
         isEditing={isEditing}
         onSave={fetchBulletins}
+         categories={categories} 
         setCategories={setCategories}
       />
     </div>
