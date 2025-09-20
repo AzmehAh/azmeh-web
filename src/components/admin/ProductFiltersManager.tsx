@@ -50,80 +50,107 @@ const ProductFiltersManager = () => {
       setLoading(false);
     }
   };
-   // إعادة ترتيب أنواع الفلاتر
-const reorderFilterTypes = async () => {
-  try {
-    const { data: filterTypesData, error } = await supabase
+
+  // إعادة ترتيب أنواع الفلاتر
+  const reorderFilterTypes = async () => {
+    try {
+      const { data: filterTypesData, error } = await supabase
+        .from('product_filter_types')
+        .select('*')
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+      if (!filterTypesData || filterTypesData.length === 0) return;
+
+      const activeTypes = filterTypesData.filter(t => t.is_active);
+      const sorted = [...activeTypes].sort((a, b) => a.sort_order - b.sort_order);
+
+      const updates = sorted.map((type, index) => ({
+        id: type.id,
+        sort_order: index
+      }));
+
+      await Promise.all(
+        updates.map(update =>
+          supabase
+            .from('product_filter_types')
+            .update({ sort_order: update.sort_order })
+            .eq('id', update.id)
+        )
+      );
+
+      await new Promise(resolve => setTimeout(resolve, 300));
+      await fetchFilterData();
+
+    } catch (error) {
+      console.error('Error reordering filter types:', error);
+      alert('Failed to reorder filter types');
+    }
+  };
+
+  // إعادة ترتيب قيم الفلتر حسب نوع الفلتر
+  const reorderFilterValues = async (filterTypeId: string) => {
+    try {
+      const { data: filterValuesData, error } = await supabase
+        .from('product_filter_values')
+        .select('*')
+        .eq('filter_type_id', filterTypeId)
+        .order('sort_order', { ascending: true });
+
+      if (error) throw error;
+      if (!filterValuesData || filterValuesData.length === 0) return;
+
+      const activeValues = filterValuesData.filter(v => v.is_active);
+      const sorted = [...activeValues].sort((a, b) => a.sort_order - b.sort_order);
+
+      const updates = sorted.map((value, index) => ({
+        id: value.id,
+        sort_order: index
+      }));
+
+      await Promise.all(
+        updates.map(update =>
+          supabase
+            .from('product_filter_values')
+            .update({ sort_order: update.sort_order })
+            .eq('id', update.id)
+        )
+      );
+
+      await new Promise(resolve => setTimeout(resolve, 300));
+      await fetchFilterData();
+
+    } catch (error) {
+      console.error('Error reordering filter values:', error);
+      alert('Failed to reorder filter values');
+    }
+  };
+
+  // الحصول على أعلى ترتيب فرز لأنواع الفلاتر
+  const getMaxFilterTypeSortOrder = async () => {
+    const { data, error } = await supabase
       .from('product_filter_types')
-      .select('*')
-      .order('sort_order', { ascending: true });
+      .select('sort_order')
+      .order('sort_order', { ascending: false })
+      .limit(1);
 
     if (error) throw error;
-    if (!filterTypesData || filterTypesData.length === 0) return;
+    return data && data.length > 0 ? data[0].sort_order + 1 : 0;
+  };
 
-    const activeTypes = filterTypesData.filter(t => t.is_active); // اختياري
-    const sorted = [...activeTypes].sort((a, b) => a.sort_order - b.sort_order);
-
-    const updates = sorted.map((type, index) => ({
-      id: type.id,
-      sort_order: index
-    }));
-
-    await Promise.all(
-      updates.map(update =>
-        supabase
-          .from('product_filter_types')
-          .update({ sort_order: update.sort_order })
-          .eq('id', update.id)
-      )
-    );
-
-    await new Promise(resolve => setTimeout(resolve, 300));
-    await fetchFilterData(); // لتحديث الواجهة
-
-  } catch (error) {
-    console.error('Error reordering filter types:', error);
-    alert('Failed to reorder filter types');
-  }
-};
-
-// إعادة ترتيب قيم الفلتر حسب نوع الفلتر
-const reorderFilterValues = async (filterTypeId: string) => {
-  try {
-    const { data: filterValuesData, error } = await supabase
+  // الحصول على أعلى ترتيب فرز لقيم الفلتر لنوع معين
+  const getMaxFilterValueSortOrder = async (filterTypeId: string) => {
+    const { data, error } = await supabase
       .from('product_filter_values')
-      .select('*')
+      .select('sort_order')
       .eq('filter_type_id', filterTypeId)
-      .order('sort_order', { ascending: true });
+      .order('sort_order', { ascending: false })
+      .limit(1);
 
     if (error) throw error;
-    if (!filterValuesData || filterValuesData.length === 0) return;
+    return data && data.length > 0 ? data[0].sort_order + 1 : 0;
+  };
 
-    const activeValues = filterValuesData.filter(v => v.is_active); // اختياري
-    const sorted = [...activeValues].sort((a, b) => a.sort_order - b.sort_order);
-
-    const updates = sorted.map((value, index) => ({
-      id: value.id,
-      sort_order: index
-    }));
-
-    await Promise.all(
-      updates.map(update =>
-        supabase
-          .from('product_filter_values')
-          .update({ sort_order: update.sort_order })
-          .eq('id', update.id)
-      )
-    );
-
-    await new Promise(resolve => setTimeout(resolve, 300));
-    await fetchFilterData(); // لتحديث الواجهة
-
-  } catch (error) {
-    console.error('Error reordering filter values:', error);
-    alert('Failed to reorder filter values');
-  }
-};
   const toggleFilterType = (typeId: string) => {
     setExpandedTypes(prev => 
       prev.includes(typeId)
@@ -137,7 +164,7 @@ const reorderFilterValues = async (filterTypeId: string) => {
 
     try {
       await api.deleteProductFilterType(id);
-      await fetchFilterData();
+      await reorderFilterTypes();
     } catch (error) {
       console.error('Error deleting filter type:', error);
       alert('Error deleting filter type');
@@ -145,35 +172,65 @@ const reorderFilterValues = async (filterTypeId: string) => {
   };
 
   const deleteFilterValue = async (id: string) => {
-  if (!confirm('Are you sure you want to delete this filter value?')) return;
+    if (!confirm('Are you sure you want to delete this filter value?')) return;
 
-  try {
-    // جلب filter_type_id قبل الحذف (لأننا سنحتاجه لإعادة الترتيب)
-    const { data: valueData, error: fetchError } = await supabase
-      .from('product_filter_values')
-      .select('filter_type_id')
-      .eq('id', id)
-      .single();
+    try {
+      const { data: valueData, error: fetchError } = await supabase
+        .from('product_filter_values')
+        .select('filter_type_id')
+        .eq('id', id)
+        .single();
 
-    if (fetchError) throw fetchError;
+      if (fetchError) throw fetchError;
 
-    await api.deleteProductFilterValue(id);
-    await reorderFilterValues(valueData.filter_type_id); // 👈 إعادة ترتيب بعد الحذف
-  } catch (error) {
-    console.error('Error deleting filter value:', error);
-    alert('Error deleting filter value');
-  }
-};
+      await api.deleteProductFilterValue(id);
+      await reorderFilterValues(valueData.filter_type_id);
+    } catch (error) {
+      console.error('Error deleting filter value:', error);
+      alert('Error deleting filter value');
+    }
+  };
 
-  const openFilterTypeModal = (filterType: ProductFilterType | null = null, editing = false) => {
+  const openFilterTypeModal = async (filterType: ProductFilterType | null = null, editing = false) => {
     setSelectedFilterType(filterType);
     setIsEditing(editing);
+    
+    // إذا كان نوع فلتر جديد، احصل على ترتيب فرز جديد
+    if (!filterType) {
+      const maxSortOrder = await getMaxFilterTypeSortOrder();
+      setSelectedFilterType({
+        id: '',
+        name: '',
+        description: '',
+        sort_order: maxSortOrder,
+        is_active: true,
+        created_at: '',
+        updated_at: ''
+      });
+    }
+    
     setIsFilterTypeModalOpen(true);
   };
 
-  const openFilterValueModal = (filterValue: ProductFilterValue | null = null, editing = false, filterTypeId?: string) => {
-    setSelectedFilterValue(filterValue || { filter_type_id: filterTypeId } as ProductFilterValue);
+  const openFilterValueModal = async (filterValue: ProductFilterValue | null = null, editing = false, filterTypeId?: string) => {
+    setSelectedFilterValue(filterValue);
     setIsEditing(editing);
+    
+    // إذا كانت قيمة فلتر جديدة، احصل على ترتيب فرز جديد
+    if (!filterValue && filterTypeId) {
+      const maxSortOrder = await getMaxFilterValueSortOrder(filterTypeId);
+      setSelectedFilterValue({
+        id: '',
+        filter_type_id: filterTypeId,
+        value: '',
+        display_name: '',
+        sort_order: maxSortOrder,
+        is_active: true,
+        created_at: '',
+        updated_at: ''
+      });
+    }
+    
     setIsFilterValueModalOpen(true);
   };
 
@@ -301,6 +358,7 @@ const reorderFilterValues = async (filterTypeId: string) => {
                               {value.display_name && value.display_name !== value.value && (
                                 <p className="text-xs text-gray-500">{value.value}</p>
                               )}
+                              <p className="text-xs text-gray-400">Order: {value.sort_order}</p>
                             </div>
                             <div className="flex items-center space-x-2">
                               <button
@@ -366,7 +424,8 @@ const reorderFilterValues = async (filterTypeId: string) => {
         filterType={selectedFilterType}
         isEditing={isEditing}
         onSave={fetchFilterData}
-         reorderFilterTypes={reorderFilterTypes}
+        reorderFilterTypes={reorderFilterTypes}
+        getMaxFilterTypeSortOrder={getMaxFilterTypeSortOrder}
       />
 
       <FilterValueModal
@@ -376,6 +435,8 @@ const reorderFilterValues = async (filterTypeId: string) => {
         isEditing={isEditing}
         onSave={fetchFilterData}
         filterTypes={filterTypes}
+        reorderFilterValues={reorderFilterValues}
+        getMaxFilterValueSortOrder={getMaxFilterValueSortOrder}
       />
     </div>
   );
@@ -388,7 +449,8 @@ const FilterTypeModal = ({
   filterType, 
   isEditing, 
   onSave,
-  reorderFilterTypes
+  reorderFilterTypes,
+  getMaxFilterTypeSortOrder
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -396,6 +458,7 @@ const FilterTypeModal = ({
   isEditing: boolean;
   onSave: () => void;
   reorderFilterTypes: () => Promise<void>;
+  getMaxFilterTypeSortOrder: () => Promise<number>;
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -414,38 +477,40 @@ const FilterTypeModal = ({
         is_active: filterType.is_active
       });
     } else {
-      setFormData({
-        name: '',
-        description: '',
-        sort_order: 0,
-        is_active: true
+      // تعيين ترتيب فرز افتراضي لنوع الفلتر الجديد
+      getMaxFilterTypeSortOrder().then(maxOrder => {
+        setFormData(prev => ({
+          ...prev,
+          sort_order: maxOrder
+        }));
       });
     }
-  }, [filterType]);
-const handleSave = async () => {
-  if (!formData.filter_type_id || !formData.value) {
-    alert('Please fill in all required fields');
-    return;
-  }
+  }, [filterType, getMaxFilterTypeSortOrder]);
 
-  setSaving(true);
-  try {
-    if (filterValue && filterValue.id) {
-      await api.updateProductFilterValue(filterValue.id, formData);
-    } else {
-      await api.createProductFilterValue(formData);
+  const handleSave = async () => {
+    if (!formData.name) {
+      alert('Please fill in all required fields');
+      return;
     }
 
-    onSave();
-    await reorderFilterValues(formData.filter_type_id); // 👈 إعادة ترتيب القيم التابعة لهذا النوع
-    onClose();
-  } catch (error) {
-    console.error('Error saving filter value:', error);
-    alert('Error saving filter value');
-  } finally {
-    setSaving(false);
-  }
-};
+    setSaving(true);
+    try {
+      if (filterType && filterType.id) {
+        await api.updateProductFilterType(filterType.id, formData);
+      } else {
+        await api.createProductFilterType(formData);
+      }
+
+      onSave();
+      await reorderFilterTypes();
+      onClose();
+    } catch (error) {
+      console.error('Error saving filter type:', error);
+      alert('Error saving filter type');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   if (!isOpen) return null;
 
@@ -562,7 +627,9 @@ const FilterValueModal = ({
   filterValue, 
   isEditing, 
   onSave,
-  filterTypes
+  filterTypes,
+  reorderFilterValues,
+  getMaxFilterValueSortOrder
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -570,6 +637,8 @@ const FilterValueModal = ({
   isEditing: boolean;
   onSave: () => void;
   filterTypes: ProductFilterType[];
+  reorderFilterValues: (filterTypeId: string) => Promise<void>;
+  getMaxFilterValueSortOrder: (filterTypeId: string) => Promise<number>;
 }) => {
   const [formData, setFormData] = useState({
     filter_type_id: '',
@@ -590,15 +659,17 @@ const FilterValueModal = ({
         is_active: filterValue.is_active !== undefined ? filterValue.is_active : true
       });
     } else {
-      setFormData({
-        filter_type_id: '',
-        value: '',
-        display_name: '',
-        sort_order: 0,
-        is_active: true
-      });
+      // تعيين ترتيب فرز افتراضي لقيمة الفلتر الجديدة
+      if (formData.filter_type_id) {
+        getMaxFilterValueSortOrder(formData.filter_type_id).then(maxOrder => {
+          setFormData(prev => ({
+            ...prev,
+            sort_order: maxOrder
+          }));
+        });
+      }
     }
-  }, [filterValue]);
+  }, [filterValue, formData.filter_type_id, getMaxFilterValueSortOrder]);
 
   const handleSave = async () => {
     if (!formData.filter_type_id || !formData.value) {
@@ -615,6 +686,7 @@ const FilterValueModal = ({
       }
 
       onSave();
+      await reorderFilterValues(formData.filter_type_id);
       onClose();
     } catch (error) {
       console.error('Error saving filter value:', error);
@@ -652,7 +724,20 @@ const FilterValueModal = ({
               </label>
               <select
                 value={formData.filter_type_id}
-                onChange={(e) => setFormData(prev => ({ ...prev, filter_type_id: e.target.value }))}
+                onChange={(e) => {
+                  const newFilterTypeId = e.target.value;
+                  setFormData(prev => ({ ...prev, filter_type_id: newFilterTypeId }));
+                  
+                  // عند تغيير نوع الفلتر، احصل على ترتيب فرز جديد
+                  if (newFilterTypeId) {
+                    getMaxFilterValueSortOrder(newFilterTypeId).then(maxOrder => {
+                      setFormData(prev => ({
+                        ...prev,
+                        sort_order: maxOrder
+                      }));
+                    });
+                  }
+                }}
                 className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
               >
                 <option value="">Select a filter type</option>
