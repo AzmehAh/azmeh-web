@@ -13,19 +13,9 @@ const BulletinDetail = () => {
   const [relatedBulletins, setRelatedBulletins] = useState<Bulletin[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // دالة لخلط المصفوفات عشوائياً (Fisher-Yates shuffle)
-  const shuffleArray = (array: any[]) => {
-    const shuffled = [...array];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  };
-
   useEffect(() => {
     if (id) {
-      fetchBulletin(id);
+      fetchBulletin(id); 
     }
   }, [id]);
 
@@ -34,15 +24,12 @@ const BulletinDetail = () => {
       const data = await api.getBulletin(bulletinId);
       setBulletin(data);
       
-      // جلب النشرات المرتبطة وخلطها عشوائياً
+      // Fetch related bulletins
       const relatedData = await api.getBulletins();
-      let related = relatedData?.filter(b => 
+      const related = relatedData?.filter(b => 
         b.id !== bulletinId && 
         (b.category === data.category || b.subcategory === data.subcategory)
-      ) || [];
-      
-      // خلط النشرات المرتبطة عشوائياً
-      related = shuffleArray(related).slice(0, 4);
+      ).slice(0, 4) || [];
       setRelatedBulletins(related);
     } catch (error) {
       console.error('Error fetching bulletin:', error);
@@ -136,44 +123,44 @@ const BulletinDetail = () => {
             </motion.div>
           </article>
 
+          {/* Related Articles */}
+          <div className="mt-16 pt-8 border-t border-gray-200">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+              <FileText className="w-6 h-6 text-[#2C5DB6] mr-3" />
+              Related Technical Bulletins
+            </h3>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              {relatedBulletins.map((relatedBulletin) => (
+                  <div
+                    key={relatedBulletin.id}
+                    onClick={() => navigate(`/bulletin/${relatedBulletin.id}`)}
+                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                  >
+                    <div className="h-32 overflow-hidden">
+                      <img
+                        src={relatedBulletin.coverImage}
+                        alt={relatedBulletin.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <span className="inline-block px-2 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
+                        {relatedBulletin.subcategory}
+                      </span>
+                      <h4 className="text-lg font-semibold text-gray-900 group-hover:text-[#2C5DB6] transition-colors mb-2 line-clamp-2">
+                        {relatedBulletin.title}
+                      </h4>
+                      <p className="text-gray-600 text-sm line-clamp-2">
+                        {relatedBulletin.shortDescription}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          </div>
 
-      {/* Related Articles */}
-      <div className="mt-16 pt-8 border-t border-gray-200">
-        <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-          <FileText className="w-6 h-6 text-[#2C5DB6] mr-3" />
-          Related Technical Bulletins
-        </h3>
-        
-        <div className="grid md:grid-cols-2 gap-6">
-          {relatedBulletins.map((relatedBulletin) => (
-              <div
-                key={relatedBulletin.id}
-                onClick={() => navigate(`/bulletin/${relatedBulletin.id}`)}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
-              >
-                <div className="h-32 overflow-hidden">
-                  <img
-                    src={relatedBulletin.coverImage}
-                    alt={relatedBulletin.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                <div className="p-4">
-                  <span className="inline-block px-2 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
-                    {relatedBulletin.subcategory}
-                  </span>
-                  <h4 className="text-lg font-semibold text-gray-900 group-hover:text-[#2C5DB6] transition-colors mb-2 line-clamp-2">
-                    {relatedBulletin.title}
-                  </h4>
-                  <p className="text-gray-600 text-sm line-clamp-2">
-                    {relatedBulletin.shortDescription}
-                  </p>
-                </div>
-              </div>
-            ))}
-        </div>
-      </div>
-  {/* Contact Section */}
+          {/* Contact Section */}
           <div className="mt-16">
             <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white">
               <div className="text-center">
