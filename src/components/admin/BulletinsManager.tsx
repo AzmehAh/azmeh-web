@@ -45,7 +45,6 @@ const BulletinModal = ({
   const [uploadingImage, setUploadingImage] = useState(false);
 
 const [betterTableLoaded, setBetterTableLoaded] = useState(false);
-const [betterTableAvailable, setBetterTableAvailable] = useState(false);
 
 useEffect(() => {
   const loadBetterTable = async () => {
@@ -57,7 +56,7 @@ useEffect(() => {
         Quill.register('modules/better-table', BetterTable, true);
       }
 
-    // هنا نعلم أنه جاهز
+      setBetterTableAvailable(true); // هنا نعلم أنه جاهز
       setBetterTableLoaded(true); // تم التحميل
     } catch (error) {
       console.error('فشل تحميل quill-better-table:', error);
@@ -67,7 +66,26 @@ useEffect(() => {
   loadBetterTable();
 }, []);
 
-
+  // Check for BetterTable availability
+  useEffect(() => {
+    const checkBetterTable = () => {
+      if (BetterTable && !betterTableAvailable) {
+        setBetterTableAvailable(true);
+      }
+    };
+    
+    if (!betterTableAvailable) {
+      const interval = setInterval(checkBetterTable, 100);
+      const timeout = setTimeout(() => {
+        clearInterval(interval);
+      }, 5000);
+      
+      return () => {
+        clearInterval(interval);
+        clearTimeout(timeout);
+      };
+    }
+  }, [betterTableAvailable]);
 
   useEffect(() => {
     if (bulletin) {
@@ -445,83 +463,38 @@ const quillFormats = React.useMemo(() => [
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Content *
               </label>
-{isEditing ? (
-  <>
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
-      {uploadingImage && (
-        <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
-          <div className="flex items-center">
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-            Uploading image...
-          </div>
-        </div>
-      )}
-
-    <div className="border border-gray-200 rounded-lg overflow-hidden">
-  {uploadingImage && (
-    <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
-      <div className="flex items-center">
-        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-        Uploading image...
-      </div>
-    </div>
-  )}
-
-  <Editor
-    apiKey={import.meta.env.VITE_TINYMCE_API_KEY || 'no-api-key'} // اختياري — تعمل بدونه
-    value={formData.content}
-    onEditorChange={(content) => setFormData(prev => ({ ...prev, content }))}
-    init={{
-      height: 400,
-      menubar: false,
-      plugins: [
-        'advlist', 'autolink', 'lists', 'link', 'image',
-        'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
-        'code', 'fullscreen', 'insertdatetime', 'media', 'table',
-        'help', 'wordcount'
-      ],
-      toolbar:
-        'undo redo | blocks | bold italic underline strikethrough | \
-        alignleft aligncenter alignright alignjustify | \
-        bullist numlist outdent indent | removeformat | \
-        table | image | code | help',
-      content_style: 'body { font-family: Arial, sans-serif; font-size: 14px }',
-      images_upload_handler: async (blobInfo, success, failure) => {
-        try {
-          const file = blobInfo.blob();
-          const fileExt = file.name.split('.').pop();
-          const fileName = `bulletin-content-${Date.now()}.${fileExt}`;
-          const filePath = `bulletins/content/${fileName}`;
-
-          const { error: uploadError } = await supabase.storage
-            .from('images')
-            .upload(filePath, file);
-
-          if (uploadError) throw uploadError;
-
-          const { data: { publicUrl } } = supabase.storage
-            .from('images')
-            .getPublicUrl(filePath);
-
-          success(publicUrl); // TinyMCE يستخدم هذا لإدراج الصورة
-        } catch (error) {
-          console.error('Error uploading image:', error);
-          failure('Error uploading image');
-        }
-      }
-    }} 
-  />
-</div>
-
-    <div className="mt-2 text-sm text-gray-500">
-      <p>
-        {betterTableLoaded
-          ? 'To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.'
-          : 'Table functionality will be available once the module loads.'}
-      </p>
-    </div>
-  </>
-) : (
+              {isEditing ? (
+                <>
+                  <div className="border border-gray-200 rounded-lg overflow-hidden">
+                    {uploadingImage && (
+                      <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
+                        <div className="flex items-center">
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                          Uploading image...
+                        </div>
+                      </div>
+                    )}
+                    <ReactQuill
+                      theme="snow"
+                      value={formData.content}
+                      onChange={(value) =>
+                        setFormData((prev) => ({ ...prev, content: value }))
+                      }
+                      modules={quillModules}
+                      formats={quillFormats}
+                      className="h-96"         
+                      placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
+                    />
+                  </div> 
+                  <div className="mt-2 text-sm text-gray-500">
+                    <p>
+                      {betterTableAvailable 
+                        ? 'To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.'
+                        : 'Table functionality will be available once the module loads.'}
+                    </p>
+                  </div>
+                </>
+              ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
                   <div dangerouslySetInnerHTML={{ __html: formData.content }} />
                 </div>
