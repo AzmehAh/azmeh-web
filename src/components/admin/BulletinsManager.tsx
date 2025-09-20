@@ -47,6 +47,7 @@ const BulletinModal = ({
   const [uploadingImage, setUploadingImage] = useState(false);
 
 const [betterTableLoaded, setBetterTableLoaded] = useState(false);
+const [betterTableAvailable, setBetterTableAvailable] = useState(false);
 
 useEffect(() => {
   const loadBetterTable = async () => {
@@ -68,26 +69,7 @@ useEffect(() => {
   loadBetterTable();
 }, []);
 
-  // Check for BetterTable availability
-  useEffect(() => {
-    const checkBetterTable = () => {
-      if (BetterTable && !betterTableAvailable) {
-        setBetterTableAvailable(true);
-      }
-    };
-    
-    if (!betterTableAvailable) {
-      const interval = setInterval(checkBetterTable, 100);
-      const timeout = setTimeout(() => {
-        clearInterval(interval);
-      }, 5000);
-      
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timeout);
-      };
-    }
-  }, [betterTableAvailable]);
+
 
   useEffect(() => {
     if (bulletin) {
@@ -490,7 +472,7 @@ const quillFormats = React.useMemo(() => [
                   </div> 
                   <div className="mt-2 text-sm text-gray-500">
                     <p>
-                      {betterTableAvailable 
+                      {betterTableAvailable betterTableAvailable
                         ? 'To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.'
                         : 'Table functionality will be available once the module loads.'}
                     </p>
