@@ -23,10 +23,8 @@ const BulletinModal = ({
   onClose, 
   bulletin, 
   isEditing, 
-  onSave,
- categories,   
-  setCategories 
-}) => {
+  onSave 
+  
 }) => {
   const [formData, setFormData] = useState({
     slug: '',
@@ -831,6 +829,7 @@ const BulletinModal = ({
         bulletin={selectedBulletin} 
         isEditing={isEditing}
         onSave={fetchBulletins}
+      
         setCategories={setCategories}
       />
     </div>
