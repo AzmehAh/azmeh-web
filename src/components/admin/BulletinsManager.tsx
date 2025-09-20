@@ -252,9 +252,13 @@ const BulletinModal = ({
     } finally {
       setSaving(false);
     }
-    // أضف الفئة الجديدة إلى القائمة إذا لم تكن موجودة
-if (!categories.includes(formData.category)) {
-  setCategories(prev => [...prev, formData.category]);
+    if (!bulletin && formData.category && setCategories) {
+  setCategories(prev => {
+    if (!prev.includes(formData.category)) {
+      return [...prev, formData.category];
+    }
+    return prev;
+  });
 }
 
   };
@@ -650,7 +654,7 @@ if (!categories.includes(formData.category)) {
     setIsModalOpen(false);
   };
 
-  const categories = [...new Set(bulletins.map(b => b.category))];
+
 
   if (loading) {
     return (
@@ -829,6 +833,7 @@ if (!categories.includes(formData.category)) {
         bulletin={selectedBulletin} 
         isEditing={isEditing}
         onSave={fetchBulletins}
+        setCategories={setCategories}
       />
     </div>
   );
