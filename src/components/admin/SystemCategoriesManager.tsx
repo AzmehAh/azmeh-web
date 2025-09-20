@@ -349,7 +349,7 @@ const CategoryModal = ({
   } finally {
     setSaving(false);
   }
-};
+
 
     setSaving(true);
     try {
