@@ -301,6 +301,19 @@ const CategoryModal = ({
     return;
   }
 
+  // Check for duplicate names
+  try {
+    const existingCategory = await api.getBulletinCategoryByName(formData.name.trim());
+    if (existingCategory && (!category || existingCategory.id !== category.id)) {
+      alert('A category with this name already exists. Please choose a different name.');
+      return;
+    }
+  } catch (error) {
+    console.error('Error checking for duplicate category name:', error);
+    alert('Error checking category name. Please try again.');
+    return;
+  }
+
   setSaving(true);
   try {
     if (category) {

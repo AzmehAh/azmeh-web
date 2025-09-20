@@ -743,6 +743,17 @@ export const api = {
     if (error) throw error;
   },
 
+  async getBulletinCategoryByName(name: string) {
+    const { data, error } = await supabase
+      .from('bulletin_categories_config')
+      .select('*')
+      .eq('name', name)
+      .maybeSingle();
+    
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows returned
+    return data;
+  },
+
   // Enhanced Products API
   async getProductsWithFilters(filters: {
     category?: string;
