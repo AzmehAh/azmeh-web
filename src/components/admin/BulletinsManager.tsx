@@ -15,9 +15,7 @@ import {
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import ReactQuill, { Quill } from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
-import 'quill-better-table/dist/quill-better-table.css';
-
+import { Editor } from '@tinymce/tinymce-react';
 
 
 
@@ -459,27 +457,61 @@ const quillFormats = React.useMemo(() => [
         </div>
       )}
 
-      {!betterTableLoaded ? (
-        <div className="flex items-center justify-center h-96 bg-gray-50">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#0055A3] mx-auto mb-4"></div>
-            <p className="text-gray-600">Loading advanced table editor...</p>
-          </div>
-        </div>
-      ) : (
-        <ReactQuill
-          theme="snow"
-          value={formData.content}
-          onChange={(value) =>
-            setFormData((prev) => ({ ...prev, content: value }))
-          }
-          modules={quillModules}
-          formats={quillFormats}
-          className="h-96"
-          placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
-        />
-      )}
-    </div> 
+    <div className="border border-gray-200 rounded-lg overflow-hidden">
+  {uploadingImage && (
+    <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
+      <div className="flex items-center">
+        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+        Uploading image...
+      </div>
+    </div>
+  )}
+
+  <Editor
+    apiKey={import.meta.env.VITE_TINYMCE_API_KEY || 'no-api-key'} // اختياري — تعمل بدونه
+    value={formData.content}
+    onEditorChange={(content) => setFormData(prev => ({ ...prev, content }))}
+    init={{
+      height: 400,
+      menubar: false,
+      plugins: [
+        'advlist', 'autolink', 'lists', 'link', 'image',
+        'charmap', 'preview', 'anchor', 'searchreplace', 'visualblocks',
+        'code', 'fullscreen', 'insertdatetime', 'media', 'table',
+        'help', 'wordcount'
+      ],
+      toolbar:
+        'undo redo | blocks | bold italic underline strikethrough | \
+        alignleft aligncenter alignright alignjustify | \
+        bullist numlist outdent indent | removeformat | \
+        table | image | code | help',
+      content_style: 'body { font-family: Arial, sans-serif; font-size: 14px }',
+      images_upload_handler: async (blobInfo, success, failure) => {
+        try {
+          const file = blobInfo.blob();
+          const fileExt = file.name.split('.').pop();
+          const fileName = `bulletin-content-${Date.now()}.${fileExt}`;
+          const filePath = `bulletins/content/${fileName}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('images')
+            .upload(filePath, file);
+
+          if (uploadError) throw uploadError;
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('images')
+            .getPublicUrl(filePath);
+
+          success(publicUrl); // TinyMCE يستخدم هذا لإدراج الصورة
+        } catch (error) {
+          console.error('Error uploading image:', error);
+          failure('Error uploading image');
+        }
+      }
+    }} 
+  />
+</div>
 
     <div className="mt-2 text-sm text-gray-500">
       <p>
