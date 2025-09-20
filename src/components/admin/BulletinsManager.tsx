@@ -24,7 +24,8 @@ const BulletinModal = ({
   bulletin, 
   isEditing, 
   onSave ,
-  categories = []
+  categories = [],
+   setCategories  
 }) => {
   const [formData, setFormData] = useState({
     slug: '',
