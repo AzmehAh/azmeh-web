@@ -132,6 +132,18 @@ const reorderFilterValues = async (filterTypeId: string) => {
     );
   };
 
+  const deleteFilterType = async (id: string) => {
+    if (!confirm('Are you sure? This will delete the filter type and all its values.')) return;
+
+    try {
+      await api.deleteProductFilterType(id);
+      await fetchFilterData();
+    } catch (error) {
+      console.error('Error deleting filter type:', error);
+      alert('Error deleting filter type');
+    }
+  };
+
   const deleteFilterValue = async (id: string) => {
   if (!confirm('Are you sure you want to delete this filter value?')) return;
 
@@ -152,18 +164,6 @@ const reorderFilterValues = async (filterTypeId: string) => {
     alert('Error deleting filter value');
   }
 };
-
-  const deleteFilterValue = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this filter value?')) return;
-
-    try {
-      await api.deleteProductFilterValue(id);
-      await fetchFilterData();
-    } catch (error) {
-      console.error('Error deleting filter value:', error);
-      alert('Error deleting filter value');
-    }
-  };
 
   const openFilterTypeModal = (filterType: ProductFilterType | null = null, editing = false) => {
     setSelectedFilterType(filterType);
