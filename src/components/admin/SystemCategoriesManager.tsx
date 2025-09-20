@@ -265,7 +265,7 @@ const CategoryModal = ({
   isOpen: boolean;
   onClose: () => void;
   category: BulletinCategoryConfig | null;
-  isEditing: boolean;
+  isEditing: boolean; 
   onSave: () => void;
    reorderCategories: () => Promise<void>;
 }) => {
@@ -299,57 +299,7 @@ const CategoryModal = ({
     if (!formData.name.trim()) {
       alert('Category name is required');
       return;
-    }const handleSave = async () => {
-  if (!formData.name.trim()) {
-    alert('Category name is required');
-    return;
-  }
-
-  setSaving(true);
-  try {
-    if (category) {
-      await api.updateBulletinCategoryConfig(category.id, formData);
-    } else {
-      await api.createBulletinCategoryConfig(formData);
     }
-
-    // 👇 إعادة الترتيب التلقائي بعد الحفظ
-    await reorderCategories();
-
-    onSave(); // تحديث الواجهة
-    onClose();
-  } catch (error) {
-    console.error('Error saving category:', error);
-    alert('Error saving category');
-  } finally {
-    setSaving(false);
-  }
-};const handleSave = async () => {
-  if (!formData.name.trim()) {
-    alert('Category name is required');
-    return;
-  }
-
-  setSaving(true);
-  try {
-    if (category) {
-      await api.updateBulletinCategoryConfig(category.id, formData);
-    } else {
-      await api.createBulletinCategoryConfig(formData);
-    }
-
-    // 👇 إعادة الترتيب التلقائي بعد الحفظ
-    await reorderCategories();
-
-    onSave(); // تحديث الواجهة
-    onClose();
-  } catch (error) {
-    console.error('Error saving category:', error);
-    alert('Error saving category');
-  } finally {
-    setSaving(false);
-  }
-
 
     setSaving(true);
     try {
