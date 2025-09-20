@@ -199,9 +199,7 @@ const BulletinModal = ({
         ['link', 'image'],
         ['clean']
       ],
-   //   handlers: {
-   //     image: imageHandler
-   //   }
+
     }
   };
 
