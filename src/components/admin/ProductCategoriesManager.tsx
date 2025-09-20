@@ -267,7 +267,8 @@ const reorderCategories = async () => {
         onClose={closeModal}
         category={selectedCategory}
         isEditing={isEditing}
-        onSave={fetchCategories}
+        onSave={fetchCategories}  
+        reorderCategories={reorderCategories}
       />
     </div>
   );
@@ -279,13 +280,15 @@ const CategoryModal = ({
   onClose, 
   category, 
   isEditing, 
-  onSave 
+  onSave ,
+  reorderCategories
 }: {
   isOpen: boolean;
   onClose: () => void;
   category: ProductCategory | null;
   isEditing: boolean;
   onSave: () => void;
+  reorderCategories: () => Promise<void>; 
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -314,32 +317,33 @@ const CategoryModal = ({
   }, [category]);
 
   const handleSave = async () => {
-    setSaving(true);
-    try {
-      if (category) {
-        const { error } = await supabase
-          .from('product_categories')
-          .update(formData)
-          .eq('id', category.id);
-        
-        if (error) throw error;
-      } else {
-        const { error } = await supabase
-          .from('product_categories')
-          .insert([formData]);
-        
-        if (error) throw error;
-      }
-
-      onSave();
-      onClose();
-    } catch (error) {
-      console.error('Error saving category:', error);
-      alert('Error saving category');
-    } finally {
-      setSaving(false);
+  setSaving(true);
+  try {
+    if (category) {
+      const { error } = await supabase
+        .from('product_categories')
+        .update(formData)
+        .eq('id', category.id);
+      
+      if (error) throw error;
+    } else {
+      const { error } = await supabase
+        .from('product_categories')
+        .insert([formData]);
+      
+      if (error) throw error;
     }
-  };
+
+    onSave(); // لتحديث القائمة مباشرة (قد يحتوي بيانات قديمة)
+    await reorderCategories(); // 👈 هذا هو المفتاح! يعيد الترتيب ويحدث القائمة مجددًا
+    onClose();
+  } catch (error) {
+    console.error('Error saving category:', error);
+    alert('Error saving category');
+  } finally {
+    setSaving(false);
+  }
+};
 
   if (!isOpen) return null;
 
