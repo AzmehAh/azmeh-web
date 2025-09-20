@@ -296,29 +296,33 @@ const CategoryModal = ({
   }, [category]);
 
   const handleSave = async () => {
-    if (!formData.name.trim()) {
-      alert('Category name is required');
-      return;
+  if (!formData.name.trim()) {
+    alert('Category name is required');
+    return;
+  }
+
+  setSaving(true);
+  try {
+    if (category) {
+      await api.updateBulletinCategoryConfig(category.id, formData);
+    } else {
+      await api.createBulletinCategoryConfig(formData);
     }
 
-    setSaving(true);
-    try {
-      if (category) {
-        await api.updateBulletinCategoryConfig(category.id, formData);
-      } else {
-        await api.createBulletinCategoryConfig(formData);
-      }
-
-      onSave();
-      onClose();
-    } catch (error) {
-      console.error('Error saving category:', error);
-      alert('Error saving category');
-    } finally {
-      setSaving(false);
+    // 👇 أضف هذا السطر!
+    if (reorderCategories && typeof reorderCategories === 'function') {
+      await reorderCategories();
     }
-  };
 
+    onSave();
+    onClose();
+  } catch (error) {
+    console.error('Error saving category:', error);
+    alert('Error saving category');
+  } finally {
+    setSaving(false);
+  }
+};
   if (!isOpen) return null;
 
   return (
