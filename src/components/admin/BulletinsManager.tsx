@@ -14,12 +14,7 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import ReactQuill, { Quill } from 'react-quill';
 import { Editor } from '@tinymce/tinymce-react';
-
-
-
-
 
 const BulletinModal = ({ 
   isOpen, 
@@ -43,49 +38,6 @@ const BulletinModal = ({
   });
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
-
-const [betterTableLoaded, setBetterTableLoaded] = useState(false);
-
-useEffect(() => {
-  const loadBetterTable = async () => {
-    try {
-      const module = await import('quill-better-table');
-      const BetterTable = module.default;
-
-      if (Quill && !Quill.imports['modules/better-table']) {
-        Quill.register('modules/better-table', BetterTable, true);
-      }
-
-      setBetterTableAvailable(true); // هنا نعلم أنه جاهز
-      setBetterTableLoaded(true); // تم التحميل
-    } catch (error) {
-      console.error('فشل تحميل quill-better-table:', error);
-    }
-  };
-
-  loadBetterTable();
-}, []);
-
-  // Check for BetterTable availability
-  useEffect(() => {
-    const checkBetterTable = () => {
-      if (BetterTable && !betterTableAvailable) {
-        setBetterTableAvailable(true);
-      }
-    };
-    
-    if (!betterTableAvailable) {
-      const interval = setInterval(checkBetterTable, 100);
-      const timeout = setTimeout(() => {
-        clearInterval(interval);
-      }, 5000);
-      
-      return () => {
-        clearInterval(interval);
-        clearTimeout(timeout);
-      };
-    }
-  }, [betterTableAvailable]);
 
   useEffect(() => {
     if (bulletin) {
@@ -119,23 +71,8 @@ useEffect(() => {
     }
   }, [bulletin]);
 
-  // Custom image handler for rich text editor
-  const imageHandler = async () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        await uploadImageToEditor(file);
-      }
-    };
-  };
-
   // Upload image for rich text editor
-  const uploadImageToEditor = async (file) => {
+  const uploadImageToEditor = async (file, success, failure) => {
     try {
       setUploadingImage(true);
       const fileExt = file.name.split('.').pop();
@@ -152,84 +89,15 @@ useEffect(() => {
         .from('images')
         .getPublicUrl(filePath);
 
-      // Insert image into editor at cursor position
-      const quill = (document.querySelector('.ql-editor')?.__quill);
-      if (quill) {
-        const range = quill.getSelection(true);
-        quill.insertEmbed(range.index, 'image', publicUrl);
-        quill.setSelection(range.index + 1);
-      }
+      success(publicUrl);
     } catch (error) {
       console.error('Error uploading image:', error);
-      alert('Error uploading image to editor');
+      failure('Error uploading image');
     } finally {
       setUploadingImage(false);
     }
   };
 
-  // Quill modules configuration for rich text editing
- const quillModules = React.useMemo(() => {
-  const baseModules = {
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean'],
-        ...(betterTableLoaded ? [['better-table']] : []) // إضافة زر الجدول فقط بعد التحميل
-      ],
-      handlers: {
-        image: imageHandler
-      }
-    }
-  };
-
-  // إذا لم تُحمّل بعد، أعد الإعدادات الأساسية فقط
-  if (!betterTableLoaded) return baseModules;
-
-  // بعد التحميل، استخدم Quill.import للحصول على الوحدة بأمان
-  const BetterTable = Quill.import('modules/better-table');
-
-  return {
-    ...baseModules,
-    'better-table': {
-      operationMenu: {
-        color: {
-          colors: ['#000', '#e60000', '#ff9900', '#ffff00', '#008a00', '#0066cc', '#9933ff', '#ffffff', '#facccc', '#ffebcc', '#ffffcc', '#cce8cc', '#cce0f5', '#ebd6ff', '#bbbbbb', '#f06666', '#ffc266', '#ffff66', '#66b966', '#66a3e0', '#c285ff', '#888888', '#a10000', '#b26b00', '#b2b200', '#006100', '#0047b2', '#6b24b2', '#444444', '#5c0000', '#663d00', '#666600', '#003700', '#002966', '#3d1466'],
-          text: 'Background Colors:'
-        },
-        items: {
-          unmergeCells: { text: 'Unmerge cells' },
-          insertColumnRight: { text: 'Insert column right' },
-          insertColumnLeft: { text: 'Insert column left' },
-          insertRowUp: { text: 'Insert row above' },
-          insertRowDown: { text: 'Insert row below' },
-          mergeCells: { text: 'Merge cells' },
-          deleteColumn: { text: 'Delete column' },
-          deleteRow: { text: 'Delete row' },
-          deleteTable: { text: 'Delete table' }
-        }
-      },
-      toolbarTable: {
-        tip: 'Insert Table',
-        tipSize: 'Size'
-      },
-      keyboard: {
-        bindings: BetterTable?.keyboardBindings || {} // الآن آمنة!
-      }
-    }
-  };
-}, [betterTableLoaded]);
-const quillFormats = React.useMemo(() => [
-  'header',
-  'bold', 'italic', 'underline', 'strike',
-  'list', 'bullet',
-  'blockquote', 'code-block',
-  'link', 'image',
-  ...(betterTableLoaded ? ['better-table'] : []) // أضف التنسيق فقط إذا تم التحميل
-], [betterTableLoaded]); 
   const handleSave = async () => {
     setSaving(true);
     try {
@@ -465,34 +333,38 @@ const quillFormats = React.useMemo(() => [
               </label>
               {isEditing ? (
                 <>
-                  <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    {uploadingImage && (
-                      <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
-                        <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                          Uploading image...
-                        </div>
+                  {uploadingImage && (
+                    <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                        Uploading image...
                       </div>
-                    )}
-                    <ReactQuill
-                      theme="snow"
-                      value={formData.content}
-                      onChange={(value) =>
-                        setFormData((prev) => ({ ...prev, content: value }))
-                      }
-                      modules={quillModules}
-                      formats={quillFormats}
-                      className="h-96"         
-                      placeholder="Start writing your bulletin content... Use the toolbar to format text, insert images, and create tables."
-                    />
-                  </div> 
-                  <div className="mt-2 text-sm text-gray-500">
-                    <p>
-                      {betterTableAvailable 
-                        ? 'To insert a table: Use the table icon in the toolbar or right-click in the editor for table options.'
-                        : 'Table functionality will be available once the module loads.'}
-                    </p>
-                  </div>
+                    </div>
+                  )}
+                  <Editor
+                    apiKey="your-api-key-here" // استبدل بمفتاح API الخاص بك
+                    value={formData.content}
+                    onEditorChange={(content) => {
+                      setFormData(prev => ({ ...prev, content }));
+                    }}
+                    init={{
+                      height: 500,
+                      menubar: 'file edit view insert format tools table help',
+                      plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table paste code help wordcount'
+                      ],
+                      toolbar: 'undo redo | formatselect | bold italic underline strikethrough | \
+                               alignleft aligncenter alignright alignjustify | \
+                               bullist numlist outdent indent | link image media table | \
+                               removeformat | help',
+                      images_upload_handler: function (blobInfo, success, failure) {
+                        uploadImageToEditor(blobInfo.blob(), success, failure);
+                      },
+                      content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; }'
+                    }}
+                  />
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
@@ -539,7 +411,7 @@ const quillFormats = React.useMemo(() => [
   );
 };
 
-// Main BulletinsManager Component
+// Main BulletinsManager Component (يبقى كما هو بدون تغيير)
 const BulletinsManager = () => {
   const [bulletins, setBulletins] = useState([]);
   const [filteredBulletins, setFilteredBulletins] = useState([]);
@@ -818,4 +690,4 @@ const BulletinsManager = () => {
   );
 };
 
-export default BulletinsManager; 
+export default BulletinsManager;
