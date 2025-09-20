@@ -202,10 +202,10 @@
 @media (prefers-reduced-motion: no-preference) {
   * {
     scroll-behavior: smooth;
-  }
+  } 
 }
 .prose img {
-  max-width: 700px;  /* تصغير العرض */
+  max-width: 200px;  /* تصغير العرض */
   height: auto;      /* يحافظ على النسبة */
   border-radius: 8px; /* اختياري */
   display: inline-block; /* عشان ما تتمدد */
