@@ -8,8 +8,8 @@ interface Bulletin {
   id: string;
   title: string;
   cover_image: string;
-  publish_date: string;
-  excerpt: string;
+  created_at: string;
+  short_description: string;
 }
 
 const BlogSection = () => {
@@ -19,9 +19,9 @@ const BlogSection = () => {
     const fetchFeatured = async () => {
       const { data, error } = await supabase
         .from('bulletins')
-        .select('id, title, cover_image, publish_date, excerpt')
-        .eq('is_featured', true)  // فقط المميزة
-        .order('publish_date', { ascending: false }) // ترتيب أحدث أول
+        .select('id, title, cover_image, created_at, short_description')
+        .eq('featured', true)  // فقط المميزة
+        .order('created_at', { ascending: false }) // ترتيب أحدث أول
         .limit(3); // مثلاً 3 مقالات فقط
 
       if (error) {
@@ -99,7 +99,7 @@ const BlogSection = () => {
               <div className="p-4 sm:p-6">
                 <div className="flex items-center text-sm text-gray-500 mb-3">
                   <Calendar className="w-4 h-4 mr-2" />
-                  <span>{formatDate(post.publish_date)}</span>
+                  <span>{formatDate(post.created_at)}</span>
                 </div>
 
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
@@ -107,7 +107,7 @@ const BlogSection = () => {
                 </h3>
 
                 <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                  {post.excerpt}
+                  {post.short_description}
                 </p>
               </div>
             </motion.article>
