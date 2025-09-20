@@ -28,29 +28,29 @@ const SystemCategoriesManager = () => {
   }, []);
 const reorderCategories = async () => {
   try {
-    // جلب أحدث قائمة بالفئات
+    // جلب أحدث بيانات الفئات من الخادم
     const categoriesData = await api.getBulletinCategoriesConfig();
     if (!categoriesData || categoriesData.length === 0) return;
 
-    // ترتيب الفئات حسب sort_order الحالي
+    // نقوم بفرز الفئات حسب sort_order الحالي
     const sorted = [...categoriesData].sort((a, b) => a.sort_order - b.sort_order);
 
-    // إعادة تعيين sort_order ليكون 0, 1, 2, ...
+    // نُعدّل sort_order ليكون 0, 1, 2, ...
     const updates = sorted.map((category, index) => ({
       id: category.id,
       sort_order: index
     }));
 
-    // تحديث كل فئة على حدة
+    // نُحدث كل فئة على حدة
     for (const update of updates) {
       await api.updateBulletinCategoryConfig(update.id, { sort_order: update.sort_order });
     }
 
-    // إعادة تحميل البيانات لتحديث الواجهة 
-    await fetchData();
+    // نُعدّل الواجهة
+    await fetchData(); // ← هذا مهم: لتحديث الواجهة بعد التحديث
   } catch (error) {
     console.error('Error reordering categories:', error);
-    alert('Error reordering categories');
+    alert('Failed to reorder categories');
   }
 };
   const fetchData = async () => {
