@@ -15,6 +15,7 @@ import Dashboard from './components/admin/Dashboard';
 import ProductsManager from './components/admin/ProductsManager';
 import ProductCategoriesManager from './components/admin/ProductCategoriesManager';
 import BulletinsManager from './components/admin/BulletinsManager';
+import BulletinForm from './components/BulletinForm';
 import ContentManager from './components/admin/ContentManager';
 import ProductFiltersManager from './components/admin/ProductFiltersManager';
 import SystemCategoriesManager from './components/admin/SystemCategoriesManager';
@@ -158,6 +159,15 @@ function App() {
               <BulletinsManager />
             </ProtectedRoute>
           } />
+          
+        <Route 
+          path="bulletins/new" 
+          element={
+            <ProtectedRoute>
+              <BulletinForm />
+            </ProtectedRoute>
+          } 
+        />
           <Route path="content" element={
             <ProtectedRoute>
               <ContentManager />
