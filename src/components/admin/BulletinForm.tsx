@@ -310,7 +310,7 @@ const BulletinForm = () => {
     }
   };
 
-  const handleCancel = () => {
+  const handleCancel = () => { 
   navigate('/admin/bulletins'); // ✅ وليس /bulletins
 };
 
