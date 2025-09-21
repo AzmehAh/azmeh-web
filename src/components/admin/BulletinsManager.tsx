@@ -191,19 +191,22 @@ const BulletinModal = ({
   }
 };
   // Quill modules configuration for rich text editing
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'], 
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean']
-      ],
-
+ const quillModules = {
+  toolbar: {
+    container: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'], 
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      ['blockquote', 'code-block'],
+      ['link', 'image'],
+      ['clean']
+    ],
+    handlers: {
+      image: imageHandler   // <== هنا أضفنا الهاندلر
     }
-  };
+  }
+};
+
 
   const quillFormats = [
     'header',
