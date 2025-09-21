@@ -207,7 +207,7 @@ const BulletinModal = ({
       ],
      // handlers: {
       //  image: imageHandler
-      }
+    //  }
     }
   };
 
