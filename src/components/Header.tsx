@@ -41,19 +41,22 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location]);
 
-  // جلب بيانات الأسئلة الشائعة من Supabase
   useEffect(() => {
-    const fetchFAQCategories = async () => {
+    const fetchFAQItems = async () => {
       const { data, error } = await supabase
-        .from('faq_categories')
-        .select('*')
-        .order('name');
-      
+        .from("faq_items")
+        .select("*")
+        .eq("category_id", categoryId) // فلترة حسب الكاتيجوري
+        .order("sort_order", { ascending: true });
+
       if (!error && data) {
-        setFaqCategories(data);
+        setFaqItems(data);
       }
+      setLoading(false);
     };
 
+    fetchFAQItems();
+  }, [categoryId]);
     // جلب بيانات استكشاف الأخطاء من Supabase
     const fetchTroubleshootingCategories = async () => {
       const { data, error } = await supabase
@@ -123,7 +126,7 @@ const Header = () => {
                       {faqCategories.map(category => (
                         <Link 
                           key={category.id} 
-                          to={`/faq/${category.slug}`} 
+                          to={`/faq/${FAQItem}`} 
                           className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
                         >
                           {category.name}
