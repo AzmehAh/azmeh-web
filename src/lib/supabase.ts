@@ -249,7 +249,7 @@ export const api = {
     const { data, error } = await supabase
       .from('bulletins')
       .select('*')
-      .eq('slug', slug)
+      .eq('id', slug)
       .eq('status', 'published')
       .single();
     

@@ -237,7 +237,7 @@ const Blog = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.1 }}
                       className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
-                      onClick={() => handleBulletinClick(b.slug)}
+                      onClick={() => handleBulletinClick(b.id)}
                     >
                       <div className="h-48 overflow-hidden">
                         <img src={b.cover_image} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
