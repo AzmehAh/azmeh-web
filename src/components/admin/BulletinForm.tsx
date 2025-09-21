@@ -323,7 +323,7 @@ const BulletinForm = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+    <div className="min-h-screen  x-4">
       <div className=" mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
