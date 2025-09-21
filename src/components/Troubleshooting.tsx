@@ -78,7 +78,7 @@ const Troubleshooting = () => {
 
 
   <h3 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors leading-snug">
-    {cat.title}
+    {cat.name}
   </h3>
 </div>
 
