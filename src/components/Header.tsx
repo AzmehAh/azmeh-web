@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
-import { supabase, FAQCategory, TroubleshootingCategory } from '../lib/supabase';
+import { supabase, FAQCategory, TroubleshootingCategory,FAQItem } from '../lib/supabase';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -279,7 +279,7 @@ const Header = () => {
                           {faqCategories.map(category => (
                             <Link 
                               key={category.id}
-                              to={`/faq/${category.slug}`} 
+                              to={`/faq/${item.id}`} 
                               onClick={() => setIsMobileMenuOpen(false)}
                               className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                             >
