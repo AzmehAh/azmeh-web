@@ -154,7 +154,7 @@ const BulletinModal = ({
   };
 }, [uploadImageToEditor]); // اعتماد على uploadImageToEditor
 
-  const uploadImageToEditor = useCallback(async (file) => {
+const uploadImageToEditor = useCallback(async (file) => {
   try {
     setUploadingImage(true);
     const imageUrl = await uploadImage(file, 'bulletins/content');
@@ -187,29 +187,6 @@ const BulletinModal = ({
     setUploadingImage(false);
   }
 }, []); // لا يعتمد على أي حالة داخلية تتغير — يمكن تركه فارغًا
-      const quill = quillRef.current.getEditor();
-      if (!quill) {
-        console.warn('Quill editor instance not found');
-        return;
-      }
-
-      // احصل على الموقع الحالي للكرسور
-      const range = quill.getSelection();
-      const position = range ? range.index : quill.getLength();
-
-      // أدخل الصورة في الموقع المحدد
-      quill.insertEmbed(position, 'image', imageUrl, 'user');
-      
-      // حرّك الكرسور بعد الصورة
-      quill.setSelection(position + 1, 0);
-    } catch (error) {
-      console.error('Error uploading image to editor:', error);
-      alert('Error uploading image: ' + (error.message || 'Unknown error'));
-    } finally {
-      setUploadingImage(false);
-    }
-  };
-
  const quillModules = useMemo(() => ({
   toolbar: {
     container: [
