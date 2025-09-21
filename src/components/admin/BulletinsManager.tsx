@@ -140,16 +140,16 @@ const BulletinsManager = () => {
   };
 
   const handleAddBulletin = () => {
-    navigate('/bulletins/new');
-  };
+  navigate('/admin/bulletins/new'); // ✅ أضف /admin
+};
 
-  const handleViewBulletin = (id) => {
-    navigate(`/bulletins/${id}`);
-  };
+const handleViewBulletin = (id) => {
+  navigate(`/admin/bulletins/${id}`); // ✅
+};
 
-  const handleEditBulletin = (id) => {
-    navigate(`/bulletins/${id}/edit`);
-  };
+const handleEditBulletin = (id) => {
+  navigate(`/admin/bulletins/${id}/edit`); // ✅
+};
 
   if (loading) {
     return (
