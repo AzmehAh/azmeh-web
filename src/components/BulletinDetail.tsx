@@ -117,13 +117,11 @@ const BulletinDetail = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-             dangerouslySetInnerHTML={{
-  __html: DOMPurify.sanitize(bulletin.content, {
-    ADD_ATTR: ['width', 'height'] // ← مهم جداً!
-  })
-}}
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(bulletin.content)
+              }}
             />
-          </article>
+          </article> 
 
           {/* Related Articles */}
           <div className="mt-16 pt-8 border-t border-gray-200">
