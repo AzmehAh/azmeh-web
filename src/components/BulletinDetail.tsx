@@ -55,7 +55,7 @@ const BulletinDetail = () => {
           <h1 className="text-2xl font-bold text-gray-900 mb-4">Bulletin Not Found</h1>
           <p className="text-gray-600 mb-8">The technical bulletin you're looking for doesn't exist.</p>
           <Link to="/systems" className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-            Back to Systems
+            Back to Blog
           </Link>
         </div>
       </div>
