@@ -38,9 +38,6 @@ const BulletinForm = () => {
   const [bulletin, setBulletin] = useState(null);
   const [loading, setLoading] = useState(!!id); // إذا كان هناك ID نحمله
   const quillRef = useRef(null);
-  const [imgWidth, setImgWidth] = useState(300); // العرض الافتراضي
-const [imgHeight, setImgHeight] = useState(200); // الارتفاع الافتراضي
-
 
   // جلب البلتين إذا كان هناك ID
   useEffect(() => {
@@ -188,42 +185,26 @@ const [imgHeight, setImgHeight] = useState(200); // الارتفاع الافت�
     }
   };
 
- const uploadImageToEditor = useCallback(async (file) => {
-  try {
-    setUploadingImage(true);
-    const imageUrl = await uploadImage(file, 'bulletins/content');
+  const uploadImageToEditor = useCallback(async (file) => {
+    try {
+      setUploadingImage(true);
+      const imageUrl = await uploadImage(file, 'bulletins/content');
 
-    if (!imageUrl) {
-      alert('Failed to upload image.');
-      return;
-    }
-
-    if (!quillRef.current) return;
-    const quill = quillRef.current.getEditor();
-    const range = quill.getSelection();
-    const position = range ? range.index : quill.getLength();
-
-    // إدراج الصورة
-    quill.insertEmbed(position, 'image', imageUrl, 'user');
-    quill.setSelection(position + 1, 0);
-
-    // تعديل الأبعاد بعد الإدراج
-    setTimeout(() => {
-      const img = document.querySelector(`img[src="${imageUrl}"]`);
-      if (img) {
-        img.width = imgWidth;
-        img.height = imgHeight;
+      if (!imageUrl) {
+        alert('Failed to upload image.');
+        return;
       }
-    }, 100);
 
-  } catch (error) {
-    console.error('Error uploading image to editor:', error);
-    alert('Error uploading image: ' + (error.message || 'Unknown error'));
-  } finally {
-    setUploadingImage(false);
-  }
-}, [imgWidth, imgHeight]);
+      if (!quillRef.current) {
+        console.warn('Quill reference is not ready');
+        return;
+      }
 
+      const quill = quillRef.current.getEditor();
+      if (!quill) {
+        console.warn('Quill editor instance not found');
+        return;
+      }
 
       const range = quill.getSelection();
       const position = range ? range.index : quill.getLength();
