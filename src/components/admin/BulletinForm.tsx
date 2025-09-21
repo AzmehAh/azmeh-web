@@ -39,6 +39,12 @@ const BulletinForm = () => {
   const [loading, setLoading] = useState(!!id); // إذا كان هناك ID نحمله
   const quillRef = useRef(null);
 
+  // 👇 states جديدة لإدارة Modal إدخال أبعاد الصورة
+  const [imageModalOpen, setImageModalOpen] = useState(false);
+  const [selectedImageFile, setSelectedImageFile] = useState(null);
+  const [imageWidth, setImageWidth] = useState('');
+  const [imageHeight, setImageHeight] = useState('');
+
   // جلب البلتين إذا كان هناك ID
   useEffect(() => {
     const fetchBulletin = async () => {
@@ -106,7 +112,7 @@ const BulletinForm = () => {
       } catch (error) {
         console.error('Error fetching categories:', error);
         try {
-          const { data: bulletinsData } = await supabase
+          const {  bulletinsData } = await supabase
             .from('bulletins')
             .select('category')
             .not('category', 'is', null);
@@ -185,11 +191,35 @@ const BulletinForm = () => {
     }
   };
 
-  const uploadImageToEditor = useCallback(async (file) => {
+  // 👇 تم تعديل هذه الدالة لتظهر Modal بدل رفع مباشر
+  const imageHandler = useCallback(() => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      if (input.files && input.files[0]) {
+        setSelectedImageFile(input.files[0]);
+        setImageWidth(''); // Reset
+        setImageHeight('');
+        setImageModalOpen(true);
+      }
+    };
+  }, []);
+
+  // 👇 الدالة الجديدة لإدراج الصورة بعد تحديد الأبعاد
+  const handleInsertImageWithDimensions = async () => {
+    if (!selectedImageFile) {
+      alert('No image selected');
+      return;
+    }
+
     try {
       setUploadingImage(true);
-      const imageUrl = await uploadImage(file, 'bulletins/content');
+      setImageModalOpen(false);
 
+      const imageUrl = await uploadImage(selectedImageFile, 'bulletins/content');
       if (!imageUrl) {
         alert('Failed to upload image.');
         return;
@@ -209,29 +239,27 @@ const BulletinForm = () => {
       const range = quill.getSelection();
       const position = range ? range.index : quill.getLength();
 
-      quill.insertEmbed(position, 'image', imageUrl, 'user');
+      let imgTag = `<img src="${imageUrl}" `;
+
+      if (imageWidth) imgTag += `width="${imageWidth}" `;
+      if (imageHeight) imgTag += `height="${imageHeight}" `;
+
+      imgTag += '/>';
+
+      quill.clipboard.dangerouslyPasteHTML(position, imgTag);
       quill.setSelection(position + 1, 0);
+
+      // Reset
+      setSelectedImageFile(null);
+      setImageWidth('');
+      setImageHeight('');
     } catch (error) {
-      console.error('Error uploading image to editor:', error);
-      alert('Error uploading image: ' + (error.message || 'Unknown error'));
+      console.error('Error inserting image with dimensions:', error);
+      alert('Error: ' + (error.message || 'Unknown error'));
     } finally {
       setUploadingImage(false);
     }
-  }, []);
-
-  const imageHandler = useCallback(async () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        await uploadImageToEditor(file);
-      }
-    };
-  }, [uploadImageToEditor]);
+  };
 
   const quillModules = useMemo(() => ({
     toolbar: {
@@ -244,7 +272,7 @@ const BulletinForm = () => {
         ['clean']
       ],
       handlers: {
-        image: imageHandler
+        image: imageHandler 
       }
     }
   }), [imageHandler]);
@@ -310,9 +338,9 @@ const BulletinForm = () => {
     }
   };
 
-  const handleCancel = () => { 
-  navigate('/admin/bulletins'); // ✅ وليس /bulletins
-};
+  const handleCancel = () => {
+    navigate('/admin/bulletins');
+  };
 
   if (loading) {
     return (
@@ -345,7 +373,6 @@ const BulletinForm = () => {
                 : 'Add New Bulletin'
               }
             </h3>
-            {/* لا حاجة لزر X */}
           </div>
 
           {/* Content */}
@@ -620,6 +647,65 @@ const BulletinForm = () => {
               >
                 Back to List
               </button>
+            </div>
+          )}
+
+          {/* 👇 Modal اختيار أبعاد الصورة */}
+          {imageModalOpen && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div className="bg-white rounded-lg p-6 w-full max-w-md">
+                <h3 className="text-lg font-semibold mb-4">Set Image Dimensions</h3>
+                
+                {selectedImageFile && (
+                  <div className="mb-4 text-center">
+                    <p className="text-sm text-gray-600 mb-2">Selected: {selectedImageFile.name}</p>
+                    <img 
+                      src={URL.createObjectURL(selectedImageFile)} 
+                      alt="Preview" 
+                      className="max-h-40 mx-auto rounded border"
+                    />
+                  </div>
+                )}
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Width (px or %)</label>
+                    <input
+                      type="text"
+                      value={imageWidth}
+                      onChange={(e) => setImageWidth(e.target.value)}
+                      placeholder="e.g., 300 or 50%"
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#0055A3]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Height (px or %)</label>
+                    <input
+                      type="text"
+                      value={imageHeight}
+                      onChange={(e) => setImageHeight(e.target.value)}
+                      placeholder="e.g., 200 or auto"
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#0055A3]"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex justify-end space-x-3 mt-6">
+                  <button
+                    onClick={() => setImageModalOpen(false)}
+                    className="px-4 py-2 text-gray-700 border border-gray-300 rounded hover:bg-gray-50"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleInsertImageWithDimensions}
+                    className="px-4 py-2 bg-[#0055A3] text-white rounded hover:bg-blue-700"
+                  >
+                    Insert Image
+                  </button>
+                </div>
+              </div>
             </div>
           )}
         </motion.div>
