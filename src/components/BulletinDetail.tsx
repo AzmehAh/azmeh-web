@@ -87,7 +87,7 @@ const BulletinDetail = () => {
             className="inline-flex items-center text-blue-100 hover:text-white font-medium mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Systems
+            Back to Blog
           </button>
 
           <div className="flex items-center space-x-3 mb-4">
