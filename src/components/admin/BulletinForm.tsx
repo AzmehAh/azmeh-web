@@ -311,8 +311,8 @@ const BulletinForm = () => {
   };
 
   const handleCancel = () => {
-    navigate('/bulletins');
-  };
+  navigate('/admin/bulletins'); // ✅ وليس /bulletins
+};
 
   if (loading) {
     return (
