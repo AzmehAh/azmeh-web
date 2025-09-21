@@ -323,12 +323,12 @@ const BulletinForm = () => {
   }
 
   return (
-    <div className="min-h-screen  x-4">
+    <div className="min-h-screen ">
       <div className=" mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-lg shadow-xl overflow-hidden"
+          className="bg-red rounded-lg shadow-xl overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
