@@ -565,7 +565,7 @@ const BulletinForm = () => {
                       onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
                       modules={quillModules}
                       formats={quillFormats}
-                      className="h-64 mb-12"
+                      className="quill-autoexpand mb-12"
                       placeholder="Start writing your bulletin content..."
                     />
                   </div>
