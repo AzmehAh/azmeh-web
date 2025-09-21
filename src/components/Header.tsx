@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown, Menu, X } from 'lucide-react';
-import { supabase, FAQCategory, TroubleshootingCategory,FAQItem } from '../lib/supabase';
+import { supabase, FAQCategory, TroubleshootingCategory,FAQItem,TroubleshootingItem } from '../lib/supabase';
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
