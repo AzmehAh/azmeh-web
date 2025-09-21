@@ -140,37 +140,53 @@ const BulletinModal = ({
     }
   };
 
-  // Custom image handler for rich text editor
-  const imageHandler = async () => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
+  const imageHandler = useCallback(async () => {
+  const input = document.createElement('input');
+  input.setAttribute('type', 'file');
+  input.setAttribute('accept', 'image/*');
+  input.click();
 
-    input.onchange = async () => {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        await uploadImageToEditor(file);
-      }
-    };
+  input.onchange = async () => {
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      await uploadImageToEditor(file);
+    }
   };
+}, [uploadImageToEditor]); // اعتماد على uploadImageToEditor
 
-  const uploadImageToEditor = async (file) => {
-    try {
-      setUploadingImage(true);
-      const imageUrl = await uploadImage(file, 'bulletins/content');
+  const uploadImageToEditor = useCallback(async (file) => {
+  try {
+    setUploadingImage(true);
+    const imageUrl = await uploadImage(file, 'bulletins/content');
 
-      if (!imageUrl) {
-        alert('Failed to upload image.');
-        return;
-      }
+    if (!imageUrl) {
+      alert('Failed to upload image.');
+      return;
+    }
 
-      // تأكد من أن quill جاهز
-      if (!quillRef.current) {
-        console.warn('Quill reference is not ready');
-        return;
-      }
+    if (!quillRef.current) {
+      console.warn('Quill reference is not ready');
+      return;
+    }
 
+    const quill = quillRef.current.getEditor();
+    if (!quill) {
+      console.warn('Quill editor instance not found');
+      return;
+    }
+
+    const range = quill.getSelection();
+    const position = range ? range.index : quill.getLength();
+
+    quill.insertEmbed(position, 'image', imageUrl, 'user');
+    quill.setSelection(position + 1, 0);
+  } catch (error) {
+    console.error('Error uploading image to editor:', error);
+    alert('Error uploading image: ' + (error.message || 'Unknown error'));
+  } finally {
+    setUploadingImage(false);
+  }
+}, []); // لا يعتمد على أي حالة داخلية تتغير — يمكن تركه فارغًا
       const quill = quillRef.current.getEditor();
       if (!quill) {
         console.warn('Quill editor instance not found');
@@ -194,23 +210,23 @@ const BulletinModal = ({
     }
   };
 
-  // Quill modules configuration for rich text editing
-  const quillModules = {
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'], 
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean']
-      ],
-     // handlers: {
-      //  image: imageHandler
-    //  }
+ const quillModules = useMemo(() => ({
+  toolbar: {
+    container: [
+      [{ 'header': [1, 2, 3, false] }],
+      ['bold', 'italic', 'underline', 'strike'], 
+      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+      ['blockquote', 'code-block'],
+      ['link', 'image'],
+      ['clean']
+    ],
+    handlers: {
+      image: imageHandler // الآن imageHandler متوفر ومُهيأ
     }
-  };
-
+  }
+}), [imageHandler]);  
+  
+  // أعد إنشاء modules فقط إذا تغير imageHandler 
   const quillFormats = [
     'header',
     'bold', 'italic', 'underline', 'strike',
