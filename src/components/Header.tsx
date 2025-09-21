@@ -126,7 +126,7 @@ const Header = () => {
                       {faqCategories.map(category => (
                         <Link 
                           key={category.id} 
-                          to={`/faq/${FAQItem}`} 
+                          to={`/faq/${item.id}`} 
                           className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
                         >
                           {category.name}
