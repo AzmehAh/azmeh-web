@@ -70,7 +70,7 @@ const BulletinDetail = () => {
           <div className="flex items-center text-sm text-gray-600">
             <Link to="/" className="hover:text-[#2C5DB6] transition-colors">Home</Link>
             <span className="mx-2">/</span>
-            <Link to="/systems" className="hover:text-[#2C5DB6] transition-colors">Systems</Link>
+            <Link to="/blog" className="hover:text-[#2C5DB6] transition-colors">Blog</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">{bulletin.subcategory}</span>
             <span className="mx-2">/</span>
@@ -83,7 +83,7 @@ const BulletinDetail = () => {
       <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <button
-            onClick={() => navigate('/systems')}
+            onClick={() => navigate('/blog')}
             className="inline-flex items-center text-blue-100 hover:text-white font-medium mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
