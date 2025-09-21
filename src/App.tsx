@@ -128,7 +128,23 @@ function App() {
               <AdminLayout onLogout={handleAdminLogout} />
             </ProtectedRoute>
           }
-        >
+        > <Route path="bulletins/new" element={
+    <ProtectedRoute>
+      <BulletinForm />
+    </ProtectedRoute>
+  } />
+  <Route path="bulletins/:id" element={
+    <ProtectedRoute>
+      <BulletinForm />
+    </ProtectedRoute>
+  } />
+  <Route path="bulletins/:id/edit" element={
+    <ProtectedRoute>
+      <BulletinForm />
+    </ProtectedRoute>
+  } />
+
+          
           <Route index element={
             <ProtectedRoute>
               <Dashboard />
