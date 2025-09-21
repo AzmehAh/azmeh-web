@@ -23,7 +23,7 @@ import Services from './components/Services';
 import ColorInspiration from './components/ColorInspiration';
 import Products from './components/Products';
 import ProductDetail from './components/ProductDetail';
-import blog from './components/blog';
+import Blog from './components/Blog';
 import BulletinDetail from './components/BulletinDetail';
 import FAQ from './components/FAQ';
 import Troubleshooting from './components/Troubleshooting';
