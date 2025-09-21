@@ -102,9 +102,12 @@ const BlogSection = () => {
                   <span>{formatDate(post.created_at)}</span>
                 </div>
 
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
+               <Link 
+                 to={`/bulletin/${post.id}`}
+                 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2 block"
+               >
                   {post.title}
-                </h3>
+               </Link>
 
                 <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
                   {post.short_description}

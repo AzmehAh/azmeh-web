@@ -123,7 +123,7 @@ const Header = () => {
                       {faqCategories.map(category => (
                         <Link 
                           key={category.id} 
-                          to={`/faq/${category.slug}`} 
+                         to={`/faq/${category.id}`} 
                           className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
                         >
                           {category.name}
@@ -140,10 +140,10 @@ const Header = () => {
                       {troubleshootingCategories.map(category => (
                         <Link 
                           key={category.id} 
-                          to={`/troubleshooting/${category.slug}`} 
+                         to={`/troubleshooting/${category.id}`} 
                           className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
                         >
-                          {category.name} {category.issue_count && <span className="text-xs text-gray-500">({category.issue_count} issues)</span>}
+                         {category.name}
                         </Link>
                       ))}
                       <Link to="/troubleshooting" className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"> 
@@ -279,7 +279,7 @@ const Header = () => {
                           {faqCategories.map(category => (
                             <Link 
                               key={category.id}
-                              to={`/faq/${item.id}`} 
+                             to={`/faq/${category.id}`} 
                               onClick={() => setIsMobileMenuOpen(false)}
                               className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                             >
@@ -293,11 +293,11 @@ const Header = () => {
                           {troubleshootingCategories.map(category => (
                             <Link 
                               key={category.id}
-                              to={`/troubleshooting/${category.slug}`} 
+                             to={`/troubleshooting/${category.id}`} 
                               onClick={() => setIsMobileMenuOpen(false)}
                               className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                             >
-                              {category.name} {category.issue_count && <span className="text-xs text-gray-400">({category.issue_count})</span>}
+                             {category.name}
                             </Link>
                           ))}
                         </div>
