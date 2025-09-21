@@ -15,7 +15,7 @@ const Header = () => {
   const location = useLocation();
   let timeoutId: NodeJS.Timeout;
 
-  const handleMouseEnter = (menu: string) => {
+  const handleMouseEnter = (menu: string) => { 
     clearTimeout(timeoutId);
     setActiveDropdown(menu);
   };
