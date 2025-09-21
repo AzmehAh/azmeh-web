@@ -42,21 +42,18 @@ const Header = () => {
   }, [location]);
 
   useEffect(() => {
-    const fetchFAQItems = async () => {
+    // جلب بيانات FAQ من Supabase
+    const fetchFAQCategories = async () => {
       const { data, error } = await supabase
-        .from("faq_items")
-        .select("*")
-        .eq("category_id", categoryId) // فلترة حسب الكاتيجوري
-        .order("sort_order", { ascending: true });
-
+        .from('faq_categories')
+        .select('*')
+        .order('name');
+      
       if (!error && data) {
-        setFaqItems(data);
+        setFaqCategories(data);
       }
-      setLoading(false);
     };
 
-    fetchFAQItems();
-  }, [categoryId]);
     // جلب بيانات استكشاف الأخطاء من Supabase
     const fetchTroubleshootingCategories = async () => {
       const { data, error } = await supabase
