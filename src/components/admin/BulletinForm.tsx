@@ -527,8 +527,7 @@ const BulletinForm = () => {
                 )}
               </div>
             </div>
-
-            {/* Short Description */}
+  {/* Short Description */}
             <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
               {isEditing || !id ? (
@@ -543,7 +542,8 @@ const BulletinForm = () => {
                 <p className="text-gray-900">{formData.short_description || 'No description'}</p>
               )}
             </div>
-
+ 
+          
             {/* Content */}
             <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -565,7 +565,7 @@ const BulletinForm = () => {
                       onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
                       modules={quillModules}
                       formats={quillFormats}
-                      className="h-[full] mb-12"
+                      className="h-64 mb-12"
                       placeholder="Start writing your bulletin content..."
                     />
                   </div>
