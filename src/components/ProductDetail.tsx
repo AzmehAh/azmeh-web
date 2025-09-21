@@ -302,7 +302,7 @@ const ProductDetail = () => {
                       <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                         <td className="px-8 py-4 font-medium text-gray-800">{spec.property}</td>
                         <td className="px-8 py-4 text-[#2C5DB6] font-semibold">{spec.value}</td>
-                        <td className="px-8 py-4 text-gray-600">{spec.standard}</td>
+                       
                       </tr>
                     ))}
                   </tbody>
