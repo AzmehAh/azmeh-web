@@ -17,7 +17,7 @@ import {
 import { supabase } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import './BulletinsManager.css'; // سيتم إنشاء هذا الملف للتنسيقات الإضافية
+import './BulletinsManager.css';
 
 const BulletinModal = ({ 
   isOpen, 
@@ -78,16 +78,14 @@ const BulletinModal = ({
     }
   }, [bulletin]);
 
-  // Upload image to storage - الإصدار المحسّن
+  // Upload image to storage
   const uploadImage = async (file, path) => {
     try {
-      // التحقق من وجود الملف
       if (!file || !file.type.startsWith('image/')) {
         alert('Please select a valid image file');
         return null;
       }
       
-      // التحقق من حجم الملف (5MB كحد أقصى)
       if (file.size > 5 * 1024 * 1024) {
         alert('Image size should be less than 5MB');
         return null;
@@ -140,70 +138,73 @@ const BulletinModal = ({
     }
   };
 
+  // ⬇️ تعريف uploadImageToEditor أولاً
+  const uploadImageToEditor = useCallback(async (file) => {
+    try {
+      setUploadingImage(true);
+      const imageUrl = await uploadImage(file, 'bulletins/content');
+
+      if (!imageUrl) {
+        alert('Failed to upload image.');
+        return;
+      }
+
+      if (!quillRef.current) {
+        console.warn('Quill reference is not ready');
+        return;
+      }
+
+      const quill = quillRef.current.getEditor();
+      if (!quill) {
+        console.warn('Quill editor instance not found');
+        return;
+      }
+
+      const range = quill.getSelection();
+      const position = range ? range.index : quill.getLength();
+
+      quill.insertEmbed(position, 'image', imageUrl, 'user');
+      quill.setSelection(position + 1, 0);
+    } catch (error) {
+      console.error('Error uploading image to editor:', error);
+      alert('Error uploading image: ' + (error.message || 'Unknown error'));
+    } finally {
+      setUploadingImage(false);
+    }
+  }, []);
+
+  // ⬇️ ثم تعريف imageHandler الذي يعتمد عليه
   const imageHandler = useCallback(async () => {
-  const input = document.createElement('input');
-  input.setAttribute('type', 'file');
-  input.setAttribute('accept', 'image/*');
-  input.click();
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
 
-  input.onchange = async () => {
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      await uploadImageToEditor(file);
+    input.onchange = async () => {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        await uploadImageToEditor(file);
+      }
+    };
+  }, [uploadImageToEditor]);
+
+  // ⬇️ ثم quillModules الذي يعتمد على imageHandler
+  const quillModules = useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'], 
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['link', 'image'],
+        ['clean']
+      ],
+      handlers: {
+        image: imageHandler
+      }
     }
-  };
-}, [uploadImageToEditor]); // اعتماد على uploadImageToEditor
+  }), [imageHandler]);
 
-const uploadImageToEditor = useCallback(async (file) => {
-  try {
-    setUploadingImage(true);
-    const imageUrl = await uploadImage(file, 'bulletins/content');
-
-    if (!imageUrl) {
-      alert('Failed to upload image.');
-      return;
-    }
-
-    if (!quillRef.current) {
-      console.warn('Quill reference is not ready');
-      return;
-    }
-
-    const quill = quillRef.current.getEditor();
-    if (!quill) {
-      console.warn('Quill editor instance not found');
-      return;
-    }
-
-    const range = quill.getSelection();
-    const position = range ? range.index : quill.getLength();
-
-    quill.insertEmbed(position, 'image', imageUrl, 'user');
-    quill.setSelection(position + 1, 0);
-  } catch (error) {
-    console.error('Error uploading image to editor:', error);
-    alert('Error uploading image: ' + (error.message || 'Unknown error'));
-  } finally {
-    setUploadingImage(false);
-  }
-}, []); // لا يعتمد على أي حالة داخلية تتغير — يمكن تركه فارغًا
- const quillModules = useMemo(() => ({
-  toolbar: {
-    container: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'], 
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      ['blockquote', 'code-block'],
-      ['link', 'image'],
-      ['clean']
-    ],
-    handlers: {
-      image: imageHandler // الآن imageHandler متوفر ومُهيأ
-    }
-  }
-}), [imageHandler]);  
-  
-  // أعد إنشاء modules فقط إذا تغير imageHandler 
   const quillFormats = [
     'header',
     'bold', 'italic', 'underline', 'strike',
@@ -213,7 +214,6 @@ const uploadImageToEditor = useCallback(async (file) => {
   ];
 
   const handleSave = async () => {
-    // التحقق من الحقول المطلوبة
     if (!formData.title || !formData.slug || !formData.category || !formData.subcategory || !formData.content) {
       alert('Please fill in all required fields (title, slug, category, subcategory, content)');
       return;
@@ -616,7 +616,6 @@ const BulletinsManager = () => {
 
   const fetchCategories = async () => {
     try {
-      // جلب الفئات من جدول الفئات الخاص بالبوستات
       const { data, error } = await supabase
         .from('bulletin_categories_config')
         .select('name')
@@ -625,9 +624,7 @@ const BulletinsManager = () => {
 
       if (error) throw error;
       
-      // إذا كان الجدول فارغاً أو غير موجود، نستخدم الفئات الموجودة في البوستات
       if (!data || data.length === 0) {
-        // جلب الفئات الفريدة من البوستات الحالية
         const { data: bulletinsData } = await supabase
           .from('bulletins')
           .select('category')
@@ -638,13 +635,11 @@ const BulletinsManager = () => {
           setCategories(uniqueCategories);
         }
       } else {
-        // استخدام الفئات من جدول الإعدادات
         setCategories(data.map(cat => cat.name));
       }
     } catch (error) {
       console.error('Error fetching categories:', error);
       
-      // Fallback: جلب الفئات من البوستات في حالة حدوث خطأ
       try {
         const { data: bulletinsData } = await supabase
           .from('bulletins')
