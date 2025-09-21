@@ -17,13 +17,14 @@ import {
 import { supabase } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import './BulletinsManager.css'; // سيتم إنشاء هذا الملف للتنسيقات الإضافية
 
 const BulletinModal = ({ 
   isOpen, 
   onClose, 
   bulletin, 
   isEditing, 
-  onSave ,
+  onSave,
   categories = [],
   setCategories 
 }) => {
@@ -77,7 +78,7 @@ const BulletinModal = ({
     }
   }, [bulletin]);
 
-  // Upload image to storage
+  // Upload image to storage - الإصدار المحسّن
   const uploadImage = async (file, path) => {
     try {
       // التحقق من وجود الملف
@@ -93,12 +94,15 @@ const BulletinModal = ({
       }
       
       const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random()}.${fileExt}`;
+      const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
       const filePath = `${path}/${fileName}`;
 
       const { error: uploadError } = await supabase.storage
         .from('system-media')
-        .upload(filePath, file);
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
 
       if (uploadError) {
         console.error('Upload error:', uploadError);
@@ -130,6 +134,7 @@ const BulletinModal = ({
       }
     } catch (error) {
       console.error('Error uploading cover image:', error);
+      alert('Failed to upload cover image');
     } finally {
       setUploadingCover(false);
     }
@@ -151,62 +156,60 @@ const BulletinModal = ({
   };
 
   const uploadImageToEditor = async (file) => {
-  try {
-    setUploadingImage(true);
-    const imageUrl = await uploadImage(file, 'bulletins/content');
+    try {
+      setUploadingImage(true);
+      const imageUrl = await uploadImage(file, 'bulletins/content');
 
-    if (!imageUrl) {
-      alert('Failed to upload image.');
-      return;
+      if (!imageUrl) {
+        alert('Failed to upload image.');
+        return;
+      }
+
+      // تأكد من أن quill جاهز
+      if (!quillRef.current) {
+        console.warn('Quill reference is not ready');
+        return;
+      }
+
+      const quill = quillRef.current.getEditor();
+      if (!quill) {
+        console.warn('Quill editor instance not found');
+        return;
+      }
+
+      // احصل على الموقع الحالي للكرسور
+      const range = quill.getSelection();
+      const position = range ? range.index : quill.getLength();
+
+      // أدخل الصورة في الموقع المحدد
+      quill.insertEmbed(position, 'image', imageUrl, 'user');
+      
+      // حرّك الكرسور بعد الصورة
+      quill.setSelection(position + 1, 0);
+    } catch (error) {
+      console.error('Error uploading image to editor:', error);
+      alert('Error uploading image: ' + (error.message || 'Unknown error'));
+    } finally {
+      setUploadingImage(false);
     }
+  };
 
-    // تأكد من أن quill جاهز
-    if (!quillRef.current) {
-      console.warn('Quill reference is not ready');
-      return;
-    }
-
-    const quill = quillRef.current.getEditor();
-    if (!quill) {
-      console.warn('Quill editor instance not found');
-      return;
-    }
-
-    // احصل على الموقع الحالي للكرسور
-    let range = quill.getSelection();
-    if (!range) {
-      // إذا لم يكن هناك تحديد، ضع الصورة في النهاية
-      range = { index: quill.getLength(), length: 0 };
-    }
-
-    // أدخل الصورة في الموقع المحدد
-    quill.insertEmbed(range.index, 'image', imageUrl, 'user');
-    // حرّك الكرسور بعد الصورة
-    quill.setSelection(range.index + 1, 0);
-  } catch (error) {
-    console.error('Error uploading image to editor:', error);
-    alert('Error uploading image: ' + (error.message || 'Unknown error'));
-  } finally {
-    setUploadingImage(false);
-  }
-};
   // Quill modules configuration for rich text editing
- const quillModules = {
-  toolbar: {
-    container: [
-      [{ 'header': [1, 2, 3, false] }],
-      ['bold', 'italic', 'underline', 'strike'], 
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      ['blockquote', 'code-block'],
-      ['link', 'image'],
-      ['clean']
-    ],
-    handlers: {
-      image: imageHandler   // <== هنا أضفنا الهاندلر
+  const quillModules = {
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'], 
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['link', 'image'],
+        ['clean']
+      ],
+      handlers: {
+        image: imageHandler
+      }
     }
-  }
-};
-
+  };
 
   const quillFormats = [
     'header',
@@ -217,6 +220,12 @@ const BulletinModal = ({
   ];
 
   const handleSave = async () => {
+    // التحقق من الحقول المطلوبة
+    if (!formData.title || !formData.slug || !formData.category || !formData.subcategory || !formData.content) {
+      alert('Please fill in all required fields (title, slug, category, subcategory, content)');
+      return;
+    }
+
     setSaving(true);
     try {
       const bulletinData = {
@@ -230,7 +239,7 @@ const BulletinModal = ({
         status: formData.status,
         featured: formData.featured,
         author: formData.author,
-        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()) : [],
+        tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') : [],
         updated_at: new Date().toISOString()
       };
 
@@ -242,6 +251,7 @@ const BulletinModal = ({
         
         if (error) throw error;
       } else {
+        bulletinData.created_at = new Date().toISOString();
         const { error } = await supabase
           .from('bulletins')
           .insert([bulletinData]);
@@ -253,19 +263,19 @@ const BulletinModal = ({
       onClose();
     } catch (error) {
       console.error('Error saving bulletin:', error);
-      alert('Error saving bulletin');
+      alert('Error saving bulletin: ' + error.message);
     } finally {
       setSaving(false);
     }
+    
     if (!bulletin && formData.category && setCategories) {
-  setCategories(prev => {
-    if (!prev.includes(formData.category)) {
-      return [...prev, formData.category];
+      setCategories(prev => {
+        if (!prev.includes(formData.category)) {
+          return [...prev, formData.category];
+        }
+        return prev;
+      });
     }
-    return prev;
-  });
-}
-
   };
 
   if (!isOpen) return null;
@@ -278,7 +288,7 @@ const BulletinModal = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+          className="relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden bulletin-modal"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
@@ -303,6 +313,7 @@ const BulletinModal = ({
                       value={formData.title}
                       onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      placeholder="Enter bulletin title"
                     />
                   ) : (
                     <p className="text-gray-900">{formData.title}</p>
@@ -317,31 +328,32 @@ const BulletinModal = ({
                       value={formData.slug}
                       onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      placeholder="unique-identifier"
                     />
                   ) : (
                     <p className="text-gray-900">{formData.slug}</p>
                   )}
                 </div>
 
-               <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
-  {isEditing ? (
-    <select
-      value={formData.category}
-      onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    >
-     {categories.map(cat => (
-  <option key={cat.id || cat} value={typeof cat === 'string' ? cat : cat.name}>
-    {typeof cat === 'string' ? cat : cat.name}
-  </option>
-
-      ))}
-    </select> 
-  ) : (
-    <p className="text-gray-900">{formData.category}</p>
-  )}
-</div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+                  {isEditing ? (
+                    <select
+                      value={formData.category}
+                      onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                    >
+                      <option value="">Select a category</option>
+                      {categories.map(cat => (
+                        <option key={cat} value={cat}>
+                          {cat}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <p className="text-gray-900">{formData.category}</p>
+                  )}
+                </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Subcategory *</label>
@@ -351,6 +363,7 @@ const BulletinModal = ({
                       value={formData.subcategory}
                       onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
                       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      placeholder="Enter subcategory"
                     />
                   ) : (
                     <p className="text-gray-900">{formData.subcategory}</p>
@@ -468,7 +481,7 @@ const BulletinModal = ({
             </div>
 
             {/* Short Description */}
-            <div className="px-6 pb-4">
+            <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
               {isEditing ? (
                 <textarea
@@ -476,56 +489,49 @@ const BulletinModal = ({
                   onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
                   rows={3}
                   className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  placeholder="Brief description of the bulletin"
                 />
               ) : (
-                <p className="text-gray-900">{formData.short_description}</p>
+                <p className="text-gray-900">{formData.short_description || 'No description'}</p>
               )}
             </div>
 
             {/* Content */}
-            <div className="px-6 pb-6">
+            <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Content *
               </label>
               {isEditing ? (
                 <>
+                  {uploadingImage && (
+                    <div className="bg-blue-50 p-3 text-sm text-blue-700 rounded-t-lg border border-b-0 border-gray-200 flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                      Uploading image...
+                    </div>
+                  )}
                   <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    {uploadingImage && (
-                      <div className="bg-blue-50 p-2 text-sm text-blue-700 border-b">
-                        <div className="flex items-center">
-                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                          Uploading image...
-                        </div>
-                      </div>
-                    )}
                     <ReactQuill
                       ref={quillRef}
                       theme="snow"
                       value={formData.content}
-                      onChange={(value) =>
-                        setFormData((prev) => ({ ...prev, content: value }))
-                      }
+                      onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
                       modules={quillModules}
                       formats={quillFormats}
-                      className="h-96"         
+                      className="h-64 mb-12"
                       placeholder="Start writing your bulletin content..."
                     />
-                  </div> 
+                  </div>
                 </>
               ) : (
                 <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-             <div 
-  className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200 prose-img:max-w-[200px] prose-img:rounded-lg"
-  dangerouslySetInnerHTML={{ __html: formData.content || '<p><em>No content</em></p>' }} 
-/>
-
-
+                  {formData.content ? (
+                    <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                  ) : (
+                    <p className="text-gray-500 italic">No content</p>
+                  )}
                 </div>
               )}
-            </div> 
-
-            {/* Padding إضافي وقت التحرير */}
-            {isEditing && <div className="pt-16"></div>}
+            </div>
           </div>
 
           {/* Footer */}
@@ -574,18 +580,18 @@ const BulletinsManager = () => {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
 
- useEffect(() => {
+  useEffect(() => {
     fetchBulletins();
     fetchCategories(); 
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     let filtered = bulletins;
 
     if (searchTerm) {
       filtered = filtered.filter(bulletin =>
         bulletin.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        bulletin.short_description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (bulletin.short_description && bulletin.short_description.toLowerCase().includes(searchTerm.toLowerCase())) ||
         bulletin.subcategory.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
@@ -597,7 +603,7 @@ const BulletinsManager = () => {
     setFilteredBulletins(filtered);
   }, [searchTerm, categoryFilter, bulletins]);
 
-   const fetchBulletins = async () => {
+  const fetchBulletins = async () => {
     try {
       setLoading(true);
       const { data, error } = await supabase
@@ -614,6 +620,7 @@ const BulletinsManager = () => {
       setLoading(false);
     }
   };
+
   const fetchCategories = async () => {
     try {
       // جلب الفئات من جدول الفئات الخاص بالبوستات
@@ -661,6 +668,7 @@ const BulletinsManager = () => {
       }
     }
   };
+
   const deleteBulletin = async (id) => {
     if (!confirm('Are you sure you want to delete this bulletin?')) return;
 
@@ -706,8 +714,6 @@ const BulletinsManager = () => {
     setIsEditing(false);
     setIsModalOpen(false);
   };
-
-
 
   if (loading) {
     return (
@@ -865,9 +871,9 @@ const BulletinsManager = () => {
           <FileText className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">No bulletins found</h3>
           <p className="text-gray-600 mb-6">
-            {searchTerm ? 'Try adjusting your search terms' : 'Get started by adding your first technical bulletin'}
+            {searchTerm || categoryFilter !== 'all' ? 'Try adjusting your search terms' : 'Get started by adding your first technical bulletin'}
           </p>
-          {!searchTerm && (
+          {!searchTerm && categoryFilter === 'all' && (
             <button
               onClick={() => openModal(null, true)}
               className="flex items-center mx-auto px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -886,11 +892,11 @@ const BulletinsManager = () => {
         bulletin={selectedBulletin} 
         isEditing={isEditing}
         onSave={fetchBulletins}
-         categories={categories} 
+        categories={categories} 
         setCategories={setCategories}
       />
     </div>
   );
 };
 
-export default BulletinsManager;  
+export default BulletinsManager;
