@@ -117,9 +117,11 @@ const BulletinDetail = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(bulletin.content)
-              }}
+             dangerouslySetInnerHTML={{
+  __html: DOMPurify.sanitize(bulletin.content, {
+    ADD_ATTR: ['width', 'height'] // ← مهم جداً!
+  })
+}}
             />
           </article>
 
