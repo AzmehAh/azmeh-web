@@ -15,7 +15,7 @@ const Header = () => {
   const location = useLocation();
   let timeoutId: NodeJS.Timeout;
 
-  const handleMouseEnter = (menu: string) => { 
+  const handleMouseEnter = (menu: string) => {
     clearTimeout(timeoutId);
     setActiveDropdown(menu);
   };
@@ -41,8 +41,8 @@ const Header = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [location]);
 
+  // جلب بيانات الأسئلة الشائعة من Supabase
   useEffect(() => {
-    // جلب بيانات FAQ من Supabase
     const fetchFAQCategories = async () => {
       const { data, error } = await supabase
         .from('faq_categories')
@@ -123,7 +123,7 @@ const Header = () => {
                       {faqCategories.map(category => (
                         <Link 
                           key={category.id} 
-                          to={`/faq/${item.id}`} 
+                          to={`/faq/${category.slug}`} 
                           className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
                         >
                           {category.name}
