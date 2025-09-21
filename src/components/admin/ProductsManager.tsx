@@ -1381,7 +1381,7 @@ const ProductModal = ({
                         <tr>
                           <th className="border px-3 py-2 text-left">Property</th>
                           <th className="border px-3 py-2 text-left">Value</th>
-                          <th className="border px-3 py-2 text-left">Standard</th>
+                        
                         </tr>
                       </thead>
                       <tbody>
@@ -1389,7 +1389,7 @@ const ProductModal = ({
                           <tr key={i}>
                             <td className="border px-3 py-2">{item.property}</td>
                             <td className="border px-3 py-2">{item.value}</td>
-                            <td className="border px-3 py-2">{item.standard}</td>
+                           
                           </tr>
                         ))}
                       </tbody>
