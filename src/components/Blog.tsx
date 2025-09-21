@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Search, X, Palette, Wrench, Shield, Building, Car, Layers, Hammer, Droplets, Settings, Factory, Home, Flame,ChevronDown } from 'lucide-react';
 import { supabase, api, Bulletin, BulletinCategoryConfig } from '../lib/supabase';
 
-const blog = () => {
+const Blog = () => {
   const navigate = useNavigate();
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
   const [systemCategories, setSystemCategories] = useState<Record<string, string[]>>({});
@@ -93,9 +93,9 @@ const blog = () => {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">Technical blog</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-6">Technical Blog</h1>
           <p className="text-xl opacity-90 max-w-3xl mx-auto leading-relaxed">
-            Explore our comprehensive technical solutions and paint blog designed for professional applications and specialized environments.
+            Explore our comprehensive technical solutions and paint Blog designed for professional applications and specialized environments.
           </p>
         </div>
       </div>
@@ -260,4 +260,4 @@ const blog = () => {
   );
 };
 
-export default blog;
+export default Blog;
