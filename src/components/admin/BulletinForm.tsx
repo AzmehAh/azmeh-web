@@ -418,6 +418,47 @@ const BulletinForm = () => {
                   )}
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Cover Image
+                  </label>
+                  {isEditing || !id ? (
+                    <div className="space-y-2">
+                      {formData.cover_image && (
+                        <div className="relative w-full h-32 rounded border overflow-hidden">
+                          <img
+                            src={formData.cover_image}
+                            alt="Cover preview" 
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                      )}
+                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
+                        <Upload className="w-4 h-4 mr-2" />
+                        {uploadingCover ? 'Uploading...' : 'Upload Cover Image'}
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleCoverImageUpload}
+                          className="hidden"
+                          disabled={uploadingCover}
+                        />
+                      </label>
+                    </div>
+                  ) : (
+                    formData.cover_image ? (
+                      <img
+                        src={formData.cover_image}
+                        alt="Cover"
+                        className="w-full h-32 object-cover rounded border"
+                      />
+                    ) : (
+                      <p className="text-gray-500">No cover image</p>
+                    )
+                  )}
+                </div>
+              </div>
+
               {/* Additional Info */}
               <div className="space-y-4">
                 <div>
@@ -503,47 +544,6 @@ const BulletinForm = () => {
             </div>
  
           
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Cover Image
-                  </label>
-                  {isEditing || !id ? (
-                    <div className="space-y-2">
-                      {formData.cover_image && (
-                        <div className="relative w-full h-32 rounded border overflow-hidden">
-                          <img
-                            src={formData.cover_image}
-                            alt="Cover preview"
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
-                        <Upload className="w-4 h-4 mr-2" />
-                        {uploadingCover ? 'Uploading...' : 'Upload Cover Image'}
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={handleCoverImageUpload}
-                          className="hidden"
-                          disabled={uploadingCover}
-                        />
-                      </label>
-                    </div>
-                  ) : (
-                    formData.cover_image ? (
-                      <img
-                        src={formData.cover_image}
-                        alt="Cover"
-                        className="w-full h-32 object-cover rounded border"
-                      />
-                    ) : (
-                      <p className="text-gray-500">No cover image</p>
-                    )
-                  )}
-                </div>
-              </div>
-
             {/* Content */}
             <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
