@@ -104,7 +104,7 @@ function App() {
         <Route path="/job-application" element={<JobApplication />} />
         <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/blog" element={<blog />} />
+        <Route path="/blog" element={<Blog />} />
         <Route path="/bulletin/:id" element={<BulletinDetail />} />
         <Route path="/faq" element={<FAQ />} />
         <Route path="/faq/:category" element={<FAQ />} />
