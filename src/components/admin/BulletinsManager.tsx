@@ -271,7 +271,7 @@ const BulletinModal = ({
     }
   };
 
-if (!isOpen) return null;
+  if (!isOpen) return null;
 
 return (
   <div className="min-h-screen bg-gray-50 py-8 px-4 md:px-6 lg:px-8">
@@ -558,6 +558,94 @@ return (
     </div>
   </div>
 );
+};
+            {/* Short Description */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
+              {isEditing ? (
+                <textarea
+                  value={formData.short_description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  placeholder="Brief description of the bulletin"
+                />
+              ) : (
+                <p className="text-gray-900">{formData.short_description || 'No description'}</p>
+              )}
+            </div>
+
+            {/* Content */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Content *
+              </label>
+              {isEditing ? (
+                <>
+                  {uploadingImage && (
+                    <div className="bg-blue-50 p-3 text-sm text-blue-700 rounded-t-lg border border-b-0 border-gray-200 flex items-center">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                      Uploading image...
+                    </div>
+                  )}
+                  <div className="border border-gray-200 rounded-lg overflow-hidden">
+                    <ReactQuill
+                      ref={quillRef}
+                      theme="snow"
+                      value={formData.content}
+                      onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+                      modules={quillModules}
+                      formats={quillFormats}
+                      className="h-64 mb-12"
+                      placeholder="Start writing your bulletin content..."
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+                  {formData.content ? (
+                    <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                  ) : (
+                    <p className="text-gray-500 italic">No content</p>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Footer */}
+          {isEditing && (
+            <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Bulletin 
+                  </>
+                )}
+              </button> 
+            </div>
+          )}
+        </motion.div>
+      </div>
+    </div>
+  );
+
 
 // Main BulletinsManager Component
 const BulletinsManager = () => {
