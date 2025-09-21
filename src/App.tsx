@@ -159,7 +159,7 @@ function App() {
               <BulletinsManager />
             </ProtectedRoute>
           } />
-          
+           {/* ⚠️ لا تنسَ حماية صفحات النموذج أيضًا إذا كانت تحتاج حماية */}
         <Route 
           path="bulletins/new" 
           element={
