@@ -323,12 +323,12 @@ const BulletinForm = () => {
   }
 
   return (
-    <div className="min-h-screen ">
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className=" mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-red rounded-lg shadow-xl overflow-hidden"
+          className="bg-white rounded-lg shadow-xl overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
@@ -565,7 +565,7 @@ const BulletinForm = () => {
                       onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
                       modules={quillModules}
                       formats={quillFormats}
-                      className="h-64 mb-12"
+                      className="h-[full] mb-12"
                       placeholder="Start writing your bulletin content..."
                     />
                   </div>
