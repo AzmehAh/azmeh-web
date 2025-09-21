@@ -402,26 +402,11 @@ const BulletinForm = () => {
                     <p className="text-gray-900">{formData.category}</p>
                   )}
                 </div>
-   {/* Short Description */}
-            <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
-              {isEditing || !id ? (
-                <textarea
-                  value={formData.short_description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="Brief description of the bulletin"
-                />
-              ) : (
-                <p className="text-gray-900">{formData.short_description || 'No description'}</p>
-              )}
-            </div>
-
+ 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Subcategory *</label>
                   {isEditing || !id ? (
-                    <input
+                    <input 
                       type="text"
                       value={formData.subcategory}
                       onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
