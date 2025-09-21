@@ -294,7 +294,7 @@ const ProductDetail = () => {
                     <tr>
                       <th className="px-8 py-4 text-left font-semibold text-gray-800">Property</th>
                       <th className="px-8 py-4 text-left font-semibold text-gray-800">Value</th>
-                      <th className="px-8 py-4 text-left font-semibold text-gray-800">Standard</th>
+                     
                     </tr>
                   </thead>
                   <tbody>
