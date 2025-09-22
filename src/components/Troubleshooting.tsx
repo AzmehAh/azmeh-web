@@ -131,19 +131,29 @@ const Troubleshooting = () => {
     }
   };
 
-  if (!currentCategory) {
-    return (
-      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Category Not Found</h1>
-          <p className="text-gray-600 mb-8">The troubleshooting category you're looking for doesn't exist.</p>
-          <Link to="/troubleshooting" className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors">
-            Back to Troubleshooting
-          </Link>
-        </div>
+ // بعد جلب البيانات، إذا انتهى التحميل ومافي فئة مطابقة
+if (!loading && category && !currentCategory) {
+  return (
+    <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Category Not Found</h1>
+        <p className="text-gray-600 mb-8">The troubleshooting category you're looking for doesn't exist.</p>
+        <Link to="/troubleshooting" className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors">
+          Back to Troubleshooting
+        </Link>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
+// أثناء التحميل، حتى لو category موجود، لا تعرض Not Found
+if (loading) {
+  return (
+    <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-[#0055A3]"></div>
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
