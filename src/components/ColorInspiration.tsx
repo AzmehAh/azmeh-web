@@ -107,7 +107,7 @@ const ColorInspiration = () => {
     className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 origin-top ${
       hoveredColor === index
         ? 'opacity-100 scale-y-175'
-        : 'opacity-0 scale-y-100'
+        : 'opacity-0 scale-y-100' 
     }`}
   />
 
