@@ -96,7 +96,7 @@ const ColorInspiration = () => {
                   src={hoveredColor === index ? product.secondaryImage : product.mainImage}
                   alt={`${product.name} product`}
                   className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
-                    hoveredColor === index ? 'opacity-80 scale-105' : 'opacity-100 scale-100'
+                    hoveredColor === index ? 'opacity-80 scale-105' : ''
                   }`}
                 />
 
