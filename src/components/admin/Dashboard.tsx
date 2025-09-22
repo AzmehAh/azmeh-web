@@ -231,28 +231,6 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Quick Actions */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-        <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-center">
-            <Package className="w-8 h-8 mx-auto mb-2 text-[#0055A3]" />
-            <span className="text-sm font-medium">Add Product</span>
-          </button>
-          <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-center">
-            <FileText className="w-8 h-8 mx-auto mb-2 text-[#0055A3]" />
-            <span className="text-sm font-medium">New Bulletin</span>
-          </button>
-          <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-center">
-            <MessageSquare className="w-8 h-8 mx-auto mb-2 text-[#0055A3]" />
-            <span className="text-sm font-medium">View Messages</span>
-          </button>
-          <button className="p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-center">
-            <TrendingUp className="w-8 h-8 mx-auto mb-2 text-[#0055A3]" />
-            <span className="text-sm font-medium">Analytics</span>
-          </button>
-        </div>
-      </div>
     </div>
   );
 };
