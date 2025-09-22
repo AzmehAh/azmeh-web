@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { supabase } from '../lib/supabase'; // <-- تم استيراد supabase بشكل صحيح
+import { supabase } from '../lib/supabase';
 
 const ColorInspiration = () => {
   const [hoveredColor, setHoveredColor] = useState<number | null>(null);
@@ -26,7 +26,6 @@ const ColorInspiration = () => {
 
       if (error) throw error;
 
-      // هنا نقوم بتحليل الصور للحصول على الرئيسية والثانوية لكل منتج
       const formattedProducts = (data || []).map(product => {
         const allImages = product.product_images || [];
         
@@ -47,8 +46,7 @@ const ColorInspiration = () => {
       setFeaturedProducts(formattedProducts);
     } catch (error) {
       console.error('Error fetching featured products:', error);
-      // بدلاً من استخدام بيانات ثابتة، نترك المصفوفة فارغة أو نعرض رسالة خطأ للمستخدم
-      setFeaturedProducts([]); // <-- تم حذف البيانات الثابتة
+      setFeaturedProducts([]);
       alert('Failed to load featured products. Please try again later.');
     } finally {
       setLoading(false);
@@ -84,7 +82,7 @@ const ColorInspiration = () => {
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
           </div>
-        ) : featuredProducts.length > 0 ? ( // <-- نتحقق إذا كانت هناك منتجات
+        ) : featuredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20">
             {featuredProducts.map((product, index) => (
               <div
@@ -93,11 +91,13 @@ const ColorInspiration = () => {
                 onMouseEnter={() => setHoveredColor(index)}
                 onMouseLeave={() => setHoveredColor(null)}
               >
-                {/* Product Image */}
+                {/* Product Image - مع استعادة تأثير التحويم */}
                 <img
                   src={hoveredColor === index ? product.secondaryImage : product.mainImage}
                   alt={`${product.name} product`}
-                  className="absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out"
+                  className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
+                    hoveredColor === index ? 'opacity-80 scale-105' : 'opacity-100 scale-100'
+                  }`}
                 />
 
                 {/* Title */}
@@ -108,7 +108,6 @@ const ColorInspiration = () => {
             ))}
           </div>
         ) : (
-          // رسالة في حالة عدم وجود منتجات مميزة
           <div className="text-center py-12 text-gray-500">
             No featured products available at the moment.
           </div>
