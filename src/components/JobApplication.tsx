@@ -111,14 +111,39 @@ const JobApplication = () => {
     e.preventDefault();
     
     if (!validateForm()) {
-      setSubmitStatus('error');
       return;
     }
 
     setIsSubmitting(true);
-    setSubmitStatus('idle');
+    setSubmitStatus('idle'); 
 
     try {
+      let resumeUrl = null;
+      
+      // Upload CV file if provided
+      if (formData.cvFile) {
+        try {
+          const fileExt = formData.cvFile.name.split('.').pop();
+          const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+          const filePath = `resumes/${fileName}`;
+
+          const { error: uploadError } = await supabase.storage
+            .from('system-media')
+            .upload(filePath, formData.cvFile);
+
+          if (uploadError) throw uploadError;
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('system-media')
+            .getPublicUrl(filePath);
+
+          resumeUrl = publicUrl;
+        } catch (uploadError) {
+          console.warn('CV upload failed:', uploadError);
+          // Continue without CV upload if storage fails
+        }
+      }
+
       // إدخال بيانات الطلب في قاعدة البيانات
       const { error } = await supabase
         .from('job_applications')
@@ -127,7 +152,7 @@ const JobApplication = () => {
           email: formData.email,
           phone: formData.phone,
           cover_letter: formData.coverLetter,
-          resume_url: null // CV storage not configured, saving without file
+          resume_url: resumeUrl
         }]);
 
       if (error) throw error;
@@ -135,6 +160,11 @@ const JobApplication = () => {
       setSubmitStatus('success');
       setFormData({ fullName: '', email: '', phone: '', coverLetter: '', cvFile: null });
       setErrors({});
+      
+      // Reset success message after 5 seconds
+      setTimeout(() => {
+        setSubmitStatus('idle');
+      }, 5000);
     } catch (error) {
       console.error('Error submitting job application:', error);
       setSubmitStatus('error');
