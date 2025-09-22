@@ -100,13 +100,13 @@ const ColorInspiration = () => {
     }`}
   />
 
-  {/* الصورة الثانية - نفس الحركة لكن بارتفاع أكبر */}
+  {/* الصورة الثانية - تتمدد لتحت وتغطي الاسم */}
   <img
     src={product.secondaryImage}
     alt={`${product.name} secondary`}
-    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
+    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 origin-top ${
       hoveredColor === index
-        ? 'opacity-100 scale-y-150'
+        ? 'opacity-100 scale-y-175'
         : 'opacity-0 scale-y-100'
     }`}
   />
