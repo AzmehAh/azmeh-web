@@ -16,6 +16,7 @@ import ProductsManager from './components/admin/ProductsManager';
 import ProductCategoriesManager from './components/admin/ProductCategoriesManager';
 import BulletinsManager from './components/admin/BulletinsManager';
 import BulletinForm from './components/admin/BulletinForm';
+import ProductForm from './components/admin/ProductForm';
 import ContentManager from './components/admin/ContentManager';
 import ProductFiltersManager from './components/admin/ProductFiltersManager';
 import SystemCategoriesManager from './components/admin/SystemCategoriesManager';
@@ -207,6 +208,16 @@ function App() {
           <Route path="applications" element={
             <ProtectedRoute>
               <JobApplicationsManager />
+            </ProtectedRoute>
+          } />
+          <Route path="products/new" element={
+            <ProtectedRoute>
+              <ProductForm />
+            </ProtectedRoute>
+          } />
+          <Route path="products/:id" element={
+            <ProtectedRoute>
+              <ProductForm />
             </ProtectedRoute>
           } />
         </Route>

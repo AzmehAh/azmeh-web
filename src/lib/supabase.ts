@@ -37,6 +37,7 @@ export interface Product {
   safety_precautions: string[];
   safety_first_aid: string[];
   status: string;
+  featured: boolean;
   created_at: string;
   updated_at: string;
 }
