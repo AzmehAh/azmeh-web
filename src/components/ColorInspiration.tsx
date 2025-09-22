@@ -92,14 +92,13 @@ const ColorInspiration = () => {
                 onMouseLeave={() => setHoveredColor(null)}
               >
                 {/* Product Image - مع استعادة تأثير التحويم */}
-              <img
-  src={hoveredColor === index ? product.secondaryImage : product.mainImage}
-  alt={`${product.name} product`}
-  className={`absolute inset-0 w-full object-contain transition-all duration-500 ease-out
-    ${hoveredColor === index ? 'opacity-80 scale-y-110' : 'opacity-100 scale-100'}
-  `}
-/>
-
+                <img
+                  src={hoveredColor === index ? product.secondaryImage : product.mainImage}
+                  alt={`${product.name} product`}
+                  className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
+                    hoveredColor === index ? 'opacity-80 scale-105' : 'opacity-100 scale-100'
+                  }`}
+                />  
  
                 {/* Title */}
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800">
