@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
+import { api } from '../lib/supabase';
 
 interface Product {
-  id: number;
+  id: string;
   name: string;
   mainImage: string; // الصورة الرئيسية
-  featured: boolean; // للتحقق إذا كان منتج مميز
+  product_images: Array<{
+    id: string;
+    image_url: string;
+    alt_text?: string;
+    is_main: boolean;
+    sort_order: number;
+  }>;
 }
 
 const ColorInspiration = () => {
@@ -17,13 +24,20 @@ const ColorInspiration = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        // ✅ غير الرابط ده لرابط API الحقيقي عندك
-        const response = await fetch('/api/products?featured=true');
-        const products: Product[] = await response.json();
+        // جلب المنتجات من Supabase
+        const products = await api.getProducts();
         
-        // ✅ تأكد أن المنتجات فيها featured=true فقط (إحتياطًا)
-        const featured = products.filter(p => p.featured);
-        setFeaturedProducts(featured);
+        // تحويل البيانات وأخذ أول 4 منتجات كمنتجات مميزة
+        const formattedProducts = products.slice(0, 4).map(product => ({
+          id: product.id,
+          name: product.name,
+          mainImage: product.product_images?.find(img => img.is_main)?.image_url 
+                    || product.product_images?.[0]?.image_url 
+                    || '/images/placeholder.jpg',
+          product_images: product.product_images || []
+        }));
+        
+        setFeaturedProducts(formattedProducts);
       } catch (error) {
         console.error("فشل جلب المنتجات:", error);
       } finally {
