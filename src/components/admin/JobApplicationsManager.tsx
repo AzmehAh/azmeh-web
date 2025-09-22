@@ -10,7 +10,9 @@ import {
   Search,
   Filter,
   Download,
-  MessageSquare
+  MessageSquare,
+  X,
+  Save
 } from 'lucide-react';
 import { supabase, JobApplication } from '../../lib/supabase';
 
