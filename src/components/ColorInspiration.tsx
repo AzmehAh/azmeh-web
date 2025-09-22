@@ -85,7 +85,7 @@ const ColorInspiration = () => {
         ) : featuredProducts.length > 0 ? ( 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20">
             {featuredProducts.map((product, index) => (
-<div
+  <div
   key={product.id}
   className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-hidden"
   onMouseEnter={() => setHoveredColor(index)}
@@ -95,27 +95,27 @@ const ColorInspiration = () => {
   <img
     src={product.mainImage}
     alt={`${product.name} main`}
-    className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${
+    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
       hoveredColor === index ? 'opacity-0' : 'opacity-100'
     }`}
-  />
+  /> 
 
-  {/* الصورة الثانية - تتحرك من الأسفل للأعلى لتغطي العنوان */}
+  {/* الصورة الثانية - تتطول عند الهوفر داخل نفس الكارد */}
   <img
     src={product.secondaryImage}
     alt={`${product.name} secondary`}
     className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
       hoveredColor === index
-        ? 'opacity-100 transform translate-y-0'
-        : 'opacity-0 transform translate-y-full'
-    }`}
+        ? 'opacity-100 scale-y-125'
+        : 'opacity-0 scale-y-100'
+    }`} 
   />
 
   {/* العنوان */}
   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
     <span className="block text-lg font-semibold">{product.name}</span>
   </div>
-</div>
+</div> 
      
             ))}
           </div>
