@@ -85,27 +85,39 @@ const ColorInspiration = () => {
         ) : featuredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20">
             {featuredProducts.map((product, index) => (
-              <div
-                key={product.id}
-                className="relative overflow-hidden group cursor-pointer w-52 h-[280px] mx-auto"
-                onMouseEnter={() => setHoveredColor(index)}
-                onMouseLeave={() => setHoveredColor(null)}
-              >
-              <img 
-  src={hoveredColor === index ? product.secondaryImage : product.mainImage}
-  alt={`${product.name} product`}
-  className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out ${
-    hoveredColor === index 
-      ? 'opacity-80 scale-110 origin-bottom' 
-      : 'opacity-100 scale-100'
+            <div
+  key={product.id}
+  className={`relative group cursor-pointer w-52 mx-auto transition-all duration-300 ${
+    hoveredColor === index ? 'h-[320px] overflow-visible z-10' : 'h-[280px] overflow-hidden'
   }`}
-/>
+  onMouseEnter={() => setHoveredColor(index)}
+  onMouseLeave={() => setHoveredColor(null)}
+>
+  {/* الصورة الأساسية - تظهر دائمًا إلا عند الهوفر */}
+  <img
+    src={product.mainImage}
+    alt={`${product.name} main`}
+    className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-300 ${
+      hoveredColor === index ? 'opacity-0' : 'opacity-100'
+    }`}
+  />
+
+  {/* الصورة الثانية - تظهر فقط عند الهوفر وبارتفاع أكبر */}
+  <img
+    src={product.secondaryImage}
+    alt={`${product.name} secondary`}
+    className={`absolute inset-0 w-full transition-opacity duration-300 ${
+      hoveredColor === index ? 'opacity-100 h-[320px] object-contain' : 'opacity-0 h-0'
+    }`}
+  />
+
+  {/* العنوان - يبقى في مكانه */}
+  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
+    <span className="block text-lg font-semibold">{product.name}</span>
+  </div>
+</div>
  
-                {/* Title */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800">
-                  <span className="block text-lg font-semibold">{product.name}</span>
-                </div>
-              </div>
+               
             ))}
           </div>
         ) : (
