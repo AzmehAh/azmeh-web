@@ -125,26 +125,29 @@ const JobApplication = () => {
         try {
           const fileExt = formData.cvFile.name.split('.').pop();
           const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-          const filePath = `resumes/${fileName}`;
+          const filePath = `job-applications/resumes/${fileName}`;
 
           const { error: uploadError } = await supabase.storage
             .from('system-media')
             .upload(filePath, formData.cvFile);
+            throw uploadError;
 
-          if (uploadError) throw uploadError;
-
-          const { data: { publicUrl } } = supabase.storage
-            .from('system-media')
-            .getPublicUrl(filePath);
-
-          resumeUrl = publicUrl;
+            const { data: { publicUrl } } = supabase.storage
+              .from('system-media')
+              .getPublicUrl(filePath);
+            
+            resumeUrl = publicUrl;
+          }
         } catch (uploadError) {
-          console.warn('CV upload failed:', uploadError);
+          console.error('CV upload failed:', uploadError);
+          alert('Failed to upload CV file. Please try again.');
+          setIsSubmitting(false);
+          return;
           // Continue without CV upload if storage fails
         }
       }
 
-      // إدخال بيانات الطلب في قاعدة البيانات
+      // Submit job application to database
       const { error } = await supabase
         .from('job_applications')
         .insert([{
@@ -160,6 +163,12 @@ const JobApplication = () => {
       setSubmitStatus('success');
       setFormData({ fullName: '', email: '', phone: '', coverLetter: '', cvFile: null });
       setErrors({});
+      
+      // Reset file input
+      const fileInput = document.getElementById('cvFile') as HTMLInputElement;
+      if (fileInput) {
+        fileInput.value = '';
+      }
       
       // Reset success message after 5 seconds
       setTimeout(() => {
