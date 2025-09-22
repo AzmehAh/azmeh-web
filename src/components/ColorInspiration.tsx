@@ -1,59 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from "framer-motion";
-import { api } from '../lib/supabase';
-
-interface Product {
-  id: string;
-  name: string;
-  mainImage: string; // الصورة الرئيسية
-  product_images: Array<{
-    id: string;
-    image_url: string;
-    alt_text?: string; 
-    is_main: boolean;
-    sort_order: number;
-  }>;
-}
 
 const ColorInspiration = () => {
-  const [hoveredProduct, setHoveredProduct] = useState<number | null>(null);
-  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [hoveredColor, setHoveredColor] = useState<number | null>(null);
 
-  // جلب المنتجات المميزة من الباك إند
-  useEffect(() => {
-    const fetchFeaturedProducts = async () => {
-      try {
-        // جلب المنتجات من Supabase
-        const products = await api.getProducts();
-        
-        // ✅ تأكد أن المنتجات فيها featured=true فقط (إحتياطًا)
-        const featured = products.filter(p => p.featured);
-        setFeaturedProducts(featured);
-      } catch (error) {
-        console.error("فشل جلب المنتجات:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFeaturedProducts();
-  }, []);
-
-  if (loading) {
-    return (
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <p className="text-gray-500">جاري التحميل...</p>
-        </div>
-      </section>
-    );
-  }
+  const colorSwatches = [
+    { 
+      name: 'Little Kiwi',
+      bucketImage: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg',
+      squareImage: 'https://images.pexels.com/photos/1643383/pexels-photo-1643383.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Ocean ',
+      bucketImage: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg',
+      squareImage: 'https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Lemon',
+      bucketImage: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg',
+      squareImage: 'https://images.pexels.com/photos/1080721/pexels-photo-1080721.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
+    },
+    {
+      name: 'Charcoal ',
+      bucketImage: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg',
+      squareImage: 'https://images.pexels.com/photos/2724749/pexels-photo-2724749.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop'
+    }
+  ];
 
   return (
     <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-10 lg:px-14">
-        {/* العنوان */}
+        {/* Title */}
         <div className="text-center mb-10">
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
@@ -61,7 +38,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6 }}
             className="text-sm uppercase text-[#0055A3] mb-2"
           >
-            مميزات جديدة
+            Fresh & Exclusive
           </motion.h3>
 
           <motion.h2
@@ -70,50 +47,43 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl font-bold text-gray-900 mb-4"
           >
-            منتجات مميزة
+            New Drops
           </motion.h2>
         </div>
 
-        {/* الشبكة */}
+        {/* Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20">
-          {featuredProducts.length > 0 ? (
-            featuredProducts.map((product, index) => (
-              <div
-                key={product.id} // ✅ استخدم ID حقيقي بدل index
-                className="relative overflow-hidden group cursor-pointer w-52 h-[280px] mx-auto"
-                onMouseEnter={() => setHoveredProduct(product.id)}
-                onMouseLeave={() => setHoveredProduct(null)}
-              >
-                {/* الصورة الرئيسية — نستخدمها كصورة Bucket و Square معًا */}
-                {/* يمكنك لاحقًا إضافة صورة ثانية إذا أردت تأثير التبديل */}
-                <img
-                  src={product.mainImage}
-                  alt={`${product.name} bucket`}
-                  className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
-                    hoveredProduct === product.id ? 'opacity-0 scale-90' : 'opacity-100 scale-100'
-                  }`}
-                />
+          {colorSwatches.map((swatch, index) => (
+            <div
+              key={index}
+              className="relative overflow-hidden group cursor-pointer w-52 h-[280px] mx-auto"
+              onMouseEnter={() => setHoveredColor(index)}
+              onMouseLeave={() => setHoveredColor(null)}
+            >
+              {/* Bucket Image */}
+              <img
+                src={swatch.bucketImage}
+                alt={`${swatch.name} bucket`}
+                className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
+                  hoveredColor === index ? 'opacity-0 scale-90' : 'opacity-100 scale-100'
+                }`}
+              />
 
-                {/* نفس الصورة — لكن مع تأثير hover (يمكنك لاحقًا تغييرها لصورة أخرى) */}
-                <img
-                  src={product.mainImage}
-                  alt={`${product.name} square`}
-                  className={`absolute inset-0 z-10 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
-                    hoveredProduct === product.id ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-                  }`}
-                />
+              {/* Square Image */}
+              <img
+                src={swatch.squareImage}
+                alt={`${swatch.name} square`}
+                className={`absolute inset-0 z-10 w-full h-full object-cover shadow-xl transition-all duration-700 ease-out ${
+                  hoveredColor === index ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
+                }`}
+              />
 
-                {/* الاسم */}
-                <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800">
-                  <span className="block text-lg font-semibold">{product.name}</span>
-                </div>
+              {/* Title */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800">
+                <span className="block text-lg font-semibold">{swatch.name}</span>
               </div>
-            ))
-          ) : (
-            <div className="col-span-full text-center py-10 text-gray-500">
-              لا توجد منتجات مميزة حالياً
             </div>
-          )}
+          ))}
         </div>
       </div>
     </section>
