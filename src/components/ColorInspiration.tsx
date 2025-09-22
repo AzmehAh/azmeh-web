@@ -87,7 +87,7 @@ const ColorInspiration = () => {
             {featuredProducts.map((product, index) => (
   <div
   key={product.id}
-  className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-hidden"
+  className="relative group cursor-pointer w-52 h-[280px] mx-auto "
   onMouseEnter={() => setHoveredColor(index)}
   onMouseLeave={() => setHoveredColor(null)}
 >
