@@ -127,17 +127,25 @@ const JobApplication = () => {
         const fileName = `${Date.now()}.${fileExt}`;
         const filePath = `cv/${fileName}`;
         
-        const { error: uploadError } = await supabase.storage
-          .from('job-applications') // تأكد من إنشاء هذا الـ bucket في Supabase
-          .upload(filePath, formData.cvFile);
-          
-        if (uploadError) throw uploadError;
-        
-        const { data: { publicUrl } } = supabase.storage
-          .from('job-applications')
-          .getPublicUrl(filePath);
-          
-        cvUrl = publicUrl;
+        try {
+          const { error: uploadError } = await supabase.storage
+            .from('job-applications')
+            .upload(filePath, formData.cvFile);
+            
+          if (uploadError) {
+            console.warn('CV upload failed, proceeding without CV:', uploadError);
+            // Continue without CV instead of throwing error
+          } else {
+            const { data: { publicUrl } } = supabase.storage
+              .from('job-applications')
+              .getPublicUrl(filePath);
+              
+            cvUrl = publicUrl;
+          }
+        } catch (uploadError) {
+          console.warn('CV upload failed, proceeding without CV:', uploadError);
+          // Continue without CV instead of throwing error
+        }
       }
 
       // إدخال بيانات الطلب في قاعدة البيانات
@@ -148,7 +156,7 @@ const JobApplication = () => {
           email: formData.email,
           phone: formData.phone,
           cover_letter: formData.coverLetter,
-          cv_url: cvUrl // حفظ رابط الـ CV
+          resume_url: cvUrl || null // حفظ رابط الـ CV أو null إذا فشل الرفع
         }]);
 
       if (error) throw error;
