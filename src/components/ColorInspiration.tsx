@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { api } from '../lib/supabase';
+import { supabase } from '../lib/supabase'; // <-- تم استيراد supabase بشكل صحيح
 
 const ColorInspiration = () => {
   const [hoveredColor, setHoveredColor] = useState<number | null>(null);
@@ -27,43 +26,30 @@ const ColorInspiration = () => {
 
       if (error) throw error;
 
+      // هنا نقوم بتحليل الصور للحصول على الرئيسية والثانوية لكل منتج
       const formattedProducts = (data || []).map(product => {
-        const mainImage = product.product_images.find(img => img.is_main) || 
-                          product.product_images[0];
+        const allImages = product.product_images || [];
         
+        // جلب الصورة الرئيسية
+        const mainImage = allImages.find(img => img.is_main) || allImages[0];
+        
+        // جلب الصورة الثانية (أول صورة غير رئيسية)
+        const secondaryImage = allImages.find(img => !img.is_main) || allImages[1] || mainImage;
+
         return {
           id: product.id,
           name: product.name,
-          image: mainImage?.image_url || 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg'
+          mainImage: mainImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image',
+          secondaryImage: secondaryImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image'
         };
       });
 
       setFeaturedProducts(formattedProducts);
     } catch (error) {
       console.error('Error fetching featured products:', error);
-      // Fallback to static data if database fetch fails
-      setFeaturedProducts([
-        { 
-          id: '1',
-          name: 'Little Kiwi',
-          image: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg'
-        },
-        {
-          id: '2',
-          name: 'Ocean',
-          image: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg'
-        },
-        {
-          id: '3',
-          name: 'Lemon',
-          image: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg'
-        },
-        {
-          id: '4',
-          name: 'Charcoal',
-          image: 'https://i.postimg.cc/850wmJTV/Whats-App-Image-2025-08-17-at-2-34-35-PM.jpg'
-        }
-      ]);
+      // بدلاً من استخدام بيانات ثابتة، نترك المصفوفة فارغة أو نعرض رسالة خطأ للمستخدم
+      setFeaturedProducts([]); // <-- تم حذف البيانات الثابتة
+      alert('Failed to load featured products. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -98,7 +84,7 @@ const ColorInspiration = () => {
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
           </div>
-        ) : (
+        ) : featuredProducts.length > 0 ? ( // <-- نتحقق إذا كانت هناك منتجات
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20">
             {featuredProducts.map((product, index) => (
               <div
@@ -109,11 +95,9 @@ const ColorInspiration = () => {
               >
                 {/* Product Image */}
                 <img
-                  src={product.image}
+                  src={hoveredColor === index ? product.secondaryImage : product.mainImage}
                   alt={`${product.name} product`}
-                  className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
-                    hoveredColor === index ? 'opacity-80 scale-105' : 'opacity-100 scale-100'
-                  }`}
+                  className="absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out"
                 />
 
                 {/* Title */}
@@ -122,6 +106,11 @@ const ColorInspiration = () => {
                 </div>
               </div>
             ))}
+          </div>
+        ) : (
+          // رسالة في حالة عدم وجود منتجات مميزة
+          <div className="text-center py-12 text-gray-500">
+            No featured products available at the moment.
           </div>
         )}
       </div>
