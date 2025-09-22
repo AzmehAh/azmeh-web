@@ -129,7 +129,7 @@ const JobApplication = () => {
         
         try {
           const { error: uploadError } = await supabase.storage
-            .from('job-applications')
+            .from('product-documents')
             .upload(filePath, formData.cvFile);
             
           if (uploadError) {
@@ -137,7 +137,7 @@ const JobApplication = () => {
             // Continue without CV instead of throwing error
           } else {
             const { data: { publicUrl } } = supabase.storage
-              .from('job-applications')
+              .from('product-documents')
               .getPublicUrl(filePath);
               
             cvUrl = publicUrl;
