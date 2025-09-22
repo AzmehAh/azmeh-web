@@ -98,16 +98,16 @@ const ColorInspiration = () => {
     className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
       hoveredColor === index ? 'opacity-0' : 'opacity-100'
     }`}
-  />
+  /> 
 
-  {/* الصورة الثانية - تتمدد لتحت وتغطي الاسم */}
+  {/* الصورة الثانية - تتطول عند الهوفر داخل نفس الكارد */}
   <img
     src={product.secondaryImage}
     alt={`${product.name} secondary`}
-    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 origin-top ${
+    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
       hoveredColor === index
-        ? 'opacity-100 scale-y-175'
-        : 'opacity-0 scale-y-100' 
+        ? 'opacity-100 scale-y-125'
+        : 'opacity-0 scale-y-100'
     }`}
   />
 
@@ -115,8 +115,7 @@ const ColorInspiration = () => {
   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
     <span className="block text-lg font-semibold">{product.name}</span>
   </div>
-</div>
-
+</div> 
      
             ))}
           </div>
