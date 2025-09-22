@@ -79,10 +79,10 @@ const ColorInspiration = () => {
  
         {/* Grid */}
         {loading ? (
-          <div className="flex items-center justify-center h-70">
+          <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
           </div>
-        ) : featuredProducts.length > 0 ? (
+        ) : featuredProducts.length > 0 ? ( 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20">
             {featuredProducts.map((product, index) => (
   <div
