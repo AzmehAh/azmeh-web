@@ -85,20 +85,23 @@ const ColorInspiration = () => {
         ) : featuredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20">
             {featuredProducts.map((product, index) => (
-              <div
-                key={product.id}
-                className="relative overflow-hidden group cursor-pointer w-52 h-[280px] mx-auto"
-                onMouseEnter={() => setHoveredColor(index)}
-                onMouseLeave={() => setHoveredColor(null)}
-              >
-                {/* Product Image - مع استعادة تأثير التحويم */}
-                <img
-                  src={hoveredColor === index ? product.secondaryImage : product.mainImage}
-                  alt={`${product.name} product`}
-                  className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ease-out ${
-                    hoveredColor === index ? 'opacity-80 scale-105' : 'opacity-100 scale-100'
-                  }`}
-                />  
+             <div
+  key={product.id}
+  className={`relative overflow-hidden group cursor-pointer w-52 h-[280px] mx-auto transition-all duration-300 ${
+    hoveredColor === index ? 'overflow-visible z-10' : 'overflow-hidden'
+  }`}
+  onMouseEnter={() => setHoveredColor(index)}
+  onMouseLeave={() => setHoveredColor(null)}
+>
+              <img
+  src={hoveredColor === index ? product.secondaryImage : product.mainImage}
+  alt={`${product.name} product`}
+  className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out ${
+    hoveredColor === index 
+      ? 'opacity-80 scale-110 origin-bottom' 
+      : 'opacity-100 scale-100'
+  }`}
+/>
  
                 {/* Title */}
                 <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800">
