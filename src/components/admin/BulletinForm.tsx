@@ -238,13 +238,12 @@ const BulletinForm = () => {
 
       const range = quill.getSelection();
       const position = range ? range.index : quill.getLength();
+let styleAttr = '';
+if (imageWidth) styleAttr += `width: ${imageWidth}; `;
+if (imageHeight) styleAttr += `height: ${imageHeight}; `;
 
-      let imgTag = `<img src="${imageUrl}" `;
-
-      if (imageWidth) imgTag += `width="${imageWidth}" `;
-      if (imageHeight) imgTag += `height="${imageHeight}" `;
-
-      imgTag += '/>';
+let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} />`;
+    
 
       quill.clipboard.dangerouslyPasteHTML(position, imgTag);
       quill.setSelection(position + 1, 0);
