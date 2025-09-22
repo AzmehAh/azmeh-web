@@ -85,15 +85,13 @@ const ColorInspiration = () => {
         ) : featuredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20">
             {featuredProducts.map((product, index) => (
-             <div
-  key={product.id}
-  className={`relative overflow-hidden group cursor-pointer w-52 h-[280px] mx-auto transition-all duration-300 ${
-    hoveredColor === index ? 'overflow-visible z-10' : 'overflow-hidden'
-  }`}
-  onMouseEnter={() => setHoveredColor(index)}
-  onMouseLeave={() => setHoveredColor(null)}
->
-              <img
+              <div
+                key={product.id}
+                className="relative overflow-hidden group cursor-pointer w-52 h-[280px] mx-auto"
+                onMouseEnter={() => setHoveredColor(index)}
+                onMouseLeave={() => setHoveredColor(null)}
+              >
+              <img 
   src={hoveredColor === index ? product.secondaryImage : product.mainImage}
   alt={`${product.name} product`}
   className={`absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out ${
