@@ -329,7 +329,7 @@ const BulletinForm = () => {
         setCategories(prev => [...prev, formData.category]);
       }
 
-      navigate('/bulletins'); // العودة للقائمة بعد الحفظ
+      navigate('/admin/bulletins'); // العودة للقائمة بعد الحفظ
     } catch (error) {
       console.error('Error saving bulletin:', error);
       alert('Error saving bulletin: ' + error.message);
