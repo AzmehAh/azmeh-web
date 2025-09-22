@@ -310,7 +310,7 @@ const ApplicationModal = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="relative bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[90vh] overflow-hidden"
+          className="relative bg-white rounded-lg shadow-xl max-w-3xl w-full max-h-[100vh] overflow-hidden"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b">
