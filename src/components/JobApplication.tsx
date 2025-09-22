@@ -130,14 +130,16 @@ const JobApplication = () => {
           const { error: uploadError } = await supabase.storage
             .from('system-media')
             .upload(filePath, formData.cvFile);
-            throw uploadError;
 
-            const { data: { publicUrl } } = supabase.storage
-              .from('system-media')
-              .getPublicUrl(filePath);
-            
-            resumeUrl = publicUrl;
+          if (uploadError) {
+            throw uploadError;
           }
+
+          const { data: { publicUrl } } = supabase.storage
+            .from('system-media')
+            .getPublicUrl(filePath);
+          
+          resumeUrl = publicUrl;
         } catch (uploadError) {
           console.error('CV upload failed:', uploadError);
           alert('Failed to upload CV file. Please try again.');
@@ -237,7 +239,7 @@ const JobApplication = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-12"> {/* <-- زدنا marginBottom إلى mb-12 لزيادة البادينغ */} 
+          <h2 className="text-3xl font-bold text-gray-900 mb-12"> {/* <-- زدنا marginBottom إلى mb-12 لزيادة البادينغ */}
             Submit Your Application
           </h2>
           
