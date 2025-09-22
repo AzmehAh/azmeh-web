@@ -85,7 +85,36 @@ const Dashboard = () => {
     }
   };
 
- 
+  const statCards = [
+    {
+      name: 'Products',
+      value: stats.products,
+      icon: Package,
+      color: 'bg-blue-500',
+      href: '/admin/products'
+    },
+    {
+      name: 'Bulletins',
+      value: stats.bulletins,
+      icon: FileText,
+      color: 'bg-green-500',
+      href: '/admin/bulletins'
+    },
+    {
+      name: 'Messages',
+      value: stats.messages,
+      icon: MessageSquare,
+      color: 'bg-yellow-500',
+      href: '/admin/messages'
+    }, 
+    {
+      name: 'Applications',
+      value: stats.applications,
+      icon: Users,
+      color: 'bg-purple-500',
+      href: '/admin/applications'
+    }
+  ];
 
   if (loading) {
     return (
