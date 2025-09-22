@@ -54,7 +54,7 @@ const ColorInspiration = () => {
   };
 
   return (
-    <section className="py-24 bg-gray-50">
+    <section className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-10 lg:px-14">
         {/* Title */}
         <div className="text-center mb-10">
@@ -76,7 +76,7 @@ const ColorInspiration = () => {
             New Drops
           </motion.h2>
         </div>
-
+ 
         {/* Grid */}
         {loading ? (
           <div className="flex items-center justify-center h-64">
@@ -87,7 +87,7 @@ const ColorInspiration = () => {
             {featuredProducts.map((product, index) => (
   <div
   key={product.id}
-  className="relative group cursor-pointer w-52 h-[400px] mx-auto overflow-hidden"
+  className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-hidden"
   onMouseEnter={() => setHoveredColor(index)}
   onMouseLeave={() => setHoveredColor(null)}
 >
