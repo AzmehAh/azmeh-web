@@ -87,7 +87,7 @@ const ColorInspiration = () => {
             {featuredProducts.map((product, index) => (
   <div
   key={product.id}
-  className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-visible"
+  className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-hidden"
   onMouseEnter={() => setHoveredColor(index)}
   onMouseLeave={() => setHoveredColor(null)}
 >
@@ -100,11 +100,11 @@ const ColorInspiration = () => {
     }`}
   />
 
-  {/* الصورة الثانية - تطلع بحجم أكبر من الكارد */}
+  {/* الصورة الثانية - نفس الحركة لكن بارتفاع أكبر */}
   <img
     src={product.secondaryImage}
     alt={`${product.name} secondary`}
-    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 origin-bottom ${
+    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
       hoveredColor === index
         ? 'opacity-100 scale-y-150'
         : 'opacity-0 scale-y-100'
