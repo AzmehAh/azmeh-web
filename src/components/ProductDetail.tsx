@@ -184,9 +184,9 @@ const ProductDetail = () => {
           {/* Breadcrumb */}
           <div className="relative mb-8">
             <div className="flex items-center text-sm text-white">
-              <Link to="/" className="hover:underline">Home</Link>
+              <Link to="/" className="hover:text-[#0055A3] transition-colors">Home</Link>
               <span className="mx-2">/</span>
-              <Link to="/products" className="hover:underline">Products</Link>
+              <Link to="/products" className="hover:text-[#0055A3] transition-colors">Products</Link>
               {product && (
                 <>
                   <span className="mx-2">/</span>
