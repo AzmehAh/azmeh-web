@@ -54,7 +54,7 @@ const ColorInspiration = () => {
   };
 
   return (
-    <section className="py-18 bg-white">
+    <section className="py-20 bg-white">
       <div className="max-w-6xl mx-auto px-4 sm:px-10 lg:px-14">
         {/* Title */}
         <div className="text-center mb-10">
