@@ -9,7 +9,7 @@ interface Product {
   product_images: Array<{
     id: string;
     image_url: string;
-    alt_text?: string;
+    alt_text?: string; 
     is_main: boolean;
     sort_order: number;
   }>;
@@ -27,17 +27,9 @@ const ColorInspiration = () => {
         // جلب المنتجات من Supabase
         const products = await api.getProducts();
         
-        // تحويل البيانات وأخذ أول 4 منتجات كمنتجات مميزة
-        const formattedProducts = products.slice(0, 4).map(product => ({
-          id: product.id,
-          name: product.name,
-          mainImage: product.product_images?.find(img => img.is_main)?.image_url 
-                    || product.product_images?.[0]?.image_url 
-                    || '/images/placeholder.jpg',
-          product_images: product.product_images || []
-        }));
-        
-        setFeaturedProducts(formattedProducts);
+        // ✅ تأكد أن المنتجات فيها featured=true فقط (إحتياطًا)
+        const featured = products.filter(p => p.featured);
+        setFeaturedProducts(featured);
       } catch (error) {
         console.error("فشل جلب المنتجات:", error);
       } finally {
