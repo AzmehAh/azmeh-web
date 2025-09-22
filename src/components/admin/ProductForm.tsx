@@ -23,7 +23,7 @@ interface ProductImage {
 interface TechnicalSpec { 
   property: string;
   value: string;
-  standard: string;
+
 }
 interface PackagingSize {
   size: string;
@@ -900,17 +900,7 @@ const ProductForm = () => {
                       }}
                       className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                     />
-                    <input
-                      type="text"
-                      placeholder="Standard"
-                      value={item.standard || ''}
-                      onChange={(e) => {
-                        const newSpecs = [...(formData.technical_specs || [])];
-                        newSpecs[idx] = { ...newSpecs[idx], standard: e.target.value };
-                        setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
-                      }}
-                      className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
+                   
                     <button
                       type="button"
                       onClick={() => removeArrayItem('technical_specs', idx)}
@@ -922,7 +912,7 @@ const ProductForm = () => {
                 ))}
                 <button
                   type="button"
-                  onClick={() => addArrayItem('technical_specs', { property: '', value: '', standard: '' })}
+                  onClick={() => addArrayItem('technical_specs', { property: '', value: '' })}
                   className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
                 >
                   + Add Specification
