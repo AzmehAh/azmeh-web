@@ -133,7 +133,7 @@ const JobApplication = () => {
           
         if (uploadError) throw uploadError;
         
-        const {  { publicUrl } } = supabase.storage
+        const { data: { publicUrl } } = supabase.storage
           .from('job-applications')
           .getPublicUrl(filePath);
           
