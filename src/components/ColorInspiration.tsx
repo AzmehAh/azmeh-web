@@ -100,14 +100,14 @@ const ColorInspiration = () => {
     }`}
   />
 
-  {/* الصورة الثانية - نفس الحركة لكن بارتفاع أكبر */}
+  {/* الصورة الثانية - تتمدد من الأعلى لتحت لتغطي العنوان */}
   <img
     src={product.secondaryImage}
     alt={`${product.name} secondary`}
     className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
       hoveredColor === index
-        ? 'opacity-100 scale-y-150'
-        : 'opacity-0 scale-y-100'
+        ? 'opacity-100 scale-y-[1.5] origin-top'
+        : 'opacity-0 scale-y-100 origin-top'
     }`}
   />
 
@@ -116,7 +116,6 @@ const ColorInspiration = () => {
     <span className="block text-lg font-semibold">{product.name}</span>
   </div>
 </div>
-
      
             ))}
           </div>
