@@ -125,7 +125,7 @@ const JobApplication = () => {
       if (formData.cvFile) {
         const fileExt = formData.cvFile.name.split('.').pop();
         const fileName = `${Date.now()}.${fileExt}`;
-        const filePath = `cv/${fileName}`;
+        const filePath = `resumes/${fileName}`;
         
         try {
           const { error: uploadError } = await supabase.storage
