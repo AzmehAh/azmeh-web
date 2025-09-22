@@ -87,7 +87,7 @@ const ColorInspiration = () => {
             {featuredProducts.map((product, index) => (
   <div
   key={product.id}
-  className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-hidden"
+  className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-visible"
   onMouseEnter={() => setHoveredColor(index)}
   onMouseLeave={() => setHoveredColor(null)}
 >
@@ -98,15 +98,15 @@ const ColorInspiration = () => {
     className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
       hoveredColor === index ? 'opacity-0' : 'opacity-100'
     }`}
-  /> 
+  />
 
-  {/* الصورة الثانية - تتطول عند الهوفر داخل نفس الكارد */}
+  {/* الصورة الثانية - تطلع بحجم أكبر من الكارد */}
   <img
     src={product.secondaryImage}
     alt={`${product.name} secondary`}
-    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
+    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 origin-bottom ${
       hoveredColor === index
-        ? 'opacity-100 scale-y-125'
+        ? 'opacity-100 scale-y-150'
         : 'opacity-0 scale-y-100'
     }`}
   />
@@ -116,6 +116,7 @@ const ColorInspiration = () => {
     <span className="block text-lg font-semibold">{product.name}</span>
   </div>
 </div>
+
      
             ))}
           </div>
