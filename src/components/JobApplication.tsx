@@ -119,35 +119,6 @@ const JobApplication = () => {
     setSubmitStatus('idle');
 
     try {
-      let cvUrl = '';
-      
-      // رفع ملف الـ CV أولاً إذا وجد
-      if (formData.cvFile) {
-        const fileExt = formData.cvFile.name.split('.').pop();
-        const fileName = `${Date.now()}.${fileExt}`;
-        const filePath = `resumes/${fileName}`;
-        
-        try {
-          const { error: uploadError } = await supabase.storage
-            .from('product-documents')
-            .upload(filePath, formData.cvFile);
-            
-          if (uploadError) {
-            console.warn('CV upload failed, proceeding without CV:', uploadError);
-            // Continue without CV instead of throwing error
-          } else {
-            const { data: { publicUrl } } = supabase.storage
-              .from('product-documents')
-              .getPublicUrl(filePath);
-              
-            cvUrl = publicUrl;
-          }
-        } catch (uploadError) {
-          console.warn('CV upload failed, proceeding without CV:', uploadError);
-          // Continue without CV instead of throwing error
-        }
-      }
-
       // إدخال بيانات الطلب في قاعدة البيانات
       const { error } = await supabase
         .from('job_applications')
@@ -156,7 +127,7 @@ const JobApplication = () => {
           email: formData.email,
           phone: formData.phone,
           cover_letter: formData.coverLetter,
-          resume_url: cvUrl || null // حفظ رابط الـ CV أو null إذا فشل الرفع
+          resume_url: null // CV storage not configured, saving without file
         }]);
 
       if (error) throw error;
