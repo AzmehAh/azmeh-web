@@ -113,19 +113,29 @@ const FAQ = () => {
     setOpenItem(openItem === id ? null : id);
   };
 
-  if (!currentCategory) {
-    return (
-      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Category Not Found</h1>
-          <p className="text-gray-600 mb-8">The FAQ category you're looking for doesn't exist.</p>
-          <Link to="/faq" className="bg-[#0055A3] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-            Back to FAQ Categories
-          </Link>
-        </div>
+
+if (!loading && category && !currentCategory) {
+  return (
+    <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+      <div className="text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">Category Not Found</h1>
+        <p className="text-gray-600 mb-8">The FAQ category you're looking for doesn't exist.</p>
+        <Link to="/faq" className="bg-[#0055A3] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
+          Back to FAQ Categories
+        </Link>
       </div>
-    );
-  }
+    </div>
+  );
+}
+
+
+if (loading) {
+  return (
+    <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-[#0055A3]"></div>
+    </div>
+  );
+}
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
