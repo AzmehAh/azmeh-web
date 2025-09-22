@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { User, Mail, Phone, FileText, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { User, Mail, Phone, FileText, Send, CheckCircle, AlertCircle, Upload as UploadIcon } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 interface FormData {
@@ -8,6 +8,7 @@ interface FormData {
   email: string;
   phone: string;
   coverLetter: string;
+  cvFile: File | null; // <-- أضفنا هذا الحقل الجديد
 }
 
 interface FormErrors {
@@ -15,6 +16,7 @@ interface FormErrors {
   email?: string;
   phone?: string;
   coverLetter?: string;
+  cvFile?: string; // <-- أضفنا هذا الحقل الجديد
 }
 
 const JobApplication = () => {
@@ -22,7 +24,8 @@ const JobApplication = () => {
     fullName: '',
     email: '',
     phone: '',
-    coverLetter: ''
+    coverLetter: '',
+    cvFile: null // <-- تهيئة الحقل الجديد
   });
   
   const [errors, setErrors] = useState<FormErrors>({});
@@ -70,6 +73,15 @@ const JobApplication = () => {
       newErrors.coverLetter = 'Cover letter must be at least 10 characters';
     }
 
+    // CV File validation
+    if (!formData.cvFile) {
+      newErrors.cvFile = 'Please upload your CV (PDF or DOC)';
+    } else if (!['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(formData.cvFile.type)) {
+      newErrors.cvFile = 'Please upload a PDF or Word document';
+    } else if (formData.cvFile.size > 5 * 1024 * 1024) { // 5MB limit
+      newErrors.cvFile = 'File size must be less than 5MB';
+    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -81,6 +93,17 @@ const JobApplication = () => {
     // Clear error for this field when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
+    }
+  };
+
+  // دالة جديدة للتعامل مع تحميل ملف الـ CV
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setFormData(prev => ({ ...prev, cvFile: file }));
+    
+    // Clear error for CV file
+    if (errors.cvFile) {
+      setErrors(prev => ({ ...prev, cvFile: undefined }));
     }
   };
 
@@ -96,19 +119,42 @@ const JobApplication = () => {
     setSubmitStatus('idle');
 
     try {
+      let cvUrl = '';
+      
+      // رفع ملف الـ CV أولاً إذا وجد
+      if (formData.cvFile) {
+        const fileExt = formData.cvFile.name.split('.').pop();
+        const fileName = `${Date.now()}.${fileExt}`;
+        const filePath = `cv/${fileName}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('job-applications') // تأكد من إنشاء هذا الـ bucket في Supabase
+          .upload(filePath, formData.cvFile);
+          
+        if (uploadError) throw uploadError;
+        
+        const {  { publicUrl } } = supabase.storage
+          .from('job-applications')
+          .getPublicUrl(filePath);
+          
+        cvUrl = publicUrl;
+      }
+
+      // إدخال بيانات الطلب في قاعدة البيانات
       const { error } = await supabase
         .from('job_applications')
         .insert([{
           full_name: formData.fullName,
           email: formData.email,
           phone: formData.phone,
-          cover_letter: formData.coverLetter
+          cover_letter: formData.coverLetter,
+          cv_url: cvUrl // حفظ رابط الـ CV
         }]);
 
       if (error) throw error;
 
       setSubmitStatus('success');
-      setFormData({ fullName: '', email: '', phone: '', coverLetter: '' });
+      setFormData({ fullName: '', email: '', phone: '', coverLetter: '', cvFile: null });
       setErrors({});
     } catch (error) {
       console.error('Error submitting job application:', error);
@@ -173,9 +219,11 @@ const JobApplication = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-8">Submit Your Application</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-12"> {/* <-- زدنا marginBottom إلى mb-12 لزيادة البادينغ */} 
+            Submit Your Application
+          </h2>
           
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-8"> {/* <-- زدنا الفاصل بين العناصر إلى space-y-8 */}
             {/* Full Name */}
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -296,6 +344,53 @@ const JobApplication = () => {
                 >
                   <AlertCircle className="w-4 h-4 mr-1" />
                   {errors.coverLetter}
+                </motion.p>
+              )}
+            </div>
+
+            {/* CV Upload - الحقل الجديد */}
+            <div>
+              <label htmlFor="cvFile" className="block text-sm font-medium text-gray-700 mb-2">
+                <UploadIcon className="w-4 h-4 inline mr-2" />
+                Upload Your CV (PDF or DOC) *
+              </label>
+              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-[#2C5DB6] transition-colors">
+                <div className="space-y-1 text-center">
+                  <UploadIcon className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="flex text-sm text-gray-600">
+                    <label
+                      htmlFor="cvFile"
+                      className="relative cursor-pointer rounded-md font-medium text-[#2C5DB6] hover:text-blue-700 focus-within:outline-none"
+                    >
+                      <span>Upload a file</span>
+                      <input
+                        id="cvFile"
+                        name="cvFile"
+                        type="file"
+                        className="sr-only"
+                        accept=".pdf,.doc,.docx"
+                        onChange={handleFileChange}
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs text-gray-500">PDF or DOC up to 5MB</p>
+                  {formData.cvFile && (
+                    <p className="text-sm text-green-600 mt-2">
+                      <CheckCircle className="w-4 h-4 inline mr-1" />
+                      {formData.cvFile.name}
+                    </p>
+                  )}
+                </div>
+              </div>
+              {errors.cvFile && (
+                <motion.p
+                  initial={{ opacity: 0, y: -5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mt-2 text-sm text-red-600 flex items-center"
+                >
+                  <AlertCircle className="w-4 h-4 mr-1" />
+                  {errors.cvFile}
                 </motion.p>
               )}
             </div>
