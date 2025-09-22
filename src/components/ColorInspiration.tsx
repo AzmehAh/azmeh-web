@@ -106,7 +106,7 @@ const ColorInspiration = () => {
     alt={`${product.name} secondary`}
     className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
       hoveredColor === index
-        ? 'opacity-100 scale-y-125'
+        ? 'opacity-100 scale-y-200'
         : 'opacity-0 scale-y-100'
     }`} 
   />
