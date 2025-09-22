@@ -95,16 +95,16 @@ const ColorInspiration = () => {
   <img
     src={product.mainImage}
     alt={`${product.name} main`}
-    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
+    className={`absolute inset-0 w-full h-full object-contain transition-opacity duration-500 ${
       hoveredColor === index ? 'opacity-0' : 'opacity-100'
     }`}
   />
 
-  {/* الصورة الثانية - تتطول عند الهوفر داخل نفس الكارد */}
+  {/* الصورة الثانية - تتمدد للأعلى */}
   <img
     src={product.secondaryImage}
     alt={`${product.name} secondary`}
-    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
+    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 origin-top ${
       hoveredColor === index
         ? 'opacity-100 scale-y-125'
         : 'opacity-0 scale-y-100'
