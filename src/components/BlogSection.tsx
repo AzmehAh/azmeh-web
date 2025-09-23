@@ -126,7 +126,7 @@ const BlogSection = () => {
           className="text-center"
         >
           <Link
-            to="/systems"
+            to="/blog"
             className="inline-flex items-center bg-[#2C5DB6] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-sm sm:text-base"
           >
             View All Articles
