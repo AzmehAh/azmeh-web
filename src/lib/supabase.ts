@@ -134,6 +134,7 @@ export interface ProductCategory {
   id: string;
   name: string;
   description?: string;
+  image_url?: string;
   parent_id?: string;
   sort_order: number;
   is_active: boolean;
