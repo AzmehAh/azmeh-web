@@ -175,7 +175,7 @@ if (loading) {
         <div className="text-center mb-16">
     
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            {currentCategory.title}
+            {currentCategory.name}
           </h1>
          
         </div>
