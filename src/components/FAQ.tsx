@@ -77,7 +77,7 @@ const FAQ = () => {
   </div>
 
   {/* نص العنوان */}
-  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#0055A3] transition-colors leading-snug">
+  <h3 className="text-2xl font-bold min-h-[10px] text-gray-900 group-hover:text-[#0055A3] transition-colors leading-snug">
     {cat.name}
   </h3>
 </div>
