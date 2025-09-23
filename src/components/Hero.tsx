@@ -179,10 +179,10 @@ const Hero = () => {
                 style={{
                   filter: isActive
                     ? "brightness(0.4) contrast(1.2)"
-                    : "brightness(0.4) contrast(1.1)",
+                    : "brightness(0.4) contrast(1.1)", 
                 }}
-                initial={{ scale: 1 }}
-                animate={{ scale: isActive ? 1 : 1 }}
+                initial={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.1 }}
                 transition={{ duration: 0.5 }}
               />
 
