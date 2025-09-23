@@ -76,7 +76,7 @@ const SocialMedia = () => {
 {/* Instagram */}
 <a
   href="#"
-  className="flex items-center justify-center bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] 
+  className="flex items-center justify-start bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] 
   text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out 
   w-[47px] hover:w-[200px] group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
 >
@@ -89,7 +89,7 @@ const SocialMedia = () => {
 {/* Facebook */}
 <a
   href="#"
-  className="flex items-center justify-center bg-[#1877F2] text-white rounded-full px-3.5 py-3 h-12 
+  className="flex items-center justify-start bg-[#1877F2] text-white rounded-full px-3.5 py-3 h-12 
   overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
   group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
 >
@@ -102,7 +102,7 @@ const SocialMedia = () => {
 {/* WhatsApp */}
 <a
   href="#"
-  className="flex items-center justify-center bg-[#25D366] text-white rounded-full px-3.5 py-3 h-12 
+  className="flex items-center justify-start bg-[#25D366] text-white rounded-full px-3.5 py-3 h-12 
   overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
   group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
 >
