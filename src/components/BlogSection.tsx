@@ -108,7 +108,7 @@ const BlogSection = () => {
           </div>
 
           <h1
-            className="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2"
+            className="text-lg sm:text-xl font-bold text-gray-900 mb-3 min-h-[64px] group-hover:text-[#2C5DB6] transition-colors line-clamp-2"
           >
             {post.title}
           </h1>
