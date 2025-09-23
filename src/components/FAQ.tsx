@@ -67,11 +67,11 @@ const FAQ = () => {
               <Link
   key={cat.id}
   to={`/faq/${cat.id}`}
-  className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+  className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden  items-stretch"
 >
   <div className="p-8 flex flex-col h-full">
     {/* القسم الأساسي (عنوان + وصف + زر) */}
-    <div className="flex flex-col flex-grow min-h-[180px]"> 
+    <div className="flex flex-col flex-grow "> 
       <div className="flex mb-4">
         <div className="w-12 h-12 flex-shrink-0 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">
           <HelpCircle className="w-6 h-6 text-white" />
