@@ -127,13 +127,7 @@ const Hero = () => {
     return () => clearInterval(intervalRef.current);
   }, [isManual, categories.length]);
 
-  if (loading) {
-    return (
-      <div className="relative w-full h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white">Loading Hero...</div>
-      </div>
-    );
-  }
+  
 
   if (categories.length === 0) {
     return (
