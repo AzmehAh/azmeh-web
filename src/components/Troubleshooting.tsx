@@ -62,14 +62,14 @@ const Troubleshooting = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl  items-stretch mx-auto">
             {troubleshootingCategories.map((cat) => (
               <Link
                 key={cat.id}
                 to={`/troubleshooting/${cat.id}`}
-                className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+                className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
               >
-                <div className="p-8">
+                <div className="p-8 flex flex-col flex-grow">
 <div className="flex mb-4">
 
   <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mr-4">
@@ -77,7 +77,7 @@ const Troubleshooting = () => {
   </div>
 
 
-  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 transition-colors leading-snug">
+  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 min-h-[64px] transition-colors leading-snug">
     {cat.name}
   </h3>
 </div>
