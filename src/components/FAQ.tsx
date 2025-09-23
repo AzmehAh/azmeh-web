@@ -262,12 +262,19 @@ if (loading) {
               Our technical experts are ready to help you with any specific questions about our products and applications.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-[#0055A3] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-                Contact Technical Support
-              </button>
-              <button className="bg-white/20 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/30  transition-colors backdrop-blur-sm">
-                Schedule Consultation
-              </button>
+             <Link
+  to="/contact"
+  className="bg-white text-[#0055A3] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors block text-center"
+>
+  Contact Technical Support
+</Link>
+
+<Link
+  to="/contact"
+  className="bg-white/20 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/30 transition-colors backdrop-blur-sm block text-center"
+>
+  Schedule Consultation
+</Link>
             </div>
           </div>
         </div>
