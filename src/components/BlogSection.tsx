@@ -76,6 +76,8 @@ const BlogSection = () => {
         </div>
 
         {/* Blog Posts Grid */}
+        <Link 
+         to={`/bulletin/${post.id}`}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8 sm:mb-12">
           {featuredPosts.map((post, index) => (
             <motion.article
@@ -114,7 +116,7 @@ const BlogSection = () => {
               </div>
             </motion.article>
           ))}
-        </div>
+        </Link>
 
         {/* View All Button */}
         <motion.div
