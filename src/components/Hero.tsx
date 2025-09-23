@@ -39,7 +39,7 @@ const AnimatedTitle = ({ text, isActive }) => {
             ? "3rem"
             : "4rem"
           : window.innerWidth < 640
-          ? "3rem"
+          ? "3rem" 
           : window.innerWidth < 768
           ? "4rem"
           : "5rem",
@@ -202,7 +202,7 @@ const Hero = () => {
                     transform: isActive
                       ? "none"
                       : window.innerWidth < 768
-                      ? "translate(-50%, -50%) rotate(-90deg) "
+                      ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
                       : "translate(-50%, -50%) rotate(-90deg)",
                     transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
