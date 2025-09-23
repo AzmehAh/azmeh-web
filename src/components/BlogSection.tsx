@@ -76,12 +76,15 @@ const BlogSection = () => {
         </div>
 
         {/* Blog Posts Grid */}
-        <Link 
-         to={`/bulletin/${post.id}`}
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8 sm:mb-12">
           {featuredPosts.map((post, index) => (
+               <Link 
+                 key={post.id}
+                 to={`/bulletin/${post.id}`}
+                  className="group block bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+    >
             <motion.article
-              key={post.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -115,9 +118,10 @@ const BlogSection = () => {
                 </p>
               </div>
             </motion.article>
+                 </Link>
           ))}
         </div>
-</Link>
+
         {/* View All Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
