@@ -116,8 +116,8 @@ const BlogSection = () => {
               </div>
             </motion.article>
           ))}
-        </Link>
-
+        </div>
+</Link>
         {/* View All Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
