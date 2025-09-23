@@ -133,7 +133,7 @@ const Hero = () => {
     <div className="w-full h-screen bg-white"></div>
   );
 }
-  }
+  
 
   if (categories.length === 0) {
     return (
