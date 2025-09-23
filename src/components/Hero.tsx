@@ -20,7 +20,7 @@ const AnimatedTitle = ({ text, isActive }) => {
       opacity: 1,
       rotateX: 0, 
       skew: isActive ? "0deg" : "10deg", 
-     
+      scale: isActive ? 1.1 : 1, 
     
       transition: { type: "spring", damping: 15, stiffness: 120 },
     },
