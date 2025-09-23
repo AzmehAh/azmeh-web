@@ -127,8 +127,12 @@ const Hero = () => {
     return () => clearInterval(intervalRef.current);
   }, [isManual, categories.length]);
 
-  if (loading) { 
-    return null;
+ 
+    if (loading) {
+  return (
+    <div className="w-full h-screen bg-white"></div>
+  );
+}
   }
 
   if (categories.length === 0) {
