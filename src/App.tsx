@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Hero from './components/Hero';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminLogin from './components/admin/AdminLogin';
+import AdminPaintCategories from './components/admin/AdminPaintCategories';
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import FAQManager from './components/admin/FAQManager';
 import TroubleshootingManager from './components/admin/TroubleshootingManager';
@@ -156,6 +157,11 @@ function App() {
               <ProductsManager />
             </ProtectedRoute>
           } />
+           <Route path="AdminPaintCategories" element={
+               <ProtectedRoute>
+               <AdminPaintCategories/>
+           </ProtectedRoute>
+          } />
           <Route path="categories" element={
             <ProtectedRoute>
               <ProductCategoriesManager />
@@ -176,7 +182,7 @@ function App() {
               <BulletinsManager />
             </ProtectedRoute>
           } />
-           {/* ⚠️ لا تنسَ حماية صفحات النموذج أيضًا إذا كانت تحتاج حماية */}
+       
         <Route 
           path="bulletins/new" 
           element={
