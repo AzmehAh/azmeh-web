@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../../lib/supabase"; // تأكد من المسار الصحيح
 
 // مكون العنوان المعدل بنمط مائل وبارز
 const AnimatedTitle = ({ text, isActive }) => {
@@ -22,21 +22,29 @@ const AnimatedTitle = ({ text, isActive }) => {
       skew: isActive ? "0deg" : "10deg",
       scale: isActive ? 1.1 : 1,
       textShadow: isActive
-        ? "0 0 8px  0 0 15px rgba(255,255,255,0.4)"
+        ? "0 0 8px rgba(255,255,255,0.7), 0 0 15px rgba(255,255,255,0.4)"
         : "0 0 3px rgba(0,0,0,0.9)",
       transition: { type: "spring", damping: 15, stiffness: 120 },
     },
   };
- 
+
   return (
     <motion.div
       style={{
         display: "flex",
         perspective: "1000px",
         transformStyle: "preserve-3d",
-        fontSize: isActive 
-          ? (window.innerWidth < 640 ? "2.5rem" : window.innerWidth < 768 ? "3rem" : "4rem")
-          : (window.innerWidth < 640 ? "3rem" : window.innerWidth < 768 ? "4rem" : "5rem"),
+        fontSize: isActive
+          ? window.innerWidth < 640
+            ? "2.5rem"
+            : window.innerWidth < 768
+            ? "3rem"
+            : "4rem"
+          : window.innerWidth < 640
+          ? "3rem"
+          : window.innerWidth < 768
+          ? "4rem"
+          : "5rem",
         fontWeight: "900",
         fontStyle: "italic",
         color: "white",
@@ -65,98 +73,77 @@ const AnimatedTitle = ({ text, isActive }) => {
 };
 
 const Hero = () => {
-  const [paintCategories, setPaintCategories] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const [isManual, setIsManual] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const intervalRef = useRef(null);
-
-  // جلب البيانات من Supabase عند التحميل
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('paint_categories')
-          .select('*')
-          .eq('is_active', true)
-          .order('order', { ascending: true });
-
-        if (error) throw error;
-
-        setPaintCategories(data);
-      } catch (error) {
-        console.error("Error fetching paint categories:", error.message);
-        // Fallback to static data if database fetch fails
-        setPaintCategories([
-          {
-            id: "flooring",
-            title: "Flooring",
-            description: "Durable coatings that protect and enhance wooden, concrete, and tiled floors.",
-            image_url: "https://images.pexels.com/photos/276724/pexels-photo-276724.jpeg",
-          },
-          {
-            id: "industrial",
-            title: "Industrial",
-            description: "Heavy-duty coatings designed for factories and industrial environments.",
-            image_url: "https://images.pexels.com/photos/209251/pexels-photo-209251.jpeg",
-          },
-          {
-            id: "furniture",
-            title: "Furniture",
-            description: "Protective and stylish finishes for wooden and metal furniture.",
-            image_url: "https://images.pexels.com/photos/1571460/pexels-photo-1571460.jpeg",
-          },
-          {
-            id: "automotive",
-            title: "Automotive",
-            description: "High-durability coatings with a glossy finish for vehicles.",
-            image_url: "https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg",
-          },
-          {
-            id: "protective",
-            title: "Protective",
-            description: "Weather-resistant protective coatings for buildings and outdoor structures.",
-            image_url: "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg",
-          },
-        ]);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCategories();
-  }, []);
 
   const handleExplore = (id) => {
     navigate(`/products?category=${id}`);
     setIsManual(true);
   };
 
+  // جلب البيانات من الباك
   useEffect(() => {
-    if (isManual || paintCategories.length === 0) return;
+    const fetchHeroCategories = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("product_categories")
+          .select("id, name, description, image_url")
+          .eq("is_active", true) // اختياري: فقط الفعالة
+          .order("sort_order", { ascending: true });
+
+        if (error) throw error;
+
+        // تأكد من وجود الصورة والوصف
+        const validCategories = data.filter(
+          (cat) => cat.image_url && cat.description && cat.name
+        );
+
+        setCategories(validCategories);
+        if (validCategories.length > 0) {
+          setActiveIndex(0);
+        }
+      } catch (error) {
+        console.error("Error fetching hero categories:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchHeroCategories();
+  }, []);
+
+  // التحكم في التبديل التلقائي
+  useEffect(() => {
+    if (isManual || categories.length === 0) return;
 
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) =>
-        prev + 1 < paintCategories.length ? prev + 1 : 0
+        prev + 1 < categories.length ? prev + 1 : 0
       );
     }, 4000);
 
     return () => clearInterval(intervalRef.current);
-  }, [isManual, paintCategories]);
+  }, [isManual, categories.length]);
 
   if (loading) {
     return (
-      <div className="relative w-full h-screen flex items-center justify-center bg-gray-900 text-white">
-        Loading categories...
+      <div className="relative w-full h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-white">Loading Hero...</div>
       </div>
     );
   }
 
-  if (paintCategories.length === 0) {
+  if (categories.length === 0) {
     return (
-      <div className="relative w-full h-screen flex items-center justify-center bg-gray-900 text-white">
-        No active categories found.
+      <div className="relative w-full h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-white text-center">
+          <div className="text-2xl mb-4">No active categories found for Hero.</div>
+          <div className="text-sm">Please add categories with image and description.</div>
+        </div>
       </div>
     );
   }
@@ -164,7 +151,7 @@ const Hero = () => {
   return (
     <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
       <div className="flex h-full">
-        {paintCategories.map((category, index) => {
+        {categories.map((category, index) => {
           const isActive = activeIndex === index;
 
           return (
@@ -189,7 +176,7 @@ const Hero = () => {
             >
               <motion.img
                 src={category.image_url}
-                alt={category.title}
+                alt={category.name}
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{
                   filter: isActive
@@ -201,26 +188,33 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
+              {/* حاوية موحدة للعناصر النصية والزر */}
               <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
+                {/* العنوان المتحرك */}
                 <div
                   className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
                   style={{
                     position: isActive ? "static" : "absolute",
                     top: isActive ? "auto" : "50%",
-                    left: isActive ? "auto" : window.innerWidth < 768 ? "50%" : "40%",
+                    left: isActive
+                      ? "auto"
+                      : window.innerWidth < 768
+                      ? "50%"
+                      : "40%",
                     transform: isActive
                       ? "none"
-                      : window.innerWidth < 768 
-                        ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
-                        : "translate(-50%, -50%) rotate(-90deg)",
+                      : window.innerWidth < 768
+                      ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
+                      : "translate(-50%, -50%) rotate(-90deg)",
                     transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
                     textAlign: isActive ? "left" : "center",
                   }}
                 >
-                  <AnimatedTitle text={category.title} isActive={isActive} />
+                  <AnimatedTitle text={category.name} isActive={isActive} />
                 </div>
 
+                {/* الوصف والزر (يظهران فقط عند التفعيل) */}
                 {isActive && (
                   <motion.div
                     className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
