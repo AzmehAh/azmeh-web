@@ -173,20 +173,11 @@ if (loading) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         {/* Header */}
         <div className="text-center mb-16">
-          <Link
-            to="/troubleshooting"
-            className="inline-flex items-center text-orange-600 hover:text-orange-700 font-medium mb-6 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to All Categories
-          </Link>
-          
+    
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
             {currentCategory.title}
           </h1>
-          <p className="text-xl text-gray-600 leading-relaxed">
-            {currentCategory.description}
-          </p>
+         
         </div>
 
         {/* Search */}
