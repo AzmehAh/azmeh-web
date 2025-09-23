@@ -99,7 +99,7 @@ const SocialMedia = () => {
   </span>
 </a>
 
-{/* WhatsApp */}
+{/* WhatsApp */} 
 <a
   href="#"
   className="flex items-center justify-start bg-[#25D366] text-white rounded-full px-3.5 py-3 h-12 
