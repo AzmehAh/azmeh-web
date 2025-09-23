@@ -756,6 +756,17 @@ export const api = {
     return data;
   },
 
+  async getProductCategoryByName(name: string) {
+    const { data, error } = await supabase
+      .from('product_categories')
+      .select('*')
+      .eq('name', name)
+      .maybeSingle();
+    
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 = no rows returned
+    return data;
+  },
+
   // Enhanced Products API
   async getProductsWithFilters(filters: {
     category?: string;

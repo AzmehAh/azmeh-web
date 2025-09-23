@@ -295,6 +295,19 @@ const CategoryModal = ({
     setSaving(true);
 
     try {
+      // Check for duplicate category name
+      const existingCategory = await supabase
+        .from('product_categories')
+        .select('id, name')
+        .eq('name', formData.name)
+        .maybeSingle();
+
+      if (existingCategory.data && (!category || existingCategory.data.id !== category.id)) {
+        alert(`A category with the name "${formData.name}" already exists. Please choose a different name.`);
+        setSaving(false);
+        return;
+      }
+
       let imageUrl = formData.image_url;
 
       // إذا كان هناك ملف جديد، فارفعه
