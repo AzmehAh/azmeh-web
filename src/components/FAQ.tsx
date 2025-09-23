@@ -71,7 +71,7 @@ const FAQ = () => {
 >
   <div className="p-8 flex flex-col h-full">
     {/* القسم الأساسي (عنوان + وصف + زر) */}
-    <div className="flex flex-col flex-grow min-h-[230px]"> 
+    <div className="flex flex-col flex-grow min-h-[180px]"> 
       <div className="flex mb-4">
         <div className="w-12 h-12 flex-shrink-0 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">
           <HelpCircle className="w-6 h-6 text-white" />
