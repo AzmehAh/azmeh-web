@@ -82,10 +82,10 @@ const BlogSection = () => {
                <Link 
                  key={post.id}
                  to={`/bulletin/${post.id}`}
-                  className=""
+                  className="group block bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
     >
             <motion.article
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 30 }} 
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
