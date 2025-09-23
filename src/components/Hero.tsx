@@ -202,7 +202,7 @@ const Hero = () => {
                     transform: isActive
                       ? "none"
                       : window.innerWidth < 768
-                      ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
+                      ? "translate(-50%, -50%) rotate(-90deg) "
                       : "translate(-50%, -50%) rotate(-90deg)",
                     transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
