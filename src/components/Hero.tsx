@@ -20,7 +20,7 @@ const AnimatedTitle = ({ text, isActive }) => {
       opacity: 1,
       rotateX: 0,
       skew: isActive ? "0deg" : "10deg", 
-      scale: isActive ? 1.1 : 1,
+      scale:  1,
     
       transition: { type: "spring", damping: 15, stiffness: 120 },
     },
@@ -181,8 +181,8 @@ const Hero = () => {
                     ? "brightness(0.4) contrast(1.2)"
                     : "brightness(0.4) contrast(1.1)",
                 }}
-                initial={{ scale: 1.1 }}
-                animate={{ scale: isActive ? 1 : 1.1 }}
+                initial={{ scale: 1}}
+                animate={{ scale: 1 }}
                 transition={{ duration: 0.5 }}
               />
 
