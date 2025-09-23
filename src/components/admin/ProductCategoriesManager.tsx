@@ -277,12 +277,12 @@ const CategoryModal = ({
     try {
       const fileName = `${Date.now()}-${file.name}`;
       const { data, error } = await supabase.storage
-        .from('product-images') // 👈 اسم مجلد التخزين
+        .from('products')
         .upload(fileName, file);
 
       if (error) throw error;
 
-      const publicUrl = supabase.storage.from('product-images').getPublicUrl(data.path).data.publicUrl;
+      const publicUrl = supabase.storage.from('products').getPublicUrl(data.path).data.publicUrl;
       return publicUrl;
     } catch (error) {
       console.error("Error uploading image:", error);

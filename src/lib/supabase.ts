@@ -600,14 +600,14 @@ export const api = {
     const filePath = `products/${productId}/${fileName}`;
 
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('product-images')
+      .from('products')
       .upload(filePath, file);
 
     if (uploadError) throw uploadError;
 
     // Get public URL
     const { data: urlData } = supabase.storage
-      .from('product-images')
+      .from('products')
       .getPublicUrl(filePath);
 
     // Save image record to database
@@ -645,7 +645,7 @@ export const api = {
       
       // Delete from storage (ignore errors if file doesn't exist)
       await supabase.storage
-        .from('product-images')
+        .from('products')
         .remove([filePath]);
     }
 
