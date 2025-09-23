@@ -65,35 +65,39 @@ const FAQ = () => {
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
             {faqCategories.map((cat) => (
               <Link
-                key={cat.id}
-                to={`/faq/${cat.id}`}
-                className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
-              >
-                <div className="p-8">
-                <div className="flex mb-4">
-  {/* أيقونة ثابتة */}
-  <div className="w-12 h-12 flex-shrink-0 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">
-    <HelpCircle className="w-6 h-6 text-white" />
+  key={cat.id}
+  to={`/faq/${cat.id}`}
+  className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden"
+>
+  <div className="p-8 flex flex-col h-full">
+    {/* القسم الأساسي (عنوان + وصف + زر) */}
+    <div className="flex flex-col flex-grow min-h-[220px]"> 
+      <div className="flex mb-4">
+        <div className="w-12 h-12 flex-shrink-0 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">
+          <HelpCircle className="w-6 h-6 text-white" />
+        </div>
+        <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#0055A3] transition-colors leading-snug">
+          {cat.name}
+        </h3>
+      </div>
+
+      <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
+        {cat.description}
+      </p>
+
+      <div className="flex items-center text-[#0055A3] font-semibold group-hover:translate-x-2 transition-transform">
+        <span>View Questions</span>
+        <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
+      </div>
+    </div>
+
+    {/* عدد الأسئلة */}
+    <div className="mt-4 text-sm text-gray-500">
+      {cat.faq_items.length} questions available
+    </div>
   </div>
+</Link>
 
-  {/* نص العنوان */}
-  <h3 className="text-2xl font-bold min-h-[30px] text-gray-900 group-hover:text-[#0055A3] transition-colors leading-snug">
-    {cat.name}
-  </h3>
-</div>
-
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    {cat.description}
-                  </p>
-                  <div className="flex items-center text-[#0055A3] font-semibold group-hover:translate-x-2 transition-transform">
-                    <span>View Questions</span>
-                    <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
-                  </div>
-                  <div className="mt-4 text-sm text-gray-500">
-                    {cat.faq_items.length} questions available
-                  </div>
-                </div>
-              </Link>
             ))}
           </div>
         </div>
