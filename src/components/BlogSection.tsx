@@ -77,50 +77,51 @@ const BlogSection = () => {
 
         {/* Blog Posts Grid */}
         
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8 sm:mb-12">
-          {featuredPosts.map((post, index) => (
-               <Link 
-                 key={post.id}
-                 to={`/bulletin/${post.id}`}
-                  className=""
+       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8 sm:mb-12">
+  {featuredPosts.map((post, index) => (
+    <Link 
+      key={post.id}
+      to={`/bulletin/${post.id}`}
+      className="h-full"
     >
-            <motion.article
-              initial={{ opacity: 0, y: 30 }} 
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer"
-            >
-              {/* Post Image */}
-              <div className="relative overflow-hidden">
-                <img
-                  src={post.cover_image}
-                  alt={post.title}
-                  className="w-full h-48 sm:h-56 lg:h-60 object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </div>
-
-              {/* Post Content */}
-              <div className="p-4 sm:p-6">
-                <div className="flex items-center text-sm text-gray-500 mb-3">
-                  <Calendar className="w-4 h-4 mr-2" />
-                  <span>{formatDate(post.created_at)}</span>
-                </div>
-
-               <h1
-                 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2 block"
-               >
-                  {post.title}
-               </h1>
-
-                <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
-                  {post.short_description}
-                </p>
-              </div>
-            </motion.article>
-                 </Link>
-          ))}
+      <motion.article
+        initial={{ opacity: 0, y: 30 }} 
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: index * 0.1 }}
+        className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer flex flex-col h-full"
+      >
+        {/* Post Image */}
+        <div className="relative overflow-hidden">
+          <img
+            src={post.cover_image}
+            alt={post.title}
+            className="w-full h-48 sm:h-56 lg:h-60 object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
         </div>
+
+        {/* Post Content */}
+        <div className="p-4 sm:p-6 flex flex-col flex-grow">
+          <div className="flex items-center text-sm text-gray-500 mb-3">
+            <Calendar className="w-4 h-4 mr-2" />
+            <span>{formatDate(post.created_at)}</span>
+          </div>
+
+          <h1
+            className="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2"
+          >
+            {post.title}
+          </h1>
+
+          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 flex-grow">
+            {post.short_description}
+          </p>
+        </div>
+      </motion.article>
+    </Link>
+  ))}
+</div>
+
 
         {/* View All Button */}
         <motion.div
