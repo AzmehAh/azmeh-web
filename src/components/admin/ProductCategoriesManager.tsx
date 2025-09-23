@@ -343,7 +343,20 @@ const CategoryModal = ({
       setSaving(false);
     }
   };
-
+useEffect(() => {
+  if (!isOpen) {
+    // إعادة تعيين كل الحقول عند إغلاق المودال
+    setFormData({
+      name: '',
+      description: '',
+      sort_order: 0,
+      is_active: true,
+      image_url: '',
+    });
+    setImagePreview(null);
+    setFile(null);
+  }
+}, [isOpen]);
   if (!isOpen) return null;
 
   return (
