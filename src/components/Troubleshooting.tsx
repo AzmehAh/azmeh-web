@@ -165,7 +165,7 @@ if (loading) {
             <span className="mx-2">/</span>
             <Link to="/troubleshooting" className="hover:text-orange-600 transition-colors">Troubleshooting</Link>
             <span className="mx-2">/</span>
-            <span className="text-gray-900">{currentCategory.title}</span>
+            <span className="text-gray-900">{currentCategory.name}</span>
           </div>
         </div>
       </div>
