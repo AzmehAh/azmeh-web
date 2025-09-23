@@ -292,7 +292,7 @@ if (loading) {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
              <Link
   to="/contact"
-  className="bg-white text-[#0055A3] px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors block text-center"
+  className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors block text-center"
 >
   Contact Technical Support
 </Link>
