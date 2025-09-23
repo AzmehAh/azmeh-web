@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase";
 
-// مكون العنوان المعدل بنمط مائل وبارز
+
 const AnimatedTitle = ({ text, isActive }) => {
   const letters = Array.from(text);
 
@@ -85,19 +85,19 @@ const Hero = () => {
     setIsManual(true);
   };
 
-  // جلب البيانات من الباك
+
   useEffect(() => {
     const fetchHeroCategories = async () => {
       try {
         const { data, error } = await supabase
           .from("product_categories")
           .select("id, name, description, image_url")
-          .eq("is_active", true) // اختياري: فقط الفعالة
+          .eq("is_active", true) 
           .order("sort_order", { ascending: true });
 
         if (error) throw error;
 
-        // تأكد من وجود الصورة والوصف
+
         const validCategories = data.filter(
           (cat) => cat.image_url && cat.description && cat.name
         );
@@ -116,7 +116,7 @@ const Hero = () => {
     fetchHeroCategories();
   }, []);
 
-  // التحكم في التبديل التلقائي
+
   useEffect(() => {
     if (isManual || categories.length === 0) return;
 
@@ -188,9 +188,9 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              {/* حاوية موحدة للعناصر النصية والزر */}
+           
               <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
-                {/* العنوان المتحرك */}
+        
                 <div
                   className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
                   style={{
@@ -214,7 +214,7 @@ const Hero = () => {
                   <AnimatedTitle text={category.name} isActive={isActive} />
                 </div>
 
-                {/* الوصف والزر (يظهران فقط عند التفعيل) */}
+         
                 {isActive && (
                   <motion.div
                     className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
