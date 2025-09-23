@@ -216,7 +216,6 @@ const ProductCategoriesManager = () => {
   );
 };
 
-// Category Modal Component
 const CategoryModal = ({ 
   isOpen, 
   onClose, 
@@ -234,9 +233,12 @@ const CategoryModal = ({
     name: '',
     description: '',
     sort_order: 0,
-    is_active: true
+    is_active: true,
+    image_url: '', // 👈 جديد
   });
   const [saving, setSaving] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null); // عرض مصغّر للصورة
+  const [file, setFile] = useState<File | null>(null); // ملف الصورة المرفوع
 
   useEffect(() => {
     if (category) {
@@ -244,33 +246,78 @@ const CategoryModal = ({
         name: category.name,
         description: category.description || '',
         sort_order: category.sort_order,
-        is_active: category.is_active
+        is_active: category.is_active,
+        image_url: category.image_url || '',
       });
+      setImagePreview(category.image_url || null);
     } else {
       setFormData({
         name: '',
         description: '',
         sort_order: 0,
-        is_active: true
+        is_active: true,
+        image_url: '',
       });
+      setImagePreview(null);
     }
   }, [category]);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
+
+    setFile(selectedFile);
+    setImagePreview(URL.createObjectURL(selectedFile));
+    setFormData(prev => ({ ...prev, image_url: '' })); // نفرغ الـ URL القديم
+  };
+
+  const uploadImage = async () => {
+    if (!file) return;
+
+    try {
+      const fileName = `${Date.now()}-${file.name}`;
+      const { data, error } = await supabase.storage
+        .from('product-images') // 👈 اسم مجلد التخزين
+        .upload(fileName, file);
+
+      if (error) throw error;
+
+      const publicUrl = supabase.storage.from('product-images').getPublicUrl(data.path).data.publicUrl;
+      return publicUrl;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image");
+      return null;
+    }
+  };
+
   const handleSave = async () => {
     setSaving(true);
+
     try {
+      let imageUrl = formData.image_url;
+
+      // إذا كان هناك ملف جديد، فارفعه
+      if (file) {
+        const uploadedUrl = await uploadImage();
+        if (uploadedUrl) {
+          imageUrl = uploadedUrl;
+        }
+      }
+
+      // تحديث أو إضافة الفئة
       if (category) {
         const { error } = await supabase
           .from('product_categories')
-          .update(formData)
+          .update({ ...formData, image_url: imageUrl })
           .eq('id', category.id);
-        
+
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('product_categories')
-          .insert([formData]);
-        
+          .insert([{ ...formData, image_url: imageUrl }]);
+
         if (error) throw error;
       }
 
@@ -306,6 +353,7 @@ const CategoryModal = ({
           </div>
 
           <div className="p-6 space-y-4">
+            {/* Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Category Name *</label>
               {isEditing ? (
@@ -321,6 +369,7 @@ const CategoryModal = ({
               )}
             </div>
 
+            {/* Description */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
               {isEditing ? (
@@ -336,39 +385,68 @@ const CategoryModal = ({
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sort Order</label>
-                {isEditing ? (
+            {/* Sort Order */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Sort Order</label>
+              {isEditing ? (
+                <input
+                  type="number"
+                  value={formData.sort_order}
+                  onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                />
+              ) : (
+                <p className="text-gray-900">{formData.sort_order}</p>
+              )}
+            </div>
+
+            {/* Status */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              {isEditing ? (
+                <select
+                  value={formData.is_active ? 'true' : 'false'}
+                  onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.value === 'true' }))}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                >
+                  <option value="true">Active</option>
+                  <option value="false">Inactive</option>
+                </select>
+              ) : (
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                  formData.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}>
+                  {formData.is_active ? 'Active' : 'Inactive'}
+                </span>
+              )}
+            </div>
+
+            {/* Image Upload */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
+              {isEditing ? (
+                <>
                   <input
-                    type="number"
-                    value={formData.sort_order}
-                    onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                   />
-                ) : (
-                  <p className="text-gray-900">{formData.sort_order}</p>
-                )}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                {isEditing ? (
-                  <select
-                    value={formData.is_active ? 'true' : 'false'}
-                    onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.value === 'true' }))}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  >
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
-                  </select>
-                ) : (
-                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                    formData.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                  }`}>
-                    {formData.is_active ? 'Active' : 'Inactive'}
-                  </span>
-                )}
-              </div>
+                  {imagePreview && (
+                    <div className="mt-3">
+                      <img
+                        src={imagePreview}
+                        alt="Preview"
+                        className="w-32 h-32 object-cover rounded-md"
+                      />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="text-gray-900">
+                  {imagePreview ? 'Image available' : 'No image'}
+                </p>
+              )}
             </div>
           </div>
 
@@ -404,7 +482,7 @@ const CategoryModal = ({
       </div>
     </div>
   );
-
 };
+
 
 export default ProductCategoriesManager;
