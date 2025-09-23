@@ -20,9 +20,9 @@ const BlogSection = () => {
       const { data, error } = await supabase
         .from('bulletins')
         .select('id, title, cover_image, created_at, short_description')
-        .eq('featured', true)  // فقط المميزة
-        .order('created_at', { ascending: false }) // ترتيب أحدث أول
-        .limit(3); // مثلاً 3 مقالات فقط
+        .eq('featured', true)  
+        .order('created_at', { ascending: false }) 
+        .limit(3); 
 
       if (error) {
         console.error('Error fetching featured bulletins:', error.message);
@@ -102,12 +102,11 @@ const BlogSection = () => {
                   <span>{formatDate(post.created_at)}</span>
                 </div>
 
-               <Link 
-                 to={`/bulletin/${post.id}`}
+               <h1
                  className="text-lg sm:text-xl font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2 block"
                >
                   {post.title}
-               </Link>
+               </h1>
 
                 <p className="text-gray-600 text-sm leading-relaxed line-clamp-3">
                   {post.short_description}
