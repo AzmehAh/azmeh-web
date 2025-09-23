@@ -76,7 +76,7 @@ const FAQ = () => {
         <div className="w-12 h-12 flex-shrink-0 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">
           <HelpCircle className="w-6 h-6 text-white" />
         </div>
-        <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#0055A3] transition-colors leading-snug">
+        <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#0055A3] min-h-[64px] transition-colors leading-snug">
           {cat.name}
         </h3>
       </div>
