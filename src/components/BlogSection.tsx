@@ -82,7 +82,7 @@ const BlogSection = () => {
                <Link 
                  key={post.id}
                  to={`/bulletin/${post.id}`}
-                  className="group block bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300"
+                  className=""
     >
             <motion.article
               initial={{ opacity: 0, y: 30 }} 
