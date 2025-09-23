@@ -128,11 +128,7 @@ const Hero = () => {
   }, [isManual, categories.length]);
 
   if (loading) { 
-    return (
-      <div className="relative w-full h-screen flex items-center justify-center bg-gray-900">
-        <div className="text-white">Loading Hero...</div>
-      </div>
-    );
+    return null;
   }
 
   if (categories.length === 0) {
