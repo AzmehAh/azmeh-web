@@ -6,3 +6,12 @@ export default {
   },
   plugins: [],
 };
+ module.exports = {
+  theme: {
+    extend: {
+      colors: {
+        logo: "#003399",
+      },
+    },
+  },
+};
