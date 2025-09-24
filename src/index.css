@@ -199,18 +199,7 @@
 }
 
 /* Smoother transitions for responsive elements */
-@media (prefers-reduced-motion: no-preference) {
-  * {
-    scroll-behavior: smooth;
-  } 
-}
-.prose img {
-  max-width: 200px;  /* تصغير العرض */
-  height: auto;      /* يحافظ على النسبة */
-  border-radius: 8px; /* اختياري */
-  display: inline-block; /* عشان ما تتمدد */
-}
-  .hexagon-badge {
+@media (prefers-reduced-motion: no-preference) {.hexagon-badge {
   position: relative;
   width: 100px; /* أصبح أكبر */
   height: 115px; /* متناسق مع العرض */
@@ -243,3 +232,14 @@
   margin-top: 6px;
   letter-spacing: 0.5px;
 }
+  * {
+    scroll-behavior: smooth;
+  } 
+}
+.prose img {
+  max-width: 200px;  /* تصغير العرض */
+  height: auto;      /* يحافظ على النسبة */
+  border-radius: 8px; /* اختياري */
+  display: inline-block; /* عشان ما تتمدد */
+}
+ 
