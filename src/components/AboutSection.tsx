@@ -28,6 +28,25 @@ const AboutSection = () => {
 
     return () => clearInterval(timer);
   }, [targetYears]);
+const AboutSection = () => {
+  const [count, setCount] = useState(0);
+  const targetYears = 25; // عدد سنوات الخبرة
+  const duration = 2000; // المدة الزمنية بالمللي ثانية (2 ثانية)
+
+  useEffect(() => {
+    let start = 0;
+    const increment = targetYears / (duration / 50); // كل 50ms يزيد
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= targetYears) {
+        start = targetYears;
+        clearInterval(timer);
+      }
+      setCount(Math.floor(start));
+    }, 50);
+
+    return () => clearInterval(timer);
+  }, []); // <= يشتغل مرة واحدة كل رفريش
 
   return (
     <section className="py-20 bg-gray-50">
@@ -80,7 +99,7 @@ const AboutSection = () => {
      {/* Counter Badge - Circle */}
   {/* Counter Badge - Circle */}
         <motion.div
-          className="absolute bottom-4 left-4 bg-white rounded-full shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-[#a8a8a8]"
+          className="absolute bottom-4 left-4 bg-white rounded-full shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-"
           initial={{ scale: 0.5, opacity: 0 }}
           whileInView={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}
