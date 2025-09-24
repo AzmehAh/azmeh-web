@@ -32,71 +32,39 @@ const AboutFounderSection = () => {
               <div className="mt-6 text-center">
                 <h3 className="text-2xl font-bold text-gray-50 mb-2">Ahmed Al Azmeh</h3>
                 <p className="text-blue-200">Founder & Visionary</p>
-                <div className="mt-4 space-y-1 text-sm text-blue-200">
-                  <p>Born: 1918, Damascus</p>
-                  <p>Started Business: 1938</p>
-                  <p>Founded Al Azmeh Paints: 1955</p>
-                  <p>Legacy Continues: 1918 - 1998</p>
-                </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Right Side: Company Intro + Description */}
+          {/* Right Side: Combined Text */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-8 text-gray-100"
           >
-            {/* Company Intro */}
-            <div className="rounded-3xl p-8 bg-[#0055A3]/80">
-              <div className="mb-6">
-                <img
-                  src="/images/Azmeh-Paints-Logo.png"
-                  alt="Al Azmeh Paints"
-                  className="h-16 w-auto brightness-0 invert"
-                />
+            <h2 className="text-4xl md:text-5xl font-bold mb-4">
+              Al Azmeh Paints – Excellence & Vision Since 1955
+            </h2>
+            <p className="leading-relaxed text-lg">
+              Ahmed Al Azmeh, born in 1918 in Damascus, Syria, began his entrepreneurial journey in 1938. 
+              In 1955, he founded Al Azmeh Paints with a clear vision: to deliver the highest quality paint systems 
+              for every application. With decades of excellence and expertise, the company quickly grew 
+              into a leading name in the paint industry.  
+              <br /><br />
+              Under Ahmed's visionary leadership until 1998, Al Azmeh Paints became synonymous with quality, 
+              innovation, and customer satisfaction. His legacy continues to guide the company today, 
+              maintaining the same commitment to excellence established nearly seven decades ago.
+            </p>
+
+            <div className="mt-8 grid grid-cols-2 gap-6">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-[#0055A3] mb-2">80</div>
+                <div className="text-gray-200">Years of Leadership</div>
               </div>
-              <h2 className="text-4xl md:text-5xl font-semibold mb-4 leading-tight">
-                Al Azmeh Paints – Excellence Since 1955
-              </h2>
-              <p className="leading-relaxed text-lg">
-                Al Azmeh has set its sights on delivering the highest quality paint systems and coatings. 
-                With decades of excellence and expertise, we have become one of the leading brands in the paint industry.
-              </p>
-            </div>
-
-            {/* Founder Description */}
-            <div className="space-y-6 text-lg text-gray-100 leading-relaxed">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                Visionary Leadership
-              </h2>
-              <p>
-                Ahmed Al Azmeh was born in 1918 in Damascus, Syria. He started his entrepreneurial 
-                journey in 1938 and founded Al Azmeh Paints Company in 1955 with a clear vision: 
-                to create the highest quality paint systems for every application.
-              </p>
-              <p>
-                Throughout his life until 1998, Ahmed led the company with unwavering dedication 
-                to quality and innovation. His vision transformed a small local business into a 
-                respected name in the paint industry, serving customers across multiple sectors.
-              </p>
-              <p>
-                His legacy of excellence continues to guide our company today, maintaining the 
-                same commitment to quality and customer satisfaction that he established nearly 
-                seven decades ago.
-              </p>
-
-              <div className="mt-8 grid grid-cols-2 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-[#0055A3] mb-2">80</div>
-                  <div className="text-gray-200">Years of Leadership</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-[#0055A3]  mb-2">1955</div>
-                  <div className="text-gray-200">Company Founded</div>
-                </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-[#0055A3] mb-2">1955</div>
+                <div className="text-gray-200">Company Founded</div>
               </div>
             </div>
           </motion.div>
