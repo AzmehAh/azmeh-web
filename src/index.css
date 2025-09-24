@@ -210,4 +210,32 @@
   border-radius: 8px; /* اختياري */
   display: inline-block; /* عشان ما تتمدد */
 }
- 
+ .hexagon-badge {
+  position: relative;
+  width: 80px;
+  height: 92px;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border: 2px solid #FFA500; /* البرتقالي الخفيف */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.hexagon-badge .count {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #0055A3;
+  line-height: 1.2;
+}
+
+.hexagon-badge .label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
