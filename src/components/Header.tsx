@@ -191,7 +191,21 @@ const Header = () => {
             Blog
           </Link>
 
-<motion.div
+ {/* Contact Dropdown */}
+<div 
+  className="relative inline-block" 
+  onMouseEnter={() => handleMouseEnter('contact')} 
+  onMouseLeave={handleMouseLeave}
+>
+  <button 
+    className={`flex items-center text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+  >
+    Contact <ChevronDown className="ml-1 h-4 w-4" />
+  </button>
+
+  <AnimatePresence>
+    {activeDropdown === 'contact' && (
+     <motion.div
   variants={curtainVariants}
   initial="hidden"
   animate={activeDropdown === 'contact' ? 'visible' : 'hidden'}
@@ -208,6 +222,9 @@ const Header = () => {
   </div>
 </motion.div>
 
+    )}
+  </AnimatePresence>
+</div>
 
 
         </nav>
