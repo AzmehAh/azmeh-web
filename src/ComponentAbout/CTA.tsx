@@ -1,6 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+const YourButtons = () => {
+  const navigate = useNavigate();
 
 const CTA = () => {
   return (
