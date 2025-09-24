@@ -184,7 +184,14 @@ const Header = () => {
 
         {/* Right Navigation */}
         <nav className="hidden lg:flex items-center space-x-8 justify-self-end">
-             {/* Contact Dropdown */}
+          <Link 
+            to="/blog" 
+            className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+          >
+            Blog
+          </Link>
+
+          {/* Contact Dropdown */}
           <div 
             className="relative" 
             onMouseEnter={() => handleMouseEnter('contact')} 
@@ -206,7 +213,7 @@ const Header = () => {
                   className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
                 >
                   <div className="p-4">
-                    <Link 
+                    <Link  
                       to="/contact" 
                       className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
                     >
@@ -223,14 +230,6 @@ const Header = () => {
               )}
             </AnimatePresence>
           </div>
-          <Link 
-            to="/blog" 
-            className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-          >
-            Blog
-          </Link>
-
-       
         </nav>
           {/* Mobile menu button */}
           <div className="lg:hidden">
