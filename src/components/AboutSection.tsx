@@ -7,7 +7,7 @@ const AboutSection = () => {
   const [count, setCount] = useState(0);
   const currentYear = new Date().getFullYear();
   const targetYears = currentYear - 1955;
- 
+
   // Animated counter effect
   useEffect(() => {
     const duration = 2000; // 2 seconds
@@ -25,7 +25,7 @@ const AboutSection = () => {
         clearInterval(timer);
       }
     }, stepDuration);
- 
+
     return () => clearInterval(timer);
   }, [targetYears]);
 
@@ -78,22 +78,7 @@ const AboutSection = () => {
 
             {/* Counter Badge */}
      {/* Counter Badge - Circle */}
-
-      {/* Right Content - Image + Counter */}
-      <motion.div
-        initial={{ opacity: 0, x: 20 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="relative flex justify-center h-full"
-      >
-        {/* Company Image */}
-        <img
-          src="https://i.pinimg.com/1200x/8f/46/97/8f4697297b8614f72f58f55b66accd09.jpg"
-          alt="Al Azmeh Paints Company"
-          className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg h-full"
-        />
-
-        {/* Counter Badge - Circle */}
+  {/* Counter Badge - Circle */}
         <motion.div
           className="absolute bottom-4 left-4 bg-white rounded-full shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-[#a8a8a8]"
           initial={{ scale: 0.5, opacity: 0 }}
@@ -106,8 +91,7 @@ const AboutSection = () => {
           <div className="text-[10px] sm:text-xs text-[#0055A3] font-semibold uppercase">
             Experience
           </div>
-        </motion.div>
-      </motion.div>
+</motion.div> 
 
           </motion.div>
 
