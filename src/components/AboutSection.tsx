@@ -38,7 +38,7 @@ const AboutSection = () => {
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }} 
+            whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center lg:text-left"
           >
@@ -53,7 +53,7 @@ const AboutSection = () => {
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
               Our commitment to quality and innovation has made us a trusted partner for professionals 
               and homeowners seeking superior paint solutions.
-            </p>
+            </p> 
             <Link
               to="/about"
               className="inline-flex items-center bg-[#2C5DB6] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-sm sm:text-base"
@@ -63,35 +63,39 @@ const AboutSection = () => {
             </Link>
           </motion.div>
 
-        {/* Right Content - Company Image with Counter Badge */}
-<motion.div
-  initial={{ opacity: 0, x: 20 }}
-  whileInView={{ opacity: 1, x: 0 }}
-  transition={{ duration: 0.6, delay: 0.2 }}
-  className="relative flex justify-center"
->
-  {/* حاوية الصورة بارتفاع متطابق مع النص */}
-  <div className="w-full max-w-md lg:max-w-lg h-full">
-    <img
-      src="https://i.pinimg.com/1200x/8f/46/97/8f4697297b8614f72f58f55b66accd09.jpg"
-      alt="Al Azmeh Paints Company"
-      className="rounded-xl shadow-lg object-cover w-full h-full"
-    />
-  </div>
+          {/* Right Content - Company Image with Counter Badge */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative flex justify-center"
+          >
+            {/* Company Image */}
+            <img
+              src="https://i.pinimg.com/1200x/8f/46/97/8f4697297b8614f72f58f55b66accd09.jpg"
+              alt="Al Azmeh Paints Company"
+              className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg"
+            />
 
-  {/* Counter Badge - Hexagon Shape */}
-  <motion.div
-    className="absolute bottom-0 left-0 transform -translate-x-1/2"
-    initial={{ scale: 0.5, opacity: 0 }}
-    whileInView={{ scale: 1, opacity: 1 }}
-    transition={{ duration: 0.5, delay: 0.5 }}
-  >
-    <div className="hexagon-badge"> 
-      <div className="count">{count}Y+</div>
-      <div className="label"></div>
-    </div>
-  </motion.div>
+            {/* Counter Badge */}
+     {/* Counter Badge - Circle */}
+  {/* Counter Badge - Circle */}
+     <motion.div
+  className="absolute bottom-1 left-2 bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo"
+  initial={{ scale: 0.5, opacity: 0 }}
+  animate={{ scale: 1, opacity: 1 }}
+  transition={{ duration: 0.5, delay: 0.5 }}
+>
+  <div className="text-xl sm:text-2xl font-bold text-[#0055A3]">
+    {count}Y+
+  </div>
+  <div className="text-[10px] sm:text-xs text-[#0055A3] font-semibold uppercase">
+    Experience
+  </div>
 </motion.div>
+
+
+          </motion.div>
 
         </div>
       </div>
