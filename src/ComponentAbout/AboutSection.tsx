@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Users } from "lucide-react";
 
-const AboutSectionn = () => {
+const AboutFounderSection = () => {
   const navigate = useNavigate();
  
   return (
@@ -105,4 +105,4 @@ const AboutSectionn = () => {
   );
 };
 
-export default AboutSection;
+export default AboutFounderSection;
