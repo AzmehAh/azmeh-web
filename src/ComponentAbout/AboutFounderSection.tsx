@@ -5,69 +5,71 @@ import { Users } from "lucide-react";
 
 const AboutFounderSection = () => {
   const navigate = useNavigate();
- 
+
   return (
     <section className="py-40 bg-[#0055A3] relative overflow-hidden text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Company Intro */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className="rounded-3xl p-10 flex flex-col justify-center bg-[#0055A3]"
-        >
-          <div className="mb-8 flex justify-center lg:justify-start">
-            <img
-              src="/images/Azmeh-Paints-Logo.png"
-              alt="Al Azmeh Paints"
-              className="h-16 w-auto brightness-0 invert"
-            />
-          </div>
-          <h2 className="text-4xl md:text-4xl font-semibold mb-6 leading-tight">
-            Al Azmeh Paints – Excellence Since 1955
-          </h2>
-          <p className="mb-8 leading-relaxed text-lg">
-            Al Azmeh has set its sights on delivering the highest quality paint systems and coatings. 
-            With decades of excellence and expertise, we have become one of the leading brands in the paint industry.
-          </p>
-        </motion.div>
-
-        {/* Founder Section */}
+        {/* Combined Section */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.8 }}
+          className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            {/* Founder Image */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8 }}
-              className="relative"
-            >
-              <div className="absolute -inset-4 bg-[#0055A3] rounded-3xl opacity-20 blur-xl"></div>
-              <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-800 rounded-3xl p-8 shadow-2xl">
-                <div className="w-64 h-64 mx-auto bg-gray-300 rounded-2xl flex items-center justify-center">
-                  <Users className="w-32 h-32 text-gray-500" />
+          {/* Left Side: Founder Image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            <div className="absolute -inset-4 bg-[#0055A3] rounded-3xl opacity-20 blur-xl"></div>
+            <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-800 rounded-3xl p-8 shadow-2xl">
+              <div className="w-64 h-64 mx-auto bg-gray-300 rounded-2xl flex items-center justify-center">
+                <Users className="w-32 h-32 text-gray-500" />
+              </div>
+              <div className="mt-6 text-center">
+                <h3 className="text-2xl font-bold text-gray-50 mb-2">Ahmed Al Azmeh</h3>
+                <p className="text-blue-200">Founder & Visionary</p>
+                <div className="mt-4 space-y-1 text-sm text-blue-200">
+                  <p>Born: 1918, Damascus</p>
+                  <p>Started Business: 1938</p>
+                  <p>Founded Al Azmeh Paints: 1955</p>
+                  <p>Legacy Continues: 1918 - 1998</p>
                 </div>
-                <div className="mt-6 text-center">
-                  <h3 className="text-2xl font-bold text-gray-50 mb-2">Ahmed Al Azmeh</h3>
-                  <p className="text-blue-200">Founder & Visionary</p>
-                  <div className="mt-4 space-y-1 text-sm text-blue-200">
-                    <p>Born: 1918, Damascus</p>
-                    <p>Started Business: 1938</p>
-                    <p>Founded Al Azmeh Paints: 1955</p>
-                    <p>Legacy Continues: 1918 - 1998</p>
-                  </div>
-                </div>
-              </div> 
-            </motion.div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Right Side: Company Intro + Description */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="space-y-8"
+          >
+            {/* Company Intro */}
+            <div className="rounded-3xl p-8 bg-[#0055A3]/80">
+              <div className="mb-6">
+                <img
+                  src="/images/Azmeh-Paints-Logo.png"
+                  alt="Al Azmeh Paints"
+                  className="h-16 w-auto brightness-0 invert"
+                />
+              </div>
+              <h2 className="text-4xl md:text-5xl font-semibold mb-4 leading-tight">
+                Al Azmeh Paints – Excellence Since 1955
+              </h2>
+              <p className="leading-relaxed text-lg">
+                Al Azmeh has set its sights on delivering the highest quality paint systems and coatings. 
+                With decades of excellence and expertise, we have become one of the leading brands in the paint industry.
+              </p>
+            </div>
 
             {/* Founder Description */}
             <div className="space-y-6 text-lg text-gray-100 leading-relaxed">
-              <h2 className="text-4xl md:text-5xl font-bold mb-8">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">
                 Visionary Leadership
               </h2>
               <p>
@@ -97,9 +99,9 @@ const AboutFounderSection = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
+        </motion.div>
       </div>
     </section>
   );
