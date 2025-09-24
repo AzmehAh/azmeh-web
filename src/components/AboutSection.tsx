@@ -76,7 +76,8 @@ const AboutSection = () => {
               className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg"
             />
 
-           {/* Counter Badge - Pentagon */}
+            {/* Counter Badge */}
+     {/* Counter Badge - Pentagon */}
 <motion.div
   className="absolute bottom-4 left-4 bg-white shadow-xl p-4 sm:p-6 flex flex-col items-center justify-center border-2 border-[#0055A3]"
   style={{
@@ -94,6 +95,7 @@ const AboutSection = () => {
   </div>
 </motion.div>
 
+          </motion.div>
 
         </div>
       </div>
