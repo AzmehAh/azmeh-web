@@ -254,7 +254,15 @@
 }
 
 /* خطان رأسيان على الجانبين (مثل الصورة) */
-
+.hexagon-badge::before,
+.hexagon-badge::after {
+  content: '';
+  position: absolute; 
+  width: 2px;
+  height: 100%;
+  background-color: #0055A3;
+  top: 0;
+}
 
 .hexagon-badge::before {
   left: 0;
