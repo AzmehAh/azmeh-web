@@ -83,127 +83,58 @@ const Header = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+          </Link>
+        </div>
 
-          {/* Left Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            <Link to="/products" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Products
-            </Link>
-            <Link to="/about" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              About Us
-            </Link>
-            
-            {/* Technical Support Dropdown */}
-            <div 
-              className="relative" 
-              onMouseEnter={() => handleMouseEnter('technical')} 
-              onMouseLeave={handleMouseLeave}
+        {/* Right Navigation */}
+        <nav className="hidden lg:flex items-center space-x-8 justify-self-end">
+          <Link 
+            to="/blog" 
+            className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+          >
+            Blog
+          </Link>
+
+          {/* Contact Dropdown */}
+          <div 
+            className="relative" 
+            onMouseEnter={() => handleMouseEnter('contact')} 
+            onMouseLeave={handleMouseLeave}
+          >
+            <button 
+              className={`flex items-center text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
             >
-              <button 
-                className={`flex items-center text-base font-medium transition-colors duration-200 ${
-                  isScrolled ? 'text-gray-900' : 'text-white'
-                } nav-link`}
-              >
-                Technical Support <ChevronDown className="ml-1 h-4 w-4" />
-              </button> 
-              <AnimatePresence>
-                {activeDropdown === 'technical' && (
-                  <motion.div
-                    variants={curtainVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute top-full mt-2 left-0 w-max bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden flex"
-                  >
-                    {/* FAQ */}
-                    <div className="min-w-[25rem] p-4">
-                      <h4 className="font-semibold text-gray-900 mb-2">FAQ</h4>
-                      {faqCategories.map(category => (
-                        <Link 
-                          key={category.id} 
-                         to={`/faq/${category.id}`} 
-                          className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
-                        >
-                          {category.name}
-                        </Link>
-                      ))}
-                      <Link to="/faq" className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"> 
-                        View All FAQ Categories →
-                      </Link>
-                    </div>
-                    
-                    {/* Troubleshooting */}
-                    <div className="min-w-[25rem] p-4 border-l border-gray-200">
-                      <h4 className="font-semibold text-gray-900 mb-2">Troubleshooting</h4>
-                      {troubleshootingCategories.map(category => (
-                        <Link 
-                          key={category.id} 
-                         to={`/troubleshooting/${category.id}`} 
-                          className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
-                        >
-                         {category.name}
-                        </Link>
-                      ))}
-                      <Link to="/troubleshooting" className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"> 
-                        View All Troubleshooting →
-                      </Link>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </nav>
-
-          {/* Logo */}
-          <div className="flex-shrink-0">
-            <Link to="/" className="flex items-center transition-opacity">
-              <img 
-                src="/images/Azmeh-Paints-Logo.png" 
-                alt="AL AZMEH PAINTS" 
-                className={`h-10 w-auto transition-all duration-300 ${
-                  isScrolled ? "filter-none" : "brightness-0 invert"
-                }`}
-              />
-            </Link>
+              Contact <ChevronDown className="ml-1 h-4 w-4" />
+            </button>
+            <AnimatePresence>
+              {activeDropdown === 'contact' && (
+                <motion.div
+                  key="contact-dropdown" // ← مهم لتجنب الوميض
+                  variants={curtainVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
+                >
+                  <div className="p-4">
+                    <Link 
+                      to="/contact" 
+                      className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                    >
+                      Contact Us
+                    </Link>
+                    <Link 
+                      to="/job-application" 
+                      className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+                    >
+                      Apply for Job
+                    </Link>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-
-          {/* Right Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            <Link to="/blog" className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              Blog
-            </Link>
-
-            {/* Contact Dropdown */}
-            <div className="relative" onMouseEnter={() => handleMouseEnter('contact')} onMouseLeave={handleMouseLeave}>
-              <button className={`flex items-center text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-                Contact <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-              <AnimatePresence>
-                {activeDropdown === 'contact' && (
-                  <motion.div
-                    variants={curtainVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
-                  >
-                    <div className="p-4">
-                      <Link to="/contact" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
-                        Contact Us
-                      </Link>
-                      <Link to="/job-application" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
-                        Apply for Job
-                      </Link>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </nav>
-
+        </nav>
           {/* Mobile menu button */}
           <div className="lg:hidden">
             <button
