@@ -13,11 +13,11 @@ const goals = () => {
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Driving innovation and excellence in every aspect of our business.
           </p>
-        </div>
+        </div> 
 
         {/* كتل Vision و Mission */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-logo rounded-2xl p-8 text-white flex flex-col gap-4">
+          <div className="bg-[#0070C0] rounded-2xl p-8 text-white flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <Eye className="w-6 h-6 text-white" />
               <h3 className="text-2xl font-bold">Vision</h3>
