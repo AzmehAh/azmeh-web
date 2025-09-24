@@ -191,45 +191,46 @@ const Header = () => {
             Blog
           </Link>
 
-          {/* Contact Dropdown */}
-          <div 
-            className="relative" 
-            onMouseEnter={() => handleMouseEnter('contact')} 
-            onMouseLeave={handleMouseLeave}
+         {/* Contact Dropdown */}
+<div 
+  className="relative inline-block" // الزر والقائمة مع بعض
+  onMouseEnter={() => handleMouseEnter('contact')} 
+  onMouseLeave={handleMouseLeave}
+>
+  <button 
+    className={`flex items-center text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+  >
+    Contact <ChevronDown className="ml-1 h-4 w-4" />
+  </button>
+
+  <AnimatePresence>
+    {activeDropdown === 'contact' && (
+      <motion.div
+        variants={curtainVariants}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
+      >
+        <div className="p-4">
+          <Link 
+            to="/contact" 
+            className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
           >
-            <button 
-              className={`flex items-center text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-            >
-              Contact <ChevronDown className="ml-1 h-4 w-4" />
-            </button>
-            <AnimatePresence>
-              {activeDropdown === 'contact' && (
-                <motion.div
-                  key="contact-dropdown" // ← مهم لتجنب الوميض
-                  variants={curtainVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
-                >
-                  <div className="p-4">
-                    <Link  
-                      to="/contact" 
-                      className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
-                    >
-                      Contact Us
-                    </Link>
-                    <Link 
-                      to="/job-application" 
-                      className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
-                    >
-                      Apply for Job
-                    </Link>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+            Contact Us
+          </Link>
+          <Link 
+            to="/job-application" 
+            className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+          >
+            Apply for Job
+          </Link>
+        </div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</div>
+
         </nav>
           {/* Mobile menu button */}
           <div className="lg:hidden">
