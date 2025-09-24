@@ -205,23 +205,23 @@ const Header = () => {
 
   <AnimatePresence>
     {activeDropdown === 'contact' && (
-     <motion.div
+<motion.div
   variants={curtainVariants}
   initial="hidden"
   animate={activeDropdown === 'contact' ? 'visible' : 'hidden'}
-  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
   style={{ pointerEvents: activeDropdown === 'contact' ? 'auto' : 'none' }}
+  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
 >
   <div className="p-4">
-    <Link to="/contact" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1">
+    <Link to="/contact" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md mb-1">
       Contact Us
     </Link>
-    <Link to="/job-application" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200">
+    <Link to="/job-application" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md">
       Apply for Job
     </Link>
   </div>
 </motion.div>
- 
+
     )}
   </AnimatePresence>
 </div>
