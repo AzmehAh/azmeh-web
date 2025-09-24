@@ -31,73 +31,72 @@ const AboutSection = () => {
 
 
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+<section className="py-20 bg-gray-50">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-stretch">
+      
+      {/* Left Content */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-center lg:text-left flex flex-col justify-center h-full"
+      >
+        <h3 className="text-sm uppercase text-[#0055A3] mb-2">Our Legacy</h3>
+        <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
+          Excellence in Paint Solutions
+        </h2>
+        <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 sm:mb-6">
+          Al Azmeh Paints has been delivering excellence in paint systems and coatings since 1955. 
+          We provide innovative solutions for residential, industrial, and commercial applications worldwide.
+        </p> 
+        <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
+          Our commitment to quality and innovation has made us a trusted partner for professionals 
+          and homeowners seeking superior paint solutions.
+        </p>
+        <Link
+          to="/about"
+          className="inline-flex items-center bg-[#2C5DB6] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-sm sm:text-base"
+        >
+          Read More
+          <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+        </Link>
+      </motion.div>
 
-          {/* Left Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-center lg:text-left"
-          >
-            <h3 className="text-sm uppercase text-[#0055A3] mb-2">Our Legacy</h3>
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Excellence in Paint Solutions
-            </h2>
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 sm:mb-6">
-              Al Azmeh Paints has been delivering excellence in paint systems and coatings since 1955. 
-              We provide innovative solutions for residential, industrial, and commercial applications worldwide.
-            </p> 
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
-              Our commitment to quality and innovation has made us a trusted partner for professionals 
-              and homeowners seeking superior paint solutions.
-            </p>
-            <Link
-              to="/about"
-              className="inline-flex items-center bg-[#2C5DB6] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-sm sm:text-base"
-            >
-              Read More
-              <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
-            </Link>
-          </motion.div>
+      {/* Right Content */}
+      <motion.div
+        initial={{ opacity: 0, x: 20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="relative flex justify-center items-center h-full"
+      >
+        {/* Company Image */}
+        <img
+          src="https://i.pinimg.com/1200x/8f/46/97/8f4697297b8614f72f58f55b66accd09.jpg"
+          alt="Al Azmeh Paints Company"
+          className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg h-full"
+        />
 
-          {/* Right Content - Company Image with Counter Badge */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative flex justify-center"
-          >
-            {/* Company Image */}
-            <img
-              src="https://i.pinimg.com/1200x/8f/46/97/8f4697297b8614f72f58f55b66accd09.jpg"
-              alt="Al Azmeh Paints Company"
-              className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg"
-            />
+        {/* Counter Badge */}
+        <motion.div
+          className="absolute bottom-0 left-1 bg-white rounded-full shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo"
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.5, delay: 0.5 }}
+        >
+          <div className="text-xl sm:text-2xl font-bold text-[#003399]">
+            {count}Y+
+          </div>
+          <div className="text-[10px] sm:text-xs text-[#003399] font-semibold uppercase">
+            Experience
+          </div>
+        </motion.div>
+      </motion.div>
 
-            {/* Counter Badge */}
-     {/* Counter Badge - Circle */}
-  {/* Counter Badge - Circle */}
-     <motion.div
-  className="absolute bottom-0 left-1 bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo"
-  initial={{ scale: 0.5, opacity: 0 }}
-  animate={{ scale: 1, opacity: 1 }}
-  transition={{ duration: 0.5, delay: 0.5 }}
->
-  <div className="text-xl sm:text-2xl font-bold text-[#0055A3]">
-    {count}Y+
+    </div>
   </div>
-  <div className="text-[10px] sm:text-xs text-[#0055A3] font-semibold uppercase">
-    Experience
-  </div>
-</motion.div>
-          </motion.div>
+</section>
 
-        </div>
-      </div>
-    </section>
   );
 };
 
