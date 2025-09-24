@@ -7,12 +7,19 @@ const goals = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* عنوان السكشن */}
         <div className="text-center mb-16">
+          <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
           <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
             Our Vision & Mission
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Driving innovation and excellence in every aspect of our business.
           </p>
+              </motion.div>
         </div> 
 
         {/* كتل Vision و Mission */}
