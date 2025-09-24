@@ -30,7 +30,7 @@ const AboutFounderSection = () => {
                 <Users className="w-32 h-32 text-gray-500" />
               </div>
               <div className="mt-6 text-center">
-                <h3 className="text-2xl font-bold text-gray-50 mb-2">Ahmed Al Azmeh</h3>
+                <h3 className="text-2xl font-bold text-gray-50 mb-2">Ehsan Ezzat Al Azmeh</h3>
                 <p className="text-blue-200">Founder & Visionary</p>
                 <div className="mt-4 space-y-1 text-sm text-blue-200">
                   <p>Born: 1918, Damascus</p>
