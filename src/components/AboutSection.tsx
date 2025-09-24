@@ -45,8 +45,6 @@ const AboutSection = () => {
       setCount(Math.floor(start));
     }, 50);
 
-    return () => clearInterval(timer);
-  }, []); // <= يشتغل مرة واحدة كل رفريش
 
   return (
     <section className="py-20 bg-gray-50">
