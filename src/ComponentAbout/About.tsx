@@ -4,6 +4,8 @@ import Values from './Values';
 import Goals from './Goals';
 import Founder from './Founder';
 import CTA from './CTA';
+import AboutFounderSection from './AboutFounderSection';
+
 
 const About = () => {
   return (
