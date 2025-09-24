@@ -71,7 +71,7 @@ const AboutSection = () => {
           >
             {/* Company Image */}
             <img
-              src="/images/company-building.jpg"
+              src="https://i.pinimg.com/1200x/5b/24/5c/5b245c35426d7c1da9f1e94bbcf4c484.jpg"
               alt="Al Azmeh Paints Company"
               className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg"
             />
