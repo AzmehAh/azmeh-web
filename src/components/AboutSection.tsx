@@ -7,25 +7,7 @@ const AboutSection = () => {
   const [count, setCount] = useState(0);
   const currentYear = new Date().getFullYear();
   const targetYears = currentYear - 1955;
- const AboutSection = () => {
-  const [count, setCount] = useState(0);
-  const targetYears = 25; // عدد سنوات الخبرة
-  const duration = 2000; // المدة الزمنية بالمللي ثانية (2 ثانية)
-
-  useEffect(() => {
-    let start = 0;
-    const increment = targetYears / (duration / 50); // خطوة العد
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= targetYears) {
-        start = targetYears;
-        clearInterval(timer);
-      }
-      setCount(Math.floor(start));
-    }, 50);
-
-    return () => clearInterval(timer);
-  }, []);
+ 
   // Animated counter effect
   useEffect(() => {
     const duration = 2000; // 2 seconds
@@ -43,7 +25,7 @@ const AboutSection = () => {
         clearInterval(timer);
       }
     }, stepDuration);
-
+ 
     return () => clearInterval(timer);
   }, [targetYears]);
 
