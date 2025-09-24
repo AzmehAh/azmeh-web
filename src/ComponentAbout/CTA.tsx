@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 const YourButtons = () => {
   const navigate = useNavigate();
 
+
 const CTA = () => {
   return (
     <section className="py-20 bg-gray-50">
@@ -14,14 +15,14 @@ const CTA = () => {
           transition={{ duration: 0.8 }}
           className="bg-[#0055A3]  rounded-3xl p-12 text-white"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6"> 
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
             Ready to Transform Your Project?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
             Let our 69+ years of experience and innovative solutions bring your vision to life. 
             Whether it's for your home, furniture, vehicle, or industrial facility, we have the perfect paint solution.
           </p>
-         <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => navigate("/contact")}
