@@ -191,9 +191,9 @@ const Header = () => {
             Blog
           </Link>
 
-         {/* Contact Dropdown */}
+{/* Contact Dropdown */}
 <div 
-  className="relative inline-block" // الزر والقائمة مع بعض
+  className="relative"   // هاد مهم: يخلي القائمة تتمركز على الزر
   onMouseEnter={() => handleMouseEnter('contact')} 
   onMouseLeave={handleMouseLeave}
 >
@@ -230,6 +230,7 @@ const Header = () => {
     )}
   </AnimatePresence>
 </div>
+
 
         </nav>
           {/* Mobile menu button */}
