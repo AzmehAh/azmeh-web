@@ -8,7 +8,7 @@ import CTA from './CTA';
 const About = () => {
   return (
     <div className="about-page">
-      <AboutSection />
+      <AboutFounderSection />
       <Values /> 
       <Goals />
       <Founder />
