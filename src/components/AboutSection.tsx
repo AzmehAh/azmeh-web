@@ -77,12 +77,9 @@ const AboutSection = () => {
             />
 
             {/* Counter Badge */}
-     {/* Counter Badge - Pentagon */}
+     {/* Counter Badge - Circle */}
 <motion.div
-  className="absolute bottom-4 left-4 bg-white shadow-xl p-4 sm:p-6 flex flex-col items-center justify-center border-2 border-[#0055A3]"
-  style={{
-    clipPath: "polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)"
-  }}
+  className="absolute bottom-4 left-4 bg-white rounded-full shadow-xl p-4 sm:p-6 flex flex-col items-center justify-center border-2 border-[#0055A3]"
   initial={{ scale: 0.5, opacity: 0 }}
   whileInView={{ scale: 1, opacity: 1 }}
   transition={{ duration: 0.5, delay: 0.5 }}
