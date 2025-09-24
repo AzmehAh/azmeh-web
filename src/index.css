@@ -241,7 +241,7 @@
 } 
 .hexagon-badge {
   position: relative;
-  width: 100px; /* أصبح أكبر */
+  width: 140px; /* أصبح أكبر */
   height: 115px; /* متناسق مع العرض */
   background: white;
   /* شكل سداسي واضح */
