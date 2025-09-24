@@ -2,21 +2,32 @@ import React from "react";
 
 const goals = () => {
   return (
-    <section className="py-20 bg-gray-50">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <section className="py-40 bg-[#0055A3] text-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* عنوان السكشن */}
-        <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-8">
-          Our Vision & Mission
-        </h2>
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            Our Vision & Mission
+          </h2>
+          <p className="text-lg text-white/90 max-w-3xl mx-auto">
+            Driving innovation and excellence in every aspect of our business.
+          </p>
+        </div>
 
-        {/* النصوص */}
-        <div className="space-y-6 text-lg text-gray-700 leading-relaxed">
-          <p>
-            <strong>Vision:</strong> To be the leading innovator in paint and coating technologies, providing sustainable solutions that protect and beautify homes, furniture, vehicles, and industrial facilities worldwide.
-          </p>
-          <p>
-            <strong>Mission:</strong> To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility to the environment.
-          </p>
+        {/* نصوص Vision و Mission */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-white">
+          <div>
+            <h3 className="text-2xl font-semibold mb-4">Vision</h3>
+            <p className="text-lg leading-relaxed">
+              To be the leading innovator in paint and coating technologies, providing sustainable solutions that protect and beautify homes, furniture, vehicles, and industrial facilities worldwide.
+            </p>
+          </div>
+          <div>
+            <h3 className="text-2xl font-semibold mb-4">Mission</h3>
+            <p className="text-lg leading-relaxed">
+              To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility to the environment.
+            </p>
+          </div>
         </div>
       </div>
     </section>
