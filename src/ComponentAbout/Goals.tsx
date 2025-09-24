@@ -1,6 +1,6 @@
 import React from "react";
 import { Eye, Target } from "lucide-react";
-
+import { motion } from "framer-motion";
 const goals = () => {
   return (
     <section className="py-40 bg-white">
