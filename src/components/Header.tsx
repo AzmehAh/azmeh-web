@@ -208,7 +208,7 @@ const Header = () => {
     <motion.div
   variants={curtainVariants}
   initial="hidden"
-  animate={activeDropdown === 'contact' ? 'visible' : ''}
+
   style={{ pointerEvents: activeDropdown === 'contact' ? 'auto' : 'none' }}
   className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
 >
