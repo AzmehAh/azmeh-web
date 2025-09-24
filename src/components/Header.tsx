@@ -205,7 +205,7 @@ const Header = () => {
 
   <AnimatePresence>
     {activeDropdown === 'contact' && (
-<motion.div
+    <motion.div
   variants={curtainVariants}
   initial="hidden"
   animate={activeDropdown === 'contact' ? 'visible' : 'hidden'}
