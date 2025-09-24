@@ -330,48 +330,44 @@ const Header = () => {
                   )}
                 </AnimatePresence>
               </div>
-{/* Contact Dropdown */}
-<div 
-  className="relative" 
-  onMouseEnter={() => handleMouseEnter('contact')} 
-  onMouseLeave={handleMouseLeave}
->
-  <button 
-    className={`flex items-center text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-  >
-    Contact <ChevronDown className="ml-1 h-4 w-4" />
-  </button>
 
-  <AnimatePresence>
-    {activeDropdown === 'contact' && (
-      <motion.div
-        key="contact-dropdown"
-        variants={curtainVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
-      >
-        <div className="p-4"> 
-          <Link 
-            to="/contact" 
-            className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
-          >
-            Contact Us
-          </Link>
-          <Link 
-            to="/job-application" 
-            className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
-          >
-            Apply for Job
-          </Link>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-</div>
+              {/* Contact Dropdown */}
+              <div className="border-t border-gray-100 pt-4 mt-4">
+                <button
+                  onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'contact' ? null : 'contact')}
+                  className="flex items-center justify-between w-full text-gray-900 hover:text-[#2C5DB6] hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+                >
+                  <span>Contact & Job Application</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
+                </button>
+                <AnimatePresence>
+                  {activeMobileDropdown === 'contact' && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      className="overflow-hidden bg-gray-50 rounded-lg mt-2 p-4 space-y-2"
+                    >
+                      <Link 
+                        to="/contact" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+                      >
+                        Contact Us
+                      </Link>
+                      <Link 
+                        to="/job-application" 
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+                      >
+                        Apply for Job
+                      </Link>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
-          </motion.div>
+          </motion.div> 
         )}
       </AnimatePresence>
     </header> 
