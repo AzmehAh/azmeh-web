@@ -81,7 +81,7 @@ const AboutSection = () => {
 
   {/* Counter Badge - Hexagon Shape */}
   <motion.div
-    className="absolute bottom-0 right-40  transform -translate-x-1/2"
+    className="absolute bottom-0 right-60  transform -translate-x-1/2"
     initial={{ scale: 0.5, opacity: 0 }}
     whileInView={{ scale: 1, opacity: 1 }}
     transition={{ duration: 0.5, delay: 0.5 }}
