@@ -88,7 +88,7 @@ const AboutSection = () => {
   >
     <div className="hexagon-badge">
       <div className="count">{count}Y+</div>
-      <div className="label">Logo</div>
+      <div className="label"></div>
     </div>
   </motion.div>
 </motion.div>
