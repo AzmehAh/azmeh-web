@@ -216,7 +216,7 @@
   height: 92px;
   background: white;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  border: 2px solid #FFA500; /* البرتقالي الخفيف */
+  
   display: flex;
   flex-direction: column;
   justify-content: center;
