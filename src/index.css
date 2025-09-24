@@ -242,7 +242,7 @@
 .hexagon-badge {
   position: relative;
   width: 140px; /* أصبح أكبر */
-  height: 115px; /* متناسق مع العرض */
+  height: 120px; /* متناسق مع العرض */
   background: white;
   /* شكل سداسي واضح */
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
