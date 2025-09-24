@@ -18,7 +18,7 @@
   transition: width 0.3s ease;
   margin-right: 5px; /* مسافة صغيرة عن النص */
 }
-
+ 
 .menu-item:hover {
   padding-left: 0.5rem;
 }
@@ -210,85 +210,4 @@
   border-radius: 8px; /* اختياري */
   display: inline-block; /* عشان ما تتمدد */
 }
- .hexagon-badge {
-  position: relative; 
-  width: 80px;
-  height: 92px;
-  background: white;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.hexagon-badge .count {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #0055A3;
-  line-height: 1.2;
-}
-
-.hexagon-badge .label {
-  font-size: 0.625rem;
-  font-weight: 600;
-  color: #888;
-  text-transform: uppercase;
-  margin-top: 4px;
-} 
-.hexagon-badge {
-  position: relative;
-  width: 130px;
-  height: 140px;
-  background: white;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 4px;
-  box-shadow: 0 6px 16px rgba(0, 85, 163, 0.15);
-  z-index: 10;
-}
-
-/* خطان رأسيان على الجانبين (مثل الصورة) */
-.hexagon-badge::before,
-.hexagon-badge::after {
-  content: '';
-  position: absolute; 
-  width: 2px;
-  height: 100%;
-  background-color: #0055A3;
-  top: 0;
-}
-
-.hexagon-badge::before {
-  left: 0;
-}
-
-.hexagon-badge::after {
-  right: 0;
-}
-
-.hexagon-badge .count {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #0055A3;
-  line-height: 1.1;
-  text-align: center;
-  position: relative;
-  z-index: 1;
-}
-
-.hexagon-badge .label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: #0055A3;
-  text-transform: uppercase;
-  margin-top: 6px;
-  letter-spacing: 0.5px;
-  position: relative;
-  z-index: 1;
-}
+ 
