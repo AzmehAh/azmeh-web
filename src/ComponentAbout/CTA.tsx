@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const CTA = () => {
   return (
@@ -18,24 +19,23 @@ const CTA = () => {
             Let our 69+ years of experience and innovative solutions bring your vision to life. 
             Whether it's for your home, furniture, vehicle, or industrial facility, we have the perfect paint solution.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <motion.button
+         <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      <motion.button
+        whileTap={{ scale: 0.95 }}
+        onClick={() => navigate("/contact")}
+        className="bg-white text-[#2C5DB6] px-8 py-4 rounded-lg font-bold text-lg hover:shadow-2xl transition-all duration-300"
+      >
+        Get In Touch
+      </motion.button>
 
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-[#2C5DB6] px-8 py-4 rounded-lg font-bold text-lg hover:shadow-2xl transition-all duration-300"
-            >
-              Get In Touch
-            </motion.button>
-            <motion.button
-            
-              whileTap={{ scale: 0.95 }}
-              className="bg-white/20 backdrop-blur-sm rounded-lg text-white px-8 py-4  font-bold text-lg hover:bg-white/30 transition-all duration-300"
-            >
-              View Our Products
-            </motion.button>
-          </div>
-        </motion.div>
-      </div>
+      <motion.button
+        whileTap={{ scale: 0.95 }}
+        onClick={() => navigate("/products")}
+        className="bg-white/20 backdrop-blur-sm rounded-lg text-white px-8 py-4 font-bold text-lg hover:bg-white/30 transition-all duration-300"
+      >
+        View Our Products
+      </motion.button>
+    </div>
     </section>
   );
 };
