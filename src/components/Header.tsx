@@ -193,7 +193,7 @@ const Header = () => {
 
  {/* Contact Dropdown */}
 <div 
-  className="relative inline-block"  // يصير المرجع للـ absolute هون
+  className="relative inline-block" 
   onMouseEnter={() => handleMouseEnter('contact')} 
   onMouseLeave={handleMouseLeave}
 >
