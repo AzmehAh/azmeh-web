@@ -10,7 +10,7 @@ const AboutFounderSection = () => {
     <section className="py-40 bg-[#0055A3] relative overflow-hidden text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        {/* Combined Section */}
+           {/* Combined Section */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -32,6 +32,12 @@ const AboutFounderSection = () => {
               <div className="mt-6 text-center">
                 <h3 className="text-2xl font-bold text-gray-50 mb-2">Ahmed Al Azmeh</h3>
                 <p className="text-blue-200">Founder & Visionary</p>
+                <div className="mt-4 space-y-1 text-sm text-blue-200">
+                  <p>Born: 1918, Damascus</p>
+                  <p>Started Business: 1938</p>
+                  <p>Founded Al Azmeh Paints: 1955</p>
+                  <p>Legacy Continues: 1918 - 1998</p>
+                </div>
               </div>
             </div>
           </motion.div>
