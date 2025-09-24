@@ -3,14 +3,15 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+
 const AboutSection = () => {
   const [count, setCount] = useState(0);
   const currentYear = new Date().getFullYear();
-  const targetYears = currentYear - 1955;
-  const duration = 2000;
+  const targetYears = currentYear - 1955; // يحسب عدد السنوات منذ 1955
+  const duration = 2000; // مدة العد بالمللي ثانية
 
   useEffect(() => {
-    const steps = 60;
+    const steps = 60; // عدد خطوات العد
     const increment = targetYears / steps;
     const stepDuration = duration / steps;
     let currentStep = 0;
@@ -20,7 +21,7 @@ const AboutSection = () => {
       if (currentStep <= steps) {
         setCount(Math.floor(increment * currentStep));
       } else {
-        setCount(targetYears);
+        setCount(targetYears); // لضمان الوصول للرقم الصحيح
         clearInterval(timer);
       }
     }, stepDuration);
@@ -28,17 +29,18 @@ const AboutSection = () => {
     return () => clearInterval(timer);
   }, [targetYears, duration]);
 
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start lg:items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
 
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            whileInView={{ opacity: 1, x: 0 }} 
             transition={{ duration: 0.6 }}
-            className="text-center lg:text-left flex flex-col justify-center"
+            className="text-center lg:text-left"
           >
             <h3 className="text-sm uppercase text-[#0055A3] mb-2">Our Legacy</h3>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
@@ -61,32 +63,35 @@ const AboutSection = () => {
             </Link>
           </motion.div>
 
-          {/* Right Content - Company Image with Counter Badge */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative flex justify-center lg:items-center lg:h-full"
-          >
-            <img
-              src="https://i.pinimg.com/1200x/8f/46/97/8f4697297b8614f72f58f55b66accd09.jpg"
-              alt="Al Azmeh Paints Company"
-              className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg h-full"
-            />
+        {/* Right Content - Company Image with Counter Badge */}
+<motion.div
+  initial={{ opacity: 0, x: 20 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.6, delay: 0.2 }}
+  className="relative flex justify-center"
+>
+  {/* حاوية الصورة بارتفاع متطابق مع النص */}
+  <div className="w-full max-w-md lg:max-w-lg h-full">
+    <img
+      src="https://i.pinimg.com/1200x/8f/46/97/8f4697297b8614f72f58f55b66accd09.jpg"
+      alt="Al Azmeh Paints Company"
+      className="rounded-xl shadow-lg object-cover w-full h-full"
+    />
+  </div>
 
-            {/* Counter Badge - Hexagon Shape */}
-            <motion.div
-              className="absolute bottom-0 left-0 transform -translate-x-1/2"
-              initial={{ scale: 0.5, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.5, delay: 0.5 }}
-            >
-              <div className="hexagon-badge">
-                <div className="count">{count}Y+</div>
-                <div className="label">Logo</div>
-              </div>
-            </motion.div>
-          </motion.div>
+  {/* Counter Badge - Hexagon Shape */}
+  <motion.div
+    className="absolute bottom-0 left-0 transform -translate-x-1/2"
+    initial={{ scale: 0.5, opacity: 0 }}
+    whileInView={{ scale: 1, opacity: 1 }}
+    transition={{ duration: 0.5, delay: 0.5 }}
+  >
+    <div className="hexagon-badge">
+      <div className="count">{count}Y+</div>
+      <div className="label">Logo</div>
+    </div>
+  </motion.div>
+</motion.div>
 
         </div>
       </div>
