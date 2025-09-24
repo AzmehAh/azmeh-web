@@ -5,7 +5,7 @@ import { Users } from "lucide-react";
 
 const AboutSectionn = () => {
   const navigate = useNavigate();
-
+ 
   return (
     <section className="py-40 bg-[#0055A3] relative overflow-hidden text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-24">
