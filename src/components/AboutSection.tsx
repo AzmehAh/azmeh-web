@@ -62,35 +62,32 @@ const AboutSection = () => {
             </Link>
           </motion.div>
 
-          {/* Right Content - Company Image with Counter Badge */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative flex justify-center"
-          >
-            {/* Company Image */}
-            <img
-              src="https://i.pinimg.com/1200x/8f/46/97/8f4697297b8614f72f58f55b66accd09.jpg"
-              alt="Al Azmeh Paints Company"
-              className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg"
-            />
-
-            {/* Counter Badge */}
-     {/* Counter Badge - Circle */}
+           {/* Right Content - Company Image with Counter Badge */}
 <motion.div
-  className="absolute bottom-0 left-1 bg-white rounded-xl shadow-xl p-4 sm:p-6 flex flex-col items-center justify-center border-2 border-[#a8a8a8]"
-  initial={{ scale: 0.5, opacity: 0 }}
-  whileInView={{ scale: 1, opacity: 1 }}
-  transition={{ duration: 0.5, delay: 0.5 }}
+  initial={{ opacity: 0, x: 20 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.6, delay: 0.2 }}
+  className="relative flex justify-center"
 >
-  <div className="text-xl sm:text-2xl font-bold text-[#0055A3]">
-    {count}Y+
-  </div>
-  <div className="text-[10px] sm:text-xs text-[#0055A3] font-semibold uppercase">
-    Experience
-  </div>
-</motion.div>
+  {/* Company Image */}
+  <img
+    src="https://i.pinimg.com/1200x/8f/46/97/8f4697297b8614f72f58f55b66accd09.jpg"
+    alt="Al Azmeh Paints Company"
+    className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg"
+  />
+
+  {/* Counter Badge - Hexagon */}
+  <motion.div
+    className="absolute bottom-0 left-0 transform -translate-x-1/2"
+    initial={{ scale: 0.5, opacity: 0 }}
+    whileInView={{ scale: 1, opacity: 1 }}
+    transition={{ duration: 0.5, delay: 0.5 }}
+  >
+    <div className="hexagon-badge">
+      <div className="count">{count}Y+</div>
+      <div className="label">Proven Experience</div>
+    </div>
+  </motion.div>
 
           </motion.div>
 
