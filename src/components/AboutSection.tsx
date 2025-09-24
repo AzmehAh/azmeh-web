@@ -80,19 +80,20 @@ const AboutSection = () => {
             {/* Counter Badge */}
      {/* Counter Badge - Circle */}
   {/* Counter Badge - Circle */}
-        <motion.div
-          className="absolute bottom-4 left-4 bg-white rounded-full shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-"
-          initial={{ scale: 0.5, opacity: 0 }}
-          whileInView={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.5 }}
-        >
-          <div className="text-xl sm:text-2xl font-bold text-[#0055A3]">
-            {count}Y+
-          </div>
-          <div className="text-[10px] sm:text-xs text-[#0055A3] font-semibold uppercase">
-            Experience
-          </div>
-</motion.div> 
+     <motion.div
+  className="absolute bottom-1 left-2 bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-[#a8a8a8]"
+  initial={{ scale: 0.5, opacity: 0 }}
+  animate={{ scale: 1, opacity: 1 }}
+  transition={{ duration: 0.5, delay: 0.5 }}
+>
+  <div className="text-xl sm:text-2xl font-bold text-[#0055A3]">
+    {count}Y+
+  </div>
+  <div className="text-[10px] sm:text-xs text-[#0055A3] font-semibold uppercase">
+    Experience
+  </div>
+</motion.div>
+
 
           </motion.div>
 
