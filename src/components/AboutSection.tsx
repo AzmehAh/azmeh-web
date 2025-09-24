@@ -81,7 +81,7 @@ const AboutSection = () => {
      {/* Counter Badge - Circle */}
   {/* Counter Badge - Circle */}
      <motion.div
-  className="absolute bottom-1 left-2 bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-[#a8a8a8]"
+  className="absolute bottom-1 left-2 bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo"
   initial={{ scale: 0.5, opacity: 0 }}
   animate={{ scale: 1, opacity: 1 }}
   transition={{ duration: 0.5, delay: 0.5 }}
