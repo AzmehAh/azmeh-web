@@ -3,47 +3,31 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+
 const AboutSection = () => {
   const [count, setCount] = useState(0);
   const currentYear = new Date().getFullYear();
-  const targetYears = currentYear - 1955;
-const AboutSection = () => {
-  const [count, setCount] = useState(0);
-  const targetYears = 25; // عدد سنوات الخبرة
-  const duration = 2000;
-  // Animated counter effect
+  const targetYears = currentYear - 1955; // يحسب عدد السنوات منذ 1955
+  const duration = 2000; // مدة العد بالمللي ثانية
+
   useEffect(() => {
-    const duration = 2000; // 2 seconds
-    const steps = 60; 
+    const steps = 60; // عدد خطوات العد
     const increment = targetYears / steps;
     const stepDuration = duration / steps;
-
     let currentStep = 0;
+
     const timer = setInterval(() => {
       currentStep++;
       if (currentStep <= steps) {
         setCount(Math.floor(increment * currentStep));
       } else {
-        setCount(targetYears);
+        setCount(targetYears); // لضمان الوصول للرقم الصحيح
         clearInterval(timer);
       }
     }, stepDuration);
 
     return () => clearInterval(timer);
-  }, [targetYears]);
- // المدة الزمنية بالمللي ثانية (2 ثانية)
-
-  useEffect(() => {
-    let start = 0;
-    const increment = targetYears / (duration / 50); // كل 50ms يزيد
-    const timer = setInterval(() => {
-      start += increment;
-      if (start >= targetYears) {
-        start = targetYears;
-        clearInterval(timer);
-      }
-      setCount(Math.floor(start));
-    }, 50);
+  }, [targetYears, duration]);
 
 
   return (
