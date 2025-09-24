@@ -199,39 +199,7 @@
 }
 
 /* Smoother transitions for responsive elements */
-@media (prefers-reduced-motion: no-preference) {.hexagon-badge {
-  position: relative;
-  width: 100px; /* أصبح أكبر */
-  height: 115px; /* متناسق مع العرض */
-  background: white;
-  /* شكل سداسي واضح */
-  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
-  border: 2px solid #0055A3; /* لون الحدود أزرق */
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 8px 4px;
-  box-shadow: 0 6px 16px rgba(0, 85, 163, 0.15); /* ظل أزرق خفيف */
-  z-index: 10;
-}
-
-.hexagon-badge .count {
-  font-size: 1.5rem; /* 24px تقريبًا */
-  font-weight: 800;
-  color: #0055A3; /* نص أزرق */
-  line-height: 1.1;
-  text-align: center;
-}
-
-.hexagon-badge .label {
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: #0055A3; /* نص أزرق */
-  text-transform: uppercase;
-  margin-top: 6px;
-  letter-spacing: 0.5px;
-}
+@media (prefers-reduced-motion: no-preference) {
   * {
     scroll-behavior: smooth;
   } 
@@ -242,4 +210,32 @@
   border-radius: 8px; /* اختياري */
   display: inline-block; /* عشان ما تتمدد */
 }
- 
+ .hexagon-badge {
+  position: relative;
+  width: 100px;
+  height: 120px;
+  background: white;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  border: 2px solid #FFA500; /* البرتقالي الخفيف */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.hexagon-badge .count {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #0055A3;
+  line-height: 1.2;
+}
+
+.hexagon-badge .label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  margin-top: 4px;
+} 
