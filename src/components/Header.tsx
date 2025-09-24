@@ -193,7 +193,7 @@ const Header = () => {
 
 {/* Contact Dropdown */}
 <div 
-  className="relative"   // هاد مهم: يخلي القائمة تتمركز على الزر
+  className="relative inline-block"  // يصير المرجع للـ absolute هون
   onMouseEnter={() => handleMouseEnter('contact')} 
   onMouseLeave={handleMouseLeave}
 >
@@ -210,7 +210,7 @@ const Header = () => {
         initial="hidden"
         animate="visible"
         exit="exit"
-        className="absolute top-full right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
+        className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
       >
         <div className="p-4">
           <Link 
