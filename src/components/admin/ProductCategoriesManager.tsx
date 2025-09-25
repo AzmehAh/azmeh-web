@@ -448,32 +448,42 @@ useEffect(() => {
             </div>
 
             {/* Image Upload */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
-              {isEditing ? (
-                <>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                  {imagePreview && (
-                    <div className="mt-3">
-                      <img 
-                        src={imagePreview}
-                        alt="Preview"
-                        className="w-32 h-32 object-cover rounded-md"
-                      />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <p className="text-gray-900">
-                  {imagePreview ? 'Image available' : 'No image'}
-                </p>
-              )}
-            </div>
+         {/* Image Upload */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Image
+  </label>
+
+  {isEditing ? (
+    <>
+      <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
+        <Upload className="w-4 h-4 mr-2" />
+        Upload Image
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}  // نفس الدالة القديمة عندك
+          className="hidden"
+        />
+      </label>
+
+      {imagePreview && (
+        <div className="mt-3">
+          <img
+            src={imagePreview}
+            alt="Preview"
+            className="w-32 h-32 object-cover rounded-md"
+          />
+        </div>
+      )}
+    </>
+  ) : (
+    <p className="text-gray-900">
+      {imagePreview ? "Image available" : "No image"}
+    </p>
+  )}
+</div>
+
           </div>
 
           {/* Footer */}
