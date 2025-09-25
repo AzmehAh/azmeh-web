@@ -759,13 +759,16 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                 </div>
               </div>
             </div>
+          
           )}
-               </motion.div>    
-        </motion.div>    
+              </div>
+        </motion.div>
+            
       </div>
           
     </div>
   );
+        
 };
 
 export default BulletinForm;
