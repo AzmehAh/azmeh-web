@@ -760,7 +760,10 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
               </div>
             </div>
           )}
+              
         </motion.div> 
+            
+            </div>
       </div>
     </div>
   );
