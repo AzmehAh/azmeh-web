@@ -85,6 +85,8 @@ const BulletinDetail = () => {
         </div>
       </div>
 
+     
+      
       {/* Article Header */}
       <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -138,7 +140,28 @@ const BulletinDetail = () => {
             'You Might Also Like'
           }
         </h3>
-
+            
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                  {isEditing || !id ? (
+                    <select
+                      value={formData.status}
+                      onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                    >
+                      <option value="draft">Draft</option>
+                      <option value="published">Published</option>
+                    </select>
+                  ) : (
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      formData.status === 'published' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {formData.status}
+                    </span>
+                  )}
+                </div>
         {relatedBulletins.length > 0 ? (
           <div className="grid md:grid-cols-2 gap-6">
             {relatedBulletins.map((relatedBulletin) => (
