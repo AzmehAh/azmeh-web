@@ -560,89 +560,38 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                   )}
                 </div>
 
-    {/* Related Bulletins */}
+   {/* Related Bulletins - Simple Version */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Related Bulletins (Manual Selection)
   </label>
   {isEditing || !id ? (
-    <div className="space-y-2">
-      <select
-        multiple
-        value={selectedRelatedIds}
-        onChange={(e) => {
-          const selected = Array.from(e.target.selectedOptions, opt => opt.value);
-          setSelectedRelatedIds(selected);
-        }}
-        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0055A3] focus:border-transparent h-32 bg-white"
-        size={6}
-      >
-        {allBulletins.length > 0 ? (
-          allBulletins.map((b) => (
-            <option key={b.id} value={b.id} className="py-2">
-              {b.title.length > 60 ? `${b.title.substring(0, 60)}...` : b.title} ({b.slug})
-            </option>
-          ))
-        ) : (
-          <option disabled value="">No bulletins available</option>
-        )}
-      </select>
-      <div className="flex justify-between items-center text-xs text-gray-500">
-        <span>Selected: {selectedRelatedIds.length} bulletin(s)</span>
-        <span>Hold Ctrl/Cmd to select multiple</span>
-      </div>
-      
-      {/* عرض البلتينات المختارة */}
-      {selectedRelatedIds.length > 0 && (
-        <div className="mt-3 p-3 bg-gray-50 rounded-lg">
-          <h4 className="text-sm font-medium text-gray-700 mb-2">Selected Bulletins:</h4>
-          <ul className="space-y-1 max-h-20 overflow-y-auto">
-            {selectedRelatedIds.map((id) => {
-              const related = allBulletins.find(b => b.id === id);
-              return (
-                <li key={id} className="text-xs text-gray-600 flex items-center justify-between">
-                  <span>{related ? related.title : `ID: ${id}`}</span>
-                  <button
-                    type="button"
-                    onClick={() => setSelectedRelatedIds(prev => prev.filter(item => item !== id))}
-                    className="text-red-500 hover:text-red-700 ml-2"
-                  >
-                    ×
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
+    <div className="border border-gray-300 rounded-lg p-2 bg-white max-h-48 overflow-y-auto">
+      {allBulletins.length > 0 ? (
+        allBulletins.map((b) => (
+          <label key={b.id} className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded">
+            <input
+              type="checkbox"
+              checked={selectedRelatedIds.includes(b.id)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setSelectedRelatedIds(prev => [...prev, b.id]);
+                } else {
+                  setSelectedRelatedIds(prev => prev.filter(id => id !== b.id));
+                }
+              }}
+              className="rounded text-[#0055A3] focus:ring-[#0055A3]"
+            />
+            <span className="text-sm">
+              {b.title} ({b.slug})
+            </span>
+          </label>
+        ))
+      ) : (
+        <p className="text-gray-500 text-sm p-2">No bulletins available</p>
       )}
     </div>
   ) : (
-    <div className="text-gray-900">
-      {selectedRelatedIds.length > 0 ? (
-        <ul className="list-disc pl-5 space-y-1">
-          {selectedRelatedIds.map((id) => {
-            const related = allBulletins.find(b => b.id === id);
-            return <li key={id}>{related ? related.title : `ID: ${id}`}</li>;
-          })}
-        </ul>
-      ) : (
-        <p className="text-gray-500">No manually selected related bulletins</p>
-      )}
-    </div>
-  )}
-</div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                  {isEditing || !id ? (
-                    <select
-                      value={formData.status}
-                      onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    >
-                      <option value="draft">Draft</option>
-                      <option value="published">Published</option>
-                    </select>
-                  ) : (
                     <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                       formData.status === 'published' 
                         ? 'bg-green-100 text-green-800' 
