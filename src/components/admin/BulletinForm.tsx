@@ -560,69 +560,9 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                   )}
                 </div>
 
- {/* Related Bulletins - Multiple Selection بنفس الشكل */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Related Bulletins (Manual Selection)
-  </label>
-  {isEditing || !id ? (
-    <div className="space-y-2">
-      <select
-        value=""
-        onChange={(e) => {
-          const selectedId = e.target.value;
-          if (selectedId && !selectedRelatedIds.includes(selectedId)) {
-            setSelectedRelatedIds(prev => [...prev, selectedId]);
-          }
-          e.target.value = ""; // Reset selection
-        }}
-        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-      >
-        <option value="">Add a related bulletin</option>
-        {allBulletins.filter(b => !selectedRelatedIds.includes(b.id)).map((b) => (
-          <option key={b.id} value={b.id}>
-            {b.title} ({b.slug})
-          </option>
-        ))}
-      </select>
-      
-      {/* عرض البلتينات المختارة */}
-      {selectedRelatedIds.length > 0 && (
-        <div className="mt-2 space-y-1">
-          {selectedRelatedIds.map((id) => {
-            const related = allBulletins.find(b => b.id === id);
-            return related ? (
-              <div key={id} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
-                <span className="text-sm">{related.title}</span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedRelatedIds(prev => prev.filter(item => item !== id))}
-                  className="text-red-500 hover:text-red-700 text-lg"
-                >
-                  ×
-                </button>
-              </div>
-            ) : null;
-          })}
-        </div>
-      )}
-    </div>
-  ) : (
-    <div className="text-gray-900">
-      {selectedRelatedIds.length > 0 ? (
-        <ul className="list-disc pl-5 space-y-1">
-          {selectedRelatedIds.map((id) => {
-            const related = allBulletins.find(b => b.id === id);
-            return <li key={id}>{related ? related.title : `ID: ${id}`}</li>;
-          })}
-        </ul>
-      ) : (
-        <p className="text-gray-500">No related bulletins selected</p>
-      )}
-    </div>
-  )}
-</div> 
-   
+ 
+ 
+          
             {/* Content */}
             <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -759,16 +699,11 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                 </div>
               </div>
             </div>
-          
           )}
-              </div>
-        </motion.div>
-            
+        </motion.div> 
       </div>
-          
     </div>
   );
-        
 };
 
 export default BulletinForm;
