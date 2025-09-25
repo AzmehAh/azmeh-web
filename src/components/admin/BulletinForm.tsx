@@ -560,32 +560,62 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                   )}
                 </div>
 
-               {/* Related Bulletins */}
+    {/* Related Bulletins */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Related Bulletins (Manual Selection)
   </label>
   {isEditing || !id ? (
-    <select
-      multiple
-      value={selectedRelatedIds}
-      onChange={(e) => {
-        const selected = Array.from(e.target.selectedOptions, opt => opt.value);
-        setSelectedRelatedIds(selected);
-      }}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
-      size={5} // إظهار 5 عناصر بشكل افتراضي
-    >
-      {allBulletins.length > 0 ? (
-        allBulletins.map((b) => (
-          <option key={b.id} value={b.id}>
-            {b.title} ({b.slug})
-          </option>
-        ))
-      ) : (
-        <option disabled>No bulletins available</option>
+    <div className="space-y-2">
+      <select
+        multiple
+        value={selectedRelatedIds}
+        onChange={(e) => {
+          const selected = Array.from(e.target.selectedOptions, opt => opt.value);
+          setSelectedRelatedIds(selected);
+        }}
+        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0055A3] focus:border-transparent h-32 bg-white"
+        size={6}
+      >
+        {allBulletins.length > 0 ? (
+          allBulletins.map((b) => (
+            <option key={b.id} value={b.id} className="py-2">
+              {b.title.length > 60 ? `${b.title.substring(0, 60)}...` : b.title} ({b.slug})
+            </option>
+          ))
+        ) : (
+          <option disabled value="">No bulletins available</option>
+        )}
+      </select>
+      <div className="flex justify-between items-center text-xs text-gray-500">
+        <span>Selected: {selectedRelatedIds.length} bulletin(s)</span>
+        <span>Hold Ctrl/Cmd to select multiple</span>
+      </div>
+      
+      {/* عرض البلتينات المختارة */}
+      {selectedRelatedIds.length > 0 && (
+        <div className="mt-3 p-3 bg-gray-50 rounded-lg">
+          <h4 className="text-sm font-medium text-gray-700 mb-2">Selected Bulletins:</h4>
+          <ul className="space-y-1 max-h-20 overflow-y-auto">
+            {selectedRelatedIds.map((id) => {
+              const related = allBulletins.find(b => b.id === id);
+              return (
+                <li key={id} className="text-xs text-gray-600 flex items-center justify-between">
+                  <span>{related ? related.title : `ID: ${id}`}</span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedRelatedIds(prev => prev.filter(item => item !== id))}
+                    className="text-red-500 hover:text-red-700 ml-2"
+                  >
+                    ×
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
       )}
-    </select>
+    </div>
   ) : (
     <div className="text-gray-900">
       {selectedRelatedIds.length > 0 ? (
@@ -599,11 +629,6 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
         <p className="text-gray-500">No manually selected related bulletins</p>
       )}
     </div>
-  )}
-  {isEditing && (
-    <p className="text-xs text-gray-500 mt-1">
-      Hold Ctrl/Cmd to select multiple bulletins
-    </p>
   )}
 </div>
                 <div>
