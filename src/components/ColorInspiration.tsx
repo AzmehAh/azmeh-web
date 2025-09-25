@@ -112,7 +112,7 @@ const ColorInspiration = () => {
   />  
 
   {/* العنوان */}
-  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
+  <div className="absolute bottom-1 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
     <span className="block text-lg font-semibold">{product.name}</span>
   </div>
 </div> 
