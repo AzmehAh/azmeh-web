@@ -560,7 +560,7 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                   )}
                 </div>
 
-                {/* Related Bulletins */}
+               {/* Related Bulletins */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Related Bulletins (Manual Selection)
@@ -574,12 +574,17 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
         setSelectedRelatedIds(selected);
       }}
       className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
+      size={5} // إظهار 5 عناصر بشكل افتراضي
     >
-      {allBulletins.map((b) => (
-        <option key={b.id} value={b.id}>
-          {b.title} ({b.slug})
-        </option>
-      ))}
+      {allBulletins.length > 0 ? (
+        allBulletins.map((b) => (
+          <option key={b.id} value={b.id}>
+            {b.title} ({b.slug})
+          </option>
+        ))
+      ) : (
+        <option disabled>No bulletins available</option>
+      )}
     </select>
   ) : (
     <div className="text-gray-900">
@@ -594,6 +599,11 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
         <p className="text-gray-500">No manually selected related bulletins</p>
       )}
     </div>
+  )}
+  {isEditing && (
+    <p className="text-xs text-gray-500 mt-1">
+      Hold Ctrl/Cmd to select multiple bulletins
+    </p>
   )}
 </div>
                 <div>
