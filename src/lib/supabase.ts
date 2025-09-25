@@ -260,6 +260,18 @@ export const api = {
     return data;
   },
 
+  async getBulletinsByIds(ids: string[]) {
+    const { data, error } = await supabase
+      .from('bulletins')
+      .select('*')
+      .in('id', ids)
+      .eq('status', 'published')
+      .order('created_at', { ascending: false });
+    
+    if (error) throw error;
+    return data;
+  },
+
   // FAQ
   async getFAQCategories() {
     const { data, error } = await supabase
