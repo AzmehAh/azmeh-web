@@ -13,10 +13,10 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
 const BulletinForm = () => {
   const navigate = useNavigate();
-  const { id } = useParams(); // للتعديل أو العرض
+  const { id } = useParams(); 
   const location = useLocation();
   const isEditing = location.pathname.includes('edit');
-  const isViewOnly = !isEditing && id; // إذا كان الرابط /bulletins/:id بدون edit
+  const isViewOnly = !isEditing && id; 
 
   const [formData, setFormData] = useState({
     slug: '',
@@ -36,16 +36,45 @@ const BulletinForm = () => {
   const [uploadingCover, setUploadingCover] = useState(false);
   const [categories, setCategories] = useState([]);
   const [bulletin, setBulletin] = useState(null);
-  const [loading, setLoading] = useState(!!id); // إذا كان هناك ID نحمله
+  const [loading, setLoading] = useState(!!id);
   const quillRef = useRef(null);
 
-  // 👇 states جديدة لإدارة Modal إدخال أبعاد الصورة
+  
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const [imageWidth, setImageWidth] = useState('');
   const [imageHeight, setImageHeight] = useState('');
+  const [allBulletins, setAllBulletins] = useState<Bulletin[]>([]);
+  const [selectedRelatedIds, setSelectedRelatedIds] = useState<string[]>([]);
+ // جلب جميع البلتينات للاختيار منها (لـ Related)
+useEffect(() => {
+  const fetchAllBulletins = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('bulletins')
+        .select('id, title, slug')
+        .eq('status', 'published') // اختياري: فقط المنشورة
+        .order('created_at', { ascending: false });
 
-  // جلب البلتين إذا كان هناك ID
+      if (error) throw error;
+
+      // استثناء البلتين الحالي من القائمة
+      const filtered = data.filter(b => b.id !== id);
+      setAllBulletins(filtered);
+
+      // إذا كنا نحرر بلتين موجود، نحمّل الـ related IDs
+      if (bulletin?.related_bulletin_ids) {
+        setSelectedRelatedIds(bulletin.related_bulletin_ids);
+      }
+    } catch (error) {
+      console.error('Error fetching bulletins for related selection:', error);
+    }
+  };
+
+  if (isEditing || !id) {
+    fetchAllBulletins();
+  }
+}, [id, isEditing, bulletin]);
   useEffect(() => {
     const fetchBulletin = async () => {
       if (!id) return;
