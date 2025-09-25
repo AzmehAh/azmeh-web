@@ -29,9 +29,15 @@ const BulletinDetail = () => {
       }
       setBulletin(data);
 
-      // ✅ جلب المقالات المرتبطة مباشرة من قاعدة البيانات
-      const related = await api.getRelatedBulletins(data.id, data.category, data.subcategory);
-      setRelatedBulletins(related);
+      // ✅ جلب المقالات المرتبطة من العمود الجديد related_bulletin_ids
+      if (data.related_bulletin_ids && data.related_bulletin_ids.length > 0) {
+        const related = await api.getBulletinsByIds(data.related_bulletin_ids);
+        setRelatedBulletins(related);
+      } else {
+        // ✅ إذا لم يكن هناك مقالات مرتبطة يدوياً، نستخدم الاقتراح التلقائي
+        const autoRelated = await api.getRelatedBulletins(data.id, data.category, data.subcategory);
+        setRelatedBulletins(autoRelated);
+      }
     } catch (error) {
       console.error('Error fetching bulletin:', error);
       setBulletin(null);
@@ -123,49 +129,52 @@ const BulletinDetail = () => {
             />
           </article> 
 
-          {/* Related Articles */}
-          <div className="mt-16 pt-8 border-t border-gray-200">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <FileText className="w-6 h-6 text-[#2C5DB6] mr-3" />
-              Related Technical Bulletins
-            </h3>
+         {/* Related Articles */}
+      <div className="mt-16 pt-8 border-t border-gray-200">
+        <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+          <FileText className="w-6 h-6 text-[#2C5DB6] mr-3" />
+          {bulletin?.related_bulletin_ids?.length > 0 ? 
+            'Related Technical Bulletins' : 
+            'You Might Also Like'
+          }
+        </h3>
 
-            {relatedBulletins.length > 0 ? (
-              <div className="grid md:grid-cols-2 gap-6">
-                {relatedBulletins.map((relatedBulletin) => (
-                  <div
-                    key={relatedBulletin.id}
-                    onClick={() => navigate(`/bulletin/${relatedBulletin.id}`)}
-                    className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
-                  >
-                    <div className="h-32 overflow-hidden">
-                      <img
-                        src={relatedBulletin.coverImage || '/placeholder-image.jpg'}
-                        alt={relatedBulletin.title}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
-                        }}
-                      />
-                    </div>
-                    <div className="p-4">
-                      <span className="inline-block px-2 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
-                        {relatedBulletin.subcategory}
-                      </span>
-                      <h4 className="text-lg font-semibold text-gray-900 group-hover:text-[#2C5DB6] transition-colors mb-2 line-clamp-2">
-                        {relatedBulletin.title}
-                      </h4>
-                      <p className="text-gray-600 text-sm line-clamp-2">
-                        {relatedBulletin.shortDescription}
-                      </p>
-                    </div>
-                  </div>
-                ))}
+        {relatedBulletins.length > 0 ? (
+          <div className="grid md:grid-cols-2 gap-6">
+            {relatedBulletins.map((relatedBulletin) => (
+              <div
+                key={relatedBulletin.id}
+                onClick={() => navigate(`/bulletin/${relatedBulletin.id}`)}
+                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+              >
+                <div className="h-32 overflow-hidden">
+                  <img
+                    src={relatedBulletin.cover_image || '/placeholder-image.jpg'}
+                    alt={relatedBulletin.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    onError={(e) => {
+                      (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
+                    }}
+                  />
+                </div>
+                <div className="p-4">
+                  <span className="inline-block px-2 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
+                    {relatedBulletin.subcategory}
+                  </span>
+                  <h4 className="text-lg font-semibold text-gray-900 group-hover:text-[#2C5DB6] transition-colors mb-2 line-clamp-2">
+                    {relatedBulletin.title}
+                  </h4>
+                  <p className="text-gray-600 text-sm line-clamp-2">
+                    {relatedBulletin.short_description}
+                  </p>
+                </div>
               </div>
-            ) : (
-              <p className="text-gray-500 text-center py-8 italic">No related bulletins available at this time.</p>
-            )}
+            ))}
           </div>
+        ) : (
+          <p className="text-gray-500 text-center py-8 italic">No related bulletins available at this time.</p>
+        )}
+      </div>
 
           {/* Contact Section */}
           <div className="mt-16">
