@@ -62,6 +62,7 @@ export interface Bulletin {
   status: string;
   created_at: string;
   updated_at: string;
+  related_bulletin_ids: string[] | null;
 }
 
 export interface BulletinContent {
