@@ -29,8 +29,7 @@ const BulletinForm = () => {
     status: 'draft',
     featured: false,
     author: 'Al Azmeh Paints',
-    tags: '',
-    related_bulletins_manual: '', // 👈 حقل النص الحر الجديد
+    tags: ''
   });
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -40,13 +39,42 @@ const BulletinForm = () => {
   const [loading, setLoading] = useState(!!id);
   const quillRef = useRef(null);
 
-  // 👇 states لإدارة Modal إدخال أبعاد الصورة
+  
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const [imageWidth, setImageWidth] = useState('');
   const [imageHeight, setImageHeight] = useState('');
+  const [allBulletins, setAllBulletins] = useState<Bulletin[]>([]);
+  const [selectedRelatedIds, setSelectedRelatedIds] = useState<string[]>([]);
+ // جلب جميع البلتينات للاختيار منها (لـ Related)
+useEffect(() => {
+  const fetchAllBulletins = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('bulletins')
+        .select('id, title, slug')
+        .eq('status', 'published') // اختياري: فقط المنشورة
+        .order('created_at', { ascending: false });
 
-  // جلب البلتين إذا كان هناك ID
+      if (error) throw error;
+
+      // استثناء البلتين الحالي من القائمة
+      const filtered = data.filter(b => b.id !== id);
+      setAllBulletins(filtered);
+
+      // إذا كنا نحرر بلتين موجود، نحمّل الـ related IDs
+      if (bulletin?.related_bulletin_ids) {
+        setSelectedRelatedIds(bulletin.related_bulletin_ids);
+      }
+    } catch (error) {
+      console.error('Error fetching bulletins for related selection:', error);
+    }
+  };
+
+  if (isEditing || !id) {
+    fetchAllBulletins();
+  }
+}, [id, isEditing, bulletin]);
   useEffect(() => {
     const fetchBulletin = async () => {
       if (!id) return;
@@ -71,8 +99,7 @@ const BulletinForm = () => {
           status: data.status || 'draft',
           featured: data.featured || false,
           author: data.author || 'Al Azmeh Paints',
-          tags: data.tags ? data.tags.join(', ') : '',
-          related_bulletins_manual: data.related_bulletins_manual || '', // 👈
+          tags: data.tags ? data.tags.join(', ') : ''
         });
       } catch (error) {
         console.error('Error fetching bulletin:', error);
@@ -240,12 +267,13 @@ const BulletinForm = () => {
 
       const range = quill.getSelection();
       const position = range ? range.index : quill.getLength();
-      let styleAttr = '';
-      if (imageWidth) styleAttr += `width: ${imageWidth}; `;
-      if (imageHeight) styleAttr += `height: ${imageHeight}; `;
+let styleAttr = '';
+if (imageWidth) styleAttr += `width: ${imageWidth}; `;
+if (imageHeight) styleAttr += `height: ${imageHeight}; `;
 
-      let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} />`;
+let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} />`;
     
+
       quill.clipboard.dangerouslyPasteHTML(position, imgTag);
       quill.setSelection(position + 1, 0);
 
@@ -305,8 +333,8 @@ const BulletinForm = () => {
         featured: formData.featured,
         author: formData.author,
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') : [],
-        related_bulletins_manual: formData.related_bulletins_manual || null, // 👈
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        related_bulletin_ids: selectedRelatedIds.length > 0 ? selectedRelatedIds : null
       };
 
       if (id) {
@@ -445,7 +473,21 @@ const BulletinForm = () => {
                     <p className="text-gray-900">{formData.subcategory}</p>
                   )}
                 </div>
-
+ {/* Short Description */}
+            <div className="mt-6">
+              <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
+              {isEditing || !id ? (
+                <textarea
+                  value={formData.short_description}
+                  onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
+                  rows={3}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  placeholder="Brief description of the bulletin"
+                />
+              ) : (
+                <p className="text-gray-900">{formData.short_description || 'No description'}</p>
+              )}
+            </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Cover Image
@@ -518,30 +560,42 @@ const BulletinForm = () => {
                   )}
                 </div>
 
-                {/* Related Bulletins - Manual Text (Optional) */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Related Bulletins (Manual Text)
-                  </label>
-                  {isEditing || !id ? (
-                    <textarea
-                      value={formData.related_bulletins_manual}
-                      onChange={(e) => setFormData(prev => ({ ...prev, related_bulletins_manual: e.target.value }))}
-                      rows={4}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      placeholder="Enter related bulletin titles or slugs manually, one per line. Example:&#10;Waterproof Coating Systems for Concrete Structures (concrete-waterproofing)&#10;Anti-Corrosion Paints for Industrial Applications (industrial-corrosion)"
-                    />
-                  ) : (
-                    formData.related_bulletins_manual ? (
-                      <pre className="bg-gray-50 p-3 rounded border text-gray-900 whitespace-pre-wrap font-sans">
-                        {formData.related_bulletins_manual}
-                      </pre>
-                    ) : (
-                      <p className="text-gray-500 italic">Not specified</p>
-                    )
-                  )}
-                </div>
-
+                {/* Related Bulletins */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Related Bulletins (Manual Selection)
+  </label>
+  {isEditing || !id ? (
+    <select
+      multiple
+      value={selectedRelatedIds}
+      onChange={(e) => {
+        const selected = Array.from(e.target.selectedOptions, opt => opt.value);
+        setSelectedRelatedIds(selected);
+      }}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
+    >
+      {allBulletins.map((b) => (
+        <option key={b.id} value={b.id}>
+          {b.title} ({b.slug})
+        </option>
+      ))}
+    </select>
+  ) : (
+    <div className="text-gray-900">
+      {selectedRelatedIds.length > 0 ? (
+        <ul className="list-disc pl-5 space-y-1">
+          {selectedRelatedIds.map((id) => {
+            const related = allBulletins.find(b => b.id === id);
+            return <li key={id}>{related ? related.title : `ID: ${id}`}</li>;
+          })}
+        </ul>
+      ) : (
+        <p className="text-gray-500">No manually selected related bulletins</p>
+      )}
+    </div>
+  )}
+</div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
                   {isEditing || !id ? (
@@ -578,24 +632,11 @@ const BulletinForm = () => {
                   </div>
                 )}
               </div>
+              
             </div>
-
-            {/* Short Description */}
-            <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
-              {isEditing || !id ? (
-                <textarea
-                  value={formData.short_description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="Brief description of the bulletin"
-                />
-              ) : (
-                <p className="text-gray-900">{formData.short_description || 'No description'}</p>
-              )}
-            </div>
+   
  
+          
             {/* Content */}
             <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -733,7 +774,7 @@ const BulletinForm = () => {
               </div>
             </div>
           )}
-        </motion.div>
+        </motion.div> 
       </div>
     </div>
   );
