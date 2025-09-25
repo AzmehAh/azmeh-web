@@ -560,45 +560,70 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                   )}
                 </div>
 
-  {/* Related Bulletins - Single Selection مثل Category */}
+ {/* Related Bulletins - Multiple Selection بنفس الشكل */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
-    Related Bulletin (Manual Selection)
+    Related Bulletins (Manual Selection)
   </label>
   {isEditing || !id ? (
-    <select
-      value={selectedRelatedIds.length > 0 ? selectedRelatedIds[0] : ""}
-      onChange={(e) => {
-        const selectedId = e.target.value;
-        setSelectedRelatedIds(selectedId ? [selectedId] : []);
-      }}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    >
-      <option value="">Select a related bulletin</option>
-      {allBulletins.map((b) => (
-        <option key={b.id} value={b.id}>
-          {b.title} ({b.slug})
-        </option>
-      ))}
-    </select>
+    <div className="space-y-2">
+      <select
+        value=""
+        onChange={(e) => {
+          const selectedId = e.target.value;
+          if (selectedId && !selectedRelatedIds.includes(selectedId)) {
+            setSelectedRelatedIds(prev => [...prev, selectedId]);
+          }
+          e.target.value = ""; // Reset selection
+        }}
+        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+      >
+        <option value="">Add a related bulletin</option>
+        {allBulletins.filter(b => !selectedRelatedIds.includes(b.id)).map((b) => (
+          <option key={b.id} value={b.id}>
+            {b.title} ({b.slug})
+          </option>
+        ))}
+      </select>
+      
+      {/* عرض البلتينات المختارة */}
+      {selectedRelatedIds.length > 0 && (
+        <div className="mt-2 space-y-1">
+          {selectedRelatedIds.map((id) => {
+            const related = allBulletins.find(b => b.id === id);
+            return related ? (
+              <div key={id} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
+                <span className="text-sm">{related.title}</span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedRelatedIds(prev => prev.filter(item => item !== id))}
+                  className="text-red-500 hover:text-red-700 text-lg"
+                >
+                  ×
+                </button>
+              </div>
+            ) : null;
+          })}
+        </div>
+      )}
+    </div>
   ) : (
     <div className="text-gray-900">
       {selectedRelatedIds.length > 0 ? (
-        (() => {
-          const related = allBulletins.find(b => b.id === selectedRelatedIds[0]);
-          return related ? (
-            <p>{related.title} ({related.slug})</p>
-          ) : (
-            <p className="text-gray-500">Related bulletin not found</p>
-          );
-        })()
+        <ul className="list-disc pl-5 space-y-1">
+          {selectedRelatedIds.map((id) => {
+            const related = allBulletins.find(b => b.id === id);
+            return <li key={id}>{related ? related.title : `ID: ${id}`}</li>;
+          })}
+        </ul>
       ) : (
-        <p className="text-gray-500">No related bulletin selected</p>
+        <p className="text-gray-500">No related bulletins selected</p>
       )}
     </div>
   )}
 </div>
-        </div>  
+ 
+          
             {/* Content */}
             <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
