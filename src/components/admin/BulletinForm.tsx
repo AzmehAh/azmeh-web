@@ -661,9 +661,6 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                     </label>
                   </div>
                 )}
-              </div>
-              
-            </div>
           
             {/* Content */}
             <div className="mt-6">
