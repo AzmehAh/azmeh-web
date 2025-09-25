@@ -560,7 +560,65 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                   )}
                 </div>
 
- 
+   {/* Related Bulletins - Simple Version */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Related Bulletins (Manual Selection)
+  </label>
+  {isEditing || !id ? (
+    <div className="border border-gray-300 rounded-lg p-2 bg-white max-h-48 overflow-y-auto">
+      {allBulletins.length > 0 ? (
+        allBulletins.map((b) => (
+          <label key={b.id} className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded">
+            <input
+              type="checkbox"
+              checked={selectedRelatedIds.includes(b.id)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setSelectedRelatedIds(prev => [...prev, b.id]);
+                } else {
+                  setSelectedRelatedIds(prev => prev.filter(id => id !== b.id));
+                }
+              }}
+              className="rounded text-[#0055A3] focus:ring-[#0055A3]"
+            />
+            <span className="text-sm"> 
+              {b.title} ({b.slug})
+            </span>
+          </label>
+        ))
+      ) : (
+        <p className="text-gray-500 text-sm p-2">No bulletins available</p>
+      )}
+    </div>
+  ) : (
+                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                      formData.status === 'published' 
+                        ? 'bg-green-100 text-green-800' 
+                        : 'bg-yellow-100 text-yellow-800'
+                    }`}>
+                      {formData.status}
+                    </span>
+                  )}
+                </div>
+
+                {(isEditing || !id) && (
+                  <div>
+                    <label className="flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={formData.featured}
+                        onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
+                        className="w-4 h-4 text-[#0055A3] border-gray-300 rounded focus:ring-[#0055A3]"
+                      />
+                      <span className="ml-2 text-sm text-gray-700">Featured bulletin</span>
+                    </label>
+                  </div>
+                )}
+              </div>
+              
+            </div>
+   
  
           
             {/* Content */}
