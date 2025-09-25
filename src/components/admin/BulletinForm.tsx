@@ -621,9 +621,7 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
         <p className="text-gray-500">No related bulletins selected</p>
       )}
     </div>
-  )}
-</div>
-   
+
  
           
             {/* Content */}
