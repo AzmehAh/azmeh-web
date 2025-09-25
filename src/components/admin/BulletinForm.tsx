@@ -333,7 +333,8 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
         featured: formData.featured,
         author: formData.author,
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag !== '') : [],
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
+        related_bulletin_ids: selectedRelatedIds.length > 0 ? selectedRelatedIds : null
       };
 
       if (id) {
