@@ -595,44 +595,9 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                   </div>
                 )}
               </div>
-              {/* Related Bulletins */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Related Bulletins (Manual Selection)
-  </label>
-  {isEditing || !id ? (
-    <select
-      multiple
-      value={selectedRelatedIds}
-      onChange={(e) => {
-        const selected = Array.from(e.target.selectedOptions, opt => opt.value);
-        setSelectedRelatedIds(selected);
-      }}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
-    >
-      {allBulletins.map((b) => (
-        <option key={b.id} value={b.id}>
-          {b.title} ({b.slug})
-        </option>
-      ))}
-    </select>
-  ) : (
-    <div className="text-gray-900">
-      {selectedRelatedIds.length > 0 ? (
-        <ul className="list-disc pl-5 space-y-1">
-          {selectedRelatedIds.map((id) => {
-            const related = allBulletins.find(b => b.id === id);
-            return <li key={id}>{related ? related.title : `ID: ${id}`}</li>;
-          })}
-        </ul>
-      ) : (
-        <p className="text-gray-500">No manually selected related bulletins</p>
-      )}
-    </div>
-  )}
-</div>
+              
             </div>
-  
+   
  
           
             {/* Content */}
