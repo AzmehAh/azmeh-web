@@ -104,7 +104,7 @@ const ColorInspiration = () => {
   <img
     src={product.secondaryImage}
     alt={`${product.name} secondary`}
-    className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
+    className={`absolute inset-0 w-full h-full z-10 object-contain transition-all duration-500 ${
       hoveredColor === index
         ? 'opacity-100 scale-y-125'
         : 'opacity-0 scale-y-100'
