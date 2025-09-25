@@ -499,7 +499,7 @@ useEffect(() => {
     </p>
   )}
 </div>
-
+</div>
 
           {/* Footer */}
           {isEditing && (
