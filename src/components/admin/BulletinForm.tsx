@@ -561,63 +561,68 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                 </div>
 
    {/* Related Bulletins - Simple Version */}
+{/* Related Bulletins - Multiple Selection بنفس الشكل */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Related Bulletins (Manual Selection)
   </label>
   {isEditing || !id ? (
-    <div className="border border-gray-300 rounded-lg p-2 bg-white max-h-48 overflow-y-auto">
-      {allBulletins.length > 0 ? (
-        allBulletins.map((b) => (
-          <label key={b.id} className="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded">
-            <input
-              type="checkbox"
-              checked={selectedRelatedIds.includes(b.id)}
-              onChange={(e) => {
-                if (e.target.checked) {
-                  setSelectedRelatedIds(prev => [...prev, b.id]);
-                } else {
-                  setSelectedRelatedIds(prev => prev.filter(id => id !== b.id));
-                }
-              }}
-              className="rounded text-[#0055A3] focus:ring-[#0055A3]"
-            />
-            <span className="text-sm"> 
-              {b.title} ({b.slug})
-            </span>
-          </label>
-        ))
-      ) : (
-        <p className="text-gray-500 text-sm p-2">No bulletins available</p>
+    <div className="space-y-2">
+      <select
+        value=""
+        onChange={(e) => {
+          const selectedId = e.target.value;
+          if (selectedId && !selectedRelatedIds.includes(selectedId)) {
+            setSelectedRelatedIds(prev => [...prev, selectedId]);
+          }
+          e.target.value = ""; // Reset selection
+        }}
+        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+      >
+        <option value="">Add a related bulletin</option>
+        {allBulletins.filter(b => !selectedRelatedIds.includes(b.id)).map((b) => (
+          <option key={b.id} value={b.id}>
+            {b.title} ({b.slug})
+          </option>
+        ))}
+      </select>
+      
+      {/* عرض البلتينات المختارة */}
+      {selectedRelatedIds.length > 0 && (
+        <div className="mt-2 space-y-1">
+          {selectedRelatedIds.map((id) => {
+            const related = allBulletins.find(b => b.id === id);
+            return related ? (
+              <div key={id} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
+                <span className="text-sm">{related.title}</span>
+                <button
+                  type="button"
+                  onClick={() => setSelectedRelatedIds(prev => prev.filter(item => item !== id))}
+                  className="text-red-500 hover:text-red-700 text-lg"
+                >
+                  ×
+                </button>
+              </div>
+            ) : null;
+          })}
+        </div>
       )}
     </div>
   ) : (
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      formData.status === 'published' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {formData.status}
-                    </span>
-                  )}
-                </div>
-
-                {(isEditing || !id) && (
-                  <div>
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={formData.featured}
-                        onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
-                        className="w-4 h-4 text-[#0055A3] border-gray-300 rounded focus:ring-[#0055A3]"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">Featured bulletin</span>
-                    </label>
-                  </div>
-                )}
-              </div>
-              
-            </div>
+    <div className="text-gray-900">
+      {selectedRelatedIds.length > 0 ? (
+        <ul className="list-disc pl-5 space-y-1">
+          {selectedRelatedIds.map((id) => {
+            const related = allBulletins.find(b => b.id === id);
+            return <li key={id}>{related ? related.title : `ID: ${id}`}</li>;
+          })}
+        </ul>
+      ) : (
+        <p className="text-gray-500">No related bulletins selected</p>
+      )}
+    </div>
+  )}
+</div>
    
  
           
