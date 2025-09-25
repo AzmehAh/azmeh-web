@@ -12,6 +12,7 @@ import {
   ChevronUp 
 } from 'lucide-react';
 import { supabase, ProductCategory } from '../../lib/supabase';
+import { Upload } from "lucide-react";
 
 const ProductCategoriesManager = () => {
   const [categories, setCategories] = useState<ProductCategory[]>([]);
