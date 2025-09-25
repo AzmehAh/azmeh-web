@@ -447,34 +447,58 @@ useEffect(() => {
               )}
             </div>
 
-            {/* Image Upload */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
-              {isEditing ? (
-                <>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageChange}
-                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  />
-                  {imagePreview && (
-                    <div className="mt-3">
-                      <img
-                        src={imagePreview}
-                        alt="Preview"
-                        className="w-32 h-32 object-cover rounded-md"
-                      />
-                    </div>
-                  )}
-                </>
-              ) : (
-                <p className="text-gray-900">
-                  {imagePreview ? 'Image available' : 'No image'}
-                </p>
-              )}
+ {/* Image Upload */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">Images</label>
+  
+  {isEditing ? (
+    <>
+      {/* زر رفع الصور */}
+      <label className={`flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit ${
+        uploading ? 'opacity-50 cursor-not-allowed' : ''
+      }`}>
+        <Upload className="w-4 h-4 mr-2" />
+        {uploading ? 'Uploading...' : 'Upload Images'}
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          onChange={handleUploadImage}
+          className="hidden"
+          disabled={uploading}
+        />
+      </label>
+
+      {/* المعاينة */}
+      {imagePreview?.length > 0 && (
+        <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+          {imagePreview.map((src, idx) => (
+            <div key={idx} className="relative group">
+              <img
+                src={src}
+                alt={`Preview ${idx}`}
+                className="w-32 h-32 object-cover rounded-md border"
+              />
+              {/* زر حذف صورة */}
+              <button
+                type="button"
+                onClick={() => handleRemoveImage(idx)}
+                className="absolute top-1 right-1 bg-red-500 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition"
+              >
+                ✕
+              </button>
             </div>
-          </div>
+          ))}
+        </div>
+      )}
+    </>
+  ) : (
+    <p className="text-gray-900">
+      {imagePreview?.length > 0 ? `${imagePreview.length} images available` : 'No images'}
+    </p>
+  )}
+</div>
+
 
           {/* Footer */}
           {isEditing && (
