@@ -221,10 +221,10 @@ const Hero = () => {
                     <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
                       {category.description}
                     </p>
-                <motion.button
+             <motion.button
   onClick={() => {
     if (category.button_link) {
-      navigate(category.button_link); // 👈 إذا المسار داخلي
+      window.open(category.button_link, "_blank"); // ✅ صار خارجي
       setIsManual(true);
     }
   }}
