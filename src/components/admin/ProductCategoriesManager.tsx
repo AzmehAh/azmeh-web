@@ -250,7 +250,7 @@ const CategoryModal = ({
         sort_order: category.sort_order,
         is_active: category.is_active,
         image_url: category.image_url || '',
-         button_link: '', 
+        button_link: category.button_link || '', 
         
       });
       setImagePreview(category.image_url || null);
