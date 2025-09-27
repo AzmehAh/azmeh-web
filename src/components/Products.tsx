@@ -132,24 +132,51 @@ const Products = () => {
 
     return filtered;
   }, [searchTerm, selectedFilters, sortOrder, products]);
-
-  const toggleFilter = (category: string, value: string) => {
-    setSelectedFilters(prev => ({
-      ...prev,
-      [category]: prev[category].includes(value)
-        ? prev[category].filter(item => item !== value)
-        : [...prev[category], value]
-    }));
-  };
-
-  const clearFilters = () => {
-    const emptyFilters: Record<string, string[]> = {};
-    filterTypes.forEach(filterType => {
-      emptyFilters[filterType.name.toLowerCase()] = [];
+// عند تحميل الصفحة وتهيئة الفلاتر من الـ URL
+useEffect(() => {
+  if (!loading) { // بعد تحميل filterTypes
+    const params = new URLSearchParams(window.location.search);
+    const newFilters: Record<string, string[]> = {};
+    filterTypes.forEach(ft => {
+      const key = ft.name.toLowerCase();
+      const value = params.get(key);
+      newFilters[key] = value ? value.split(',') : [];
     });
-    setSelectedFilters(emptyFilters);
-    setSearchTerm('');
-  };
+    setSelectedFilters(newFilters);
+  }
+}, [loading, filterTypes]);
+
+// تعديل toggleFilter لتحديث URL تلقائياً
+const toggleFilter = (category: string, value: string) => {
+  setSelectedFilters(prev => {
+    const newValues = prev[category].includes(value)
+      ? prev[category].filter(item => item !== value)
+      : [...prev[category], value];
+
+    const newFilters = { ...prev, [category]: newValues };
+
+    // تحديث الـ URL
+    const params = new URLSearchParams();
+    Object.entries(newFilters).forEach(([key, values]) => {
+      if (values.length > 0) params.set(key, values.join(','));
+    });
+
+    navigate(`/products?${params.toString()}`, { replace: true });
+
+    return newFilters;
+  });
+};
+
+// تعديل clearFilters لتفريغ URL أيضاً
+const clearFilters = () => {
+  const emptyFilters: Record<string, string[]> = {};
+  filterTypes.forEach(filterType => {
+    emptyFilters[filterType.name.toLowerCase()] = [];
+  });
+  setSelectedFilters(emptyFilters);
+  setSearchTerm('');
+  navigate('/products', { replace: true });
+};
 
   const getActiveFiltersCount = () => {
     return Object.values(selectedFilters).flat().length;
