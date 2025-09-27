@@ -89,7 +89,7 @@ const Hero = () => {
       try {
         const { data, error } = await supabase
           .from("product_categories")
-          .select("id, name, description, image_url")
+          .select("id, name, description, image_url,button_link")
           .eq("is_active", true) 
           .order("sort_order", { ascending: true });
 
