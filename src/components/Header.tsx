@@ -190,41 +190,49 @@ const Header = () => {
           >
             Blog
           </Link>
-
- {/* Contact Dropdown */}
+{/* Contact Dropdown */}
 <div 
-  className="relative inline-block" 
+  className="relative" 
   onMouseEnter={() => handleMouseEnter('contact')} 
   onMouseLeave={handleMouseLeave}
 >
   <button 
-    className={`flex items-center text-base font-medium nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+    className={`flex items-center text-base font-medium transition-colors duration-200 ${
+      isScrolled ? 'text-gray-900' : 'text-white'
+    } nav-link`}
   >
     Contact <ChevronDown className="ml-1 h-4 w-4" />
   </button>
 
   <AnimatePresence>
     {activeDropdown === 'contact' && (
-    <motion.div
-  variants={curtainVariants} 
-  initial="hidden"
-  animate={activeDropdown === 'contact' ? 'visible' : 'hidden'}
-  style={{ pointerEvents: activeDropdown === 'contact' ? 'auto' : 'none' }}
-  className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
->
-  <div className="p-4">
-    <Link to="/contact" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md mb-1">
-      Contact Us
-    </Link>
-    <Link to="/job-application" className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md">
-      Apply for Job
-    </Link>
-  </div>
-</motion.div>
-
+      <motion.div
+        key="contact-dropdown"
+        variants={curtainVariants} 
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        className="absolute top-full mt-2 left-0 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
+      >
+        <div className="p-4">
+          <Link 
+            to="/contact" 
+            className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md mb-1 transition-colors duration-200"
+          >
+            Contact Us
+          </Link>
+          <Link 
+            to="/job-application" 
+            className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+          >
+            Apply for Job
+          </Link>
+        </div>
+      </motion.div>
     )}
   </AnimatePresence>
 </div>
+
 
 
         </nav>
