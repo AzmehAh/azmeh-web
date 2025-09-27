@@ -235,7 +235,8 @@ const CategoryModal = ({
     description: '',
     sort_order: 0,
     is_active: true,
-    image_url: '', // 👈 جديد
+    image_url: '', 
+     button_link: '',
   });
   const [saving, setSaving] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null); // عرض مصغّر للصورة
@@ -249,6 +250,8 @@ const CategoryModal = ({
         sort_order: category.sort_order,
         is_active: category.is_active,
         image_url: category.image_url || '',
+         button_link: '', 
+        
       });
       setImagePreview(category.image_url || null);
     } else {
@@ -258,6 +261,7 @@ const CategoryModal = ({
         sort_order: 0,
         is_active: true,
         image_url: '',
+         button_link: '', 
       });
       setImagePreview(null);
     }
@@ -447,7 +451,26 @@ useEffect(() => {
                 </span>
               )}
             </div>
-
+{/* Button Link */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Button Link
+  </label>
+  {isEditing ? (
+    <input
+      type="text"
+      value={formData.button_link || ''}
+      onChange={(e) =>
+        setFormData((prev) => ({ ...prev, button_link: e.target.value }))
+      }
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+      placeholder="/products?category=5 أو https://example.com"
+    />
+  ) : (
+    <p className="text-gray-900">{formData.button_link}</p>
+  )}
+</div>
+ 
             {/* Image Upload */}
          {/* Image Upload */}
 <div>
