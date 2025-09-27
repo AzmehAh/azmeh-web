@@ -47,22 +47,46 @@ const Blog = () => {
       setLoading(false);
     }
   };
+useEffect(() => {
+  if (!loading) { // بعد تحميل bulletinCategories / systemCategories
+    const params = new URLSearchParams(window.location.search);
+    const newFilters: Record<string, string[]> = {};
+    bulletinCategories.forEach(cat => {
+      const key = cat.name;
+      const value = params.get(key);
+      newFilters[key] = value ? value.split(',') : [];
+    });
+    setSelectedFilters(newFilters);
+  }
+}, [loading, bulletinCategories]);
 
   // Toggle subcategory filter
-  const toggleFilter = (category: string, subcategory: string) => {
-    setSelectedFilters(prev => {
-      const prevCategory = prev[category] || [];
-      const updatedCategory = prevCategory.includes(subcategory)
-        ? prevCategory.filter(item => item !== subcategory)
-        : [...prevCategory, subcategory];
-      return { ...prev, [category]: updatedCategory };
-    });
-  };
+ const toggleFilter = (category: string, subcategory: string) => {
+  setSelectedFilters(prev => {
+    const prevCategory = prev[category] || [];
+    const updatedCategory = prevCategory.includes(subcategory)
+      ? prevCategory.filter(item => item !== subcategory)
+      : [...prevCategory, subcategory];
 
-  const clearFilters = () => {
-    setSelectedFilters({});
-    setSearchTerm('');
-  };
+    const newFilters = { ...prev, [category]: updatedCategory };
+
+    // تحديث الـ URL
+    const params = new URLSearchParams();
+    Object.entries(newFilters).forEach(([cat, subs]) => {
+      if (subs.length > 0) params.set(cat, subs.join(','));
+    });
+
+    navigate(`/blog?${params.toString()}`, { replace: true });
+
+    return newFilters;
+  });
+};
+
+ const clearFilters = () => {
+  setSelectedFilters({});
+  setSearchTerm('');
+  navigate('/blog', { replace: true });
+};
 
   // Filter bulletins based on selectedFilters and search term
   const filteredBulletins = useMemo(() => {
