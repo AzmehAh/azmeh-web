@@ -1,6 +1,7 @@
 import React from 'react';
 import { X } from 'lucide-react';
-import { InputField } from './ProductForm';
+// ✅ استورد من الملف الجديد
+import { InputField, ArrayInputField } from './FormComponents';
 
 interface DryingTimeModalProps {
   data: any;
