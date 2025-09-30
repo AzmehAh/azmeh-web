@@ -24,7 +24,42 @@ const parseArrayField = (field: any): any[] => {
   }
   return [];
 };
+// 1. State declarations
+const [brands, setBrands] = useState<any[]>([]);
+const [types, setTypes] = useState<any[]>([]);
+// ... other states
 
+// 2. Define all fetch functions BEFORE useEffect
+const fetchBrands = async () => {
+  const { data, error } = await supabase.from('brands').select('*');
+  if (!error) setBrands(data || []);
+};
+
+const fetchTypes = async () => {
+  const { data, error } = await supabase.from('types').select('*');
+  if (!error) setTypes(data || []);
+};
+
+const fetchMaterials = async () => {
+  const { data, error } = await supabase.from('materials').select('*');
+  if (!error) setMaterials(data || []);
+};
+
+const fetchUsages = async () => {
+  const { data, error } = await supabase.from('usages').select('*');
+  if (!error) setUsages(data || []);
+};
+
+// 3. Now useEffect can safely call them
+useEffect(() => {
+  fetchBrands();
+  fetchTypes();
+  fetchMaterials();
+  fetchUsages();
+  if (isEditing) {
+    fetchProduct();
+  }
+}, [id, isEditing]);
 const ProductForm = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
