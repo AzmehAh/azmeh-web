@@ -130,42 +130,47 @@ const ProductForm = () => {
   };
 
   const fetchProduct = async () => {
-    if (!id) return;
-    try {
-      setLoading(true);
-      const {  productData, error } = await supabase.from('products').select('*').eq('id', id).single();
-      if (error) throw error;
-      const {  imagesData } = await supabase.from('product_images').select('*').eq('product_id', id);
-      const parsed = {
-        ...productData,
-        features: parseArrayField(productData.features),
-        applications: parseArrayField(productData.applications),
-        packaging: parseArrayField(productData.packaging),
-        safety_precautions: parseArrayField(productData.safety_precautions),
-        safety_first_aid: parseArrayField(productData.safety_first_aid),
-        general_features: parseArrayField(productData.general_features),
-        recommended_uses: parseArrayField(productData.recommended_uses),
-        mixing_steps: parseArrayField(productData.mixing_steps),
-      };
-      setFormData(parsed);
-      setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
-    } catch (err) {
-      alert('Failed to load product');
-      navigate('/admin/products');
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!id) return;
+  try {
+    setLoading(true);
 
-  useEffect(() => {
-    fetchFilterOptions();
-    if (isEditing) fetchProduct();
-  }, [id]);
+    const { data: productData, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-  // =============== Handlers ===============
-  const handleInputChange = (field: string, value: any) => {
-    setFormData((prev: any) => ({ ...prev, [field]: value }));
-  };
+    if (error) throw error;
+
+    const { data: imagesData, error: imagesError } = await supabase
+      .from('product_images')
+      .select('*')
+      .eq('product_id', id);
+
+    if (imagesError) throw imagesError;
+
+    const parsed = {
+      ...productData,
+      features: parseArrayField(productData.features),
+      applications: parseArrayField(productData.applications),
+      packaging: parseArrayField(productData.packaging),
+      safety_precautions: parseArrayField(productData.safety_precautions),
+      safety_first_aid: parseArrayField(productData.safety_first_aid),
+      general_features: parseArrayField(productData.general_features),
+      recommended_uses: parseArrayField(productData.recommended_uses),
+      mixing_steps: parseArrayField(productData.mixing_steps),
+    };
+
+    setFormData(parsed);
+    setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
+  } catch (err) {
+    alert('Failed to load product');
+    navigate('/admin/products');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
