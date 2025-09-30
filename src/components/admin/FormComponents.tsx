@@ -6,23 +6,35 @@ export const InputField = ({
   value, 
   onChange, 
   type = "text",
-  placeholder = ""
+  placeholder = "",
+  rows = 3
 }: { 
   label: string; 
   value: string; 
   onChange: (v: string) => void;
   type?: string;
   placeholder?: string;
+  rows?: number;
 }) => (
   <div>
     <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-    <input
-      type={type}
-      value={value}
-      placeholder={placeholder}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-    />
+    {type === "textarea" ? (
+      <textarea
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        rows={rows}
+        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] resize-none"
+      />
+    ) : (
+      <input
+        type={type}
+        value={value}
+        placeholder={placeholder}
+        onChange={(e) => onChange(e.target.value)}
+        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+      />
+    )}
   </div>
 );
 
@@ -58,7 +70,7 @@ export const ArrayInputField = ({
             Remove
           </button>
         </div>
-      ))} 
+      ))}
       <button
         type="button"
         onClick={onAdd}
@@ -68,4 +80,4 @@ export const ArrayInputField = ({
       </button>
     </div>
   </div>
-); 
+);
