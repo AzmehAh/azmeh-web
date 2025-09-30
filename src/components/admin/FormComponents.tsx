@@ -1,6 +1,6 @@
+// src/components/admin/FormComponents.tsx
 import React from 'react';
 
-// مكون لإدخال نص عادي
 export const InputField = ({ 
   label, 
   value, 
@@ -26,7 +26,6 @@ export const InputField = ({
   </div>
 );
 
-// مكون لإدخال مصفوفة (قائمة من العناصر)
 export const ArrayInputField = ({ 
   label, 
   items, 
@@ -65,7 +64,7 @@ export const ArrayInputField = ({
         onClick={onAdd}
         className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
       >
-        + Add {label.split(' ')[0]}
+        + Add {label}
       </button>
     </div>
   </div>
