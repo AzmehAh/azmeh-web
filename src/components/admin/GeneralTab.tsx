@@ -1,4 +1,4 @@
-// src/components/admin/GeneralTab.tsx
+
 import React from 'react';
 import { Upload, Trash2 } from 'lucide-react';
 import { InputField, ArrayInputField } from './FormComponents';
