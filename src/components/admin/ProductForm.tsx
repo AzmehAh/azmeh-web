@@ -296,29 +296,27 @@ const ProductForm = () => {
             <Tab id="safety" activeTab={activeTab} label="Safety" onClick={() => setActiveTab('safety')} />
           </div>
         </div>
- 
-        {/* Tab Content */}
-        <div className="p-6 max-h-[500px] overflow-y-auto">
-          {activeTab === 'general' && (
-            <GeneralTab
-              data={{ ...formData, images }}
-              onChange={handleInputChange}
-              onImageUpload={handleUploadImage}
-              onImageRemove={removeImage}
-              onSetMainImage={setMainImage}
-              uploading={uploading}
-              brands={brands}
-              types={types}
-              materials={materials}
-              usages={usages}
-            />
-          )}
-          {activeTab === 'application' && <ApplicationTab data={formData} onChange={handleInputChange} />}
-          {activeTab === 'technical' && <TechnicalTab data={formData} onChange={handleInputChange} />}
-          {activeTab === 'drying' && <DryingTimeTab data={formData} onChange={handleInputChange} />}
-          {activeTab === 'safety' && <SafetyTab data={formData} onChange={handleInputChange} />}
-        </div>
-
+ {/* Tab Content */}
+<div className="p-6">
+  {activeTab === 'general' && (
+    <GeneralTab
+      data={{ ...formData, images }}
+      onChange={handleInputChange}
+      onImageUpload={handleUploadImage}
+      onImageRemove={removeImage}
+      onSetMainImage={setMainImage}
+      uploading={uploading}
+      brands={brands}
+      types={types}
+      materials={materials}
+      usages={usages}
+    />
+  )}
+  {activeTab === 'application' && <ApplicationTab data={formData} onChange={handleInputChange} />}
+  {activeTab === 'technical' && <TechnicalTab data={formData} onChange={handleInputChange} />}
+  {activeTab === 'drying' && <DryingTimeTab data={formData} onChange={handleInputChange} />}
+  {activeTab === 'safety' && <SafetyTab data={formData} onChange={handleInputChange} />}
+</div>
         {/* Footer */}
         <div className="flex justify-end space-x-3 p-6 border-t bg-gray-50">
           <button onClick={() => navigate('/admin/products')} className="px-4 py-2 border rounded">Cancel</button>
