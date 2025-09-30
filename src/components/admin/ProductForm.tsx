@@ -277,7 +277,7 @@ const ProductForm = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-xl">
+      <div className="max-w-6xl mx-auto bg-white shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <button onClick={() => navigate('/admin/products')} className="flex items-center text-gray-600">
