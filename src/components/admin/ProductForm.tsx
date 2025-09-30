@@ -125,17 +125,7 @@ interface Product {
   created_at?: string;
 }
 
-const parseArrayField = (field: any): any[] => {
-  if (Array.isArray(field)) return field;
-  if (typeof field === 'string') {
-    try {
-      return JSON.parse(field);
-    } catch (e) {
-      return [];
-    }
-  }
-  return [];
-};
+
 
 // =============== مكون InputField للاستخدام المتكرر ===============
 const InputField = ({ label, value, onChange, type = "text" }: { 
