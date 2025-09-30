@@ -433,7 +433,6 @@ const ProductForm = () => {
   }
 
   // =============== واجهة المستخدم ===============
-   // =============== واجهة المستخدم ===============
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
@@ -455,6 +454,8 @@ const ProductForm = () => {
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[calc(100vh-200px)]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+         
+            
             {/* Basic Info */}
             <div className="space-y-4">
               <div>
@@ -567,6 +568,73 @@ const ProductForm = () => {
               </div>
             </div>
 
+            {/* Description */}
+            <div className="mt-6 col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Description *
+              </label>
+              <textarea
+                value={formData.description || ''}
+                onChange={(e) => handleInputChange('description', e.target.value)}
+                rows={3}
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+              />
+            </div>
+
+            {/* Technical Description */}
+            <div className="mt-6 col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Technical Description
+              </label>
+              <textarea
+                value={formData.technical_description || ''}
+                onChange={(e) => handleInputChange('technical_description', e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+              />
+            </div>
+
+
+            {/* Packaging */}
+            <div className="mt-6 col-span-2">
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Packaging Sizes
+              </label>
+              <div className="space-y-2">
+                {(formData.packaging || []).map((item, idx) => (
+                  <div key={idx} className="flex gap-2">
+                    <input
+                      type="text"
+                      value={item.size || ''}
+                      onChange={(e) => {
+                        const newPackaging = [...(formData.packaging || [])];
+                        newPackaging[idx] = { ...newPackaging[idx], size: e.target.value };
+                        setFormData(prev => ({ ...prev, packaging: newPackaging }));
+                      }}
+                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      placeholder="Size (e.g., 1L, 5kg)"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeArrayItem('packaging', idx)}
+                      className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={() => addArrayItem('packaging', { size: '' })}
+                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+                >
+                  + Add Size
+                </button>
+              </div>
+            </div>
+
+          
+
             {/* Product Images */}
             <div className="mt-6 col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -626,6 +694,7 @@ const ProductForm = () => {
               </div>
             </div>
 
+          
             {/* =============== أزرار فتح المودالات =============== */}
             <div className="mt-8 col-span-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <button
@@ -718,7 +787,6 @@ const ProductForm = () => {
         />
       )}
     </div>
-
   );
 };
 
