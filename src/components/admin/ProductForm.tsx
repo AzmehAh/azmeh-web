@@ -129,10 +129,12 @@ const ProductForm = () => {
     }
   };
 
-  const fetchProduct = async () => {
+ const fetchProduct = async () => {
   if (!id) return;
   try {
     setLoading(true);
+
+    console.log("Fetching product with ID:", id);
 
     const { data: productData, error } = await supabase
       .from('products')
@@ -141,6 +143,7 @@ const ProductForm = () => {
       .single();
 
     if (error) throw error;
+    console.log("Product data:", productData);
 
     const { data: imagesData, error: imagesError } = await supabase
       .from('product_images')
@@ -148,28 +151,41 @@ const ProductForm = () => {
       .eq('product_id', id);
 
     if (imagesError) throw imagesError;
+    console.log("Images data:", imagesData);
 
+    // 👇 تجهيز البيانات: كل الأعمدة + تحويل اللي لازم Arrays
     const parsed = {
       ...productData,
-      features: parseArrayField(productData.features),
-      applications: parseArrayField(productData.applications),
-      packaging: parseArrayField(productData.packaging),
-      safety_precautions: parseArrayField(productData.safety_precautions),
-      safety_first_aid: parseArrayField(productData.safety_first_aid),
-      general_features: parseArrayField(productData.general_features),
-      recommended_uses: parseArrayField(productData.recommended_uses),
-      mixing_steps: parseArrayField(productData.mixing_steps),
+
+      // General Tab
+      features: parseArrayField(productData?.features),
+      general_features: parseArrayField(productData?.general_features),
+      recommended_uses: parseArrayField(productData?.recommended_uses),
+
+      // Application Tab
+      applications: parseArrayField(productData?.applications),
+      mixing_steps: parseArrayField(productData?.mixing_steps),
+
+      // Safety Tab
+      safety_precautions: parseArrayField(productData?.safety_precautions),
+      safety_first_aid: parseArrayField(productData?.safety_first_aid),
+
+      // Packaging (ممكن تاب منفصل أو ضمن General)
+      packaging: parseArrayField(productData?.packaging),
     };
 
     setFormData(parsed);
     setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
   } catch (err) {
+    console.error("Error loading product:", err);
     alert('Failed to load product');
+    setLoading(false);
     navigate('/admin/products');
   } finally {
     setLoading(false);
   }
 };
+
 
 
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
