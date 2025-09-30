@@ -39,7 +39,7 @@ import Contact from './components/Contact';
 import JobApplication from './components/JobApplication';
 import About from './ComponentAbout/About.tsx'; // تم إصلاح هذا السطر
 import { auth } from './lib/auth';
-import ProductForm from './components/admin/ProductForm';
+
 import GeneralInfoPage from './components/admin/GeneralInfoPage';
 import ApplicationPage from './components/admin/ApplicationPage';
 import TechnicalPage from './components/admin/TechnicalPage';
