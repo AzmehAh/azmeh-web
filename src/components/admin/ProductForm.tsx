@@ -433,6 +433,7 @@ const ProductForm = () => {
   }
 
   // =============== واجهة المستخدم ===============
+   // =============== واجهة المستخدم ===============
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-xl">
@@ -454,8 +455,6 @@ const ProductForm = () => {
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[calc(100vh-200px)]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* ... (كل الحقول الأساسية كما هي: name, code, brand, type, material, usage, description, technical_description, features, applications, instructions, packaging, storage, safety, technical_specs, images) ... */}
-            
             {/* Basic Info */}
             <div className="space-y-4">
               <div>
@@ -568,191 +567,6 @@ const ProductForm = () => {
               </div>
             </div>
 
-            {/* Description */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Description *
-              </label>
-              <textarea
-                value={formData.description || ''}
-                onChange={(e) => handleInputChange('description', e.target.value)}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-              />
-            </div>
-
-            {/* Technical Description */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Technical Description
-              </label>
-              <textarea
-                value={formData.technical_description || ''}
-                onChange={(e) => handleInputChange('technical_description', e.target.value)}
-                rows={4}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-              />
-            </div>
-
-            {/* Features */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Features
-              </label>
-              <div className="space-y-2">
-                {(formData.features || []).map((item, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={item}
-                      onChange={(e) => handleArrayInputChange('features', idx, e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('features', idx)}
-                      className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => addArrayItem('features', '')}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                >
-                  + Add Feature
-                </button>
-              </div>
-            </div>
-
-            {/* Applications */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Applications
-              </label>
-              <div className="space-y-2">
-                {(formData.applications || []).map((item, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={item}
-                      onChange={(e) => handleArrayInputChange('applications', idx, e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('applications', idx)}
-                      className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => addArrayItem('applications', '')}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                >
-                  + Add Application
-                </button>
-              </div>
-            </div>
-
-            {/* Instructions */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Instructions
-              </label>
-              <div className="space-y-2">
-                {(formData.instructions || []).map((item, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={item}
-                      onChange={(e) => handleArrayInputChange('instructions', idx, e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('instructions', idx)}
-                      className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => addArrayItem('instructions', '')}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                >
-                  + Add Instruction
-                </button>
-              </div>
-            </div>
-
-            {/* Packaging */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Packaging Sizes
-              </label>
-              <div className="space-y-2">
-                {(formData.packaging || []).map((item, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={item.size || ''}
-                      onChange={(e) => {
-                        const newPackaging = [...(formData.packaging || [])];
-                        newPackaging[idx] = { ...newPackaging[idx], size: e.target.value };
-                        setFormData(prev => ({ ...prev, packaging: newPackaging }));
-                      }}
-                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      placeholder="Size (e.g., 1L, 5kg)"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('packaging', idx)}
-                      className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => addArrayItem('packaging', { size: '' })}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                >
-                  + Add Size
-                </button>
-              </div>
-            </div>
-
-            {/* Storage */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Storage
-              </label>
-              <ReactQuill
-                value={formData.storage || ""}
-                onChange={(value) => handleInputChange("storage", value)}
-                className="bg-white rounded-lg border border-gray-200"
-                theme="snow"
-                modules={{
-                  toolbar: [
-                    [{ header: [1, 2, 3, false] }],
-                    ["bold", "italic", "underline", "strike"],
-                    [{ list: "ordered" }, { list: "bullet" }],
-                    ["link", "image"],
-                    ["clean"],
-                  ],
-                }}
-              />
-            </div>
-
             {/* Product Images */}
             <div className="mt-6 col-span-2">
               <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -809,121 +623,6 @@ const ProductForm = () => {
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
-
-            {/* Safety Precautions */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Safety Precautions
-              </label>
-              <div className="space-y-2">
-                {(formData.safety_precautions || []).map((item, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={item}
-                      onChange={(e) => handleArrayInputChange('safety_precautions', idx, e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('safety_precautions', idx)}
-                      className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => addArrayItem('safety_precautions', '')}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                >
-                  + Add Safety Precaution
-                </button>
-              </div>
-            </div>
-
-            {/* Safety First Aid */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Safety First Aid
-              </label>
-              <div className="space-y-2">
-                {(formData.safety_first_aid || []).map((item, idx) => (
-                  <div key={idx} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={item}
-                      onChange={(e) => handleArrayInputChange('safety_first_aid', idx, e.target.value)}
-                      className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('safety_first_aid', idx)}
-                      className="px-2 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => addArrayItem('safety_first_aid', '')}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                >
-                  + Add Safety First Aid
-                </button>
-              </div>
-            </div>
-
-            {/* Technical Specs */}
-            <div className="mt-6 col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Technical Specifications
-              </label>
-              <div className="space-y-2">
-                {(formData.technical_specs || []).map((item, idx) => (
-                  <div key={idx} className="grid grid-cols-1 md:grid-cols-4 gap-2 items-center">
-                    <input
-                      type="text"
-                      placeholder="Property"
-                      value={item.property || ''}
-                      onChange={(e) => {
-                        const newSpecs = [...(formData.technical_specs || [])];
-                        newSpecs[idx] = { ...newSpecs[idx], property: e.target.value };
-                        setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
-                      }}
-                      className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Value"
-                      value={item.value || ''}
-                      onChange={(e) => {
-                        const newSpecs = [...(formData.technical_specs || [])];
-                        newSpecs[idx] = { ...newSpecs[idx], value: e.target.value };
-                        setFormData(prev => ({ ...prev, technical_specs: newSpecs }));
-                      }}
-                      className="px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => removeArrayItem('technical_specs', idx)}
-                      className="px-2 py-2 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-                <button
-                  type="button"
-                  onClick={() => addArrayItem('technical_specs', { property: '', value: '' })}
-                  className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-                >
-                  + Add Specification
-                </button>
               </div>
             </div>
 
@@ -1019,6 +718,7 @@ const ProductForm = () => {
         />
       )}
     </div>
+
   );
 };
 
