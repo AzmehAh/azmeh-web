@@ -52,7 +52,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       <InputField 
         label="Thinner / Cleaner" 
         value={data.thinner_cleaner || ''} 
-        onChange={(v) => handleChange('Thinner / Cleaner', v)} 
+        onChange={(v) => handleChange('thinner_cleaner', v)} 
       />
       <InputField 
         label="Application Temperature" 
@@ -79,9 +79,9 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       </div>
       <InputField 
         label="Mixing Steps" 
-        value={data.Mixing.Steps || ''} 
-        onChange={(v) => handleChange('Mixing Steps', v)} 
+        value={data.mixing_steps || ''} 
+        onChange={(v) => handleChange('mixing_steps', v)} 
       />
     </div>
   );
-}; 
+};
