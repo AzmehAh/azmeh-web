@@ -14,7 +14,7 @@ const TechnicalPage = () => {
   useEffect(() => {
     if (id) fetchProduct();
   }, [id]);
-
+ئ
   const fetchProduct = async () => {
     const { data: product, error } = await supabase
       .from('products')
