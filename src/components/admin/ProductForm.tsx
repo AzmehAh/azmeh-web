@@ -286,28 +286,17 @@ const ProductForm = () => {
           <h1 className="text-2xl font-bold">{isEditing ? 'Edit Product' : 'Add Product'}</h1>
         </div>
 
-       {/* Tab Content */}
-<div className="p-6">
-  {activeTab === 'general' && (
-    <GeneralTab
-      data={{ ...formData, images }}
-      onChange={handleInputChange}
-      onImageUpload={handleUploadImage}
-      onImageRemove={removeImage}
-      onSetMainImage={setMainImage}
-      uploading={uploading}
-      brands={brands}
-      types={types}
-      materials={materials}
-      usages={usages}
-    />
-  )}
-  {activeTab === 'application' && <ApplicationTab data={formData} onChange={handleInputChange} />}
-  {activeTab === 'technical' && <TechnicalTab data={formData} onChange={handleInputChange} />}
-  {activeTab === 'drying' && <DryingTimeTab data={formData} onChange={handleInputChange} />}
-  {activeTab === 'safety' && <SafetyTab data={formData} onChange={handleInputChange} />}
-</div>
-
+        {/* Tabs */}
+        <div className="border-b">
+          <div className="flex">
+            <Tab id="general" activeTab={activeTab} label="General" onClick={() => setActiveTab('general')} />
+            <Tab id="application" activeTab={activeTab} label="Application" onClick={() => setActiveTab('application')} />
+            <Tab id="technical" activeTab={activeTab} label="Technical" onClick={() => setActiveTab('technical')} />
+            <Tab id="drying" activeTab={activeTab} label="Drying Time" onClick={() => setActiveTab('drying')} />
+            <Tab id="safety" activeTab={activeTab} label="Safety" onClick={() => setActiveTab('safety')} />
+          </div>
+        </div>
+ 
         {/* Tab Content */}
         <div className="p-6 max-h-[500px] overflow-y-auto">
           {activeTab === 'general' && (
