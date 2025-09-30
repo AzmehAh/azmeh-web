@@ -4,7 +4,7 @@ import { Upload, Trash2 } from 'lucide-react';
 import { InputField, ArrayInputField } from './FormComponents';
 
 interface Props {
-   any;
+  data: any;
   onChange: (field: string, value: any) => void;
   onImageUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onImageRemove: (index: number) => void;
@@ -43,6 +43,18 @@ export const GeneralTab: React.FC<Props> = ({
     newPack.splice(index, 1);
     onChange('packaging', newPack);
   };
+
+  // قائمة الحقول الإضافية الجديدة
+  const additionalFields = [
+    { key: 'storing_conditions', label: 'Storing Conditions' },
+    { key: 'joint_preparation', label: 'Joint Preparation' },
+    { key: 'joint_size', label: 'Joint Size' },
+    { key: 'movement_capacity', label: 'Movement Capacity' },
+    { key: 'substrate_treatment', label: 'Substrate Treatment' },
+    { key: 'surface_preparation', label: 'Surface Preparation' },
+    { key: 'features', label: 'Features' },
+    { key: 'recommended_uses', label: 'Recommended Uses' },
+  ];
 
   return (
     <div className="space-y-6">
@@ -187,6 +199,21 @@ export const GeneralTab: React.FC<Props> = ({
           </div>
         </div>
 
+        {/* الحقول الإضافية (General Information) */}
+        {additionalFields.map((field) => (
+          <div key={field.key} className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              {field.label}
+            </label>
+            <textarea
+              value={data[field.key] || ''}
+              onChange={(e) => onChange(field.key, e.target.value)}
+              rows={3}
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+            />
+          </div>
+        ))}
+
         {/* Images */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
@@ -231,11 +258,11 @@ export const GeneralTab: React.FC<Props> = ({
                     Main
                   </label>
                 </div>
-              ))}
+              ))} 
             </div>
           </div>
         </div>
       </div>
     </div>
   );
-}; 
+};
