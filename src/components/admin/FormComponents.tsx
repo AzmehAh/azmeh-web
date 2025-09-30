@@ -58,7 +58,7 @@ export const ArrayInputField = ({
             Remove
           </button>
         </div>
-      ))}
+      ))} 
       <button
         type="button"
         onClick={onAdd}
