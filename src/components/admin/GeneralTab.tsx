@@ -63,9 +63,9 @@ export const GeneralTab: React.FC<Props> = ({
           <select
             value={data.brand || ''}
             onChange={(e) => onChange('brand', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200  focus:outline-none focus:border-[#0055A3]"
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
           >
-            <option value="">Select</option>
+            <option value="">Select</option> 
             {brands.map((b) => (
               <option key={b.id} value={b.value}>
                 {b.display_name || b.value}
