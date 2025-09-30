@@ -85,21 +85,48 @@ const ProductForm = () => {
   const [usages, setUsages] = useState<any[]>([]);
 
   // =============== Fetch Functions ===============
-  const fetchBrands = async () => {
-    const { data, error } = await supabase.from('brands').select('*');
-    if (!error) setBrands(data || []);
-  };
-  const fetchTypes = async () => {
-    const { data, error } = await supabase.from('types').select('*');
-    if (!error) setTypes(data || []);
-  };
-  const fetchMaterials = async () => {
-    const { data, error } = await supabase.from('materials').select('*');
-    if (!error) setMaterials(data || []);
-  };
-  const fetchUsages = async () => {
-    const { data, error } = await supabase.from('usages').select('*');
-    if (!error) setUsages(data || []);
+  const fetchFilterOptions = async () => {
+    try {
+      // Fetch filter types and values from existing tables
+      const { data: filterTypes, error: typesError } = await supabase
+        .from('product_filter_types')
+        .select('*')
+        .eq('is_active', true);
+      
+      if (typesError) throw typesError;
+
+      const { data: filterValues, error: valuesError } = await supabase
+        .from('product_filter_values')
+        .select('*, filter_type_id')
+        .eq('is_active', true);
+      
+      if (valuesError) throw valuesError;
+
+      // Group values by filter type name
+      const groupedValues = (filterTypes || []).reduce((acc: any, type: any) => {
+        acc[type.name.toLowerCase()] = (filterValues || [])
+          .filter((value: any) => value.filter_type_id === type.id)
+          .map((value: any) => ({
+            id: value.id,
+            name: value.display_name || value.value,
+            value: value.value
+          }));
+        return acc;
+      }, {});
+
+      // Set individual filter arrays
+      setBrands(groupedValues.brand || groupedValues.brands || []);
+      setTypes(groupedValues.type || groupedValues.types || []);
+      setMaterials(groupedValues.material || groupedValues.materials || []);
+      setUsages(groupedValues.usage || groupedValues.usages || []);
+    } catch (error) {
+      console.error('Error fetching filter options:', error);
+      // Set empty arrays as fallback
+      setBrands([]);
+      setTypes([]);
+      setMaterials([]);
+      setUsages([]);
+    }
   };
 
   const fetchProduct = async () => {
@@ -131,10 +158,7 @@ const ProductForm = () => {
   };
 
   useEffect(() => {
-    fetchBrands();
-    fetchTypes();
-    fetchMaterials();
-    fetchUsages();
+    fetchFilterOptions();
     if (isEditing) fetchProduct();
   }, [id]);
 
