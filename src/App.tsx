@@ -40,10 +40,6 @@ import JobApplication from './components/JobApplication';
 import About from './ComponentAbout/About.tsx'; // تم إصلاح هذا السطر
 import { auth } from './lib/auth';
 
-import GeneralInfoPage from './components/admin/GeneralInfoPage';
-import ApplicationPage from './components/admin/ApplicationPage';
-import TechnicalPage from './components/admin/TechnicalPage';
-import DryingTimePage from './components/admin/DryingTimePage';
 const HomePage = () => ( 
   <>
     <Hero />
@@ -55,7 +51,7 @@ const HomePage = () => (
     <SocialMedia />
   </>
 );
-
+ 
 function App() {
   const location = useLocation();
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -119,15 +115,6 @@ function App() {
         <Route path="/troubleshooting/:category" element={<Troubleshooting />} />
         
         {/* Admin Routes */}
-        <Routes>
-  <Route path="/admin/products" element={<ProductsList />} />
-  <Route path="/admin/products/new" element={<ProductForm />} />
-  <Route path="/admin/products/:id" element={<ProductForm />} />
-  <Route path="/admin/products/:id/general-info" element={<GeneralInfoPage />} />
-  <Route path="/admin/products/:id/application" element={<ApplicationPage />} />
-  <Route path="/admin/products/:id/technical" element={<TechnicalPage />} />
-  <Route path="/admin/products/:id/drying-time" element={<DryingTimePage />} />
-</Routes>
         <Route 
           path="/admin/login" 
           element={
