@@ -65,7 +65,6 @@ const ProductForm = () => {
     number_of_coats: '',
     note: '',
     tensile_adhesion_strength: '',
-    // ... (أضف باقي الحقول كما في النموذج السابق)
     // Drying Time
     dry_to_touch: '',
     dry_to_handle: '',
@@ -77,17 +76,24 @@ const ProductForm = () => {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(isEditing);
-  const [activeTab, setActiveTab] = useState('general'); // general, application, technical, drying, safety
+  const [activeTab, setActiveTab] = useState('general');
 
   const [brands, setBrands] = useState<any[]>([]);
   const [types, setTypes] = useState<any[]>([]);
   const [materials, setMaterials] = useState<any[]>([]);
   const [usages, setUsages] = useState<any[]>([]);
 
+  // =============== Input Handler ===============
+  const handleInputChange = (field: string, value: any) => {
+    setFormData((prev: any) => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
   // =============== Fetch Functions ===============
   const fetchFilterOptions = async () => {
     try {
-      // Fetch filter types and values from existing tables
       const { data: filterTypes, error: typesError } = await supabase
         .from('product_filter_types')
         .select('*')
@@ -102,7 +108,6 @@ const ProductForm = () => {
       
       if (valuesError) throw valuesError;
 
-      // Group values by filter type name
       const groupedValues = (filterTypes || []).reduce((acc: any, type: any) => {
         acc[type.name.toLowerCase()] = (filterValues || [])
           .filter((value: any) => value.filter_type_id === type.id)
@@ -114,14 +119,12 @@ const ProductForm = () => {
         return acc;
       }, {});
 
-      // Set individual filter arrays
       setBrands(groupedValues.brand || groupedValues.brands || []);
       setTypes(groupedValues.type || groupedValues.types || []);
       setMaterials(groupedValues.material || groupedValues.materials || []);
       setUsages(groupedValues.usage || groupedValues.usages || []);
     } catch (error) {
       console.error('Error fetching filter options:', error);
-      // Set empty arrays as fallback
       setBrands([]);
       setTypes([]);
       setMaterials([]);
@@ -129,64 +132,65 @@ const ProductForm = () => {
     }
   };
 
- const fetchProduct = async () => {
-  if (!id) return;
-  try {
-    setLoading(true);
+  const fetchProduct = async () => {
+    if (!id) return;
+    try {
+      setLoading(true);
+      console.log("Fetching product with ID:", id);
 
-    console.log("Fetching product with ID:", id);
+      const { data: productData, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
 
-    const { data: productData, error } = await supabase
-      .from('products')
-      .select('*')
-      .eq('id', id)
-      .single();
+      if (error) throw error;
+      console.log("Product data:", productData);
 
-    if (error) throw error;
-    console.log("Product data:", productData);
+      const { data: imagesData, error: imagesError } = await supabase
+        .from('product_images')
+        .select('*')
+        .eq('product_id', id);
 
-    const { data: imagesData, error: imagesError } = await supabase
-      .from('product_images')
-      .select('*')
-      .eq('product_id', id);
+      if (imagesError) throw imagesError;
+      console.log("Images data:", imagesData);
 
-    if (imagesError) throw imagesError;
-    console.log("Images data:", imagesData);
+      const parsed = {
+        ...productData,
+        features: parseArrayField(productData?.features),
+        general_features: parseArrayField(productData?.general_features),
+        recommended_uses: parseArrayField(productData?.recommended_uses),
+        applications: parseArrayField(productData?.applications),
+        mixing_steps: parseArrayField(productData?.mixing_steps),
+        safety_precautions: parseArrayField(productData?.safety_precautions),
+        safety_first_aid: parseArrayField(productData?.safety_first_aid),
+        packaging: parseArrayField(productData?.packaging),
+      };
 
-    // 👇 تجهيز البيانات: كل الأعمدة + تحويل اللي لازم Arrays
-    const parsed = {
-      ...productData,
+      setFormData(parsed);
+      setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
+    } catch (err) {
+      console.error("Error loading product:", err);
+      alert('Failed to load product');
+      navigate('/admin/products');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      // General Tab
-      features: parseArrayField(productData?.features),
-      general_features: parseArrayField(productData?.general_features),
-      recommended_uses: parseArrayField(productData?.recommended_uses),
-
-      // Application Tab
-      applications: parseArrayField(productData?.applications),
-      mixing_steps: parseArrayField(productData?.mixing_steps),
-
-      // Safety Tab
-      safety_precautions: parseArrayField(productData?.safety_precautions),
-      safety_first_aid: parseArrayField(productData?.safety_first_aid),
-
-      // Packaging (ممكن تاب منفصل أو ضمن General)
-      packaging: parseArrayField(productData?.packaging),
+  // =============== UseEffect ===============
+  useEffect(() => {
+    const initializeData = async () => {
+      await fetchFilterOptions();
+      if (isEditing) {
+        await fetchProduct();
+      } else {
+        setLoading(false);
+      }
     };
 
-    setFormData(parsed);
-    setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
-  } catch (err) {
-    console.error("Error loading product:", err);
-    alert('Failed to load product');
-    setLoading(false);
-    navigate('/admin/products');
-  } finally {
-    setLoading(false);
-  }
-};
-
-
+    initializeData();
+  }, [id, isEditing]);
 
   const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -234,18 +238,35 @@ const ProductForm = () => {
 
       let productId = id;
       if (id) {
-        await supabase.from('products').update(productData).eq('id', id);
+        const { error } = await supabase.from('products').update(productData).eq('id', id);
+        if (error) throw error;
       } else {
-        const { data } = await supabase.from('products').insert([productData]).select();
+        const { data, error } = await supabase.from('products').insert([productData]).select();
+        if (error) throw error;
         productId = data?.[0]?.id;
       }
 
+      // Save images if productId exists
       if (productId) {
-        // Save images logic here (same as before)
+        // Delete existing images if editing
+        if (isEditing) {
+          await supabase.from('product_images').delete().eq('product_id', productId);
+        }
+
+        // Insert new images
+        if (images.length > 0) {
+          const imagesToInsert = images.map(img => ({
+            product_id: productId,
+            image_url: img.image_url,
+            is_main: img.isMain || false
+          }));
+          await supabase.from('product_images').insert(imagesToInsert);
+        }
       }
 
       navigate('/admin/products');
     } catch (err) {
+      console.error('Save error:', err);
       alert('Save failed');
     } finally {
       setSaving(false);
@@ -308,6 +329,6 @@ const ProductForm = () => {
       </div>
     </div>
   );
-};
+}; 
 
-export default ProductForm; 
+export default ProductForm;
