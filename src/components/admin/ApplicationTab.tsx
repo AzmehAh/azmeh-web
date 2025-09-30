@@ -77,12 +77,10 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
           className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
         />
       </div>
-      <ArrayInputField
-        label="Mixing Steps"
-        items={data.mixing_steps || []}
-        onAdd={() => addArrayItem('mixing_steps')}
-        onRemove={(idx) => removeArrayItem('mixing_steps', idx)}
-        onChange={(idx, val) => handleArrayChange('mixing_steps', idx, val)}
+      <InputField 
+        label="Mixing Steps" 
+        value={data.Mixing.Steps || ''} 
+        onChange={(v) => handleChange('Mixing Steps', v)} 
       />
     </div>
   );
