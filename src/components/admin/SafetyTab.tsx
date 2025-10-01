@@ -1,6 +1,6 @@
 // src/components/admin/SafetyTab.tsx
 import React from 'react';
-import { ArrayInputField } from './FormComponents';
+import { InputField } from './FormComponents';
 
 interface Props {
   data: any;
@@ -8,40 +8,33 @@ interface Props {
 }
 
 export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
-  const handleArrayChange = (field: string, index: number, value: string) => {
-    const arr = [...(data[field] || [])];
-    arr[index] = value;
-    onChange(field, arr);
-  };
-
-  const addArrayItem = (field: string) => {
-    const arr = [...(data[field] || []), ''];
-    onChange(field, arr);
-  };
-
-  const removeArrayItem = (field: string, index: number) => {
-    const arr = [...(data[field] || [])];
-    arr.splice(index, 1);
-    onChange(field, arr);
-  };
+  const handleChange = (field: string, value: any) => onChange(field, value);
 
   return (
-    <div className="grid grid-cols-1 gap-6">
-      <ArrayInputField
+    <div className="space-y-4">
+      <InputField
         label="Safety Precautions"
-        items={data.safety_precautions || []}
-        onAdd={() => addArrayItem('safety_precautions')}
-        onRemove={(idx) => removeArrayItem('safety_precautions', idx)} 
-        onChange={(idx, val) => handleArrayChange('safety_precautions', idx, val)}
+        value={data.safety_precautions || ''}
+        onChange={(v) => handleChange('safety_precautions', v)}
+        type="textarea"
       />
 
-      <ArrayInputField
+      <InputField
         label="First Aid Measures"
-        items={data.safety_first_aid || []}
-        onAdd={() => addArrayItem('safety_first_aid')}
-        onRemove={(idx) => removeArrayItem('safety_first_aid', idx)}
-        onChange={(idx, val) => handleArrayChange('safety_first_aid', idx, val)}
+        value={data.safety_first_aid || ''}
+        onChange={(v) => handleChange('safety_first_aid', v)}
+        type="textarea"
       />
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Note</label>
+        <textarea
+          value={data.safety_note || ''}
+          onChange={(e) => handleChange('safety_note', e.target.value)}
+          rows={3}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+        />
+      </div>
     </div>
   );
 };
