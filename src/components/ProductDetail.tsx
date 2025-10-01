@@ -381,37 +381,48 @@ technical_specs: TECHNICAL_FIELDS
     </div>
   </section>
 )}
+{/* Application Details */}
+{product.application && (
+  <section className="py-16 bg-white">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
+        Application Details
+      </h2>
+      <div className="max-w-4xl mx-auto">
+        {Object.entries(product.application).map(([key, value]) => {
+          // تخطي الحقول الفارغة
+          if (!value) return null;
 
-      {/* Instructions */}
-      {product.instructions.length > 0 && (
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-              Application Instructions
-            </h2>
-            <div className="max-w-4xl mx-auto relative">
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
-              {product.instructions.map((instruction, index) => (
-                <motion.div
-                  key={index}
-                  className="relative flex items-start mb-12 last:mb-0"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.2 }}
-                >
-                  <div className="absolute left-4 w-8 h-8 bg-[#2C5DB6] rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
-                    {index + 1}
-                  </div>
-                  <div className="ml-20 bg-gray-50 rounded-xl p-6 flex-1">
-                    <p className="text-gray-700 leading-relaxed">{instruction}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
- 
+          // تحويل اسم الحقل إلى عنوان مقروء (مثل: method_of_application → Method of Application)
+          const label = key
+            .replace(/_/g, ' ')
+            .replace(/\b\w/g, char => char.toUpperCase());
+
+          return (
+            <motion.div
+              key={key}
+              className="relative flex items-start mb-8 last:mb-0"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* دائرة صغيرة زرقاء بدل الرقم — لإعطاء طابع بصري دون ترقيم */}
+              <div className="absolute left-4 w-8 h-8 bg-[#2C5DB6] rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
+                <span className="text-xs">●</span>
+              </div>
+              <div className="ml-20 bg-gray-50 rounded-xl p-6 flex-1">
+                <h3 className="text-gray-800 font-semibold mb-2">{label}:</h3>
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                  {String(value)}
+                </p>
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+)}
       {/* Storage */}
       {product.storage && (
         <section className="py-16 bg-white">
