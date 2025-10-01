@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Download, Package, FileText, CheckCircle, Wrench, Shield } from "lucide-react";
-import { supabase, api } from "../lib/supabase"; // مسار معدل
+import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
 
-// تعريف واجهة المنتج
+// تعريف واجهة المنتج - محدثة
 interface Product {
   id: string;
   name: string;
@@ -26,8 +26,19 @@ interface Product {
   storage: string;
   safety_precautions: string[];
   safety_first_aid: string[];
+  // الحقول الجديدة للتطبيق
+  application?: {
+    method_of_application?: string;
+    mixing_ratio?: string;
+    mixing_note?: string;
+    pot_life?: string;
+    cleaner_thinner?: string;
+    application_temperature?: string;
+    curing_note?: string;
+    number_of_coats?: string;
+  };
 }
-// تعريف الحقول التقنية كما في TechnicalTab
+
 const TECHNICAL_FIELDS = [
   { key: 'number_of_coats', label: 'Number of Coats' },
   { key: 'tensile_adhesion_strength', label: 'Tensile Adhesion Strength' },
@@ -61,25 +72,26 @@ const TECHNICAL_FIELDS = [
   { key: 'component_b', label: 'Component B' },
   { key: 'note', label: 'Note' },
 ];
+
 const brands = [
   { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
-  { name: "SRT",         logo: "/images/SRT-.gif" },
-  { name: "Original",    logo: "/images/Original.gif" },
-  { name: "Omegan",      logo: "/images/Omegan.gif" },
-  { name: "Mlonati",     logo: "/images/Mlonati.gif" },
-  { name: "Jupiter",     logo: "/images/Jupiter.gif" },
-  { name: "COPRAbEL",    logo: "/images/COPRAbEL.jpg" },
-  { name: "Capric",      logo: "/images/Capric.gif" },
-  { name: "Azur",        logo: "/images/Azur-.png" },
-  { name: "AlDahab",     logo: "/images/AlDahab.png" },
+  { name: "SRT", logo: "/images/SRT-.gif" },
+  { name: "Original", logo: "/images/Original.gif" },
+  { name: "Omegan", logo: "/images/Omegan.gif" },
+  { name: "Mlonati", logo: "/images/Mlonati.gif" },
+  { name: "Jupiter", logo: "/images/Jupiter.gif" },
+  { name: "COPRAbEL", logo: "/images/COPRAbEL.jpg" },
+  { name: "Capric", logo: "/images/Capric.gif" },
+  { name: "Azur", logo: "/images/Azur-.png" },
+  { name: "AlDahab", logo: "/images/AlDahab.png" },
 ];
-
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (id) {
@@ -96,22 +108,56 @@ const ProductDetail = () => {
     }
   }, [product]);
 
-  // دالة مساعدة لتحليل الحقول المصفوفة
+  // دالة مساعدة لتحليل الحقول المصفوفة - محسنة
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
     if (typeof field === 'string') {
       try {
-        return JSON.parse(field);
+        const parsed = JSON.parse(field);
+        return Array.isArray(parsed) ? parsed : [];
       } catch (e) {
-        return [];
+        // إذا فشل التحليل، حاول تقسيم النص بالفاصلة
+        if (field.includes(',')) {
+          return field.split(',').map((item: string) => item.trim()).filter(Boolean);
+        }
+        return field ? [field] : [];
       }
     }
     return [];
   };
 
+  // دالة لإنشاء كائن التطبيق
+  const createApplicationObject = (productData: any) => {
+    const applicationFields = [
+      'method_of_application',
+      'mixing_ratio',
+      'mixing_note',
+      'pot_life',
+      'cleaner_thinner',
+      'application_temperature',
+      'curing_note',
+      'number_of_coats'
+    ];
+
+    const application: any = {};
+    let hasApplicationData = false;
+
+    applicationFields.forEach(field => {
+      if (productData[field]) {
+        application[field] = productData[field];
+        hasApplicationData = true;
+      }
+    });
+
+    return hasApplicationData ? application : undefined;
+  };
+
   const fetchProduct = async (productId: string) => {
     try {
       setLoading(true);
+      setError(null);
+      
+      console.log('Fetching product with ID:', productId);
       
       // جلب بيانات المنتج
       const { data: productData, error: productError } = await supabase
@@ -120,57 +166,85 @@ const ProductDetail = () => {
         .eq('id', productId)
         .single();
 
-      if (productError) throw productError;
+      if (productError) {
+        console.error('Supabase error:', productError);
+        throw productError;
+      }
+
       if (!productData) {
+        console.log('No product data found');
         setProduct(null);
         return;
       }
 
-      // جلب صور المنتج مع ترتيب الصورة الرئيسية أولاً
-      const { data: imagesData, error: imagesError } = await supabase
-        .from('product_images')
-        .select('*')
-        .eq('product_id', productId)
-        .order('is_main', { ascending: false })
-        .order('sort_order', { ascending: true });
+      console.log('Product data received:', productData);
 
-      if (imagesError) throw imagesError;
+      // جلب صور المنتج
+      let imagesData = [];
+      try {
+        const { data: images, error: imagesError } = await supabase
+          .from('product_images')
+          .select('*')
+          .eq('product_id', productId)
+          .order('is_main', { ascending: false })
+          .order('sort_order', { ascending: true });
+
+        if (imagesError) {
+          console.error('Error fetching images:', imagesError);
+        } else {
+          imagesData = images || [];
+        }
+      } catch (imagesError) {
+        console.error('Exception fetching images:', imagesError);
+      }
 
       // جلب الصورة الرئيسية
-      const mainImage = await api.getMainProductImage(productId);
+      let mainImage = null;
+      try {
+        mainImage = await api.getMainProductImage(productId);
+      } catch (imageError) {
+        console.error('Error fetching main image:', imageError);
+      }
 
+      // إنشاء كائن المنتج المنسق
       const formattedProduct: Product = {
         id: productData.id,
-        name: productData.name,
-        code: productData.code,
-        description: productData.description,
+        name: productData.name || 'No Name',
+        code: productData.code || 'No Code',
+        description: productData.description || '',
         technical_description: productData.technical_description || "",
-        image_url: mainImage?.image_url || (imagesData && imagesData.length > 0 ? imagesData[0].image_url : ""),
-        images: imagesData ? imagesData.map(img => img.image_url) : [],
-        type: productData.type,
-        brand: productData.brand,
-        material: productData.material,
-        usage: productData.usage,
+        image_url: mainImage?.image_url || 
+                  (imagesData.length > 0 ? imagesData[0].image_url : "") ||
+                  productData.image_url || 
+                  "/images/placeholder.jpg",
+        images: imagesData.map(img => img.image_url).filter(Boolean),
+        type: productData.type || "",
+        brand: productData.brand || "",
+        material: productData.material || "",
+        usage: productData.usage || "",
         packaging: parseArrayField(productData.packaging),
-        // تحويل الحقول الفردية إلى مصفوفة technical_specs
-technical_specs: TECHNICAL_FIELDS
-  .map(({ key, label }) => ({
-    property: label,
-    value: productData[key] || '',
-    standard: '' // يمكنك حذفه لاحقاً إذا لم تكن بحاجة إليه
-  }))
-  .filter(spec => spec.value.trim() !== ''), // إخفاء الحقول الفارغة
+        technical_specs: TECHNICAL_FIELDS
+          .map(({ key, label }) => ({
+            property: label,
+            value: productData[key] || '',
+            standard: ''
+          }))
+          .filter(spec => spec.value && spec.value.toString().trim() !== ''),
         features: parseArrayField(productData.features),
         applications: parseArrayField(productData.applications),
         instructions: parseArrayField(productData.instructions),
         storage: productData.storage || "",
         safety_precautions: parseArrayField(productData.safety_precautions),
-        safety_first_aid: parseArrayField(productData.safety_first_aid)
+        safety_first_aid: parseArrayField(productData.safety_first_aid),
+        application: createApplicationObject(productData)
       };
 
+      console.log('Formatted product:', formattedProduct);
       setProduct(formattedProduct);
+
     } catch (error) {
       console.error('Error fetching product:', error);
+      setError('Failed to load product. Please try again.');
       setProduct(null);
     } finally {
       setLoading(false);
@@ -178,21 +252,38 @@ technical_specs: TECHNICAL_FIELDS
   };
 
   const handleDownloadDatasheet = () => {
-    // يمكنك تنفيذ هذه الوظيفة لاحقاً
     console.log("Download datasheet for product:", product?.id);
     alert("سيتم تنزيل ورقة البيانات الفنية قريباً");
   };
 
-  const brandLogo =
-    product &&
-    brands.find((b) =>
-      product.brand ? product.brand.toLowerCase().includes(b.name.toLowerCase()) : false
-    )?.logo;
+  const brandLogo = product && brands.find((b) =>
+    product.brand ? product.brand.toLowerCase().includes(b.name.toLowerCase()) : false
+  )?.logo;
+
+  // إضافة ديباج للتسجيل
+  console.log('Current product state:', { product, loading, error });
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-[70vh] flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Error Loading Product</h1>
+          <p className="text-gray-600 mb-4">{error}</p>
+          <Link
+            to="/products"
+            className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Back to Products
+          </Link>
+        </div>
       </div>
     );
   }
@@ -243,26 +334,36 @@ technical_specs: TECHNICAL_FIELDS
               <p className="text-xl text-blue-100 mb-4 leading-relaxed">{product.description}</p>
 
               <div className="flex flex-wrap gap-4 mb-8">
-                <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.type}</span>
-                <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.material}</span>
-                <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.usage}</span>
+                {product.type && (
+                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.type}</span>
+                )}
+                {product.material && (
+                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.material}</span>
+                )}
+                {product.usage && (
+                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.usage}</span>
+                )}
               </div>
 
-              <p className="text-blue-100/90 mb-6 leading-relaxed">{product.technical_description}</p>
+              {product.technical_description && (
+                <p className="text-blue-100/90 mb-6 leading-relaxed">{product.technical_description}</p>
+              )}
 
-              <div className="mb-8">
-                <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                  <Package className="w-5 h-5 text-white mr-2" />
-                  Packaging & Sizes
-                </h3>
-                <div className="flex flex-wrap gap-4">
-                  {product.packaging.map((pack, index) => (
-                    <div key={index} className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28">
-                      <h4 className="text-sm font-bold text-white">{pack.size}</h4>
-                    </div>
-                  ))}
+              {product.packaging && product.packaging.length > 0 && (
+                <div className="mb-8">
+                  <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+                    <Package className="w-5 h-5 text-white mr-2" />
+                    Packaging & Sizes
+                  </h3>
+                  <div className="flex flex-wrap gap-4">
+                    {product.packaging.map((pack, index) => (
+                      <div key={index} className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28">
+                        <h4 className="text-sm font-bold text-white">{pack.size}</h4>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <button
                 onClick={handleDownloadDatasheet}
@@ -281,7 +382,7 @@ technical_specs: TECHNICAL_FIELDS
                 </div>
               )}
 
-              {product.images.length > 0 ? (
+              {product.images && product.images.length > 0 ? (
                 <>
                   <motion.img
                     key={currentImageIndex}
@@ -291,6 +392,9 @@ technical_specs: TECHNICAL_FIELDS
                     initial={{ opacity: 0, scale: 1.1 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.7 }}
+                    onError={(e) => {
+                      e.currentTarget.src = "/images/placeholder.jpg";
+                    }}
                   />
 
                   {product.images.length > 1 && (
@@ -318,9 +422,9 @@ technical_specs: TECHNICAL_FIELDS
       </section>
 
       {/* Technical Specifications */}
-      {product.technical_specs.length > 0 && (
+      {product.technical_specs && product.technical_specs.length > 0 && (
         <section className="py-16 bg-white">
-          <div className="container mx-auto px-20 sm:px-6 lg:px-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-16">
               <div className="bg-[#2C5DB6] px-8 py-6">
                 <h2 className="text-2xl font-bold text-white flex items-center">
@@ -334,7 +438,6 @@ technical_specs: TECHNICAL_FIELDS
                     <tr>
                       <th className="px-8 py-4 text-left font-semibold text-gray-800">Property</th>
                       <th className="px-8 py-4 text-left font-semibold text-gray-800">Value</th>
-                     
                     </tr>
                   </thead>
                   <tbody>
@@ -342,7 +445,6 @@ technical_specs: TECHNICAL_FIELDS
                       <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                         <td className="px-8 py-4 font-medium text-gray-800">{spec.property}</td>
                         <td className="px-8 py-4 text-[#2C5DB6] font-semibold">{spec.value}</td>
-                       
                       </tr>
                     ))}
                   </tbody>
@@ -353,111 +455,113 @@ technical_specs: TECHNICAL_FIELDS
         </section>
       )}
 
-     {/* Features */}
-{product.features.length > 0 && (
-  <section className="py-16 bg-gray-50">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto"> {/* يجعل المحتوى في المنتصف */}
-        <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center justify-center">
-          <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
-          Key Features
-        </h2>
-        <div className="space-y-4">
-          {product.features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }} // تغيير x إلى y لتأثير سقوط طبيعي من الأعلى
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              viewport={{ once: true }} // اختياري: لتشغيل التأثير مرة واحدة فقط
-              className="flex items-center bg-white p-4 rounded-xl shadow-sm" // ✅ تم إزالة hover:shadow-md
-            >
-              <div className="w-3 h-3 bg-green-500 rounded-full mr-4 flex-shrink-0" />
-              <span className="text-gray-700 font-medium">{feature}</span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-)}
-{/* Application Details */}
-{product.application && (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-        Application Details
-      </h2>
-      <div className="max-w-4xl mx-auto space-y-8">
-        {product.application.method_of_application && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Method of Application:</h3>
-            <p className="text-gray-700 mt-2">{product.application.method_of_application}</p>
+      {/* Features */}
+      {product.features && product.features.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center justify-center">
+                <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
+                Key Features
+              </h2>
+              <div className="space-y-4">
+                {product.features.map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="flex items-center bg-white p-4 rounded-xl shadow-sm"
+                  >
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-4 flex-shrink-0" />
+                    <span className="text-gray-700 font-medium">{feature}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </div>
-        )}
+        </section>
+      )}
 
-        {product.application.mixing_ratio && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Mixing Ratio:</h3>
-            <p className="text-gray-700 mt-2">{product.application.mixing_ratio}</p>
-          </div>
-        )}
+      {/* Application Details */}
+      {product.application && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
+              Application Details
+            </h2>
+            <div className="max-w-4xl mx-auto space-y-8">
+              {product.application.method_of_application && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-gray-800 font-semibold">Method of Application:</h3>
+                  <p className="text-gray-700 mt-2">{product.application.method_of_application}</p>
+                </div>
+              )}
 
-        {product.application.mixing_note && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Mixing Note:</h3>
-            <p className="text-gray-700 mt-2">{product.application.mixing_note}</p>
-          </div>
-        )}
+              {product.application.mixing_ratio && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-gray-800 font-semibold">Mixing Ratio:</h3>
+                  <p className="text-gray-700 mt-2">{product.application.mixing_ratio}</p>
+                </div>
+              )}
 
-        {product.application.pot_life && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Pot Life:</h3>
-            <p className="text-gray-700 mt-2">{product.application.pot_life}</p>
-          </div>
-        )}
+              {product.application.mixing_note && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-gray-800 font-semibold">Mixing Note:</h3>
+                  <p className="text-gray-700 mt-2">{product.application.mixing_note}</p>
+                </div>
+              )}
 
-        {product.application.cleaner_thinner && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Cleaner / Thinner:</h3>
-            <p className="text-gray-700 mt-2">{product.application.cleaner_thinner}</p>
-          </div>
-        )}
+              {product.application.pot_life && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-gray-800 font-semibold">Pot Life:</h3>
+                  <p className="text-gray-700 mt-2">{product.application.pot_life}</p>
+                </div>
+              )}
 
-        {product.application.application_temperature && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Application Temperature:</h3>
-            <p className="text-gray-700 mt-2">{product.application.application_temperature}</p>
-          </div>
-        )}
+              {product.application.cleaner_thinner && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-gray-800 font-semibold">Cleaner / Thinner:</h3>
+                  <p className="text-gray-700 mt-2">{product.application.cleaner_thinner}</p>
+                </div>
+              )}
 
-        {product.application.curing_note && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Curing Note:</h3>
-            <p className="text-gray-700 mt-2">{product.application.curing_note}</p>
-          </div>
-        )}
+              {product.application.application_temperature && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-gray-800 font-semibold">Application Temperature:</h3>
+                  <p className="text-gray-700 mt-2">{product.application.application_temperature}</p>
+                </div>
+              )}
 
-        {product.application.number_of_coats && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Number of Coats:</h3>
-            <p className="text-gray-700 mt-2">{product.application.number_of_coats}</p>
+              {product.application.curing_note && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-gray-800 font-semibold">Curing Note:</h3>
+                  <p className="text-gray-700 mt-2">{product.application.curing_note}</p>
+                </div>
+              )}
+
+              {product.application.number_of_coats && (
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-gray-800 font-semibold">Number of Coats:</h3>
+                  <p className="text-gray-700 mt-2">{product.application.number_of_coats}</p>
+                </div>
+              )}
+            </div>
           </div>
-        )}
-      </div>
-    </div>
-  </section>
-)}
+        </section>
+      )}
+
       {/* Storage */}
       {product.storage && (
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-12 flex items-center justify-center">
-              <Shield className=" w-8 h-8 text-green-600 mr-3" />
+              <Shield className="w-8 h-8 text-green-600 mr-3" />
               Storage Requirements
             </h2>
             <div
-              className="max-w-4xl prose prose-lg  mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
+              className="max-w-4xl prose prose-lg mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storage) }}
             />
           </div>
@@ -483,7 +587,7 @@ technical_specs: TECHNICAL_FIELDS
                 <h3 className="text-xl font-bold text-white">Safety Precautions</h3>
               </div>
               <div className="p-6">
-                {product.safety_precautions.length > 0 ? (
+                {product.safety_precautions && product.safety_precautions.length > 0 ? (
                   <div className="space-y-3">
                     {product.safety_precautions.map((precaution, index) => (
                       <div key={index} className="flex items-start">
@@ -509,7 +613,7 @@ technical_specs: TECHNICAL_FIELDS
                 <h3 className="text-xl font-bold text-white">First Aid</h3>
               </div>
               <div className="p-6">
-                {product.safety_first_aid.length > 0 ? (
+                {product.safety_first_aid && product.safety_first_aid.length > 0 ? (
                   <div className="space-y-3">
                     {product.safety_first_aid.map((aid, index) => (
                       <div key={index} className="flex items-start">
@@ -524,10 +628,10 @@ technical_specs: TECHNICAL_FIELDS
               </div>
             </motion.div>
           </div>
-        </div> 
+        </div>
       </section>
     </div>
   );
 };
- 
+
 export default ProductDetail;
