@@ -34,31 +34,38 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
         value={data.method_of_application || ''} 
         onChange={(v) => handleChange('method_of_application', v)} 
       />
+
       <InputField 
         label="Mixing Ratio" 
         value={data.mixing_ratio || ''} 
         onChange={(v) => handleChange('mixing_ratio', v)} 
       />
+
       <InputField 
         label="Pot Life" 
         value={data.pot_life || ''} 
         onChange={(v) => handleChange('pot_life', v)} 
       />
+
       <InputField 
         label="Cleaner" 
         value={data.cleaner || ''} 
         onChange={(v) => handleChange('cleaner', v)} 
       />
+
       <InputField 
-        label="Thinner " 
-        value={data.thinner_cleaner || ''} 
+        label="Thinner" 
+        value={data.thinner || ''} 
         onChange={(v) => handleChange('thinner', v)} 
       />
+
       <InputField 
         label="Application Temperature" 
         value={data.application_temperature || ''} 
         onChange={(v) => handleChange('application_temperature', v)} 
       />
+
+      {/* Mixing Note */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Mixing Note</label>
         <textarea
@@ -68,6 +75,8 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
           className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
         />
       </div>
+
+      {/* Curing Note */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Curing Note</label>
         <textarea
@@ -77,10 +86,14 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
           className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
         />
       </div>
-      <InputField 
-        label="Mixing Steps" 
-        value={data.mixing_steps || ''} 
-        onChange={(v) => handleChange('mixing_steps', v)} 
+
+      {/* Mixing Steps - Array */}
+      <ArrayInputField 
+        label="Mixing Steps"
+        items={data.mixing_steps || []}
+        onAdd={() => addArrayItem('mixing_steps')}
+        onRemove={(idx) => removeArrayItem('mixing_steps', idx)}
+        onChange={(idx, v) => handleArrayChange('mixing_steps', idx, v)}
       />
     </div>
   );
