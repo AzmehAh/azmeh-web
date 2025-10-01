@@ -225,8 +225,39 @@ const ProductForm = () => {
   const handleSave = async () => {
     setSaving(true);
     try {
+      // Define valid database columns to prevent schema errors
+      const validColumns = [
+        'name', 'code', 'brand', 'type', 'material', 'usage', 'description', 
+        'technical_description', 'features', 'applications', 'instructions', 
+        'packaging', 'storage', 'safety_precautions', 'safety_first_aid', 
+        'technical_specs', 'status', 'category_id', 'featured',
+        'storing_conditions', 'joint_preparation', 'joint_size', 'movement_capacity',
+        'substrate_treatment', 'surface_preparation', 'general_features', 'recommended_uses',
+        'method_of_application', 'mixing_ratio', 'mixing_note', 'mixing_steps', 'pot_life',
+        'cleaner', 'thinner_cleaner', 'application_temperature', 'curing_note',
+        'number_of_coats', 'note', 'tensile_adhesion_strength', 'material_consumption',
+        'viscosity', 'weather_resistance', 'compressive_strength', 'tear_resistance',
+        'elongation_at_rupture', 'tensile_strength_100', 'tensile_strength_50',
+        'specific_gravity_mixed', 'solvent_resistance', 'chemical_resistance',
+        'abrasion_resistance', 'friction_resistance', 'washability', 'water_resistance',
+        'theoretical_spreading_rate', 'recommended_film_thickness', 'temperature_resistance',
+        'solvent_splash_resistance', 'sandability', 'adhesion', 'flexibility',
+        'voc', 'volume_solids', 'gloss', 'color', 'component_a', 'component_b',
+        'dry_to_touch', 'dry_to_handle', 'complete_setting', 'grouting_time',
+        'adjustability_time', 'dry_to_topcoat', 'initial_setting', 'fully_cured',
+        'dry_to_sand', 'drying_time_note'
+      ];
+
+      // Filter formData to only include valid database columns
+      const filteredData = Object.keys(formData)
+        .filter(key => validColumns.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = formData[key];
+          return obj;
+        }, {} as any);
+
       const productData = {
-        ...formData,
+        ...filteredData,
         features: formData.features || [],
         safety_precautions: formData.safety_precautions || [],
         safety_first_aid: formData.safety_first_aid || [],
