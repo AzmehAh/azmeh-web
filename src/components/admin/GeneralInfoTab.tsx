@@ -77,13 +77,10 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
         onRemove={(idx) => removeArrayItem('general_features', idx)}
         onChange={(idx, val) => handleArrayChange('general_features', idx, val)}
       />
-      <ArrayInputField
-        label="Recommended Uses"
-        items={localData.recommended_uses || []}
-        onAdd={() => addArrayItem('recommended_uses')}
-        onRemove={(idx) => removeArrayItem('recommended_uses', idx)}
-        onChange={(idx, val) => handleArrayChange('recommended_uses', idx, String(val))}
-        inputType="text" 
+        <InputField 
+        label="Recommended Uses" 
+        value={localData.Recommended_Uses || ''} 
+        onChange={(v) => handleChange('Recommended Uses', v)} 
       />
     </div>
   );
