@@ -73,7 +73,8 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
   items={data.recommended_uses || []}
   onAdd={() => addArrayItem('recommended_uses')}
   onRemove={(idx) => removeArrayItem('recommended_uses', idx)}
-  onChange={(idx, val) => handleArrayChange('recommended_uses', idx, String(val))}
+ onChange={(idx, val) => handleArrayChange('recommended_uses', idx, val)}
+
   inputType="text" 
 />
 
