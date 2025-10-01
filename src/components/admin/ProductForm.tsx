@@ -192,32 +192,32 @@ const ProductForm = () => {
     initializeData();
   }, [id, isEditing]);
 
-  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    setUploading(true);
-    const files = Array.from(e.target.files);
-    try {
-      const uploaded = await Promise.all(files.map(async (file) => {
-        const fileName = `${Math.random()}.${file.name.split('.').pop()}`;
-        const { error } = await supabase.storage.from('products').upload(`product_images/${fileName}`, file);
-        if (error) {
-          if (error.message.includes('Bucket not found')) {
-            throw new Error('Storage bucket "product-images" not found. Please create this bucket in your Supabase project dashboard under Storage.');
-          }
-          throw error;
+ const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (!e.target.files) return;
+  setUploading(true);
+  const files = Array.from(e.target.files);
+  try {
+    const uploaded = await Promise.all(files.map(async (file) => {
+      const fileName = `${Math.random()}.${file.name.split('.').pop()}`;
+      const { error } = await supabase.storage.from('products').upload(`product_images/${fileName}`, file);
+      if (error) {
+        if (error.message.includes('Bucket not found')) {
+          throw new Error('Storage bucket "products" not found. Please create this bucket in your Supabase project dashboard under Storage.');
         }
-        const { data } = supabase.storage.from('product-images').getPublicUrl(`product_images/${fileName}`);
-        return { image_url: data.publicUrl, isMain: false };
-      }));
-      setImages(prev => [...prev, ...uploaded]);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Image upload failed';
-      alert(errorMessage);
-      console.error('Image upload error:', err);
-    } finally {
-      setUploading(false);
-    }
-  };
+        throw error;
+      }
+      const { data } = supabase.storage.from('products').getPublicUrl(`product_images/${fileName}`); // ✅ تم التصحيح هنا
+      return { image_url: data.publicUrl, isMain: false };
+    }));
+    setImages(prev => [...prev, ...uploaded]);
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : 'Image upload failed';
+    alert(errorMessage);
+    console.error('Image upload error:', err);
+  } finally {
+    setUploading(false);
+  }
+};
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
