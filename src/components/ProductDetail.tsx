@@ -27,7 +27,40 @@ interface Product {
   safety_precautions: string[];
   safety_first_aid: string[];
 }
-
+// تعريف الحقول التقنية كما في TechnicalTab
+const TECHNICAL_FIELDS = [
+  { key: 'number_of_coats', label: 'Number of Coats' },
+  { key: 'tensile_adhesion_strength', label: 'Tensile Adhesion Strength' },
+  { key: 'material_consumption', label: 'Material Consumption' },
+  { key: 'viscosity', label: 'Viscosity' },
+  { key: 'weather_resistance', label: 'Weather Resistance' },
+  { key: 'compressive_strength', label: 'Compressive Strength' },
+  { key: 'tear_resistance', label: 'Tear Resistance' },
+  { key: 'elongation_at_rupture', label: 'Elongation at Rupture' },
+  { key: 'tensile_strength_100', label: 'Tensile Strength at 100% Elongation' },
+  { key: 'tensile_strength_50', label: 'Tensile Strength at 50% Elongation' },
+  { key: 'specific_gravity_mixed', label: 'Specific Gravity (Mixed)' },
+  { key: 'solvent_resistance', label: 'Solvent Resistance' },
+  { key: 'chemical_resistance', label: 'Chemical Resistance' },
+  { key: 'abrasion_resistance', label: 'Abrasion Resistance' },
+  { key: 'friction_resistance', label: 'Friction Resistance' },
+  { key: 'washability', label: 'Washability' },
+  { key: 'water_resistance', label: 'Water Resistance' },
+  { key: 'theoretical_spreading_rate', label: 'Theoretical Spreading Rate' },
+  { key: 'recommended_film_thickness', label: 'Recommended Film Thickness' },
+  { key: 'temperature_resistance', label: 'Temperature Resistance' },
+  { key: 'solvent_splash_resistance', label: 'Solvent Splash Resistance' },
+  { key: 'sandability', label: 'Sandability' },
+  { key: 'adhesion', label: 'Adhesion' },
+  { key: 'flexibility', label: 'Flexibility' },
+  { key: 'voc', label: 'VOC' },
+  { key: 'volume_solids', label: 'Volume Solids' },
+  { key: 'gloss', label: 'Gloss' },
+  { key: 'color', label: 'Color' },
+  { key: 'component_a', label: 'Component A' },
+  { key: 'component_b', label: 'Component B' },
+  { key: 'note', label: 'Note' },
+];
 const brands = [
   { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
   { name: "SRT",         logo: "/images/SRT-.gif" },
