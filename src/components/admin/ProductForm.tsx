@@ -257,15 +257,15 @@ const ProductForm = () => {
         }, {} as any);
 
       const productData = {
-        ...filteredData,
-        features: formData.features || [],
-        safety_precautions: formData.safety_precautions || [],
-        safety_first_aid: formData.safety_first_aid || [],
-        packaging: formData.packaging || [],
-        general_features: formData.general_features || [],
-        recommended_uses: formData.recommended_uses || [],
-        mixing_steps: formData.mixing_steps || [],
-      };
+  ...filteredData,
+  features: JSON.stringify(formData.features || []),
+  safety_precautions: JSON.stringify(formData.safety_precautions || []),
+  safety_first_aid: JSON.stringify(formData.safety_first_aid || []),
+  packaging: JSON.stringify(formData.packaging || []),
+  general_features: JSON.stringify(formData.general_features || []),
+  recommended_uses: JSON.stringify(formData.recommended_uses || []),
+  mixing_steps: JSON.stringify(formData.mixing_steps || []),
+};
 
       let productId = id;
       if (id) {
