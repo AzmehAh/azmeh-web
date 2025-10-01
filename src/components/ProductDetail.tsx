@@ -152,7 +152,14 @@ const ProductDetail = () => {
         material: productData.material,
         usage: productData.usage,
         packaging: parseArrayField(productData.packaging),
-        technical_specs: parseArrayField(productData.technical_specs),
+        // تحويل الحقول الفردية إلى مصفوفة technical_specs
+technical_specs: TECHNICAL_FIELDS
+  .map(({ key, label }) => ({
+    property: label,
+    value: productData[key] || '',
+    standard: '' // يمكنك حذفه لاحقاً إذا لم تكن بحاجة إليه
+  }))
+  .filter(spec => spec.value.trim() !== ''), // إخفاء الحقول الفارغة
         features: parseArrayField(productData.features),
         applications: parseArrayField(productData.applications),
         instructions: parseArrayField(productData.instructions),
