@@ -388,37 +388,62 @@ technical_specs: TECHNICAL_FIELDS
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
         Application Details
       </h2>
-      <div className="max-w-4xl mx-auto">
-        {Object.entries(product.application).map(([key, value]) => {
-          // تخطي الحقول الفارغة
-          if (!value) return null;
+      <div className="max-w-4xl mx-auto space-y-8">
+        {product.application.method_of_application && (
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="text-gray-800 font-semibold">Method of Application:</h3>
+            <p className="text-gray-700 mt-2">{product.application.method_of_application}</p>
+          </div>
+        )}
 
-          // تحويل اسم الحقل إلى عنوان مقروء (مثل: method_of_application → Method of Application)
-          const label = key
-            .replace(/_/g, ' ')
-            .replace(/\b\w/g, char => char.toUpperCase());
+        {product.application.mixing_ratio && (
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="text-gray-800 font-semibold">Mixing Ratio:</h3>
+            <p className="text-gray-700 mt-2">{product.application.mixing_ratio}</p>
+          </div>
+        )}
 
-          return (
-            <motion.div
-              key={key}
-              className="relative flex items-start mb-8 last:mb-0"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              {/* دائرة صغيرة زرقاء بدل الرقم — لإعطاء طابع بصري دون ترقيم */}
-              <div className="absolute left-4 w-8 h-8 bg-[#2C5DB6] rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
-                <span className="text-xs">●</span>
-              </div>
-              <div className="ml-20 bg-gray-50 rounded-xl p-6 flex-1">
-                <h3 className="text-gray-800 font-semibold mb-2">{label}:</h3>
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {String(value)}
-                </p>
-              </div>
-            </motion.div>
-          );
-        })}
+        {product.application.mixing_note && (
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="text-gray-800 font-semibold">Mixing Note:</h3>
+            <p className="text-gray-700 mt-2">{product.application.mixing_note}</p>
+          </div>
+        )}
+
+        {product.application.pot_life && (
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="text-gray-800 font-semibold">Pot Life:</h3>
+            <p className="text-gray-700 mt-2">{product.application.pot_life}</p>
+          </div>
+        )}
+
+        {product.application.cleaner_thinner && (
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="text-gray-800 font-semibold">Cleaner / Thinner:</h3>
+            <p className="text-gray-700 mt-2">{product.application.cleaner_thinner}</p>
+          </div>
+        )}
+
+        {product.application.application_temperature && (
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="text-gray-800 font-semibold">Application Temperature:</h3>
+            <p className="text-gray-700 mt-2">{product.application.application_temperature}</p>
+          </div>
+        )}
+
+        {product.application.curing_note && (
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="text-gray-800 font-semibold">Curing Note:</h3>
+            <p className="text-gray-700 mt-2">{product.application.curing_note}</p>
+          </div>
+        )}
+
+        {product.application.number_of_coats && (
+          <div className="bg-gray-50 rounded-xl p-6">
+            <h3 className="text-gray-800 font-semibold">Number of Coats:</h3>
+            <p className="text-gray-700 mt-2">{product.application.number_of_coats}</p>
+          </div>
+        )}
       </div>
     </div>
   </section>
