@@ -199,7 +199,7 @@ const ProductForm = () => {
     try {
       const uploaded = await Promise.all(files.map(async (file) => {
         const fileName = `${Math.random()}.${file.name.split('.').pop()}`;
-        const { error } = await supabase.storage.from('product-images').upload(`product_images/${fileName}`, file);
+        const { error } = await supabase.storage.from('products').upload(`product_images/${fileName}`, file);
         if (error) {
           if (error.message.includes('Bucket not found')) {
             throw new Error('Storage bucket "product-images" not found. Please create this bucket in your Supabase project dashboard under Storage.');
