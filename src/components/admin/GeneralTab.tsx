@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { Upload, Trash2 } from 'lucide-react';
-import { InputField, ArrayInputField } from './FormComponents';
+import { InputField } from './FormComponents'; // تأكد أن ArrayInputField غير مستخدم هنا
 
 interface Props {
   data: any;
@@ -28,6 +27,7 @@ export const GeneralTab: React.FC<Props> = ({
   materials,
   usages,
 }) => {
+  // Packaging handlers
   const handlePackagingChange = (index: number, value: string) => {
     const newPack = [...(data.packaging || [])];
     newPack[index] = { size: value };
@@ -44,7 +44,24 @@ export const GeneralTab: React.FC<Props> = ({
     onChange('packaging', newPack);
   };
 
-  // قائمة الحقول الإضافية الجديدة
+  // ✅ Features handlers
+  const handleFeatureChange = (index: number, value: string) => {
+    const newFeatures = [...(data.features || [])];
+    newFeatures[index] = value;
+    onChange('features', newFeatures);
+  };
+
+  const addFeature = () => {
+    onChange('features', [...(data.features || []), '']);
+  };
+
+  const removeFeature = (index: number) => {
+    const newFeatures = [...(data.features || [])];
+    newFeatures.splice(index, 1);
+    onChange('features', newFeatures);
+  };
+
+  // قائمة الحقول الإضافية (بدون Features لأنها معالجة بشكل منفصل)
   const additionalFields = [
     { key: 'storing_conditions', label: 'Storing Conditions' },
     { key: 'joint_preparation', label: 'Joint Preparation' },
@@ -52,7 +69,6 @@ export const GeneralTab: React.FC<Props> = ({
     { key: 'movement_capacity', label: 'Movement Capacity' },
     { key: 'substrate_treatment', label: 'Substrate Treatment' },
     { key: 'surface_preparation', label: 'Surface Preparation' },
-    { key: 'features', label: 'Features' },
     { key: 'recommended_uses', label: 'Recommended Uses' },
   ];
 
@@ -77,7 +93,7 @@ export const GeneralTab: React.FC<Props> = ({
             onChange={(e) => onChange('brand', e.target.value)}
             className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
           >
-            <option value="">Select</option> 
+            <option value="">Select</option>
             {brands.map((b) => (
               <option key={b.id} value={b.value}>
                 {b.display_name || b.value}
@@ -199,7 +215,39 @@ export const GeneralTab: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* الحقول الإضافية (General Information) */}
+        {/* Features */}
+        <div className="md:col-span-2">
+          <label className="block text-sm font-medium text-gray-700 mb-2">Product Features</label>
+          <div className="space-y-2">
+            {(data.features || []).map((item: any, idx: number) => (
+              <div key={idx} className="flex gap-2">
+                <input
+                  type="text"
+                  value={item || ''}
+                  onChange={(e) => handleFeatureChange(idx, e.target.value)}
+                  className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  placeholder="e.g., UV resistance, Water repellent"
+                />
+                <button
+                  type="button"
+                  onClick={() => removeFeature(idx)}
+                  className="px-3 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addFeature}
+              className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+            >
+              + Add Feature
+            </button>
+          </div>
+        </div>
+
+        {/* الحقول الإضافية الأخرى */}
         {additionalFields.map((field) => (
           <div key={field.key} className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -213,37 +261,7 @@ export const GeneralTab: React.FC<Props> = ({
             />
           </div>
         ))}
-{/* Features */}
-<div className="md:col-span-2">
-  <label className="block text-sm font-medium text-gray-700 mb-2">Product Features</label>
-  <div className="space-y-2">
-    {(data.features || []).map((item: any, idx: number) => (
-      <div key={idx} className="flex gap-2">
-        <input
-          type="text"
-          value={item || ''} // لأن features مصفوفة من نصوص مباشرة، وليس كائنات
-          onChange={(e) => handleFeatureChange(idx, e.target.value)}
-          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          placeholder="e.g., UV resistance, Water repellent"
-        />
-        <button
-          type="button"
-          onClick={() => removeFeature(idx)}
-          className="px-3 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-        >
-          Remove
-        </button>
-      </div>
-    ))}
-    <button
-      type="button"
-      onClick={addFeature}
-      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-    >
-      + Add Feature
-    </button>
-  </div>
-</div>
+
         {/* Images */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
@@ -288,7 +306,7 @@ export const GeneralTab: React.FC<Props> = ({
                     Main
                   </label>
                 </div>
-              ))} 
+              ))}
             </div>
           </div>
         </div>
