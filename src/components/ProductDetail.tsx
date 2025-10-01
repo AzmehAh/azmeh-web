@@ -353,62 +353,34 @@ technical_specs: TECHNICAL_FIELDS
         </section>
       )}
 
-      {/* Features & Applications */}
-      {(product.features.length > 0 || product.applications.length > 0) && (
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* Features */}
-              {product.features.length > 0 && (
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center">
-                    <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
-                    Key Features
-                  </h2>
-                  <div className="space-y-4">
-                    {product.features.map((feature, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: -20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
-                        className="flex items-center bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-                      >
-                        <div className="w-3 h-3 bg-green-500 rounded-full mr-4 flex-shrink-0" />
-                        <span className="text-gray-700 font-medium">{feature}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Applications */}
-              {product.applications.length > 0 && (
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center">
-                    <Wrench className="w-8 h-8 text-[#2C5DB6] mr-3" />
-                    Applications
-                  </h2>
-                  <div className="space-y-4">
-                    {product.applications.map((application, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: 20 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ duration: 0.4, delay: index * 0.1 }}
-                        className="flex items-center bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow"
-                      >
-                        <div className="w-3 h-3 bg-[#2C5DB6] rounded-full mr-4 flex-shrink-0" />
-                        <span className="text-gray-700 font-medium">{application}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
+   {/* Features */}
+{product.features.length > 0 && (
+  <section className="py-16 bg-gray-50">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto"> {/* يجعل المحتوى في المنتصف */}
+        <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center justify-center">
+          <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
+          Key Features
+        </h2>
+        <div className="space-y-4">
+          {product.features.map((feature, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }} // تغيير x إلى y لتأثير سقوط طبيعي من الأعلى
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: index * 0.1 }}
+              viewport={{ once: true }} // اختياري: لتشغيل التأثير مرة واحدة فقط
+              className="flex items-center bg-white p-4 rounded-xl shadow-sm" // ✅ تم إزالة hover:shadow-md
+            >
+              <div className="w-3 h-3 bg-green-500 rounded-full mr-4 flex-shrink-0" />
+              <span className="text-gray-700 font-medium">{feature}</span>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
 
       {/* Instructions */}
       {product.instructions.length > 0 && (
