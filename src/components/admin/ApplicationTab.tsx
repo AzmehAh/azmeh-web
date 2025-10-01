@@ -1,6 +1,6 @@
 // src/components/admin/ApplicationTab.tsx
 import React from 'react';
-import { InputField, ArrayInputField } from './FormComponents';
+import { InputField } from './FormComponents';
 
 interface Props {
   data: any;
@@ -10,59 +10,20 @@ interface Props {
 export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
   const handleChange = (field: string, value: any) => onChange(field, value);
 
-  const handleArrayChange = (field: string, index: number, value: string) => {
-    const arr = [...(data[field] || [])];
-    arr[index] = value;
-    onChange(field, arr);
-  };
-
-  const addArrayItem = (field: string) => {
-    const arr = [...(data[field] || []), ''];
-    onChange(field, arr);
-  };
-
-  const removeArrayItem = (field: string, index: number) => {
-    const arr = [...(data[field] || [])];
-    arr.splice(index, 1);
-    onChange(field, arr);
-  };
-
   return (
-    <div className="space-y-4">
+    <div className="grid grid-cols-1 gap-4">
       <InputField 
         label="Method of Application" 
         value={data.method_of_application || ''} 
         onChange={(v) => handleChange('method_of_application', v)} 
+        type="textarea"
       />
 
       <InputField 
         label="Mixing Ratio" 
         value={data.mixing_ratio || ''} 
         onChange={(v) => handleChange('mixing_ratio', v)} 
-      />
-
-      <InputField 
-        label="Pot Life" 
-        value={data.pot_life || ''} 
-        onChange={(v) => handleChange('pot_life', v)} 
-      />
-
-      <InputField 
-        label="Cleaner" 
-        value={data.cleaner || ''} 
-        onChange={(v) => handleChange('cleaner', v)} 
-      />
-
-      <InputField 
-        label="Thinner" 
-        value={data.thinner || ''} 
-        onChange={(v) => handleChange('thinner', v)} 
-      />
-
-      <InputField 
-        label="Application Temperature" 
-        value={data.application_temperature || ''} 
-        onChange={(v) => handleChange('application_temperature', v)} 
+        type="textarea"
       />
 
       <InputField 
@@ -73,18 +34,46 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <InputField 
+        label="Mixing Steps" 
+        value={data.mixing_steps || ''} 
+        onChange={(v) => handleChange('mixing_steps', v)} 
+        type="textarea"
+      />
+
+      <InputField 
+        label="Pot Life" 
+        value={data.pot_life || ''} 
+        onChange={(v) => handleChange('pot_life', v)} 
+        type="textarea"
+      />
+
+      <InputField 
+        label="Cleaner / Thinner" 
+        value={data.cleaner_thinner || ''} 
+        onChange={(v) => handleChange('cleaner_thinner', v)} 
+        type="textarea"
+      />
+
+      <InputField 
+        label="Application Temperature" 
+        value={data.application_temperature || ''} 
+        onChange={(v) => handleChange('application_temperature', v)} 
+        type="textarea"
+      />
+
+      <InputField 
         label="Curing Note" 
         value={data.curing_note || ''} 
         onChange={(v) => handleChange('curing_note', v)} 
         type="textarea"
+        rows={5}
       />
 
-      <ArrayInputField 
-        label="Mixing Steps"
-        items={data.mixing_steps || []}
-        onAdd={() => addArrayItem('mixing_steps')}
-        onRemove={(idx) => removeArrayItem('mixing_steps', idx)}
-        onChange={(idx, v) => handleArrayChange('mixing_steps', idx, v)}
+      <InputField 
+        label="Number of Coats" 
+        value={data.number_of_coats || ''} 
+        onChange={(v) => handleChange('number_of_coats', v)} 
+        type="textarea"
       />
     </div>
   );
