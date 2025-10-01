@@ -474,7 +474,7 @@ const ProductDetail = () => {
               <div className="bg-orange-500 px-6 py-4">
                 <h3 className="text-xl font-bold text-white">First Aid</h3>
               </div>
-              <div className="p-6">
+              <div className="p-6"> 
                 {product.safety_first_aid.length > 0 ? (
                   <div className="space-y-3">
                     {product.safety_first_aid.map((aid, index) => (
@@ -492,7 +492,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
-    </div> 
+    </div>
   );
 };
 
