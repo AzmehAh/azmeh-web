@@ -26,14 +26,15 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="grid grid-cols-1 gap-6">
       <ArrayInputField
         label="Safety Precautions"
         items={data.safety_precautions || []}
         onAdd={() => addArrayItem('safety_precautions')}
-        onRemove={(idx) => removeArrayItem('safety_precautions', idx)}
+        onRemove={(idx) => removeArrayItem('safety_precautions', idx)} 
         onChange={(idx, val) => handleArrayChange('safety_precautions', idx, val)}
       />
+
       <ArrayInputField
         label="First Aid Measures"
         items={data.safety_first_aid || []}
@@ -43,4 +44,4 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
       />
     </div>
   );
-}; 
+};
