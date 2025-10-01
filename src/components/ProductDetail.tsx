@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Download, Package, FileText, CheckCircle, Wrench, Shield } from "lucide-react";
-import { supabase, api } from "../lib/supabase"; // مسار معدل
+import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
 
-// تعريف واجهة المنتج
+// =============== تعريف واجهة المنتج ===============
 interface Product {
   id: string;
   name: string;
@@ -26,8 +26,10 @@ interface Product {
   storage: string;
   safety_precautions: string[];
   safety_first_aid: string[];
+  application: Record<string, string>; // 👈 أضفنا هذا
 }
-// تعريف الحقول التقنية كما في TechnicalTab
+
+// =============== الحقول التقنية ===============
 const TECHNICAL_FIELDS = [
   { key: 'number_of_coats', label: 'Number of Coats' },
   { key: 'tensile_adhesion_strength', label: 'Tensile Adhesion Strength' },
@@ -61,6 +63,21 @@ const TECHNICAL_FIELDS = [
   { key: 'component_b', label: 'Component B' },
   { key: 'note', label: 'Note' },
 ];
+
+// =============== حقول Application ===============
+const APPLICATION_FIELDS = [
+  { key: 'method_of_application', label: 'Method of Application' },
+  { key: 'mixing_ratio', label: 'Mixing Ratio' },
+  { key: 'mixing_note', label: 'Mixing Note' },
+  { key: 'mixing_steps', label: 'Mixing Steps' },
+  { key: 'pot_life', label: 'Pot Life' },
+  { key: 'cleaner_thinner', label: 'Cleaner / Thinner' },
+  { key: 'application_temperature', label: 'Application Temperature' },
+  { key: 'curing_note', label: 'Curing Note' },
+  { key: 'number_of_coats', label: 'Number of Coats' },
+];
+
+// =============== شعارات الماركات ===============
 const brands = [
   { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
   { name: "SRT",         logo: "/images/SRT-.gif" },
@@ -74,7 +91,7 @@ const brands = [
   { name: "AlDahab",     logo: "/images/AlDahab.png" },
 ];
 
-
+// =============== مكوّن صفحة تفاصيل المنتج ===============
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<Product | null>(null);
@@ -96,7 +113,6 @@ const ProductDetail = () => {
     }
   }, [product]);
 
-  // دالة مساعدة لتحليل الحقول المصفوفة
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
     if (typeof field === 'string') {
@@ -113,7 +129,6 @@ const ProductDetail = () => {
     try {
       setLoading(true);
       
-      // جلب بيانات المنتج
       const { data: productData, error: productError } = await supabase
         .from('products')
         .select('*')
@@ -126,7 +141,6 @@ const ProductDetail = () => {
         return;
       }
 
-      // جلب صور المنتج مع ترتيب الصورة الرئيسية أولاً
       const { data: imagesData, error: imagesError } = await supabase
         .from('product_images')
         .select('*')
@@ -136,8 +150,16 @@ const ProductDetail = () => {
 
       if (imagesError) throw imagesError;
 
-      // جلب الصورة الرئيسية
       const mainImage = await api.getMainProductImage(productId);
+
+      // 👇 إنشاء كائن application
+      const application = APPLICATION_FIELDS.reduce((acc, { key, label }) => {
+        const value = productData[key] || '';
+        if (value.trim() !== '') {
+          acc[label] = value;
+        }
+        return acc;
+      }, {} as Record<string, string>);
 
       const formattedProduct: Product = {
         id: productData.id,
@@ -152,20 +174,20 @@ const ProductDetail = () => {
         material: productData.material,
         usage: productData.usage,
         packaging: parseArrayField(productData.packaging),
-        // تحويل الحقول الفردية إلى مصفوفة technical_specs
-technical_specs: TECHNICAL_FIELDS
-  .map(({ key, label }) => ({
-    property: label,
-    value: productData[key] || '',
-    standard: '' // يمكنك حذفه لاحقاً إذا لم تكن بحاجة إليه
-  }))
-  .filter(spec => spec.value.trim() !== ''), // إخفاء الحقول الفارغة
+        technical_specs: TECHNICAL_FIELDS
+          .map(({ key, label }) => ({
+            property: label,
+            value: productData[key] || '',
+            standard: ''
+          }))
+          .filter(spec => spec.value.trim() !== ''),
         features: parseArrayField(productData.features),
         applications: parseArrayField(productData.applications),
         instructions: parseArrayField(productData.instructions),
         storage: productData.storage || "",
         safety_precautions: parseArrayField(productData.safety_precautions),
-        safety_first_aid: parseArrayField(productData.safety_first_aid)
+        safety_first_aid: parseArrayField(productData.safety_first_aid),
+        application, // 👈 أضفناه هنا
       };
 
       setProduct(formattedProduct);
@@ -178,8 +200,6 @@ technical_specs: TECHNICAL_FIELDS
   };
 
   const handleDownloadDatasheet = () => {
-    // يمكنك تنفيذ هذه الوظيفة لاحقاً
-    console.log("Download datasheet for product:", product?.id);
     alert("سيتم تنزيل ورقة البيانات الفنية قريباً");
   };
 
@@ -202,9 +222,7 @@ technical_specs: TECHNICAL_FIELDS
       <div className="min-h-[70vh] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Product Not Found</h1>
-          <p className="text-gray-600 mb-8">
-            The product you're looking for doesn't exist.
-          </p>
+          <p className="text-gray-600 mb-8">The product you're looking for doesn't exist.</p>
           <Link
             to="/products"
             className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
@@ -221,7 +239,6 @@ technical_specs: TECHNICAL_FIELDS
       {/* Hero Section */}
       <section className="py-24 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
           <div className="relative mb-8">
             <div className="flex items-center text-sm text-white">
               <Link to="/" className="hover:text-[#0055A3] transition-colors">Home</Link>
@@ -237,7 +254,6 @@ technical_specs: TECHNICAL_FIELDS
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column */}
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
               <p className="text-xl text-blue-100 mb-4 leading-relaxed">{product.description}</p>
@@ -273,7 +289,6 @@ technical_specs: TECHNICAL_FIELDS
               </button>
             </div>
 
-            {/* Right Column */}
             <div className="relative">
               {brandLogo && (
                 <div className="mb-4 text-right">
@@ -334,7 +349,6 @@ technical_specs: TECHNICAL_FIELDS
                     <tr>
                       <th className="px-8 py-4 text-left font-semibold text-gray-800">Property</th>
                       <th className="px-8 py-4 text-left font-semibold text-gray-800">Value</th>
-                     
                     </tr>
                   </thead>
                   <tbody>
@@ -342,7 +356,6 @@ technical_specs: TECHNICAL_FIELDS
                       <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
                         <td className="px-8 py-4 font-medium text-gray-800">{spec.property}</td>
                         <td className="px-8 py-4 text-[#2C5DB6] font-semibold">{spec.value}</td>
-                       
                       </tr>
                     ))}
                   </tbody>
@@ -353,101 +366,54 @@ technical_specs: TECHNICAL_FIELDS
         </section>
       )}
 
-     {/* Features */}
-{product.features.length > 0 && (
-  <section className="py-16 bg-gray-50">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto"> {/* يجعل المحتوى في المنتصف */}
-        <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center justify-center">
-          <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
-          Key Features
-        </h2>
-        <div className="space-y-4">
-          {product.features.map((feature, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }} // تغيير x إلى y لتأثير سقوط طبيعي من الأعلى
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.1 }}
-              viewport={{ once: true }} // اختياري: لتشغيل التأثير مرة واحدة فقط
-              className="flex items-center bg-white p-4 rounded-xl shadow-sm" // ✅ تم إزالة hover:shadow-md
-            >
-              <div className="w-3 h-3 bg-green-500 rounded-full mr-4 flex-shrink-0" />
-              <span className="text-gray-700 font-medium">{feature}</span>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </div>
-  </section>
-)}
-{/* Application Details */}
-{product.application && (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-        Application Details
-      </h2>
-      <div className="max-w-4xl mx-auto space-y-8">
-        {product.application.method_of_application && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Method of Application:</h3>
-            <p className="text-gray-700 mt-2">{product.application.method_of_application}</p>
+      {/* Features */}
+      {product.features.length > 0 && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center justify-center">
+                <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
+                Key Features
+              </h2>
+              <div className="space-y-4">
+                {product.features.map((feature, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="flex items-center bg-white p-4 rounded-xl shadow-sm"
+                  >
+                    <div className="w-3 h-3 bg-green-500 rounded-full mr-4 flex-shrink-0" />
+                    <span className="text-gray-700 font-medium">{feature}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
           </div>
-        )}
+        </section>
+      )}
 
-        {product.application.mixing_ratio && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Mixing Ratio:</h3>
-            <p className="text-gray-700 mt-2">{product.application.mixing_ratio}</p>
+      {/* ✅ Application Details - القسم الجديد */}
+      {product.application && Object.keys(product.application).length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
+              Application Details
+            </h2>
+            <div className="max-w-4xl mx-auto space-y-8">
+              {Object.entries(product.application).map(([label, value]) => (
+                <div key={label} className="bg-gray-50 rounded-xl p-6">
+                  <h3 className="text-gray-800 font-semibold">{label}:</h3>
+                  <p className="text-gray-700 mt-2 whitespace-pre-line">{value}</p>
+                </div>
+              ))}
+            </div>
           </div>
-        )}
+        </section>
+      )}
 
-        {product.application.mixing_note && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Mixing Note:</h3>
-            <p className="text-gray-700 mt-2">{product.application.mixing_note}</p>
-          </div>
-        )}
-
-        {product.application.pot_life && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Pot Life:</h3>
-            <p className="text-gray-700 mt-2">{product.application.pot_life}</p>
-          </div>
-        )}
-
-        {product.application.cleaner_thinner && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Cleaner / Thinner:</h3>
-            <p className="text-gray-700 mt-2">{product.application.cleaner_thinner}</p>
-          </div>
-        )}
-
-        {product.application.application_temperature && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Application Temperature:</h3>
-            <p className="text-gray-700 mt-2">{product.application.application_temperature}</p>
-          </div>
-        )}
-
-        {product.application.curing_note && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Curing Note:</h3>
-            <p className="text-gray-700 mt-2">{product.application.curing_note}</p>
-          </div>
-        )}
-
-        {product.application.number_of_coats && (
-          <div className="bg-gray-50 rounded-xl p-6">
-            <h3 className="text-gray-800 font-semibold">Number of Coats:</h3>
-            <p className="text-gray-700 mt-2">{product.application.number_of_coats}</p>
-          </div>
-        )}
-      </div>
-    </div>
-  </section>
-)}
       {/* Storage */}
       {product.storage && (
         <section className="py-16 bg-white">
@@ -457,7 +423,7 @@ technical_specs: TECHNICAL_FIELDS
               Storage Requirements
             </h2>
             <div
-              className="max-w-4xl prose prose-lg  mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
+              className="max-w-4xl prose prose-lg mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storage) }}
             />
           </div>
