@@ -7,7 +7,7 @@ interface Props {
   onChange: (field: string, value: any) => void;
 }
 
-export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
+export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => { 
   const handleChange = (field: string, value: any) => onChange(field, value);
 
   return (
