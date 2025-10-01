@@ -74,7 +74,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
   onAdd={() => addArrayItem('recommended_uses')}
   onRemove={(idx) => removeArrayItem('recommended_uses', idx)}
   onChange={(idx, val) => handleArrayChange('recommended_uses', idx, String(val))}
-  inputType="text" // ← تأكد من استخدام هذا إذا كان المكوّن يدعمه
+  inputType="text" 
 />
 
     </div>
