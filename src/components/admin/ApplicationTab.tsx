@@ -98,3 +98,4 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
     </div>
   );
 };
+ 
