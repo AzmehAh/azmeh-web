@@ -213,7 +213,37 @@ export const GeneralTab: React.FC<Props> = ({
             />
           </div>
         ))}
-
+{/* Features */}
+<div className="md:col-span-2">
+  <label className="block text-sm font-medium text-gray-700 mb-2">Product Features</label>
+  <div className="space-y-2">
+    {(data.features || []).map((item: any, idx: number) => (
+      <div key={idx} className="flex gap-2">
+        <input
+          type="text"
+          value={item || ''} // لأن features مصفوفة من نصوص مباشرة، وليس كائنات
+          onChange={(e) => handleFeatureChange(idx, e.target.value)}
+          className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+          placeholder="e.g., UV resistance, Water repellent"
+        />
+        <button
+          type="button"
+          onClick={() => removeFeature(idx)}
+          className="px-3 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+        >
+          Remove
+        </button>
+      </div>
+    ))}
+    <button
+      type="button"
+      onClick={addFeature}
+      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+    >
+      + Add Feature
+    </button>
+  </div>
+</div>
         {/* Images */}
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
