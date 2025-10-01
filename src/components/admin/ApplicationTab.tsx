@@ -65,29 +65,20 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
         onChange={(v) => handleChange('application_temperature', v)} 
       />
 
-      {/* Mixing Note */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Mixing Note</label>
-        <textarea
-          value={data.mixing_note || ''}
-          onChange={(e) => handleChange('mixing_note', e.target.value)}
-          rows={3}
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-        />
-      </div>
+      <InputField 
+        label="Mixing Note" 
+        value={data.mixing_note || ''} 
+        onChange={(v) => handleChange('mixing_note', v)} 
+        type="textarea"
+      />
 
-      {/* Curing Note */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Curing Note</label>
-        <textarea
-          value={data.curing_note || ''}
-          onChange={(e) => handleChange('curing_note', e.target.value)}
-          rows={3}
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-        />
-      </div>
+      <InputField 
+        label="Curing Note" 
+        value={data.curing_note || ''} 
+        onChange={(v) => handleChange('curing_note', v)} 
+        type="textarea"
+      />
 
-      {/* Mixing Steps - Array */}
       <ArrayInputField 
         label="Mixing Steps"
         items={data.mixing_steps || []}
@@ -98,4 +89,3 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
     </div>
   );
 };
- 
