@@ -50,7 +50,7 @@ const ProductForm = () => {
     substrate_treatment: '',
     surface_preparation: '',
     general_features: [],
-    recommended_uses: [],
+    recommended_uses: '',
     // Application
     method_of_application: '',
     mixing_ratio: '',
@@ -159,7 +159,7 @@ const ProductForm = () => {
         ...productData,
         features: parseArrayField(productData?.features),
         general_features: parseArrayField(productData?.general_features),
-        recommended_uses: parseArrayField(productData?.recommended_uses),
+      
         applications: parseArrayField(productData?.applications),
         mixing_steps: parseArrayField(productData?.mixing_steps),
         safety_precautions: parseArrayField(productData?.safety_precautions),
@@ -263,7 +263,7 @@ const ProductForm = () => {
   safety_first_aid: formData.safety_first_aid || [],
   packaging: JSON.stringify(formData.packaging || []),
   general_features: formData.general_features || [],
-  recommended_uses: formData.recommended_uses || [],
+ 
   mixing_steps: formData.mixing_steps || [],
 };
 
