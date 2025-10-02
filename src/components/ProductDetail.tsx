@@ -58,6 +58,10 @@ interface Product {
 }
 
 const TECHNICAL_FIELDS = [
+  { key: 'gloss', label: 'Gloss' },
+  { key: 'color', label: 'Color' },
+  { key: 'component_a', label: 'Component A' },
+  { key: 'component_b', label: 'Component B' },
   { key: 'number_of_coats', label: 'Number of Coats' },
   { key: 'tensile_adhesion_strength', label: 'Tensile Adhesion Strength' },
   { key: 'material_consumption', label: 'Material Consumption' },
@@ -84,10 +88,7 @@ const TECHNICAL_FIELDS = [
   { key: 'flexibility', label: 'Flexibility' },
   { key: 'voc', label: 'VOC' },
   { key: 'volume_solids', label: 'Volume Solids' },
-  { key: 'gloss', label: 'Gloss' },
-  { key: 'color', label: 'Color' },
-  { key: 'component_a', label: 'Component A' },
-  { key: 'component_b', label: 'Component B' },
+  
   { key: 'note', label: 'Note' },
 ];
 
