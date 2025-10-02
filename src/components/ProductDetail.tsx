@@ -36,24 +36,23 @@ interface Product {
     application_temperature?: string;
     curing_note?: string;
     number_of_coats?: string;
-  dry_to_touch?: string;
-  dry_to_handle?: string;
-  complete_setting?: string;
-  grouting_time?: string;
-  adjustability_time?: string;
-  dry_to_topcoat?: string;
-  initial_setting?: string;
-  fully_cured?: string;
-  dry_to_sand?: string;
-  drying_time_note?: string;
-   storing_conditions?: string;
+    dry_to_touch?: string;
+    dry_to_handle?: string;
+    complete_setting?: string;
+    grouting_time?: string;
+    adjustability_time?: string;
+    dry_to_topcoat?: string;
+    initial_setting?: string;
+    fully_cured?: string;
+    dry_to_sand?: string;
+    drying_time_note?: string;
+    storing_conditions?: string;
     joint_preparation?: string;
-  joint_size?: string;
-  movement_capacity?: string;
-  substrate_treatment?: string;
-  surface_preparation?: string;
-  recommended_uses?: string[];
-
+    joint_size?: string;
+    movement_capacity?: string;
+    substrate_treatment?: string;
+    surface_preparation?: string;
+    recommended_uses?: string[];
   };
 }
 
@@ -246,7 +245,6 @@ const ProductDetail = () => {
             property: label,
             value: productData[key] || '',
             standard: ''
-            
           }))
           .filter(spec => spec.value && spec.value.toString().trim() !== ''),
         features: parseArrayField(productData.features),
@@ -256,26 +254,23 @@ const ProductDetail = () => {
         safety_precautions: parseArrayField(productData.safety_precautions),
         safety_first_aid: parseArrayField(productData.safety_first_aid),
         application: createApplicationObject(productData),
-         
-  joint_preparation: productData.joint_preparation || '',
-  joint_size: productData.joint_size || '',
-  movement_capacity: productData.movement_capacity || '',
-  substrate_treatment: productData.substrate_treatment || '',
-  surface_preparation: productData.surface_preparation || '',
-  recommended_uses: parseArrayField(productData.recommended_uses),
-
-       
-         storing_conditions: productData.storing_conditions || '',
-  dry_to_touch: productData.dry_to_touch || '',
-  dry_to_handle: productData.dry_to_handle || '',
-  complete_setting: productData.complete_setting || '',
-  grouting_time: productData.grouting_time || '',
-  adjustability_time: productData.adjustability_time || '',
-  dry_to_topcoat: productData.dry_to_topcoat || '',
-  initial_setting: productData.initial_setting || '',
-  fully_cured: productData.fully_cured || '',
-  dry_to_sand: productData.dry_to_sand || '',
-  drying_time_note: productData.drying_time_note || ''
+        joint_preparation: productData.joint_preparation || '',
+        joint_size: productData.joint_size || '',
+        movement_capacity: productData.movement_capacity || '',
+        substrate_treatment: productData.substrate_treatment || '',
+        surface_preparation: productData.surface_preparation || '',
+        recommended_uses: parseArrayField(productData.recommended_uses),
+        storing_conditions: productData.storing_conditions || '',
+        dry_to_touch: productData.dry_to_touch || '',
+        dry_to_handle: productData.dry_to_handle || '',
+        complete_setting: productData.complete_setting || '',
+        grouting_time: productData.grouting_time || '',
+        adjustability_time: productData.adjustability_time || '',
+        dry_to_topcoat: productData.dry_to_topcoat || '',
+        initial_setting: productData.initial_setting || '',
+        fully_cured: productData.fully_cured || '',
+        dry_to_sand: productData.dry_to_sand || '',
+        drying_time_note: productData.drying_time_note || ''
       };
 
       console.log('Formatted product:', formattedProduct);
@@ -348,8 +343,8 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
+      {/* Hero Section - now consistent with py-16 */}
+      <section className="py-16 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <div className="relative mb-8">
@@ -459,74 +454,76 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
-{/* Additional Technical Information */}
-{(
-  product.joint_preparation ||
-  product.joint_size ||
-  product.movement_capacity ||
-  product.substrate_treatment ||
-  product.surface_preparation ||
-  (product.recommended_uses && product.recommended_uses.length > 0)
-) && (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
-          Technical Guidelines
-        </h2>
-        <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="divide-y divide-gray-200">
-            {product.joint_preparation && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Joint Preparation:</span> {product.joint_preparation}
-                </p>
+
+      {/* Additional Technical Information */}
+      {(
+        product.joint_preparation ||
+        product.joint_size ||
+        product.movement_capacity ||
+        product.substrate_treatment ||
+        product.surface_preparation ||
+        (product.recommended_uses && product.recommended_uses.length > 0)
+      ) && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
+                Technical Guidelines
+              </h2>
+              <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="divide-y divide-gray-200">
+                  {product.joint_preparation && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Joint Preparation:</span> {product.joint_preparation}
+                      </p>
+                    </div>
+                  )}
+                  {product.joint_size && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Joint Size:</span> {product.joint_size}
+                      </p>
+                    </div>
+                  )}
+                  {product.movement_capacity && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Movement Capacity:</span> {product.movement_capacity}
+                      </p>
+                    </div>
+                  )}
+                  {product.substrate_treatment && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Substrate Treatment:</span> {product.substrate_treatment}
+                      </p>
+                    </div>
+                  )}
+                  {product.surface_preparation && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Surface Preparation:</span> {product.surface_preparation}
+                      </p>
+                    </div>
+                  )}
+                  {product.recommended_uses && product.recommended_uses.length > 0 && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800 mb-2 font-medium">Recommended Uses:</p>
+                      <ul className="list-disc list-inside space-y-1 text-gray-700">
+                        {product.recommended_uses.map((use, index) => (
+                          <li key={index}>{use}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </div>
               </div>
-            )}
-            {product.joint_size && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Joint Size:</span> {product.joint_size}
-                </p>
-              </div>
-            )}
-            {product.movement_capacity && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Movement Capacity:</span> {product.movement_capacity}
-                </p>
-              </div>
-            )}
-            {product.substrate_treatment && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Substrate Treatment:</span> {product.substrate_treatment}
-                </p>
-              </div>
-            )}
-            {product.surface_preparation && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Surface Preparation:</span> {product.surface_preparation}
-                </p>
-              </div>
-            )}
-            {product.recommended_uses && product.recommended_uses.length > 0 && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800 mb-2 font-medium">Recommended Uses:</p>
-                <ul className="list-disc list-inside space-y-1 text-gray-700">
-                  {product.recommended_uses.map((use, index) => (
-                    <li key={index}>{use}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-)}
+        </section>
+      )}
+
       {/* Technical Specifications */}
       {product.technical_specs && product.technical_specs.length > 0 && (
         <section className="py-16 bg-white">
@@ -566,7 +563,7 @@ const ProductDetail = () => {
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-gray-800 mb-8 flex items-center justify-center">
+              <h2 className="text-3xl font-bold text-gray-800 mb-10 flex items-center justify-center">
                 <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
                 Key Features
               </h2>
@@ -590,171 +587,169 @@ const ProductDetail = () => {
         </section>
       )}
 
-{/* Application Details - Same Timeline as Instructions */}
-{product.application && (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-        Application Details
-      </h2>
-      <div className="max-w-4xl mx-auto relative">
-        {/* نفس الخط الزمني تمامًا */}
-        <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
+      {/* Application Details */}
+      {product.application && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
+              Application Details
+            </h2>
+            <div className="max-w-4xl mx-auto relative">
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
 
-        {/* تحويل كائن application إلى مصفوفة وعرضها بنفس هيكل Instructions */}
-        {Object.entries(product.application)
-          .filter(([, value]) => value) // تجاهل الحقول الفارغة
-          .map(([key, value], index) => {
-            const label = key
-              .replace(/_/g, ' ')
-              .replace(/\b\w/g, char => char.toUpperCase());
+              {Object.entries(product.application)
+                .filter(([, value]) => value)
+                .map(([key, value], index) => {
+                  const label = key
+                    .replace(/_/g, ' ')
+                    .replace(/\b\w/g, char => char.toUpperCase());
 
-            return (
-              <motion.div
-                key={key}
-                className="relative flex items-start mb-12 last:mb-0"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }} 
-                transition={{ duration: 0.5, delay: index * 0.2 }}
-                viewport={{ once: true }}
-              >
-                {/* النقطة: نفس مكان الرقم تمامًا، نفس الحجم تقريبًا، لكن بدون نص */}
-                <div className="absolute left-4 w-8 h-8 bg-[#2C5DB6] rounded-full flex items-center justify-center z-10">
-                  <div className="w-2 h-2 rounded-full bg-white"></div>
-                </div>
+                  return (
+                    <motion.div
+                      key={key}
+                      className="relative flex items-start mb-12 last:mb-0"
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }} 
+                      transition={{ duration: 0.5, delay: index * 0.2 }}
+                      viewport={{ once: true }}
+                    >
+                      <div className="absolute left-4 w-8 h-8 bg-[#2C5DB6] rounded-full flex items-center justify-center z-10">
+                        <div className="w-2 h-2 rounded-full bg-white"></div>
+                      </div>
 
-                {/* نفس المحتوى تمامًا، لكن بدل <p> عادي، نضع عنوان + معلومة في سطر واحد */}
-                <div className="ml-20 bg-gray-50 rounded-xl p-6 flex-1">
-                  <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
-                    <span className="font-semibold text-gray-800">{label}:</span>
-                    <span className="text-gray-700 leading-relaxed">{value}</span>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-      </div>
-    </div>
-  </section>
-)}
- {/* Drying Time */}
-{(
-  product.dry_to_touch ||
-  product.dry_to_handle ||
-  product.complete_setting ||
-  product.grouting_time ||
-  product.adjustability_time ||
-  product.dry_to_topcoat ||
-  product.initial_setting ||
-  product.fully_cured ||
-  product.dry_to_sand ||
-  product.drying_time_note
-) && (
-  <section className="py-16 bg-gray-50">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 flex items-center justify-center">
-          <Wrench className="w-8 h-8 text-blue-600 mr-3" />
-          Drying Time
-        </h2>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="divide-y divide-gray-100">
-            {product.dry_to_touch && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Dry to Touch:</span> {product.dry_to_touch}
-                </p>
-              </div>
-            )}
-            {product.dry_to_handle && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Dry to Handle:</span> {product.dry_to_handle}
-                </p>
-              </div>
-            )}
-            {product.complete_setting && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Complete Setting:</span> {product.complete_setting}
-                </p>
-              </div>
-            )}
-            {product.grouting_time && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Grouting Time:</span> {product.grouting_time}
-                </p>
-              </div>
-            )}
-            {product.adjustability_time && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Adjustability Time:</span> {product.adjustability_time}
-                </p>
-              </div>
-            )}
-            {product.dry_to_topcoat && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Dry to Topcoat:</span> {product.dry_to_topcoat}
-                </p>
-              </div>
-            )}
-            {product.initial_setting && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Initial Setting:</span> {product.initial_setting}
-                </p>
-              </div>
-            )}
-            {product.fully_cured && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Fully Cured:</span> {product.fully_cured}
-                </p>
-              </div>
-            )}
-            {product.dry_to_sand && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Dry to Sand:</span> {product.dry_to_sand}
-                </p>
-              </div>
-            )}
-            {product.drying_time_note && (
-              <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Note:</span> {product.drying_time_note}
-                </p>
-              </div>
-            )}
+                      <div className="ml-20 bg-gray-50 rounded-xl p-6 flex-1">
+                        <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
+                          <span className="font-semibold text-gray-800">{label}:</span>
+                          <span className="text-gray-700 leading-relaxed">{value}</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-)}
-     {/* Storage */}
-{product.storing_conditions && (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 className="text-3xl font-bold text-center text-gray-800 mb-12 flex items-center justify-center">
-        <Shield className="w-8 h-8 text-green-600 mr-3" />
-       Storing Conditions
-      </h2>
-      <div
-        className="max-w-4xl prose prose-lg mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
-        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storing_conditions) }}
-      />
-    </div>
-  </section>
-)}
+        </section>
+      )}
+
+      {/* Drying Time */}
+      {(
+        product.dry_to_touch ||
+        product.dry_to_handle ||
+        product.complete_setting ||
+        product.grouting_time ||
+        product.adjustability_time ||
+        product.dry_to_topcoat ||
+        product.initial_setting ||
+        product.fully_cured ||
+        product.dry_to_sand ||
+        product.drying_time_note
+      ) && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+                <Wrench className="w-8 h-8 text-blue-600 mr-3" />
+                Drying Time
+              </h2>
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="divide-y divide-gray-100">
+                  {product.dry_to_touch && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Dry to Touch:</span> {product.dry_to_touch}
+                      </p>
+                    </div>
+                  )}
+                  {product.dry_to_handle && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Dry to Handle:</span> {product.dry_to_handle}
+                      </p>
+                    </div>
+                  )}
+                  {product.complete_setting && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Complete Setting:</span> {product.complete_setting}
+                      </p>
+                    </div>
+                  )}
+                  {product.grouting_time && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Grouting Time:</span> {product.grouting_time}
+                      </p>
+                    </div>
+                  )}
+                  {product.adjustability_time && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Adjustability Time:</span> {product.adjustability_time}
+                      </p>
+                    </div>
+                  )}
+                  {product.dry_to_topcoat && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Dry to Topcoat:</span> {product.dry_to_topcoat}
+                      </p>
+                    </div>
+                  )}
+                  {product.initial_setting && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Initial Setting:</span> {product.initial_setting}
+                      </p>
+                    </div>
+                  )}
+                  {product.fully_cured && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Fully Cured:</span> {product.fully_cured}
+                      </p>
+                    </div>
+                  )}
+                  {product.dry_to_sand && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Dry to Sand:</span> {product.dry_to_sand}
+                      </p>
+                    </div>
+                  )}
+                  {product.drying_time_note && (
+                    <div className="px-6 py-4">
+                      <p className="text-gray-800">
+                        <span className="font-medium">Note:</span> {product.drying_time_note}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Storage */}
+      {product.storing_conditions && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+              <Shield className="w-8 h-8 text-green-600 mr-3" />
+              Storing Conditions
+            </h2>
+            <div
+              className="max-w-4xl prose prose-lg mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storing_conditions) }}
+            />
+          </div>
+        </section>
+      )}
 
       {/* Safety */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-12 flex items-center justify-center">
+          <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
             <Shield className="w-8 h-8 text-red-500 mr-3" />
             Safety Information
           </h2>
