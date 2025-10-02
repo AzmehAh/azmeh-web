@@ -590,7 +590,7 @@ const ProductDetail = () => {
         </section>
       )} 
 
-     {/* Application Instructions */}
+{/* Application Instructions */}
 {product.application && (
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -603,58 +603,82 @@ const ProductDetail = () => {
           <div className="divide-y divide-gray-100">
             {product.application.method_of_application && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Method of Application:</span> {product.application.method_of_application}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Method of Application:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.method_of_application}
+                  </span>
+                </div>
               </div>
             )}
             {product.application.mixing_ratio && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Mixing Ratio:</span> {product.application.mixing_ratio}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Mixing Ratio:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.mixing_ratio}
+                  </span>
+                </div>
               </div>
             )}
             {product.application.mixing_note && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Mixing Note:</span> {product.application.mixing_note}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Mixing Note:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.mixing_note}
+                  </span>
+                </div>
               </div>
             )}
             {product.application.pot_life && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Pot Life:</span> {product.application.pot_life}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Pot Life:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.pot_life}
+                  </span>
+                </div>
               </div>
             )}
             {product.application.cleaner_thinner && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Cleaner / Thinner:</span> {product.application.cleaner_thinner}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Cleaner / Thinner:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.cleaner_thinner}
+                  </span>
+                </div>
               </div>
             )}
             {product.application.application_temperature && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Application Temperature:</span> {product.application.application_temperature}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Application Temperature:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.application_temperature}
+                  </span>
+                </div>
               </div>
             )}
             {product.application.curing_note && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Curing Note:</span> {product.application.curing_note}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Curing Note:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.curing_note}
+                  </span>
+                </div>
               </div>
             )}
             {product.application.number_of_coats && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Number of Coats:</span> {product.application.number_of_coats}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Number of Coats:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.number_of_coats}
+                  </span>
+                </div>
               </div>
             )}
           </div>
@@ -663,7 +687,6 @@ const ProductDetail = () => {
     </div>
   </section>
 )}
-
       {/* Drying Time */}
       {(
         product.dry_to_touch ||
