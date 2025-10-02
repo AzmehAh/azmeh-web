@@ -250,7 +250,7 @@ const ProductDetail = () => {
         safety_first_aid: parseArrayField(productData.safety_first_aid),
         application: createApplicationObject(productData),
          // ✅ أضف هذه السطور الجديدة هنا
-         storing_conditions: productData.storing_conditions || ''
+         storing_conditions: productData.storing_conditions || '',
   dry_to_touch: productData.dry_to_touch || '',
   dry_to_handle: productData.dry_to_handle || '',
   complete_setting: productData.complete_setting || '',
