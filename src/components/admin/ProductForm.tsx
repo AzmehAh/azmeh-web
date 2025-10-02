@@ -241,7 +241,7 @@ const ProductForm = () => {
         'storing_conditions', 'joint_preparation', 'joint_size', 'movement_capacity',
         'substrate_treatment', 'surface_preparation', 'general_features', 'recommended_uses',
         'method_of_application', 'mixing_ratio', 'mixing_note', 'mixing_steps', 'pot_life',
-        'cleaner', 'thinner_cleaner', 'application_temperature', 'curing_note',
+        'cleaner', 'thinner', 'application_temperature', 'curing_note',
         'number_of_coats', 'note', 'tensile_adhesion_strength', 'material_consumption',
         'viscosity', 'weather_resistance', 'compressive_strength', 'tear_resistance',
         'elongation_at_rupture', 'tensile_strength_100', 'tensile_strength_50',
