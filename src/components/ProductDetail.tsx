@@ -25,7 +25,7 @@ interface Product {
   instructions: string[];
   storage: string;
   safety_precautions: string[];
-  note: string[];
+   safety_note: string;
   safety_first_aid: string[];
   // الحقول الجديدة للتطبيق
   application?: {
@@ -255,7 +255,7 @@ const ProductDetail = () => {
         instructions: parseArrayField(productData.instructions),
         storage: productData.storage || "",
         safety_precautions: parseArrayField(productData.safety_precautions),
-          note: parseArrayField(productData.note),
+         safety_note: productData.safety_note || "",
         safety_first_aid: parseArrayField(productData.safety_first_aid),
         application: createApplicationObject(productData),
          
@@ -850,8 +850,8 @@ const ProductDetail = () => {
         </section>
       )}
       
-{/* Note */}
-{product.note && product.note.length > 0 && (
+{/* Note from Safety */}
+{product.safety_note && (
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto text-center mb-10">
@@ -862,11 +862,9 @@ const ProductDetail = () => {
       </div>
       <div className="max-w-4xl mx-auto">
         <div className="bg-gray-50 rounded-2xl p-8">
-          {product.note.map((n, index) => (
-            <p key={index} className="text-gray-700 leading-relaxed mb-4 last:mb-0">
-              {n}
-            </p>
-          ))}
+          <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+            {product.safety_note}
+          </p>
         </div>
       </div>
     </div>
