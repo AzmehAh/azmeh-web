@@ -662,7 +662,7 @@ const ProductDetail = () => {
       </h2>
       <div
         className="max-w-4xl prose prose-lg mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
-        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storage) }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storing_conditions) }}
       />
     </div>
   </section>
