@@ -468,7 +468,7 @@ const ProductDetail = () => {
   product.surface_preparation ||
   (product.recommended_uses && product.recommended_uses.length > 0)
 ) && (
-  <section className="py-16 bg-white">
+  <section className="py-16  bg-gray-50">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
