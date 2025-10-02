@@ -856,7 +856,7 @@ const ProductDetail = () => {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto text-center mb-10">
         <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center">
-          <FileText className="w-8 h-8 text-gray-600 mr-3" />
+       
           Note
         </h2>
       </div>
