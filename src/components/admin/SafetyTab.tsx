@@ -31,12 +31,7 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
         type="textarea"
       />
 
-     <InputField
-        label="Safety note"
-        value={Array.isArray(data.safety_note) ? data.safety_note.join(', ') : data.safety_note || ''}
-        onChange={(v) => handleArrayFieldChange('safety_note', v)}
-        type="textarea"
-      />
+    
     </div>
   );
 };
