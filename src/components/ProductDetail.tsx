@@ -590,51 +590,79 @@ const ProductDetail = () => {
         </section>
       )}
 
-      {/* Application Details */}
-      {product.application && (
-        <section className="py-16  bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className=" text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-              <Layers className="w-8 h-8 text-green-600 mr-3" />
-             Application Instruction
-            </h2>
-          
-            <div className="max-w-6xl mx-auto relative">
-              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
-
-              {Object.entries(product.application)
-                .filter(([, value]) => value)
-                .map(([key, value], index) => {
-                  const label = key
-                    .replace(/_/g, ' ')
-                    .replace(/\b\w/g, char => char.toUpperCase());
-
-                  return (
-                    <motion.div
-                      key={key}
-                      className="relative flex items-start mb-12 last:mb-0"
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }} 
-                      transition={{ duration: 0.5, delay: index * 0.2 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="absolute left-4 w-8 h-8 bg-[#2C5DB6] rounded-full flex items-center justify-center z-10">
-                        <div className="w-2 h-2 rounded-full bg-white"></div>
-                      </div>
-
-                      <div className="ml-20 bg-gray-50 rounded-xl p-6 flex-1">
-                        <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
-                          <span className="font-semibold text-gray-800">{label}:</span>
-                          <span className="text-gray-700 leading-relaxed">{value}</span>
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-            </div>
+     {/* Application Instructions */}
+{product.application && (
+  <section className="py-16 bg-white">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+          <Layers className="w-8 h-8 text-green-600 mr-3" />
+          Application Instructions
+        </h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="divide-y divide-gray-100">
+            {product.application.method_of_application && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Method of Application:</span> {product.application.method_of_application}
+                </p>
+              </div>
+            )}
+            {product.application.mixing_ratio && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Mixing Ratio:</span> {product.application.mixing_ratio}
+                </p>
+              </div>
+            )}
+            {product.application.mixing_note && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Mixing Note:</span> {product.application.mixing_note}
+                </p>
+              </div>
+            )}
+            {product.application.pot_life && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Pot Life:</span> {product.application.pot_life}
+                </p>
+              </div>
+            )}
+            {product.application.cleaner_thinner && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Cleaner / Thinner:</span> {product.application.cleaner_thinner}
+                </p>
+              </div>
+            )}
+            {product.application.application_temperature && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Application Temperature:</span> {product.application.application_temperature}
+                </p>
+              </div>
+            )}
+            {product.application.curing_note && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Curing Note:</span> {product.application.curing_note}
+                </p>
+              </div>
+            )}
+            {product.application.number_of_coats && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Number of Coats:</span> {product.application.number_of_coats}
+                </p>
+              </div>
+            )}
           </div>
-        </section>
-      )}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
 
       {/* Drying Time */}
       {(
