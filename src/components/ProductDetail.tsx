@@ -465,7 +465,7 @@ const ProductDetail = () => {
         (product.recommended_uses && product.recommended_uses.length > 0)
       ) && (
         <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container mx-auto px-10 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
                 Technical Guidelines
