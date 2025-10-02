@@ -31,15 +31,13 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
         type="textarea"
       />
  
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Note</label>
-        <textarea
-          value={data.safety_note || ''}
-          onChange={(e) => handleChange('safety_note', e.target.value)}
-          rows={3}
-          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-        />
-      </div>
+      <InputField
+  label="Note"
+  value={data.safety_note || ''}
+  onChange={(v) => handleChange('safety_note', v)}
+  type="textarea"
+  rows={3}
+/>
     </div>
   );
 };
