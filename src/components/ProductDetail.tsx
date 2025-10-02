@@ -454,110 +454,111 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
-
-      {/* Additional Technical Information */}
-      {(
-        product.joint_preparation ||
-        product.joint_size ||
-        product.movement_capacity ||
-        product.substrate_treatment ||
-        product.surface_preparation ||
-        (product.recommended_uses && product.recommended_uses.length > 0)
-      ) && (
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-10 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto">
-              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
-                Technical Guidelines
-              </h2>
-              <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="divide-y divide-gray-200">
-                  {product.joint_preparation && (
-                    <div className="px-6 py-4">
-                      <p className="text-gray-800">
-                        <span className="font-medium">Joint Preparation:</span> {product.joint_preparation}
-                      </p>
-                    </div>
-                  )}
-                  {product.joint_size && (
-                    <div className="px-6 py-4">
-                      <p className="text-gray-800">
-                        <span className="font-medium">Joint Size:</span> {product.joint_size}
-                      </p>
-                    </div>
-                  )}
-                  {product.movement_capacity && (
-                    <div className="px-6 py-4">
-                      <p className="text-gray-800">
-                        <span className="font-medium">Movement Capacity:</span> {product.movement_capacity}
-                      </p>
-                    </div>
-                  )}
-                  {product.substrate_treatment && (
-                    <div className="px-6 py-4">
-                      <p className="text-gray-800">
-                        <span className="font-medium">Substrate Treatment:</span> {product.substrate_treatment}
-                      </p>
-                    </div>
-                  )}
-                  {product.surface_preparation && (
-                    <div className="px-6 py-4">
-                      <p className="text-gray-800">
-                        <span className="font-medium">Surface Preparation:</span> {product.surface_preparation}
-                      </p>
-                    </div>
-                  )}
-                  {product.recommended_uses && product.recommended_uses.length > 0 && (
-                    <div className="px-6 py-4">
-                      <p className="text-gray-800 mb-2 font-medium">Recommended Uses:</p>
-                      <ul className="list-disc list-inside space-y-1 text-gray-700">
-                        {product.recommended_uses.map((use, index) => (
-                          <li key={index}>{use}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+{/* Additional Technical Information */}
+{(
+  product.joint_preparation ||
+  product.joint_size ||
+  product.movement_capacity ||
+  product.substrate_treatment ||
+  product.surface_preparation ||
+  (product.recommended_uses && product.recommended_uses.length > 0)
+) && (
+  <section className="py-16 bg-white">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
+          Technical Guidelines
+        </h2>
+        <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="divide-y divide-gray-200">
+            {product.joint_preparation && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Joint Preparation:</span> {product.joint_preparation}
+                </p>
               </div>
-            </div>
+            )}
+            {product.joint_size && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Joint Size:</span> {product.joint_size}
+                </p>
+              </div>
+            )}
+            {product.movement_capacity && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Movement Capacity:</span> {product.movement_capacity}
+                </p>
+              </div>
+            )}
+            {product.substrate_treatment && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Substrate Treatment:</span> {product.substrate_treatment}
+                </p>
+              </div>
+            )}
+            {product.surface_preparation && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Surface Preparation:</span> {product.surface_preparation}
+                </p>
+              </div>
+            )}
+            {product.recommended_uses && product.recommended_uses.length > 0 && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800 mb-2 font-medium">Recommended Uses:</p>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
+                  {product.recommended_uses.map((use, index) => (
+                    <li key={index}>{use}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
-        </section>
-      )}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
 
-      {/* Technical Specifications */}
-      {product.technical_specs && product.technical_specs.length > 0 && (
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-16">
-              <div className="bg-[#2C5DB6] px-8 py-6">
-                <h2 className="text-2xl font-bold text-white flex items-center">
-                  <FileText className="w-6 h-6 mr-3" />
-                  Technical Specifications
-                </h2>
-              </div>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-50">
-                    <tr>
-                      <th className="px-8 py-4 text-left font-semibold text-gray-800">Property</th>
-                      <th className="px-8 py-4 text-left font-semibold text-gray-800">Value</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {product.technical_specs.map((spec, index) => (
-                      <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                        <td className="px-8 py-4 font-medium text-gray-800">{spec.property}</td>
-                        <td className="px-8 py-4 text-[#2C5DB6] font-semibold">{spec.value}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
+{/* Technical Specifications */}
+{product.technical_specs && product.technical_specs.length > 0 && (
+  <section className="py-16 bg-white">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      {/* نفس max-w-3xl mx-auto مثل القسم الأول */}
+      <div className="max-w-3xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+          <div className="bg-[#2C5DB6] px-6 py-4">
+            <h2 className="text-lg font-bold text-white flex items-center">
+              <FileText className="w-5 h-5 mr-2" />
+              Technical Specifications
+            </h2>
           </div>
-        </section>
-      )}
-
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-800">Property</th>
+                  <th className="px-4 py-3 text-left font-semibold text-gray-800">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                {product.technical_specs.map((spec, index) => (
+                  <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                    <td className="px-4 py-3 font-medium text-gray-800">{spec.property}</td>
+                    <td className="px-4 py-3 text-[#2C5DB6] font-medium">{spec.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
       {/* Features */}
       {product.features && product.features.length > 0 && (
         <section className="py-16 bg-gray-50">
