@@ -660,7 +660,7 @@ const ProductDetail = () => {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-12 flex items-center justify-center">
         <Shield className="w-8 h-8 text-green-600 mr-3" />
-        {product.storing_conditions}
+       Storing Conditions
       </h2>
       <div
         className="max-w-4xl prose prose-lg mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
