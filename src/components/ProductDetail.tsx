@@ -722,7 +722,7 @@ const ProductDetail = () => {
           <Wrench className="w-8 h-8 text-blue-600 mr-3" />
           Drying Time
         </h2>
-        <div className=" bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className=" bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-100">
             {product.dry_to_touch && (
               <div className="px-6 py-4">
