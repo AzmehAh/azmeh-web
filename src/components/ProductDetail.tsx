@@ -484,105 +484,48 @@ const ProductDetail = () => {
         </section>
       )}
 
-      {/* Application Details */}
-      {product.application && (
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-              Application Details
-            </h2>
-            <div className="max-w-4xl mx-auto space-y-8">
-              {product.application.method_of_application && (
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-gray-800 font-semibold">Method of Application:</h3>
-                  <p className="text-gray-700 mt-2">{product.application.method_of_application}</p>
-                </div>
-              )}
-
-              {product.application.mixing_ratio && (
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-gray-800 font-semibold">Mixing Ratio:</h3>
-                  <p className="text-gray-700 mt-2">{product.application.mixing_ratio}</p>
-                </div>
-              )}
-
-              {product.application.mixing_note && (
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-gray-800 font-semibold">Mixing Note:</h3>
-                  <p className="text-gray-700 mt-2">{product.application.mixing_note}</p>
-                </div>
-              )}
-
-              {product.application.pot_life && (
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-gray-800 font-semibold">Pot Life:</h3>
-                  <p className="text-gray-700 mt-2">{product.application.pot_life}</p>
-                </div>
-              )}
-
-              {product.application.cleaner_thinner && (
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-gray-800 font-semibold">Cleaner / Thinner:</h3>
-                  <p className="text-gray-700 mt-2">{product.application.cleaner_thinner}</p>
-                </div>
-              )}
-
-              {product.application.application_temperature && (
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-gray-800 font-semibold">Application Temperature:</h3>
-                  <p className="text-gray-700 mt-2">{product.application.application_temperature}</p>
-                </div>
-              )}
-
-              {product.application.curing_note && (
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-gray-800 font-semibold">Curing Note:</h3>
-                  <p className="text-gray-700 mt-2">{product.application.curing_note}</p>
-                </div>
-              )}
-
-              {product.application.number_of_coats && (
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-gray-800 font-semibold">Number of Coats:</h3>
-                  <p className="text-gray-700 mt-2">{product.application.number_of_coats}</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-      )}{/* Instructions */}
-{product.instructions && product.instructions.length > 0 && (
+   {/* Application Details */}
+{product.application && (
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
-        Application Instructions
+        Application Details
       </h2>
       <div className="max-w-4xl mx-auto space-y-6">
-        {product.instructions.map((instruction, index) => (
-          <motion.div
-            key={index}
-            className="flex items-start"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            viewport={{ once: true }}
-          >
-            {/* Bullet Point */}
-            <div className="flex-shrink-0 mt-1.5">
-              <div className="w-3 h-3 rounded-full bg-[#2C5DB6]"></div>
-            </div>
+        {Object.entries(product.application).map(([key, value]) => {
+          if (!value) return null;
 
-            {/* Content */}
-            <div className="ml-4 flex-1 bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100">
-              <p className="text-gray-700 leading-relaxed">{instruction}</p>
-            </div>
-          </motion.div>
-        ))}
+          // تحويل اسم الحقل إلى عنوان مقروء (مثل: mixing_ratio → Mixing Ratio)
+          const readableLabel = key
+            .replace(/_/g, ' ') // استبدال الشرطة السفلية بمسافة
+            .replace(/\b\w/g, char => char.toUpperCase()); // جعل أول حرف كبير
+
+          return (
+            <motion.div
+              key={key}
+              className="flex items-start"
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              {/* Bullet Point */}
+              <div className="flex-shrink-0 mt-2">
+                <div className="w-3 h-3 rounded-full bg-[#2C5DB6]"></div>
+              </div>
+
+              {/* Content */}
+              <div className="ml-4 flex-1 bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100">
+                <h3 className="text-gray-800 font-semibold">{readableLabel}:</h3>
+                <p className="text-gray-700 mt-1 leading-relaxed">{value}</p>
+              </div>
+            </motion.div>
+          );
+        })}
       </div>
     </div>
   </section>
 )}
-
       {/* Storage */}
       {product.storage && (
         <section className="py-16 bg-white">
