@@ -248,7 +248,7 @@ const ProductDetail = () => {
         storage: productData.storage || "",
         safety_precautions: parseArrayField(productData.safety_precautions),
         safety_first_aid: parseArrayField(productData.safety_first_aid),
-        application: createApplicationObject(productData)
+        application: createApplicationObject(productData),
          // ✅ أضف هذه السطور الجديدة هنا
   dry_to_touch: productData.dry_to_touch || '',
   dry_to_handle: productData.dry_to_handle || '',
@@ -259,7 +259,7 @@ const ProductDetail = () => {
   initial_setting: productData.initial_setting || '',
   fully_cured: productData.fully_cured || '',
   dry_to_sand: productData.dry_to_sand || '',
-  drying_time_note: productData.drying_time_note || '',
+  drying_time_note: productData.drying_time_note || ''
       };
 
       console.log('Formatted product:', formattedProduct);
