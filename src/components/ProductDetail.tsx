@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, Package, FileText, CheckCircle, Wrench, Shield ,SprayCan,ClipboardList} from "lucide-react";
+import { Download, Package, FileText, CheckCircle, Wrench, Shield ,Info,ClipboardList} from "lucide-react";
 import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
 
@@ -471,10 +471,10 @@ const ProductDetail = () => {
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
-              <SprayCan className="w-5 h-5 mr-2" />
-             General Information
-            </h2>    
+        <h2 className=" text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+              <Info className="w-8 h-8 text-green-600 mr-3" />
+              Storing Conditions
+            </h2>   
      
         <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-200">
