@@ -47,6 +47,12 @@ interface Product {
   dry_to_sand?: string;
   drying_time_note?: string;
    storing_conditions?: string;
+    joint_preparation?: string;
+  joint_size?: string;
+  movement_capacity?: string;
+  substrate_treatment?: string;
+  surface_preparation?: string;
+  recommended_uses?: string[];
 
   };
 }
@@ -250,7 +256,15 @@ const ProductDetail = () => {
         safety_precautions: parseArrayField(productData.safety_precautions),
         safety_first_aid: parseArrayField(productData.safety_first_aid),
         application: createApplicationObject(productData),
-         // ✅ أضف هذه السطور الجديدة هنا
+         
+  joint_preparation: productData.joint_preparation || '',
+  joint_size: productData.joint_size || '',
+  movement_capacity: productData.movement_capacity || '',
+  substrate_treatment: productData.substrate_treatment || '',
+  surface_preparation: productData.surface_preparation || '',
+  recommended_uses: parseArrayField(productData.recommended_uses),
+
+       
          storing_conditions: productData.storing_conditions || '',
   dry_to_touch: productData.dry_to_touch || '',
   dry_to_handle: productData.dry_to_handle || '',
@@ -445,7 +459,74 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
-
+{/* Additional Technical Information */}
+{(
+  product.joint_preparation ||
+  product.joint_size ||
+  product.movement_capacity ||
+  product.substrate_treatment ||
+  product.surface_preparation ||
+  (product.recommended_uses && product.recommended_uses.length > 0)
+) && (
+  <section className="py-16 bg-white">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">
+          Technical Guidelines
+        </h2>
+        <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="divide-y divide-gray-200">
+            {product.joint_preparation && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Joint Preparation:</span> {product.joint_preparation}
+                </p>
+              </div>
+            )}
+            {product.joint_size && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Joint Size:</span> {product.joint_size}
+                </p>
+              </div>
+            )}
+            {product.movement_capacity && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Movement Capacity:</span> {product.movement_capacity}
+                </p>
+              </div>
+            )}
+            {product.substrate_treatment && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Substrate Treatment:</span> {product.substrate_treatment}
+                </p>
+              </div>
+            )}
+            {product.surface_preparation && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Surface Preparation:</span> {product.surface_preparation}
+                </p>
+              </div>
+            )}
+            {product.recommended_uses && product.recommended_uses.length > 0 && (
+              <div className="px-6 py-4">
+                <p className="text-gray-800 mb-2 font-medium">Recommended Uses:</p>
+                <ul className="list-disc list-inside space-y-1 text-gray-700">
+                  {product.recommended_uses.map((use, index) => (
+                    <li key={index}>{use}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
       {/* Technical Specifications */}
       {product.technical_specs && product.technical_specs.length > 0 && (
         <section className="py-16 bg-white">
