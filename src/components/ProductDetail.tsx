@@ -33,7 +33,7 @@ interface Product {
     mixing_ratio?: string;
     mixing_note?: string;
     pot_life?: string;
-    cleaner_thinner?: string;
+    thinner?: string;
     application_temperature?: string;
     curing_note?: string;
     number_of_coats?: string;
@@ -658,12 +658,12 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
-            {product.application.cleaner_thinner && (
+            {product.application.thinner && (
               <div className="px-6 py-4">
                 <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Cleaner / Thinner:</span>
+                  <span className="font-medium text-gray-800">Thinner:</span>
                   <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.cleaner_thinner}
+                    {product.application.thinner}
                   </span>
                 </div>
               </div>
