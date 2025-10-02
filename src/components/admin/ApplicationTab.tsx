@@ -50,7 +50,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       <InputField 
         label="Cleaner / Thinner" 
         value={data.cleaner_thinner || ''} 
-        onChange={(v) => handleChange('cleaner_thinner', v)} 
+        onChange={(v) => handleChange('thinner_cleaner', v)} 
         type="textarea"
       />
 
