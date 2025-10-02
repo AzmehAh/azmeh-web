@@ -10,7 +10,7 @@ interface Props {
 export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
   const [localData, setLocalData] = useState(data);
 
-  // تحديث البيانات المحلية عندما تتغير الـ props
+  
   useEffect(() => {
     setLocalData(data);
   }, [data]);
