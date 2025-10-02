@@ -251,7 +251,7 @@ const ProductForm = () => {
         'solvent_splash_resistance', 'sandability', 'adhesion', 'flexibility',
         'voc', 'volume_solids', 'gloss', 'color', 'component_a', 'component_b',
         'dry_to_touch', 'dry_to_handle', 'complete_setting', 'grouting_time',
-        'adjustability_time', 'dry_to_topcoat', 'initial_setting', 'fully_cured',
+        'adjustability_time', 'dry_to_topcoat', 'initial_setting', 'fully_cured','note_application',
         'dry_to_sand', 'drying_time_note', 'safety_note'
       ];
 
