@@ -550,7 +550,38 @@ const ProductDetail = () => {
             </div>
           </div>
         </section>
-      )}
+      )}{/* Instructions */}
+{product.instructions && product.instructions.length > 0 && (
+  <section className="py-16 bg-white">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
+        Application Instructions
+      </h2>
+      <div className="max-w-4xl mx-auto space-y-6">
+        {product.instructions.map((instruction, index) => (
+          <motion.div
+            key={index}
+            className="flex items-start"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5, delay: index * 0.1 }}
+            viewport={{ once: true }}
+          >
+            {/* Bullet Point */}
+            <div className="flex-shrink-0 mt-1.5">
+              <div className="w-3 h-3 rounded-full bg-[#2C5DB6]"></div>
+            </div>
+
+            {/* Content */}
+            <div className="ml-4 flex-1 bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100">
+              <p className="text-gray-700 leading-relaxed">{instruction}</p>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
 
       {/* Storage */}
       {product.storage && (
