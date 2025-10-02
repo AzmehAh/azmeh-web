@@ -484,7 +484,7 @@ const ProductDetail = () => {
         </section>
       )}
 
-{/* Application Details - Same Timeline Design as Instructions */}
+{/* Application Details - Same Timeline as Instructions */}
 {product.application && (
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -492,14 +492,13 @@ const ProductDetail = () => {
         Application Details
       </h2>
       <div className="max-w-4xl mx-auto relative">
-        {/* الخط الزمني العمودي (مثل Instructions) */}
+        {/* نفس الخط الزمني تمامًا */}
         <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
 
-        {/* تحويل كائن application إلى مصفوفة وعرضها */}
+        {/* تحويل كائن application إلى مصفوفة وعرضها بنفس هيكل Instructions */}
         {Object.entries(product.application)
           .filter(([, value]) => value) // تجاهل الحقول الفارغة
           .map(([key, value], index) => {
-            // تحويل اسم الحقل إلى عنوان مقروء (مثل mixing_ratio → Mixing Ratio)
             const label = key
               .replace(/_/g, ' ')
               .replace(/\b\w/g, char => char.toUpperCase());
@@ -509,18 +508,20 @@ const ProductDetail = () => {
                 key={key}
                 className="relative flex items-start mb-12 last:mb-0"
                 initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                whileInView={{ opacity: 1, y: 0 }} 
                 transition={{ duration: 0.5, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
-                {/* النقطة الدائرية (بدلاً من الرقم) - نفس مكان الرقم تمامًا */}
-                <div className="absolute left-4 w-3 h-3 rounded-full bg-[#2C5DB6] mt-2 z-10" />
+                {/* النقطة: نفس مكان الرقم تمامًا، نفس الحجم تقريبًا، لكن بدون نص */}
+                <div className="absolute left-4 w-8 h-8 bg-[#2C5DB6] rounded-full flex items-center justify-center z-10">
+                  <div className="w-2 h-2 rounded-full bg-white"></div>
+                </div>
 
-                {/* المحتوى: العنوان والمعلومة في نفس السطر */}
+                {/* نفس المحتوى تمامًا، لكن بدل <p> عادي، نضع عنوان + معلومة في سطر واحد */}
                 <div className="ml-20 bg-gray-50 rounded-xl p-6 flex-1">
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
-                    <h3 className="font-semibold text-gray-800 min-w-[160px]">{label}:</h3>
-                    <p className="text-gray-700 mt-1 sm:mt-0 leading-relaxed">{value}</p>
+                  <div className="flex items-center flex-wrap gap-x-2 gap-y-1">
+                    <span className="font-semibold text-gray-800">{label}:</span>
+                    <span className="text-gray-700 leading-relaxed">{value}</span>
                   </div>
                 </div>
               </motion.div>
