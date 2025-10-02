@@ -465,7 +465,7 @@ const ProductDetail = () => {
 ) && (
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
           Technical Guidelines
         </h2>
@@ -528,7 +528,7 @@ const ProductDetail = () => {
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       {/* نفس max-w-3xl mx-auto مثل القسم الأول */}
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <div className="bg-[#2C5DB6] px-6 py-4">
             <h2 className="text-lg font-bold text-white flex items-center">
@@ -563,7 +563,7 @@ const ProductDetail = () => {
       {product.features && product.features.length > 0 && (
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-800 mb-10 flex items-center justify-center">
                 <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
                 Key Features
@@ -595,7 +595,7 @@ const ProductDetail = () => {
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-10">
               Application Details
             </h2>
-            <div className="max-w-4xl mx-auto relative">
+            <div className="max-w-6xl mx-auto relative">
               <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
 
               {Object.entries(product.application)
@@ -647,7 +647,7 @@ const ProductDetail = () => {
       ) && (
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
                 <Wrench className="w-8 h-8 text-blue-600 mr-3" />
                 Drying Time
@@ -735,7 +735,7 @@ const ProductDetail = () => {
       {product.storing_conditions && (
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+            <h2 className=" max-w-6xl text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
               <Shield className="w-8 h-8 text-green-600 mr-3" />
               Storing Conditions
             </h2>
