@@ -36,23 +36,24 @@ interface Product {
     application_temperature?: string;
     curing_note?: string;
     number_of_coats?: string;
-    dry_to_touch?: string;
-    dry_to_handle?: string;
-    complete_setting?: string;
-    grouting_time?: string;
-    adjustability_time?: string;
-    dry_to_topcoat?: string;
-    initial_setting?: string;
-    fully_cured?: string;
-    dry_to_sand?: string;
-    drying_time_note?: string;
-    storing_conditions?: string;
+  dry_to_touch?: string;
+  dry_to_handle?: string;
+  complete_setting?: string;
+  grouting_time?: string;
+  adjustability_time?: string;
+  dry_to_topcoat?: string;
+  initial_setting?: string;
+  fully_cured?: string;
+  dry_to_sand?: string;
+  drying_time_note?: string;
+   storing_conditions?: string;
     joint_preparation?: string;
-    joint_size?: string;
-    movement_capacity?: string;
-    substrate_treatment?: string;
-    surface_preparation?: string;
-    recommended_uses?: string[];
+  joint_size?: string;
+  movement_capacity?: string;
+  substrate_treatment?: string;
+  surface_preparation?: string;
+  recommended_uses?: string[];
+
   };
 }
 
@@ -245,6 +246,7 @@ const ProductDetail = () => {
             property: label,
             value: productData[key] || '',
             standard: ''
+            
           }))
           .filter(spec => spec.value && spec.value.toString().trim() !== ''),
         features: parseArrayField(productData.features),
@@ -254,23 +256,26 @@ const ProductDetail = () => {
         safety_precautions: parseArrayField(productData.safety_precautions),
         safety_first_aid: parseArrayField(productData.safety_first_aid),
         application: createApplicationObject(productData),
-        joint_preparation: productData.joint_preparation || '',
-        joint_size: productData.joint_size || '',
-        movement_capacity: productData.movement_capacity || '',
-        substrate_treatment: productData.substrate_treatment || '',
-        surface_preparation: productData.surface_preparation || '',
-        recommended_uses: parseArrayField(productData.recommended_uses),
-        storing_conditions: productData.storing_conditions || '',
-        dry_to_touch: productData.dry_to_touch || '',
-        dry_to_handle: productData.dry_to_handle || '',
-        complete_setting: productData.complete_setting || '',
-        grouting_time: productData.grouting_time || '',
-        adjustability_time: productData.adjustability_time || '',
-        dry_to_topcoat: productData.dry_to_topcoat || '',
-        initial_setting: productData.initial_setting || '',
-        fully_cured: productData.fully_cured || '',
-        dry_to_sand: productData.dry_to_sand || '',
-        drying_time_note: productData.drying_time_note || ''
+         
+  joint_preparation: productData.joint_preparation || '',
+  joint_size: productData.joint_size || '',
+  movement_capacity: productData.movement_capacity || '',
+  substrate_treatment: productData.substrate_treatment || '',
+  surface_preparation: productData.surface_preparation || '',
+  recommended_uses: parseArrayField(productData.recommended_uses),
+
+       
+         storing_conditions: productData.storing_conditions || '',
+  dry_to_touch: productData.dry_to_touch || '',
+  dry_to_handle: productData.dry_to_handle || '',
+  complete_setting: productData.complete_setting || '',
+  grouting_time: productData.grouting_time || '',
+  adjustability_time: productData.adjustability_time || '',
+  dry_to_topcoat: productData.dry_to_topcoat || '',
+  initial_setting: productData.initial_setting || '',
+  fully_cured: productData.fully_cured || '',
+  dry_to_sand: productData.dry_to_sand || '',
+  drying_time_note: productData.drying_time_note || ''
       };
 
       console.log('Formatted product:', formattedProduct);
@@ -343,8 +348,8 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section - now consistent with py-16 */}
-      <section className="py-16 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
+      {/* Hero Section */}
+      <section className="py-24 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <div className="relative mb-8">
