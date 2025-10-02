@@ -154,7 +154,9 @@ const ProductDetail = () => {
       'mixing_ratio',
       'mixing_note',
       'pot_life',
-      'cleaner_thinner',
+      'cleaner',
+      'thinner',
+      'note',
       'application_temperature',
       'curing_note',
       'number_of_coats'
