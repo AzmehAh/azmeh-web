@@ -531,6 +531,37 @@ const ProductDetail = () => {
     </div>
   </section>
 )}
+      {/* Drying Time - تصميم جدولي أنيق */}
+{product.drying_time && (
+  <section className="py-16 bg-gray-50">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+          <Wrench className="w-8 h-8 text-blue-600 mr-3" />
+          Drying Time
+        </h2>
+        <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
+          <div className="divide-y divide-gray-100">
+            {Object.entries(product.drying_time)
+              .filter(([, value]) => value)
+              .map(([key, value]) => {
+                const label = key
+                  .replace(/_/g, ' ')
+                  .replace(/\b\w/g, char => char.toUpperCase());
+
+                return (
+                  <div key={key} className="px-6 py-4 flex justify-between items-start">
+                    <span className="font-medium text-gray-700 w-2/5">{label}</span>
+                    <span className="text-gray-900 font-semibold text-right w-3/5">{value}</span>
+                  </div>
+                );
+              })}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+)}
       {/* Storage */}
       {product.storage && (
         <section className="py-16 bg-white">
