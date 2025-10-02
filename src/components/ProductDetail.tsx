@@ -484,44 +484,48 @@ const ProductDetail = () => {
         </section>
       )}
 
-   {/* Application Details */}
+{/* Application Details - Timeline with Bullets */}
 {product.application && (
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
         Application Details
       </h2>
-      <div className="max-w-4xl mx-auto space-y-6">
-        {Object.entries(product.application).map(([key, value]) => {
-          if (!value) return null;
+      <div className="max-w-4xl mx-auto relative">
+        {/* الخط الزمني العمودي */}
+        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
 
-          // تحويل اسم الحقل إلى عنوان مقروء (مثل: mixing_ratio → Mixing Ratio)
-          const readableLabel = key
-            .replace(/_/g, ' ') // استبدال الشرطة السفلية بمسافة
-            .replace(/\b\w/g, char => char.toUpperCase()); // جعل أول حرف كبير
+        {/* تحويل الكائن إلى مصفوفة وعرضها */}
+        {Object.entries(product.application)
+          .filter(([, value]) => value) // استبعاد الحقول الفارغة
+          .map(([key, value], index) => {
+            // تحويل الاسم إلى شكل مقروء
+            const label = key
+              .replace(/_/g, ' ')
+              .replace(/\b\w/g, char => char.toUpperCase());
 
-          return (
-            <motion.div
-              key={key}
-              className="flex items-start"
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              {/* Bullet Point */}
-              <div className="flex-shrink-0 mt-2">
-                <div className="w-3 h-3 rounded-full bg-[#2C5DB6]"></div>
-              </div>
+            return (
+              <motion.div
+                key={key}
+                className="relative flex items-start mb-12 last:mb-0"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.15 }}
+                viewport={{ once: true }}
+              >
+                {/* النقطة (بدلاً من الرقم) */}
+                <div className="absolute left-2 w-3 h-3 rounded-full bg-[#2C5DB6] mt-2 z-10" />
 
-              {/* Content */}
-              <div className="ml-4 flex-1 bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100">
-                <h3 className="text-gray-800 font-semibold">{readableLabel}:</h3>
-                <p className="text-gray-700 mt-1 leading-relaxed">{value}</p>
-              </div>
-            </motion.div>
-          );
-        })}
+                {/* المحتوى: عنوان + وصف جنب بعض */}
+                <div className="ml-8 flex-1 bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:gap-4">
+                    <h3 className="font-semibold text-gray-800 min-w-[180px]">{label}:</h3>
+                    <p className="text-gray-700 mt-1 sm:mt-0 leading-relaxed">{value}</p>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
       </div>
     </div>
   </section>
