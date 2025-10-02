@@ -473,7 +473,7 @@ const ProductDetail = () => {
       <div className="max-w-6xl mx-auto">
         <h2 className=" text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
               <Info className="w-8 h-8 text-green-600 mr-3" />
-              Storing Conditions
+             General Information
             </h2>   
      
         <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
