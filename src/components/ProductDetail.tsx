@@ -484,7 +484,7 @@ const ProductDetail = () => {
         </section>
       )}
 
-{/* Application Details - Timeline with Bullets */}
+{/* Application Details - Same Timeline Design as Instructions */}
 {product.application && (
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -492,14 +492,14 @@ const ProductDetail = () => {
         Application Details
       </h2>
       <div className="max-w-4xl mx-auto relative">
-        {/* الخط الزمني العمودي */}
-        <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
+        {/* الخط الزمني العمودي (مثل Instructions) */}
+        <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
 
-        {/* تحويل الكائن إلى مصفوفة وعرضها */}
+        {/* تحويل كائن application إلى مصفوفة وعرضها */}
         {Object.entries(product.application)
-          .filter(([, value]) => value) // استبعاد الحقول الفارغة
+          .filter(([, value]) => value) // تجاهل الحقول الفارغة
           .map(([key, value], index) => {
-            // تحويل الاسم إلى شكل مقروء
+            // تحويل اسم الحقل إلى عنوان مقروء (مثل mixing_ratio → Mixing Ratio)
             const label = key
               .replace(/_/g, ' ')
               .replace(/\b\w/g, char => char.toUpperCase());
@@ -510,16 +510,16 @@ const ProductDetail = () => {
                 className="relative flex items-start mb-12 last:mb-0"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.15 }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
                 viewport={{ once: true }}
               >
-                {/* النقطة (بدلاً من الرقم) */}
-                <div className="absolute left-2 w-3 h-3 rounded-full bg-[#2C5DB6] mt-2 z-10" />
+                {/* النقطة الدائرية (بدلاً من الرقم) - نفس مكان الرقم تمامًا */}
+                <div className="absolute left-4 w-3 h-3 rounded-full bg-[#2C5DB6] mt-2 z-10" />
 
-                {/* المحتوى: عنوان + وصف جنب بعض */}
-                <div className="ml-8 flex-1 bg-gray-50 rounded-xl p-5 shadow-sm border border-gray-100">
-                  <div className="flex flex-col sm:flex-row sm:items-start sm:gap-4">
-                    <h3 className="font-semibold text-gray-800 min-w-[180px]">{label}:</h3>
+                {/* المحتوى: العنوان والمعلومة في نفس السطر */}
+                <div className="ml-20 bg-gray-50 rounded-xl p-6 flex-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:gap-4">
+                    <h3 className="font-semibold text-gray-800 min-w-[160px]">{label}:</h3>
                     <p className="text-gray-700 mt-1 sm:mt-0 leading-relaxed">{value}</p>
                   </div>
                 </div>
