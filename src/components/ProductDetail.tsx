@@ -881,22 +881,7 @@ const ProductDetail = () => {
           </h2>
           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
             {/* Precautions */}
-            {/* Note */}
-{product.safety_note && (
-  <motion.div
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay: 0.2 }}
-    className="bg-white rounded-2xl shadow-lg overflow-hidden mt-8 max-w-6xl mx-auto"
-  >
-    <div className="bg-blue-500 px-6 py-4">
-      <h3 className="text-xl font-bold text-white">Note</h3>
-    </div>
-    <div className="p-6">
-      <p className="text-gray-700">{product.safety_note}</p>
-    </div>
-  </motion.div>
-)}
+          
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
