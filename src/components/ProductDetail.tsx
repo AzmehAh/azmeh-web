@@ -25,6 +25,7 @@ interface Product {
   instructions: string[];
   storage: string;
   safety_precautions: string[];
+  note: string[];
   safety_first_aid: string[];
   // الحقول الجديدة للتطبيق
   application?: {
@@ -254,6 +255,7 @@ const ProductDetail = () => {
         instructions: parseArrayField(productData.instructions),
         storage: productData.storage || "",
         safety_precautions: parseArrayField(productData.safety_precautions),
+          note: parseArrayField(productData.note),
         safety_first_aid: parseArrayField(productData.safety_first_aid),
         application: createApplicationObject(productData),
          
