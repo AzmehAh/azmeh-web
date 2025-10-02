@@ -46,7 +46,12 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
         onChange={(v) => handleChange('pot_life', v)} 
         type="textarea"
       />
-
+ <InputField 
+        label="cleaner" 
+        value={data.cleaner || ''} 
+        onChange={(v) => handleChange('cleaner', v)} 
+        type="textarea"
+      />
       <InputField 
         label="Thinner" 
         value={data.thinner || ''} 
