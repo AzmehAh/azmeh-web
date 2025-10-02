@@ -475,7 +475,7 @@ const ProductDetail = () => {
           <Info className="w-8 h-8 text-green-600 mr-3" />
           General Information
         </h2>
-        <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-200">
  
                {product.recommended_uses && (
