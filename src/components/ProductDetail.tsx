@@ -34,6 +34,7 @@ interface Product {
     mixing_note?: string;
     pot_life?: string;
     thinner?: string;
+   cleaner?: string;
     application_temperature?: string;
     curing_note?: string;
     number_of_coats?: string;
