@@ -849,7 +849,29 @@ const ProductDetail = () => {
           </div>
         </section>
       )}
-
+      
+{/* Note */}
+{product.note && product.note.length > 0 && (
+  <section className="py-16 bg-white">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto text-center mb-10">
+        <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center">
+          <FileText className="w-8 h-8 text-gray-600 mr-3" />
+          Note
+        </h2>
+      </div>
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-gray-50 rounded-2xl p-8">
+          {product.note.map((n, index) => (
+            <p key={index} className="text-gray-700 leading-relaxed mb-4 last:mb-0">
+              {n}
+            </p>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
       {/* Safety */}
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
