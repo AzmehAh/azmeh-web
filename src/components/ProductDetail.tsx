@@ -588,9 +588,9 @@ const ProductDetail = () => {
             </div>
           </div>
         </section>
-      )}
+      )} 
 
-    بدي للكل مو بس ل الو {/* Application Instructions */}
+     {/* Application Instructions */}
 {product.application && (
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
