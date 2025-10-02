@@ -36,6 +36,17 @@ interface Product {
     application_temperature?: string;
     curing_note?: string;
     number_of_coats?: string;
+  dry_to_touch?: string;
+  dry_to_handle?: string;
+  complete_setting?: string;
+  grouting_time?: string;
+  adjustability_time?: string;
+  dry_to_topcoat?: string;
+  initial_setting?: string;
+  fully_cured?: string;
+  dry_to_sand?: string;
+  drying_time_note?: string;
+}
   };
 }
 
@@ -531,8 +542,19 @@ const ProductDetail = () => {
     </div>
   </section>
 )}
-      {/* Drying Time - تصميم جدولي أنيق */}
-{product.drying_time && (
+   {/* Drying Time */}
+{(
+  product.dry_to_touch ||
+  product.dry_to_handle ||
+  product.complete_setting ||
+  product.grouting_time ||
+  product.adjustability_time ||
+  product.dry_to_topcoat ||
+  product.initial_setting ||
+  product.fully_cured ||
+  product.dry_to_sand ||
+  product.drying_time_note
+) && (
   <section className="py-16 bg-gray-50">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
@@ -540,22 +562,68 @@ const ProductDetail = () => {
           <Wrench className="w-8 h-8 text-blue-600 mr-3" />
           Drying Time
         </h2>
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden border border-gray-200">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-100">
-            {Object.entries(product.drying_time)
-              .filter(([, value]) => value)
-              .map(([key, value]) => {
-                const label = key
-                  .replace(/_/g, ' ')
-                  .replace(/\b\w/g, char => char.toUpperCase());
-
-                return (
-                  <div key={key} className="px-6 py-4 flex justify-between items-start">
-                    <span className="font-medium text-gray-700 w-2/5">{label}</span>
-                    <span className="text-gray-900 font-semibold text-right w-3/5">{value}</span>
-                  </div>
-                );
-              })}
+            {product.dry_to_touch && (
+              <div className="px-6 py-4 flex justify-between">
+                <span className="font-medium text-gray-700 w-2/5">Dry to Touch</span>
+                <span className="text-gray-900 font-semibold text-right w-3/5">{product.dry_to_touch}</span>
+              </div>
+            )}
+            {product.dry_to_handle && (
+              <div className="px-6 py-4 flex justify-between">
+                <span className="font-medium text-gray-700 w-2/5">Dry to Handle</span>
+                <span className="text-gray-900 font-semibold text-right w-3/5">{product.dry_to_handle}</span>
+              </div>
+            )}
+            {product.complete_setting && (
+              <div className="px-6 py-4 flex justify-between">
+                <span className="font-medium text-gray-700 w-2/5">Complete Setting</span>
+                <span className="text-gray-900 font-semibold text-right w-3/5">{product.complete_setting}</span>
+              </div>
+            )}
+            {product.grouting_time && (
+              <div className="px-6 py-4 flex justify-between">
+                <span className="font-medium text-gray-700 w-2/5">Grouting Time</span>
+                <span className="text-gray-900 font-semibold text-right w-3/5">{product.grouting_time}</span>
+              </div>
+            )}
+            {product.adjustability_time && (
+              <div className="px-6 py-4 flex justify-between">
+                <span className="font-medium text-gray-700 w-2/5">Adjustability Time</span>
+                <span className="text-gray-900 font-semibold text-right w-3/5">{product.adjustability_time}</span>
+              </div>
+            )}
+            {product.dry_to_topcoat && (
+              <div className="px-6 py-4 flex justify-between">
+                <span className="font-medium text-gray-700 w-2/5">Dry to Topcoat</span>
+                <span className="text-gray-900 font-semibold text-right w-3/5">{product.dry_to_topcoat}</span>
+              </div>
+            )}
+            {product.initial_setting && (
+              <div className="px-6 py-4 flex justify-between">
+                <span className="font-medium text-gray-700 w-2/5">Initial Setting</span>
+                <span className="text-gray-900 font-semibold text-right w-3/5">{product.initial_setting}</span>
+              </div>
+            )}
+            {product.fully_cured && (
+              <div className="px-6 py-4 flex justify-between">
+                <span className="font-medium text-gray-700 w-2/5">Fully Cured</span>
+                <span className="text-gray-900 font-semibold text-right w-3/5">{product.fully_cured}</span>
+              </div>
+            )}
+            {product.dry_to_sand && (
+              <div className="px-6 py-4 flex justify-between">
+                <span className="font-medium text-gray-700 w-2/5">Dry to Sand</span>
+                <span className="text-gray-900 font-semibold text-right w-3/5">{product.dry_to_sand}</span>
+              </div>
+            )}
+            {product.drying_time_note && (
+              <div className="px-6 py-4">
+                <span className="font-medium text-gray-700 block mb-2">Note</span>
+                <p className="text-gray-900 whitespace-pre-line">{product.drying_time_note}</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
