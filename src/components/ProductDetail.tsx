@@ -614,7 +614,7 @@ const ProductDetail = () => {
           <Layers className="w-8 h-8 text-green-600 mr-3" />
           Application Instructions
         </h2>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className=" bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-100">
             {product.application.method_of_application && (
               <div className="px-6 py-4">
@@ -722,7 +722,7 @@ const ProductDetail = () => {
           <Wrench className="w-8 h-8 text-blue-600 mr-3" />
           Drying Time
         </h2>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className=" bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-100">
             {product.dry_to_touch && (
               <div className="px-6 py-4">
@@ -841,7 +841,7 @@ const ProductDetail = () => {
               Storing Conditions
             </h2>
             <div
-              className="max-w-4xl prose prose-lg mx-auto bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-8"
+              className="max-w-4xl prose prose-lg mx-auto  bg-gray-50 rounded-2xl p-8"
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storing_conditions) }}
             />
           </div>
