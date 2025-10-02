@@ -29,6 +29,7 @@ interface Product {
   safety_first_aid: string[];
   // الحقول الجديدة للتطبيق
   application?: {
+    note?: string;
     method_of_application?: string;
     mixing_ratio?: string;
     mixing_note?: string;
@@ -704,6 +705,16 @@ const ProductDetail = () => {
                   <span className="font-medium text-gray-800">Number of Coats:</span>
                   <span className="text-gray-700 leading-relaxed flex-1">
                     {product.application.number_of_coats}
+                  </span>
+                </div>
+              </div>
+            )}
+             {product.application.note && (
+              <div className="px-6 py-4">
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">note:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.note}
                   </span>
                 </div>
               </div>
