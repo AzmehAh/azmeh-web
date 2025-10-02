@@ -658,6 +658,15 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
+             {product.application.cleaner && (
+              <div className="px-6 py-4">
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">cleaner:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.application.cleaner}
+                  </span>
+                </div>
+              </div>
             {product.application.thinner && (
               <div className="px-6 py-4">
                 <div className="flex items-start gap-2">
