@@ -604,7 +604,7 @@ const ProductDetail = () => {
               <ClipboardList className="w-5 h-5 mr-2" />
              Application Instruction
             </h2>
-            </h2>
+          
             <div className="max-w-6xl mx-auto relative">
               <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#2C5DB6] to-blue-300" />
 
