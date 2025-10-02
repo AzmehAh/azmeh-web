@@ -80,12 +80,14 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
         onChange={(v) => handleChange('number_of_coats', v)} 
         type="textarea"
       />
-       <InputField 
+      <InputField 
         label="note application" 
-        value={data.note.application || ''} 
+        value={data.note_application || ''} 
         onChange={(v) => handleChange('note_application', v)} 
         type="textarea"
+        rows={5}
       />
+
     </div>
   );
 };
