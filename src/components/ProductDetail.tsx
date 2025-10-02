@@ -851,7 +851,7 @@ const ProductDetail = () => {
       )}
       
 {/* Note from Safety */}
-{product.safety_note && (
+{product.safety_precautions && (
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto text-center mb-10">
@@ -863,7 +863,7 @@ const ProductDetail = () => {
       <div className="max-w-4xl mx-auto">
         <div className="bg-gray-50 rounded-2xl p-8">
           <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-            {product.safety_note}
+            {product.safety_precautions}
           </p>
         </div>
       </div>
