@@ -459,7 +459,7 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
-{/* Additional Technical Information */}
+{/* General Information */}
 {(
   product.joint_preparation ||
   product.joint_size ||
@@ -471,56 +471,72 @@ const ProductDetail = () => {
   <section className="py-16 bg-white">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
-        <h2 className=" text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-              <Info className="w-8 h-8 text-green-600 mr-3" />
-             General Information
-            </h2>   
-     
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+          <Info className="w-8 h-8 text-green-600 mr-3" />
+          General Information
+        </h2>
         <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-200">
             {product.joint_preparation && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Joint Preparation:</span> {product.joint_preparation}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Joint Preparation:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.joint_preparation}
+                  </span>
+                </div>
               </div>
             )}
             {product.joint_size && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Joint Size:</span> {product.joint_size}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Joint Size:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.joint_size}
+                  </span>
+                </div>
               </div>
             )}
             {product.movement_capacity && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Movement Capacity:</span> {product.movement_capacity}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Movement Capacity:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.movement_capacity}
+                  </span>
+                </div>
               </div>
             )}
             {product.substrate_treatment && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Substrate Treatment:</span> {product.substrate_treatment}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Substrate Treatment:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.substrate_treatment}
+                  </span>
+                </div>
               </div>
             )}
             {product.surface_preparation && (
               <div className="px-6 py-4">
-                <p className="text-gray-800">
-                  <span className="font-medium">Surface Preparation:</span> {product.surface_preparation}
-                </p>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Surface Preparation:</span>
+                  <span className="text-gray-700 leading-relaxed flex-1">
+                    {product.surface_preparation}
+                  </span>
+                </div>
               </div>
             )}
             {product.recommended_uses && product.recommended_uses.length > 0 && (
               <div className="px-6 py-4">
-                <p className="text-gray-800 mb-2 font-medium">Recommended Uses:</p>
-                <ul className="list-disc list-inside space-y-1 text-gray-700">
-                  {product.recommended_uses.map((use, index) => (
-                    <li key={index}>{use}</li>
-                  ))}
-                </ul>
+                <div className="flex items-start gap-2">
+                  <span className="font-medium text-gray-800">Recommended Uses:</span>
+                  <ul className="text-gray-700 leading-relaxed list-disc list-inside flex-1 space-y-1">
+                    {product.recommended_uses.map((use, index) => (
+                      <li key={index}>{use}</li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             )}
           </div>
@@ -529,7 +545,6 @@ const ProductDetail = () => {
     </div>
   </section>
 )}
-
 {/* Technical Specifications */}
 {product.technical_specs && product.technical_specs.length > 0 && (
   <section className="py-16 bg-white">
