@@ -46,6 +46,7 @@ interface Product {
   fully_cured?: string;
   dry_to_sand?: string;
   drying_time_note?: string;
+   storing_conditions?: string;
 
   };
 }
