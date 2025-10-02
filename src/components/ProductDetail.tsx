@@ -667,7 +667,7 @@ const ProductDetail = () => {
                     {product.application.cleaner}
                   </span>
                 </div>
-              </div>
+              </div>  )}
             {product.application.thinner && (
               <div className="px-6 py-4">
                 <div className="flex items-start gap-2">
