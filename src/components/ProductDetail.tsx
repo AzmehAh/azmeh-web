@@ -238,7 +238,18 @@ const ProductDetail = () => {
           .map(({ key, label }) => ({
             property: label,
             value: productData[key] || '',
-            standard: ''
+            standard: '',
+             // ✅ أضف هذه السطور الجديدة هنا
+  dry_to_touch: productData.dry_to_touch || '',
+  dry_to_handle: productData.dry_to_handle || '',
+  complete_setting: productData.complete_setting || '',
+  grouting_time: productData.grouting_time || '',
+  adjustability_time: productData.adjustability_time || '',
+  dry_to_topcoat: productData.dry_to_topcoat || '',
+  initial_setting: productData.initial_setting || '',
+  fully_cured: productData.fully_cured || '',
+  dry_to_sand: productData.dry_to_sand || '',
+  drying_time_note: productData.drying_time_note || ''
           }))
           .filter(spec => spec.value && spec.value.toString().trim() !== ''),
         features: parseArrayField(productData.features),
