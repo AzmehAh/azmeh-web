@@ -18,7 +18,7 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
   return (
     <div className="space-y-4">
       <InputField
-        label="Safety note"
+        label="Safety Precautions"
         value={Array.isArray(data.safety_precautions) ? data.safety_precautions.join(', ') : data.safety_precautions || ''}
         onChange={(v) => handleArrayFieldChange('safety_precautions', v)}
         type="textarea"
@@ -30,8 +30,16 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
         onChange={(v) => handleArrayFieldChange('safety_first_aid', v)}
         type="textarea"
       />
-
-    
+ 
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1">Note</label>
+        <textarea
+          value={data.safety_note || ''}
+          onChange={(e) => handleChange('safety_note', e.target.value)}
+          rows={3}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+        />
+      </div>
     </div>
   );
 };
