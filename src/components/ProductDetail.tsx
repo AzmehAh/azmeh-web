@@ -545,12 +545,7 @@ const ProductDetail = () => {
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-800">Property</th>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-800">Value</th>
-                </tr>
-              </thead>
+              
               <tbody>
                 {product.technical_specs.map((spec, index) => (
                   <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
