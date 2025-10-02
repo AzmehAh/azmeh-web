@@ -29,7 +29,7 @@ interface Product {
   safety_first_aid: string[];
   // الحقول الجديدة للتطبيق
   application?: {
-    note?: string;
+    note_application?: string;
     method_of_application?: string;
     mixing_ratio?: string;
     mixing_note?: string;
@@ -156,7 +156,7 @@ const ProductDetail = () => {
       'pot_life',
       'cleaner',
       'thinner',
-      'note',
+      'note_application',
       'application_temperature',
       'curing_note',
       'number_of_coats'
@@ -711,12 +711,12 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
-             {product.application.note && (
+             {product.application.note_application && (
               <div className="px-6 py-4">
                 <div className="flex items-start gap-2">
                   <span className="font-medium text-gray-800">note:</span>
                   <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.note}
+                    {product.application.note_application}
                   </span>
                 </div>
               </div>
