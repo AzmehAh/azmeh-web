@@ -554,7 +554,7 @@ const ProductDetail = () => {
     </div>
   </section>
 )}
-   {/* Drying Time */}
+ {/* Drying Time */}
 {(
   product.dry_to_touch ||
   product.dry_to_handle ||
@@ -570,70 +570,80 @@ const ProductDetail = () => {
   <section className="py-16 bg-gray-50">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-8 flex items-center justify-center">
           <Wrench className="w-8 h-8 text-blue-600 mr-3" />
           Drying Time
         </h2>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-100">
             {product.dry_to_touch && (
-              <div className="px-6 py-4 flex justify-between">
-                <span className="font-medium text-gray-700 w-2/5">Dry to Touch</span>
-                <span className="text-gray-900 font-semibold text-right w-3/5">{product.dry_to_touch}</span>
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Dry to Touch:</span> {product.dry_to_touch}
+                </p>
               </div>
             )}
             {product.dry_to_handle && (
-              <div className="px-6 py-4 flex justify-between">
-                <span className="font-medium text-gray-700 w-2/5">Dry to Handle</span>
-                <span className="text-gray-900 font-semibold text-right w-3/5">{product.dry_to_handle}</span>
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Dry to Handle:</span> {product.dry_to_handle}
+                </p>
               </div>
             )}
             {product.complete_setting && (
-              <div className="px-6 py-4 flex justify-between">
-                <span className="font-medium text-gray-700 w-2/5">Complete Setting</span>
-                <span className="text-gray-900 font-semibold text-right w-3/5">{product.complete_setting}</span>
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Complete Setting:</span> {product.complete_setting}
+                </p>
               </div>
             )}
             {product.grouting_time && (
-              <div className="px-6 py-4 flex justify-between">
-                <span className="font-medium text-gray-700 w-2/5">Grouting Time</span>
-                <span className="text-gray-900 font-semibold text-right w-3/5">{product.grouting_time}</span>
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Grouting Time:</span> {product.grouting_time}
+                </p>
               </div>
             )}
             {product.adjustability_time && (
-              <div className="px-6 py-4 flex justify-between">
-                <span className="font-medium text-gray-700 w-2/5">Adjustability Time</span>
-                <span className="text-gray-900 font-semibold text-right w-3/5">{product.adjustability_time}</span>
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Adjustability Time:</span> {product.adjustability_time}
+                </p>
               </div>
             )}
             {product.dry_to_topcoat && (
-              <div className="px-6 py-4 flex justify-between">
-                <span className="font-medium text-gray-700 w-2/5">Dry to Topcoat</span>
-                <span className="text-gray-900 font-semibold text-right w-3/5">{product.dry_to_topcoat}</span>
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Dry to Topcoat:</span> {product.dry_to_topcoat}
+                </p>
               </div>
             )}
             {product.initial_setting && (
-              <div className="px-6 py-4 flex justify-between">
-                <span className="font-medium text-gray-700 w-2/5">Initial Setting</span>
-                <span className="text-gray-900 font-semibold text-right w-3/5">{product.initial_setting}</span>
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Initial Setting:</span> {product.initial_setting}
+                </p>
               </div>
             )}
             {product.fully_cured && (
-              <div className="px-6 py-4 flex justify-between">
-                <span className="font-medium text-gray-700 w-2/5">Fully Cured</span>
-                <span className="text-gray-900 font-semibold text-right w-3/5">{product.fully_cured}</span>
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Fully Cured:</span> {product.fully_cured}
+                </p>
               </div>
             )}
             {product.dry_to_sand && (
-              <div className="px-6 py-4 flex justify-between">
-                <span className="font-medium text-gray-700 w-2/5">Dry to Sand</span>
-                <span className="text-gray-900 font-semibold text-right w-3/5">{product.dry_to_sand}</span>
+              <div className="px-6 py-4">
+                <p className="text-gray-800">
+                  <span className="font-medium">Dry to Sand:</span> {product.dry_to_sand}
+                </p>
               </div>
             )}
             {product.drying_time_note && (
               <div className="px-6 py-4">
-                <span className="font-medium text-gray-700 block mb-2">Note</span>
-                <p className="text-gray-900 whitespace-pre-line">{product.drying_time_note}</p>
+                <p className="text-gray-800">
+                  <span className="font-medium">Note:</span> {product.drying_time_note}
+                </p>
               </div>
             )}
           </div>
