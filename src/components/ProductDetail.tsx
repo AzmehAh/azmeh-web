@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers } from "lucide-react";
 import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
-import { useTranslation } from "react-i18next"; // ✅ نفس Hero
+import { useTranslation } from "react-i18next"; 
 
-// تعريف واجهة المنتج - محدثة
+
 interface Product {
   id: string;
   name: string;
@@ -59,7 +59,7 @@ interface Product {
     recommended_uses?: string[];
   };
 }
-
+const { t, i18n } = useTranslation(); 
 const TECHNICAL_FIELDS = [
   { key: 'component_a', label: 'Component A', keyAr: 'component_a_ar' },
   { key: 'component_b', label: 'Component B', keyAr: 'component_b_ar' },
