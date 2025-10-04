@@ -7,32 +7,21 @@ import { useTranslation } from "react-i18next";
 
 
 const AnimatedTitle = ({ text, isActive }) => {
-  const letters = Array.from(text);
-
   const container = {
-    hidden: { opacity: 1 },
-    visible: { opacity: 1, transition: { staggerChildren: 0.03 } },
-  };
-
-  const child = {
-    hidden: { y: 50, opacity: 0, rotateX: -45, skew: "10deg" },
-    visible: {
-      y: 0,
-      opacity: 1,
-      rotateX: 0, 
-      skew: isActive ? "0deg" : "10deg", 
-      scale: isActive ? 1.1 : 1, 
-    
-      transition: { type: "spring", damping: 15, stiffness: 120 },
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.8, type: "spring" } 
     },
   };
 
   return (
-    <motion.div
+    <motion.h1
+      variants={container}
+      initial="hidden"
+      animate="visible"
       style={{
-        display: "flex",
-        perspective: "1000px",
-        transformStyle: "preserve-3d",
         fontSize: isActive
           ? window.innerWidth < 640
             ? "2.5rem"
@@ -40,34 +29,20 @@ const AnimatedTitle = ({ text, isActive }) => {
             ? "3rem"
             : "4rem"
           : window.innerWidth < 640
-          ? "3rem" 
+          ? "3rem"
           : window.innerWidth < 768
           ? "4rem"
           : "5rem",
         fontWeight: "900",
-        fontStyle: "italic",
         color: "white",
-        textTransform: "uppercase",
-        letterSpacing: window.innerWidth < 640 ? "1px" : "2px",
-        cursor: "default",
-        userSelect: "none",
         textAlign: "center",
         lineHeight: "1.1",
+        direction: "inherit",
+        whiteSpace: "nowrap",
       }}
-      variants={container}
-      initial="hidden"
-      animate="visible"
     >
-      {letters.map((letter, index) => (
-        <motion.span
-          key={index}
-          variants={child}
-          style={{ display: "inline-block", transformOrigin: "center bottom" }}
-        >
-          {letter === " " ? "\u00A0" : letter}
-        </motion.span>
-      ))}
-    </motion.div>
+      {text}
+    </motion.h1>
   );
 };
 
