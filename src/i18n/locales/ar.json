@@ -48,7 +48,15 @@
     "storage": "التخزين",
     "safety": "معلومات السلامة",
     "precautions": "الاحتياطات",
-    "firstAid": "الإسعافات الأولية"
+    "firstAid": "الإسعافات الأولية",
+    
+  "joint_preparation": "تحضير الفراغ",
+  "joint_size": "حجم الفراغ",
+  "movement_capacity": "سعة الحركة",
+  "substrate_treatment": "معالجة القاعدة",
+  "surface_preparation": "تحضير السطح",
+  "recommended_uses": "الاستخدامات الموصى بها"
+
   },
   "contact": {
     "title": "اتصل بنا",
@@ -121,12 +129,4 @@
     "apply": "تطبيق",
     "reset": "إعادة تعيين"
   }
-}
-{
-  "joint_preparation": "تحضير الفراغ",
-  "joint_size": "حجم الفراغ",
-  "movement_capacity": "سعة الحركة",
-  "substrate_treatment": "معالجة القاعدة",
-  "surface_preparation": "تحضير السطح",
-  "recommended_uses": "الاستخدامات الموصى بها"
 }
