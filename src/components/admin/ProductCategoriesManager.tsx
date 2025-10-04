@@ -488,7 +488,7 @@ useEffect(() => {
     <>
       <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
         <Upload className="w-4 h-4 mr-2" />
-        Upload Image / حمل الصورة 
+        Upload Image / تنزيل الصورة 
         <input
           type="file"
           accept="image/*"
