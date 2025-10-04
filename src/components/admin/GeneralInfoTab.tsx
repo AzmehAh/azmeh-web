@@ -26,7 +26,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Joint Preparation"
+       labelEn="Joint Preparation"
         labelAr="تحضير الفراغ"
         nameEn="joint_preparation"
         nameAr="joint_preparation_ar"
@@ -37,7 +37,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Joint Size"
+        labelEn="Joint Size"
         labelAr="حجم الفراغ"
         nameEn="joint_size"
         nameAr="joint_size_ar"
@@ -48,7 +48,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Movement Capacity"
+        labelEn="Movement Capacity"
         labelAr="سعة الحركة"
         nameEn="movement_capacity"
         nameAr="movement_capacity_ar"
@@ -59,7 +59,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Substrate Treatment"
+        labelEn="Substrate Treatment"
         labelAr="معالجة السطح الأساسي"
         nameEn="substrate_treatment"
         nameAr="substrate_treatment_ar"
@@ -70,7 +70,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Surface Preparation"
+        labelEn="Surface Preparation"
         labelAr="تحضير السطح"
         nameEn="surface_preparation"
         nameAr="surface_preparation_ar"
@@ -81,7 +81,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Recommended Uses"
+       labelEn="Recommended Uses"
         labelAr="الاستخدامات الموصى بها"
         nameEn="recommended_uses"
         nameAr="recommended_uses_ar"
