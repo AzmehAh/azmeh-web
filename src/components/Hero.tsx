@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase";
+import { useTranslation } from "react-i18next";
 
 
 const AnimatedTitle = ({ text, isActive }) => {
@@ -71,6 +72,8 @@ const AnimatedTitle = ({ text, isActive }) => {
 };
 
 const Hero = () => {
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
   const [activeIndex, setActiveIndex] = useState(0);
   const [isManual, setIsManual] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -89,8 +92,8 @@ const Hero = () => {
       try {
         const { data, error } = await supabase
           .from("product_categories")
-          .select("id, name, description, image_url , button_link")
-          .eq("is_active", true) 
+          .select("id, name, name_ar, description, description_ar, image_url , button_link")
+          .eq("is_active", true)
           .order("sort_order", { ascending: true });
 
         if (error) throw error;
@@ -207,7 +210,7 @@ const Hero = () => {
                     textAlign: isActive ? "left" : "center",
                   }}
                 >
-                  <AnimatedTitle text={category.name} isActive={isActive} />
+                  <AnimatedTitle text={isRTL && category.name_ar ? category.name_ar : category.name} isActive={isActive} />
                 </div>
 
          
@@ -219,7 +222,7 @@ const Hero = () => {
                     transition={{ delay: 0.3, duration: 0.5 }}
                   >
                     <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
-                      {category.description}
+                      {isRTL && category.description_ar ? category.description_ar : category.description}
                     </p>
              <motion.button
   onClick={() => {
@@ -232,8 +235,8 @@ const Hero = () => {
   whileTap={{ scale: 0.98 }}
   className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300 text-sm sm:text-base"
 >
-  <span>READ MORE</span>
-  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+  <span>{t('hero.readMore')}</span>
+  <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} />
 </motion.button>
 
                   </motion.div>

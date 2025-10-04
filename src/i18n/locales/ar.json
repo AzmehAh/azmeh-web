@@ -1,0 +1,124 @@
+{
+  "header": {
+    "products": "المنتجات",
+    "about": "من نحن",
+    "blog": "المدونة",
+    "contact": "اتصل بنا",
+    "technicalSupport": "الدعم الفني",
+    "faq": "الأسئلة الشائعة",
+    "troubleshooting": "استكشاف الأخطاء",
+    "viewAllFaq": "عرض جميع فئات الأسئلة الشائعة ←",
+    "viewAllTroubleshooting": "عرض جميع المشاكل ←",
+    "contactUs": "اتصل بنا",
+    "applyForJob": "التقدم لوظيفة",
+    "contactAndJob": "التواصل والتوظيف",
+    "home": "الرئيسية"
+  },
+  "hero": {
+    "readMore": "اقرأ المزيد"
+  },
+  "about": {
+    "title": "من نحن",
+    "founder": "المؤسس",
+    "goals": "أهدافنا",
+    "values": "قيمنا"
+  },
+  "products": {
+    "title": "المنتجات",
+    "filter": "تصفية",
+    "search": "ابحث عن المنتجات...",
+    "brand": "العلامة التجارية",
+    "type": "النوع",
+    "material": "المادة",
+    "usage": "الاستخدام",
+    "allBrands": "جميع العلامات",
+    "allTypes": "جميع الأنواع",
+    "allMaterials": "جميع المواد",
+    "allUsages": "جميع الاستخدامات",
+    "viewDetails": "عرض التفاصيل",
+    "noProducts": "لا توجد منتجات",
+    "noProductsDescription": "حاول تعديل التصفية أو البحث",
+    "productCode": "كود المنتج",
+    "overview": "نظرة عامة",
+    "features": "الميزات",
+    "applications": "التطبيقات",
+    "instructions": "التعليمات",
+    "technicalSpecs": "المواصفات الفنية",
+    "packaging": "التعبئة",
+    "storage": "التخزين",
+    "safety": "معلومات السلامة",
+    "precautions": "الاحتياطات",
+    "firstAid": "الإسعافات الأولية"
+  },
+  "contact": {
+    "title": "اتصل بنا",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "subject": "الموضوع",
+    "message": "الرسالة",
+    "send": "إرسال الرسالة",
+    "sending": "جاري الإرسال...",
+    "success": "تم إرسال الرسالة بنجاح!",
+    "error": "فشل إرسال الرسالة"
+  },
+  "job": {
+    "title": "التقدم لوظيفة",
+    "fullName": "الاسم الكامل",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "coverLetter": "خطاب التقديم",
+    "resume": "السيرة الذاتية",
+    "submit": "إرسال الطلب",
+    "submitting": "جاري الإرسال...",
+    "success": "تم إرسال الطلب بنجاح!",
+    "error": "فشل إرسال الطلب"
+  },
+  "blog": {
+    "title": "المدونة",
+    "readMore": "اقرأ المزيد",
+    "noPosts": "لا توجد مقالات",
+    "categories": "الفئات",
+    "recent": "المقالات الأخيرة"
+  },
+  "faq": {
+    "title": "الأسئلة الشائعة",
+    "categories": "فئات الأسئلة الشائعة",
+    "search": "ابحث عن سؤال..."
+  },
+  "troubleshooting": {
+    "title": "استكشاف الأخطاء",
+    "problem": "المشكلة",
+    "solution": "الحل",
+    "severity": "الخطورة",
+    "low": "منخفض",
+    "medium": "متوسط",
+    "high": "عالي",
+    "critical": "حرج"
+  },
+  "footer": {
+    "about": "معلومات عنا",
+    "quickLinks": "روابط سريعة",
+    "contact": "اتصل بنا",
+    "followUs": "تابعنا",
+    "rights": "جميع الحقوق محفوظة"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "خطأ",
+    "success": "نجح",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "close": "إغلاق",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "search": "بحث",
+    "filter": "تصفية",
+    "clear": "مسح",
+    "apply": "تطبيق",
+    "reset": "إعادة تعيين"
+  }
+}

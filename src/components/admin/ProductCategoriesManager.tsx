@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Plus, 
-  Search, 
-  Edit, 
-  Trash2, 
+import {
+  Plus,
+  Search,
+  Edit,
+  Trash2,
   Save,
   X,
   Package,
   ChevronDown,
-  ChevronUp 
+  ChevronUp
 } from 'lucide-react';
 import { supabase, ProductCategory } from '../../lib/supabase';
 import { Upload } from "lucide-react";
+import BilingualInput from './BilingualInput';
 
 const ProductCategoriesManager = () => {
   const [categories, setCategories] = useState<ProductCategory[]>([]);
@@ -232,11 +233,13 @@ const CategoryModal = ({
 }) => {
   const [formData, setFormData] = useState({
     name: '',
+    name_ar: '',
     description: '',
+    description_ar: '',
     sort_order: 0,
     is_active: true,
-    image_url: '', 
-     button_link: '',
+    image_url: '',
+    button_link: '',
   });
   const [saving, setSaving] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null); // عرض مصغّر للصورة
@@ -246,22 +249,25 @@ const CategoryModal = ({
     if (category) {
       setFormData({
         name: category.name,
+        name_ar: category.name_ar || '',
         description: category.description || '',
+        description_ar: category.description_ar || '',
         sort_order: category.sort_order,
         is_active: category.is_active,
         image_url: category.image_url || '',
-        button_link: category.button_link || '', 
-        
+        button_link: category.button_link || '',
       });
       setImagePreview(category.image_url || null);
     } else {
       setFormData({
         name: '',
+        name_ar: '',
         description: '',
+        description_ar: '',
         sort_order: 0,
         is_active: true,
         image_url: '',
-         button_link: '', 
+        button_link: '',
       });
       setImagePreview(null);
     }
@@ -385,36 +391,44 @@ useEffect(() => {
 
           <div className="p-6 space-y-4">
             {/* Name */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category Name *</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="e.g., Industrial Coatings"
-                />
-              ) : (
+            {isEditing ? (
+              <BilingualInput
+                label="Category Name"
+                nameEn="name"
+                nameAr="name_ar"
+                valueEn={formData.name}
+                valueAr={formData.name_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                required
+                placeholder="e.g., Industrial Coatings"
+              />
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Category Name</label>
                 <p className="text-gray-900">{formData.name}</p>
-              )}
-            </div>
+                {formData.name_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.name_ar}</p>}
+              </div>
+            )}
 
             {/* Description */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-              {isEditing ? (
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="Category description..."
-                />
-              ) : (
+            {isEditing ? (
+              <BilingualInput
+                label="Description"
+                nameEn="description"
+                nameAr="description_ar"
+                valueEn={formData.description}
+                valueAr={formData.description_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                type="textarea"
+                placeholder="Category description..."
+              />
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
                 <p className="text-gray-900">{formData.description}</p>
-              )}
-            </div>
+                {formData.description_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.description_ar}</p>}
+              </div>
+            )}
 
             {/* Sort Order */}
             <div>
