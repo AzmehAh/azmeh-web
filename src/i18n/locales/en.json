@@ -122,3 +122,11 @@
     "reset": "Reset"
   }
 }
+{
+  "joint_preparation": "Joint Preparation",
+  "joint_size": "Joint Size",
+  "movement_capacity": "Movement Capacity",
+  "substrate_treatment": "Substrate Treatment",
+  "surface_preparation": "Surface Preparation",
+  "recommended_uses": "Recommended Uses"
+}
