@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers } from "lucide-react";
 import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
-import { useTranslation } from "react-i18next"; // ✅ نفس Hero
+import { useTranslation } from "react-i18next";
 
-// تعريف واجهة المنتج - محدثة
+// تعريف واجهة المنتج - كما هي
 interface Product {
   id: string;
   name: string;
@@ -109,13 +109,12 @@ const brands = [
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { i18n } = useTranslation(); // ✅ نفس Hero
+  const { t, i18n } = useTranslation(); // ✅ t للترجمة
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
-  // دالة مساعدة لاختيار الحقل حسب اللغة
   const getLocalizedField = (enValue: any, arValue: any) => {
     if (i18n.language === 'ar') {
       return arValue || enValue;
@@ -123,7 +122,6 @@ const ProductDetail = () => {
     return enValue;
   };
 
-  // دالة مساعدة لتحليل الحقول المصفوفة
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
     if (typeof field === 'string') {
@@ -181,7 +179,6 @@ const ProductDetail = () => {
         return;
       }
 
-      // جلب الصور
       let imagesData = [];
       try {
         const { data: images } = await supabase
@@ -202,7 +199,6 @@ const ProductDetail = () => {
         console.error('Error fetching main image:', e);
       }
 
-      // بناء المنتج المنسق مع دعم اللغة
       const formattedProduct: Product = {
         id: productData.id,
         name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
@@ -255,7 +251,7 @@ const ProductDetail = () => {
       setProduct(formattedProduct);
     } catch (error) {
       console.error('Error fetching product:', error);
-      setError('Failed to load product. Please try again.');
+      setError(t('error_loading_product'));
       setProduct(null);
     } finally {
       setLoading(false);
@@ -266,7 +262,7 @@ const ProductDetail = () => {
     if (id) {
       fetchProduct(id);
     }
-  }, [id, i18n.language]); // ✅ إعادة الجلب عند تغيير اللغة
+  }, [id, i18n.language]);
 
   useEffect(() => {
     if (product && product.images && product.images.length > 1) {
@@ -278,7 +274,7 @@ const ProductDetail = () => {
   }, [product]);
 
   const handleDownloadDatasheet = () => {
-    alert("سيتم تنزيل ورقة البيانات الفنية قريباً");
+    alert(t('download_datasheet') + " قريباً");
   };
 
   const brandLogo = product && brands.find((b) =>
@@ -297,13 +293,13 @@ const ProductDetail = () => {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Error Loading Product</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">{t('error_loading_product')}</h1>
           <p className="text-gray-600 mb-4">{error}</p>
           <Link
             to="/products"
             className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Back to Products
+            {t('back_to_products')}
           </Link>
         </div>
       </div>
@@ -314,13 +310,13 @@ const ProductDetail = () => {
     return (
       <div className="min-h-[70vh] flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">Product Not Found</h1>
-          <p className="text-gray-600 mb-8">The product you're looking for doesn't exist.</p>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">{t('product_not_found')}</h1>
+          <p className="text-gray-600 mb-8">{t('product_not_found_desc')}</p>
           <Link
             to="/products"
             className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Back to Products
+            {t('back_to_products')}
           </Link>
         </div>
       </div>
@@ -334,9 +330,9 @@ const ProductDetail = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative mb-8">
             <div className="flex items-center text-sm text-white">
-              <Link to="/" className="hover:text-[#0055A3] transition-colors">Home</Link>
+              <Link to="/" className="hover:text-[#0055A3] transition-colors">{t('home')}</Link>
               <span className="mx-2">/</span>
-              <Link to="/products" className="hover:text-[#0055A3] transition-colors">Products</Link>
+              <Link to="/products" className="hover:text-[#0055A3] transition-colors">{t('products')}</Link>
               <span className="mx-2">/</span>
               <span className="text-white">{product.name}</span>
             </div>
@@ -361,7 +357,7 @@ const ProductDetail = () => {
                 <div className="mb-8">
                   <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
                     <Package className="w-5 h-5 text-white mr-2" />
-                    Packaging & Sizes
+                    {t('packaging_sizes')}
                   </h3>
                   <div className="flex flex-wrap gap-4">
                     {product.packaging.map((pack, index) => (
@@ -378,7 +374,7 @@ const ProductDetail = () => {
                 className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center"
               >
                 <Download className="w-6 h-6 mr-3" />
-                Download Technical Datasheet
+                {t('download_datasheet')}
               </button>
             </div>
 
@@ -440,14 +436,14 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
                 <Info className="w-8 h-8 text-green-600 mr-3" />
-                General Information
+                {t('general_information')}
               </h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="divide-y divide-gray-200">
                   {product.recommended_uses && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Recommended Uses:</span>
+                        <span className="font-medium text-gray-800">{t('products.recommended_uses')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">
                           {Array.isArray(product.recommended_uses) 
                             ? product.recommended_uses.join(', ') 
@@ -459,7 +455,7 @@ const ProductDetail = () => {
                   {product.joint_preparation && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Joint Preparation:</span>
+                        <span className="font-medium text-gray-800">{t('products.joint_preparation')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.joint_preparation}</span>
                       </div>
                     </div>
@@ -467,7 +463,7 @@ const ProductDetail = () => {
                   {product.joint_size && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Joint Size:</span>
+                        <span className="font-medium text-gray-800">{t('products.joint_size')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.joint_size}</span>
                       </div>
                     </div>
@@ -475,7 +471,7 @@ const ProductDetail = () => {
                   {product.movement_capacity && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Movement Capacity:</span>
+                        <span className="font-medium text-gray-800">{t('products.movement_capacity')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.movement_capacity}</span>
                       </div>
                     </div>
@@ -483,7 +479,7 @@ const ProductDetail = () => {
                   {product.substrate_treatment && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Substrate Treatment:</span>
+                        <span className="font-medium text-gray-800">{t('products.substrate_treatment')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.substrate_treatment}</span>
                       </div>
                     </div>
@@ -491,7 +487,7 @@ const ProductDetail = () => {
                   {product.surface_preparation && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Surface Preparation:</span>
+                        <span className="font-medium text-gray-800">{t('products.surface_preparation')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.surface_preparation}</span>
                       </div>
                     </div>
@@ -512,7 +508,7 @@ const ProductDetail = () => {
                 <div className="bg-[#2C5DB6] px-6 py-4">
                   <h2 className="text-lg font-bold text-white flex items-center">
                     <FileText className="w-5 h-5 mr-2" />
-                    Technical Specifications
+                    {t('technical_specifications')}
                   </h2>
                 </div>
                 <div className="overflow-x-auto">
@@ -540,7 +536,7 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-800 mb-10 flex items-center justify-center">
                 <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
-                Key Features
+                {t('key_features')}
               </h2>
               <div className="space-y-4">
                 {product.features.map((feature, index) => (
@@ -569,14 +565,14 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
                 <Layers className="w-8 h-8 text-green-600 mr-3" />
-                Application Instructions
+                {t('application_instructions')}
               </h2>
               <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="divide-y divide-gray-100">
                   {product.application.method_of_application && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Method of Application:</span>
+                        <span className="font-medium text-gray-800">{t('products.method_of_application')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.application.method_of_application}</span>
                       </div>
                     </div>
@@ -584,7 +580,7 @@ const ProductDetail = () => {
                   {product.application.mixing_ratio && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Mixing Ratio:</span>
+                        <span className="font-medium text-gray-800">{t('products.mixing_ratio')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.application.mixing_ratio}</span>
                       </div>
                     </div>
@@ -592,7 +588,7 @@ const ProductDetail = () => {
                   {product.application.mixing_note && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Mixing Note:</span>
+                        <span className="font-medium text-gray-800">{t('products.mixing_note')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.application.mixing_note}</span>
                       </div>
                     </div>
@@ -600,7 +596,7 @@ const ProductDetail = () => {
                   {product.application.mixing_steps && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Mixing Steps:</span>
+                        <span className="font-medium text-gray-800">{t('products.mixing_steps')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.application.mixing_steps}</span>
                       </div>
                     </div>
@@ -608,7 +604,7 @@ const ProductDetail = () => {
                   {product.application.cleaner && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Cleaner:</span>
+                        <span className="font-medium text-gray-800">{t('products.cleaner')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.application.cleaner}</span>
                       </div>
                     </div>
@@ -616,7 +612,7 @@ const ProductDetail = () => {
                   {product.application.thinner && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Thinner:</span>
+                        <span className="font-medium text-gray-800">{t('products.thinner')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.application.thinner}</span>
                       </div>
                     </div>
@@ -624,7 +620,7 @@ const ProductDetail = () => {
                   {product.application.application_temperature && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Application Temperature:</span>
+                        <span className="font-medium text-gray-800">{t('products.application_temperature')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.application.application_temperature}</span>
                       </div>
                     </div>
@@ -632,7 +628,7 @@ const ProductDetail = () => {
                   {product.application.curing_note && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Curing Note:</span>
+                        <span className="font-medium text-gray-800">{t('products.curing_note')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.application.curing_note}</span>
                       </div>
                     </div>
@@ -640,7 +636,7 @@ const ProductDetail = () => {
                   {product.application.note_application && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Note:</span>
+                        <span className="font-medium text-gray-800">{t('products.note_application')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.application.note_application}</span>
                       </div>
                     </div>
@@ -670,14 +666,14 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
                 <Wrench className="w-8 h-8 text-blue-600 mr-3" />
-                Drying Time
+                {t('drying_time')}
               </h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="divide-y divide-gray-100">
                   {product.dry_to_touch && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Dry to Touch:</span>
+                        <span className="font-medium text-gray-800">{t('products.dry_to_touch')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_touch}</span>
                       </div>
                     </div>
@@ -685,7 +681,7 @@ const ProductDetail = () => {
                   {product.dry_to_handle && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Dry to Handle:</span>
+                        <span className="font-medium text-gray-800">{t('products.dry_to_handle')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_handle}</span>
                       </div>
                     </div>
@@ -693,7 +689,7 @@ const ProductDetail = () => {
                   {product.complete_setting && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Complete Setting:</span>
+                        <span className="font-medium text-gray-800">{t('products.complete_setting')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.complete_setting}</span>
                       </div>
                     </div>
@@ -701,7 +697,7 @@ const ProductDetail = () => {
                   {product.grouting_time && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Grouting Time:</span>
+                        <span className="font-medium text-gray-800">{t('products.grouting_time')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.grouting_time}</span>
                       </div>
                     </div>
@@ -709,7 +705,7 @@ const ProductDetail = () => {
                   {product.adjustability_time && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Adjustability Time:</span>
+                        <span className="font-medium text-gray-800">{t('products.adjustability_time')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.adjustability_time}</span>
                       </div>
                     </div>
@@ -717,7 +713,7 @@ const ProductDetail = () => {
                   {product.dry_to_topcoat && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Dry to Topcoat:</span>
+                        <span className="font-medium text-gray-800">{t('products.dry_to_topcoat')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_topcoat}</span>
                       </div>
                     </div>
@@ -725,7 +721,7 @@ const ProductDetail = () => {
                   {product.initial_setting && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Initial Setting:</span>
+                        <span className="font-medium text-gray-800">{t('products.initial_setting')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.initial_setting}</span>
                       </div>
                     </div>
@@ -733,7 +729,7 @@ const ProductDetail = () => {
                   {product.fully_cured && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Fully Cured:</span>
+                        <span className="font-medium text-gray-800">{t('products.fully_cured')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.fully_cured}</span>
                       </div>
                     </div>
@@ -741,7 +737,7 @@ const ProductDetail = () => {
                   {product.dry_to_sand && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Dry to Sand:</span>
+                        <span className="font-medium text-gray-800">{t('products.dry_to_sand')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_sand}</span>
                       </div>
                     </div>
@@ -749,7 +745,7 @@ const ProductDetail = () => {
                   {product.drying_time_note && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Note:</span>
+                        <span className="font-medium text-gray-800">{t('products.drying_time_note')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.drying_time_note}</span>
                       </div>
                     </div>
@@ -767,7 +763,7 @@ const ProductDetail = () => {
           <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
               <Shield className="w-8 h-8 text-green-600 mr-3" />
-              Storing Conditions
+              {t('storing_conditions')}
             </h2>
             <div
               className="max-w-4xl prose prose-lg mx-auto bg-gray-50 rounded-2xl p-8"
@@ -784,7 +780,7 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto text-center mb-10">
               <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center">
                 <Shield className="w-8 h-8 text-red-500 mr-3" />
-                Note
+                {t('safety_note')}
               </h2>
             </div>
             <div className="max-w-6xl mx-auto">
@@ -801,4 +797,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;  
+export default ProductDetail;
