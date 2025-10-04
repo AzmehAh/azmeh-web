@@ -1,6 +1,6 @@
 // src/components/admin/TechnicalTab.tsx
 import React from 'react';
-import { InputField } from './FormComponents';
+import BilingualInput from './BilingualInput';
 
 interface Props {
   data: any;
@@ -8,41 +8,58 @@ interface Props {
 }
 
 export const TechnicalTab: React.FC<Props> = ({ data, onChange }) => {
-  const handleChange = (field: string, value: any) => onChange(field, value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    onChange(e.target.name, e.target.value);
+  };
+
+  const fields = [
+    { en: 'number_of_coats', label: 'Number of Coats' },
+    { en: 'tensile_adhesion_strength', label: 'Tensile Adhesion Strength' },
+    { en: 'material_consumption', label: 'Material Consumption' },
+    { en: 'viscosity', label: 'Viscosity' },
+    { en: 'weather_resistance', label: 'Weather Resistance' },
+    { en: 'compressive_strength', label: 'Compressive Strength' },
+    { en: 'tear_resistance', label: 'Tear Resistance' },
+    { en: 'elongation_at_rupture', label: 'Elongation at Rupture' },
+    { en: 'tensile_strength_100', label: 'Tensile Strength at 100% Elongation' },
+    { en: 'tensile_strength_50', label: 'Tensile Strength at 50% Elongation' },
+    { en: 'specific_gravity_mixed', label: 'Specific Gravity (Mixed)' },
+    { en: 'solvent_resistance', label: 'Solvent Resistance' },
+    { en: 'chemical_resistance', label: 'Chemical Resistance' },
+    { en: 'abrasion_resistance', label: 'Abrasion Resistance' },
+    { en: 'friction_resistance', label: 'Friction Resistance' },
+    { en: 'washability', label: 'Washability' },
+    { en: 'water_resistance', label: 'Water Resistance' },
+    { en: 'theoretical_spreading_rate', label: 'Theoretical Spreading Rate' },
+    { en: 'recommended_film_thickness', label: 'Recommended Film Thickness' },
+    { en: 'temperature_resistance', label: 'Temperature Resistance' },
+    { en: 'solvent_splash_resistance', label: 'Solvent Splash Resistance' },
+    { en: 'sandability', label: 'Sandability' },
+    { en: 'adhesion', label: 'Adhesion' },
+    { en: 'flexibility', label: 'Flexibility' },
+    { en: 'voc', label: 'VOC' },
+    { en: 'volume_solids', label: 'Volume Solids' },
+    { en: 'gloss', label: 'Gloss' },
+    { en: 'color', label: 'Color' },
+    { en: 'component_a', label: 'Component A' },
+    { en: 'component_b', label: 'Component B' },
+    { en: 'note', label: 'Note' }
+  ];
 
   return (
-    <div className="grid grid-cols-1 gap-4">
-      <InputField label="Number of Coats" value={data.number_of_coats || ''} onChange={(v) => handleChange('number_of_coats', v)} type="textarea" />
-      <InputField label="Tensile Adhesion Strength" value={data.tensile_adhesion_strength || ''} onChange={(v) => handleChange('tensile_adhesion_strength', v)} type="textarea" />
-      <InputField label="Material Consumption" value={data.material_consumption || ''} onChange={(v) => handleChange('material_consumption', v)} type="textarea" />
-      <InputField label="Viscosity" value={data.viscosity || ''} onChange={(v) => handleChange('viscosity', v)} type="textarea" />
-      <InputField label="Weather Resistance" value={data.weather_resistance || ''} onChange={(v) => handleChange('weather_resistance', v)} type="textarea" />
-      <InputField label="Compressive Strength" value={data.compressive_strength || ''} onChange={(v) => handleChange('compressive_strength', v)} type="textarea" />
-      <InputField label="Tear Resistance" value={data.tear_resistance || ''} onChange={(v) => handleChange('tear_resistance', v)} type="textarea" />
-      <InputField label="Elongation at Rupture" value={data.elongation_at_rupture || ''} onChange={(v) => handleChange('elongation_at_rupture', v)} type="textarea" />
-      <InputField label="Tensile Strength at 100% Elongation" value={data.tensile_strength_100 || ''} onChange={(v) => handleChange('tensile_strength_100', v)} type="textarea" />
-      <InputField label="Tensile Strength at 50% Elongation" value={data.tensile_strength_50 || ''} onChange={(v) => handleChange('tensile_strength_50', v)} type="textarea" />
-      <InputField label="Specific Gravity (Mixed)" value={data.specific_gravity_mixed || ''} onChange={(v) => handleChange('specific_gravity_mixed', v)} type="textarea" />
-      <InputField label="Solvent Resistance" value={data.solvent_resistance || ''} onChange={(v) => handleChange('solvent_resistance', v)} type="textarea" />
-      <InputField label="Chemical Resistance" value={data.chemical_resistance || ''} onChange={(v) => handleChange('chemical_resistance', v)} type="textarea" />
-      <InputField label="Abrasion Resistance" value={data.abrasion_resistance || ''} onChange={(v) => handleChange('abrasion_resistance', v)} type="textarea" />
-      <InputField label="Friction Resistance" value={data.friction_resistance || ''} onChange={(v) => handleChange('friction_resistance', v)} type="textarea" />
-      <InputField label="Washability" value={data.washability || ''} onChange={(v) => handleChange('washability', v)} type="textarea" />
-      <InputField label="Water Resistance" value={data.water_resistance || ''} onChange={(v) => handleChange('water_resistance', v)} type="textarea" />
-      <InputField label="Theoretical Spreading Rate" value={data.theoretical_spreading_rate || ''} onChange={(v) => handleChange('theoretical_spreading_rate', v)} type="textarea" />
-      <InputField label="Recommended Film Thickness" value={data.recommended_film_thickness || ''} onChange={(v) => handleChange('recommended_film_thickness', v)} type="textarea" />
-      <InputField label="Temperature Resistance" value={data.temperature_resistance || ''} onChange={(v) => handleChange('temperature_resistance', v)} type="textarea" />
-      <InputField label="Solvent Splash Resistance" value={data.solvent_splash_resistance || ''} onChange={(v) => handleChange('solvent_splash_resistance', v)} type="textarea" />
-      <InputField label="Sandability" value={data.sandability || ''} onChange={(v) => handleChange('sandability', v)} type="textarea" />
-      <InputField label="Adhesion" value={data.adhesion || ''} onChange={(v) => handleChange('adhesion', v)} type="textarea" />
-      <InputField label="Flexibility" value={data.flexibility || ''} onChange={(v) => handleChange('flexibility', v)} type="textarea" />
-      <InputField label="VOC" value={data.voc || ''} onChange={(v) => handleChange('voc', v)} type="textarea" />
-      <InputField label="Volume Solids" value={data.volume_solids || ''} onChange={(v) => handleChange('volume_solids', v)} type="textarea" />
-      <InputField label="Gloss" value={data.gloss || ''} onChange={(v) => handleChange('gloss', v)} type="textarea" />
-      <InputField label="Color" value={data.color || ''} onChange={(v) => handleChange('color', v)} type="textarea" />
-      <InputField label="Component A" value={data.component_a || ''} onChange={(v) => handleChange('component_a', v)} type="textarea" />
-      <InputField label="Component B" value={data.component_b || ''} onChange={(v) => handleChange('component_b', v)} type="textarea" />
-      <InputField label="Note" value={data.note || ''} onChange={(v) => handleChange('note', v)} type="textarea" rows={5} />
+    <div className="space-y-6">
+      {fields.map(field => (
+        <BilingualInput
+          key={field.en}
+          label={field.label}
+          nameEn={field.en}
+          nameAr={`${field.en}_ar`}
+          valueEn={data[field.en] || ''}
+          valueAr={data[`${field.en}_ar`] || ''}
+          onChange={handleChange}
+          type="textarea"
+        />
+      ))}
     </div>
   );
 };

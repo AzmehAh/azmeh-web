@@ -1,6 +1,8 @@
 import React from 'react';
 import { Upload, Trash2 } from 'lucide-react';
-import { InputField } from './FormComponents'; // تأكد أن ArrayInputField غير مستخدم هنا
+import { InputField } from './FormComponents';
+import BilingualInput from './BilingualInput';
+import BilingualArrayInput from './BilingualArrayInput';
 
 interface Props {
   data: any;
@@ -74,17 +76,24 @@ export const GeneralTab: React.FC<Props> = ({
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <InputField
-          label="Product Name *"
-          value={data.name || ''}
-          onChange={(v) => onChange('name', v)}
+      <div className="space-y-6">
+        <BilingualInput
+          label="Product Name"
+          nameEn="name"
+          nameAr="name_ar"
+          valueEn={data.name || ''}
+          valueAr={data.name_ar || ''}
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+          required
         />
+
         <InputField
           label="Product Code *"
           value={data.code || ''}
           onChange={(v) => onChange('code', v)}
         />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Brand *</label>
@@ -163,25 +172,30 @@ export const GeneralTab: React.FC<Props> = ({
           </select>
         </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Description *</label>
-          <textarea
-            value={data.description || ''}
-            onChange={(e) => onChange('description', e.target.value)}
-            rows={3}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
         </div>
 
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Technical Description</label>
-          <textarea
-            value={data.technical_description || ''}
-            onChange={(e) => onChange('technical_description', e.target.value)}
-            rows={4}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          />
-        </div>
+        <BilingualInput
+          label="Description"
+          nameEn="description"
+          nameAr="description_ar"
+          valueEn={data.description || ''}
+          valueAr={data.description_ar || ''}
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+          type="textarea"
+          required
+        />
+
+        <BilingualInput
+          label="Technical Description"
+          nameEn="technical_description"
+          nameAr="technical_description_ar"
+          valueEn={data.technical_description || ''}
+          valueAr={data.technical_description_ar || ''}
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+          type="textarea"
+        />
+
+        <div className="space-y-4">
 
         {/* Packaging */}
         <div className="md:col-span-2">
@@ -215,55 +229,19 @@ export const GeneralTab: React.FC<Props> = ({
           </div>
         </div>
 
-        {/* Features */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Product Features</label>
-          <div className="space-y-2">
-            {(data.features || []).map((item: any, idx: number) => (
-              <div key={idx} className="flex gap-2">
-                <input
-                  type="text"
-                  value={item || ''}
-                  onChange={(e) => handleFeatureChange(idx, e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="e.g., UV resistance, Water repellent"
-                />
-                <button
-                  type="button"
-                  onClick={() => removeFeature(idx)}
-                  className="px-3 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addFeature}
-              className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-            >
-              + Add Feature
-            </button>
-          </div>
         </div>
 
-        {/* الحقول الإضافية الأخرى */}
-        {additionalFields.map((field) => (
-          <div key={field.key} className="md:col-span-2">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {field.label}
-            </label>
-            <textarea
-              value={data[field.key] || ''}
-              onChange={(e) => onChange(field.key, e.target.value)}
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-            />
-          </div>
-        ))}
+        {/* Features */}
+        <BilingualArrayInput
+          label="Product Features"
+          valueEn={Array.isArray(data.features) ? data.features : []}
+          valueAr={Array.isArray(data.features_ar) ? data.features_ar : []}
+          onChangeEn={(items) => onChange('features', items)}
+          onChangeAr={(items) => onChange('features_ar', items)}
+        />
 
         {/* Images */}
-        <div className="md:col-span-2">
+        <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
           <div className="space-y-4">
             <div className="flex items-center gap-4">

@@ -1,6 +1,6 @@
 // src/components/admin/DryingTimeTab.tsx
 import React from 'react';
-import { InputField } from './FormComponents';
+import BilingualInput from './BilingualInput';
 
 interface Props {
   data: any;
@@ -8,79 +8,110 @@ interface Props {
 }
 
 export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
-  const handleChange = (field: string, value: any) => onChange(field, value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    onChange(e.target.name, e.target.value);
+  };
 
   return (
-    <div className="grid grid-cols-1 gap-4">
-      <InputField
+    <div className="space-y-6">
+      <BilingualInput
         label="Dry to Touch"
-        value={data.dry_to_touch || ''}
-        onChange={(v) => handleChange('dry_to_touch', v)}
+        nameEn="dry_to_touch"
+        nameAr="dry_to_touch_ar"
+        valueEn={data.dry_to_touch || ''}
+        valueAr={data.dry_to_touch_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField
+      <BilingualInput
         label="Dry to Handle"
-        value={data.dry_to_handle || ''}
-        onChange={(v) => handleChange('dry_to_handle', v)}
+        nameEn="dry_to_handle"
+        nameAr="dry_to_handle_ar"
+        valueEn={data.dry_to_handle || ''}
+        valueAr={data.dry_to_handle_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField
+      <BilingualInput
         label="Complete Setting"
-        value={data.complete_setting || ''}
-        onChange={(v) => handleChange('complete_setting', v)}
+        nameEn="complete_setting"
+        nameAr="complete_setting_ar"
+        valueEn={data.complete_setting || ''}
+        valueAr={data.complete_setting_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField
+      <BilingualInput
         label="Grouting Time"
-        value={data.grouting_time || ''}
-        onChange={(v) => handleChange('grouting_time', v)}
+        nameEn="grouting_time"
+        nameAr="grouting_time_ar"
+        valueEn={data.grouting_time || ''}
+        valueAr={data.grouting_time_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField
+      <BilingualInput
         label="Adjustability Time"
-        value={data.adjustability_time || ''}
-        onChange={(v) => handleChange('adjustability_time', v)}
+        nameEn="adjustability_time"
+        nameAr="adjustability_time_ar"
+        valueEn={data.adjustability_time || ''}
+        valueAr={data.adjustability_time_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField
+      <BilingualInput
         label="Dry to Topcoat"
-        value={data.dry_to_topcoat || ''}
-        onChange={(v) => handleChange('dry_to_topcoat', v)}
+        nameEn="dry_to_topcoat"
+        nameAr="dry_to_topcoat_ar"
+        valueEn={data.dry_to_topcoat || ''}
+        valueAr={data.dry_to_topcoat_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField
+      <BilingualInput
         label="Initial Setting"
-        value={data.initial_setting || ''}
-        onChange={(v) => handleChange('initial_setting', v)}
+        nameEn="initial_setting"
+        nameAr="initial_setting_ar"
+        valueEn={data.initial_setting || ''}
+        valueAr={data.initial_setting_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField
+      <BilingualInput
         label="Fully Cured"
-        value={data.fully_cured || ''}
-        onChange={(v) => handleChange('fully_cured', v)}
+        nameEn="fully_cured"
+        nameAr="fully_cured_ar"
+        valueEn={data.fully_cured || ''}
+        valueAr={data.fully_cured_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField
+      <BilingualInput
         label="Dry to Sand"
-        value={data.dry_to_sand || ''}
-        onChange={(v) => handleChange('dry_to_sand', v)}
-        type="textarea" 
+        nameEn="dry_to_sand"
+        nameAr="dry_to_sand_ar"
+        valueEn={data.dry_to_sand || ''}
+        valueAr={data.dry_to_sand_ar || ''}
+        onChange={handleChange}
+        type="textarea"
       />
 
-      <InputField
-        label="Note"
-        value={data.drying_time_note || ''}
-        onChange={(v) => handleChange('drying_time_note', v)}
+      <BilingualInput
+        label="Drying Time Note"
+        nameEn="drying_time_note"
+        nameAr="drying_time_note_ar"
+        valueEn={data.drying_time_note || ''}
+        valueAr={data.drying_time_note_ar || ''}
+        onChange={handleChange}
         type="textarea"
-        rows={4}
       />
     </div>
   );

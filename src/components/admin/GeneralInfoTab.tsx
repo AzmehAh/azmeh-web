@@ -1,6 +1,6 @@
 // src/components/admin/GeneralInfoTab.tsx
-import React, { useEffect, useState } from 'react';
-import { InputField, ArrayInputField } from './FormComponents';
+import React from 'react';
+import BilingualInput from './BilingualInput';
 
 interface Props {
   data: any;
@@ -8,73 +8,80 @@ interface Props {
 }
 
 export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
-  const [localData, setLocalData] = useState(data);
-
-  
-  useEffect(() => {
-    setLocalData(data);
-  }, [data]);
-
-  const handleChange = (field: string, value: any) => {
-    const updatedData = { ...localData, [field]: value };
-    setLocalData(updatedData);
-    onChange(field, value);
-  };
-
-  const handleArrayChange = (field: string, index: number, value: string) => {
-    const arr = [...(localData[field] || [])];
-    arr[index] = value;
-    handleChange(field, arr);
-  };
-
-  const addArrayItem = (field: string) => {
-    const arr = [...(localData[field] || []), ''];
-    handleChange(field, arr);
-  };
-
-  const removeArrayItem = (field: string, index: number) => {
-    const arr = [...(localData[field] || [])];
-    arr.splice(index, 1);
-    handleChange(field, arr);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    onChange(e.target.name, e.target.value);
   };
 
   return (
-    <div className="space-y-4">
-      <InputField 
-        label="Storing Conditions" 
-        value={localData.storing_conditions || ''} 
-        onChange={(v) => handleChange('storing_conditions', v)} 
+    <div className="space-y-6">
+      <BilingualInput
+        label="Storing Conditions"
+        nameEn="storing_conditions"
+        nameAr="storing_conditions_ar"
+        valueEn={data.storing_conditions || ''}
+        valueAr={data.storing_conditions_ar || ''}
+        onChange={handleChange}
+        type="textarea"
       />
-      <InputField 
-        label="Joint Preparation" 
-        value={localData.joint_preparation || ''} 
-        onChange={(v) => handleChange('joint_preparation', v)} 
+
+      <BilingualInput
+        label="Joint Preparation"
+        nameEn="joint_preparation"
+        nameAr="joint_preparation_ar"
+        valueEn={data.joint_preparation || ''}
+        valueAr={data.joint_preparation_ar || ''}
+        onChange={handleChange}
+        type="textarea"
       />
-      <InputField 
-        label="Joint Size" 
-        value={localData.joint_size || ''} 
-        onChange={(v) => handleChange('joint_size', v)} 
+
+      <BilingualInput
+        label="Joint Size"
+        nameEn="joint_size"
+        nameAr="joint_size_ar"
+        valueEn={data.joint_size || ''}
+        valueAr={data.joint_size_ar || ''}
+        onChange={handleChange}
+        type="textarea"
       />
-      <InputField 
-        label="Movement Capacity" 
-        value={localData.movement_capacity || ''} 
-        onChange={(v) => handleChange('movement_capacity', v)} 
+
+      <BilingualInput
+        label="Movement Capacity"
+        nameEn="movement_capacity"
+        nameAr="movement_capacity_ar"
+        valueEn={data.movement_capacity || ''}
+        valueAr={data.movement_capacity_ar || ''}
+        onChange={handleChange}
+        type="textarea"
       />
-      <InputField 
-        label="Substrate Treatment" 
-        value={localData.substrate_treatment || ''} 
-        onChange={(v) => handleChange('substrate_treatment', v)} 
+
+      <BilingualInput
+        label="Substrate Treatment"
+        nameEn="substrate_treatment"
+        nameAr="substrate_treatment_ar"
+        valueEn={data.substrate_treatment || ''}
+        valueAr={data.substrate_treatment_ar || ''}
+        onChange={handleChange}
+        type="textarea"
       />
-      <InputField 
-        label="Surface Preparation" 
-        value={localData.surface_preparation || ''} 
-        onChange={(v) => handleChange('surface_preparation', v)} 
+
+      <BilingualInput
+        label="Surface Preparation"
+        nameEn="surface_preparation"
+        nameAr="surface_preparation_ar"
+        valueEn={data.surface_preparation || ''}
+        valueAr={data.surface_preparation_ar || ''}
+        onChange={handleChange}
+        type="textarea"
       />
-    
-        <InputField 
-        label="Recommended Uses" 
-        value={localData.Recommended_Uses || ''} 
-        onChange={(v) => handleChange('Recommended Uses', v)} 
+
+      <BilingualInput
+        label="Recommended Uses"
+        nameEn="recommended_uses"
+        nameAr="recommended_uses_ar"
+        valueEn={data.recommended_uses || ''}
+        valueAr={data.recommended_uses_ar || ''}
+        onChange={handleChange}
+        type="textarea"
       />
     </div>
   );

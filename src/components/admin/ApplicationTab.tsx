@@ -1,6 +1,6 @@
 // src/components/admin/ApplicationTab.tsx
 import React from 'react';
-import { InputField } from './FormComponents';
+import BilingualInput from './BilingualInput';
 
 interface Props {
   data: any;
@@ -8,86 +8,121 @@ interface Props {
 }
 
 export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
-  const handleChange = (field: string, value: any) => onChange(field, value);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    onChange(e.target.name, e.target.value);
+  };
 
   return (
-    <div className="grid grid-cols-1 gap-4">
-      <InputField 
-        label="Method of Application" 
-        value={data.method_of_application || ''} 
-        onChange={(v) => handleChange('method_of_application', v)} 
+    <div className="space-y-6">
+      <BilingualInput
+        label="Method of Application"
+        nameEn="method_of_application"
+        nameAr="method_of_application_ar"
+        valueEn={data.method_of_application || ''}
+        valueAr={data.method_of_application_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField 
-        label="Mixing Ratio" 
-        value={data.mixing_ratio || ''} 
-        onChange={(v) => handleChange('mixing_ratio', v)} 
+      <BilingualInput
+        label="Mixing Ratio"
+        nameEn="mixing_ratio"
+        nameAr="mixing_ratio_ar"
+        valueEn={data.mixing_ratio || ''}
+        valueAr={data.mixing_ratio_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField 
-        label="Mixing Note" 
-        value={data.mixing_note || ''} 
-        onChange={(v) => handleChange('mixing_note', v)} 
+      <BilingualInput
+        label="Mixing Note"
+        nameEn="mixing_note"
+        nameAr="mixing_note_ar"
+        valueEn={data.mixing_note || ''}
+        valueAr={data.mixing_note_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField 
-        label="Mixing Steps" 
-        value={data.mixing_steps || ''} 
-        onChange={(v) => handleChange('mixing_steps', v)} 
+      <BilingualInput
+        label="Mixing Steps"
+        nameEn="mixing_steps"
+        nameAr="mixing_steps_ar"
+        valueEn={data.mixing_steps || ''}
+        valueAr={data.mixing_steps_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField 
-        label="Pot Life" 
-        value={data.pot_life || ''} 
-        onChange={(v) => handleChange('pot_life', v)} 
-        type="textarea"
-      />
- <InputField 
-        label="cleaner" 
-        value={data.cleaner || ''} 
-        onChange={(v) => handleChange('cleaner', v)} 
-        type="textarea"
-      />
-      <InputField 
-        label="Thinner" 
-        value={data.thinner || ''} 
-        onChange={(v) => handleChange('thinner', v)} 
+      <BilingualInput
+        label="Pot Life"
+        nameEn="pot_life"
+        nameAr="pot_life_ar"
+        valueEn={data.pot_life || ''}
+        valueAr={data.pot_life_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField 
-        label="Application Temperature" 
-        value={data.application_temperature || ''} 
-        onChange={(v) => handleChange('application_temperature', v)} 
+      <BilingualInput
+        label="Cleaner"
+        nameEn="cleaner"
+        nameAr="cleaner_ar"
+        valueEn={data.cleaner || ''}
+        valueAr={data.cleaner_ar || ''}
+        onChange={handleChange}
         type="textarea"
       />
 
-      <InputField 
-        label="Curing Note" 
-        value={data.curing_note || ''} 
-        onChange={(v) => handleChange('curing_note', v)} 
+      <BilingualInput
+        label="Thinner"
+        nameEn="thinner"
+        nameAr="thinner_ar"
+        valueEn={data.thinner || ''}
+        valueAr={data.thinner_ar || ''}
+        onChange={handleChange}
         type="textarea"
-        rows={5}
       />
 
-      <InputField 
-        label="Number of Coats" 
-        value={data.number_of_coats || ''} 
-        onChange={(v) => handleChange('number_of_coats', v)} 
+      <BilingualInput
+        label="Application Temperature"
+        nameEn="application_temperature"
+        nameAr="application_temperature_ar"
+        valueEn={data.application_temperature || ''}
+        valueAr={data.application_temperature_ar || ''}
+        onChange={handleChange}
         type="textarea"
-      />
-      <InputField 
-        label="note application" 
-        value={data.note_application || ''} 
-        onChange={(v) => handleChange('note_application', v)} 
-        type="textarea"
-        rows={5}
       />
 
+      <BilingualInput
+        label="Curing Note"
+        nameEn="curing_note"
+        nameAr="curing_note_ar"
+        valueEn={data.curing_note || ''}
+        valueAr={data.curing_note_ar || ''}
+        onChange={handleChange}
+        type="textarea"
+      />
+
+      <BilingualInput
+        label="Number of Coats"
+        nameEn="number_of_coats"
+        nameAr="number_of_coats_ar"
+        valueEn={data.number_of_coats || ''}
+        valueAr={data.number_of_coats_ar || ''}
+        onChange={handleChange}
+        type="textarea"
+      />
+
+      <BilingualInput
+        label="Application Note"
+        nameEn="note_application"
+        nameAr="note_application_ar"
+        valueEn={data.note_application || ''}
+        valueAr={data.note_application_ar || ''}
+        onChange={handleChange}
+        type="textarea"
+      />
     </div>
   );
 };
