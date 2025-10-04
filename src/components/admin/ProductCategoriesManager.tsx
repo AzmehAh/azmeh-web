@@ -424,7 +424,7 @@ useEffect(() => {
 
             {/* Sort Order */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Sort Order</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Sort Order / الترتيب</label>
               {isEditing ? (
                 <input
                   type="number"
@@ -439,15 +439,15 @@ useEffect(() => {
 
             {/* Status */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status / الحالة</label>
               {isEditing ? (
                 <select
                   value={formData.is_active ? 'true' : 'false'}
                   onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.value === 'true' }))}
                   className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                 >
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
+                  <option value="true">Active / نشط</option>
+                  <option value="false">Inactive / غير نشط</option>
                 </select>
               ) : (
                 <span className={`px-2 py-1 text-xs font-medium rounded-full ${
@@ -460,7 +460,7 @@ useEffect(() => {
 {/* Button Link */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
-    Button Link
+    Button Link / رابط الزر
   </label>
   {isEditing ? (
     <input
@@ -481,14 +481,14 @@ useEffect(() => {
          {/* Image Upload */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
-    Image
+    Image / الصورة
   </label>
 
   {isEditing ? (
     <>
       <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700 transition-colors w-fit">
         <Upload className="w-4 h-4 mr-2" />
-        Upload Image
+        Upload Image / حمل الصورة 
         <input
           type="file"
           accept="image/*"
