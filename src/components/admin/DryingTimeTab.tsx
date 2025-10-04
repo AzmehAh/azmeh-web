@@ -3,7 +3,7 @@ import React from 'react';
 import BilingualInput from './BilingualInput';
 
 interface Props {
-  data: any;
+   any;
   onChange: (field: string, value: any) => void;
 }
 
@@ -15,7 +15,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
   return (
     <div className="space-y-6">
       <BilingualInput
-        label="Dry to Touch"
+        labelEn="Dry to Touch"
+        labelAr="الجفاف للمس"
         nameEn="dry_to_touch"
         nameAr="dry_to_touch_ar"
         valueEn={data.dry_to_touch || ''}
@@ -25,7 +26,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Dry to Handle"
+        labelEn="Dry to Handle"
+        labelAr="الجفاف للتعامل"
         nameEn="dry_to_handle"
         nameAr="dry_to_handle_ar"
         valueEn={data.dry_to_handle || ''}
@@ -35,7 +37,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Complete Setting"
+        labelEn="Complete Setting"
+        labelAr="التماسك الكامل"
         nameEn="complete_setting"
         nameAr="complete_setting_ar"
         valueEn={data.complete_setting || ''}
@@ -45,7 +48,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Grouting Time"
+        labelEn="Grouting Time"
+        labelAr="وقت الحقن / السد"
         nameEn="grouting_time"
         nameAr="grouting_time_ar"
         valueEn={data.grouting_time || ''}
@@ -55,7 +59,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Adjustability Time"
+        labelEn="Adjustability Time"
+        labelAr="وقت القابلية للتعديل"
         nameEn="adjustability_time"
         nameAr="adjustability_time_ar"
         valueEn={data.adjustability_time || ''}
@@ -65,7 +70,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Dry to Topcoat"
+        labelEn="Dry to Topcoat"
+        labelAr="الجفاف لطبقة الطلاء العلوية"
         nameEn="dry_to_topcoat"
         nameAr="dry_to_topcoat_ar"
         valueEn={data.dry_to_topcoat || ''}
@@ -75,7 +81,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Initial Setting"
+        labelEn="Initial Setting"
+        labelAr="التماسك الأولي"
         nameEn="initial_setting"
         nameAr="initial_setting_ar"
         valueEn={data.initial_setting || ''}
@@ -85,7 +92,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Fully Cured"
+        labelEn="Fully Cured"
+        labelAr="الشفاء الكامل"
         nameEn="fully_cured"
         nameAr="fully_cured_ar"
         valueEn={data.fully_cured || ''}
@@ -95,7 +103,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Dry to Sand"
+        labelEn="Dry to Sand"
+        labelAr="الجفاف للسنفرة"
         nameEn="dry_to_sand"
         nameAr="dry_to_sand_ar"
         valueEn={data.dry_to_sand || ''}
@@ -105,7 +114,8 @@ export const DryingTimeTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Drying Time Note"
+        labelEn="Drying Time Note"
+        labelAr="ملاحظة وقت الجفاف"
         nameEn="drying_time_note"
         nameAr="drying_time_note_ar"
         valueEn={data.drying_time_note || ''}
