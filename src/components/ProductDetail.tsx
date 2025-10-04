@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, Package, FileText, CheckCircle, Wrench, Shield ,Info,Layers} from "lucide-react";
+import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers } from "lucide-react";
 import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
+import { useLanguage } from "../context/LanguageContext"; // تأكد من مسار الملف
 
 // تعريف واجهة المنتج - محدثة
 interface Product {
@@ -25,9 +26,8 @@ interface Product {
   instructions: string[];
   storage: string;
   safety_precautions: string[];
-   safety_note: string;
+  safety_note: string;
   safety_first_aid: string[];
-  // الحقول الجديدة للتطبيق
   application?: {
     note_application?: string;
     method_of_application?: string;
@@ -36,63 +36,62 @@ interface Product {
     mixing_steps?: string;
     pot_life?: string;
     thinner?: string;
-   cleaner?: string;
+    cleaner?: string;
     application_temperature?: string;
     curing_note?: string;
     number_of_coats?: string;
-  dry_to_touch?: string;
-  dry_to_handle?: string;
-  complete_setting?: string;
-  grouting_time?: string;
-  adjustability_time?: string;
-  dry_to_topcoat?: string;
-  initial_setting?: string;
-  fully_cured?: string;
-  dry_to_sand?: string;
-  drying_time_note?: string;
-   storing_conditions?: string;
+    dry_to_touch?: string;
+    dry_to_handle?: string;
+    complete_setting?: string;
+    grouting_time?: string;
+    adjustability_time?: string;
+    dry_to_topcoat?: string;
+    initial_setting?: string;
+    fully_cured?: string;
+    dry_to_sand?: string;
+    drying_time_note?: string;
+    storing_conditions?: string;
     joint_preparation?: string;
-  joint_size?: string;
-  movement_capacity?: string;
-  substrate_treatment?: string;
-  surface_preparation?: string;
-  recommended_uses?: string[];
-
+    joint_size?: string;
+    movement_capacity?: string;
+    substrate_treatment?: string;
+    surface_preparation?: string;
+    recommended_uses?: string[];
   };
 }
 
 const TECHNICAL_FIELDS = [
-  { key: 'component_a', label: 'Component A' },
-  { key: 'component_b', label: 'Component B' },
-  { key: 'gloss', label: 'Gloss' },
-  { key: 'color', label: 'Color' },
-  { key: 'number_of_coats', label: 'Number of Coats' },
-  { key: 'tensile_adhesion_strength', label: 'Tensile Adhesion Strength' },
-  { key: 'material_consumption', label: 'Material Consumption' },
-  { key: 'viscosity', label: 'Viscosity' },
-  { key: 'weather_resistance', label: 'Weather Resistance' },
-  { key: 'compressive_strength', label: 'Compressive Strength' },
-  { key: 'tear_resistance', label: 'Tear Resistance' },
-  { key: 'elongation_at_rupture', label: 'Elongation at Rupture' },
-  { key: 'tensile_strength_100', label: 'Tensile Strength at 100% Elongation' },
-  { key: 'tensile_strength_50', label: 'Tensile Strength at 50% Elongation' },
-  { key: 'specific_gravity_mixed', label: 'Specific Gravity (Mixed)' },
-  { key: 'solvent_resistance', label: 'Solvent Resistance' },
-  { key: 'chemical_resistance', label: 'Chemical Resistance' },
-  { key: 'abrasion_resistance', label: 'Abrasion Resistance' },
-  { key: 'friction_resistance', label: 'Friction Resistance' },
-  { key: 'washability', label: 'Washability' },
-  { key: 'water_resistance', label: 'Water Resistance' },
-  { key: 'theoretical_spreading_rate', label: 'Theoretical Spreading Rate' },
-  { key: 'recommended_film_thickness', label: 'Recommended Film Thickness' },
-  { key: 'temperature_resistance', label: 'Temperature Resistance' },
-  { key: 'solvent_splash_resistance', label: 'Solvent Splash Resistance' },
-  { key: 'sandability', label: 'Sandability' },
-  { key: 'adhesion', label: 'Adhesion' },
-  { key: 'flexibility', label: 'Flexibility' },
-  { key: 'voc', label: 'VOC' },
-  { key: 'volume_solids', label: 'Volume Solids' },
-  { key: 'note', label: 'Note' },
+  { key: 'component_a', label: 'Component A', keyAr: 'component_a_ar' },
+  { key: 'component_b', label: 'Component B', keyAr: 'component_b_ar' },
+  { key: 'gloss', label: 'Gloss', keyAr: 'gloss_ar' },
+  { key: 'color', label: 'Color', keyAr: 'color_ar' },
+  { key: 'number_of_coats', label: 'Number of Coats', keyAr: 'number_of_coats_ar' },
+  { key: 'tensile_adhesion_strength', label: 'Tensile Adhesion Strength', keyAr: 'tensile_adhesion_strength_ar' },
+  { key: 'material_consumption', label: 'Material Consumption', keyAr: 'material_consumption_ar' },
+  { key: 'viscosity', label: 'Viscosity', keyAr: 'viscosity_ar' },
+  { key: 'weather_resistance', label: 'Weather Resistance', keyAr: 'weather_resistance_ar' },
+  { key: 'compressive_strength', label: 'Compressive Strength', keyAr: 'compressive_strength_ar' },
+  { key: 'tear_resistance', label: 'Tear Resistance', keyAr: 'tear_resistance_ar' },
+  { key: 'elongation_at_rupture', label: 'Elongation at Rupture', keyAr: 'elongation_at_rupture_ar' },
+  { key: 'tensile_strength_100', label: 'Tensile Strength at 100% Elongation', keyAr: 'tensile_strength_100_ar' },
+  { key: 'tensile_strength_50', label: 'Tensile Strength at 50% Elongation', keyAr: 'tensile_strength_50_ar' },
+  { key: 'specific_gravity_mixed', label: 'Specific Gravity (Mixed)', keyAr: 'specific_gravity_mixed_ar' },
+  { key: 'solvent_resistance', label: 'Solvent Resistance', keyAr: 'solvent_resistance_ar' },
+  { key: 'chemical_resistance', label: 'Chemical Resistance', keyAr: 'chemical_resistance_ar' },
+  { key: 'abrasion_resistance', label: 'Abrasion Resistance', keyAr: 'abrasion_resistance_ar' },
+  { key: 'friction_resistance', label: 'Friction Resistance', keyAr: 'friction_resistance_ar' },
+  { key: 'washability', label: 'Washability', keyAr: 'washability_ar' },
+  { key: 'water_resistance', label: 'Water Resistance', keyAr: 'water_resistance_ar' },
+  { key: 'theoretical_spreading_rate', label: 'Theoretical Spreading Rate', keyAr: 'theoretical_spreading_rate_ar' },
+  { key: 'recommended_film_thickness', label: 'Recommended Film Thickness', keyAr: 'recommended_film_thickness_ar' },
+  { key: 'temperature_resistance', label: 'Temperature Resistance', keyAr: 'temperature_resistance_ar' },
+  { key: 'solvent_splash_resistance', label: 'Solvent Splash Resistance', keyAr: 'solvent_splash_resistance_ar' },
+  { key: 'sandability', label: 'Sandability', keyAr: 'sandability_ar' },
+  { key: 'adhesion', label: 'Adhesion', keyAr: 'adhesion_ar' },
+  { key: 'flexibility', label: 'Flexibility', keyAr: 'flexibility_ar' },
+  { key: 'voc', label: 'VOC', keyAr: 'voc_ar' },
+  { key: 'volume_solids', label: 'Volume Solids', keyAr: 'volume_solids_ar' },
+  { key: 'note', label: 'Note', keyAr: 'note_ar' },
 ];
 
 const brands = [
@@ -110,25 +109,19 @@ const brands = [
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const { language } = useLanguage(); // استخدام اللغة الحالية
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (id) {
-      fetchProduct(id);
+  // دالة مساعدة لاختيار الحقل حسب اللغة
+  const getLocalizedField = (enValue: any, arValue: any) => {
+    if (language === 'ar') {
+      return arValue || enValue;
     }
-  }, [id]);
-
-  useEffect(() => {
-    if (product && product.images && product.images.length > 1) {
-      const interval = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
-      }, 4000);
-      return () => clearInterval(interval);
-    }
-  }, [product]);
+    return enValue;
+  };
 
   // دالة مساعدة لتحليل الحقول المصفوفة - محسنة
   const parseArrayField = (field: any): any[] => {
@@ -138,7 +131,6 @@ const ProductDetail = () => {
         const parsed = JSON.parse(field);
         return Array.isArray(parsed) ? parsed : [];
       } catch (e) {
-        // إذا فشل التحليل، حاول تقسيم النص بالفاصلة
         if (field.includes(',')) {
           return field.split(',').map((item: string) => item.trim()).filter(Boolean);
         }
@@ -150,143 +142,118 @@ const ProductDetail = () => {
 
   // دالة لإنشاء كائن التطبيق
   const createApplicationObject = (productData: any) => {
-    const applicationFields = [
-      'method_of_application',
-      'mixing_ratio',
-      'mixing_note',
-       'mixing_steps',
-      'pot_life',
-      'cleaner',
-      'thinner',
-      'note_application',
-      'application_temperature',
-      'curing_note'
-      
+    const appFields = [
+      'method_of_application', 'mixing_ratio', 'mixing_note', 'mixing_steps',
+      'pot_life', 'cleaner', 'thinner', 'note_application',
+      'application_temperature', 'curing_note',
+      'dry_to_touch', 'dry_to_handle', 'complete_setting',
+      'grouting_time', 'adjustability_time', 'dry_to_topcoat',
+      'initial_setting', 'fully_cured', 'dry_to_sand', 'drying_time_note'
     ];
 
     const application: any = {};
-    let hasApplicationData = false;
+    let hasData = false;
 
-    applicationFields.forEach(field => {
-      if (productData[field]) {
-        application[field] = productData[field];
-        hasApplicationData = true;
+    appFields.forEach(field => {
+      const value = getLocalizedField(productData[field], productData[`${field}_ar`]);
+      if (value) {
+        application[field] = value;
+        hasData = true;
       }
     });
 
-    return hasApplicationData ? application : undefined;
+    return hasData ? application : undefined;
   };
 
   const fetchProduct = async (productId: string) => {
     try {
       setLoading(true);
       setError(null);
-      
-      console.log('Fetching product with ID:', productId);
-      
-      // جلب بيانات المنتج
+
       const { data: productData, error: productError } = await supabase
         .from('products')
         .select('*')
         .eq('id', productId)
         .single();
 
-      if (productError) {
-        console.error('Supabase error:', productError);
-        throw productError;
-      }
-
+      if (productError) throw productError;
       if (!productData) {
-        console.log('No product data found');
         setProduct(null);
         return;
       }
 
-      console.log('Product data received:', productData);
-
-      // جلب صور المنتج
+      // جلب الصور
       let imagesData = [];
       try {
-        const { data: images, error: imagesError } = await supabase
+        const { data: images } = await supabase
           .from('product_images')
           .select('*')
           .eq('product_id', productId)
           .order('is_main', { ascending: false })
           .order('sort_order', { ascending: true });
-
-        if (imagesError) {
-          console.error('Error fetching images:', imagesError);
-        } else {
-          imagesData = images || [];
-        }
-      } catch (imagesError) {
-        console.error('Exception fetching images:', imagesError);
+        imagesData = images || [];
+      } catch (e) {
+        console.error('Error fetching images:', e);
       }
 
-      // جلب الصورة الرئيسية
       let mainImage = null;
       try {
         mainImage = await api.getMainProductImage(productId);
-      } catch (imageError) {
-        console.error('Error fetching main image:', imageError);
+      } catch (e) {
+        console.error('Error fetching main image:', e);
       }
 
-      // إنشاء كائن المنتج المنسق
+      // بناء المنتج المنسق مع دعم اللغة
       const formattedProduct: Product = {
         id: productData.id,
-        name: productData.name || 'No Name',
+        name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
         code: productData.code || 'No Code',
-        description: productData.description || '',
-        technical_description: productData.technical_description || "",
+        description: getLocalizedField(productData.description, productData.description_ar) || '',
+        technical_description: getLocalizedField(productData.technical_description, productData.technical_description_ar) || "",
         image_url: mainImage?.image_url || 
-                  (imagesData.length > 0 ? imagesData[0].image_url : "") ||
-                  productData.image_url || 
-                  "/images/placeholder.jpg",
+                   (imagesData.length > 0 ? imagesData[0].image_url : "") ||
+                   productData.image_url || 
+                   "/images/placeholder.jpg",
         images: imagesData.map(img => img.image_url).filter(Boolean),
-        type: productData.type || "",
+        type: getLocalizedField(productData.type, productData.type_ar) || "",
         brand: productData.brand || "",
-        material: productData.material || "",
-        usage: productData.usage || "",
-        packaging: parseArrayField(productData.packaging),
+        material: getLocalizedField(productData.material, productData.material_ar) || "",
+        usage: getLocalizedField(productData.usage, productData.usage_ar) || "",
+        packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
         technical_specs: TECHNICAL_FIELDS
-          .map(({ key, label }) => ({
-            property: label,
-            value: productData[key] || '',
-            standard: ''
-            
-          }))
-          .filter(spec => spec.value && spec.value.toString().trim() !== ''),
-        features: parseArrayField(productData.features),
-        applications: parseArrayField(productData.applications),
-        instructions: parseArrayField(productData.instructions),
-        storage: productData.storage || "",
-        safety_precautions: parseArrayField(productData.safety_precautions),
-        safety_note: productData.safety_note || "",
-        safety_first_aid: parseArrayField(productData.safety_first_aid),
+          .map(({ key, label, keyAr }) => {
+            const value = getLocalizedField(productData[key], productData[keyAr]);
+            return { property: label, value: value || '', standard: '' };
+          })
+          .filter(spec => spec.value.trim() !== ''),
+        features: parseArrayField(getLocalizedField(productData.features, productData.features_ar)),
+        applications: parseArrayField(getLocalizedField(productData.applications, productData.applications_ar)),
+        instructions: parseArrayField(getLocalizedField(productData.instructions, productData.instructions_ar)),
+        storage: getLocalizedField(productData.storage, productData.storage_ar) || "",
+        safety_precautions: parseArrayField(getLocalizedField(productData.safety_precautions, productData.safety_precautions_ar)),
+        safety_note: getLocalizedField(productData.safety_note, productData.safety_note_ar) || "",
+        safety_first_aid: parseArrayField(getLocalizedField(productData.safety_first_aid, productData.safety_first_aid_ar)),
         application: createApplicationObject(productData),
-         
-  joint_preparation: productData.joint_preparation || '',
-  joint_size: productData.joint_size || '',
-  movement_capacity: productData.movement_capacity || '',
-  substrate_treatment: productData.substrate_treatment || '',
-  surface_preparation: productData.surface_preparation || '',
-  recommended_uses: parseArrayField(productData.recommended_uses),
-  storing_conditions: productData.storing_conditions || '',
-  dry_to_touch: productData.dry_to_touch || '',
-  dry_to_handle: productData.dry_to_handle || '',
-  complete_setting: productData.complete_setting || '',
-  grouting_time: productData.grouting_time || '',
-  adjustability_time: productData.adjustability_time || '',
-  dry_to_topcoat: productData.dry_to_topcoat || '',
-  initial_setting: productData.initial_setting || '',
-  fully_cured: productData.fully_cured || '',
-  dry_to_sand: productData.dry_to_sand || '',
-  drying_time_note: productData.drying_time_note || ''
+        joint_preparation: getLocalizedField(productData.joint_preparation, productData.joint_preparation_ar) || '',
+        joint_size: getLocalizedField(productData.joint_size, productData.joint_size_ar) || '',
+        movement_capacity: getLocalizedField(productData.movement_capacity, productData.movement_capacity_ar) || '',
+        substrate_treatment: getLocalizedField(productData.substrate_treatment, productData.substrate_treatment_ar) || '',
+        surface_preparation: getLocalizedField(productData.surface_preparation, productData.surface_preparation_ar) || '',
+        recommended_uses: parseArrayField(getLocalizedField(productData.recommended_uses, productData.recommended_uses_ar)),
+        storing_conditions: getLocalizedField(productData.storing_conditions, productData.storing_conditions_ar) || '',
+        dry_to_touch: getLocalizedField(productData.dry_to_touch, productData.dry_to_touch_ar) || '',
+        dry_to_handle: getLocalizedField(productData.dry_to_handle, productData.dry_to_handle_ar) || '',
+        complete_setting: getLocalizedField(productData.complete_setting, productData.complete_setting_ar) || '',
+        grouting_time: getLocalizedField(productData.grouting_time, productData.grouting_time_ar) || '',
+        adjustability_time: getLocalizedField(productData.adjustability_time, productData.adjustability_time_ar) || '',
+        dry_to_topcoat: getLocalizedField(productData.dry_to_topcoat, productData.dry_to_topcoat_ar) || '',
+        initial_setting: getLocalizedField(productData.initial_setting, productData.initial_setting_ar) || '',
+        fully_cured: getLocalizedField(productData.fully_cured, productData.fully_cured_ar) || '',
+        dry_to_sand: getLocalizedField(productData.dry_to_sand, productData.dry_to_sand_ar) || '',
+        drying_time_note: getLocalizedField(productData.drying_time_note, productData.drying_time_note_ar) || ''
       };
 
-      console.log('Formatted product:', formattedProduct);
       setProduct(formattedProduct);
-
     } catch (error) {
       console.error('Error fetching product:', error);
       setError('Failed to load product. Please try again.');
@@ -296,17 +263,28 @@ const ProductDetail = () => {
     }
   };
 
+  useEffect(() => {
+    if (id) {
+      fetchProduct(id);
+    }
+  }, [id, language]); // إعادة الجلب عند تغيير اللغة
+
+  useEffect(() => {
+    if (product && product.images && product.images.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prev) => (prev + 1) % product.images.length);
+      }, 4000);
+      return () => clearInterval(interval);
+    }
+  }, [product]);
+
   const handleDownloadDatasheet = () => {
-    console.log("Download datasheet for product:", product?.id);
     alert("سيتم تنزيل ورقة البيانات الفنية قريباً");
   };
 
   const brandLogo = product && brands.find((b) =>
     product.brand ? product.brand.toLowerCase().includes(b.name.toLowerCase()) : false
   )?.logo;
-
-  // إضافة ديباج للتسجيل
-  console.log('Current product state:', { product, loading, error });
 
   if (loading) {
     return (
@@ -338,9 +316,7 @@ const ProductDetail = () => {
       <div className="min-h-[70vh] flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Product Not Found</h1>
-          <p className="text-gray-600 mb-8">
-            The product you're looking for doesn't exist.
-          </p>
+          <p className="text-gray-600 mb-8">The product you're looking for doesn't exist.</p>
           <Link
             to="/products"
             className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
@@ -357,37 +333,25 @@ const ProductDetail = () => {
       {/* Hero Section */}
       <section className="py-24 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
           <div className="relative mb-8">
             <div className="flex items-center text-sm text-white">
               <Link to="/" className="hover:text-[#0055A3] transition-colors">Home</Link>
               <span className="mx-2">/</span>
               <Link to="/products" className="hover:text-[#0055A3] transition-colors">Products</Link>
-              {product && (
-                <>
-                  <span className="mx-2">/</span>
-                  <span className="text-white">{product.name}</span>
-                </>
-              )}
+              <span className="mx-2">/</span>
+              <span className="text-white">{product.name}</span>
             </div>
           </div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Column */}
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
               <p className="text-xl text-blue-100 mb-4 leading-relaxed">{product.description}</p>
 
               <div className="flex flex-wrap gap-4 mb-8">
-                {product.type && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.type}</span>
-                )}
-                {product.material && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.material}</span>
-                )}
-                {product.usage && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.usage}</span>
-                )}
+                {product.type && <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.type}</span>}
+                {product.material && <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.material}</span>}
+                {product.usage && <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.usage}</span>}
               </div>
 
               {product.technical_description && (
@@ -419,7 +383,6 @@ const ProductDetail = () => {
               </button>
             </div>
 
-            {/* Right Column */}
             <div className="relative">
               {brandLogo && (
                 <div className="mb-4 text-right">
@@ -437,9 +400,7 @@ const ProductDetail = () => {
                     initial={{ opacity: 0, scale: 1.1 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.7 }}
-                    onError={(e) => {
-                      e.currentTarget.src = "/images/placeholder.jpg";
-                    }}
+                    onError={(e) => { e.currentTarget.src = "/images/placeholder.jpg"; }}
                   />
 
                   {product.images.length > 1 && (
@@ -465,123 +426,112 @@ const ProductDetail = () => {
           </div>
         </div>
       </section>
-{/* General Information */}
-{(
-  product.joint_preparation ||
-  product.joint_size ||
-  product.movement_capacity ||
-  product.substrate_treatment ||
-  product.surface_preparation ||
-  (product.recommended_uses && product.recommended_uses.length > 0)
-) && (
-  <section className="py-16  bg-gray-50">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-          <Info className="w-8 h-8 text-green-600 mr-3" />
-          General Information
-        </h2>
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="divide-y divide-gray-200">
- 
-               {product.recommended_uses && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Recommended Uses:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.recommended_uses}
-                  </span>
+
+      {/* General Information */}
+      {(
+        product.joint_preparation ||
+        product.joint_size ||
+        product.movement_capacity ||
+        product.substrate_treatment ||
+        product.surface_preparation ||
+        (product.recommended_uses && product.recommended_uses.length > 0)
+      ) && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+                <Info className="w-8 h-8 text-green-600 mr-3" />
+                General Information
+              </h2>
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="divide-y divide-gray-200">
+                  {product.recommended_uses && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Recommended Uses:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">
+                          {product.recommended_uses.join(', ')}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  {product.joint_preparation && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Joint Preparation:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.joint_preparation}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.joint_size && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Joint Size:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.joint_size}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.movement_capacity && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Movement Capacity:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.movement_capacity}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.substrate_treatment && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Substrate Treatment:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.substrate_treatment}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.surface_preparation && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Surface Preparation:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.surface_preparation}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
-            {product.joint_preparation && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Joint Preparation:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.joint_preparation}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.joint_size && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Joint Size:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.joint_size}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.movement_capacity && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Movement Capacity:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.movement_capacity}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.substrate_treatment && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Substrate Treatment:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.substrate_treatment}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.surface_preparation && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Surface Preparation:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.surface_preparation}
-                  </span>
-                </div>
-              </div>
-            )}
-         
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-)}
-{/* Technical Specifications */}
-{product.technical_specs && product.technical_specs.length > 0 && (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      {/* نفس max-w-3xl mx-auto مثل القسم الأول */}
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="bg-[#2C5DB6] px-6 py-4">
-            <h2 className="text-lg font-bold text-white flex items-center">
-              <FileText className="w-5 h-5 mr-2" />
-              Technical Specifications
-            </h2>
+        </section>
+      )}
+
+      {/* Technical Specifications */}
+      {product.technical_specs && product.technical_specs.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div className="bg-[#2C5DB6] px-6 py-4">
+                  <h2 className="text-lg font-bold text-white flex items-center">
+                    <FileText className="w-5 h-5 mr-2" />
+                    Technical Specifications
+                  </h2>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <tbody>
+                      {product.technical_specs.map((spec, index) => (
+                        <tr key={index} className="border-b border-gray-100">
+                          <td className="px-4 py-3 font-medium text-gray-800">{spec.property}</td>
+                          <td className="px-4 py-3 text-[#2C5DB6] font-medium">{spec.value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              
-              <tbody>
-                {product.technical_specs.map((spec, index) => (
-                  <tr key={index} className="border-b border-gray-100  transition-colors">
-                    <td className="px-4 py-3 font-medium text-gray-800">{spec.property}</td>
-                    <td className="px-4 py-3 text-[#2C5DB6] font-medium">{spec.value}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-)}
+        </section>
+      )}
+
       {/* Features */}
       {product.features && product.features.length > 0 && (
         <section className="py-16 bg-gray-50">
@@ -609,350 +559,245 @@ const ProductDetail = () => {
             </div>
           </div>
         </section>
-      )} 
+      )}
 
-{/* Application Instructions */}
-{product.application && (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-          <Layers className="w-8 h-8 text-green-600 mr-3" />
-          Application Instructions
-        </h2>
-        <div className=" bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="divide-y divide-gray-100">
-            {product.application.method_of_application && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Method of Application:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.method_of_application}
-                  </span>
+      {/* Application Instructions */}
+      {product.application && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+                <Layers className="w-8 h-8 text-green-600 mr-3" />
+                Application Instructions
+              </h2>
+              <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="divide-y divide-gray-100">
+                  {product.application.method_of_application && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Method of Application:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.method_of_application}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.mixing_ratio && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Mixing Ratio:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.mixing_ratio}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.mixing_note && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Mixing Note:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.mixing_note}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.mixing_steps && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Mixing Steps:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.mixing_steps}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.cleaner && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Cleaner:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.cleaner}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.thinner && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Thinner:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.thinner}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.application_temperature && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Application Temperature:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.application_temperature}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.curing_note && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Curing Note:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.curing_note}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.note_application && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Note:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.note_application}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
-            {product.application.mixing_ratio && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Mixing Ratio:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.mixing_ratio}
-                  </span>
-                </div>
-              </div>
-            )}
-           
-              {product.application.mixing_note && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Mixing Note:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.mixing_note}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.application.mixing_steps && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Mixing Steps:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.mixing_steps}
-                  </span>
-                </div>
-              </div>
-            )}
-             {product.application.cleaner && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">cleaner:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.cleaner}
-                  </span>
-                </div>
-              </div>  )}
-            {product.application.thinner && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Thinner:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.thinner}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.application.application_temperature && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Application Temperature:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.application_temperature}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.application.curing_note && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Curing Note:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.curing_note}
-                  </span>
-                </div>
-              </div>
-            )}
-           
-             {product.application.note_application && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">note:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.note_application}
-                  </span>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-)}
-{/* Drying Time */}
-{(
-  product.dry_to_touch ||
-  product.dry_to_handle ||
-  product.complete_setting ||
-  product.grouting_time ||
-  product.adjustability_time ||
-  product.dry_to_topcoat ||
-  product.initial_setting ||
-  product.fully_cured ||
-  product.dry_to_sand ||
-  product.drying_time_note
-) && (
-  <section className="py-16 bg-gray-50">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-          <Wrench className="w-8 h-8 text-blue-600 mr-3" />
-          Drying Time
-        </h2>
-        <div className=" bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="divide-y divide-gray-100">
-            {product.dry_to_touch && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Dry to Touch:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.dry_to_touch}
-                  </span>
+        </section>
+      )}
+
+      {/* Drying Time */}
+      {(
+        product.dry_to_touch ||
+        product.dry_to_handle ||
+        product.complete_setting ||
+        product.grouting_time ||
+        product.adjustability_time ||
+        product.dry_to_topcoat ||
+        product.initial_setting ||
+        product.fully_cured ||
+        product.dry_to_sand ||
+        product.drying_time_note
+      ) && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+                <Wrench className="w-8 h-8 text-blue-600 mr-3" />
+                Drying Time
+              </h2>
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="divide-y divide-gray-100">
+                  {product.dry_to_touch && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Dry to Touch:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_touch}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.dry_to_handle && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Dry to Handle:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_handle}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.complete_setting && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Complete Setting:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.complete_setting}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.grouting_time && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Grouting Time:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.grouting_time}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.adjustability_time && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Adjustability Time:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.adjustability_time}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.dry_to_topcoat && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Dry to Topcoat:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_topcoat}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.initial_setting && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Initial Setting:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.initial_setting}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.fully_cured && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Fully Cured:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.fully_cured}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.dry_to_sand && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Dry to Sand:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_sand}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.drying_time_note && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">Note:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.drying_time_note}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
-            {product.dry_to_handle && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Dry to Handle:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.dry_to_handle}
-                  </span>
-                </div>
-              </div>
-            )}
-            {/* كرري نفس التنسيق لباقي الحقول */}
-            {product.complete_setting && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Complete Setting:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.complete_setting}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.grouting_time && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Grouting Time:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.grouting_time}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.adjustability_time && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Adjustability Time:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.adjustability_time}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.dry_to_topcoat && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Dry to Topcoat:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.dry_to_topcoat}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.initial_setting && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Initial Setting:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.initial_setting}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.fully_cured && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Fully Cured:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.fully_cured}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.dry_to_sand && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Dry to Sand:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.dry_to_sand}
-                  </span>
-                </div>
-              </div>
-            )}
-            {product.drying_time_note && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Note:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.drying_time_note}
-                  </span>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-)}
+        </section>
+      )}
 
       {/* Storage */}
       {product.storing_conditions && (
         <section className="py-16 bg-white">
-          <div className="container max-w-6xl  mx-auto  px-4 sm:px-6 lg:px-8">
-            <h2 className=" text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+          <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
               <Shield className="w-8 h-8 text-green-600 mr-3" />
               Storing Conditions
             </h2>
             <div
-              className="max-w-4xl prose prose-lg mx-auto  bg-gray-50 rounded-2xl p-8"
+              className="max-w-4xl prose prose-lg mx-auto bg-gray-50 rounded-2xl p-8"
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storing_conditions) }}
             />
           </div>
         </section>
       )}
-      
-{/* Note from Safety */}
-{product.safety_note && (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto text-center mb-10">
-        <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center">
-         <Shield className="w-8 h-8 text-red-500 mr-3" />
-          Note
-        </h2>
-      </div>
-      <div className="max-w-6xl mx-auto">
-        <div className="bg-gray-50 rounded-2xl p-8">
-          <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-            {product.safety_note}
-          </p>
-        </div> 
-      </div>
-    </div>
-  </section>
-)}
-      {/* Safety */}
-     
-      {/*    <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-            <Shield className="w-8 h-8 text-red-500 mr-3" />
-            Safety Information
-          </h2>
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
-      
-          
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden"
-            >
-              <div className="bg-red-500 px-6 py-4">
-                <h3 className="text-xl font-bold text-white">Safety Precautions</h3>
+      {/* Safety Note */}
+      {product.safety_note && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto text-center mb-10">
+              <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center">
+                <Shield className="w-8 h-8 text-red-500 mr-3" />
+                Note
+              </h2>
+            </div>
+            <div className="max-w-6xl mx-auto">
+              <div className="bg-gray-50 rounded-2xl p-8">
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                  {product.safety_note}
+                </p>
               </div>
-              <div className="p-6">
-                {product.safety_precautions && product.safety_precautions.length > 0 ? (
-                  <div className="space-y-3">
-                    {product.safety_precautions.map((precaution, index) => (
-                      <div key={index} className="flex items-start">
-                        <div className="w-2 h-2 bg-red-500 rounded-full mt-2 mr-4 flex-shrink-0" />
-                        <p className="text-gray-700">{precaution}</p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-gray-500">No safety precautions available.</p>
-                )}
-              </div>
-            </motion.div>
-
-        
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="bg-white rounded-2xl shadow-lg overflow-hidden"
-            >
-              <div className="bg-orange-500 px-6 py-4">
-                <h3 className="text-xl font-bold text-white">First Aid</h3>
-              </div>
-              <div className="p-6">
-                {product.safety_first_aid && product.safety_first_aid.length > 0 ? (
-                  <div className="space-y-3">
-                    {product.safety_first_aid.map((aid, index) => (
-                      <div key={index} className="flex items-start">
-                        <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 mr-4 flex-shrink-0" />
-                        <p className="text-gray-700">{aid}</p>
-                      </div>
-                    ))}
-                  </div>
-              
-                ) : (
-                  <p className="text-gray-500">No first aid information available.</p>
-                )}
-              </div>
-            </motion.div>
+            </div>
           </div>
-        </div>
-      </section> */}
+        </section>
+      )}
     </div>
-  ); 
+  );
 };
 
 export default ProductDetail;
