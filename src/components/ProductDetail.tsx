@@ -4,9 +4,9 @@ import { motion } from "framer-motion";
 import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers } from "lucide-react";
 import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
-import { useTranslation } from "react-i18next"; 
+import { useTranslation } from "react-i18next"; // ✅ نفس Hero
 
-
+// تعريف واجهة المنتج - محدثة
 interface Product {
   id: string;
   name: string;
@@ -59,7 +59,7 @@ interface Product {
     recommended_uses?: string[];
   };
 }
-const { t, i18n } = useTranslation(); 
+
 const TECHNICAL_FIELDS = [
   { key: 'component_a', label: 'Component A', keyAr: 'component_a_ar' },
   { key: 'component_b', label: 'Component B', keyAr: 'component_b_ar' },
@@ -447,7 +447,7 @@ const ProductDetail = () => {
                   {product.recommended_uses && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.recommended_uses')}:</span>
+                        <span className="font-medium text-gray-800">Recommended Uses:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">
                           {Array.isArray(product.recommended_uses) 
                             ? product.recommended_uses.join(', ') 
@@ -459,7 +459,7 @@ const ProductDetail = () => {
                   {product.joint_preparation && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800"> {t('products.joint_preparation')}:</span>
+                        <span className="font-medium text-gray-800">Joint Preparation:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.joint_preparation}</span>
                       </div>
                     </div>
@@ -467,7 +467,7 @@ const ProductDetail = () => {
                   {product.joint_size && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.joint_size')}:</span>
+                        <span className="font-medium text-gray-800">Joint Size:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.joint_size}</span>
                       </div>
                     </div>
@@ -475,7 +475,7 @@ const ProductDetail = () => {
                   {product.movement_capacity && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800"> {t('products.movement_capacity')}:</span>
+                        <span className="font-medium text-gray-800">Movement Capacity:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.movement_capacity}</span>
                       </div>
                     </div>
@@ -483,7 +483,7 @@ const ProductDetail = () => {
                   {product.substrate_treatment && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.substrate_treatment')}:</span>
+                        <span className="font-medium text-gray-800">Substrate Treatment:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.substrate_treatment}</span>
                       </div>
                     </div>
@@ -491,7 +491,7 @@ const ProductDetail = () => {
                   {product.surface_preparation && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800"> {t('products.surface_preparation')}:</span>
+                        <span className="font-medium text-gray-800">Surface Preparation:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.surface_preparation}</span>
                       </div>
                     </div>
@@ -801,4 +801,4 @@ const ProductDetail = () => {
   );
 };
 
-export default ProductDetail;
+export default ProductDetail;  
