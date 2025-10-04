@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers } from "lucide-react";
 import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
-import { useLanguage } from "../context/LanguageContext"; // تأكد من مسار الملف
+import { useTranslation } from "react-i18next"; // ✅ نفس Hero
 
 // تعريف واجهة المنتج - محدثة
 interface Product {
@@ -109,7 +109,7 @@ const brands = [
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
-  const { language } = useLanguage(); // استخدام اللغة الحالية
+  const { i18n } = useTranslation(); // ✅ نفس Hero
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -117,13 +117,13 @@ const ProductDetail = () => {
 
   // دالة مساعدة لاختيار الحقل حسب اللغة
   const getLocalizedField = (enValue: any, arValue: any) => {
-    if (language === 'ar') {
+    if (i18n.language === 'ar') {
       return arValue || enValue;
     }
     return enValue;
   };
 
-  // دالة مساعدة لتحليل الحقول المصفوفة - محسنة
+  // دالة مساعدة لتحليل الحقول المصفوفة
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
     if (typeof field === 'string') {
@@ -140,7 +140,6 @@ const ProductDetail = () => {
     return [];
   };
 
-  // دالة لإنشاء كائن التطبيق
   const createApplicationObject = (productData: any) => {
     const appFields = [
       'method_of_application', 'mixing_ratio', 'mixing_note', 'mixing_steps',
@@ -267,7 +266,7 @@ const ProductDetail = () => {
     if (id) {
       fetchProduct(id);
     }
-  }, [id, language]); // إعادة الجلب عند تغيير اللغة
+  }, [id, i18n.language]); // ✅ إعادة الجلب عند تغيير اللغة
 
   useEffect(() => {
     if (product && product.images && product.images.length > 1) {
@@ -450,7 +449,9 @@ const ProductDetail = () => {
                       <div className="flex items-start gap-2">
                         <span className="font-medium text-gray-800">Recommended Uses:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">
-                          {product.recommended_uses.join(', ')}
+                          {Array.isArray(product.recommended_uses) 
+                            ? product.recommended_uses.join(', ') 
+                            : product.recommended_uses}
                         </span>
                       </div>
                     </div>
