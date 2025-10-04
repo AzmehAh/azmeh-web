@@ -51,7 +51,7 @@ export const TechnicalTab: React.FC<Props> = ({ data, onChange }) => {
       {fields.map(field => (
         <BilingualInput
           key={field.en}
-          labelEn={field.label}
+          label={field.label}
           labelAr={field.labelAr}
           nameEn={field.en}
           nameAr={`${field.en}_ar`}
