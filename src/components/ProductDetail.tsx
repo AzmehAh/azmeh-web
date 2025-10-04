@@ -879,7 +879,7 @@ const ProductDetail = () => {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto text-center mb-10">
         <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center">
-       
+         <Shield className="w-8 h-8 text-red-500 mr-3" />
           Note
         </h2>
       </div>
@@ -894,14 +894,15 @@ const ProductDetail = () => {
   </section>
 )}
       {/* Safety */}
-      <section className="py-16 bg-gray-50">
+     
+      {/*    <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
             <Shield className="w-8 h-8 text-red-500 mr-3" />
             Safety Information
           </h2>
           <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-8">
-            {/* Precautions */}
+      
           
 
             <motion.div
@@ -929,7 +930,7 @@ const ProductDetail = () => {
               </div>
             </motion.div>
 
-            {/* First Aid */}
+        
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -957,7 +958,7 @@ const ProductDetail = () => {
             </motion.div>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   ); 
 };
