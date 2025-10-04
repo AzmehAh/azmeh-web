@@ -15,7 +15,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
   return (
     <div className="space-y-6">
       <BilingualInput
-        label="Method of Application"
+        labelEn="Method of Application"
         labelAr="طريقة التطبيق"
         nameEn="method_of_application"
         nameAr="method_of_application_ar"
@@ -26,7 +26,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Mixing Ratio"
+        labelEn="Mixing Ratio"
         labelAr="نسبة الخلط"
         nameEn="mixing_ratio"
         nameAr="mixing_ratio_ar"
@@ -37,7 +37,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Mixing Note"
+        labelEn="Mixing Note"
         labelAr="ملاحظة الخلط"
         nameEn="mixing_note"
         nameAr="mixing_note_ar"
@@ -48,7 +48,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Mixing Steps"
+        labelEn="Mixing Steps"
         labelAr="خطوات الخلط"
         nameEn="mixing_steps"
         nameAr="mixing_steps_ar"
@@ -59,7 +59,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Pot Life"
+        labelEn="Pot Life"
         labelAr="مدة الصلاحية بعد الخلط"
         nameEn="pot_life"
         nameAr="pot_life_ar"
@@ -70,7 +70,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Cleaner"
+       labelEn="Cleaner"
         labelAr="المذيب / المنظف"
         nameEn="cleaner"
         nameAr="cleaner_ar"
@@ -81,7 +81,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Thinner"
+       labelEn="Thinner"
         labelAr="المخفف"
         nameEn="thinner"
         nameAr="thinner_ar"
@@ -92,7 +92,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Application Temperature"
+       labelEn="Application Temperature"
         labelAr="درجة حرارة التطبيق"
         nameEn="application_temperature"
         nameAr="application_temperature_ar"
@@ -103,7 +103,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Curing Note"
+       labelEn="Curing Note"
         labelAr="ملاحظة المعالجة / التصلب"
         nameEn="curing_note"
         nameAr="curing_note_ar"
@@ -114,7 +114,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Number of Coats"
+        labelEn="Number of Coats"
         labelAr="عدد الطبقات"
         nameEn="number_of_coats"
         nameAr="number_of_coats_ar"
@@ -125,7 +125,7 @@ export const ApplicationTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Application Note"
+       labelEn="Application Note"
         labelAr="ملاحظة التطبيق"
         nameEn="note_application"
         nameAr="note_application_ar"
