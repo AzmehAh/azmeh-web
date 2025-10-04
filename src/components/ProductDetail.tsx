@@ -33,6 +33,7 @@ interface Product {
     method_of_application?: string;
     mixing_ratio?: string;
     mixing_note?: string;
+    mixing_steps?: string;
     pot_life?: string;
     thinner?: string;
    cleaner?: string;
@@ -153,13 +154,14 @@ const ProductDetail = () => {
       'method_of_application',
       'mixing_ratio',
       'mixing_note',
+       'mixing_steps',
       'pot_life',
       'cleaner',
       'thinner',
       'note_application',
       'application_temperature',
-      'curing_note',
-      'number_of_coats'
+      'curing_note'
+      
     ];
 
     const application: any = {};
@@ -259,7 +261,7 @@ const ProductDetail = () => {
         instructions: parseArrayField(productData.instructions),
         storage: productData.storage || "",
         safety_precautions: parseArrayField(productData.safety_precautions),
-         safety_note: productData.safety_note || "",
+        safety_note: productData.safety_note || "",
         safety_first_aid: parseArrayField(productData.safety_first_aid),
         application: createApplicationObject(productData),
          
@@ -269,9 +271,7 @@ const ProductDetail = () => {
   substrate_treatment: productData.substrate_treatment || '',
   surface_preparation: productData.surface_preparation || '',
   recommended_uses: parseArrayField(productData.recommended_uses),
-
-       
-         storing_conditions: productData.storing_conditions || '',
+  storing_conditions: productData.storing_conditions || '',
   dry_to_touch: productData.dry_to_touch || '',
   dry_to_handle: productData.dry_to_handle || '',
   complete_setting: productData.complete_setting || '',
@@ -642,7 +642,8 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
-            {product.application.mixing_note && (
+           
+              {product.application.mixing_note && (
               <div className="px-6 py-4">
                 <div className="flex items-start gap-2">
                   <span className="font-medium text-gray-800">Mixing Note:</span>
@@ -652,12 +653,12 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
-            {product.application.pot_life && (
+            {product.application.mixing_steps && (
               <div className="px-6 py-4">
                 <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Pot Life:</span>
+                  <span className="font-medium text-gray-800">Mixing Steps:</span>
                   <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.pot_life}
+                    {product.application.mixing_steps}
                   </span>
                 </div>
               </div>
@@ -701,16 +702,7 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
-            {product.application.number_of_coats && (
-              <div className="px-6 py-4">
-                <div className="flex items-start gap-2">
-                  <span className="font-medium text-gray-800">Number of Coats:</span>
-                  <span className="text-gray-700 leading-relaxed flex-1">
-                    {product.application.number_of_coats}
-                  </span>
-                </div>
-              </div>
-            )}
+           
              {product.application.note_application && (
               <div className="px-6 py-4">
                 <div className="flex items-start gap-2">
