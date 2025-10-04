@@ -15,7 +15,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
   return (
     <div className="space-y-6">
       <BilingualInput
-        label="Storing Conditions"
+        labelEn="Storing Conditions"
         labelAr="شروط التخزين"
         nameEn="storing_conditions"
         nameAr="storing_conditions_ar"
