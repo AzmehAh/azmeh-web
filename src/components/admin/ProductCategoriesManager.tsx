@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  Plus,
-  Search,
-  Edit,
-  Trash2,
-  Save,
-  X,
-  Package,
-  ChevronDown,
-  ChevronUp
-} from 'lucide-react';
+import { Plus, Search, CreditCard as Edit, Trash2, Save, X, Package, ChevronDown, ChevronUp } from 'lucide-react';
 import { supabase, ProductCategory } from '../../lib/supabase';
 import { Upload } from "lucide-react";
 import BilingualInput from './BilingualInput';
