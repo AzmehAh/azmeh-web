@@ -236,7 +236,7 @@ export const GeneralTab: React.FC<Props> = ({
 
         {/* Features */}
         <BilingualArrayInput
-          label="Product Features"
+          label="Product Features / المميزات"
           valueEn={Array.isArray(data.features) ? data.features : []}
           valueAr={Array.isArray(data.features_ar) ? data.features_ar : []}
           onChangeEn={(items) => onChange('features', items)}
