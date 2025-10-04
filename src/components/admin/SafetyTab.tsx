@@ -31,13 +31,14 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
         onChangeAr={(items) => onChange('safety_first_aid_ar', items)}
       />
 
-      <BilingualInput
-        label="Safety Note"
+     <BilingualInput
+        labelEn="Safety Note"
+        labelAr="ملاحظة السلامة"
         nameEn="safety_note"
         nameAr="safety_note_ar"
         valueEn={data.safety_note || ''}
         valueAr={data.safety_note_ar || ''}
-        onChange={handleChange} 
+        onChange={handleChange}
         type="textarea"
       />
     </div>
