@@ -60,39 +60,39 @@ interface Product {
   };
 }
 
-const TECHNICAL_FIELD_KEYS = [
-  'component_a',
-  'component_b',
-  'gloss',
-  'color',
-  'number_of_coats',
-  'tensile_adhesion_strength',
-  'material_consumption',
-  'viscosity',
-  'weather_resistance',
-  'compressive_strength',
-  'tear_resistance',
-  'elongation_at_rupture',
-  'tensile_strength_100',
-  'tensile_strength_50',
-  'specific_gravity_mixed',
-  'solvent_resistance',
-  'chemical_resistance',
-  'abrasion_resistance',
-  'friction_resistance',
-  'washability',
-  'water_resistance',
-  'theoretical_spreading_rate',
-  'recommended_film_thickness',
-  'temperature_resistance',
-  'solvent_splash_resistance',
-  'sandability',
-  'adhesion',
-  'flexibility',
-  'voc',
-  'volume_solids',
-  'note',
-] as const;
+const TECHNICAL_FIELDS = [
+  { key: 'component_a', label: 'Component A', keyAr: 'component_a_ar' },
+  { key: 'component_b', label: 'Component B', keyAr: 'component_b_ar' },
+  { key: 'gloss', label: 'Gloss', keyAr: 'gloss_ar' },
+  { key: 'color', label: 'Color', keyAr: 'color_ar' },
+  { key: 'number_of_coats', label: 'Number of Coats', keyAr: 'number_of_coats_ar' },
+  { key: 'tensile_adhesion_strength', label: 'Tensile Adhesion Strength', keyAr: 'tensile_adhesion_strength_ar' },
+  { key: 'material_consumption', label: 'Material Consumption', keyAr: 'material_consumption_ar' },
+  { key: 'viscosity', label: 'Viscosity', keyAr: 'viscosity_ar' },
+  { key: 'weather_resistance', label: 'Weather Resistance', keyAr: 'weather_resistance_ar' },
+  { key: 'compressive_strength', label: 'Compressive Strength', keyAr: 'compressive_strength_ar' },
+  { key: 'tear_resistance', label: 'Tear Resistance', keyAr: 'tear_resistance_ar' },
+  { key: 'elongation_at_rupture', label: 'Elongation at Rupture', keyAr: 'elongation_at_rupture_ar' },
+  { key: 'tensile_strength_100', label: 'Tensile Strength at 100% Elongation', keyAr: 'tensile_strength_100_ar' },
+  { key: 'tensile_strength_50', label: 'Tensile Strength at 50% Elongation', keyAr: 'tensile_strength_50_ar' },
+  { key: 'specific_gravity_mixed', label: 'Specific Gravity (Mixed)', keyAr: 'specific_gravity_mixed_ar' },
+  { key: 'solvent_resistance', label: 'Solvent Resistance', keyAr: 'solvent_resistance_ar' },
+  { key: 'chemical_resistance', label: 'Chemical Resistance', keyAr: 'chemical_resistance_ar' },
+  { key: 'abrasion_resistance', label: 'Abrasion Resistance', keyAr: 'abrasion_resistance_ar' },
+  { key: 'friction_resistance', label: 'Friction Resistance', keyAr: 'friction_resistance_ar' },
+  { key: 'washability', label: 'Washability', keyAr: 'washability_ar' },
+  { key: 'water_resistance', label: 'Water Resistance', keyAr: 'water_resistance_ar' },
+  { key: 'theoretical_spreading_rate', label: 'Theoretical Spreading Rate', keyAr: 'theoretical_spreading_rate_ar' },
+  { key: 'recommended_film_thickness', label: 'Recommended Film Thickness', keyAr: 'recommended_film_thickness_ar' },
+  { key: 'temperature_resistance', label: 'Temperature Resistance', keyAr: 'temperature_resistance_ar' },
+  { key: 'solvent_splash_resistance', label: 'Solvent Splash Resistance', keyAr: 'solvent_splash_resistance_ar' },
+  { key: 'sandability', label: 'Sandability', keyAr: 'sandability_ar' },
+  { key: 'adhesion', label: 'Adhesion', keyAr: 'adhesion_ar' },
+  { key: 'flexibility', label: 'Flexibility', keyAr: 'flexibility_ar' },
+  { key: 'voc', label: 'VOC', keyAr: 'voc_ar' },
+  { key: 'volume_solids', label: 'Volume Solids', keyAr: 'volume_solids_ar' },
+  { key: 'note', label: 'Note', keyAr: 'note_ar' },
+];
 
 const brands = [
   { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
@@ -215,12 +215,12 @@ const ProductDetail = () => {
         material: getLocalizedField(productData.material, productData.material_ar) || "",
         usage: getLocalizedField(productData.usage, productData.usage_ar) || "",
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
-        technical_specs: TECHNICAL_FIELDS
-          .map(({ key, label, keyAr }) => {
-            const value = getLocalizedField(productData[key], productData[keyAr]);
-            return { property: label, value: value || '', standard: '' };
-          })
-          .filter(spec => spec.value.trim() !== ''),
+ technical_specs: TECHNICAL_FIELDS
+  .map(({ key, keyAr }) => {
+    const value = getLocalizedField(productData[key], productData[keyAr]);
+    return { key, value: value || '', standard: '' }; // ← key بدل label
+  })
+  .filter(spec => spec.value.trim() !== ''),
         features: parseArrayField(getLocalizedField(productData.features, productData.features_ar)),
         applications: parseArrayField(getLocalizedField(productData.applications, productData.applications_ar)),
         instructions: parseArrayField(getLocalizedField(productData.instructions, productData.instructions_ar)),
