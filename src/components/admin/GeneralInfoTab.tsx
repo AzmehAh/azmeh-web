@@ -16,6 +16,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
     <div className="space-y-6">
       <BilingualInput
         label="Storing Conditions"
+        labelAr="شروط التخزين"
         nameEn="storing_conditions"
         nameAr="storing_conditions_ar"
         valueEn={data.storing_conditions || ''}
@@ -26,6 +27,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
 
       <BilingualInput
         label="Joint Preparation"
+        labelAr="تحضير الفراغ"
         nameEn="joint_preparation"
         nameAr="joint_preparation_ar"
         valueEn={data.joint_preparation || ''}
@@ -36,6 +38,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
 
       <BilingualInput
         label="Joint Size"
+        labelAr="حجم الفراغ"
         nameEn="joint_size"
         nameAr="joint_size_ar"
         valueEn={data.joint_size || ''}
@@ -46,6 +49,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
 
       <BilingualInput
         label="Movement Capacity"
+        labelAr="سعة الحركة"
         nameEn="movement_capacity"
         nameAr="movement_capacity_ar"
         valueEn={data.movement_capacity || ''}
@@ -56,6 +60,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
 
       <BilingualInput
         label="Substrate Treatment"
+        labelAr="معالجة السطح الأساسي"
         nameEn="substrate_treatment"
         nameAr="substrate_treatment_ar"
         valueEn={data.substrate_treatment || ''}
@@ -66,6 +71,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
 
       <BilingualInput
         label="Surface Preparation"
+        labelAr="تحضير السطح"
         nameEn="surface_preparation"
         nameAr="surface_preparation_ar"
         valueEn={data.surface_preparation || ''}
@@ -76,6 +82,7 @@ export const GeneralInfoTab: React.FC<Props> = ({ data, onChange }) => {
 
       <BilingualInput
         label="Recommended Uses"
+        labelAr="الاستخدامات الموصى بها"
         nameEn="recommended_uses"
         nameAr="recommended_uses_ar"
         valueEn={data.recommended_uses || ''}
