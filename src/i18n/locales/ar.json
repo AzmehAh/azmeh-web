@@ -122,3 +122,11 @@
     "reset": "إعادة تعيين"
   }
 }
+{
+  "joint_preparation": "تحضير الفراغ",
+  "joint_size": "حجم الفراغ",
+  "movement_capacity": "سعة الحركة",
+  "substrate_treatment": "معالجة القاعدة",
+  "surface_preparation": "تحضير السطح",
+  "recommended_uses": "الاستخدامات الموصى بها"
+}
