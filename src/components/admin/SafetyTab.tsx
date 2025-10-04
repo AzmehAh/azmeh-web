@@ -4,7 +4,7 @@ import BilingualInput from './BilingualInput';
 import BilingualArrayInput from './BilingualArrayInput';
 
 interface Props {
-  data: any;
+   any;
   onChange: (field: string, value: any) => void;
 }
 
@@ -16,7 +16,8 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
   return (
     <div className="space-y-6">
       <BilingualArrayInput
-        label="Safety Precautions"
+        labelEn="Safety Precautions"
+        labelAr="إجراءات السلامة"
         valueEn={Array.isArray(data.safety_precautions) ? data.safety_precautions : []}
         valueAr={Array.isArray(data.safety_precautions_ar) ? data.safety_precautions_ar : []}
         onChangeEn={(items) => onChange('safety_precautions', items)}
@@ -24,7 +25,8 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualArrayInput
-        label="First Aid Measures"
+        labelEn="First Aid Measures"
+        labelAr="إجراءات الإسعافات الأولية"
         valueEn={Array.isArray(data.safety_first_aid) ? data.safety_first_aid : []}
         valueAr={Array.isArray(data.safety_first_aid_ar) ? data.safety_first_aid_ar : []}
         onChangeEn={(items) => onChange('safety_first_aid', items)}
@@ -32,7 +34,8 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualInput
-        label="Safety Note"
+        labelEn="Safety Note"
+        labelAr="ملاحظة السلامة"
         nameEn="safety_note"
         nameAr="safety_note_ar"
         valueEn={data.safety_note || ''}
