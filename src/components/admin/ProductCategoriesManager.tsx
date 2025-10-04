@@ -391,7 +391,7 @@ useEffect(() => {
                 valueAr={formData.name_ar}
                 onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
                 required
-                placeholder="e.g., Industrial Coatings"
+               
               />
             ) : (
               <div>
