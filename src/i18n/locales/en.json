@@ -125,7 +125,17 @@
   "flexibility": "Flexibility",
   "voc": "VOC",
   "volume_solids": "Volume Solids",
-  "note": "Note"
+  "note": "Note",
+  "safety_note": "Safety Note",
+  "storing_conditions": "Storing Conditions",
+  "drying_time": "Drying Time",
+  "application_instructions": "Application Instructions",
+  "key_features": "Key Features",
+  "technical_specifications": "Technical Specifications",
+  "general_information": "General Information",
+  "packaging_sizes": "Packaging & Sizes",
+  "download_datasheet": "Download Technical Datasheet",
+  "products": "Products"
 
 
   },
