@@ -244,7 +244,7 @@ export const GeneralTab: React.FC<Props> = ({
         <h3 className="text-lg font-semibold text-gray-800 mb-4">General Information</h3>
         <GeneralInfoTab data={data} onChange={onChange} />
       </div>
-    </div>
+   
         {/* Images */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
