@@ -3,7 +3,7 @@ import { Upload, Trash2 } from 'lucide-react';
 import { InputField } from './FormComponents';
 import BilingualInput from './BilingualInput';
 import BilingualArrayInput from './BilingualArrayInput';
-
+import { GeneralInfoTab } from './GeneralInfoTab';
 interface Props {
   data: any;
   onChange: (field: string, value: any) => void;
@@ -239,7 +239,12 @@ export const GeneralTab: React.FC<Props> = ({
           onChangeEn={(items) => onChange('features', items)}
           onChangeAr={(items) => onChange('features_ar', items)}
         />
-
+ {/* ✅ هنا نضيف قسم المعلومات الإضافية */}
+      <div className="border-t pt-6 mt-6">
+        <h3 className="text-lg font-semibold text-gray-800 mb-4">General Information</h3>
+        <GeneralInfoTab data={data} onChange={onChange} />
+      </div>
+    </div>
         {/* Images */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
