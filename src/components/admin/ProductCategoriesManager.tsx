@@ -383,7 +383,8 @@ useEffect(() => {
             {/* Name */}
             {isEditing ? (
               <BilingualInput
-                label="Category Name"
+                labelEn="Category Name"
+                labelAr="اسم التصنيف"
                 nameEn="name"
                 nameAr="name_ar"
                 valueEn={formData.name}
@@ -403,7 +404,8 @@ useEffect(() => {
             {/* Description */}
             {isEditing ? (
               <BilingualInput
-                label="Description"
+                labelEn="Description"
+                 labelAr="الوصف"
                 nameEn="description"
                 nameAr="description_ar"
                 valueEn={formData.description}
