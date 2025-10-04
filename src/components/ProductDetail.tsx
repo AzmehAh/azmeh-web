@@ -218,7 +218,7 @@ const ProductDetail = () => {
  technical_specs: TECHNICAL_FIELDS
   .map(({ key, keyAr }) => {
     const value = getLocalizedField(productData[key], productData[keyAr]);
-    return { key, value: value || '', standard: '' }; // ← key بدل label
+    return { key, value: value || '', standard: '' }; 
   })
   .filter(spec => spec.value.trim() !== ''),
         features: parseArrayField(getLocalizedField(productData.features, productData.features_ar)),
@@ -516,7 +516,7 @@ const ProductDetail = () => {
                     <tbody>
                       {product.technical_specs.map((spec, index) => (
                         <tr key={index} className="border-b border-gray-100">
-                          <td className="px-4 py-3 font-medium text-gray-800">{spec.property}</td>
+                          <td className="px-4 py-3 font-medium text-gray-800">{t(`products.${spec.key}`)}</td>
                           <td className="px-4 py-3 text-[#2C5DB6] font-medium">{spec.value}</td>
                         </tr>
                       ))}
