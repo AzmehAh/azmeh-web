@@ -119,7 +119,7 @@ export const GeneralTab: React.FC<Props> = ({
             onChange={(e) => onChange('type', e.target.value)}
             className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
           >
-            <option value="">Select</option>
+            <option value="">Select / اختار</option>
             {types.map((t) => (
               <option key={t.id} value={t.value}>
                 {t.display_name || t.value}
@@ -135,7 +135,7 @@ export const GeneralTab: React.FC<Props> = ({
             onChange={(e) => onChange('material', e.target.value)}
             className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
           >
-            <option value="">Select</option>
+            <option value="">Select / اختار</option>
             {materials.map((m) => (
               <option key={m.id} value={m.value}>
                 {m.display_name || m.value}
@@ -151,7 +151,7 @@ export const GeneralTab: React.FC<Props> = ({
             onChange={(e) => onChange('usage', e.target.value)}
             className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
           >
-            <option value="">Select</option>
+            <option value="">Select / اختار</option>
             {usages.map((u) => (
               <option key={u.id} value={u.value}>
                 {u.display_name || u.value}
