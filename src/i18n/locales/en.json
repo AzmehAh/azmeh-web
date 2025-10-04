@@ -91,7 +91,42 @@
   "initial_setting": "Initial Setting",
   "fully_cured": "Fully Cured",
   "dry_to_sand": "Dry to Sand",
-  "drying_time_note": "Note"
+  "drying_time_note": "Note",
+    {
+
+
+  "component_a": "Component A",
+  "component_b": "Component B",
+  "gloss": "Gloss",
+  "color": "Color",
+  "number_of_coats": "Number of Coats",
+  "tensile_adhesion_strength": "Tensile Adhesion Strength",
+  "material_consumption": "Material Consumption",
+  "viscosity": "Viscosity",
+  "weather_resistance": "Weather Resistance",
+  "compressive_strength": "Compressive Strength",
+  "tear_resistance": "Tear Resistance",
+  "elongation_at_rupture": "Elongation at Rupture",
+  "tensile_strength_100": "Tensile Strength at 100% Elongation",
+  "tensile_strength_50": "Tensile Strength at 50% Elongation",
+  "specific_gravity_mixed": "Specific Gravity (Mixed)",
+  "solvent_resistance": "Solvent Resistance",
+  "chemical_resistance": "Chemical Resistance",
+  "abrasion_resistance": "Abrasion Resistance",
+  "friction_resistance": "Friction Resistance",
+  "washability": "Washability",
+  "water_resistance": "Water Resistance",
+  "theoretical_spreading_rate": "Theoretical Spreading Rate",
+  "recommended_film_thickness": "Recommended Film Thickness",
+  "temperature_resistance": "Temperature Resistance",
+  "solvent_splash_resistance": "Solvent Splash Resistance",
+  "sandability": "Sandability",
+  "adhesion": "Adhesion",
+  "flexibility": "Flexibility",
+  "voc": "VOC",
+  "volume_solids": "Volume Solids",
+  "note": "Note"
+}
 
   },
   "contact": {
