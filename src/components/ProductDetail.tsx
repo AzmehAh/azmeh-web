@@ -330,7 +330,7 @@ const ProductDetail = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative mb-8">
             <div className="flex items-center text-sm text-white">
-              <Link to="/" className="hover:text-[#0055A3] transition-colors">{t('home')}</Link>
+              <Link to="/" className="hover:text-[#0055A3] transition-colors">{t('products.home')}</Link>
               <span className="mx-2">/</span>
               <Link to="/products" className="hover:text-[#0055A3] transition-colors">{t('products.products')}</Link>
               <span className="mx-2">/</span>
@@ -357,7 +357,7 @@ const ProductDetail = () => {
                 <div className="mb-8">
                   <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
                     <Package className="w-5 h-5 text-white mr-2" />
-                    {t('packaging_sizes')}
+                    {t('products.packaging_sizes')}
                   </h3>
                   <div className="flex flex-wrap gap-4">
                     {product.packaging.map((pack, index) => (
@@ -374,7 +374,7 @@ const ProductDetail = () => {
                 className="bg-gradient-to-r from-yellow-400 to-yellow-500 hover:from-yellow-500 hover:to-yellow-600 text-black px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center"
               >
                 <Download className="w-6 h-6 mr-3" />
-                {t('download_datasheet')}
+                {t('products.download_datasheet')}
               </button>
             </div>
 
@@ -436,7 +436,7 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
                 <Info className="w-8 h-8 text-green-600 mr-3" />
-                {t('general_information')}
+                {t('products.general_information')}
               </h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="divide-y divide-gray-200">
@@ -508,7 +508,7 @@ const ProductDetail = () => {
                 <div className="bg-[#2C5DB6] px-6 py-4">
                   <h2 className="text-lg font-bold text-white flex items-center">
                     <FileText className="w-5 h-5 mr-2" />
-                    {t('technical_specifications')}
+                    {t('products.technical_specifications')}
                   </h2>
                 </div>
                 <div className="overflow-x-auto">
@@ -536,7 +536,7 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-800 mb-10 flex items-center justify-center">
                 <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
-                {t('key_features')}
+                {t('products.key_features')}
               </h2>
               <div className="space-y-4">
                 {product.features.map((feature, index) => (
@@ -565,7 +565,7 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
                 <Layers className="w-8 h-8 text-green-600 mr-3" />
-                {t('application_instructions')}
+                {t('products.application_instructions')}
               </h2>
               <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="divide-y divide-gray-100">
@@ -666,7 +666,7 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
                 <Wrench className="w-8 h-8 text-blue-600 mr-3" />
-                {t('drying_time')}
+                {t('products.drying_time')}
               </h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="divide-y divide-gray-100">
@@ -763,7 +763,7 @@ const ProductDetail = () => {
           <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
               <Shield className="w-8 h-8 text-green-600 mr-3" />
-              {t('storing_conditions')}
+              {t('products.storing_conditions')}
             </h2>
             <div
               className="max-w-4xl prose prose-lg mx-auto bg-gray-50 rounded-2xl p-8"
@@ -780,7 +780,7 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto text-center mb-10">
               <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center">
                 <Shield className="w-8 h-8 text-red-500 mr-3" />
-                {t('safety_note')}
+                {t('products.safety_note')}
               </h2>
             </div>
             <div className="max-w-6xl mx-auto">
