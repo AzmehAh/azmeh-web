@@ -1,7 +1,8 @@
 import React from 'react';
 
 interface BilingualInputProps {
-  label: string;
+  labelEn: string;
+  labelAr: string;
   nameEn: string;
   nameAr: string;
   valueEn: string;
@@ -13,7 +14,8 @@ interface BilingualInputProps {
 }
 
 const BilingualInput: React.FC<BilingualInputProps> = ({
-  label,
+  labelEn,
+  labelAr,
   nameEn,
   nameAr,
   valueEn,
@@ -27,8 +29,10 @@ const BilingualInput: React.FC<BilingualInputProps> = ({
 
   return (
     <div className="space-y-3">
+      {/* العنوان الرئيسي المدمج: إنجليزي / عربي */}
       <label className="block text-sm font-semibold text-gray-700 mb-2">
-        {label} {required && <span className="text-red-500">*</span>}
+        {labelEn} / {labelAr}
+        {required && <span className="text-red-500"> *</span>}
       </label>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
