@@ -123,9 +123,17 @@
   "flexibility": "المرونة",
   "voc": "مركبات عضوية متطايرة (VOC)",
   "volume_solids": "المواد الصلبة بالحجم",
-  "note": "ملاحظة"
-
-
+  "note": "ملاحظة",
+  "safety_note": "ملاحظة السلامة",
+  "storing_conditions": "شروط التخزين",
+  "drying_time": "وقت الجفاف",
+  "application_instructions": "تعليمات التطبيق",
+  "key_features": "الميزات الرئيسية",
+  "technical_specifications": "المواصفات الفنية",
+  "general_information": "المعلومات العامة",
+  "packaging_sizes": "التغليف والأحجام",
+  "download_datasheet": "تنزيل ورقة البيانات الفنية",
+  "products": "المنتجات"
 
   },
   "contact": {
@@ -181,6 +189,7 @@
     "followUs": "تابعنا",
     "rights": "جميع الحقوق محفوظة"
   },
+  
   "common": {
     "loading": "جاري التحميل...",
     "error": "خطأ",
