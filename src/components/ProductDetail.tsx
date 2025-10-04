@@ -569,7 +569,7 @@ const ProductDetail = () => {
               
               <tbody>
                 {product.technical_specs.map((spec, index) => (
-                  <tr key={index} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+                  <tr key={index} className="border-b border-gray-100  transition-colors">
                     <td className="px-4 py-3 font-medium text-gray-800">{spec.property}</td>
                     <td className="px-4 py-3 text-[#2C5DB6] font-medium">{spec.value}</td>
                   </tr>
