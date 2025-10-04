@@ -16,8 +16,7 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
   return (
     <div className="space-y-6">
       <BilingualArrayInput
-       labelEn="Safety Note"
-        labelAr="ملاحظة السلامة"
+        label="Safety Precautions / إجراءات السلامة"
         valueEn={Array.isArray(data.safety_precautions) ? data.safety_precautions : []}
         valueAr={Array.isArray(data.safety_precautions_ar) ? data.safety_precautions_ar : []}
         onChangeEn={(items) => onChange('safety_precautions', items)}
@@ -25,7 +24,7 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
       />
 
       <BilingualArrayInput
-        label="First Aid Measures"
+        label="First Aid Measures /إجراءات الإسعافات الأولية"
         valueEn={Array.isArray(data.safety_first_aid) ? data.safety_first_aid : []}
         valueAr={Array.isArray(data.safety_first_aid_ar) ? data.safety_first_aid_ar : []}
         onChangeEn={(items) => onChange('safety_first_aid', items)}
