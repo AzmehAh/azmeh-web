@@ -447,7 +447,7 @@ const ProductDetail = () => {
                   {product.recommended_uses && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Recommended Uses:</span>
+                        <span className="font-medium text-gray-800">{t('products.recommended_uses')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">
                           {Array.isArray(product.recommended_uses) 
                             ? product.recommended_uses.join(', ') 
@@ -459,7 +459,7 @@ const ProductDetail = () => {
                   {product.joint_preparation && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Joint Preparation:</span>
+                        <span className="font-medium text-gray-800"> {t('products.joint_preparation')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.joint_preparation}</span>
                       </div>
                     </div>
@@ -467,7 +467,7 @@ const ProductDetail = () => {
                   {product.joint_size && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Joint Size:</span>
+                        <span className="font-medium text-gray-800">{t('products.joint_size')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.joint_size}</span>
                       </div>
                     </div>
@@ -475,7 +475,7 @@ const ProductDetail = () => {
                   {product.movement_capacity && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Movement Capacity:</span>
+                        <span className="font-medium text-gray-800"> {t('products.movement_capacity')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.movement_capacity}</span>
                       </div>
                     </div>
@@ -483,7 +483,7 @@ const ProductDetail = () => {
                   {product.substrate_treatment && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Substrate Treatment:</span>
+                        <span className="font-medium text-gray-800">{t('products.substrate_treatment')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.substrate_treatment}</span>
                       </div>
                     </div>
@@ -491,7 +491,7 @@ const ProductDetail = () => {
                   {product.surface_preparation && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">Surface Preparation:</span>
+                        <span className="font-medium text-gray-800"> {t('products.surface_preparation')}:</span>
                         <span className="text-gray-700 leading-relaxed flex-1">{product.surface_preparation}</span>
                       </div>
                     </div>
