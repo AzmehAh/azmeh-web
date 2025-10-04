@@ -412,7 +412,7 @@ useEffect(() => {
                 valueAr={formData.description_ar}
                 onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
                 type="textarea"
-                placeholder="Category description..."
+             
               />
             ) : (
               <div>
