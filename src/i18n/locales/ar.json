@@ -240,7 +240,7 @@
     "backToMain": "العودة إلى دليل الاستكشاف",
     "searchPlaceholder": "ابحث عن المشاكل...",
     "resultsFound": "نتيجة تم العثور عليها لـ",
-    "noIssuesFound": "لم يتم العثور على مشاكل",
+    "noIssuesFound": "لم يتم العثور على مشاكل", 
     "tryAdjusting": "جرّب تعديل كلمات البحث",
     "priority": "أولوية",
     "solution": "الحل:",
@@ -249,6 +249,6 @@
     "contactSupport": "تواصل مع الدعم الفني",
     "scheduleConsultation": "احجز استشارة"
   }
+}
 
-
-
+}
