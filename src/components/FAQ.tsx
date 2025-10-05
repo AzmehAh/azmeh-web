@@ -53,53 +53,55 @@ const FAQ = () => {
       );
     }
 
-    return (
-      <div className="min-h-screen bg-gray-50 pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            {t('faq.title')}
-          </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-16 leading-relaxed">
-            {t('faq.subtitle')}
-          </p>
-<div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-  {faqCategories.map(cat => (
-    <Link
-      key={cat.id}
-      to={`/faq/${cat.id}`}
-      className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full"
-    >
-      <div className="p-8 flex flex-col flex-1">
-        <div className="flex mb-4">
-          <div className="w-12 h-12 flex-shrink-0 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">
-            <HelpCircle className="w-6 h-6 text-white" />
-          </div>
-          <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#0055A3] transition-colors leading-snug">
-            {getField(cat, 'name')}
-          </h3>
-        </div>
+  return (
+  <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
+      <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+        {t('faq.title')}
+      </h1>
+      <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-16 leading-relaxed">
+        {t('faq.subtitle')}
+      </p>
 
-        <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
-          {getField(cat, 'description')}
-        </p>
+      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        {faqCategories.map(cat => (
+          <Link
+            key={cat.id}
+            to={`/faq/${cat.id}`}
+            className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col min-h-[320px]"
+          >
+            <div className="p-8 flex flex-col flex-1">
+              <div className="flex mb-4">
+                <div className="w-12 h-12 flex-shrink-0 bg-[#0055A3] rounded-xl flex items-center justify-center mr-4">
+                  <HelpCircle className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 group-hover:text-[#0055A3] transition-colors leading-snug">
+                  {getField(cat, 'name')}
+                </h3>
+              </div>
 
-        <div className="mt-auto pt-4 border-t border-gray-100">
-          <div className="flex items-center text-[#0055A3] font-semibold group-hover:translate-x-2 transition-transform">
-            <span>{t('faq.viewQuestions')}</span>
-            <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
-          </div>
+              <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
+                {getField(cat, 'description')}
+              </p>
 
-          <div className="mt-2 text-sm text-gray-500">
-            {cat.faq_items.length} {t('faq.questionsAvailable')}
-          </div>
-        </div>
+              <div className="mt-auto pt-4 border-t border-gray-100">
+                <div className="flex items-center text-[#0055A3] font-semibold group-hover:translate-x-2 transition-transform">
+                  <span>{t('faq.viewQuestions')}</span>
+                  <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
+                </div>
+
+                <div className="mt-2 text-sm text-gray-500">
+                  {cat.faq_items.length} {t('faq.questionsAvailable')}
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
-    </Link>
-  ))}
-</div>
-        </div>
-      </div>
-    );
+    </div>
+  </div>
+);
+     
   }
 
   const filteredFAQs = currentCategory
