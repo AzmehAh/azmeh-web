@@ -276,9 +276,8 @@ const Header = () => {
         opacity: 0, 
         maxHeight: 0,
         transition: { duration: 0.25, ease: "easeIn" }
-      }}
-      className={`lg:hidden  border-t border-gray-200 overflow-hidden shadow-lg
-      ${  isScrolled ? 'bg-white shadow-lg backdrop-blur-sm' : 'bg-transparent'}`}
+      }} 
+      className="lg:hidden bg-white border-t border-gray-200 overflow-hidden shadow-lg"
     >
       <div className="px-6 py-6 space-y-1 max-h-[80vh] overflow-y-auto">
         {/* نفس الترتيب الأصلي كما طلبت */}
