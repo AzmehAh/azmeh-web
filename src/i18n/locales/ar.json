@@ -193,25 +193,7 @@
     "categories": "فئات الأسئلة الشائعة",
     "search": "ابحث عن سؤال..."
   },
-   "troubleshooting": {
-    "title": "دليل استكشاف الأخطاء",
-    "subtitle": "اكتشف حلولاً للمشاكل الشائعة في الطلاء وطرق التطبيق.",
-    "viewSolutions": "عرض الحلول",
-    "issuesCovered": "مشكلة مغطاة",
-    "categoryNotFound": "لم يتم العثور على الفئة",
-    "categoryNotFoundDesc": "الفئة التي تبحث عنها غير موجودة.",
-    "backToMain": "العودة إلى دليل الاستكشاف",
-    "searchPlaceholder": "ابحث عن المشاكل...",
-    "resultsFound": "نتيجة تم العثور عليها لـ",
-    "noIssuesFound": "لم يتم العثور على مشاكل",
-    "tryAdjusting": "جرّب تعديل كلمات البحث",
-    "priority": "أولوية",
-    "solution": "الحل:",
-    "needSupport": "هل تحتاج إلى دعم فني إضافي؟",
-    "supportDescription": "خبراؤنا الفنيون جاهزون لمساعدتك في حل المشكلات المعقدة.",
-    "contactSupport": "تواصل مع الدعم الفني",
-    "scheduleConsultation": "احجز استشارة"
-  },
+  
   "troubleshooting": {
     "title": "استكشاف الأخطاء",
     "problem": "المشكلة",
@@ -248,5 +230,24 @@
     "apply": "تطبيق",
     "reset": "إعادة تعيين"
   }
+   "troubleshooting": {
+    "title": "دليل استكشاف الأخطاء",
+    "subtitle": "اكتشف حلولاً للمشاكل الشائعة في الطلاء وطرق التطبيق.",
+    "viewSolutions": "عرض الحلول",
+    "issuesCovered": "مشكلة مغطاة",
+    "categoryNotFound": "لم يتم العثور على الفئة",
+    "categoryNotFoundDesc": "الفئة التي تبحث عنها غير موجودة.",
+    "backToMain": "العودة إلى دليل الاستكشاف",
+    "searchPlaceholder": "ابحث عن المشاكل...",
+    "resultsFound": "نتيجة تم العثور عليها لـ",
+    "noIssuesFound": "لم يتم العثور على مشاكل",
+    "tryAdjusting": "جرّب تعديل كلمات البحث",
+    "priority": "أولوية",
+    "solution": "الحل:",
+    "needSupport": "هل تحتاج إلى دعم فني إضافي؟",
+    "supportDescription": "خبراؤنا الفنيون جاهزون لمساعدتك في حل المشكلات المعقدة.",
+    "contactSupport": "تواصل مع الدعم الفني",
+    "scheduleConsultation": "احجز استشارة"
+  },
   
 }
