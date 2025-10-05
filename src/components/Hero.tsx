@@ -188,8 +188,7 @@ const Hero = () => {
                   <AnimatedTitle text={isRTL && category.name_ar ? category.name_ar : category.name} isActive={isActive} />
                 </div>
 
-         
-            {isActive && (
+         {isActive && (
   <motion.div
     className={`w-full max-w-sm sm:max-w-md lg:max-w-lg flex flex-col items-${isRTL ? 'end' : 'start'} text-${isRTL ? 'right' : 'left'}`}
     initial={{ opacity: 0, y: 20 }}
@@ -229,6 +228,8 @@ const Hero = () => {
   </motion.div>
 )}
 
+          );
+        })}
       </div>
     </div>
   );
