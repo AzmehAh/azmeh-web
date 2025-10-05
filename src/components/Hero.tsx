@@ -38,7 +38,7 @@ const AnimatedTitle = ({ text, isActive }) => {
         textAlign: "center",
         lineHeight: "1.1",
         direction: "inherit",
-        whiteSpace: "nowrap", 
+        whiteSpace: "nowrap",
       }}
     >
       {text}
@@ -225,4 +225,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default Hero; 
