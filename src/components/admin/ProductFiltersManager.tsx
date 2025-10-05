@@ -296,8 +296,7 @@ const ProductFiltersManager = () => {
                     )}
                   </button>
                   <Filter className="w-6 h-6 text-[#0055A3]" />
-                  <div>
-                   <div className="flex flex-col">
+                 <div className="flex flex-col">
   {/* English Title */}
   <h3 className="text-xl font-semibold text-gray-900">
     {filterType.name}
@@ -324,6 +323,7 @@ const ProductFiltersManager = () => {
     </p>
   )}
 </div>
+                  </div>
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                     filterType.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                   }`}>
