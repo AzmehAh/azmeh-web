@@ -445,70 +445,70 @@ const Products = () => {
                     const productMaterial = getTranslatedText(product, 'material');
                     const productUsage = getTranslatedText(product, 'usage');
 
-                    return (
-                      <motion.div
-                        key={product.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group 
-                          ${viewMode === 'list' ? 'flex items-center' : 'flex flex-col'}
-                        `}
-                        onClick={() => navigate(`/product/${product.id}`)}
-                      >
-                        {/* Product Image */}
-                        <div className={`${viewMode === 'list' ? 'w-24 h-24 flex-shrink-0' : 'h-48'} overflow-hidden`}>
-                          <img
-                            src={product.image}
-                            alt={productName}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          />
-                        </div>
+                  return (
+    <motion.div
+      key={product.id}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05 }}
+      className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group 
+        ${viewMode === 'list' ? 'flex items-center' : 'flex flex-col'}
+      `}
+      onClick={() => navigate(`/product/${product.id}`)}
+    >
+      {/* Product Image */}
+      <div className={`${viewMode === 'list' ? 'w-24 h-24 flex-shrink-0' : 'h-48'} overflow-hidden`}>
+        <img
+          src={product.image}
+          alt={productName}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+      </div>
 
-                        {/* Product Info */}
-                        <div className="p-6 flex-1 grid grid-rows-[auto,1fr,auto] items-stretch">
-                          {/* Title & Brand */}
-                          <div className="flex items-start justify-between mb-3">
-                            <div>
-                              <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors">
-                                {productName}
-                              </h3>
-                              <p className="text-sm text-gray-500 font-mono">{product.code}</p>
-                            </div>
-                            <span className="px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full">
-                              {productBrand}
-                            </span>
-                          </div>
+      {/* Product Info */}
+      <div className="p-6 flex-1 grid grid-rows-[auto,1fr,auto] items-stretch">
+        {/* Title & Brand */}
+        <div className="flex items-start justify-between mb-3">
+          <div>
+            <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors">
+              {productName}
+            </h3>
+            <p className="text-sm text-gray-500 font-mono">{product.code}</p>
+          </div>
+          <span className="px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full">
+            {productBrand}
+          </span>
+        </div>
 
-                          {/* Description + Tags */}
-                          <div className="flex flex-col justify-between">
-                            <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                              {productDescription}
-                            </p>
+        {/* Description + Tags */}
+        <div className="flex flex-col justify-between">
+          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+            {productDescription}
+          </p>
 
-                            <div className="flex flex-wrap gap-2 mb-4">
-                              <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                                {productType}
-                              </span>
-                              <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                                {productMaterial}
-                              </span>
-                              <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-                                {productUsage}
-                              </span>
-                            </div>
-                          </div>
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+              {productType}
+            </span>
+            <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+              {productMaterial}
+            </span>
+            <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+              {productUsage}
+            </span>
+          </div>
+        </div>
 
-                          {/* Button */}
-                          {viewMode === 'grid' && (
-                            <button className="w-full bg-[#2C5DB6] text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
-                              {t('products.viewDetails')}
-                            </button>
-                          )}
-                        </div>
-                      </motion.div>
-                    );
-                  })}
+        {/* Button */}
+        {viewMode === 'grid' && (
+          <button className="w-full bg-[#2C5DB6] text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
+            {t('products.viewDetails')}
+          </button>
+        )}
+      </div>
+    </motion.div>
+  );
+})}
                 </motion.div>
               )}
             </AnimatePresence>
