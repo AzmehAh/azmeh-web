@@ -149,7 +149,7 @@ const JobApplicationsManager = () => {
           <h1 className="text-3xl font-bold text-gray-900">Job Applications</h1>
           <p className="text-gray-600">Manage job application submissions</p>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center gap-4">
           <span className="text-sm text-gray-600">
             {filteredApplications.length} of {applications.length} applications
           </span>
@@ -197,7 +197,7 @@ const JobApplicationsManager = () => {
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center space-x-3 mb-2">
+                    <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-semibold text-gray-900 truncate">
                         {application.full_name}
                       </h3>
@@ -206,7 +206,7 @@ const JobApplicationsManager = () => {
                       </span>
                     </div>
                     
-                    <div className="flex items-center space-x-4 text-sm text-gray-600 mb-2">
+                    <div className="flex items-center gap-4 text-sm text-gray-600 mb-2">
                       <div className="flex items-center">
                         <Mail className="w-4 h-4 mr-1" />
                         {application.email}
@@ -226,7 +226,7 @@ const JobApplicationsManager = () => {
                     </p>
                   </div>
 
-                  <div className="flex items-center space-x-2 ml-4">
+                  <div className="flex items-center gap-2 ml-4">
                     <div className="relative">
                       <select
                         value={application.status}
@@ -416,7 +416,7 @@ const ApplicationModal = ({
 
           {/* Footer */}
           <div className="flex items-center justify-between p-6 border-t bg-gray-50">
-            <div className="flex space-x-3">
+            <div className="flex gap-3">
               <a
                 href={`mailto:${application.email}?subject=Regarding your job application`}
                 className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors"
@@ -425,7 +425,7 @@ const ApplicationModal = ({
                 Contact Applicant
               </a>
             </div>
-            <div className="flex space-x-3">
+            <div className="flex gap-3">
               <button
                 onClick={onClose}
                 className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
