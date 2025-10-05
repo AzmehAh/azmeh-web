@@ -397,7 +397,7 @@ const Header = () => {
             )}
           </AnimatePresence>
         </div>
-
+ 
         <div className="mb-4 pt-2 border-t border-gray-100">
           <LanguageSwitcher />
         </div>
