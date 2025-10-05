@@ -68,7 +68,7 @@ const FAQ = () => {
   <Link
     key={cat.id}
     to={`/faq/${cat.id}`}
-    className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full"
+    className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full min-h-[300px]"
   >
     <div className="p-8 flex flex-col h-full">
       <div className="flex mb-4">
