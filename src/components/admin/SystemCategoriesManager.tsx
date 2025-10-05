@@ -13,6 +13,7 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { supabase, BulletinCategoryConfig, api, Bulletin } from '../../lib/supabase';
+import BilingualInput from './BilingualInput';
 
 const SystemCategoriesManager = () => {
   const [categories, setCategories] = useState<BulletinCategoryConfig[]>([]);
@@ -26,33 +27,29 @@ const SystemCategoriesManager = () => {
   useEffect(() => {
     fetchData();
   }, []);
-const reorderCategories = async () => {
-  try {
-    // جلب أحدث بيانات الفئات من الخادم
-    const categoriesData = await api.getBulletinCategoriesConfig();
-    if (!categoriesData || categoriesData.length === 0) return;
 
-    // نقوم بفرز الفئات حسب sort_order الحالي
-    const sorted = [...categoriesData].sort((a, b) => a.sort_order - b.sort_order);
+  const reorderCategories = async () => {
+    try {
+      const categoriesData = await api.getBulletinCategoriesConfig();
+      if (!categoriesData || categoriesData.length === 0) return;
 
-    // نُعدّل sort_order ليكون 0, 1, 2, ...
-    const updates = sorted.map((category, index) => ({
-      id: category.id,
-      sort_order: index
-    }));
+      const sorted = [...categoriesData].sort((a, b) => a.sort_order - b.sort_order);
+      const updates = sorted.map((category, index) => ({
+        id: category.id,
+        sort_order: index
+      }));
 
-    // نُحدث كل فئة على حدة
-    for (const update of updates) {
-      await api.updateBulletinCategoryConfig(update.id, { sort_order: update.sort_order });
+      for (const update of updates) {
+        await api.updateBulletinCategoryConfig(update.id, { sort_order: update.sort_order });
+      }
+
+      await fetchData();
+    } catch (error) {
+      console.error('Error reordering categories:', error);
+      alert('Failed to reorder categories');
     }
+  };
 
-    // نُعدّل الواجهة
-    await fetchData(); // ← هذا مهم: لتحديث الواجهة بعد التحديث
-  } catch (error) {
-    console.error('Error reordering categories:', error);
-    alert('Failed to reorder categories');
-  }
-};
   const fetchData = async () => {
     try {
       const [categoriesData, bulletinsData] = await Promise.all([
@@ -107,7 +104,9 @@ const reorderCategories = async () => {
   const filteredCategories = categories.filter(category =>
     searchTerm === '' || 
     category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (category.description && category.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    (category.name_ar && category.name_ar.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (category.description && category.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (category.description_ar && category.description_ar.toLowerCase().includes(searchTerm.toLowerCase()))
   );
 
   if (loading) {
@@ -168,7 +167,14 @@ const reorderCategories = async () => {
                   
                   <div className="flex-1">
                     <div className="flex items-center space-x-3 mb-2">
-                      <h3 className="text-xl font-semibold text-gray-900">{category.name}</h3>
+                      <h3 className="text-xl font-semibold text-gray-900">
+                        {category.name}
+                        {category.name_ar && (
+                          <span className="block text-gray-700 text-base" dir="rtl">
+                            {category.name_ar}
+                          </span>
+                        )}
+                      </h3>
                       <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                         category.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                       }`}>
@@ -176,8 +182,15 @@ const reorderCategories = async () => {
                       </span>
                     </div>
                     
-                    {category.description && (
-                      <p className="text-gray-600 mb-3">{category.description}</p>
+                    {(category.description || category.description_ar) && (
+                      <p className="text-gray-600 mb-3">
+                        {category.description}
+                        {category.description_ar && (
+                          <span className="block" dir="rtl">
+                            {category.description_ar}
+                          </span>
+                        )}
+                      </p>
                     )}
 
                     <div className="flex items-center space-x-4 text-sm text-gray-500">
@@ -247,7 +260,7 @@ const reorderCategories = async () => {
         category={selectedCategory}
         isEditing={isEditing}
         onSave={fetchData}
-      reorderCategories={reorderCategories} 
+        reorderCategories={reorderCategories} 
       />
     </div>
   );
@@ -267,11 +280,13 @@ const CategoryModal = ({
   category: BulletinCategoryConfig | null;
   isEditing: boolean;
   onSave: () => void;
-   reorderCategories: () => Promise<void>;
+  reorderCategories: () => Promise<void>;
 }) => {
   const [formData, setFormData] = useState({
     name: '',
+    name_ar: '',
     description: '',
+    description_ar: '',
     sort_order: 0,
     is_active: true
   });
@@ -281,14 +296,18 @@ const CategoryModal = ({
     if (category) {
       setFormData({
         name: category.name,
+        name_ar: category.name_ar || '',
         description: category.description || '',
+        description_ar: category.description_ar || '',
         sort_order: category.sort_order,
         is_active: category.is_active
       });
     } else {
       setFormData({
         name: '',
+        name_ar: '',
         description: '',
+        description_ar: '',
         sort_order: 0,
         is_active: true
       });
@@ -296,46 +315,59 @@ const CategoryModal = ({
   }, [category]);
 
   const handleSave = async () => {
-  if (!formData.name.trim()) {
-    alert('Category name is required');
-    return;
-  }
-
-  // Check for duplicate names
-  try {
-    const existingCategory = await api.getBulletinCategoryByName(formData.name.trim());
-    if (existingCategory && (!category || existingCategory.id !== category.id)) {
-      alert('A category with this name already exists. Please choose a different name.');
+    if (!formData.name.trim()) {
+      alert('Category name is required');
       return;
     }
-  } catch (error) {
-    console.error('Error checking for duplicate category name:', error);
-    alert('Error checking category name. Please try again.');
-    return;
-  }
 
-  setSaving(true);
-  try {
-    if (category) {
-      await api.updateBulletinCategoryConfig(category.id, formData);
-    } else {
-      await api.createBulletinCategoryConfig(formData);
+    try {
+      const existingCategory = await api.getBulletinCategoryByName(formData.name.trim());
+      if (existingCategory && (!category || existingCategory.id !== category.id)) {
+        alert('A category with this name already exists. Please choose a different name.');
+        return;
+      }
+    } catch (error) {
+      console.error('Error checking for duplicate category name:', error);
+      alert('Error checking category name. Please try again.');
+      return;
     }
 
-    // 👇 أضف هذا السطر!
-    if (reorderCategories && typeof reorderCategories === 'function') {
-      await reorderCategories();
-    }
+    setSaving(true);
+    try {
+      if (category) {
+        await api.updateBulletinCategoryConfig(category.id, {
+          name: formData.name,
+          name_ar: formData.name_ar,
+          description: formData.description,
+          description_ar: formData.description_ar,
+          sort_order: formData.sort_order,
+          is_active: formData.is_active
+        });
+      } else {
+        await api.createBulletinCategoryConfig({
+          name: formData.name,
+          name_ar: formData.name_ar,
+          description: formData.description,
+          description_ar: formData.description_ar,
+          sort_order: formData.sort_order,
+          is_active: formData.is_active
+        });
+      }
 
-    onSave();
-    onClose();
-  } catch (error) {
-    console.error('Error saving category:', error);
-    alert('Error saving category');
-  } finally {
-    setSaving(false);
-  }
-};
+      if (reorderCategories && typeof reorderCategories === 'function') {
+        await reorderCategories();
+      }
+
+      onSave();
+      onClose();
+    } catch (error) {
+      console.error('Error saving category:', error);
+      alert('Error saving category');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -358,44 +390,54 @@ const CategoryModal = ({
           </div>
 
           <div className="p-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Category Name *
-              </label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="e.g., Technical Solutions, Paint Systems"
-                />
-              ) : (
+            {/* Name */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Category Name"
+                labelAr="اسم التصنيف"
+                nameEn="name"
+                nameAr="name_ar"
+                valueEn={formData.name}
+                valueAr={formData.name_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                required
+              />
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category Name / اسم التصنيف
+                </label>
                 <p className="text-gray-900">{formData.name}</p>
-              )}
-            </div>
+                {formData.name_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.name_ar}</p>}
+              </div>
+            )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Description
-              </label>
-              {isEditing ? (
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="Category description..."
-                />
-              ) : (
+            {/* Description */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Description"
+                labelAr="الوصف"
+                nameEn="description"
+                nameAr="description_ar"
+                valueEn={formData.description}
+                valueAr={formData.description_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                type="textarea"
+              />
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description / الوصف
+                </label>
                 <p className="text-gray-900">{formData.description}</p>
-              )}
-            </div>
+                {formData.description_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.description_ar}</p>}
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Sort Order
+                  Sort Order / الترتيب
                 </label>
                 {isEditing ? (
                   <input
@@ -411,7 +453,7 @@ const CategoryModal = ({
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Status
+                  Status / الحالة
                 </label>
                 {isEditing ? (
                   <select
@@ -419,8 +461,8 @@ const CategoryModal = ({
                     onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.value === 'true' }))}
                     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
                   >
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
+                    <option value="true">Active / نشط</option>
+                    <option value="false">Inactive / غير نشط</option>
                   </select>
                 ) : (
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
@@ -465,7 +507,6 @@ const CategoryModal = ({
       </div>
     </div>
   );
-
 };
 
 export default SystemCategoriesManager;
