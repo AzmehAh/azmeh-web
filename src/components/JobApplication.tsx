@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { User, Mail, Phone, FileText, Send, CheckCircle, AlertCircle, Upload as UploadIcon } from 'lucide-react';
 import { supabase } from '../lib/supabase';
+import { useTranslation } from 'react-i18next';
 
 interface FormData {
   fullName: string;
   email: string;
   phone: string;
   coverLetter: string;
-  cvFile: File | null; // <-- أضفنا هذا الحقل الجديد
+  cvFile: File | null;
 }
 
 interface FormErrors {
@@ -16,16 +17,17 @@ interface FormErrors {
   email?: string;
   phone?: string;
   coverLetter?: string;
-  cvFile?: string; // <-- أضفنا هذا الحقل الجديد
+  cvFile?: string;
 }
 
 const JobApplication = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<FormData>({
     fullName: '',
     email: '',
     phone: '',
     coverLetter: '',
-    cvFile: null // <-- تهيئة الحقل الجديد
+    cvFile: null
   });
   
   const [errors, setErrors] = useState<FormErrors>({});
@@ -45,41 +47,36 @@ const JobApplication = () => {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    // Full Name validation
     if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full name is required';
+      newErrors.fullName = t('jobApplication.validation.fullNameRequired');
     } else if (formData.fullName.trim().length < 2) {
-      newErrors.fullName = 'Full name must be at least 2 characters';
+      newErrors.fullName = t('jobApplication.validation.fullNameMinLength');
     }
 
-    // Email validation
     if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = t('jobApplication.validation.emailRequired');
     } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Please enter a valid email address';
+      newErrors.email = t('jobApplication.validation.emailInvalid');
     }
 
-    // Phone validation
     if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
+      newErrors.phone = t('jobApplication.validation.phoneRequired');
     } else if (!validatePhone(formData.phone)) {
-      newErrors.phone = 'Please enter a valid phone number';
+      newErrors.phone = t('jobApplication.validation.phoneInvalid');
     }
 
-    // Cover Letter validation
     if (!formData.coverLetter.trim()) {
-      newErrors.coverLetter = 'Cover letter/message is required';
+      newErrors.coverLetter = t('jobApplication.validation.coverLetterRequired');
     } else if (formData.coverLetter.trim().length < 10) {
-      newErrors.coverLetter = 'Cover letter must be at least 10 characters';
+      newErrors.coverLetter = t('jobApplication.validation.coverLetterMinLength');
     }
 
-    // CV File validation
     if (!formData.cvFile) {
-      newErrors.cvFile = 'Please upload your CV (PDF or DOC)';
+      newErrors.cvFile = t('jobApplication.validation.cvRequired');
     } else if (!['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(formData.cvFile.type)) {
-      newErrors.cvFile = 'Please upload a PDF or Word document';
-    } else if (formData.cvFile.size > 5 * 1024 * 1024) { // 5MB limit
-      newErrors.cvFile = 'File size must be less than 5MB';
+      newErrors.cvFile = t('jobApplication.validation.cvInvalidType');
+    } else if (formData.cvFile.size > 5 * 1024 * 1024) {
+      newErrors.cvFile = t('jobApplication.validation.cvSizeExceeded');
     }
 
     setErrors(newErrors);
@@ -90,18 +87,15 @@ const JobApplication = () => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
-    // Clear error for this field when user starts typing
     if (errors[name as keyof FormErrors]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
     }
   };
 
-  // دالة جديدة للتعامل مع تحميل ملف الـ CV
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setFormData(prev => ({ ...prev, cvFile: file }));
     
-    // Clear error for CV file
     if (errors.cvFile) {
       setErrors(prev => ({ ...prev, cvFile: undefined }));
     }
@@ -115,12 +109,11 @@ const JobApplication = () => {
     }
 
     setIsSubmitting(true);
-    setSubmitStatus('idle'); 
+    setSubmitStatus('idle');
 
     try {
       let resumeUrl = null;
       
-      // Upload CV file if provided
       if (formData.cvFile) {
         try {
           const fileExt = formData.cvFile.name.split('.').pop();
@@ -142,14 +135,12 @@ const JobApplication = () => {
           resumeUrl = publicUrl;
         } catch (uploadError) {
           console.error('CV upload failed:', uploadError);
-          alert('Failed to upload CV file. Please try again.');
+          alert(t('jobApplication.errorMessage'));
           setIsSubmitting(false);
           return;
-          // Continue without CV upload if storage fails
         }
       }
 
-      // Submit job application to database
       const { error } = await supabase
         .from('job_applications')
         .insert([{
@@ -166,13 +157,11 @@ const JobApplication = () => {
       setFormData({ fullName: '', email: '', phone: '', coverLetter: '', cvFile: null });
       setErrors({});
       
-      // Reset file input
       const fileInput = document.getElementById('cvFile') as HTMLInputElement;
       if (fileInput) {
         fileInput.value = '';
       }
       
-      // Reset success message after 5 seconds
       setTimeout(() => {
         setSubmitStatus('idle');
       }, 5000);
@@ -190,9 +179,11 @@ const JobApplication = () => {
       <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Job Application</h1>
+            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+              {t('jobApplication.title')}
+            </h1>
             <p className="text-xl opacity-90 max-w-3xl mx-auto leading-relaxed">
-              Join our team of paint specialists and help us continue our legacy of excellence in the industry.
+              {t('jobApplication.heroDescription')}
             </p>
           </div>
         </div>
@@ -206,28 +197,42 @@ const JobApplication = () => {
           transition={{ duration: 0.6 }}
           className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 mb-8"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Why Work With Us?</h2>
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            {t('jobApplication.whyWorkWithUs')}
+          </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-[#2C5DB6] rounded-lg flex items-center justify-center mx-auto mb-3">
                 <CheckCircle className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Excellence Since 1955</h3>
-              <p className="text-gray-600 text-sm">Join a company with nearly 70 years of industry leadership</p>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                {t('jobApplication.excellenceSince1955')}
+              </h3>
+              <p className="text-gray-600 text-sm">
+                {t('jobApplication.excellenceDescription')}
+              </p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-[#2C5DB6] rounded-lg flex items-center justify-center mx-auto mb-3">
                 <User className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Career Growth</h3>
-              <p className="text-gray-600 text-sm">Opportunities for professional development and advancement</p>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                {t('jobApplication.careerGrowth')}
+              </h3>
+              <p className="text-gray-600 text-sm">
+                {t('jobApplication.careerGrowthDescription')}
+              </p>
             </div>
             <div className="text-center">
               <div className="w-12 h-12 bg-[#2C5DB6] rounded-lg flex items-center justify-center mx-auto mb-3">
                 <FileText className="w-6 h-6 text-white" />
               </div>
-              <h3 className="font-semibold text-gray-900 mb-2">Innovation</h3>
-              <p className="text-gray-600 text-sm">Work with cutting-edge paint technologies and solutions</p>
+              <h3 className="font-semibold text-gray-900 mb-2">
+                {t('jobApplication.innovation')}
+              </h3>
+              <p className="text-gray-600 text-sm">
+                {t('jobApplication.innovationDescription')}
+              </p>
             </div>
           </div>
         </motion.div>
@@ -239,16 +244,16 @@ const JobApplication = () => {
           transition={{ duration: 0.6, delay: 0.2 }}
           className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-12"> {/* <-- زدنا marginBottom إلى mb-12 لزيادة البادينغ */}
-            Submit Your Application
+          <h2 className="text-3xl font-bold text-gray-900 mb-12">
+            {t('jobApplication.submitApplication')}
           </h2>
           
-          <form onSubmit={handleSubmit} className="space-y-8"> {/* <-- زدنا الفاصل بين العناصر إلى space-y-8 */}
+          <form onSubmit={handleSubmit} className="space-y-8">
             {/* Full Name */}
             <div>
               <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-2">
                 <User className="w-4 h-4 inline mr-2" />
-                Full Name *
+                {t('jobApplication.fullName')} *
               </label>
               <input
                 type="text"
@@ -261,7 +266,7 @@ const JobApplication = () => {
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
                     : 'border-gray-200 focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20'
                 }`}
-                placeholder="Enter your full name"
+                placeholder={t('jobApplication.fullName')}
               />
               {errors.fullName && (
                 <motion.p
@@ -279,7 +284,7 @@ const JobApplication = () => {
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                 <Mail className="w-4 h-4 inline mr-2" />
-                Email Address *
+                {t('jobApplication.emailAddress')} *
               </label>
               <input
                 type="email"
@@ -310,7 +315,7 @@ const JobApplication = () => {
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                 <Phone className="w-4 h-4 inline mr-2" />
-                Phone Number *
+                {t('jobApplication.phoneNumber')} *
               </label>
               <input
                 type="tel"
@@ -341,7 +346,7 @@ const JobApplication = () => {
             <div>
               <label htmlFor="coverLetter" className="block text-sm font-medium text-gray-700 mb-2">
                 <FileText className="w-4 h-4 inline mr-2" />
-                Cover Letter / Message *
+                {t('jobApplication.coverLetter')} *
               </label>
               <textarea
                 id="coverLetter"
@@ -354,7 +359,7 @@ const JobApplication = () => {
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
                     : 'border-gray-200 focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20'
                 }`}
-                placeholder="Tell us about yourself, your experience, and why you'd like to work with Al Azmeh Paints..."
+                placeholder={t('jobApplication.coverLetter')}
               />
               {errors.coverLetter && (
                 <motion.p
@@ -368,11 +373,11 @@ const JobApplication = () => {
               )}
             </div>
 
-            {/* CV Upload - الحقل الجديد */}
+            {/* CV Upload */}
             <div>
               <label htmlFor="cvFile" className="block text-sm font-medium text-gray-700 mb-2">
                 <UploadIcon className="w-4 h-4 inline mr-2" />
-                Upload Your CV (PDF or DOC) *
+                {t('jobApplication.uploadCV')} *
               </label>
               <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-[#2C5DB6] transition-colors">
                 <div className="space-y-1 text-center">
@@ -382,7 +387,7 @@ const JobApplication = () => {
                       htmlFor="cvFile"
                       className="relative cursor-pointer rounded-md font-medium text-[#2C5DB6] hover:text-blue-700 focus-within:outline-none"
                     >
-                      <span>Upload a file</span>
+                      <span>{t('jobApplication.uploadFile')}</span>
                       <input
                         id="cvFile"
                         name="cvFile"
@@ -392,9 +397,9 @@ const JobApplication = () => {
                         onChange={handleFileChange}
                       />
                     </label>
-                    <p className="pl-1">or drag and drop</p>
+                    <p className="pl-1">{t('jobApplication.dragAndDrop')}</p>
                   </div>
-                  <p className="text-xs text-gray-500">PDF or DOC up to 5MB</p>
+                  <p className="text-xs text-gray-500">{t('jobApplication.fileTypes')}</p>
                   {formData.cvFile && (
                     <p className="text-sm text-green-600 mt-2">
                       <CheckCircle className="w-4 h-4 inline mr-1" />
@@ -425,9 +430,11 @@ const JobApplication = () => {
                 <div className="flex items-center">
                   <CheckCircle className="w-6 h-6 text-green-600 mr-3" />
                   <div>
-                    <h3 className="font-semibold text-green-800">Application Submitted Successfully!</h3>
+                    <h3 className="font-semibold text-green-800">
+                      {t('jobApplication.applicationSubmitted')}
+                    </h3>
                     <p className="text-green-700 text-sm mt-1">
-                      Thank you for your interest in Al Azmeh Paints. We'll review your application and contact you soon.
+                      {t('jobApplication.successMessage')}
                     </p>
                   </div>
                 </div>
@@ -443,9 +450,11 @@ const JobApplication = () => {
                 <div className="flex items-center">
                   <AlertCircle className="w-6 h-6 text-red-600 mr-3" />
                   <div>
-                    <h3 className="font-semibold text-red-800">Submission Failed</h3>
+                    <h3 className="font-semibold text-red-800">
+                      {t('jobApplication.submissionFailed')}
+                    </h3>
                     <p className="text-red-700 text-sm mt-1">
-                      There was an error submitting your application. Please try again.
+                      {t('jobApplication.errorMessage')}
                     </p>
                   </div>
                 </div>
@@ -461,12 +470,12 @@ const JobApplication = () => {
               {isSubmitting ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Submitting Application...
+                  {t('jobApplication.submitting')}
                 </>
               ) : (
                 <>
                   <Send className="w-5 h-5 mr-2" />
-                  Submit Application
+                  {t('jobApplication.submitButton')}
                 </>
               )}
             </button>
@@ -474,7 +483,7 @@ const JobApplication = () => {
 
           <div className="mt-8 pt-8 border-t border-gray-200 text-center text-sm text-gray-600">
             <p>
-              By submitting this application, you agree to our processing of your personal data for recruitment purposes.
+              {t('jobApplication.privacyNotice')}
             </p>
           </div>
         </motion.div>
