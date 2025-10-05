@@ -323,7 +323,7 @@ const ProductFiltersManager = () => {
     </p>
   )}
 </div>
-                  </div>
+                 
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                     filterType.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                   }`}>
