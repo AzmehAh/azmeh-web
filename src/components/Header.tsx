@@ -398,9 +398,14 @@ const Header = () => {
           </AnimatePresence>
         </div>
  
-        <div className="mb-4 pt-2 border-t border-gray-100">
-          <LanguageSwitcher />
-        </div>
+       <div
+  className={`mb-4 pt-2 border-t border-gray-100 flex ${
+    i18n.dir() === "rtl" ? "justify-start" : "justify-end"
+  }`}
+>
+  <LanguageSwitcher />
+</div>
+
       </div>
     </motion.div>
   )}
