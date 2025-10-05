@@ -14,6 +14,7 @@ import {
   Tag
 } from 'lucide-react';
 import { supabase, ProductFilterType, ProductFilterValue, api } from '../../lib/supabase';
+import BilingualInput from './BilingualInput';
 
 const ProductFiltersManager = () => {
   const [filterTypes, setFilterTypes] = useState<(ProductFilterType & { product_filter_values: ProductFilterValue[] })[]>([]);
@@ -42,7 +43,6 @@ const ProductFiltersManager = () => {
 
       if (error) throw error;
       setFilterTypes(data || []);
-      // Expand all filter types by default
       setExpandedTypes((data || []).map(type => type.id));
     } catch (error) {
       console.error('Error fetching filter data:', error);
@@ -51,7 +51,6 @@ const ProductFiltersManager = () => {
     }
   };
 
-  // إعادة ترتيب أنواع الفلاتر
   const reorderFilterTypes = async () => {
     try {
       const { data: filterTypesData, error } = await supabase
@@ -88,7 +87,6 @@ const ProductFiltersManager = () => {
     }
   };
 
-  // إعادة ترتيب قيم الفلتر حسب نوع الفلتر
   const reorderFilterValues = async (filterTypeId: string) => {
     try {
       const { data: filterValuesData, error } = await supabase
@@ -126,7 +124,6 @@ const ProductFiltersManager = () => {
     }
   };
 
-  // الحصول على أعلى ترتيب فرز لأنواع الفلاتر
   const getMaxFilterTypeSortOrder = async () => {
     const { data, error } = await supabase
       .from('product_filter_types')
@@ -138,7 +135,6 @@ const ProductFiltersManager = () => {
     return data && data.length > 0 ? data[0].sort_order + 1 : 0;
   };
 
-  // الحصول على أعلى ترتيب فرز لقيم الفلتر لنوع معين
   const getMaxFilterValueSortOrder = async (filterTypeId: string) => {
     const { data, error } = await supabase
       .from('product_filter_values')
@@ -195,13 +191,14 @@ const ProductFiltersManager = () => {
     setSelectedFilterType(filterType);
     setIsEditing(editing);
     
-    // إذا كان نوع فلتر جديد، احصل على ترتيب فرز جديد
     if (!filterType) {
       const maxSortOrder = await getMaxFilterTypeSortOrder();
       setSelectedFilterType({
         id: '',
         name: '',
+        name_ar: '',
         description: '',
+        description_ar: '',
         sort_order: maxSortOrder,
         is_active: true,
         created_at: '',
@@ -216,14 +213,15 @@ const ProductFiltersManager = () => {
     setSelectedFilterValue(filterValue);
     setIsEditing(editing);
     
-    // إذا كانت قيمة فلتر جديدة، احصل على ترتيب فرز جديد
     if (!filterValue && filterTypeId) {
       const maxSortOrder = await getMaxFilterValueSortOrder(filterTypeId);
       setSelectedFilterValue({
         id: '',
         filter_type_id: filterTypeId,
         value: '',
+        value_ar: '',
         display_name: '',
+        display_name_ar: '',
         sort_order: maxSortOrder,
         is_active: true,
         created_at: '',
@@ -237,9 +235,12 @@ const ProductFiltersManager = () => {
   const filteredFilterTypes = filterTypes.filter(type =>
     searchTerm === '' || 
     type.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (type.name_ar && type.name_ar.toLowerCase().includes(searchTerm.toLowerCase())) ||
     type.product_filter_values.some(value => 
       value.value.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (value.display_name && value.display_name.toLowerCase().includes(searchTerm.toLowerCase()))
+      (value.value_ar && value.value_ar.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (value.display_name && value.display_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (value.display_name_ar && value.display_name_ar.toLowerCase().includes(searchTerm.toLowerCase()))
     )
   );
 
@@ -253,7 +254,6 @@ const ProductFiltersManager = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Product Filters</h1>
@@ -268,7 +268,6 @@ const ProductFiltersManager = () => {
         </button>
       </div>
 
-      {/* Search */}
       <div className="relative">
         <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
         <input
@@ -280,11 +279,9 @@ const ProductFiltersManager = () => {
         />
       </div>
 
-      {/* Filter Types */}
       <div className="space-y-4">
         {filteredFilterTypes.map((filterType) => (
           <div key={filterType.id} className="bg-white rounded-lg shadow-sm border border-gray-200">
-            {/* Filter Type Header */}
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
@@ -300,9 +297,23 @@ const ProductFiltersManager = () => {
                   </button>
                   <Filter className="w-6 h-6 text-[#0055A3]" />
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900">{filterType.name}</h3>
-                    {filterType.description && (
-                      <p className="text-gray-600 text-sm">{filterType.description}</p>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {filterType.name}
+                      {filterType.name_ar && (
+                        <span className="block text-gray-700 text-base" dir="rtl">
+                          {filterType.name_ar}
+                        </span>
+                      )}
+                    </h3>
+                    {(filterType.description || filterType.description_ar) && (
+                      <p className="text-gray-600 text-sm">
+                        {filterType.description}
+                        {filterType.description_ar && (
+                          <span className="block" dir="rtl">
+                            {filterType.description_ar}
+                          </span>
+                        )}
+                      </p>
                     )}
                   </div>
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
@@ -338,7 +349,6 @@ const ProductFiltersManager = () => {
               </div>
             </div>
 
-            {/* Filter Values */}
             <AnimatePresence>
               {expandedTypes.includes(filterType.id) && (
                 <motion.div
@@ -354,7 +364,14 @@ const ProductFiltersManager = () => {
                         {filterType.product_filter_values.map((value) => (
                           <div key={value.id} className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
                             <div>
-                              <h4 className="font-semibold text-gray-900">{value.display_name || value.value}</h4>
+                              <h4 className="font-semibold text-gray-900">
+                                {value.display_name || value.value}
+                                {(value.display_name_ar || value.value_ar) && (
+                                  <span className="block text-gray-700 text-sm" dir="rtl">
+                                    {value.display_name_ar || value.value_ar}
+                                  </span>
+                                )}
+                              </h4>
                               {value.display_name && value.display_name !== value.value && (
                                 <p className="text-xs text-gray-500">{value.value}</p>
                               )}
@@ -417,7 +434,6 @@ const ProductFiltersManager = () => {
         )}
       </div>
 
-      {/* Modals */}
       <FilterTypeModal
         isOpen={isFilterTypeModalOpen}
         onClose={() => setIsFilterTypeModalOpen(false)}
@@ -462,7 +478,9 @@ const FilterTypeModal = ({
 }) => {
   const [formData, setFormData] = useState({
     name: '',
+    name_ar: '',
     description: '',
+    description_ar: '',
     sort_order: 0,
     is_active: true
   });
@@ -472,24 +490,29 @@ const FilterTypeModal = ({
     if (filterType) {
       setFormData({
         name: filterType.name,
+        name_ar: filterType.name_ar || '',
         description: filterType.description || '',
+        description_ar: filterType.description_ar || '',
         sort_order: filterType.sort_order,
         is_active: filterType.is_active
       });
     } else {
-      // تعيين ترتيب فرز افتراضي لنوع الفلتر الجديد
       getMaxFilterTypeSortOrder().then(maxOrder => {
-        setFormData(prev => ({
-          ...prev,
-          sort_order: maxOrder
-        }));
+        setFormData({
+          name: '',
+          name_ar: '',
+          description: '',
+          description_ar: '',
+          sort_order: maxOrder,
+          is_active: true
+        });
       });
     }
   }, [filterType, getMaxFilterTypeSortOrder]);
 
   const handleSave = async () => {
-    if (!formData.name) {
-      alert('Please fill in all required fields');
+    if (!formData.name.trim()) {
+      alert('Please fill in the English name');
       return;
     }
 
@@ -534,86 +557,118 @@ const FilterTypeModal = ({
           </div>
 
           <div className="p-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Filter Type Name *
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                placeholder="e.g., Type, Brand, Material"
+            {/* Name */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Filter Type Name"
+                labelAr="اسم نوع الفلتر"
+                nameEn="name"
+                nameAr="name_ar"
+                valueEn={formData.name}
+                valueAr={formData.name_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                required
               />
-            </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Filter Type Name / اسم نوع الفلتر
+                </label>
+                <p className="text-gray-900">{formData.name}</p>
+                {formData.name_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.name_ar}</p>}
+              </div>
+            )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Description
-              </label>
-              <textarea
-                value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                placeholder="Description of this filter type..."
+            {/* Description */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Description"
+                labelAr="الوصف"
+                nameEn="description"
+                nameAr="description_ar"
+                valueEn={formData.description}
+                valueAr={formData.description_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                type="textarea"
               />
-            </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description / الوصف
+                </label>
+                <p className="text-gray-900">{formData.description}</p>
+                {formData.description_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.description_ar}</p>}
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Sort Order
+                  Sort Order / الترتيب
                 </label>
-                <input
-                  type="number"
-                  value={formData.sort_order}
-                  onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                />
+                {isEditing ? (
+                  <input
+                    type="number"
+                    value={formData.sort_order}
+                    onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900">{formData.sort_order}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Status
+                  Status / الحالة
                 </label>
-                <select
-                  value={formData.is_active ? 'true' : 'false'}
-                  onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.value === 'true' }))}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                >
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
-                </select>
+                {isEditing ? (
+                  <select
+                    value={formData.is_active ? 'true' : 'false'}
+                    onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.value === 'true' }))}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  >
+                    <option value="true">Active / نشط</option>
+                    <option value="false">Inactive / غير نشط</option>
+                  </select>
+                ) : (
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                    formData.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {formData.is_active ? 'Active' : 'Inactive'}
+                  </span>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
-            >
-              {saving ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save
-                </>
-              )}
-            </button>
-          </div>
+          {isEditing && (
+            <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>
@@ -643,7 +698,9 @@ const FilterValueModal = ({
   const [formData, setFormData] = useState({
     filter_type_id: '',
     value: '',
+    value_ar: '',
     display_name: '',
+    display_name_ar: '',
     sort_order: 0,
     is_active: true
   });
@@ -654,12 +711,13 @@ const FilterValueModal = ({
       setFormData({
         filter_type_id: filterValue.filter_type_id,
         value: filterValue.value || '',
+        value_ar: filterValue.value_ar || '',
         display_name: filterValue.display_name || '',
+        display_name_ar: filterValue.display_name_ar || '',
         sort_order: filterValue.sort_order || 0,
         is_active: filterValue.is_active !== undefined ? filterValue.is_active : true
       });
     } else {
-      // تعيين ترتيب فرز افتراضي لقيمة الفلتر الجديدة
       if (formData.filter_type_id) {
         getMaxFilterValueSortOrder(formData.filter_type_id).then(maxOrder => {
           setFormData(prev => ({
@@ -672,8 +730,8 @@ const FilterValueModal = ({
   }, [filterValue, formData.filter_type_id, getMaxFilterValueSortOrder]);
 
   const handleSave = async () => {
-    if (!formData.filter_type_id || !formData.value) {
-      alert('Please fill in all required fields');
+    if (!formData.filter_type_id || !formData.value.trim()) {
+      alert('Please select a filter type and enter a value');
       return;
     }
 
@@ -720,7 +778,7 @@ const FilterValueModal = ({
           <div className="p-6 space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Filter Type *
+                Filter Type / نوع الفلتر *
               </label>
               <select
                 value={formData.filter_type_id}
@@ -728,7 +786,6 @@ const FilterValueModal = ({
                   const newFilterTypeId = e.target.value;
                   setFormData(prev => ({ ...prev, filter_type_id: newFilterTypeId }));
                   
-                  // عند تغيير نوع الفلتر، احصل على ترتيب فرز جديد
                   if (newFilterTypeId) {
                     getMaxFilterValueSortOrder(newFilterTypeId).then(maxOrder => {
                       setFormData(prev => ({
@@ -742,91 +799,122 @@ const FilterValueModal = ({
               >
                 <option value="">Select a filter type</option>
                 {filterTypes.map(type => (
-                  <option key={type.id} value={type.id}>{type.name}</option>
+                  <option key={type.id} value={type.id}>{type.name}{type.name_ar && ` / ${type.name_ar}`}</option>
                 ))}
               </select>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Value *
-              </label>
-              <input
-                type="text"
-                value={formData.value}
-                onChange={(e) => setFormData(prev => ({ ...prev, value: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                placeholder="e.g., Epoxy, Azur, Industrial"
+            {/* Value */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Value"
+                labelAr="القيمة"
+                nameEn="value"
+                nameAr="value_ar"
+                valueEn={formData.value}
+                valueAr={formData.value_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                required
               />
-            </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Value / القيمة
+                </label>
+                <p className="text-gray-900">{formData.value}</p>
+                {formData.value_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.value_ar}</p>}
+              </div>
+            )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Display Name (optional)
-              </label>
-              <input
-                type="text"
-                value={formData.display_name}
-                onChange={(e) => setFormData(prev => ({ ...prev, display_name: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                placeholder="Pretty name for display"
+            {/* Display Name */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Display Name (optional)"
+                labelAr="اسم العرض (اختياري)"
+                nameEn="display_name"
+                nameAr="display_name_ar"
+                valueEn={formData.display_name}
+                valueAr={formData.display_name_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
               />
-            </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Display Name / اسم العرض
+                </label>
+                <p className="text-gray-900">{formData.display_name || '-'}</p>
+                {formData.display_name_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.display_name_ar}</p>}
+              </div>
+            )}
 
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Sort Order
+                  Sort Order / الترتيب
                 </label>
-                <input
-                  type="number"
-                  value={formData.sort_order}
-                  onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                />
+                {isEditing ? (
+                  <input
+                    type="number"
+                    value={formData.sort_order}
+                    onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  />
+                ) : (
+                  <p className="text-gray-900">{formData.sort_order}</p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Status
+                  Status / الحالة
                 </label>
-                <select
-                  value={formData.is_active ? 'true' : 'false'}
-                  onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.value === 'true' }))}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                >
-                  <option value="true">Active</option>
-                  <option value="false">Inactive</option>
-                </select>
+                {isEditing ? (
+                  <select
+                    value={formData.is_active ? 'true' : 'false'}
+                    onChange={(e) => setFormData(prev => ({ ...prev, is_active: e.target.value === 'true' }))}
+                    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  >
+                    <option value="true">Active / نشط</option>
+                    <option value="false">Inactive / غير نشط</option>
+                  </select>
+                ) : (
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                    formData.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {formData.is_active ? 'Active' : 'Inactive'}
+                  </span>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
-            >
-              {saving ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save
-                </>
-              )}
-            </button>
-          </div>
+          {isEditing && (
+            <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>
