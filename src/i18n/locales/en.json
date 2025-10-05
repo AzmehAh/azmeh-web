@@ -17,11 +17,79 @@
   "hero": {
     "readMore": "READ MORE"
   },
+  "values": {
+    "title": "Our Core Values",
+    "subtitle": "The principles that guide every decision we make and every solution we create for our customers.",
+    "values": [
+      {
+        "title": "Quality Excellence",
+        "description": "Unwavering commitment to delivering the highest quality paint systems."
+      },
+      {
+        "title": "Innovation",
+        "description": "Continuous research and development to create cutting-edge coating technologies."
+      },
+      {
+        "title": "Social Responsibility",
+        "description": "Environmental stewardship through eco-friendly formulations and sustainable practices."
+      },
+      {
+        "title": "Employee Growth",
+        "description": "Investing in our team through training and career advancement opportunities."
+      },
+      {
+        "title": "Customer Trust",
+        "description": "Building lasting relationships through exceptional service and reliable products."
+      },
+      {
+        "title": "Industry Leadership",
+        "description": "Setting standards for excellence and innovation in the paint and coatings industry."
+      }
+    ]
+  },
+  "goals": {
+    "title": "Our Vision & Mission",
+    "subtitle": "Driving innovation and excellence in every aspect of our business.",
+    "vision": {
+      "title": "Vision",
+      "description": "To be the leading innovator in paint and coating technologies, providing sustainable solutions that protect and beautify homes, furniture, vehicles, and industrial facilities worldwide."
+    },
+    "mission": {
+      "title": "Mission",
+      "description": "To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility to the environment."
+    }
+  },
+  "cta": {
+    "title": "Ready to Transform Your Project?",
+    "subtitle": "Let our 69+ years of experience and innovative solutions bring your vision to life. Whether it's for your home, furniture, vehicle, or industrial facility, we have the perfect paint solution.",
+    "buttons": {
+      "contact": "Get In Touch",
+      "products": "View Our Products"
+    }
+  },
+  "founder": {
+    "title": "Al Azmeh Paints – Excellence & Vision Since 1955",
+    "founderName": "Ehsan Ezzat Al Azmeh",
+    "founderTitle": "Founder & Visionary",
+    "details": {
+      "born": "Born: 1918, Damascus",
+      "started": "Started Business: 1938",
+      "founded": "Founded Al Azmeh Paints: 1955",
+      "legacy": "Legacy Continues: 1918 - 1998"
+    },
+    "description": "Ahmed Al Azmeh, born in 1918 in Damascus, Syria, began his entrepreneurial journey in 1938. In 1955, he founded Al Azmeh Paints with a clear vision: to deliver the highest quality paint systems for every application. With decades of excellence and expertise, the company quickly grew into a leading name in the paint industry. Under Ahmed's visionary leadership until 1998, Al Azmeh Paints became synonymous with quality, innovation, and customer satisfaction. His legacy continues to guide the company today, maintaining the same commitment to excellence established nearly seven decades ago.",
+    "stats": {
+      "leadership": "Years of Leadership",
+      "founded": "Company Founded"
+    }
+  },
   "about": {
-    "title": "About Us",
-    "founder": "Founder",
-    "goals": "Our Goals",
-    "values": "Our Values"
+    "legacy": "Our Legacy",
+    "title": "Excellence in Paint Solutions",
+    "description1": "Al Azmeh Paints has been delivering excellence in paint systems and coatings since 1955. We provide innovative solutions for residential, industrial, and commercial applications worldwide.",
+    "description2": "Our commitment to quality and innovation has made us a trusted partner for professionals and homeowners seeking superior paint solutions.",
+    "readMore": "Read More",
+    "experience": "Experience"
   },
   "products": {
     "title": "Products",
@@ -29,7 +97,7 @@
     "search": "Search products...",
     "brand": "Brand",
     "type": "Type",
-    "material": "Material", 
+    "material": "Material",
     "usage": "Usage",
     "allBrands": "All Brands",
     "allTypes": "All Types",
@@ -49,95 +117,91 @@
     "safety": "Safety Information",
     "precautions": "Precautions",
     "firstAid": "First Aid",
-    
-  
-  "product_not_found": "Product Not Found",
-  "product_not_found_desc": "The product you're looking for doesn't exist.",
-  "error_loading_product": "Error Loading Product",
-  "back_to_products": "Back to Products",
-  "home": "Home",
-  "products": "Products",
-  "packaging_sizes": "Packaging & Sizes",
-  "download_datasheet": "Download Technical Datasheet",
-  "general_information": "General Information",
-  "technical_specifications": "Technical Specifications",
-  "key_features": "Key Features",
-  "application_instructions": "Application Instructions",
-  "drying_time": "Drying Time",
-  "storing_conditions": "Storing Conditions",
-  "safety_note": "Safety Note",
-
-  "substrate_treatment": "Substrate Treatment",
-  "surface_preparation": "Surface Preparation",
-  "joint_preparation": "Joint Preparation",
-  "joint_size": "Joint Size",
-  "movement_capacity": "Movement Capacity",
-  "recommended_uses": "Recommended Uses",
-  "method_of_application": "Method of Application",
-  "mixing_ratio": "Mixing Ratio",
-  "mixing_note": "Mixing Note",
-  "mixing_steps": "Mixing Steps",
-  "cleaner": "Cleaner",
-  "thinner": "Thinner",
-  "application_temperature": "Application Temperature",
-  "curing_note": "Curing Note",
-  "note_application": "Note",
-  "dry_to_touch": "Dry to Touch",
-  "dry_to_handle": "Dry to Handle",
-  "complete_setting": "Complete Setting",
-  "grouting_time": "Grouting Time",
-  "adjustability_time": "Adjustability Time",
-  "dry_to_topcoat": "Dry to Topcoat",
-  "initial_setting": "Initial Setting",
-  "fully_cured": "Fully Cured",
-  "dry_to_sand": "Dry to Sand",
-  "drying_time_note": "Note",
-    
-
-
-  "component_a": "Component A",
-  "component_b": "Component B",
-  "gloss": "Gloss",
-  "color": "Color",
-  "number_of_coats": "Number of Coats",
-  "tensile_adhesion_strength": "Tensile Adhesion Strength",
-  "material_consumption": "Material Consumption",
-  "viscosity": "Viscosity",
-  "weather_resistance": "Weather Resistance",
-  "compressive_strength": "Compressive Strength",
-  "tear_resistance": "Tear Resistance",
-  "elongation_at_rupture": "Elongation at Rupture",
-  "tensile_strength_100": "Tensile Strength at 100% Elongation",
-  "tensile_strength_50": "Tensile Strength at 50% Elongation",
-  "specific_gravity_mixed": "Specific Gravity (Mixed)",
-  "solvent_resistance": "Solvent Resistance",
-  "chemical_resistance": "Chemical Resistance",
-  "abrasion_resistance": "Abrasion Resistance",
-  "friction_resistance": "Friction Resistance",
-  "washability": "Washability",
-  "water_resistance": "Water Resistance",
-  "theoretical_spreading_rate": "Theoretical Spreading Rate",
-  "recommended_film_thickness": "Recommended Film Thickness",
-  "temperature_resistance": "Temperature Resistance",
-  "solvent_splash_resistance": "Solvent Splash Resistance",
-  "sandability": "Sandability",
-  "adhesion": "Adhesion",
-  "flexibility": "Flexibility",
-  "voc": "VOC",
-  "volume_solids": "Volume Solids",
-  "note": "Note",
-  "safety_note": "Safety Note",
-  "storing_conditions": "Storing Conditions",
-  "drying_time": "Drying Time",
-  "application_instructions": "Application Instructions",
-  "key_features": "Key Features",
-  "technical_specifications": "Technical Specifications",
-  "general_information": "General Information",
-  "packaging_sizes": "Packaging & Sizes",
-  "download_datasheet": "Download Technical Datasheet",
-  "products": "Products"
-
-
+    "product_not_found": "Product Not Found",
+    "product_not_found_desc": "The product you're looking for doesn't exist.",
+    "error_loading_product": "Error Loading Product",
+    "back_to_products": "Back to Products",
+    "home": "Home",
+    "packaging_sizes": "Packaging & Sizes",
+    "download_datasheet": "Download Technical Datasheet",
+    "general_information": "General Information",
+    "technical_specifications": "Technical Specifications",
+    "key_features": "Key Features",
+    "application_instructions": "Application Instructions",
+    "drying_time": "Drying Time",
+    "storing_conditions": "Storing Conditions",
+    "safety_note": "Safety Note",
+    "substrate_treatment": "Substrate Treatment",
+    "surface_preparation": "Surface Preparation",
+    "joint_preparation": "Joint Preparation",
+    "joint_size": "Joint Size",
+    "movement_capacity": "Movement Capacity",
+    "recommended_uses": "Recommended Uses",
+    "method_of_application": "Method of Application",
+    "mixing_ratio": "Mixing Ratio",
+    "mixing_note": "Mixing Note",
+    "mixing_steps": "Mixing Steps",
+    "cleaner": "Cleaner",
+    "thinner": "Thinner",
+    "application_temperature": "Application Temperature",
+    "curing_note": "Curing Note",
+    "note_application": "Note",
+    "dry_to_touch": "Dry to Touch",
+    "dry_to_handle": "Dry to Handle",
+    "complete_setting": "Complete Setting",
+    "grouting_time": "Grouting Time",
+    "adjustability_time": "Adjustability Time",
+    "dry_to_topcoat": "Dry to Topcoat",
+    "initial_setting": "Initial Setting",
+    "fully_cured": "Fully Cured",
+    "dry_to_sand": "Dry to Sand",
+    "drying_time_note": "Note",
+    "component_a": "Component A",
+    "component_b": "Component B",
+    "gloss": "Gloss",
+    "color": "Color",
+    "number_of_coats": "Number of Coats",
+    "tensile_adhesion_strength": "Tensile Adhesion Strength",
+    "material_consumption": "Material Consumption",
+    "viscosity": "Viscosity",
+    "weather_resistance": "Weather Resistance",
+    "compressive_strength": "Compressive Strength",
+    "tear_resistance": "Tear Resistance",
+    "elongation_at_rupture": "Elongation at Rupture",
+    "tensile_strength_100": "Tensile Strength at 100% Elongation",
+    "tensile_strength_50": "Tensile Strength at 50% Elongation",
+    "specific_gravity_mixed": "Specific Gravity (Mixed)",
+    "solvent_resistance": "Solvent Resistance",
+    "chemical_resistance": "Chemical Resistance",
+    "abrasion_resistance": "Abrasion Resistance",
+    "friction_resistance": "Friction Resistance",
+    "washability": "Washability",
+    "water_resistance": "Water Resistance",
+    "theoretical_spreading_rate": "Theoretical Spreading Rate",
+    "recommended_film_thickness": "Recommended Film Thickness",
+    "temperature_resistance": "Temperature Resistance",
+    "solvent_splash_resistance": "Solvent Splash Resistance",
+    "sandability": "Sandability",
+    "adhesion": "Adhesion",
+    "flexibility": "Flexibility",
+    "voc": "VOC",
+    "volume_solids": "Volume Solids",
+    "note": "Note",
+    "ourProducts": "Our Products",
+    "discoverOurRange": "Discover Our Complete Product Range",
+    "searchPlaceholder": "Search products...",
+    "sortByName": "Sort by Name",
+    "sortByBrand": "Sort by Brand",
+    "sortByCode": "Sort by Code",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "search": "Search",
+    "clearAll": "Clear All",
+    "allProducts": "All Products",
+    "noProductsFound": "No products found",
+    "tryAdjustingSearch": "Try adjusting your search terms or filters",
+    "clearFilters": "Clear Filters",
+    "code": "Code"
   },
   "contact": {
     "title": "Contact Us",
@@ -170,7 +234,7 @@
     "categories": "Categories",
     "recent": "Recent Posts"
   },
- "faq": {
+  "faq": {
     "title": "Frequently Asked Questions",
     "subtitle": "Find answers to common questions about our paint systems, application techniques, and technical specifications.",
     "viewQuestions": "View Questions",
