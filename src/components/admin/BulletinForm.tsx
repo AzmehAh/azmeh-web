@@ -10,6 +10,7 @@ import { supabase } from '../../lib/supabase';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import BilingualInput from './BilingualInput'; // تأكد من وجوده
 
 const BulletinForm = () => {
   const navigate = useNavigate();
@@ -21,11 +22,14 @@ const BulletinForm = () => {
   const [formData, setFormData] = useState({
     slug: '',
     title: '',
+    title_ar: '',
     short_description: '',
+    short_description_ar: '',
     cover_image: '',
     category: '',
     subcategory: '',
     content: '',
+    content_ar: '',
     status: 'draft',
     featured: false,
     author: 'Al Azmeh Paints',
@@ -38,43 +42,43 @@ const BulletinForm = () => {
   const [bulletin, setBulletin] = useState(null);
   const [loading, setLoading] = useState(!!id);
   const quillRef = useRef(null);
-
+  const quillRefAr = useRef(null); // مرجع منفصل للمحرر العربي
   
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [selectedImageFile, setSelectedImageFile] = useState(null);
   const [imageWidth, setImageWidth] = useState('');
   const [imageHeight, setImageHeight] = useState('');
-  const [allBulletins, setAllBulletins] = useState<Bulletin[]>([]);
+  const [allBulletins, setAllBulletins] = useState([]);
   const [selectedRelatedIds, setSelectedRelatedIds] = useState<string[]>([]);
- // جلب جميع البلتينات للاختيار منها (لـ Related)
-useEffect(() => {
-  const fetchAllBulletins = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('bulletins')
-        .select('id, title, slug')
-        .eq('status', 'published') // اختياري: فقط المنشورة
-        .order('created_at', { ascending: false });
 
-      if (error) throw error;
+  // جلب جميع البلتينات للاختيار منها (لـ Related)
+  useEffect(() => {
+    const fetchAllBulletins = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('bulletins')
+          .select('id, title, slug')
+          .eq('status', 'published')
+          .order('created_at', { ascending: false });
 
-      // استثناء البلتين الحالي من القائمة
-      const filtered = data.filter(b => b.id !== id);
-      setAllBulletins(filtered);
+        if (error) throw error;
 
-      // إذا كنا نحرر بلتين موجود، نحمّل الـ related IDs
-      if (bulletin?.related_bulletin_ids) {
-        setSelectedRelatedIds(bulletin.related_bulletin_ids);
+        const filtered = data.filter(b => b.id !== id);
+        setAllBulletins(filtered);
+
+        if (bulletin?.related_bulletin_ids) {
+          setSelectedRelatedIds(bulletin.related_bulletin_ids);
+        }
+      } catch (error) {
+        console.error('Error fetching bulletins for related selection:', error);
       }
-    } catch (error) {
-      console.error('Error fetching bulletins for related selection:', error);
-    }
-  };
+    };
 
-  if (isEditing || !id) {
-    fetchAllBulletins();
-  }
-}, [id, isEditing, bulletin]);
+    if (isEditing || !id) {
+      fetchAllBulletins();
+    }
+  }, [id, isEditing, bulletin]);
+
   useEffect(() => {
     const fetchBulletin = async () => {
       if (!id) return;
@@ -91,11 +95,14 @@ useEffect(() => {
         setFormData({
           slug: data.slug,
           title: data.title,
+          title_ar: data.title_ar || '',
           short_description: data.short_description || '',
+          short_description_ar: data.short_description_ar || '',
           cover_image: data.cover_image || '',
           category: data.category,
           subcategory: data.subcategory,
           content: typeof data.content === 'string' ? data.content : '',
+          content_ar: typeof data.content_ar === 'string' ? data.content_ar : '',
           status: data.status || 'draft',
           featured: data.featured || false,
           author: data.author || 'Al Azmeh Paints',
@@ -141,7 +148,7 @@ useEffect(() => {
       } catch (error) {
         console.error('Error fetching categories:', error);
         try {
-          const {  bulletinsData } = await supabase
+          const { data: bulletinsData } = await supabase
             .from('bulletins')
             .select('category')
             .not('category', 'is', null);
@@ -220,8 +227,8 @@ useEffect(() => {
     }
   };
 
-  // 👇 تم تعديل هذه الدالة لتظهر Modal بدل رفع مباشر
-  const imageHandler = useCallback(() => {
+  // دالة لمعالجة رفع الصورة في المحرر (الإنجليزي)
+  const imageHandlerEn = useCallback(() => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -230,14 +237,31 @@ useEffect(() => {
     input.onchange = async () => {
       if (input.files && input.files[0]) {
         setSelectedImageFile(input.files[0]);
-        setImageWidth(''); // Reset
+        setImageWidth('');
         setImageHeight('');
         setImageModalOpen(true);
       }
     };
   }, []);
 
-  // 👇 الدالة الجديدة لإدراج الصورة بعد تحديد الأبعاد
+  // دالة لمعالجة رفع الصورة في المحرر (العربي)
+  const imageHandlerAr = useCallback(() => {
+    const input = document.createElement('input');
+    input.setAttribute('type', 'file');
+    input.setAttribute('accept', 'image/*');
+    input.click();
+
+    input.onchange = async () => {
+      if (input.files && input.files[0]) {
+        setSelectedImageFile(input.files[0]);
+        setImageWidth('');
+        setImageHeight('');
+        setImageModalOpen(true);
+      }
+    };
+  }, []);
+
+  // دالة لإدراج الصورة بعد تحديد الأبعاد
   const handleInsertImageWithDimensions = async () => {
     if (!selectedImageFile) {
       alert('No image selected');
@@ -254,30 +278,33 @@ useEffect(() => {
         return;
       }
 
-      if (!quillRef.current) {
-        console.warn('Quill reference is not ready');
-        return;
+      let styleAttr = '';
+      if (imageWidth) styleAttr += `width: ${imageWidth}; `;
+      if (imageHeight) styleAttr += `height: ${imageHeight}; `;
+      let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} />`;
+
+      // إدراج في المحرر الإنجليزي إذا كان نشطًا
+      if (quillRef.current) {
+        const quill = quillRef.current.getEditor();
+        if (quill) {
+          const range = quill.getSelection();
+          const position = range ? range.index : quill.getLength();
+          quill.clipboard.dangerouslyPasteHTML(position, imgTag);
+          quill.setSelection(position + 1, 0);
+        }
       }
 
-      const quill = quillRef.current.getEditor();
-      if (!quill) {
-        console.warn('Quill editor instance not found');
-        return;
+      // إدراج في المحرر العربي إذا كان نشطًا
+      if (quillRefAr.current) {
+        const quill = quillRefAr.current.getEditor();
+        if (quill) {
+          const range = quill.getSelection();
+          const position = range ? range.index : quill.getLength();
+          quill.clipboard.dangerouslyPasteHTML(position, imgTag);
+          quill.setSelection(position + 1, 0);
+        }
       }
 
-      const range = quill.getSelection();
-      const position = range ? range.index : quill.getLength();
-let styleAttr = '';
-if (imageWidth) styleAttr += `width: ${imageWidth}; `;
-if (imageHeight) styleAttr += `height: ${imageHeight}; `;
-
-let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} />`;
-    
-
-      quill.clipboard.dangerouslyPasteHTML(position, imgTag);
-      quill.setSelection(position + 1, 0);
-
-      // Reset
       setSelectedImageFile(null);
       setImageWidth('');
       setImageHeight('');
@@ -289,7 +316,7 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
     }
   };
 
-  const quillModules = useMemo(() => ({
+  const quillModulesEn = useMemo(() => ({
     toolbar: {
       container: [
         [{ 'header': [1, 2, 3, false] }],
@@ -300,10 +327,26 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
         ['clean']
       ],
       handlers: {
-        image: imageHandler 
+        image: imageHandlerEn 
       }
     }
-  }), [imageHandler]);
+  }), [imageHandlerEn]);
+
+  const quillModulesAr = useMemo(() => ({
+    toolbar: {
+      container: [
+        [{ 'header': [1, 2, 3, false] }],
+        ['bold', 'italic', 'underline', 'strike'], 
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        ['blockquote', 'code-block'],
+        ['link', 'image'],
+        ['clean']
+      ],
+      handlers: {
+        image: imageHandlerAr 
+      }
+    }
+  }), [imageHandlerAr]);
 
   const quillFormats = [
     'header',
@@ -324,11 +367,14 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
       const bulletinData = {
         slug: formData.slug,
         title: formData.title,
+        title_ar: formData.title_ar || null,
         short_description: formData.short_description || null,
+        short_description_ar: formData.short_description_ar || null,
         cover_image: formData.cover_image || null,
         category: formData.category,
         subcategory: formData.subcategory,
         content: formData.content,
+        content_ar: formData.content_ar || null,
         status: formData.status,
         featured: formData.featured,
         author: formData.author,
@@ -353,12 +399,11 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
         if (error) throw error;
       }
 
-      // تحديث التصنيفات إذا أضفنا تصنيف جديد
       if (!id && formData.category && !categories.includes(formData.category)) {
         setCategories(prev => [...prev, formData.category]);
       }
 
-      navigate('/admin/bulletins'); // العودة للقائمة بعد الحفظ
+      navigate('/admin/bulletins');
     } catch (error) {
       console.error('Error saving bulletin:', error);
       alert('Error saving bulletin: ' + error.message);
@@ -380,8 +425,8 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 ">
-      <div className=" mx-auto">
+    <div className="min-h-screen bg-gray-50">
+      <div className="mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -409,18 +454,27 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Basic Info */}
               <div className="space-y-4">
+                {/* Title - Bilingual */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Title / العنوان *
+                  </label>
                   {isEditing || !id ? (
-                    <input
-                      type="text"
-                      value={formData.title}
-                      onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      placeholder="Enter bulletin title"
+                    <BilingualInput
+                      labelEn="Title"
+                      labelAr="العنوان"
+                      nameEn="title"
+                      nameAr="title_ar"
+                      valueEn={formData.title}
+                      valueAr={formData.title_ar}
+                      onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                      required
                     />
                   ) : (
-                    <p className="text-gray-900">{formData.title}</p>
+                    <div>
+                      <p className="text-gray-900">{formData.title}</p>
+                      {formData.title_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.title_ar}</p>}
+                    </div>
                   )}
                 </div>
 
@@ -473,21 +527,34 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                     <p className="text-gray-900">{formData.subcategory}</p>
                   )}
                 </div>
- {/* Short Description */}
-            <div className="mt-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
-              {isEditing || !id ? (
-                <textarea
-                  value={formData.short_description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
-                  rows={3}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="Brief description of the bulletin"
-                />
-              ) : (
-                <p className="text-gray-900">{formData.short_description || 'No description'}</p>
-              )}
-            </div>
+
+                {/* Short Description - Bilingual */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Short Description / وصف مختصر
+                  </label>
+                  {isEditing || !id ? (
+                    <BilingualInput
+                      labelEn="Short Description"
+                      labelAr="وصف مختصر"
+                      nameEn="short_description"
+                      nameAr="short_description_ar"
+                      valueEn={formData.short_description}
+                      valueAr={formData.short_description_ar}
+                      onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                      type="textarea"
+                      rows={3}
+                    />
+                  ) : (
+                    <div>
+                      <p className="text-gray-900">{formData.short_description || 'No description'}</p>
+                      {formData.short_description_ar && (
+                        <p className="text-gray-700 mt-1" dir="rtl">{formData.short_description_ar}</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
                     Cover Image
@@ -560,140 +627,172 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
                   )}
                 </div>
 
-   {/* Related Bulletins - Simple Version */}
-{/* Related Bulletins - Multiple Selection بنفس الشكل */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">
-    Related Bulletins (Manual Selection)
-  </label>
-  {isEditing || !id ? (
-    <div className="space-y-2">
-      <select
-        value=""
-        onChange={(e) => {
-          const selectedId = e.target.value;
-          if (selectedId && !selectedRelatedIds.includes(selectedId)) {
-            setSelectedRelatedIds(prev => [...prev, selectedId]);
-          }
-          e.target.value = ""; // Reset selection
-        }}
-        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-      >
-        <option value="">Add a related bulletin</option>
-        {allBulletins.filter(b => !selectedRelatedIds.includes(b.id)).map((b) => (
-          <option key={b.id} value={b.id}>
-            {b.title} ({b.slug})
-          </option>
-        ))}
-      </select>
-      
-      {/* عرض البلتينات المختارة */}
-      {selectedRelatedIds.length > 0 && (
-        <div className="mt-2 space-y-1">
-          {selectedRelatedIds.map((id) => {
-            const related = allBulletins.find(b => b.id === id);
-            return related ? (
-              <div key={id} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
-                <span className="text-sm">{related.title}</span>
-                <button
-                  type="button"
-                  onClick={() => setSelectedRelatedIds(prev => prev.filter(item => item !== id))}
-                  className="text-red-500 hover:text-red-700 text-lg"
-                >
-                  ×
-                </button>
-              </div>
-            ) : null;
-          })}
-        </div>
-      )}
-    </div>
-  ) : (
-    <div className="text-gray-900">
-      {selectedRelatedIds.length > 0 ? (
-        <ul className="list-disc pl-5 space-y-1">
-          {selectedRelatedIds.map((id) => {
-            const related = allBulletins.find(b => b.id === id);
-            return <li key={id}>{related ? related.title : `ID: ${id}`}</li>;
-          })}
-        </ul>
-      ) : (
-        <p className="text-gray-500">No related bulletins selected</p>
-      )}
-    </div>
-  )}
-</div> 
+                {/* Related Bulletins */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Related Bulletins (Manual Selection)
+                  </label>
+                  {isEditing || !id ? (
+                    <div className="space-y-2">
+                      <select
+                        value=""
+                        onChange={(e) => {
+                          const selectedId = e.target.value;
+                          if (selectedId && !selectedRelatedIds.includes(selectedId)) {
+                            setSelectedRelatedIds(prev => [...prev, selectedId]);
+                          }
+                          e.target.value = "";
+                        }}
+                        className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                      >
+                        <option value="">Add a related bulletin</option>
+                        {allBulletins.filter(b => !selectedRelatedIds.includes(b.id)).map((b) => (
+                          <option key={b.id} value={b.id}>
+                            {b.title} ({b.slug})
+                          </option>
+                        ))}
+                      </select>
+                      
+                      {selectedRelatedIds.length > 0 && (
+                        <div className="mt-2 space-y-1">
+                          {selectedRelatedIds.map((id) => {
+                            const related = allBulletins.find(b => b.id === id);
+                            return related ? (
+                              <div key={id} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded">
+                                <span className="text-sm">{related.title}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedRelatedIds(prev => prev.filter(item => item !== id))}
+                                  className="text-red-500 hover:text-red-700 text-lg"
+                                >
+                                  ×
+                                </button>
+                              </div>
+                            ) : null;
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="text-gray-900">
+                      {selectedRelatedIds.length > 0 ? (
+                        <ul className="list-disc pl-5 space-y-1">
+                          {selectedRelatedIds.map((id) => {
+                            const related = allBulletins.find(b => b.id === id);
+                            return <li key={id}>{related ? related.title : `ID: ${id}`}</li>;
+                          })}
+                        </ul>
+                      ) : (
+                        <p className="text-gray-500">No related bulletins selected</p>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
    
-     <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                  {isEditing || !id ? (
-                    <select
-                      value={formData.status}
-                      onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    >
-                      <option value="draft">Draft</option>
-                      <option value="published">Published</option>
-                    </select>
-                  ) : (
-                    <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                      formData.status === 'published' 
-                        ? 'bg-green-100 text-green-800' 
-                        : 'bg-yellow-100 text-yellow-800'
-                    }`}>
-                      {formData.status}
-                    </span>
-                  )}
-                </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+              {isEditing || !id ? (
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData(prev => ({ ...prev, status: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                >
+                  <option value="draft">Draft</option>
+                  <option value="published">Published</option>
+                </select>
+              ) : (
+                <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                  formData.status === 'published' 
+                    ? 'bg-green-100 text-green-800' 
+                    : 'bg-yellow-100 text-yellow-800'
+                }`}>
+                  {formData.status}
+                </span>
+              )}
+            </div>
 
-                {(isEditing || !id) && (
-                  <div>
-                    <label className="flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={formData.featured}
-                        onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
-                        className="w-4 h-4 text-[#0055A3] border-gray-300 rounded focus:ring-[#0055A3]"
-                      />
-                      <span className="ml-2 text-sm text-gray-700">Featured bulletin</span>
-                    </label>
-                  </div>
-                )}
+            {(isEditing || !id) && (
+              <div>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={formData.featured}
+                    onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
+                    className="w-4 h-4 text-[#0055A3] border-gray-300 rounded focus:ring-[#0055A3]"
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Featured bulletin</span>
+                </label>
+              </div>
+            )}
           
-            {/* Content */}
+            {/* Content - Bilingual */}
             <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Content *
+                Content / المحتوى *
               </label>
               {isEditing || !id ? (
-                <>
-                  {uploadingImage && (
-                    <div className="bg-blue-50 p-3 text-sm text-blue-700 rounded-t-lg border border-b-0 border-gray-200 flex items-center">
-                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-                      Uploading image...
+                <div className="space-y-4">
+                  {/* English Content */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">English Content</label>
+                    {uploadingImage && (
+                      <div className="bg-blue-50 p-3 text-sm text-blue-700 rounded-t-lg border border-b-0 border-gray-200 flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
+                        Uploading image...
+                      </div>
+                    )}
+                    <div className="border border-gray-200 rounded-lg overflow-hidden">
+                      <ReactQuill
+                        ref={quillRef}
+                        theme="snow"
+                        value={formData.content}
+                        onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
+                        modules={quillModulesEn}
+                        formats={quillFormats}
+                        className="quill-autoexpand mb-12"
+                        placeholder="Start writing your bulletin content in English..."
+                      />
                     </div>
-                  )}
-                  <div className="border border-gray-200 rounded-lg overflow-hidden">
-                    <ReactQuill
-                      ref={quillRef}
-                      theme="snow"
-                      value={formData.content}
-                      onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
-                      modules={quillModules}
-                      formats={quillFormats}
-                      className="quill-autoexpand mb-12"
-                      placeholder="Start writing your bulletin content..."
-                    />
                   </div>
-                </>
+
+                  {/* Arabic Content */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Arabic Content</label>
+                    <div className="border border-gray-200 rounded-lg overflow-hidden" dir="rtl">
+                      <ReactQuill
+                        ref={quillRefAr}
+                        theme="snow"
+                        value={formData.content_ar}
+                        onChange={(value) => setFormData(prev => ({ ...prev, content_ar: value }))}
+                        modules={quillModulesAr}
+                        formats={quillFormats}
+                        className="quill-autoexpand mb-12"
+                        placeholder="ابدأ بكتابة محتوى البلتين بالعربية..."
+                      />
+                    </div>
+                  </div>
+                </div>
               ) : (
-                <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
-                  {formData.content ? (
-                    <div dangerouslySetInnerHTML={{ __html: formData.content }} />
-                  ) : (
-                    <p className="text-gray-500 italic">No content</p>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-medium text-gray-900 mb-2">English Content:</h4>
+                    <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200">
+                      {formData.content ? (
+                        <div dangerouslySetInnerHTML={{ __html: formData.content }} />
+                      ) : (
+                        <p className="text-gray-500 italic">No content</p>
+                      )}
+                    </div>
+                  </div>
+                  {formData.content_ar && (
+                    <div>
+                      <h4 className="font-medium text-gray-900 mb-2">Arabic Content:</h4>
+                      <div className="prose max-w-none bg-gray-50 p-6 rounded-lg border border-gray-200" dir="rtl">
+                        <div dangerouslySetInnerHTML={{ __html: formData.content_ar }} />
+                      </div>
+                    </div>
                   )}
                 </div>
               )}
@@ -741,7 +840,7 @@ let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} 
             </div>
           )}
 
-          {/* 👇 Modal اختيار أبعاد الصورة */}
+          {/* Image Dimensions Modal */}
           {imageModalOpen && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
               <div className="bg-white rounded-lg p-6 w-full max-w-md">
