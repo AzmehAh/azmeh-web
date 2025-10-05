@@ -308,7 +308,7 @@ const ProductFiltersManager = () => {
       {filterType.description}
     </p>
   )}
-
+ 
   
 </div>
                  
