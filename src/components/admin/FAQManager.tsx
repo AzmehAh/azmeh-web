@@ -12,6 +12,7 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { supabase, FAQCategory, FAQItem } from '../../lib/supabase';
+import BilingualInput from './BilingualInput'; // تأكد من وجود هذا المكوّن
 
 const FAQManager = () => {
   const [categories, setCategories] = useState<(FAQCategory & { faq_items: FAQItem[] })[]>([]);
@@ -40,7 +41,6 @@ const FAQManager = () => {
 
       if (error) throw error;
       setCategories(data || []);
-      // Expand all categories by default
       setExpandedCategories((data || []).map(cat => cat.id));
     } catch (error) {
       console.error('Error fetching FAQ data:', error);
@@ -106,9 +106,14 @@ const FAQManager = () => {
   const filteredCategories = categories.filter(category =>
     searchTerm === '' || 
     category.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (category.name_ar && category.name_ar.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    category.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (category.description_ar && category.description_ar.toLowerCase().includes(searchTerm.toLowerCase())) ||
     category.faq_items.some(item => 
       item.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.answer.toLowerCase().includes(searchTerm.toLowerCase())
+      (item.question_ar && item.question_ar.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      item.answer.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.answer_ar && item.answer_ar.toLowerCase().includes(searchTerm.toLowerCase()))
     )
   );
 
@@ -171,9 +176,23 @@ const FAQManager = () => {
                   </button>
                   <HelpCircle className="w-6 h-6 text-[#0055A3]" />
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900">{category.name}</h3>
-                    {category.description && (
-                      <p className="text-gray-600 text-sm">{category.description}</p>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {category.name}
+                      {category.name_ar && (
+                        <span className="block text-gray-700 text-base" dir="rtl">
+                          {category.name_ar}
+                        </span>
+                      )}
+                    </h3>
+                    {(category.description || category.description_ar) && (
+                      <p className="text-gray-600 text-sm">
+                        {category.description}
+                        {category.description_ar && (
+                          <span className="block" dir="rtl">
+                            {category.description_ar}
+                          </span>
+                        )}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -216,12 +235,26 @@ const FAQManager = () => {
                 >
                   <div className="p-6 space-y-4">
                     {category.faq_items.length > 0 ? (
-                      category.faq_items.map((item, index) => (
+                      category.faq_items.map((item) => (
                         <div key={item.id} className="bg-gray-50 rounded-lg p-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <h4 className="font-semibold text-gray-900 mb-2">{item.question}</h4>
-                              <p className="text-gray-600 text-sm line-clamp-3">{item.answer}</p>
+                              <h4 className="font-semibold text-gray-900 mb-2">
+                                {item.question}
+                                {item.question_ar && (
+                                  <span className="block text-gray-700 mt-1" dir="rtl">
+                                    {item.question_ar}
+                                  </span>
+                                )}
+                              </h4>
+                              <p className="text-gray-600 text-sm">
+                                {item.answer}
+                                {item.answer_ar && (
+                                  <span className="block mt-1" dir="rtl">
+                                    {item.answer_ar}
+                                  </span>
+                                )}
+                              </p>
                             </div>
                             <div className="flex items-center space-x-2 ml-4">
                               <button
@@ -280,7 +313,7 @@ const FAQManager = () => {
         )}
       </div>
 
-      {/* Category Modal */}
+      {/* Modals */}
       <CategoryModal
         isOpen={isCategoryModalOpen}
         onClose={() => setIsCategoryModalOpen(false)}
@@ -289,7 +322,6 @@ const FAQManager = () => {
         onSave={fetchFAQData}
       />
 
-      {/* FAQ Modal */}
       <FAQModal
         isOpen={isFAQModalOpen}
         onClose={() => setIsFAQModalOpen(false)}
@@ -318,7 +350,9 @@ const CategoryModal = ({
 }) => {
   const [formData, setFormData] = useState({
     name: '',
+    name_ar: '',
     description: '',
+    description_ar: '',
     sort_order: 0
   });
   const [saving, setSaving] = useState(false);
@@ -327,32 +361,53 @@ const CategoryModal = ({
     if (category) {
       setFormData({
         name: category.name,
+        name_ar: category.name_ar || '',
         description: category.description || '',
+        description_ar: category.description_ar || '',
         sort_order: category.sort_order
       });
     } else {
       setFormData({
         name: '',
+        name_ar: '',
         description: '',
+        description_ar: '',
         sort_order: 0
       });
     }
   }, [category]);
 
   const handleSave = async () => {
+    if (!formData.name.trim()) {
+      alert('Category name (English) is required');
+      return;
+    }
+
     setSaving(true);
     try {
       if (category) {
         const { error } = await supabase
           .from('faq_categories')
-          .update(formData)
+          .update({
+            name: formData.name,
+            name_ar: formData.name_ar,
+            description: formData.description,
+            description_ar: formData.description_ar,
+            sort_order: formData.sort_order
+          })
           .eq('id', category.id);
         
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('faq_categories')
-          .insert([formData]);
+          .insert([{
+            name: formData.name,
+            name_ar: formData.name_ar,
+            description: formData.description,
+            description_ar: formData.description_ar,
+            sort_order: formData.sort_order
+          }]);
         
         if (error) throw error;
       }
@@ -389,70 +444,94 @@ const CategoryModal = ({
           </div>
 
           <div className="p-6 space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Category Name *
-              </label>
-              <input
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                placeholder="e.g., Industrial Coating"
+            {/* Name - Bilingual */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Category Name"
+                labelAr="اسم التصنيف"
+                nameEn="name"
+                nameAr="name_ar"
+                valueEn={formData.name}
+                valueAr={formData.name_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                required
               />
-            </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Category Name / اسم التصنيف
+                </label>
+                <p className="text-gray-900">{formData.name}</p>
+                {formData.name_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.name_ar}</p>}
+              </div>
+            )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Description
-              </label>
-              <textarea
-                value={formData.description}
-                onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                placeholder="Category description..."
+            {/* Description - Bilingual */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Description"
+                labelAr="الوصف"
+                nameEn="description"
+                nameAr="description_ar"
+                valueEn={formData.description}
+                valueAr={formData.description_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                type="textarea"
               />
-            </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Description / الوصف
+                </label>
+                <p className="text-gray-900">{formData.description}</p>
+                {formData.description_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.description_ar}</p>}
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Sort Order
               </label>
-              <input
-                type="number"
-                value={formData.sort_order}
-                onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-              />
+              {isEditing ? (
+                <input
+                  type="number"
+                  value={formData.sort_order}
+                  onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                />
+              ) : (
+                <p className="text-gray-900">{formData.sort_order}</p>
+              )}
             </div>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
-            >
-              {saving ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save
-                </>
-              )}
-            </button>
-          </div>
+          {isEditing && (
+            <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>
@@ -478,7 +557,9 @@ const FAQModal = ({
   const [formData, setFormData] = useState({
     category_id: '',
     question: '',
+    question_ar: '',
     answer: '',
+    answer_ar: '',
     sort_order: 0
   });
   const [saving, setSaving] = useState(false);
@@ -488,22 +569,26 @@ const FAQModal = ({
       setFormData({
         category_id: faqItem.category_id,
         question: faqItem.question || '',
+        question_ar: faqItem.question_ar || '',
         answer: faqItem.answer || '',
+        answer_ar: faqItem.answer_ar || '',
         sort_order: faqItem.sort_order || 0
       });
     } else {
       setFormData({
         category_id: '',
         question: '',
+        question_ar: '',
         answer: '',
+        answer_ar: '',
         sort_order: 0
       });
     }
   }, [faqItem]);
 
   const handleSave = async () => {
-    if (!formData.category_id || !formData.question || !formData.answer) {
-      alert('Please fill in all required fields');
+    if (!formData.category_id || !formData.question.trim() || !formData.answer.trim()) {
+      alert('Please fill in all required fields (English question and answer)');
       return;
     }
 
@@ -512,14 +597,28 @@ const FAQModal = ({
       if (faqItem && faqItem.id) {
         const { error } = await supabase
           .from('faq_items')
-          .update(formData)
+          .update({
+            category_id: formData.category_id,
+            question: formData.question,
+            question_ar: formData.question_ar,
+            answer: formData.answer,
+            answer_ar: formData.answer_ar,
+            sort_order: formData.sort_order
+          })
           .eq('id', faqItem.id);
         
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from('faq_items')
-          .insert([formData]);
+          .insert([{
+            category_id: formData.category_id,
+            question: formData.question,
+            question_ar: formData.question_ar,
+            answer: formData.answer,
+            answer_ar: formData.answer_ar,
+            sort_order: formData.sort_order
+          }]);
         
         if (error) throw error;
       }
@@ -567,75 +666,102 @@ const FAQModal = ({
               >
                 <option value="">Select a category</option>
                 {categories.map(cat => (
-                  <option key={cat.id} value={cat.id}>{cat.name}</option>
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name} {cat.name_ar && `(${cat.name_ar})`}
+                  </option>
                 ))}
               </select>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Question *
-              </label>
-              <input
-                type="text"
-                value={formData.question}
-                onChange={(e) => setFormData(prev => ({ ...prev, question: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                placeholder="Enter the FAQ question..."
+            {/* Question - Bilingual */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Question"
+                labelAr="السؤال"
+                nameEn="question"
+                nameAr="question_ar"
+                valueEn={formData.question}
+                valueAr={formData.question_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                required
               />
-            </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Question / السؤال
+                </label>
+                <p className="text-gray-900">{formData.question}</p>
+                {formData.question_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.question_ar}</p>}
+              </div>
+            )}
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Answer *
-              </label>
-              <textarea
-                value={formData.answer}
-                onChange={(e) => setFormData(prev => ({ ...prev, answer: e.target.value }))}
+            {/* Answer - Bilingual */}
+            {isEditing ? (
+              <BilingualInput
+                labelEn="Answer"
+                labelAr="الإجابة"
+                nameEn="answer"
+                nameAr="answer_ar"
+                valueEn={formData.answer}
+                valueAr={formData.answer_ar}
+                onChange={(e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))}
+                type="textarea"
                 rows={6}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                placeholder="Enter the detailed answer..."
               />
-            </div>
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Answer / الإجابة
+                </label>
+                <p className="text-gray-900">{formData.answer}</p>
+                {formData.answer_ar && <p className="text-gray-700 mt-1" dir="rtl">{formData.answer_ar}</p>}
+              </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Sort Order
               </label>
-              <input
-                type="number"
-                value={formData.sort_order}
-                onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
-                className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-              />
+              {isEditing ? (
+                <input
+                  type="number"
+                  value={formData.sort_order}
+                  onChange={(e) => setFormData(prev => ({ ...prev, sort_order: parseInt(e.target.value) || 0 }))}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                />
+              ) : (
+                <p className="text-gray-900">{formData.sort_order}</p>
+              )}
             </div>
           </div>
 
-          <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
-            <button
-              onClick={onClose}
-              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
-            >
-              {saving ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save FAQ
-                </>
-              )}
-            </button>
-          </div>
+          {isEditing && (
+            <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+              <button
+                onClick={onClose}
+                className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 flex items-center"
+              >
+                {saving ? (
+                  <>
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                    Saving...
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4 mr-2" />
+                    Save FAQ
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </motion.div>
       </div>
     </div>
