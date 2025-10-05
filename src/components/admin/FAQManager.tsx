@@ -194,8 +194,7 @@ const FAQManager = () => {
           </span>
         )}
       </p>
-    )}
-  </div>
+   
         <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-500">{category.faq_items.length} items</span>
                   <button
