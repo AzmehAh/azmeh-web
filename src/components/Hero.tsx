@@ -168,11 +168,13 @@ const Hero = () => {
                   style={{
                     position: isActive ? "static" : "absolute",
                     top: isActive ? "auto" : "50%",
-                    left: isActive
-                      ? "auto"
-                      : window.innerWidth < 768
-                      ? "50%"
-                      : "40%",
+                  left: isActive
+  ? "auto"
+  : isRTL
+    ? "55%" // ← عند اللغة العربية وغير نشط
+    : window.innerWidth < 768
+      ? "50%"
+      : "40%",
                     transform: isActive
                       ? "none"
                       : window.innerWidth < 768
