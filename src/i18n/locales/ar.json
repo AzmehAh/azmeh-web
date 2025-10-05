@@ -193,6 +193,25 @@
     "categories": "فئات الأسئلة الشائعة",
     "search": "ابحث عن سؤال..."
   },
+   "troubleshooting": {
+    "title": "Troubleshooting Guide",
+    "subtitle": "Find solutions to common coating problems and application defects.",
+    "viewSolutions": "View Solutions",
+    "issuesCovered": "issues covered",
+    "categoryNotFound": "Category Not Found",
+    "categoryNotFoundDesc": "The troubleshooting category you're looking for doesn't exist.",
+    "backToMain": "Back to Troubleshooting",
+    "searchPlaceholder": "Search issues...",
+    "resultsFound": "result(s) found for",
+    "noIssuesFound": "No issues found",
+    "tryAdjusting": "Try adjusting your search terms",
+    "priority": "Priority",
+    "solution": "Solution:",
+    "needSupport": "Need Additional Technical Support?",
+    "supportDescription": "Our technical experts are available to help you resolve complex coating issues.",
+    "contactSupport": "Contact Technical Support",
+    "scheduleConsultation": "Schedule Consultation"
+  },
   "troubleshooting": {
     "title": "استكشاف الأخطاء",
     "problem": "المشكلة",
@@ -229,23 +248,5 @@
     "apply": "تطبيق",
     "reset": "إعادة تعيين"
   }
-   "troubleshooting": {
-    "title": "Troubleshooting Guide",
-    "subtitle": "Find solutions to common coating problems and application defects.",
-    "viewSolutions": "View Solutions",
-    "issuesCovered": "issues covered",
-    "categoryNotFound": "Category Not Found",
-    "categoryNotFoundDesc": "The troubleshooting category you're looking for doesn't exist.",
-    "backToMain": "Back to Troubleshooting",
-    "searchPlaceholder": "Search issues...",
-    "resultsFound": "result(s) found for",
-    "noIssuesFound": "No issues found",
-    "tryAdjusting": "Try adjusting your search terms",
-    "priority": "Priority",
-    "solution": "Solution:",
-    "needSupport": "Need Additional Technical Support?",
-    "supportDescription": "Our technical experts are available to help you resolve complex coating issues.",
-    "contactSupport": "Contact Technical Support",
-    "scheduleConsultation": "Schedule Consultation"
-  }
+  
 }
