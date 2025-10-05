@@ -170,10 +170,23 @@
     "categories": "Categories",
     "recent": "Recent Posts"
   },
-  "faq": {
+ "faq": {
     "title": "Frequently Asked Questions",
-    "categories": "FAQ Categories",
-    "search": "Search questions..."
+    "subtitle": "Find answers to common questions about our paint systems, application techniques, and technical specifications.",
+    "viewQuestions": "View Questions",
+    "questionsAvailable": "questions available",
+    "notFoundTitle": "Category Not Found",
+    "notFoundDesc": "The FAQ category you're looking for doesn't exist.",
+    "backToCategories": "Back to FAQ Categories",
+    "home": "Home",
+    "searchPlaceholder": "Search questions...",
+    "resultsFound": "result(s) found for",
+    "noQuestions": "No questions found",
+    "trySearch": "Try adjusting your search terms",
+    "stillHaveQuestions": "Still have questions?",
+    "supportText": "Our technical experts are ready to help you with any specific questions about our products and applications.",
+    "contactSupport": "Contact Technical Support",
+    "scheduleConsultation": "Schedule Consultation"
   },
   "troubleshooting": {
     "title": "Troubleshooting Guide",
