@@ -297,25 +297,33 @@ const ProductFiltersManager = () => {
                   </button>
                   <Filter className="w-6 h-6 text-[#0055A3]" />
                   <div>
-                    <h3 className="text-xl font-semibold text-gray-900">
-                      {filterType.name}
-                      {filterType.name_ar && (
-                        <span className="block text-gray-700 text-base" dir="rtl">
-                          {filterType.name_ar}
-                        </span>
-                      )}
-                    </h3>
-                    {(filterType.description || filterType.description_ar) && (
-                      <p className="text-gray-600 text-sm">
-                        {filterType.description}
-                        {filterType.description_ar && (
-                          <span className="block" dir="rtl">
-                            {filterType.description_ar}
-                          </span>
-                        )}
-                      </p>
-                    )} 
-                  </div>
+                   <div className="flex flex-col">
+  {/* English Title */}
+  <h3 className="text-xl font-semibold text-gray-900">
+    {filterType.name}
+  </h3>
+
+  {/* English Description */}
+  {filterType.description && (
+    <p className="text-gray-600 text-sm mt-1">
+      {filterType.description}
+    </p>
+  )}
+
+  {/* Arabic Title */}
+  {filterType.name_ar && (
+    <h4 className="text-xl font-semibold text-gray-700 mt-2" dir="rtl">
+      {filterType.name_ar}
+    </h4>
+  )}
+
+  {/* Arabic Description */}
+  {filterType.description_ar && (
+    <p className="text-gray-600 text-sm mt-1" dir="rtl">
+      {filterType.description_ar}
+    </p>
+  )}
+</div>
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
                     filterType.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
                   }`}>
