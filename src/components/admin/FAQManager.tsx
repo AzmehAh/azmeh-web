@@ -194,8 +194,11 @@ const FAQManager = () => {
           </span>
         )}
       </p>
-   
-        <div className="flex items-center space-x-2">
+    )}
+     </div>
+  </div>
+</div>
+                <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-500">{category.faq_items.length} items</span>
                   <button
                     onClick={() => openFAQModal(null, true, category.id)}
