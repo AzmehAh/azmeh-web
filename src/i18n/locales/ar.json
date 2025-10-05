@@ -279,7 +279,7 @@
       "cvRequired": "يرجى رفع سيرتك الذاتية (PDF أو DOC)",
       "cvInvalidType": "يرجى رفع ملف PDF أو Word",
       "cvSizeExceeded": "يجب أن يكون حجم الملف أقل من 5MB"
-    
+    }
   },
   "blog": {
     "title": "المدونة",
