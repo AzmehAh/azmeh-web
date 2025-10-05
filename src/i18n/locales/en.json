@@ -135,7 +135,29 @@
   "general_information": "General Information",
   "packaging_sizes": "Packaging & Sizes",
   "download_datasheet": "Download Technical Datasheet",
-  "products": "Products"
+  "products": "Products",
+
+    "ourProducts": "Our Products",
+    "discoverOurRange": "Discover our comprehensive product range",
+    "searchPlaceholder": "Search products...",
+    "sortByName": "Sort by Name",
+    "sortByBrand": "Sort by Brand",
+    "sortByCode": "Sort by Code",
+    "ascending": "Ascending",
+    "descending": "Descending",
+    "brand": "Brand",
+    "type": "Type",
+    "material": "Material",
+    "usage": "Usage",
+    "search": "Search",
+    "clearAll": "Clear All",
+    "allProducts": "All Products",
+    "noProductsFound": "No products found",
+    "tryAdjustingSearch": "Try adjusting your search terms or filters",
+    "clearFilters": "Clear Filters",
+    "code": "Code"
+  }
+
 
 
   },
