@@ -79,170 +79,176 @@ const Header = () => {
     visible: { scaleY: 1, opacity: 1 },
     exit: { scaleY: 0, opacity: 0 }
   };
-
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled ? 'bg-white shadow-lg backdrop-blur-sm' : 'bg-transparent'
       }`}
     >
-     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      {/* استخدام grid لتوسيط الشعار دائمًا */}
-      <div className="grid grid-cols-3 items-center h-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* استخدام grid لتوسيط الشعار دائمًا */}
+        <div className="grid grid-cols-3 items-center h-20">
 
-        {/* Left Navigation */}
-        <nav className="hidden lg:flex items-center gap-8 justify-self-start">
-          <Link
-            to="/products"
-            className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-          >
-            {t('header.products')}
-          </Link>
-          <Link
-            to="/about"
-            className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-          >
-            {t('header.about')}
-          </Link>
-
-          {/* Technical Support Dropdown */}
-          <div 
-            className="relative" 
-            onMouseEnter={() => handleMouseEnter('technical')} 
-            onMouseLeave={handleMouseLeave}
-          >
-            <button 
-              className={`flex items-center text-base font-medium transition-colors duration-200 ${
-                isScrolled ? 'text-gray-900' : 'text-white'
-              } nav-link`}
+          {/* Left Navigation - يصبح يمين في RTL */}
+          <nav className="hidden lg:flex items-center gap-8 justify-self-start">
+            <Link
+              to="/products"
+              className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
             >
-              {t('header.technicalSupport')} <ChevronDown className={`${isRTL ? 'mr-1' : 'ml-1'} h-4 w-4`} />
-            </button> 
-            <AnimatePresence>
-              {activeDropdown === 'technical' && (
-                <motion.div
-                  key="technical-dropdown"
-                  variants={curtainVariants}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
-                  className="absolute top-full mt-2 left-0 w-max bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden flex"
-                >
-                  {/* FAQ */}
-                  <div className="min-w-[25rem] p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">{t('header.faq')}</h4>
-                    {faqCategories.map(category => (
+              {t('header.products')}
+            </Link>
+            <Link
+              to="/about"
+              className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+            >
+              {t('header.about')}
+            </Link>
+
+            {/* Technical Support Dropdown */}
+            <div 
+              className="relative" 
+              onMouseEnter={() => handleMouseEnter('technical')} 
+              onMouseLeave={handleMouseLeave}
+            >
+              <button 
+                className={`flex items-center text-base font-medium transition-colors duration-200 ${
+                  isScrolled ? 'text-gray-900' : 'text-white'
+                } nav-link`}
+              >
+                {t('header.technicalSupport')} 
+                <ChevronDown className={`${isRTL ? 'mr-1' : 'ml-1'} h-4 w-4`} />
+              </button> 
+              <AnimatePresence>
+                {activeDropdown === 'technical' && (
+                  <motion.div
+                    key="technical-dropdown"
+                    variants={curtainVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className={`absolute top-full mt-2 ${
+                      isRTL ? 'right-0' : 'left-0'
+                    } w-max bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden flex ${
+                      isRTL ? 'flex-row-reverse' : 'flex-row'
+                    }`}
+                  >
+                    {/* Troubleshooting - أولًا في RTL */}
+                    <div className={`min-w-[25rem] p-4 ${isRTL ? 'border-l' : 'border-r'} border-gray-200`}>
+                      <h4 className="font-semibold text-gray-900 mb-2">{t('header.troubleshooting')}</h4>
+                      {troubleshootingCategories.map(category => (
+                        <Link
+                          key={category.id}
+                          to={`/troubleshooting/${category.id}`}
+                          className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                        >
+                          {isRTL && category.name_ar ? category.name_ar : category.name}
+                        </Link>
+                      ))}
                       <Link
-                        key={category.id}
-                        to={`/faq/${category.id}`}
-                        className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                        to="/troubleshooting"
+                        className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
                       >
-                        {isRTL && category.name_ar ? category.name_ar : category.name}
+                        {t('header.viewAllTroubleshooting')}
                       </Link>
-                    ))}
-                    <Link
-                      to="/faq"
-                      className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
-                    >
-                      {t('header.viewAllFaq')}
-                    </Link>
-                  </div>
-                  
-                  {/* Troubleshooting */}
-                  <div className={`min-w-[25rem] p-4 ${isRTL ? 'border-r' : 'border-l'} border-gray-200`}>
-                    <h4 className="font-semibold text-gray-900 mb-2">{t('header.troubleshooting')}</h4>
-                    {troubleshootingCategories.map(category => (
+                    </div>
+                    
+                    {/* FAQ - ثانيًا في RTL */}
+                    <div className="min-w-[25rem] p-4">
+                      <h4 className="font-semibold text-gray-900 mb-2">{t('header.faq')}</h4>
+                      {faqCategories.map(category => (
+                        <Link
+                          key={category.id}
+                          to={`/faq/${category.id}`}
+                          className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                        >
+                          {isRTL && category.name_ar ? category.name_ar : category.name}
+                        </Link>
+                      ))}
                       <Link
-                        key={category.id}
-                        to={`/troubleshooting/${category.id}`}
-                        className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                        to="/faq"
+                        className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
                       >
-                        {isRTL && category.name_ar ? category.name_ar : category.name}
+                        {t('header.viewAllFaq')}
                       </Link>
-                    ))}
-                    <Link
-                      to="/troubleshooting"
-                      className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
-                    >
-                      {t('header.viewAllTroubleshooting')}
-                    </Link>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </nav>
+
+          {/* Logo - دائمًا في المنتصف */}
+          <div className="justify-self-center flex-shrink-0">
+            <Link to="/" className="flex items-center transition-opacity">
+              <img 
+                src="/images/Azmeh-Paints-Logo.png" 
+                alt="AL AZMEH PAINTS" 
+                className={`h-10 w-auto transition-all duration-300 ${
+                  isScrolled ? "filter-none" : "brightness-0 invert"
+                }`}
+              />
+            </Link>
           </div>
-        </nav>
 
-        {/* Logo - دائمًا في المنتصف */}
-        <div className="justify-self-center flex-shrink-0">
-          <Link to="/" className="flex items-center transition-opacity">
-            <img 
-              src="/images/Azmeh-Paints-Logo.png" 
-              alt="AL AZMEH PAINTS" 
-              className={`h-10 w-auto transition-all duration-300 ${
-                isScrolled ? "filter-none" : "brightness-0 invert"
-              }`}
-            />
-          </Link>
-        </div>
+          {/* Right Navigation - يصبح يسار في RTL */}
+          <nav className="hidden lg:flex items-center gap-8 justify-self-end">
+            <LanguageSwitcher />
+            <Link
+              to="/blog"
+              className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
+            >
+              {t('header.blog')}
+            </Link>
 
-        {/* Right Navigation */}
-        <nav className="hidden lg:flex items-center gap-8 justify-self-end">
-          <LanguageSwitcher />
-          <Link
-            to="/blog"
-            className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-          >
-            {t('header.blog')}
-          </Link>
-{/* Contact Dropdown */}
-<div 
-  className="relative" 
-  onMouseEnter={() => handleMouseEnter('contact')} 
-  onMouseLeave={handleMouseLeave}
->
-  <button 
-    className={`flex items-center text-base font-medium transition-colors duration-200 ${
-      isScrolled ? 'text-gray-900' : 'text-white'
-    } nav-link`}
-  >
-    {t('header.contact')} <ChevronDown className={`${isRTL ? 'mr-1' : 'ml-1'} h-4 w-4`} />
-  </button>
+            {/* Contact Dropdown */}
+            <div 
+              className="relative" 
+              onMouseEnter={() => handleMouseEnter('contact')} 
+              onMouseLeave={handleMouseLeave}
+            >
+              <button 
+                className={`flex items-center text-base font-medium transition-colors duration-200 ${
+                  isScrolled ? 'text-gray-900' : 'text-white'
+                } nav-link`}
+              >
+                {t('header.contact')} 
+                <ChevronDown className={`${isRTL ? 'mr-1' : 'ml-1'} h-4 w-4`} />
+              </button>
 
-  <AnimatePresence>
-    {activeDropdown === 'contact' && (
-      <motion.div
-        key="contact-dropdown"
-        variants={curtainVariants} 
-        initial="hidden"
-        animate="visible"
-        exit="exit"
-        className="absolute top-full mt-2 left-0 w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden"
-      >
-        <div className="p-4">
-          <Link
-            to="/contact"
-            className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md mb-1 transition-colors duration-200"
-          >
-            {t('header.contactUs')}
-          </Link>
-          <Link
-            to="/job-application"
-            className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
-          >
-            {t('header.applyForJob')}
-          </Link>
-        </div>
-      </motion.div>
-    )}
-  </AnimatePresence>
-</div>
+              <AnimatePresence>
+                {activeDropdown === 'contact' && (
+                  <motion.div
+                    key="contact-dropdown"
+                    variants={curtainVariants} 
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    className={`absolute top-full mt-2 ${
+                      isRTL ? 'right-0' : 'left-0'
+                    } w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden`}
+                  >
+                    <div className="p-4">
+                      <Link
+                        to="/contact"
+                        className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md mb-1 transition-colors duration-200"
+                      >
+                        {t('header.contactUs')}
+                      </Link>
+                      <Link
+                        to="/job-application"
+                        className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+                      >
+                        {t('header.applyForJob')}
+                      </Link>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </nav>
 
-
-
-        </nav>
           {/* Mobile menu button */}
-          <div className="lg:hidden">
+          <div className="lg:hidden justify-self-end">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 rounded-md text-gray-900 hover:text-[#2C5DB6] transition-colors"
@@ -319,7 +325,7 @@ const Header = () => {
                           {faqCategories.map(category => (
                             <Link
                               key={category.id}
-                             to={`/faq/${category.id}`}
+                              to={`/faq/${category.id}`}
                               onClick={() => setIsMobileMenuOpen(false)}
                               className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                             >
@@ -333,11 +339,11 @@ const Header = () => {
                           {troubleshootingCategories.map(category => (
                             <Link
                               key={category.id}
-                             to={`/troubleshooting/${category.id}`}
+                              to={`/troubleshooting/${category.id}`}
                               onClick={() => setIsMobileMenuOpen(false)}
                               className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                             >
-                             {isRTL && category.name_ar ? category.name_ar : category.name}
+                              {isRTL && category.name_ar ? category.name_ar : category.name}
                             </Link>
                           ))}
                         </div>
@@ -386,7 +392,7 @@ const Header = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </header> 
+    </header>
   );
 };
 
