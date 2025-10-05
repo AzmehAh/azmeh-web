@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 
-const LanguageSwitcher = ({ isScrolled = false }) => {
+const LanguageSwitcher = () => {
   const { i18n } = useTranslation();
   const currentLang = i18n.language;
 
@@ -19,16 +19,14 @@ const LanguageSwitcher = ({ isScrolled = false }) => {
   return (
     <button
       onClick={toggleLanguage}
-      className={`flex items-center space-x-2 px-4 py-2 rounded-lg border border-transparent transition-colors duration-200 ${
-        isScrolled ? 'text-gray-900' : 'text-white'
-      } hover:border-[#2C5DB6]`}
+      className="flex items-center space-x-2 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors"
       aria-label="Switch language"
     >
-      <Globe className={`w-5 h-5 ${isScrolled ? 'text-gray-900' : 'text-white'}`} />
-      <span className="text-sm font-medium">
+      <Globe className="w-5 h-5 text-gray-700" />
+      <span className="text-sm font-medium text-gray-700">
         {currentLang === 'en' ? 'العربية' : 'English'}
       </span>
-    </button>
+    </button> 
   );
 };
 
