@@ -174,7 +174,7 @@ const Troubleshooting = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center text-sm text-gray-600">
             <Link to="/" className="hover:text-orange-600 transition-colors">
-              {t('common.home')}
+              {t('faq.home')}
             </Link>
             <span className="mx-2">/</span>
             <Link to="/troubleshooting" className="hover:text-orange-600 transition-colors">
