@@ -238,17 +238,48 @@
 
   
 
-  "job": {
-    "title": "التقدم لوظيفة",
+   
+  "jobApplication": {
+    "title": "التقدم للوظيفة",
+    "heroTitle": "انضم إلى فريقنا",
+    "heroDescription": "انضم إلى فريقنا من متخصصي الدهانات وساعدنا في مواصلة إرثنا من التميز في الصناعة.",
+    "whyWorkWithUs": "لماذا تعمل معنا؟",
+    "excellenceSince1955": "التميز منذ 1955",
+    "excellenceDescription": "انضم إلى شركة ذات قيادة صناعية تمتد لما يقرب من 70 عامًا",
+    "careerGrowth": "النمو الوظيفي",
+    "careerGrowthDescription": "فرص للتطوير المهني والتقدم الوظيفي",
+    "innovation": "الابتكار",
+    "innovationDescription": "اعمل مع تقنيات وحلول دهانات متطورة",
+    "submitApplication": "قدم طلبك",
     "fullName": "الاسم الكامل",
-    "email": "البريد الإلكتروني",
-    "phone": "الهاتف",
-    "coverLetter": "خطاب التقديم",
-    "resume": "السيرة الذاتية",
-    "submit": "إرسال الطلب",
-    "submitting": "جاري الإرسال...",
-    "success": "تم إرسال الطلب بنجاح!",
-    "error": "فشل إرسال الطلب"
+    "emailAddress": "البريد الإلكتروني",
+    "phoneNumber": "رقم الهاتف",
+    "coverLetter": "خطاب التقديم / الرسالة",
+    "uploadCV": "رفع السيرة الذاتية (PDF أو DOC)",
+    "uploadFile": "رفع ملف",
+    "dragAndDrop": "أو اسحب وأفلت",
+    "fileTypes": "PDF أو DOC بحد أقصى 5MB",
+    "fileUploaded": "تم رفع الملف بنجاح",
+    "applicationSubmitted": "تم تقديم الطلب بنجاح!",
+    "successMessage": "شكرًا لاهتمامك بدهانات الأزمية. سنراجع طلبك وسنتواصل معك قريبًا.",
+    "submissionFailed": "فشل في التقديم",
+    "errorMessage": "حدث خطأ في تقديم طلبك. يرجى المحاولة مرة أخرى.",
+    "submitting": "جاري تقديم الطلب...",
+    "submitButton": "تقديم الطلب",
+    "privacyNotice": "بتقديم هذا الطلب، فإنك توافق على معالجة بياناتك الشخصية لأغراض التوظيف.",
+    "validation": {
+      "fullNameRequired": "الاسم الكامل مطلوب",
+      "fullNameMinLength": "يجب أن يكون الاسم الكامل على الأقل حرفين",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "emailInvalid": "يرجى إدخال عنوان بريد إلكتروني صحيح",
+      "phoneRequired": "رقم الهاتف مطلوب",
+      "phoneInvalid": "يرجى إدخال رقم هاتف صحيح",
+      "coverLetterRequired": "خطاب التقديم/الرسالة مطلوب",
+      "coverLetterMinLength": "يجب أن يكون خطاب التقديم على الأقل 10 أحرف",
+      "cvRequired": "يرجى رفع سيرتك الذاتية (PDF أو DOC)",
+      "cvInvalidType": "يرجى رفع ملف PDF أو Word",
+      "cvSizeExceeded": "يجب أن يكون حجم الملف أقل من 5MB"
+    
   },
   "blog": {
     "title": "المدونة",
