@@ -266,20 +266,27 @@ const Header = () => {
 <AnimatePresence>
   {isMobileMenuOpen && (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      className="lg:hidden fixed inset-x-0 top-20 bg-white border-t border-gray-200 shadow-lg z-40"
+      initial={{ opacity: 0, maxHeight: 0 }}
+      animate={{ 
+        opacity: 1, 
+        maxHeight: 800, // قيمة كافية لتغطية المحتوى
+        transition: { duration: 0.35, ease: "easeOut" }
+      }}
+      exit={{ 
+        opacity: 0, 
+        maxHeight: 0,
+        transition: { duration: 0.25, ease: "easeIn" }
+      }}
+      className="lg:hidden bg-white border-t border-gray-200 overflow-hidden shadow-lg"
     >
-      <div className="px-6 py-6 space-y-1 max-h-[70vh] overflow-y-auto">
-        {/* نفس ترتيب اللابتوب: اليسار أولًا */}
+      <div className="px-6 py-6 space-y-1 max-h-[80vh] overflow-y-auto">
+        {/* نفس الترتيب الأصلي كما طلبت */}
         <Link
-          to="/products"
+          to="/"
           onClick={() => setIsMobileMenuOpen(false)}
           className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
         >
-          {t('header.products')}
+          {t('header.home')}
         </Link>
         <Link
           to="/about"
@@ -288,9 +295,23 @@ const Header = () => {
         >
           {t('header.about')}
         </Link>
+        <Link
+          to="/blog"
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+        >
+          {t('header.blog')}
+        </Link>
+        <Link
+          to="/products"
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+        >
+          {t('header.products')}
+        </Link>
 
-        {/* Technical Support Dropdown - مثل اللابتوب */}
-        <div className="border-t border-gray-100 pt-4 mt-2">
+        {/* Technical Support Dropdown */}
+        <div className="border-t border-gray-100 pt-4 mt-4">
           <button
             onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'technical' ? null : 'technical')}
             className="flex items-center justify-between w-full text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
@@ -298,39 +319,16 @@ const Header = () => {
             <span>{t('header.technicalSupport')}</span>
             <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'technical' ? 'rotate-180' : ''}`} />
           </button>
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {activeMobileDropdown === 'technical' && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.25 }}
-                className="overflow-hidden mt-2"
+                className="overflow-hidden bg-gray-50 rounded-lg mt-2"
               >
-                <div className="bg-gray-50 rounded-lg p-4 space-y-4">
-                  {/* Troubleshooting أولًا (مثل اللابتوب) */}
-                  <div>
-                    <h5 className="text-sm font-semibold text-gray-700 mb-2">{t('header.troubleshooting')}</h5>
-                    {troubleshootingCategories.map(category => (
-                      <Link
-                        key={category.id}
-                        to={`/troubleshooting/${category.id}`}
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
-                      >
-                        {isRTL && category.name_ar ? category.name_ar : category.name}
-                      </Link>
-                    ))}
-                    <Link
-                      to="/troubleshooting"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm font-medium mt-2"
-                    >
-                      {t('header.viewAllTroubleshooting')}
-                    </Link>
-                  </div>
-
-                  {/* FAQ ثانيًا */}
+                <div className="p-4 space-y-3">
                   <div>
                     <h5 className="text-sm font-semibold text-gray-700 mb-2">{t('header.faq')}</h5>
                     {faqCategories.map(category => (
@@ -343,13 +341,19 @@ const Header = () => {
                         {isRTL && category.name_ar ? category.name_ar : category.name}
                       </Link>
                     ))}
-                    <Link
-                      to="/faq"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="block text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm font-medium mt-2"
-                    >
-                      {t('header.viewAllFaq')}
-                    </Link>
+                  </div>
+                  <div>
+                    <h5 className="text-sm font-semibold text-gray-700 mb-2">{t('header.troubleshooting')}</h5>
+                    {troubleshootingCategories.map(category => (
+                      <Link
+                        key={category.id}
+                        to={`/troubleshooting/${category.id}`}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+                      >
+                        {isRTL && category.name_ar ? category.name_ar : category.name}
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </motion.div>
@@ -357,56 +361,44 @@ const Header = () => {
           </AnimatePresence>
         </div>
 
-        {/* القسم الأيمن من اللابتوب */}
-        <Link
-          to="/blog"
-          onClick={() => setIsMobileMenuOpen(false)}
-          className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200 mt-4 pt-4 border-t border-gray-100"
-        >
-          {t('header.blog')}
-        </Link>
-
         {/* Contact Dropdown */}
-        <div className="pt-2">
+        <div className="border-t border-gray-100 pt-4 mt-4">
           <button
             onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'contact' ? null : 'contact')}
             className="flex items-center justify-between w-full text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
           >
-            <span>{t('header.contact')}</span>
+            <span>{t('header.contactAndJob')}</span>
             <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
           </button>
-          <AnimatePresence mode="wait">
+          <AnimatePresence>
             {activeMobileDropdown === 'contact' && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.25 }}
-                className="overflow-hidden mt-2"
+                className="overflow-hidden bg-gray-50 rounded-lg mt-2 p-4 space-y-2"
               >
-                <div className="bg-gray-50 rounded-lg p-4 space-y-2">
-                  <Link
-                    to="/contact"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
-                  >
-                    {t('header.contactUs')}
-                  </Link>
-                  <Link
-                    to="/job-application"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
-                  >
-                    {t('header.applyForJob')}
-                  </Link>
-                </div>
+                <Link
+                  to="/contact"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+                >
+                  {t('header.contactUs')}
+                </Link>
+                <Link
+                  to="/job-application"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+                >
+                  {t('header.applyForJob')}
+                </Link>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Language Switcher - في النهاية، بمحاذاة كاملة */}
-        <div className="pt-4 border-t border-gray-100 flex justify-end">
+        <div className="mb-4 pt-2 border-t border-gray-100">
           <LanguageSwitcher />
         </div>
       </div>
