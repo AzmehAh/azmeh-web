@@ -139,14 +139,14 @@ const Header = () => {
                         <Link
                           key={category.id}
                           to={`/troubleshooting/${category.id}`}
-                          className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                          className="menu-item block text-gray-600 hover:text-logo px-3 py-2 rounded-md transition-colors duration-200 mb-1"
                         >
                           {isRTL && category.name_ar ? category.name_ar : category.name}
                         </Link>
                       ))}
                       <Link
                         to="/troubleshooting"
-                        className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+                        className="menu-item block text-logo px-3 py-2 rounded-md transition-colors duration-200"
                       >
                         {t('header.viewAllTroubleshooting')}
                       </Link>
@@ -159,14 +159,14 @@ const Header = () => {
                         <Link
                           key={category.id}
                           to={`/faq/${category.id}`}
-                          className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200 mb-1"
+                          className="menu-item block text-gray-600 hover:text-logo px-3 py-2 rounded-md transition-colors duration-200 mb-1"
                         >
                           {isRTL && category.name_ar ? category.name_ar : category.name}
                         </Link>
                       ))}
                       <Link
                         to="/faq"
-                        className="menu-item block text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+                        className="menu-item block text-logo px-3 py-2 rounded-md transition-colors duration-200"
                       >
                         {t('header.viewAllFaq')}
                       </Link>
@@ -230,13 +230,13 @@ const Header = () => {
                     <div className="p-4">
                       <Link
                         to="/contact"
-                        className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md mb-1 transition-colors duration-200"
+                        className="menu-item block text-gray-600 hover:text-logo px-3 py-2 rounded-md mb-1 transition-colors duration-200"
                       >
                         {t('header.contactUs')}
                       </Link>
                       <Link
                         to="/job-application"
-                        className="menu-item block text-gray-600 hover:text-[#2C5DB6] px-3 py-2 rounded-md transition-colors duration-200"
+                        className="menu-item block text-gray-600 hover:text-logo px-3 py-2 rounded-md transition-colors duration-200"
                       >
                         {t('header.applyForJob')}
                       </Link>
@@ -254,7 +254,7 @@ const Header = () => {
           <div className="lg:hidden justify-self-end">
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md text-gray-900 hover:text-[#2C5DB6] transition-colors"
+              className="p-2 rounded-md text-gray-900 hover:text-logo transition-colors"
             >
               {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
@@ -273,34 +273,32 @@ const Header = () => {
             className="lg:hidden bg-white border-t border-gray-200 overflow-hidden shadow-lg"
           >
             <div className="px-6 py-6 space-y-1 max-h-[80vh] overflow-y-auto">
-              <div className="mb-4">
-                <LanguageSwitcher />
-              </div>
+             
               <Link
                 to="/"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-[#2C5DB6] hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+                className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
               >
                 {t('header.home')}
               </Link>
               <Link
                 to="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-[#2C5DB6] hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+                className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
               >
                 {t('header.about')}
               </Link>
               <Link
                 to="/blog"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-[#2C5DB6] hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+                className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
               >
                 {t('header.blog')}
               </Link>
               <Link
                 to="/products"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-[#2C5DB6] hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+                className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
               >
                 {t('header.products')}
               </Link>
@@ -309,7 +307,7 @@ const Header = () => {
               <div className="border-t border-gray-100 pt-4 mt-4">
                 <button
                   onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'technical' ? null : 'technical')}
-                  className="flex items-center justify-between w-full text-gray-900 hover:text-[#2C5DB6] hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+                  className="flex items-center justify-between w-full text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
                 >
                   <span>{t('header.technicalSupport')}</span>
                   <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'technical' ? 'rotate-180' : ''}`} />
@@ -330,7 +328,7 @@ const Header = () => {
                               key={category.id}
                               to={`/faq/${category.id}`}
                               onClick={() => setIsMobileMenuOpen(false)}
-                              className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+                              className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                             >
                               {isRTL && category.name_ar ? category.name_ar : category.name}
                             </Link>
@@ -344,7 +342,7 @@ const Header = () => {
                               key={category.id}
                               to={`/troubleshooting/${category.id}`}
                               onClick={() => setIsMobileMenuOpen(false)}
-                              className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+                              className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                             >
                               {isRTL && category.name_ar ? category.name_ar : category.name}
                             </Link>
@@ -360,7 +358,7 @@ const Header = () => {
               <div className="border-t border-gray-100 pt-4 mt-4">
                 <button
                   onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'contact' ? null : 'contact')}
-                  className="flex items-center justify-between w-full text-gray-900 hover:text-[#2C5DB6] hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+                  className="flex items-center justify-between w-full text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
                 >
                   <span>{t('header.contactAndJob')}</span>
                   <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
@@ -376,20 +374,23 @@ const Header = () => {
                       <Link
                         to="/contact"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+                        className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                       >
                         {t('header.contactUs')}
                       </Link>
                       <Link
                         to="/job-application"
                         onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-[#2C5DB6] py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+                        className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                       >
                         {t('header.applyForJob')}
                       </Link>
                     </motion.div>
                   )}
                 </AnimatePresence>
+              </div>
+               <div className="mb-4">
+                <LanguageSwitcher />
               </div>
             </div>
           </motion.div>
