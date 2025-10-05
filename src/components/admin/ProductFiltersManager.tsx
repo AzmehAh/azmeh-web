@@ -298,13 +298,14 @@ const ProductFiltersManager = () => {
         <Filter className="w-6 h-6 text-[#0055A3]" />
         <div>
           <h3 className="text-xl font-semibold text-gray-900">
-            {filterType.name}
-            {filterType.name_ar && (
-              <span className="block text-gray-700 text-base" dir="rtl">
-                {filterType.name_ar}
-              </span>
-            )}
-          </h3>
+  {filterType.name}
+  {filterType.name_ar && (
+    <div className="text-gray-700 text-base mt-1" dir="rtl">
+      {filterType.name_ar}
+    </div>
+  )}
+</h3>
+        
           {(filterType.description || filterType.description_ar) && (
             <p className="text-gray-600 text-sm">
               {filterType.description}
