@@ -322,9 +322,7 @@ const ProductFiltersManager = () => {
           {filterType.is_active ? 'Active' : 'Inactive'}
         </span>
       </div>
-      ...
-    </div>
-  </div>
+     
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-500">{filterType.product_filter_values.length} values</span>
                   <button
