@@ -189,37 +189,46 @@ const Hero = () => {
                 </div>
 
          
-                {isActive && (
-                  <motion.div
-                    className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3, duration: 0.5 }}
-                  >
-                    <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
-                      {isRTL && category.description_ar ? category.description_ar : category.description}
-                    </p>
-             <motion.button
-  onClick={() => {
-    if (category.button_link) {
-      window.open(category.button_link, "_blank"); // ✅ صار خارجي
-      setIsManual(true);
-    }
-  }}
-  whileHover={{ scale: 1.02 }}
-  whileTap={{ scale: 0.98 }}
-  className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300 text-sm sm:text-base"
->
-  <span>{t('hero.readMore')}</span>
-  <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} />
-</motion.button>
+            {isActive && (
+  <motion.div
+    className={`w-full max-w-sm sm:max-w-md lg:max-w-lg flex flex-col items-${isRTL ? 'end' : 'start'} text-${isRTL ? 'right' : 'left'}`}
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.3, duration: 0.5 }}
+    style={{ direction: isRTL ? 'rtl' : 'ltr' }}
+  >
+    <AnimatedTitle
+      text={isRTL && category.name_ar ? category.name_ar : category.name}
+      isActive={isActive}
+    />
+    <p className="text-base sm:text-lg md:text-xl mb-4 sm:mb-5 md:mb-6 text-white leading-relaxed drop-shadow-lg">
+      {isRTL && category.description_ar
+        ? category.description_ar
+        : category.description}
+    </p>
+    <motion.button
+      onClick={() => {
+        if (category.button_link) {
+          window.open(category.button_link, "_blank");
+          setIsManual(true);
+        }
+      }}
+      whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
+      className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300 text-sm sm:text-base"
+    >
+      <span>{t('hero.readMore')}</span>
+      <ArrowRight
+        className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
+          isRTL
+            ? 'rotate-180 -translate-x-1 group-hover:-translate-x-2'
+            : 'translate-x-1 group-hover:translate-x-2'
+        }`}
+      />
+    </motion.button>
+  </motion.div>
+)}
 
-                  </motion.div>
-                )}
-              </div>
-            </motion.div>
-          );
-        })}
       </div>
     </div>
   );
