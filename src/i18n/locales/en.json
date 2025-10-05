@@ -23,32 +23,13 @@
     "goals": "Our Goals",
     "values": "Our Values"
   },
-   "troubleshooting": {
-    "title": "Troubleshooting Guide",
-    "subtitle": "Find solutions to common coating problems and application defects.",
-    "viewSolutions": "View Solutions",
-    "issuesCovered": "issues covered",
-    "categoryNotFound": "Category Not Found",
-    "categoryNotFoundDesc": "The troubleshooting category you're looking for doesn't exist.",
-    "backToMain": "Back to Troubleshooting",
-    "searchPlaceholder": "Search issues...",
-    "resultsFound": "result(s) found for",
-    "noIssuesFound": "No issues found",
-    "tryAdjusting": "Try adjusting your search terms",
-    "priority": "Priority",
-    "solution": "Solution:",
-    "needSupport": "Need Additional Technical Support?",
-    "supportDescription": "Our technical experts are available to help you resolve complex coating issues.",
-    "contactSupport": "Contact Technical Support",
-    "scheduleConsultation": "Schedule Consultation"
-  },
   "products": {
     "title": "Products",
     "filter": "Filter",
     "search": "Search products...",
     "brand": "Brand",
     "type": "Type",
-    "material": "Material",
+    "material": "Material", 
     "usage": "Usage",
     "allBrands": "All Brands",
     "allTypes": "All Types",
@@ -154,28 +135,7 @@
   "general_information": "General Information",
   "packaging_sizes": "Packaging & Sizes",
   "download_datasheet": "Download Technical Datasheet",
-  "products": "Products",
-
-    "ourProducts": "Our Products",
-    "discoverOurRange": "Discover our comprehensive product range",
-    "searchPlaceholder": "Search products...",
-    "sortByName": "Sort by Name",
-    "sortByBrand": "Sort by Brand",
-    "sortByCode": "Sort by Code",
-    "ascending": "Ascending",
-    "descending": "Descending",
-    "brand": "Brand",
-    "type": "Type",
-    "material": "Material",
-    "usage": "Usage",
-    "search": "Search",
-    "clearAll": "Clear All",
-    "allProducts": "All Products",
-    "noProductsFound": "No products found",
-    "tryAdjustingSearch": "Try adjusting your search terms or filters",
-    "clearFilters": "Clear Filters",
-    "code": "Code"
-  
+  "products": "Products"
 
 
   },
