@@ -451,8 +451,9 @@ const BulletinForm = () => {
 
           {/* Content */}
           <div className="overflow-y-auto max-h-[calc(100vh-200px)] p-6">
+            {/* قسم واحد موحد للمعلومات الأساسية والإضافية */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Basic Info */}
+              {/* العمود الأول */}
               <div className="space-y-4">
                 {/* Title - Bilingual */}
                 <div>
@@ -528,6 +529,23 @@ const BulletinForm = () => {
                   )}
                 </div>
 
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Author</label>
+                  {isEditing || !id ? (
+                    <input
+                      type="text"
+                      value={formData.author}
+                      onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
+                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                    />
+                  ) : (
+                    <p className="text-gray-900">{formData.author}</p>
+                  )}
+                </div>
+              </div>
+
+              {/* العمود الثاني */}
+              <div className="space-y-4">
                 {/* Short Description - Bilingual */}
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -592,23 +610,6 @@ const BulletinForm = () => {
                     ) : (
                       <p className="text-gray-500">No cover image</p>
                     )
-                  )}
-                </div>
-              </div>
-
-              {/* Additional Info */}
-              <div className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Author</label>
-                  {isEditing || !id ? (
-                    <input
-                      type="text"
-                      value={formData.author}
-                      onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                    />
-                  ) : (
-                    <p className="text-gray-900">{formData.author}</p>
                   )}
                 </div>
 
@@ -691,7 +692,7 @@ const BulletinForm = () => {
               </div>
             </div>
    
-            <div>
+            <div className="mt-6">
               <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
               {isEditing || !id ? (
                 <select
@@ -714,7 +715,7 @@ const BulletinForm = () => {
             </div>
 
             {(isEditing || !id) && (
-              <div>
+              <div className="mt-4">
                 <label className="flex items-center">
                   <input
                     type="checkbox"
