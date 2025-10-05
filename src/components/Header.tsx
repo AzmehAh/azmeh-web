@@ -262,25 +262,36 @@ const Header = () => {
         </div>
       </div>
 
-    {/* Mobile menu */}
+   {/* Mobile menu button - على اليمين */}
+<div className="lg:hidden flex justify-end p-4">
+  <button
+    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+    className="p-2 rounded-md text-gray-900 hover:text-logo transition-colors"
+    aria-label={isMobileMenuOpen ? t('header.closeMenu') : t('header.openMenu')}
+  >
+    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+  </button>
+</div>
+
+{/* Mobile menu */}
 <AnimatePresence>
   {isMobileMenuOpen && (
     <motion.div
-      initial={{ opacity: 0, maxHeight: 0 }}
+      initial={{ opacity: 0, height: 0 }}
       animate={{ 
         opacity: 1, 
-        maxHeight: 800, // قيمة كافية لتغطية المحتوى
+        height: 'auto',
         transition: { duration: 0.35, ease: "easeOut" }
       }}
       exit={{ 
         opacity: 0, 
-        maxHeight: 0,
+        height: 0,
         transition: { duration: 0.25, ease: "easeIn" }
       }}
       className="lg:hidden bg-white border-t border-gray-200 overflow-hidden shadow-lg"
     >
       <div className="px-6 py-6 space-y-1 max-h-[80vh] overflow-y-auto">
-        {/* نفس الترتيب الأصلي كما طلبت */}
+        {/* الروابط الأساسية */}
         <Link
           to="/"
           onClick={() => setIsMobileMenuOpen(false)}
@@ -398,8 +409,36 @@ const Header = () => {
           </AnimatePresence>
         </div>
 
-        <div className="mb-4 pt-2 border-t border-gray-100">
-          <LanguageSwitcher />
+        {/* Language Switcher - عربي على اليسار، إنجليزي على اليمين */}
+        <div className="pt-4 border-t border-gray-100">
+          <div className="flex justify-between px-4">
+            <button
+              onClick={() => {
+                i18n.changeLanguage('ar');
+                setIsMobileMenuOpen(false);
+              }}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                i18n.language === 'ar'
+                  ? 'bg-blue-100 text-logo'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              العربية
+            </button>
+            <button
+              onClick={() => {
+                i18n.changeLanguage('en');
+                setIsMobileMenuOpen(false);
+              }}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                i18n.language === 'en'
+                  ? 'bg-blue-100 text-logo'
+                  : 'text-gray-700 hover:bg-gray-100'
+              }`}
+            >
+              English
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
