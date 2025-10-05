@@ -192,7 +192,7 @@ const Header = () => {
 
           {/* Right Navigation - يصبح يسار في RTL */}
           <nav className="hidden lg:flex items-center gap-8 justify-self-end">
-            <LanguageSwitcher />
+           
             <Link
               to="/blog"
               className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
@@ -245,6 +245,7 @@ const Header = () => {
                 )}
               </AnimatePresence>
             </div>
+             <LanguageSwitcher />
           </nav>
 
           {/* Mobile menu button */}
