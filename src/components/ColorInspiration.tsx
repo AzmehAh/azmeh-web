@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom'; // ← أضف هذا السطر
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
 
 const ColorInspiration = () => {
   const [hoveredColor, setHoveredColor] = useState<number | null>(null);
-  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language; // 'ar' or 'en'
 
   useEffect(() => {
     fetchFeaturedProducts();
@@ -34,7 +37,7 @@ const ColorInspiration = () => {
 
         return {
           id: product.id,
-          name: product.name,
+          name: currentLang === 'ar' ? product.name_ar : product.name,
           mainImage: mainImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image',
           secondaryImage: secondaryImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image'
         };
@@ -44,7 +47,7 @@ const ColorInspiration = () => {
     } catch (error) {
       console.error('Error fetching featured products:', error);
       setFeaturedProducts([]);
-      alert('Failed to load featured products. Please try again later.');
+      alert(t('colorInspiration.loadError'));
     } finally {
       setLoading(false);
     }
@@ -61,7 +64,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6 }}
             className="text-sm uppercase text-[#0055A3] mb-2"
           >
-            Fresh & Exclusive
+            {t('colorInspiration.subtitle')}
           </motion.h3>
 
           <motion.h2
@@ -70,7 +73,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl font-bold text-gray-900 mb-4"
           >
-            New Drops
+            {t('colorInspiration.title')}
           </motion.h2>
         </div>
 
@@ -84,7 +87,7 @@ const ColorInspiration = () => {
             {featuredProducts.map((product, index) => (
               <Link
                 key={product.id}
-                to={`/product/${product.id}`} // ← هذا يوجه إلى صفحة التفاصيل
+                to={`/product/${product.id}`}
                 className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-hidden block"
                 onMouseEnter={() => setHoveredColor(index)}
                 onMouseLeave={() => setHoveredColor(null)}
@@ -111,7 +114,11 @@ const ColorInspiration = () => {
 
                 {/* العنوان */}
                 {hoveredColor !== index && (
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
+                  <div
+                    className={`absolute bottom-0 ${
+                      currentLang === 'ar' ? 'right-1/2' : 'left-1/2'
+                    } transform -translate-x-1/2 text-center text-gray-800 z-20`}
+                  >
                     <span className="block text-lg font-semibold">{product.name}</span>
                   </div>
                 )}
@@ -120,7 +127,7 @@ const ColorInspiration = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            No featured products available at the moment.
+            {t('colorInspiration.noProducts')}
           </div>
         )}
       </div>
