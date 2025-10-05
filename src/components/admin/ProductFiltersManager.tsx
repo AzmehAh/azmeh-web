@@ -281,49 +281,47 @@ const ProductFiltersManager = () => {
 
       <div className="space-y-4">
         {filteredFilterTypes.map((filterType) => (
-         <div key={filterType.id} className="bg-white rounded-lg shadow-sm border border-gray-200">
-  <div className="p-6 border-b border-gray-200">
-    <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-3">
-        <button
-          onClick={() => toggleFilterType(filterType.id)}
-          className="p-2 hover:bg-gray-100 rounded transition-colors"
-        >
-          {expandedTypes.includes(filterType.id) ? (
-            <ChevronUp className="w-5 h-5 text-gray-600" />
-          ) : (
-            <ChevronDown className="w-5 h-5 text-gray-600" />
-          )}
-        </button>
-        <Filter className="w-6 h-6 text-[#0055A3]" />
-        <div>
-          <h3 className="text-xl font-semibold text-gray-900">
-  {filterType.name}
-  {filterType.name_ar && (
-    <div className="text-gray-700 text-base mt-1" dir="rtl">
-      {filterType.name_ar}
-    </div>
-  )}
-</h3>
-        
-          {(filterType.description || filterType.description_ar) && (
-            <p className="text-gray-600 text-sm">
-              {filterType.description}
-              {filterType.description_ar && (
-                <span className="block" dir="rtl">
-                  {filterType.description_ar}
-                </span>
-              )}
-            </p>
-          )}
-        </div>
-        <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-          filterType.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-        }`}>
-          {filterType.is_active ? 'Active' : 'Inactive'}
-        </span>
-      </div>
-     
+          <div key={filterType.id} className="bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  <button
+                    onClick={() => toggleFilterType(filterType.id)}
+                    className="p-2 hover:bg-gray-100 rounded transition-colors"
+                  >
+                    {expandedTypes.includes(filterType.id) ? (
+                      <ChevronUp className="w-5 h-5 text-gray-600" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-gray-600" />
+                    )}
+                  </button>
+                  <Filter className="w-6 h-6 text-[#0055A3]" />
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900">
+                      {filterType.name}
+                      {filterType.name_ar && (
+                        <span className="block text-gray-700 text-base" dir="rtl">
+                          {filterType.name_ar}
+                        </span>
+                      )}
+                    </h3>
+                    {(filterType.description || filterType.description_ar) && (
+                      <p className="text-gray-600 text-sm">
+                        {filterType.description}
+                        {filterType.description_ar && (
+                          <span className="block" dir="rtl">
+                            {filterType.description_ar}
+                          </span>
+                        )}
+                      </p>
+                    )} 
+                  </div>
+                  <span className={`px-2 py-1 text-xs font-medium rounded-full ${
+                    filterType.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                  }`}>
+                    {filterType.is_active ? 'Active' : 'Inactive'}
+                  </span>
+                </div>
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-500">{filterType.product_filter_values.length} values</span>
                   <button
