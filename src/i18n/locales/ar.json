@@ -133,7 +133,31 @@
   "general_information": "المعلومات العامة",
   "packaging_sizes": "التغليف والأحجام",
   "download_datasheet": "تنزيل ورقة البيانات الفنية",
-  "products": "المنتجات"
+  "products": "المنتجات",
+   
+    "ourProducts": "منتجاتنا",
+    "discoverOurRange": "اكتشف مجموعة منتجاتنا المتكاملة",
+    "searchPlaceholder": "ابحث عن المنتجات...",
+    "sortByName": "الترتيب حسب الاسم",
+    "sortByBrand": "الترتيب حسب الماركة",
+    "sortByCode": "الترتيب حسب الكود",
+    "ascending": "تصاعدي",
+    "descending": "تنازلي",
+    "brand": "الماركة",
+    "type": "النوع",
+    "material": "المادة",
+    "usage": "الاستخدام",
+    "search": "بحث",
+    "clearAll": "مسح الكل",
+    "allProducts": "جميع المنتجات",
+    "noProductsFound": "لم يتم العثور على منتجات",
+    "tryAdjustingSearch": "حاول تعديل مصطلحات البحث أو الفلاتر",
+    "clearFilters": "مسح الفلاتر",
+    "code": "الكود"
+
+
+
+}
 
   },
   "contact": {
