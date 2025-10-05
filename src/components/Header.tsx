@@ -250,17 +250,7 @@ const Header = () => {
 </div>
           </nav>
 
-          {/* Mobile menu button */}
-          <div className="lg:hidden justify-self-end">
-            <button
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 rounded-md text-gray-900 hover:text-logo transition-colors"
-            >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
-        </div>
-      </div>
+        
 
    {/* Mobile menu button - على اليمين */}
 <div className="lg:hidden flex justify-end p-4">
