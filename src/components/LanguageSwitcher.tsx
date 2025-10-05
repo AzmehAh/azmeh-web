@@ -19,7 +19,7 @@ const LanguageSwitcher = () => {
   return (
     <button
       onClick={toggleLanguage}
-      className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors nav-link"
+      className="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors "
       aria-label="Switch language"
     >
       <Globe className="w-5 h-5" />
