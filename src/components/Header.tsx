@@ -29,18 +29,28 @@ const Header = () => {
   };
 
  useEffect(() => {
-  const handleScroll = () => {
+  const updateScroll = () => {
     const scrollTop =
       window.pageYOffset ||
       document.documentElement.scrollTop ||
       document.body.scrollTop ||
       0;
-    setIsScrolled(scrollTop > 20);
+
+    if (location.pathname !== '/') {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(scrollTop > 50);
+    }
   };
 
-  window.addEventListener("scroll", handleScroll, { passive: true });
-  return () => window.removeEventListener("scroll", handleScroll);
-}, []);
+  // تأكد من تنفيذها فور تحميل الصفحة
+  updateScroll();
+
+  // استمع للتمرير في جميع الحالات
+  window.addEventListener('scroll', updateScroll, { passive: true });
+
+  return () => window.removeEventListener('scroll', updateScroll);
+}, [location]);
 
   // جلب بيانات الأسئلة الشائعة من Supabase
   useEffect(() => {
