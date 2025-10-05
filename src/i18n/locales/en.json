@@ -327,6 +327,14 @@
     "followUs": "Follow Us",
     "rights": "All rights reserved"
   },
+  
+  "colorInspiration": {
+    "subtitle": "Fresh & Exclusive",
+    "title": "New Drops",
+    "noProducts": "No featured products available at the moment.",
+    "loadError": "Failed to load featured products. Please try again later."
+  
+},
   "common": {
     "loading": "Loading...",
     "error": "Error",
