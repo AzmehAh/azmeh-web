@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronDown, ArrowLeft, Search, AlertTriangle, CheckCircle, Wrench, AlertCircle } from 'lucide-react';
+import { ChevronDown, Search, AlertTriangle, CheckCircle, Wrench, AlertCircle } from 'lucide-react';
 import { supabase, TroubleshootingCategory, TroubleshootingItem } from '../lib/supabase';
+import { useTranslation } from 'react-i18next';
 
 const Troubleshooting = () => {
+  const { t, i18n } = useTranslation();
   const { category } = useParams<{ category?: string }>();
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
-  const [troubleshootingCategories, setTroubleshootingCategories] = useState<(TroubleshootingCategory & { troubleshooting_items: TroubleshootingItem[] })[]>([]);
+  const [troubleshootingCategories, setTroubleshootingCategories] = useState<
+    (TroubleshootingCategory & { troubleshooting_items: TroubleshootingItem[] })[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -35,34 +38,38 @@ const Troubleshooting = () => {
     }
   };
 
-  // Get the current category data
-  const currentCategory = category 
-    ? troubleshootingCategories.find(cat => cat.id === category)
+  // اللغة الحالية
+  const lang = i18n.language;
+
+  // احصل على الفئة الحالية
+  const currentCategory = category
+    ? troubleshootingCategories.find((cat) => cat.id === category)
     : null;
 
-  // If no category is specified, show category selection
-  if (!category) {
-    if (loading) {
-      return (
-        <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-[#0055A3]"></div>
-        </div>
-      );
-    }
+  // شاشة التحميل
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-[#0055A3]" />
+      </div>
+    );
+  }
 
+  // إذا لم يتم تحديد فئة
+  if (!category) {
     return (
       <div className="min-h-screen bg-gray-50 pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
           <div className="text-center mb-16">
             <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              Troubleshooting Guide
+              {t('troubleshooting.title')}
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              Find solutions to common coating problems and application defects. Our comprehensive guides help you identify, prevent, and resolve coating issues.
+              {t('troubleshooting.subtitle')}
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl  items-stretch mx-auto">
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl items-stretch mx-auto">
             {troubleshootingCategories.map((cat) => (
               <Link
                 key={cat.id}
@@ -70,27 +77,26 @@ const Troubleshooting = () => {
                 className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
               >
                 <div className="p-8 flex flex-col flex-grow">
-<div className="flex mb-4">
+                  <div className="flex mb-4">
+                    <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mr-4">
+                      <Wrench className="w-6 h-6 text-white" />
+                    </div>
 
-  <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mr-4">
-    <Wrench className="w-6 h-6 text-white" />
-  </div>
-
-
-  <h3 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 min-h-[64px] transition-colors leading-snug">
-    {cat.name}
-  </h3>
-</div>
+                    <h3 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 min-h-[64px] transition-colors leading-snug">
+                      {lang === 'ar' ? cat.name_ar : cat.name}
+                    </h3>
+                  </div>
 
                   <p className="text-gray-600 leading-relaxed mb-6">
-                    {cat.description}
+                    {lang === 'ar' ? cat.description_ar : cat.description}
                   </p>
+
                   <div className="flex items-center text-orange-600 font-semibold group-hover:translate-x-2 transition-transform">
-                    <span>View Solutions</span>
+                    <span>{t('troubleshooting.viewSolutions')}</span>
                     <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
                   </div>
                   <div className="mt-4 text-sm text-gray-500">
-                    {cat.troubleshooting_items.length} issues covered
+                    {cat.troubleshooting_items.length} {t('troubleshooting.issuesCovered')}
                   </div>
                 </div>
               </Link>
@@ -101,12 +107,34 @@ const Troubleshooting = () => {
     );
   }
 
-  // Filter issues based on search
-  const filteredIssues = currentCategory 
-    ? currentCategory.troubleshooting_items.filter(issue => 
-        issue.problem.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        issue.solution.toLowerCase().includes(searchTerm.toLowerCase())
-      )
+  // إذا لم يتم العثور على فئة مطابقة
+  if (!currentCategory) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('troubleshooting.categoryNotFound')}</h1>
+          <p className="text-gray-600 mb-8">{t('troubleshooting.categoryNotFoundDesc')}</p>
+          <Link
+            to="/troubleshooting"
+            className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors"
+          >
+            {t('troubleshooting.backToMain')}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // فلترة المشاكل حسب البحث
+  const filteredIssues = currentCategory
+    ? currentCategory.troubleshooting_items.filter((issue) => {
+        const problem = lang === 'ar' ? issue.problem_ar : issue.problem;
+        const solution = lang === 'ar' ? issue.solution_ar : issue.solution;
+        return (
+          problem?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          solution?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      })
     : [];
 
   const toggleItem = (id: string) => {
@@ -114,46 +142,30 @@ const Troubleshooting = () => {
   };
 
   const getSeverityColor = (severity: string) => {
-    switch(severity) {
-      case 'High': return 'text-red-600 bg-red-50 border-red-200';
-      case 'Medium': return 'text-orange-600 bg-orange-50 border-orange-200';
-      case 'Low': return 'text-green-600 bg-green-50 border-green-200';
-      default: return 'text-gray-600 bg-gray-50 border-gray-200';
+    switch (severity) {
+      case 'High':
+        return 'text-red-600 bg-red-50 border-red-200';
+      case 'Medium':
+        return 'text-orange-600 bg-orange-50 border-orange-200';
+      case 'Low':
+        return 'text-green-600 bg-green-50 border-green-200';
+      default:
+        return 'text-gray-600 bg-gray-50 border-gray-200';
     }
   };
 
   const getSeverityIcon = (severity: string) => {
-    switch(severity) {
-      case 'High': return <AlertTriangle className="w-4 h-4" />;
-      case 'Medium': return <AlertCircle className="w-4 h-4" />;
-      case 'Low': return <CheckCircle className="w-4 h-4" />;
-      default: return <CheckCircle className="w-4 h-4" />;
+    switch (severity) {
+      case 'High':
+        return <AlertTriangle className="w-4 h-4" />;
+      case 'Medium':
+        return <AlertCircle className="w-4 h-4" />;
+      case 'Low':
+        return <CheckCircle className="w-4 h-4" />;
+      default:
+        return <CheckCircle className="w-4 h-4" />;
     }
   };
-
- // بعد جلب البيانات، إذا انتهى التحميل ومافي فئة مطابقة
-if (!loading && category && !currentCategory) {
-  return (
-    <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900 mb-4">Category Not Found</h1>
-        <p className="text-gray-600 mb-8">The troubleshooting category you're looking for doesn't exist.</p>
-        <Link to="/troubleshooting" className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors">
-          Back to Troubleshooting
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-// أثناء التحميل، حتى لو category موجود، لا تعرض Not Found
-if (loading) {
-  return (
-    <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-[#0055A3]"></div>
-    </div>
-  );
-}
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -161,23 +173,26 @@ if (loading) {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center text-sm text-gray-600">
-            <Link to="/" className="hover:text-orange-600 transition-colors">Home</Link>
+            <Link to="/" className="hover:text-orange-600 transition-colors">
+              {t('common.home')}
+            </Link>
             <span className="mx-2">/</span>
-            <Link to="/troubleshooting" className="hover:text-orange-600 transition-colors">Troubleshooting</Link>
+            <Link to="/troubleshooting" className="hover:text-orange-600 transition-colors">
+              {t('troubleshooting.title')}
+            </Link>
             <span className="mx-2">/</span>
-            <span className="text-gray-900">{currentCategory.name}</span>
+            <span className="text-gray-900">
+              {lang === 'ar' ? currentCategory.name_ar : currentCategory.name}
+            </span>
           </div>
         </div>
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header */}
         <div className="text-center mb-16">
-    
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            {currentCategory.name}
+            {lang === 'ar' ? currentCategory.name_ar : currentCategory.name}
           </h1>
-         
         </div>
 
         {/* Search */}
@@ -186,7 +201,7 @@ if (loading) {
             <Search className="absolute left-4 top-3.5 w-5 h-5 text-gray-400" />
             <input
               type="text"
-              placeholder="Search issues..."
+              placeholder={t('troubleshooting.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 transition-all"
@@ -194,7 +209,7 @@ if (loading) {
           </div>
           {searchTerm && (
             <p className="text-center text-gray-600 mt-4">
-              {filteredIssues.length} result(s) found for "{searchTerm}"
+              {filteredIssues.length} {t('troubleshooting.resultsFound')} "{searchTerm}"
             </p>
           )}
         </div>
@@ -206,8 +221,10 @@ if (loading) {
               <div className="text-gray-400 mb-4">
                 <Search className="w-16 h-16 mx-auto" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">No issues found</h3>
-              <p className="text-gray-600">Try adjusting your search terms</p>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                {t('troubleshooting.noIssuesFound')}
+              </h3>
+              <p className="text-gray-600">{t('troubleshooting.tryAdjusting')}</p>
             </div>
           ) : (
             filteredIssues.map((item, index) => (
@@ -230,12 +247,16 @@ if (loading) {
                     </div>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors leading-relaxed mb-2">
-                        {item.problem}
+                        {lang === 'ar' ? item.problem_ar : item.problem}
                       </h3>
                       <div className="flex items-center space-x-2">
-                        <span className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border ${getSeverityColor(item.severity)}`}>
+                        <span
+                          className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border ${getSeverityColor(
+                            item.severity
+                          )}`}
+                        >
                           {getSeverityIcon(item.severity)}
-                          <span>{item.severity} Priority</span>
+                          <span>{item.severity} {t('troubleshooting.priority')}</span>
                         </span>
                       </div>
                     </div>
@@ -249,7 +270,7 @@ if (loading) {
                     </motion.div>
                   </div>
                 </button>
-                
+
                 <AnimatePresence>
                   {openItem === item.id && (
                     <motion.div
@@ -265,9 +286,11 @@ if (loading) {
                             <div className="flex items-start space-x-3">
                               <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
                               <div>
-                                <h4 className="font-semibold text-gray-900 mb-2">Solution:</h4>
+                                <h4 className="font-semibold text-gray-900 mb-2">
+                                  {t('troubleshooting.solution')}
+                                </h4>
                                 <p className="text-gray-700 leading-relaxed">
-                                  {item.solution}
+                                  {lang === 'ar' ? item.solution_ar : item.solution}
                                 </p>
                               </div>
                             </div>
@@ -285,24 +308,24 @@ if (loading) {
         {/* Contact Section */}
         <div className="mt-16 text-center">
           <div className="bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-8 text-white">
-            <h3 className="text-2xl font-bold mb-4">Need Additional Technical Support?</h3>
+            <h3 className="text-2xl font-bold mb-4">{t('troubleshooting.needSupport')}</h3>
             <p className="text-orange-100 mb-6 max-w-2xl mx-auto">
-              Our technical experts are available to help you resolve complex coating issues and provide personalized solutions for your specific applications.
+              {t('troubleshooting.supportDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-             <Link
-  to="/contact"
-  className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors block text-center"
->
-  Contact Technical Support
-</Link>
+              <Link
+                to="/contact"
+                className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors block text-center"
+              >
+                {t('troubleshooting.contactSupport')}
+              </Link>
 
-<Link
-  to="/contact"
-  className="bg-white/20 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/30 transition-colors backdrop-blur-sm block text-center"
->
-  Schedule Consultation
-</Link>
+              <Link
+                to="/contact"
+                className="bg-white/20 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/30 transition-colors backdrop-blur-sm block text-center"
+              >
+                {t('troubleshooting.scheduleConsultation')}
+              </Link>
             </div>
           </div>
         </div>
