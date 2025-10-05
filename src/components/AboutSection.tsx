@@ -2,16 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
-
+import { useTranslation } from 'react-i18next';
 
 const AboutSection = () => {
   const [count, setCount] = useState(0);
   const currentYear = new Date().getFullYear();
-  const targetYears = currentYear - 1955; // يحسب عدد السنوات منذ 1955
-  const duration = 2000; // مدة العد بالمللي ثانية
+  const targetYears = currentYear - 1955;
+  const duration = 2000;
+  const { t } = useTranslation();
 
   useEffect(() => {
-    const steps = 60; // عدد خطوات العد
+    const steps = 60;
     const increment = targetYears / steps;
     const stepDuration = duration / steps;
     let currentStep = 0;
@@ -21,7 +22,7 @@ const AboutSection = () => {
       if (currentStep <= steps) {
         setCount(Math.floor(increment * currentStep));
       } else {
-        setCount(targetYears); // لضمان الوصول للرقم الصحيح
+        setCount(targetYears);
         clearInterval(timer);
       }
     }, stepDuration);
@@ -29,12 +30,10 @@ const AboutSection = () => {
     return () => clearInterval(timer);
   }, [targetYears, duration]);
 
-
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -42,23 +41,23 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
             className="text-center lg:text-left"
           >
-            <h3 className="text-sm uppercase text-[#0055A3] mb-2">Our Legacy</h3>
+            <h3 className="text-sm uppercase text-[#0055A3] mb-2">
+              {t('about.legacy')}
+            </h3>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
-              Excellence in Paint Solutions
+              {t('about.title')}
             </h2>
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 sm:mb-6">
-              Al Azmeh Paints has been delivering excellence in paint systems and coatings since 1955. 
-              We provide innovative solutions for residential, industrial, and commercial applications worldwide.
-            </p> 
+              {t('about.description1')}
+            </p>
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
-              Our commitment to quality and innovation has made us a trusted partner for professionals 
-              and homeowners seeking superior paint solutions.
-            </p> 
+              {t('about.description2')}
+            </p>
             <Link
               to="/about"
               className="inline-flex items-center bg-[#2C5DB6] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-sm sm:text-base"
             >
-              Read More
+              {t('about.readMore')}
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
             </Link>
           </motion.div>
@@ -78,25 +77,20 @@ const AboutSection = () => {
             />
 
             {/* Counter Badge */}
-     {/* Counter Badge - Circle */}
-  {/* Counter Badge - Circle */}
-     <motion.div
-  className="absolute bottom-0 left-2 bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo"
-  initial={{ scale: 0.5, opacity: 0 }}
-  animate={{ scale: 1, opacity: 1 }}
-  transition={{ duration: 0.5, delay: 0.5 }}
->
-  <div className="text-xl sm:text-2xl font-bold text-[#0055A3]">
-    {count}Y+
-  </div>
-  <div className="text-[10px] sm:text-xs text-[#0055A3] font-semibold uppercase">
-    Experience
-  </div>
-</motion.div>
-
- 
+            <motion.div
+              className="absolute bottom-0 left-2 bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo"
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <div className="text-xl sm:text-2xl font-bold text-[#0055A3]">
+                {count}Y+
+              </div>
+              <div className="text-[10px] sm:text-xs text-[#0055A3] font-semibold uppercase">
+                {t('about.experience')}
+              </div>
+            </motion.div>
           </motion.div>
-
         </div>
       </div>
     </section>
