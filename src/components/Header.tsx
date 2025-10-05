@@ -91,7 +91,7 @@ const Header = () => {
       <div className="grid grid-cols-3 items-center h-20">
 
         {/* Left Navigation */}
-        <nav className="hidden lg:flex items-center space-x-8 justify-self-start">
+        <nav className="hidden lg:flex items-center gap-8 justify-self-start">
           <Link
             to="/products"
             className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
@@ -187,7 +187,7 @@ const Header = () => {
         </div>
 
         {/* Right Navigation */}
-        <nav className="hidden lg:flex items-center space-x-8 justify-self-end">
+        <nav className="hidden lg:flex items-center gap-8 justify-self-end">
           <LanguageSwitcher />
           <Link
             to="/blog"
