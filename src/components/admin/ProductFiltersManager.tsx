@@ -309,19 +309,7 @@ const ProductFiltersManager = () => {
     </p>
   )}
 
-  {/* Arabic Title */}
-  {filterType.name_ar && (
-    <h4 className="text-xl font-semibold text-gray-700 mt-2" dir="rtl">
-      {filterType.name_ar}
-    </h4>
-  )}
-
-  {/* Arabic Description */}
-  {filterType.description_ar && (
-    <p className="text-gray-600 text-sm mt-1" dir="rtl">
-      {filterType.description_ar}
-    </p>
-  )}
+  
 </div>
                  
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
