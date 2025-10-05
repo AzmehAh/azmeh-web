@@ -451,24 +451,7 @@ const BulletinForm = () => {
 
           {/* Content - بدون تقسيم إلى عمودين */}
           <div className="overflow-y-auto max-h-[calc(100vh-200px)] p-6 space-y-6">
-            
-            {/* Slug */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Slug *</label>
-              {isEditing || !id ? (
-                <input
-                  type="text"
-                  value={formData.slug}
-                  onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="unique-identifier"
-                />
-              ) : (
-                <p className="text-gray-900">{formData.slug}</p>
-              )}
-            </div>
-
-            {/* Title - English and Arabic side by side */}
+             {/* Title - English and Arabic side by side */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Title *
@@ -501,6 +484,23 @@ const BulletinForm = () => {
                 </div>
               )}
             </div>
+            {/* Slug */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Slug *</label>
+              {isEditing || !id ? (
+                <input
+                  type="text"
+                  value={formData.slug}
+                  onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value }))}
+                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                  placeholder="unique-identifier"
+                />
+              ) : (
+                <p className="text-gray-900">{formData.slug}</p>
+              )}
+            </div>
+
+           
 
             {/* Category */}
             <div>
