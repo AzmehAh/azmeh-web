@@ -245,7 +245,9 @@ const Header = () => {
                 )}
               </AnimatePresence>
             </div>
-             <LanguageSwitcher />
+           <div className={`flex items-center ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
+  <LanguageSwitcher />
+</div>
           </nav>
 
           {/* Mobile menu button */}
