@@ -252,33 +252,36 @@ const Header = () => {
 
         
 
-   {/* Mobile menu button - على اليمين */}
-<div className="lg:hidden flex justify-end p-4">
+{/* Mobile menu button */}
+<div
+  className={`lg:hidden flex ${
+    isRTL ? "justify-start pl-4" : "justify-end pr-4"
+  }`}
+>
   <button
     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-    className="p-2 rounded-md text-gray-900 hover:text-logo transition-colors"
-    aria-label={isMobileMenuOpen ? t('header.closeMenu') : t('header.openMenu')}
+    className="p-2 rounded-md text-gray-900 hover:text-logo transition-colors focus:outline-none"
+    aria-label={isMobileMenuOpen ? t("header.closeMenu") : t("header.openMenu")}
   >
-    {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+    {isMobileMenuOpen ? (
+      <X className="h-6 w-6" />
+    ) : (
+      <Menu className="h-6 w-6" />
+    )}
   </button>
 </div>
 
-{/* Mobile menu */}
+
+{/* Mobile Menu */}
 <AnimatePresence>
   {isMobileMenuOpen && (
     <motion.div
+      key="mobile-menu"
       initial={{ opacity: 0, height: 0 }}
-      animate={{ 
-        opacity: 1, 
-        height: 'auto',
-        transition: { duration: 0.35, ease: "easeOut" }
-      }}
-      exit={{ 
-        opacity: 0, 
-        height: 0,
-        transition: { duration: 0.25, ease: "easeIn" }
-      }}
-      className="lg:hidden bg-white border-t border-gray-200 overflow-hidden shadow-lg"
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      transition={{ duration: 0.35, ease: "easeInOut" }}
+      className="lg:hidden bg-white/95 backdrop-blur border-t border-gray-200 shadow-lg overflow-hidden"
     >
       <div className="px-6 py-6 space-y-1 max-h-[80vh] overflow-y-auto">
         {/* الروابط الأساسية */}
@@ -289,6 +292,7 @@ const Header = () => {
         >
           {t('header.home')}
         </Link>
+
         <Link
           to="/about"
           onClick={() => setIsMobileMenuOpen(false)}
@@ -296,6 +300,7 @@ const Header = () => {
         >
           {t('header.about')}
         </Link>
+
         <Link
           to="/blog"
           onClick={() => setIsMobileMenuOpen(false)}
@@ -303,6 +308,7 @@ const Header = () => {
         >
           {t('header.blog')}
         </Link>
+
         <Link
           to="/products"
           onClick={() => setIsMobileMenuOpen(false)}
@@ -311,48 +317,68 @@ const Header = () => {
           {t('header.products')}
         </Link>
 
-        {/* Technical Support Dropdown */}
+        {/* --- قسم الدعم الفني --- */}
         <div className="border-t border-gray-100 pt-4 mt-4">
           <button
-            onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'technical' ? null : 'technical')}
+            onClick={() =>
+              setActiveMobileDropdown(
+                activeMobileDropdown === "technical" ? null : "technical"
+              )
+            }
             className="flex items-center justify-between w-full text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
           >
-            <span>{t('header.technicalSupport')}</span>
-            <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'technical' ? 'rotate-180' : ''}`} />
+            <span>{t("header.technicalSupport")}</span>
+            <ChevronDown
+              className={`w-4 h-4 transition-transform ${
+                activeMobileDropdown === "technical" ? "rotate-180" : ""
+              }`}
+            />
           </button>
+
           <AnimatePresence>
-            {activeMobileDropdown === 'technical' && (
+            {activeMobileDropdown === "technical" && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
+                animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.25 }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
                 className="overflow-hidden bg-gray-50 rounded-lg mt-2"
               >
                 <div className="p-4 space-y-3">
+                  {/* الأسئلة الشائعة */}
                   <div>
-                    <h5 className="text-sm font-semibold text-gray-700 mb-2">{t('header.faq')}</h5>
-                    {faqCategories.map(category => (
+                    <h5 className="text-sm font-semibold text-gray-700 mb-2">
+                      {t("header.faq")}
+                    </h5>
+                    {faqCategories.map((category) => (
                       <Link
                         key={category.id}
                         to={`/faq/${category.id}`}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                       >
-                        {isRTL && category.name_ar ? category.name_ar : category.name}
+                        {isRTL && category.name_ar
+                          ? category.name_ar
+                          : category.name}
                       </Link>
                     ))}
                   </div>
+
+                  {/* الحلول التقنية */}
                   <div>
-                    <h5 className="text-sm font-semibold text-gray-700 mb-2">{t('header.troubleshooting')}</h5>
-                    {troubleshootingCategories.map(category => (
+                    <h5 className="text-sm font-semibold text-gray-700 mb-2">
+                      {t("header.troubleshooting")}
+                    </h5>
+                    {troubleshootingCategories.map((category) => (
                       <Link
                         key={category.id}
                         to={`/troubleshooting/${category.id}`}
                         onClick={() => setIsMobileMenuOpen(false)}
                         className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                       >
-                        {isRTL && category.name_ar ? category.name_ar : category.name}
+                        {isRTL && category.name_ar
+                          ? category.name_ar
+                          : category.name}
                       </Link>
                     ))}
                   </div>
@@ -362,22 +388,31 @@ const Header = () => {
           </AnimatePresence>
         </div>
 
-        {/* Contact Dropdown */}
+        {/* --- قسم التواصل والتوظيف --- */}
         <div className="border-t border-gray-100 pt-4 mt-4">
           <button
-            onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'contact' ? null : 'contact')}
+            onClick={() =>
+              setActiveMobileDropdown(
+                activeMobileDropdown === "contact" ? null : "contact"
+              )
+            }
             className="flex items-center justify-between w-full text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
           >
-            <span>{t('header.contactAndJob')}</span>
-            <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
+            <span>{t("header.contactAndJob")}</span>
+            <ChevronDown
+              className={`w-4 h-4 transition-transform ${
+                activeMobileDropdown === "contact" ? "rotate-180" : ""
+              }`}
+            />
           </button>
+
           <AnimatePresence>
-            {activeMobileDropdown === 'contact' && (
+            {activeMobileDropdown === "contact" && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
+                animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.25 }}
+                transition={{ duration: 0.25, ease: "easeInOut" }}
                 className="overflow-hidden bg-gray-50 rounded-lg mt-2 p-4 space-y-2"
               >
                 <Link
@@ -385,55 +420,33 @@ const Header = () => {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                 >
-                  {t('header.contactUs')}
+                  {t("header.contactUs")}
                 </Link>
                 <Link
                   to="/job-application"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
                 >
-                  {t('header.applyForJob')}
+                  {t("header.applyForJob")}
                 </Link>
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Language Switcher - عربي على اليسار، إنجليزي على اليمين */}
-        <div className="pt-4 border-t border-gray-100">
-          <div className="flex justify-between px-4">
-            <button
-              onClick={() => {
-                i18n.changeLanguage('ar');
-                setIsMobileMenuOpen(false);
-              }}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                i18n.language === 'ar'
-                  ? 'bg-blue-100 text-logo'
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              العربية
-            </button>
-            <button
-              onClick={() => {
-                i18n.changeLanguage('en');
-                setIsMobileMenuOpen(false);
-              }}
-              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                i18n.language === 'en'
-                  ? 'bg-blue-100 text-logo'
-                  : 'text-gray-700 hover:bg-gray-100'
-              }`}
-            >
-              English
-            </button>
-          </div>
+        {/* --- زر اللغة --- */}
+        <div
+          className={`pt-4 border-t border-gray-100 ${
+            isRTL ? "text-left" : "text-right"
+          }`}
+        >
+          <LanguageSwitcher />
         </div>
       </div>
     </motion.div>
   )}
 </AnimatePresence>
+
     </header>
   );
 };
