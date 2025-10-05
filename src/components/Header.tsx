@@ -401,7 +401,7 @@ const Header = () => {
  
        <div
   className={`mb-4 pt-2 border-t border-gray-100 flex ${
-    i18n.dir() === "rtl" ? "justify-center" : "justify-end"
+    i18n.dir() === "rtl" ? "justify-end" : "justify-end"
   }`}
 >
   <LanguageSwitcher />
