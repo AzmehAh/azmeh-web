@@ -1,466 +1,476 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, X, ChevronDown, Grid, List, SortAsc } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import { supabase, api, ProductFilterType, ProductFilterValue } from '../lib/supabase';
-
-// تعريف واجهة المنتج
-interface Product {
-  id: string;
-  name: string;
-  code: string;
-  description: string;
-  image: string;
-  type: string;
-  brand: string;
-  material: string;
-  usage: string;
-}
+// src/pages/Products.jsx
+import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Search, Filter, ChevronDown, Package } from 'lucide-react';
+import { supabase } from '../lib/supabase';
+import { useTranslation } from 'react-i18next';
 
 const Products = () => {
-  const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [products, setProducts] = useState<Product[]>([]);
-  const [filterOptions, setFilterOptions] = useState<Record<string, string[]>>({});
-  const [filterTypes, setFilterTypes] = useState<(ProductFilterType & { product_filter_values: ProductFilterValue[] })[]>([]);
+  const { t, i18n } = useTranslation();
+  const [products, setProducts] = useState([]);
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [productsLoading, setProductsLoading] = useState(true);
-  const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [activeFilterCategory, setActiveFilterCategory] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedFilters, setSelectedFilters] = useState({
+    brand: [],
+    type: [],
+    material: [],
+    usage: []
+  });
+  const [filterOptions, setFilterOptions] = useState({
+    brands: [],
+    types: [],
+    materials: [],
+    usages: []
+  });
+  const [sortBy, setSortBy] = useState('name');
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
-    fetchFilterData();
     fetchProducts();
+    fetchFilterOptions();
   }, []);
 
-  const fetchFilterData = async () => {
+  useEffect(() => {
+    filterAndSortProducts();
+  }, [products, searchTerm, selectedFilters, sortBy, sortOrder, i18n.language]);
+
+  const fetchProducts = async () => {
     try {
-      const data = await api.getProductFilterTypes();
-      setFilterTypes(data || []);
-      
-      // Transform data into filter options format
-      const options: Record<string, string[]> = {};
-      data?.forEach(filterType => {
-        const key = filterType.name.toLowerCase();
-        options[key] = filterType.product_filter_values
-          .filter(value => value.is_active)
-          .sort((a, b) => a.sort_order - b.sort_order)
-          .map(value => value.value);
-      });
-      
-      setFilterOptions(options);
-      
-      // Initialize selectedFilters with empty arrays for each filter type
-      const initialFilters: Record<string, string[]> = {};
-      data?.forEach(filterType => {
-        initialFilters[filterType.name.toLowerCase()] = [];
-      });
-      setSelectedFilters(initialFilters);
-      
+      const { data: productsData, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          product_images (
+            image_url,
+            is_main
+          )
+        `)
+        .eq('status', 'active');
+
+      if (error) throw error;
+
+      const productsWithMainImages = productsData.map(product => ({
+        ...product,
+        mainImage: product.product_images?.find(img => img.is_main)?.image_url || 
+                   product.product_images?.[0]?.image_url || null
+      }));
+
+      setProducts(productsWithMainImages || []);
     } catch (error) {
-      console.error('Error fetching filter data:', error);
+      console.error('Error fetching products:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchProducts = async () => {
+  const fetchFilterOptions = async () => {
     try {
-      setProductsLoading(true);
-      // استدعاء API لجلب المنتجات مع الصور
-      const { data: productsData, error } = await supabase
-        .from('products')
-        .select(`
-          *,
-          product_images(*)
-        `)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+      const { data: filterTypes, error: typesError } = await supabase
+        .from('product_filter_types')
+        .select('*')
+        .eq('is_active', true);
+      
+      if (typesError) throw typesError;
 
-      if (error) throw error;
+      const { data: filterValues, error: valuesError } = await supabase
+        .from('product_filter_values')
+        .select('*, filter_type_id')
+        .eq('is_active', true);
+      
+      if (valuesError) throw valuesError;
 
-      // تحويل البيانات لتتضمن الصورة الرئيسية
-      const formattedProducts = (productsData || []).map(product => {
-        const mainImage = product.product_images.find((img: any) => img.is_main) || 
-                          product.product_images[0];
+      const groupedValues = (filterTypes || []).reduce((acc, type) => {
+        const values = (filterValues || [])
+          .filter(value => value.filter_type_id === type.id)
+          .map(value => ({
+            id: value.id,
+            name: value.display_name || value.value,
+            name_ar: value.display_name_ar || value.value_ar,
+            value: value.value
+          }));
         
-        return {
-          id: product.id,
-          name: product.name,
-          code: product.code,
-          description: product.description,
-          image: mainImage?.image_url || '',
-          type: product.type,
-          brand: product.brand,
-          material: product.material,
-          usage: product.usage
-        };
-      });
+        acc[type.name.toLowerCase()] = values;
+        return acc;
+      }, {});
 
-      setProducts(formattedProducts);
+      setFilterOptions({
+        brands: groupedValues.brand || groupedValues.brands || [],
+        types: groupedValues.type || groupedValues.types || [],
+        materials: groupedValues.material || groupedValues.materials || [],
+        usages: groupedValues.usage || groupedValues.usages || []
+      });
     } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setProductsLoading(false);
+      console.error('Error fetching filter options:', error);
     }
   };
 
-  // Filter and sort products
-  const filteredProducts = useMemo(() => {
+  const filterAndSortProducts = () => {
     let filtered = products.filter(product => {
       // Search filter
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const searchLower = searchTerm.toLowerCase();
+      const matchesSearch = 
+        product.name?.toLowerCase().includes(searchLower) ||
+        product.name_ar?.toLowerCase().includes(searchLower) ||
+        product.description?.toLowerCase().includes(searchLower) ||
+        product.description_ar?.toLowerCase().includes(searchLower) ||
+        product.code?.toLowerCase().includes(searchLower);
 
-      // Category filters
-      const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
-        if (values.length === 0) return true;
-        return values.includes(product[category as keyof Product] as string);
-      });
+      if (!matchesSearch) return false;
 
-      return matchesSearch && matchesFilters;
+      // Brand filter
+      if (selectedFilters.brand.length > 0 && !selectedFilters.brand.includes(product.brand)) {
+        return false;
+      }
+
+      // Type filter
+      if (selectedFilters.type.length > 0 && !selectedFilters.type.includes(product.type)) {
+        return false;
+      }
+
+      // Material filter
+      if (selectedFilters.material.length > 0 && !selectedFilters.material.includes(product.material)) {
+        return false;
+      }
+
+      // Usage filter
+      if (selectedFilters.usage.length > 0 && !selectedFilters.usage.includes(product.usage)) {
+        return false;
+      }
+
+      return true;
     });
 
-    // Sort alphabetically
+    // Sorting
     filtered.sort((a, b) => {
-      const compareValue = a.name.localeCompare(b.name);
-      return sortOrder === 'asc' ? compareValue : -compareValue;
+      let aValue, bValue;
+
+      // Get the correct field based on current language
+      if (sortBy === 'name') {
+        aValue = i18n.language === 'ar' ? (a.name_ar || a.name) : (a.name || a.name_ar);
+        bValue = i18n.language === 'ar' ? (b.name_ar || b.name) : (b.name || b.name_ar);
+      } else if (sortBy === 'brand') {
+        aValue = a.brand;
+        bValue = b.brand;
+      } else if (sortBy === 'code') {
+        aValue = a.code;
+        bValue = b.code;
+      } else {
+        aValue = a[sortBy];
+        bValue = b[sortBy];
+      }
+
+      aValue = aValue || '';
+      bValue = bValue || '';
+
+      if (sortOrder === 'asc') {
+        return aValue.localeCompare(bValue, i18n.language === 'ar' ? 'ar' : 'en');
+      } else {
+        return bValue.localeCompare(aValue, i18n.language === 'ar' ? 'ar' : 'en');
+      }
     });
 
-    return filtered;
-  }, [searchTerm, selectedFilters, sortOrder, products]);
-// عند تحميل الصفحة وتهيئة الفلاتر من الـ URL
-useEffect(() => {
-  if (!loading) { // بعد تحميل filterTypes
-    const params = new URLSearchParams(window.location.search);
-    const newFilters: Record<string, string[]> = {};
-    filterTypes.forEach(ft => {
-      const key = ft.name.toLowerCase();
-      const value = params.get(key);
-      newFilters[key] = value ? value.split(',') : [];
-    });
-    setSelectedFilters(newFilters);
-  }
-}, [loading, filterTypes]);
-
-// تعديل toggleFilter لتحديث URL تلقائياً
-const toggleFilter = (category: string, value: string) => {
-  setSelectedFilters(prev => {
-    const newValues = prev[category].includes(value)
-      ? prev[category].filter(item => item !== value)
-      : [...prev[category], value];
-
-    const newFilters = { ...prev, [category]: newValues };
-
-    // تحديث الـ URL
-    const params = new URLSearchParams();
-    Object.entries(newFilters).forEach(([key, values]) => {
-      if (values.length > 0) params.set(key, values.join(','));
-    });
-
-    navigate(`/products?${params.toString()}`, { replace: true });
-
-    return newFilters;
-  });
-};
-
-// تعديل clearFilters لتفريغ URL أيضاً
-const clearFilters = () => {
-  const emptyFilters: Record<string, string[]> = {};
-  filterTypes.forEach(filterType => {
-    emptyFilters[filterType.name.toLowerCase()] = [];
-  });
-  setSelectedFilters(emptyFilters);
-  setSearchTerm('');
-  navigate('/products', { replace: true });
-};
-
-  const getActiveFiltersCount = () => {
-    return Object.values(selectedFilters).flat().length;
+    setFilteredProducts(filtered);
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 pt-20">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Our Products</h1>
-            <p className="text-xl opacity-90 max-w-3xl mx-auto leading-relaxed">
-              Discover our comprehensive range of premium paint systems and technical solutions designed for every application and environment.
-            </p>
-          </div>
-        </div>
+  const handleFilterChange = (filterType, value) => {
+    setSelectedFilters(prev => ({
+      ...prev,
+      [filterType]: prev[filterType].includes(value)
+        ? prev[filterType].filter(item => item !== value)
+        : [...prev[filterType], value]
+    }));
+  };
+
+  const clearFilters = () => {
+    setSelectedFilters({
+      brand: [],
+      type: [],
+      material: [],
+      usage: []
+    });
+    setSearchTerm('');
+  };
+
+  const getDisplayName = (item) => {
+    return i18n.language === 'ar' ? (item.name_ar || item.name) : (item.name || item.name_ar);
+  };
+
+  const getProductDisplayName = (product) => {
+    return i18n.language === 'ar' ? (product.name_ar || product.name) : (product.name || product.name_ar);
+  };
+
+  const getProductDescription = (product) => {
+    return i18n.language === 'ar' ? (product.description_ar || product.description) : (product.description || product.description_ar);
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
       </div>
+    );
+  }
 
-      {loading || productsLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+  return (
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-bold text-gray-900 mb-4"
+          >
+            {t('products.ourProducts')}
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-xl text-gray-600 max-w-2xl mx-auto"
+          >
+            {t('products.discoverOurRange')}
+          </motion.p>
         </div>
-      ) : (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */}
-          <div className="lg:w-80 flex-shrink-0">
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24  
-                          max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
-              <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900 flex items-center">
-                  <Filter className="w-5 h-5 text-[#2C5DB6] mr-2" />
-                  Filters
-                </h3>
-                {getActiveFiltersCount() > 0 && (
-                  <button
-                    onClick={clearFilters}
-                    className="text-sm text-[#2C5DB6] hover:text-blue-700 font-medium"
-                  >
-                    Clear All
-                  </button>
-                )}
+
+        {/* Search and Filters */}
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Search */}
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  placeholder={t('products.searchPlaceholder')}
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+                />
               </div>
+            </div>
 
-              {/* Search */}
-              <div className="mb-6">
-                <div className="relative">
-                  <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] transition-colors"
-                  />
-                </div>
-              </div>
-
-              {/* Sort Order */}
-              <div className="mb-6">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Alphabetical Order
-                </label>
-                <button
-                  onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
-                  className="flex items-center space-x-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors w-full"
-                >
-                  <SortAsc className={`w-4 h-4 ${sortOrder === 'desc' ? 'rotate-180' : ''} transition-transform`} />
-                  <span className="text-sm">
-                    {sortOrder === 'asc' ? 'A to Z' : 'Z to A'}
-                  </span>
-                </button>
-              </div>
-
-              {/* Filter Categories */}
-              {Object.entries(filterOptions).map(([category, options]) => (
-                <div key={category} className="mb-6">
-                  <button
-                    onClick={() =>
-                      setActiveFilterCategory(activeFilterCategory === category ? null : category)
-                    }
-                    className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-[#2C5DB6] transition-colors"
-                  >
-                    <span className="capitalize">By {category}</span>
-                    <ChevronDown
-                      className={`w-4 h-4 transition-transform ${
-                        activeFilterCategory === category ? 'rotate-180' : ''
-                      }`}
-                    />
-                  </button>
-
-                  <AnimatePresence>
-                    {activeFilterCategory === category && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: 'auto', opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="overflow-hidden"
-                      >
-                        <div className="space-y-2">
-                          {options.map((option) => (
-                            <label
-                              key={option}
-                              className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={selectedFilters[category]?.includes(option) || false}
-                                onChange={() => toggleFilter(category, option)}
-                                className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
-                              />
-                              <span className="text-sm text-gray-700">{option}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-
-              {/* Active Filters */}
-              {getActiveFiltersCount() > 0 && (
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <h4 className="text-sm font-medium text-gray-900 mb-3">Active Filters</h4>
-                  <div className="flex flex-wrap gap-2">
-                    {Object.entries(selectedFilters).map(([category, values]) =>
-                      values.map((value) => (
-                        <span
-                          key={`${category}-${value}`}
-                          className="inline-flex items-center space-x-1 px-3 py-1 bg-[#2C5DB6] text-white text-xs rounded-full"
-                        >
-                          <span>{value}</span>
-                          <button
-                            onClick={() => toggleFilter(category, value)}
-                            className="hover:bg-blue-700 rounded-full p-0.5 transition-colors"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </span>
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
+            {/* Sort */}
+            <div className="flex gap-4">
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+              >
+                <option value="name">{t('products.sortByName')}</option>
+                <option value="brand">{t('products.sortByBrand')}</option>
+                <option value="code">{t('products.sortByCode')}</option>
+              </select>
+              
+              <select
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value)}
+                className="px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+              >
+                <option value="asc">{t('products.ascending')}</option>
+                <option value="desc">{t('products.descending')}</option>
+              </select>
             </div>
           </div>
 
-          {/* Products Grid */}
-          <div className="flex-1">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-4">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Products ({filteredProducts.length})
-                </h2>
+          {/* Filter Sections */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-6">
+            {/* Brand Filter */}
+            <FilterSection
+              title={t('products.brand')}
+              options={filterOptions.brands}
+              selectedOptions={selectedFilters.brand}
+              onChange={(value) => handleFilterChange('brand', value)}
+              getDisplayName={getDisplayName}
+            />
+
+            {/* Type Filter */}
+            <FilterSection
+              title={t('products.type')}
+              options={filterOptions.types}
+              selectedOptions={selectedFilters.type}
+              onChange={(value) => handleFilterChange('type', value)}
+              getDisplayName={getDisplayName}
+            />
+
+            {/* Material Filter */}
+            <FilterSection
+              title={t('products.material')}
+              options={filterOptions.materials}
+              selectedOptions={selectedFilters.material}
+              onChange={(value) => handleFilterChange('material', value)}
+              getDisplayName={getDisplayName}
+            />
+
+            {/* Usage Filter */}
+            <FilterSection
+              title={t('products.usage')}
+              options={filterOptions.usages}
+              selectedOptions={selectedFilters.usage}
+              onChange={(value) => handleFilterChange('usage', value)}
+              getDisplayName={getDisplayName}
+            />
+          </div>
+
+          {/* Active Filters and Clear Button */}
+          {(searchTerm || Object.values(selectedFilters).some(arr => arr.length > 0)) && (
+            <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-200">
+              <div className="flex flex-wrap gap-2">
+                {searchTerm && (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    {t('products.search')}: "{searchTerm}"
+                    <button 
+                      onClick={() => setSearchTerm('')}
+                      className="ml-2 hover:text-blue-600"
+                    >
+                      ×
+                    </button>
+                  </span>
+                )}
+                {selectedFilters.brand.map(brand => {
+                  const brandObj = filterOptions.brands.find(b => b.value === brand);
+                  return brandObj ? (
+                    <span key={brand} className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      {t('products.brand')}: {getDisplayName(brandObj)}
+                      <button 
+                        onClick={() => handleFilterChange('brand', brand)}
+                        className="ml-2 hover:text-green-600"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ) : null;
+                })}
+                {/* Add similar blocks for other filter types */}
               </div>
               
-              <div className="flex items-center space-x-3">
-                <div className="flex bg-white rounded-lg shadow-sm border border-gray-200">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-l-lg transition-colors ${
-                      viewMode === 'grid'
-                        ? 'bg-[#2C5DB6] text-white'
-                        : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >
-                    <Grid className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-r-lg transition-colors ${
-                      viewMode === 'list'
-                        ? 'bg-[#2C5DB6] text-white'
-                        : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >
-                    <List className="w-5 h-5" />
-                  </button>
-                </div>
-              </div>
+              <button
+                onClick={clearFilters}
+                className="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
+                {t('products.clearAll')}
+              </button>
             </div>
+          )}
+        </div>
 
-            {/* Products Display */}
-            <AnimatePresence mode="wait">
-              {filteredProducts.length === 0 ? (
+        {/* Products Grid */}
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-gray-900">
+              {t('products.allProducts')} ({filteredProducts.length})
+            </h2>
+          </div>
+
+          {filteredProducts.length === 0 ? (
+            <div className="text-center py-12 bg-white rounded-lg shadow-sm border border-gray-200">
+              <Package className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">
+                {t('products.noProductsFound')}
+              </h3>
+              <p className="text-gray-600 mb-4">
+                {t('products.tryAdjustingSearch')}
+              </p>
+              <button
+                onClick={clearFilters}
+                className="px-4 py-2 bg-[#0055A3] text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                {t('products.clearFilters')}
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {filteredProducts.map((product, index) => (
                 <motion.div
+                  key={product.id}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-16"
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
                 >
-                  <div className="text-gray-400 mb-4">
-                    <Filter className="w-16 h-16 mx-auto" />
+                  {/* Product Image */}
+                  <div className="aspect-w-16 aspect-h-12 bg-gray-100">
+                    {product.mainImage ? (
+                      <img
+                        src={product.mainImage}
+                        alt={getProductDisplayName(product)}
+                        className="w-full h-48 object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-48 flex items-center justify-center bg-gray-100">
+                        <Package className="w-12 h-12 text-gray-400" />
+                      </div>
+                    )}
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
-                  <p className="text-gray-600">Try adjusting your filters or search terms</p>
+
+                  {/* Product Info */}
+                  <div className="p-4">
+                    <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
+                      {getProductDisplayName(product)}
+                    </h3>
+                    
+                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                      {getProductDescription(product)}
+                    </p>
+
+                    {product.code && (
+                      <p className="text-xs text-gray-500 mb-3">
+                        {t('products.code')}: {product.code}
+                      </p>
+                    )}
+
+                    {product.brand && (
+                      <div className="flex items-center justify-between">
+                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-800">
+                          {product.brand}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </motion.div>
-              ) : (
-                <motion.div
-                  key={viewMode}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className={
-                    viewMode === 'grid'
-                      ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
-                      : 'space-y-4'
-                  }
-                >
-                  {filteredProducts.map((product, index) => (
-                <motion.div
-  key={product.id}
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ delay: index * 0.05 }}
-  className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group 
-    ${viewMode === 'list' ? 'flex items-center' : 'flex flex-col'}
-  `}
-  onClick={() => navigate(`/product/${product.id}`)}
->
-  {/* Product Image */}
-  <div className={`${viewMode === 'list' ? 'w-24 h-24 flex-shrink-0' : 'h-48'} overflow-hidden`}>
-    <img
-      src={product.image}
-      alt={product.name}
-      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-    />
-  </div>
-
-  {/* Product Info */}
-  <div className="p-6 flex-1 grid grid-rows-[auto,1fr,auto] items-stretch">
-    {/* Title & Brand */}
-    <div className="flex items-start justify-between mb-3">
-      <div>
-        <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors">
-          {product.name}
-        </h3>
-        <p className="text-sm text-gray-500 font-mono">{product.code}</p>
-      </div>
-      <span className="px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full">
-        {product.brand}
-      </span>
-    </div>
-
-    {/* Description + Tags */}
-    <div className="flex flex-col justify-between">
-      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-        {product.description}
-      </p>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-          {product.type}
-        </span>
-        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-          {product.material}
-        </span>
-        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-          {product.usage}
-        </span>
-      </div>
-    </div>
-
-    {/* Button */}
-    {viewMode === 'grid' && (
-      <button className="w-full bg-[#2C5DB6] text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
-        View Details
-      </button>
-    )}
-  </div>
-</motion.div>
-
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+    </div>
+  );
+};
+
+// Filter Section Component
+const FilterSection = ({ title, options, selectedOptions, onChange, getDisplayName }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="border border-gray-200 rounded-lg">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between p-4 text-left font-medium text-gray-900 hover:bg-gray-50 rounded-lg"
+      >
+        <span>{title}</span>
+        {isOpen ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+      </button>
+      
+      {isOpen && (
+        <div className="p-4 border-t border-gray-200 max-h-60 overflow-y-auto">
+          <div className="space-y-2">
+            {options.map((option) => (
+              <label key={option.id} className="flex items-center space-x-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={selectedOptions.includes(option.value)}
+                  onChange={() => onChange(option.value)}
+                  className="rounded border-gray-300 text-[#0055A3] focus:ring-[#0055A3]"
+                />
+                <span className="text-sm text-gray-700">{getDisplayName(option)}</span>
+              </label>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );
 };
 
-export default Products; 
+export default Products;
