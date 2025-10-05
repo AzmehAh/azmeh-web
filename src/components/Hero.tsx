@@ -228,10 +228,7 @@ const Hero = () => {
   </motion.div>
 )}
 
-          );
-        })}
-      </div>
-    </div>
+        
   );
 };
 
