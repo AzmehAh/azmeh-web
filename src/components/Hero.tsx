@@ -163,36 +163,39 @@ const Hero = () => {
               <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
                 
                 {/* العنوان - يظهر فقط عند النشاط */}
-                <div
-                  className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
-                  style={{
-                    position: isActive ? "static" : "absolute",
-                    top: isActive ? "auto" : "50%",
-                  left: isActive
-  ? "auto"
-  : isRTL
-    ? "55%" // ← عند اللغة العربية وغير نشط
-    : window.innerWidth < 768
-      ? "50%"
-      : "40%",
-                    transform: isActive
-                      ? "none"
-                      : window.innerWidth < 768
-                      ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
-                      : "translate(-50%, -50%) rotate(-90deg)",
-                    transition: "all 0.6s ease-in-out",
-                    width: isActive ? "100%" : "auto",
-                    textAlign: isActive ? (isRTL ? "right" : "left") : "center",
-                    direction: isRTL ? "rtl" : "ltr",
-                  }}
-                >
-                  <AnimatedTitle 
-                    text={isRTL && category.name_ar ? category.name_ar : category.name} 
-                    isActive={isActive} 
-                    isRTL={isRTL} 
-                  />
-                </div>
-
+              <div
+  key={`title-${isRTL}-${index}`} // ⭐ هذا هو التعديل المهم!
+  className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+  style={{
+    position: isActive ? "static" : "absolute",
+    top: isActive ? "auto" : "50%",
+    left: isActive
+      ? "auto"
+      : isRTL
+        ? "55%"
+        : window.innerWidth < 768
+          ? "50%"
+          : "40%",
+    transform: isActive
+      ? "none"
+      : isRTL
+        ? "translateY(-50%) rotate(-90deg)"
+        : window.innerWidth < 768
+          ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
+          : "translate(-50%, -50%) rotate(-90deg)",
+    transformOrigin: isRTL ? "top right" : "center center",
+    transition: "all 0.6s ease-in-out",
+    width: isActive ? "100%" : "auto",
+    textAlign: isActive ? (isRTL ? "right" : "left") : "center",
+    direction: isRTL ? "rtl" : "ltr",
+  }}
+>
+  <AnimatedTitle 
+    text={isRTL && category.name_ar ? category.name_ar : category.name} 
+    isActive={isActive} 
+    isRTL={isRTL} 
+  />
+</div>
                 {/* الشرح - يظهر فقط عند النشاط */}
                 {isActive && (
                   <motion.div
