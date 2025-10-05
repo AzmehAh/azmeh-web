@@ -174,28 +174,29 @@ const FAQManager = () => {
                       <ChevronDown className="w-5 h-5 text-gray-600" />
                     )}
                   </button>
-                  <HelpCircle className="w-6 h-6 text-[#0055A3]" />
-                  <div>
-                    <h3 className="text-xl font-semibold text-gray-900">
-                      {category.name}
-                      {category.name_ar && (
-                        <span className="block text-gray-700 text-base" dir="rtl">
-                          {category.name_ar}
-                        </span>
-                      )}
-                    </h3>
-                    {(category.description || category.description_ar) && (
-                      <p className="text-gray-600 text-sm">
-                        {category.description}
-                        {category.description_ar && (
-                          <span className="block" dir="rtl">
-                            {category.description_ar}
-                          </span>
-                        )}
-                      </p>
-                    )}
-                  </div>
-                </div>
+                 <div className="flex items-start gap-3">
+  <HelpCircle className="w-6 h-6 text-[#0055A3] mt-1 flex-shrink-0" />
+  <div className="min-w-0">
+    <h3 className="text-xl font-semibold text-gray-900">
+      {category.name}
+      {category.name_ar && (
+        <span className="block text-gray-700 text-base mt-1" dir="rtl">
+          {category.name_ar}
+        </span>
+      )}
+    </h3>
+    {(category.description || category.description_ar) && (
+      <p className="text-gray-600 text-sm mt-1">
+        {category.description}
+        {category.description_ar && (
+          <span className="block mt-1" dir="rtl">
+            {category.description_ar}
+          </span>
+        )}
+      </p>
+    )}
+  </div>
+</div>
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-500">{category.faq_items.length} items</span>
                   <button
