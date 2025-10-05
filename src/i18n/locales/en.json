@@ -328,11 +328,14 @@
     "rights": "All rights reserved"
   },
   
-  "colorInspiration": {
-    "subtitle": "Fresh & Exclusive",
-    "title": "New Drops",
-    "noProducts": "No featured products available at the moment.",
-    "loadError": "Failed to load featured products. Please try again later."
+  
+  "services": {
+    "ecoFriendly": "ECO-FRIENDLY PAINTING",
+    "precisionInterior": "PRECISION INTERIOR",
+    "industrialCoatings": "INDUSTRIAL COATINGS",
+    "customSolutions": "CUSTOM SOLUTIONS"
+  
+
   
 },
   "common": {
