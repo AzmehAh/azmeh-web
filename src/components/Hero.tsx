@@ -5,8 +5,7 @@ import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import { useTranslation } from "react-i18next";
 
-
-const AnimatedTitle = ({ text, isActive }) => {
+const AnimatedTitle = ({ text, isActive, isRTL }) => {
   const container = {
     hidden: { opacity: 0, y: 30 },
     visible: { 
@@ -35,10 +34,12 @@ const AnimatedTitle = ({ text, isActive }) => {
           : "5rem",
         fontWeight: "900",
         color: "white",
-        textAlign: "center",
+        textAlign: isRTL ? "right" : "left", // ⭐ تعديل مهم للغة العربية
         lineHeight: "1.1",
-        direction: "inherit",
+        direction: isRTL ? "rtl" : "ltr", // ⭐ ضبط اتجاه النص
         whiteSpace: "nowrap",
+        transform: isRTL && !isActive ? "rotate(-90deg) translateX(50%)" : "none", // ⭐ تعديل لجعل النص العربي يظهر بشكل مائل لكن قابل للقراءة
+        transformOrigin: isRTL && !isActive ? "top right" : "center center", // ⭐ تعديل لمركز التدوير
       }}
     >
       {text}
@@ -61,7 +62,6 @@ const Hero = () => {
     setIsManual(true);
   };
 
-
   useEffect(() => {
     const fetchHeroCategories = async () => {
       try {
@@ -72,7 +72,6 @@ const Hero = () => {
           .order("sort_order", { ascending: true });
 
         if (error) throw error;
-
 
         const validCategories = data.filter(
           (cat) => cat.image_url && cat.description && cat.name
@@ -92,7 +91,6 @@ const Hero = () => {
     fetchHeroCategories();
   }, []);
 
-
   useEffect(() => {
     if (isManual || categories.length === 0) return;
 
@@ -105,11 +103,11 @@ const Hero = () => {
     return () => clearInterval(intervalRef.current);
   }, [isManual, categories.length]);
 
- if (loading) {
-  return (
-    <div className="w-full h-screen bg-white"></div>
-  );
-}
+  if (loading) {
+    return (
+      <div className="w-full h-screen bg-white"></div>
+    );
+  }
 
   if (categories.length === 0) {
     return (
@@ -162,19 +160,21 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-           
               <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
-        
+                
+                {/* العنوان - يظهر فقط عند النشاط */}
                 <div
                   className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
                   style={{
                     position: isActive ? "static" : "absolute",
                     top: isActive ? "auto" : "50%",
-                    left: isActive
-                      ? "auto"
-                      : window.innerWidth < 768
-                      ? "50%"
-                      : "40%",
+                  left: isActive
+  ? "auto"
+  : isRTL
+    ? "55%" // ← عند اللغة العربية وغير نشط
+    : window.innerWidth < 768
+      ? "50%"
+      : "40%",
                     transform: isActive
                       ? "none"
                       : window.innerWidth < 768
@@ -182,13 +182,18 @@ const Hero = () => {
                       : "translate(-50%, -50%) rotate(-90deg)",
                     transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
-                    textAlign: isActive ? "left" : "center",
+                    textAlign: isActive ? (isRTL ? "right" : "left") : "center",
+                    direction: isRTL ? "rtl" : "ltr",
                   }}
                 >
-                  <AnimatedTitle text={isRTL && category.name_ar ? category.name_ar : category.name} isActive={isActive} />
+                  <AnimatedTitle 
+                    text={isRTL && category.name_ar ? category.name_ar : category.name} 
+                    isActive={isActive}  
+                    isRTL={isRTL} 
+                  />
                 </div>
 
-         
+                {/* الشرح - يظهر فقط عند النشاط */}
                 {isActive && (
                   <motion.div
                     className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
@@ -199,21 +204,22 @@ const Hero = () => {
                     <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
                       {isRTL && category.description_ar ? category.description_ar : category.description}
                     </p>
-             <motion.button
-  onClick={() => {
-    if (category.button_link) {
-      window.open(category.button_link, "_blank"); // ✅ صار خارجي
-      setIsManual(true);
-    }
-  }}
-  whileHover={{ scale: 1.02 }}
-  whileTap={{ scale: 0.98 }}
-  className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300 text-sm sm:text-base"
->
-  <span>{t('hero.readMore')}</span>
-  <ArrowRight className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} />
-</motion.button>
-
+                    <motion.button
+                      onClick={() => {
+                        if (category.button_link) {
+                          window.open(category.button_link, "_blank");
+                          setIsManual(true);
+                        }
+                      }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-[#2C5DB6] transition-all duration-300 text-sm sm:text-base"
+                    >
+                      <span>{t('hero.readMore')}</span>
+                      <ArrowRight 
+                        className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
+                      />
+                    </motion.button>
                   </motion.div>
                 )}
               </div>
@@ -225,4 +231,4 @@ const Hero = () => {
   );
 };
 
-export default Hero; 
+export default Hero;
