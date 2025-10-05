@@ -389,7 +389,9 @@ const Header = () => {
                   )}
                 </AnimatePresence>
               </div>
-              
+               <div className="mb-4">
+                <LanguageSwitcher />
+              </div>
             </div>
           </motion.div>
         )}
