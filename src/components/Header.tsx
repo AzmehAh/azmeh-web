@@ -389,13 +389,11 @@ const Header = () => {
                   )}
                 </AnimatePresence>
               </div>
-               <div className={`... nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}">
-                <LanguageSwitcher />
-              </div>
+              
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> 
     </header>
   );
 };
