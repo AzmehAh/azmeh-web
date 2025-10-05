@@ -57,54 +57,57 @@ const Troubleshooting = () => {
 
   // إذا لم يتم تحديد فئة
   if (!category) {
-    return (
-      <div className="min-h-screen bg-gray-50 pt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center mb-16">
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              {t('troubleshooting.title')}
-            </h1>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-              {t('troubleshooting.subtitle')}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl items-stretch mx-auto">
-            {troubleshootingCategories.map((cat) => (
-              <Link
-                key={cat.id}
-                to={`/troubleshooting/${cat.id}`}
-                className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col"
-              >
-                <div className="p-8 flex flex-col flex-grow">
-                  <div className="flex mb-4">
-                    <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mr-4">
-                      <Wrench className="w-6 h-6 text-white" />
-                    </div>
-
-                    <h3 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 min-h-[64px] transition-colors leading-snug">
-                      {lang === 'ar' ? cat.name_ar : cat.name}
-                    </h3>
-                  </div>
-
-                  <p className="text-gray-600 leading-relaxed mb-6">
-                    {lang === 'ar' ? cat.description_ar : cat.description}
-                  </p>
-
-                  <div className="flex items-center text-orange-600 font-semibold group-hover:translate-x-2 transition-transform">
-                    <span>{t('troubleshooting.viewSolutions')}</span>
-                    <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
-                  </div>
-                  <div className="mt-4 text-sm text-gray-500">
-                    {cat.troubleshooting_items.length} {t('troubleshooting.issuesCovered')}
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+   return (
+  <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="text-center mb-16">
+        <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+          {t('troubleshooting.title')}
+        </h1>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          {t('troubleshooting.subtitle')}
+        </p>
       </div>
-    );
+
+      <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+        {troubleshootingCategories.map((cat) => (
+          <Link
+            key={cat.id}
+            to={`/troubleshooting/${cat.id}`}
+            className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col h-full"
+          >
+            <div className="p-8 flex flex-col flex-grow">
+              <div className="flex mb-4">
+                <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mr-4">
+                  <Wrench className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 min-h-[64px] transition-colors leading-snug">
+                  {lang === 'ar' ? cat.name_ar : cat.name}
+                </h3>
+              </div>
+
+              {/* ✅ أضف flex-grow هنا */}
+              <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
+                {lang === 'ar' ? cat.description_ar : cat.description}
+              </p>
+
+              {/* ✅ لف القسم السفلي وادفعه للأسفل */}
+              <div className="mt-auto pt-4 border-t border-gray-100">
+                <div className="flex items-center text-orange-600 font-semibold group-hover:translate-x-2 transition-transform">
+                  <span>{t('troubleshooting.viewSolutions')}</span>
+                  <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
+                </div>
+                <div className="mt-2 text-sm text-gray-500">
+                  {cat.troubleshooting_items.length} {t('troubleshooting.issuesCovered')}
+                </div>
+              </div>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  </div>
+);
   }
 
   // إذا لم يتم العثور على فئة مطابقة
