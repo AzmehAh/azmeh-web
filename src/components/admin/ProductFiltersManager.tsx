@@ -315,7 +315,7 @@ const ProductFiltersManager = () => {
       )}
     </p>
   )}
-</div>
+
   
   
 </div>
