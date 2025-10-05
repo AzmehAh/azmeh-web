@@ -2,23 +2,32 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, X, ChevronDown, Grid, List, SortAsc } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { supabase, api, ProductFilterType, ProductFilterValue } from '../lib/supabase';
- 
-// تعريف واجهة المنتج
+
 interface Product {
   id: string;
   name: string;
+  name_ar: string;
   code: string;
   description: string;
+  description_ar: string;
   image: string;
   type: string;
+  type_ar: string;
   brand: string;
+  brand_ar: string;
   material: string;
+  material_ar: string;
   usage: string;
+  usage_ar: string;
 }
 
 const Products = () => {
+  const { i18n } = useTranslation();
+  const lang = i18n.language; // "ar" أو "en"
   const navigate = useNavigate();
+  
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [filterOptions, setFilterOptions] = useState<Record<string, string[]>>({});
@@ -35,12 +44,16 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+  useEffect(() => {
+    // عندما تتغير اللغة، نعيد تحميل المنتجات لتحديث الحقول
+    fetchProducts();
+  }, [i18n.language]);
+
   const fetchFilterData = async () => {
     try {
       const data = await api.getProductFilterTypes();
       setFilterTypes(data || []);
-      
-      // Transform data into filter options format
+
       const options: Record<string, string[]> = {};
       data?.forEach(filterType => {
         const key = filterType.name.toLowerCase();
@@ -49,16 +62,15 @@ const Products = () => {
           .sort((a, b) => a.sort_order - b.sort_order)
           .map(value => value.value);
       });
-      
+
       setFilterOptions(options);
-      
-      // Initialize selectedFilters with empty arrays for each filter type
+
       const initialFilters: Record<string, string[]> = {};
       data?.forEach(filterType => {
         initialFilters[filterType.name.toLowerCase()] = [];
       });
       setSelectedFilters(initialFilters);
-      
+
     } catch (error) {
       console.error('Error fetching filter data:', error);
     } finally {
@@ -69,33 +81,33 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setProductsLoading(true);
-      // استدعاء API لجلب المنتجات مع الصور
       const { data: productsData, error } = await supabase
         .from('products')
-        .select(`
-          *,
-          product_images(*)
-        `)
+        .select(`*, product_images(*)`)
         .eq('status', 'active')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      // تحويل البيانات لتتضمن الصورة الرئيسية
       const formattedProducts = (productsData || []).map(product => {
-        const mainImage = product.product_images.find((img: any) => img.is_main) || 
-                          product.product_images[0];
-        
+        const mainImage = product.product_images.find((img: any) => img.is_main) || product.product_images[0];
+
         return {
           id: product.id,
           name: product.name,
+          name_ar: product.name_ar,
           code: product.code,
           description: product.description,
+          description_ar: product.description_ar,
           image: mainImage?.image_url || '',
           type: product.type,
+          type_ar: product.type_ar,
           brand: product.brand,
+          brand_ar: product.brand_ar,
           material: product.material,
-          usage: product.usage
+          material_ar: product.material_ar,
+          usage: product.usage,
+          usage_ar: product.usage_ar
         };
       });
 
@@ -107,102 +119,107 @@ const Products = () => {
     }
   };
 
-  // Filter and sort products
+  // فلترة المنتجات بناءً على اللغة
   const filteredProducts = useMemo(() => {
     let filtered = products.filter(product => {
-      // Search filter
-      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.description.toLowerCase().includes(searchTerm.toLowerCase());
+      const nameField = lang === 'ar' ? product.name_ar : product.name;
+      const descField = lang === 'ar' ? product.description_ar : product.description;
 
-      // Category filters
+      const matchesSearch =
+        nameField?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        descField?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.code?.toLowerCase().includes(searchTerm.toLowerCase());
+
       const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
         if (values.length === 0) return true;
-        return values.includes(product[category as keyof Product] as string);
+        const fieldValue =
+          lang === 'ar'
+            ? (product[`${category}_ar`] as string)
+            : (product[category as keyof Product] as string);
+        return values.includes(fieldValue);
       });
 
       return matchesSearch && matchesFilters;
     });
 
-    // Sort alphabetically
     filtered.sort((a, b) => {
-      const compareValue = a.name.localeCompare(b.name);
+      const aName = lang === 'ar' ? a.name_ar : a.name;
+      const bName = lang === 'ar' ? b.name_ar : b.name;
+      const compareValue = aName.localeCompare(bName, lang);
       return sortOrder === 'asc' ? compareValue : -compareValue;
     });
 
     return filtered;
-  }, [searchTerm, selectedFilters, sortOrder, products]);
-// عند تحميل الصفحة وتهيئة الفلاتر من الـ URL
-useEffect(() => {
-  if (!loading) { // بعد تحميل filterTypes
-    const params = new URLSearchParams(window.location.search);
-    const newFilters: Record<string, string[]> = {};
-    filterTypes.forEach(ft => {
-      const key = ft.name.toLowerCase();
-      const value = params.get(key);
-      newFilters[key] = value ? value.split(',') : [];
+  }, [searchTerm, selectedFilters, sortOrder, products, lang]);
+
+  // عند تحميل الصفحة وتهيئة الفلاتر من الـ URL
+  useEffect(() => {
+    if (!loading) {
+      const params = new URLSearchParams(window.location.search);
+      const newFilters: Record<string, string[]> = {};
+      filterTypes.forEach(ft => {
+        const key = ft.name.toLowerCase();
+        const value = params.get(key);
+        newFilters[key] = value ? value.split(',') : [];
+      });
+      setSelectedFilters(newFilters);
+    }
+  }, [loading, filterTypes]);
+
+  const toggleFilter = (category: string, value: string) => {
+    setSelectedFilters(prev => {
+      const newValues = prev[category].includes(value)
+        ? prev[category].filter(item => item !== value)
+        : [...prev[category], value];
+
+      const newFilters = { ...prev, [category]: newValues };
+
+      const params = new URLSearchParams();
+      Object.entries(newFilters).forEach(([key, values]) => {
+        if (values.length > 0) params.set(key, values.join(','));
+      });
+
+      navigate(`/products?${params.toString()}`, { replace: true });
+
+      return newFilters;
     });
-    setSelectedFilters(newFilters);
-  }
-}, [loading, filterTypes]);
-
-// تعديل toggleFilter لتحديث URL تلقائياً
-const toggleFilter = (category: string, value: string) => {
-  setSelectedFilters(prev => {
-    const newValues = prev[category].includes(value)
-      ? prev[category].filter(item => item !== value)
-      : [...prev[category], value];
-
-    const newFilters = { ...prev, [category]: newValues };
-
-    // تحديث الـ URL
-    const params = new URLSearchParams();
-    Object.entries(newFilters).forEach(([key, values]) => {
-      if (values.length > 0) params.set(key, values.join(','));
-    });
-
-    navigate(`/products?${params.toString()}`, { replace: true });
-
-    return newFilters;
-  });
-};
-
-// تعديل clearFilters لتفريغ URL أيضاً
-const clearFilters = () => {
-  const emptyFilters: Record<string, string[]> = {};
-  filterTypes.forEach(filterType => {
-    emptyFilters[filterType.name.toLowerCase()] = [];
-  });
-  setSelectedFilters(emptyFilters);
-  setSearchTerm('');
-  navigate('/products', { replace: true });
-};
-
-  const getActiveFiltersCount = () => {
-    return Object.values(selectedFilters).flat().length;
   };
+
+  const clearFilters = () => {
+    const emptyFilters: Record<string, string[]> = {};
+    filterTypes.forEach(filterType => {
+      emptyFilters[filterType.name.toLowerCase()] = [];
+    });
+    setSelectedFilters(emptyFilters);
+    setSearchTerm('');
+    navigate('/products', { replace: true });
+  };
+
+  const getActiveFiltersCount = () => Object.values(selectedFilters).flat().length;
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
-      {/* Hero Section */}
+      {/* Hero */}
       <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">Our Products</h1>
-            <p className="text-xl opacity-90 max-w-3xl mx-auto leading-relaxed">
-              Discover our comprehensive range of premium paint systems and technical solutions designed for every application and environment.
-            </p>
-          </div>
+        <div className="max-w-7xl mx-auto text-center px-4">
+          <h1 className="text-5xl font-bold mb-4">
+            {lang === 'ar' ? 'منتجاتنا' : 'Our Products'}
+          </h1>
+          <p className="text-xl opacity-90 max-w-3xl mx-auto">
+            {lang === 'ar'
+              ? 'اكتشف مجموعتنا الشاملة من أنظمة الدهانات والحلول التقنية عالية الجودة لكل تطبيق وبيئة.'
+              : 'Discover our comprehensive range of premium paint systems and technical solutions for every application.'}
+          </p>
         </div>
       </div>
 
       {loading || productsLoading ? (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]" />
         </div>
       ) : (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className="lg:w-80 flex-shrink-0">
             <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24  
@@ -327,137 +344,59 @@ const clearFilters = () => {
             </div>
           </div>
 
-          {/* Products Grid */}
-          <div className="flex-1">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between mb-8">
-              <div className="flex items-center space-x-4">
-                <h2 className="text-2xl font-bold text-gray-900">
-                  Products ({filteredProducts.length})
-                </h2>
-              </div>
-              
-              <div className="flex items-center space-x-3">
-                <div className="flex bg-white rounded-lg shadow-sm border border-gray-200">
-                  <button
-                    onClick={() => setViewMode('grid')}
-                    className={`p-2 rounded-l-lg transition-colors ${
-                      viewMode === 'grid'
-                        ? 'bg-[#2C5DB6] text-white'
-                        : 'text-gray-400 hover:text-gray-600'
-                    }`}
+
+            {/* Products */}
+            <div className="flex-1">
+              <div
+                className={
+                  viewMode === 'grid'
+                    ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
+                    : 'space-y-4'
+                }
+              >
+                {filteredProducts.map(product => (
+                  <motion.div
+                    key={product.id}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className={`bg-white rounded-xl shadow-lg overflow-hidden group cursor-pointer 
+                    ${viewMode === 'list' ? 'flex items-center' : 'flex flex-col'}`}
+                    onClick={() => navigate(`/product/${product.id}`)}
                   >
-                    <Grid className="w-5 h-5" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode('list')}
-                    className={`p-2 rounded-r-lg transition-colors ${
-                      viewMode === 'list'
-                        ? 'bg-[#2C5DB6] text-white'
-                        : 'text-gray-400 hover:text-gray-600'
-                    }`}
-                  >
-                    <List className="w-5 h-5" />
-                  </button>
-                </div>
+                    <div className={`${viewMode === 'list' ? 'w-24 h-24' : 'h-48'} overflow-hidden`}>
+                      <img
+                        src={product.image}
+                        alt={lang === 'ar' ? product.name_ar : product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                      />
+                    </div>
+
+                    <div className="p-6 flex-1 flex flex-col justify-between">
+                      <h3 className="text-lg font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors">
+                        {lang === 'ar' ? product.name_ar : product.name}
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-3">
+                        {lang === 'ar' ? product.description_ar : product.description}
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                          {lang === 'ar' ? product.type_ar : product.type}
+                        </span>
+                        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                          {lang === 'ar' ? product.material_ar : product.material}
+                        </span>
+                        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                          {lang === 'ar' ? product.usage_ar : product.usage}
+                        </span>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
             </div>
-
-            {/* Products Display */}
-            <AnimatePresence mode="wait">
-              {filteredProducts.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-16"
-                >
-                  <div className="text-gray-400 mb-4">
-                    <Filter className="w-16 h-16 mx-auto" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">No products found</h3>
-                  <p className="text-gray-600">Try adjusting your filters or search terms</p>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key={viewMode}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className={
-                    viewMode === 'grid'
-                      ? 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6'
-                      : 'space-y-4'
-                  }
-                >
-                  {filteredProducts.map((product, index) => (
-                <motion.div
-  key={product.id}
-  initial={{ opacity: 0, y: 20 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ delay: index * 0.05 }}
-  className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group 
-    ${viewMode === 'list' ? 'flex items-center' : 'flex flex-col'}
-  `}
-  onClick={() => navigate(`/product/${product.id}`)}
->
-  {/* Product Image */}
-  <div className={`${viewMode === 'list' ? 'w-24 h-24 flex-shrink-0' : 'h-48'} overflow-hidden`}>
-    <img
-      src={product.image}
-      alt={product.name}
-      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-    />
-  </div>
-
-  {/* Product Info */}
-  <div className="p-6 flex-1 grid grid-rows-[auto,1fr,auto] items-stretch">
-    {/* Title & Brand */}
-    <div className="flex items-start justify-between mb-3">
-      <div>
-        <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors">
-          {product.name}
-        </h3>
-        <p className="text-sm text-gray-500 font-mono">{product.code}</p>
-      </div>
-      <span className="px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full">
-        {product.brand}
-      </span>
-    </div>
-
-    {/* Description + Tags */}
-    <div className="flex flex-col justify-between">
-      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-        {product.description}
-      </p>
-
-      <div className="flex flex-wrap gap-2 mb-4">
-        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-          {product.type}
-        </span>
-        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-          {product.material}
-        </span>
-        <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-          {product.usage}
-        </span>
-      </div>
-    </div>
-
-    {/* Button */}
-    {viewMode === 'grid' && (
-      <button className="w-full bg-[#2C5DB6] text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
-        View Details
-      </button>
-    )}
-  </div>
-</motion.div>
-
-                  ))}
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
         </div>
-      </div>
       )}
     </div>
   );
