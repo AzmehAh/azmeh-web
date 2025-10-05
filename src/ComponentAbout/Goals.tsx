@@ -1,46 +1,50 @@
 import React from "react";
 import { Eye, Target } from "lucide-react";
 import { motion } from "framer-motion";
-const goals = () => {
+import { useTranslation } from "react-i18next";
+
+const Goals = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="py-40 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* عنوان السكشن */}
         <div className="text-center mb-16">
           <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
-            Our Vision & Mission
-          </h2>
-          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Driving innovation and excellence in every aspect of our business.
-          </p>
-              </motion.div>
-        </div> 
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
+              {t('goals.title')}
+            </h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              {t('goals.subtitle')}
+            </p>
+          </motion.div>
+        </div>
 
         {/* كتل Vision و Mission */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-[#0070C0] rounded-2xl p-8 text-white flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <Eye className="w-6 h-6 text-white" />
-              <h3 className="text-2xl font-bold">Vision</h3>
+              <h3 className="text-2xl font-bold">{t('goals.vision.title')}</h3>
             </div>
             <p className="text-sm leading-relaxed">
-              To be the leading innovator in paint and coating technologies, providing sustainable solutions that protect and beautify homes, furniture, vehicles, and industrial facilities worldwide.
+              {t('goals.vision.description')}
             </p>
           </div>
 
           <div className="bg-[#0070C0] rounded-2xl p-8 text-white flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <Target className="w-6 h-6 text-white" />
-              <h3 className="text-2xl font-bold">Mission</h3>
+              <h3 className="text-2xl font-bold">{t('goals.mission.title')}</h3>
             </div>
             <p className="text-sm leading-relaxed">
-              To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility to the environment.
+              {t('goals.mission.description')}
             </p>
           </div>
         </div>
@@ -49,4 +53,4 @@ const goals = () => {
   );
 };
 
-export default goals;
+export default Goals;
