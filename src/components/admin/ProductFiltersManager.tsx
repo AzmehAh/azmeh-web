@@ -297,32 +297,19 @@ const ProductFiltersManager = () => {
                   </button>
                   <Filter className="w-6 h-6 text-[#0055A3]" />
                  <div className="flex flex-col">
-  <div className="space-y-1">
   {/* English Title */}
-  <h3 className="text-xl font-semibold text-gray-900" dir="ltr">
+  <h3 className="text-xl font-semibold text-gray-900">
     {filterType.name}
   </h3>
 
   {/* English Description */}
   {filterType.description && (
-    <p className="text-gray-600 text-sm" dir="ltr">
+    <p className="text-gray-600 text-sm mt-1">
       {filterType.description}
     </p>
   )}
-
-  {/* Arabic Title */}
-  {filterType.name_ar && (
-    <h4 className="text-xl font-semibold text-gray-700" dir="rtl">
-      {filterType.name_ar}
-    </h4>
-  )}
-
-  {/* Arabic Description */}
-  {filterType.description_ar && (
-    <p className="text-gray-600 text-sm" dir="rtl">
-      {filterType.description_ar}
-    </p>
-  )}
+  
+  
 </div>
                  
                   <span className={`px-2 py-1 text-xs font-medium rounded-full ${
