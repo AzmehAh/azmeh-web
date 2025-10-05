@@ -21,7 +21,7 @@ const Services = () => {
             <div
               key={index}
               className={`flex items-center p-2 sm:p-0 cursor-pointer group ${
-                currentLang === 'ar' ? 'space-x-reverse' : ''
+                currentLang === 'ar' ? 'gap-reverse' : ''
               }`}
             >
               <span className="text-2xl sm:text-3xl font-bold text-gray-200 group-hover:text-[#0055A3] transition-colors duration-300 flex-shrink-0">
