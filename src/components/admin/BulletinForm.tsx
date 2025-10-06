@@ -643,8 +643,55 @@ const BulletinForm = () => {
               )}
             </div>
 
-            {/* Related Bulletins */}
-            {/* ... (تبقى كما هي، لأنها ليست ثنائية اللغة) ... */}
+        {/* Related Bulletins */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Related Bulletins
+  </label>
+  {isEditing || !id ? (
+    <div className="space-y-2 max-h-40 overflow-y-auto border border-gray-200 rounded-lg p-2">
+      {allBulletins.length > 0 ? (
+        allBulletins.map((bulletinItem) => (
+          <label key={bulletinItem.id} className="flex items-start space-x-3">
+            <input
+              type="checkbox"
+              checked={selectedRelatedIds.includes(bulletinItem.id)}
+              onChange={(e) => {
+                if (e.target.checked) {
+                  setSelectedRelatedIds(prev => [...prev, bulletinItem.id]);
+                } else {
+                  setSelectedRelatedIds(prev => prev.filter(id => id !== bulletinItem.id));
+                }
+              }}
+              className="mt-1 w-4 h-4 text-[#0055A3] rounded focus:ring-[#0055A3]"
+            />
+            <span className="text-sm text-gray-800">
+              <span className="font-medium">{bulletinItem.title}</span> 
+              <span className="text-gray-500 ml-2">({bulletinItem.slug})</span>
+            </span>
+          </label>
+        ))
+      ) : (
+        <p className="text-sm text-gray-500 italic">No published bulletins available.</p>
+      )}
+    </div>
+  ) : (
+    <div className="space-y-1">
+      {bulletin?.related_bulletin_ids && bulletin.related_bulletin_ids.length > 0 ? (
+        bulletin.related_bulletin_ids.map((relId) => {
+          const rel = allBulletins.find(b => b.id === relId);
+          return rel ? (
+            <div key={relId} className="text-gray-900">
+              {rel.title} <span className="text-gray-500">({rel.slug})</span>
+            </div>
+          ) : null;
+        })
+      ) : (
+        <p className="text-gray-500">—</p>
+      )}
+    </div>
+  )}
+</div>
 
             {/* Status */}
             <div>
