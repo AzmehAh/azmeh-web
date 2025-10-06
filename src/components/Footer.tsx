@@ -7,6 +7,9 @@ const Footer = () => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
 
+  // دالة لتحديد الهوامش حسب الاتجاه
+  const marginClass = (left, right) => isRTL ? left : right;
+
   return (
     <footer className="bg-[#0055A3] text-white" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -71,23 +74,23 @@ const Footer = () => {
               {t('footer.contactInfo')}
             </h4>
             <div className="space-y-4">
-              <div className={`flex items-start ${isRTL ? 'flex-row-reverse gap-reverse' : 'gap-3'}`}>
-                <Mail className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`} />
+              <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+                <Mail className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${marginClass('ml-3', 'mr-3')}`} />
                 <div>
                   <p className="text-gray-300 text-sm">manager@dkl-syria.com</p>
                 </div>
               </div>
-              <div className={`flex items-start ${isRTL ? 'flex-row-reverse gap-reverse' : 'gap-3'}`}>
-                <Phone className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`} />
+              <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+                <Phone className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${marginClass('ml-3', 'mr-3')}`} />
                 <div>
                   <p className="text-gray-300 text-sm">(+963) 988 691 712</p>
                 </div>
               </div>
-              <div className={`flex items-start ${isRTL ? 'flex-row-reverse gap-reverse' : 'gap-3'}`}>
-                <MapPin className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`} />
+              <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+                <MapPin className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${marginClass('ml-3', 'mr-3')}`} />
                 <div>
                   <p className="text-gray-300 text-sm">
-                   {t('footer.address')}
+                    {t('footer.address')}
                   </p>
                 </div>
               </div>
@@ -99,28 +102,32 @@ const Footer = () => {
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.followUs')}
             </h4>
-            <div className={`flex ${isRTL ? 'flex-row-reverse gap-reverse' : 'gap-4'}`}>
+            <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} ${marginClass('space-x-reverse', '')} space-x-4`}>
               <a
                 href="#"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
+                aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
+                aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
+                aria-label="LinkedIn"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
+                aria-label="YouTube"
               >
                 <Youtube className="w-5 h-5" />
               </a>
@@ -131,7 +138,6 @@ const Footer = () => {
               </p>
             </div>
           </div>
-
         </div>
 
         {/* Bottom Border */}
@@ -140,7 +146,7 @@ const Footer = () => {
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
               {t('footer.professionalSolutions')}
             </p>
-            <div className={`flex ${isRTL ? 'flex-row-reverse gap-reverse' : 'gap-6'} text-sm`}>
+            <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} ${marginClass('space-x-reverse', '')} space-x-6 text-sm`}>
               <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
                 {t('footer.privacyPolicy')}
               </Link>
@@ -148,11 +154,11 @@ const Footer = () => {
                 {t('footer.termsOfService')}
               </Link>
             </div>
-          </div>  
+          </div> 
         </div>
       </div>
     </footer>
   );
 };
 
-export default Footer;  
+export default Footer;
