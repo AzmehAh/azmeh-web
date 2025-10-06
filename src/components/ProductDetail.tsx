@@ -344,7 +344,8 @@ const ProductDetail = () => {
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
               <p className="text-xl text-blue-100 mb-4 leading-relaxed">{product.description}</p>
 
-            {product.type && (
+              <div className="flex flex-wrap gap-4 mb-8">
+                {product.type && (
   <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
     {getLocalizedField(product.type, product.type_ar)}
   </span>
