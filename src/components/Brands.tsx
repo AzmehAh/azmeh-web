@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
 
 const BrandsSection = () => {
-  const isRTL = false; // false = LTR, true = RTL
+  const isRTL = false; 
 
   const animationRef = useRef<number>();
   const x = useMotionValue(0);
@@ -98,30 +98,30 @@ const BrandsSection = () => {
     <section className="bg-white pt-15 pb-20 relative">
       <div className="pt-10 max-w-screen-2xl mx-auto relative">
        <div className="text-center mb-10">
-  {/* العنوان الصغير */}
+ 
    <motion.h3
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6 }}
     className="text-sm uppercase text-[#0055A3] mb-2"
   >
-    Trusted Partners
+  {t("trustedPartners")}
   </motion.h3>
 
-  {/* العنوان الكبير */}
+ 
  <motion.h2
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.6, delay: 0.1 }}
     className="text-4xl font-bold text-gray-900 mb-4"
   >
-   Our Featured Brands
+      {t("featuredBrands")}
     </motion.h2>
 </div>
 
        
 
-        {/* السكشن المتحرك */}
+       
       <div
   className="relative overflow-x-clip mt-12 max-w-[90%] mx-auto"
   onMouseEnter={handleMouseEnter}
