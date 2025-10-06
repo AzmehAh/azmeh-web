@@ -297,7 +297,13 @@
     "bulletinsAvailable": "نشرة متاحة",
     "noResults": "لا توجد نتائج",
     "noResultsText": "حاول تعديل الفلاتر أو البحث بكلمة مختلفة",
-    "readMore": "اقرأ المزيد"
+    "readMore": "اقرأ المزيد",
+    
+    "sectionTag": "إلهام الدهان",
+    "sectionTitle": "أحدث المقالات من مدونتنا",
+    "viewAllButton": "عرض جميع المقالات"
+  
+}
   
   
 
