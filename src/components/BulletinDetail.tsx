@@ -129,8 +129,7 @@ const BulletinDetail = () => {
           >
             {isRTL ? null : <ArrowLeft className="w-4 h-4 mr-2" />}
             {t('bulletin.backToBlog')}
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            
+            {isRTL ? <ArrowLeft className="w-4 h-4 ml-2 " /> : null}
           </button>
 
           <div className="flex items-center gap-3 mb-4">
