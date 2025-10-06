@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 
 const BrandsSection = () => {
-  const { t, i18n } = useTranslation(''); // استخدم namespace 'brands'
+  const { t, i18n } = useTranslation(''); 
   const currentLang = i18n.language;
   const isRTL = currentLang === 'ar';
 
