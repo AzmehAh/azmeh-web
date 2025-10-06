@@ -320,12 +320,16 @@
     "contactSupport": "Contact Technical Support",
     "scheduleConsultation": "Schedule Consultation"
   },
-  "footer": { 
-    "about": "About",
+  "footer": {
+    "companyDescription": "Excellence in paint systems and coatings since 1955. Trusted by professionals worldwide.",
+    "copyright": "© {{year}} Al Azmeh Paints. All rights reserved.",
     "quickLinks": "Quick Links",
-    "contact": "Contact",
+    "contactInfo": "Contact Info",
     "followUs": "Follow Us",
-    "rights": "All rights reserved"
+    "stayUpdated": "Stay updated with our latest news and products",
+    "professionalSolutions": "Professional paint solutions for every application",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service"
   },
   
   
@@ -354,6 +358,11 @@
     "filter": "Filter",
     "clear": "Clear",
     "apply": "Apply",
-    "reset": "Reset"
+    "reset": "Reset",
+    "home": "Home",
+    "products": "Products",
+    "blog": "Blog",
+    "about": "About Us",
+    "contact": "Contact"
   }
 }
