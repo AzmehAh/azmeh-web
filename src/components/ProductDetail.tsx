@@ -116,11 +116,11 @@ const ProductDetail = () => {
   const [error, setError] = useState<string | null>(null);
 
   const getLocalizedField = (enValue: any, arValue: any) => {
-    if (i18n.language === 'ar') {
-      return arValue || enValue;
-    }
-    return enValue;
-  };
+  if (i18n.language === 'ar') {
+    return (arValue && arValue.trim() !== '') ? arValue : enValue;
+  }
+  return enValue;
+};
 
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
