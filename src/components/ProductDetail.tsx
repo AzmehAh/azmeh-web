@@ -109,11 +109,12 @@ const brands = [
 
 const ProductDetail = () => { 
   const { id } = useParams<{ id: string }>();
-  const { t, i18n } = useTranslation(); // ✅ t للترجمة
+  const { t, i18n } = useTranslation();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const [translatedFilterValues, setTranslatedFilterValues] = useState<Record<string, Record<string, string>>>({});
 
   const getLocalizedField = (enValue: any, arValue: any) => {
     if (i18n.language === 'ar') {
@@ -162,6 +163,36 @@ const ProductDetail = () => {
     return hasData ? application : undefined;
   };
 
+  const translateFilterValue = (category: string, value: string): string => {
+    if (!translatedFilterValues[category]) return value;
+    return translatedFilterValues[category][value] || value;
+  };
+
+  const fetchFilterTranslations = async () => {
+    try {
+      const data = await api.getProductFilterTypes();
+      const translations: Record<string, Record<string, string>> = {};
+
+      data?.forEach(filterType => {
+        const key = filterType.name.toLowerCase();
+        filterType.product_filter_values
+          .filter(value => value.is_active)
+          .forEach(value => {
+            const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
+            translations[key] = {
+              ...translations[key],
+              [value.value]: displayValue,
+              ...(value.value_ar && { [value.value_ar]: displayValue })
+            };
+          });
+      });
+
+      setTranslatedFilterValues(translations);
+    } catch (error) {
+      console.error('Error fetching filter translations:', error);
+    }
+  };
+
   const fetchProduct = async (productId: string) => {
     try {
       setLoading(true);
@@ -199,6 +230,10 @@ const ProductDetail = () => {
         console.error('Error fetching main image:', e);
       }
 
+      const baseType = getLocalizedField(productData.type, productData.type_ar) || "";
+      const baseMaterial = getLocalizedField(productData.material, productData.material_ar) || "";
+      const baseUsage = getLocalizedField(productData.usage, productData.usage_ar) || "";
+
       const formattedProduct: Product = {
         id: productData.id,
         name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
@@ -210,17 +245,17 @@ const ProductDetail = () => {
                    productData.image_url || 
                    "/images/placeholder.jpg",
         images: imagesData.map(img => img.image_url).filter(Boolean),
-        type: getLocalizedField(productData.type, productData.type_ar) || "",
+        type: baseType,
         brand: productData.brand || "",
-        material: getLocalizedField(productData.material, productData.material_ar) || "",
-        usage: getLocalizedField(productData.usage, productData.usage_ar) || "",
+        material: baseMaterial,
+        usage: baseUsage,
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
- technical_specs: TECHNICAL_FIELDS
-  .map(({ key, keyAr }) => {
-    const value = getLocalizedField(productData[key], productData[keyAr]);
-    return { key, value: value || '', standard: '' }; 
-  })
-  .filter(spec => spec.value.trim() !== ''),
+        technical_specs: TECHNICAL_FIELDS
+          .map(({ key, keyAr }) => {
+            const value = getLocalizedField(productData[key], productData[keyAr]);
+            return { key, value: value || '', standard: '' }; 
+          })
+          .filter(spec => spec.value.trim() !== ''),
         features: parseArrayField(getLocalizedField(productData.features, productData.features_ar)),
         applications: parseArrayField(getLocalizedField(productData.applications, productData.applications_ar)),
         instructions: parseArrayField(getLocalizedField(productData.instructions, productData.instructions_ar)),
@@ -260,9 +295,26 @@ const ProductDetail = () => {
 
   useEffect(() => {
     if (id) {
+      fetchFilterTranslations();
       fetchProduct(id);
     }
   }, [id, i18n.language]);
+
+  // تحديث الحقول المترجمة بعد تحميل translatedFilterValues
+  useEffect(() => {
+    if (product && Object.keys(translatedFilterValues).length > 0) {
+      setProduct(prev => {
+        if (!prev) return null;
+        return {
+          ...prev,
+          type: translateFilterValue('type', prev.type),
+          brand: translateFilterValue('brand', prev.brand),
+          material: translateFilterValue('material', prev.material),
+          usage: translateFilterValue('usage', prev.usage),
+        };
+      });
+    }
+  }, [translatedFilterValues]);
 
   useEffect(() => {
     if (product && product.images && product.images.length > 1) {
