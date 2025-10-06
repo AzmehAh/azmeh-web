@@ -290,7 +290,13 @@
     "bulletinsAvailable": "bulletin(s) available",
     "noResults": "No bulletins found",
     "noResultsText": "Try selecting a different filter or adjusting your search",
-    "readMore": "Read More"
+    "readMore": "Read More",
+   
+    "sectionTag": "Paint Inspiration",
+    "sectionTitle": "Latest from Our Blog",
+    "viewAllButton": "View All Articles"
+  
+}
   },
   "faq": {
     "title": "Frequently Asked Questions",
