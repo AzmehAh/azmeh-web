@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from 'react-i18next';
 
 const SocialMedia = () => {
-  const { t, i18n } = useTranslation('social'); // استخدام namespace 'social'
+  const { t, i18n } = useTranslation(''); // استخدام namespace 'social'
   const isRTL = i18n.language === 'ar';
 
   const socialPosts = [
@@ -38,7 +38,7 @@ const SocialMedia = () => {
             transition={{ duration: 0.6 }}
             className="text-sm uppercase text-[#0055A3] mb-2"
           >
-            {t('inspirationTitle')}
+            {t('social.inspirationTitle')}
           </motion.h3>
           
           <motion.h2
@@ -47,7 +47,7 @@ const SocialMedia = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl font-bold text-gray-900 mb-4"
           >
-            {t('followUsTitle')}
+            {t('social.followUsTitle')}
           </motion.h2>
          
           <div className="mt-6 w-24 h-1 bg-white/50 mx-auto rounded"></div>
@@ -87,7 +87,7 @@ const SocialMedia = () => {
           >
             <Instagram className="w-5 h-5 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              {t('followInstagram')}
+              {t('social.followInstagram')}
             </span>
           </a>
 
@@ -100,7 +100,7 @@ const SocialMedia = () => {
           >
             <Facebook className="w-5 h-5 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              {t('likeFacebook')}
+              {t('social.likeFacebook')}
             </span>
           </a>
 
@@ -113,7 +113,7 @@ const SocialMedia = () => {
           >
             <MessageCircle className="w-5 h-5 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              {t('whatsappSupport')}
+              {t('social.whatsappSupport')}
             </span>
           </a>
         </div>
