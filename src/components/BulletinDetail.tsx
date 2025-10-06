@@ -216,19 +216,24 @@ const BulletinDetail = () => {
           </div>
 
           {/* Contact Section */}
-          <div className="mt-16">
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white text-center">
-              <h3 className="text-2xl font-bold mb-4">{t('bulletin.needHelpTitle')}</h3>
-              <p className="text-gray-300 mb-6 max-w-2xl mx-auto">{t('bulletin.needHelpText')}</p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-[#2C5DB6] hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
-                  {t('bulletin.contactTeam')}
-                </button>
-                <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm">
-                  {t('bulletin.downloadPdf')}
-                </button>
-              </div>
-            </div>
+        <div className="mt-16">
+  <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white text-center">
+    <h3 className="text-2xl font-bold mb-4">{t('bulletin.needHelpTitle')}</h3>
+    <p className="text-gray-300 mb-6 max-w-2xl mx-auto">{t('bulletin.needHelpText')}</p>
+    <div className="flex flex-col sm:flex-row gap-4 justify-center">
+      {/* ✅ هذا الزر سيأخذك إلى صفحة /contact */}
+      <Link
+        to="/contact"
+        className="bg-[#2C5DB6] hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center"
+      >
+        {t('bulletin.contactTeam')}
+      </Link>
+
+      <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm">
+        {t('bulletin.downloadPdf')}
+      </button>
+    </div>
+  </div>
           </div>
         </div>
       </div>
