@@ -5,60 +5,53 @@ import { supabase } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
 
 const ColorInspiration = () => {
-  const { i18n, t } = useTranslation(); // ← أضف t لاستخدام الترجمة لاحقًا
+  const { i18n } = useTranslation();
   const [hoveredColor, setHoveredColor] = useState<number | null>(null);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchFeaturedProducts = async () => {
-      setLoading(true);
-      try {
-        const { data, error } = await supabase
-          .from('products')
-          .select(`
-            id,
-            name_en,
-            name_ar,
-            status,
-            featured,
-            created_at,
-            product_images (*)
-          `)
-          .eq('status', 'active')
-          .eq('featured', true)
-          .order('created_at', { ascending: false })
-          .limit(4);
-
-        if (error) throw error;
-
-        const currentLang = i18n.language; // ← احصل على القيمة الحالية هنا
-
-        const formattedProducts = (data || []).map(product => {
-          const allImages = product.product_images || [];
-          const mainImage = allImages.find(img => img.is_main) || allImages[0];
-          const secondaryImage = allImages.find(img => !img.is_main) || allImages[1] || mainImage;
-
-          return {
-            id: product.id,
-            name: currentLang === 'ar' ? product.name_ar : product.name_en,
-            mainImage: mainImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image',
-            secondaryImage: secondaryImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image'
-          };
-        });
-
-        setFeaturedProducts(formattedProducts);
-      } catch (error) {
-        console.error('Error fetching featured products:', error);
-        setFeaturedProducts([]);
-        alert(t('colorInspiration.fetchError') || 'Failed to load featured products. Please try again later.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchFeaturedProducts();
-  }, [i18n.language, t]); // ← t مطلوب لأننا نستخدمه في alert
+  }, [i18n.language]); // ← إعادة الجلب عند تغيير اللغة
+
+  const fetchFeaturedProducts = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select(`
+          *,
+          product_images (*)
+        `)
+        .eq('status', 'active')
+        .eq('featured', true)
+        .order('created_at', { ascending: false })
+        .limit(4);
+
+      if (error) throw error;
+
+      const formattedProducts = (data || []).map(product => {
+        const allImages = product.product_images || [];
+        const mainImage = allImages.find(img => img.is_main) || allImages[0];
+        const secondaryImage = allImages.find(img => !img.is_main) || allImages[1] || mainImage;
+
+        return {
+          id: product.id,
+          // ← هنا نحدد الاسم حسب اللغة
+          name: i18n.language === 'ar' ? product.name_ar : product.name_en,
+          mainImage: mainImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image',
+          secondaryImage: secondaryImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image'
+        };
+      });
+
+      setFeaturedProducts(formattedProducts);
+    } catch (error) {
+      console.error('Error fetching featured products:', error);
+      setFeaturedProducts([]);
+      alert('Failed to load featured products. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="py-20 bg-white">
@@ -71,7 +64,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6 }}
             className="text-sm uppercase text-[#0055A3] mb-2"
           >
-            {t('colorInspiration.freshExclusive')}
+            Fresh & Exclusive
           </motion.h3>
 
           <motion.h2
@@ -80,7 +73,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl font-bold text-gray-900 mb-4"
           >
-            {t('colorInspiration.newDrops')}
+            New Drops
           </motion.h2>
         </div>
 
@@ -99,6 +92,7 @@ const ColorInspiration = () => {
                 onMouseEnter={() => setHoveredColor(index)}
                 onMouseLeave={() => setHoveredColor(null)}
               >
+                {/* الصورة الأساسية */}
                 <img
                   src={product.mainImage}
                   alt={`${product.name} main`}
@@ -106,6 +100,8 @@ const ColorInspiration = () => {
                     hoveredColor === index ? 'opacity-0' : 'opacity-100'
                   }`}
                 />
+
+                {/* الصورة الثانية */}
                 <img
                   src={product.secondaryImage}
                   alt={`${product.name} secondary`}
@@ -113,11 +109,11 @@ const ColorInspiration = () => {
                     hoveredColor === index ? 'opacity-100 scale-y-125' : 'opacity-0 scale-y-100'
                   }`}
                 />
+
+                {/* العنوان */}
                 {hoveredColor !== index && (
-                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
-                    <span className="block text-lg font-semibold whitespace-nowrap">
-                      {product.name}
-                    </span>
+                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
+                    <span className="block text-lg font-semibold">{product.name}</span>
                   </div>
                 )}
               </Link>
@@ -125,7 +121,7 @@ const ColorInspiration = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            {t('colorInspiration.noProducts') || 'No featured products available at the moment.'}
+            No featured products available at the moment.
           </div>
         )}
       </div>
@@ -134,3 +130,4 @@ const ColorInspiration = () => {
 };
 
 export default ColorInspiration;
+ 
