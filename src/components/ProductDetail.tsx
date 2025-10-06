@@ -506,13 +506,14 @@ const ProductDetail = () => {
                       </div>
                     </div>
                   )}
+                  
                 </div>
               </div>
             </div>
           </div>
         </section>
       )}
-
+</div>
       {/* Technical Specifications */}
       {product.technical_specs && product.technical_specs.length > 0 && (
         <section className="py-16 bg-white">
