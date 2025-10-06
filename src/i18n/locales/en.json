@@ -324,13 +324,17 @@
     "scheduleConsultation": "Schedule Consultation"
   },
   "footer": {
-    "about": "About",
+    "companyDescription": "Excellence in paint systems and coatings since 1955. Trusted by professionals worldwide.",
+    "copyright": "© {{year}} Al Azmeh Paints. All rights reserved.",
     "quickLinks": "Quick Links",
-    "contact": "Contact",
+    "contactInfo": "Contact Info",
     "followUs": "Follow Us",
-    "rights": "All rights reserved"
+    "stayUpdated": "Stay updated with our latest news and products",
+    "professionalSolutions": "Professional paint solutions for every application",
+    "privacyPolicy": "Privacy Policy",
+    "address":  "Damascus Syria",
+    "termsOfService": "Terms of Service"
   },
-  
   
   "services": {
     "ecoFriendly": "ECO-FRIENDLY PAINTING",
