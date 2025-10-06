@@ -159,48 +159,47 @@ const ProductForm = () => {
     }));
   };
 
- const fetchFilterOptions = async () => {
-  try {
-    const { data: filterTypes, error: typesError } = await supabase
-      .from('product_filter_types')
-      .select('*')
-      .eq('is_active', true);
-    
-    if (typesError) throw typesError;
+  // =============== Fetch Functions ===============
+  const fetchFilterOptions = async () => {
+    try {
+      const { data: filterTypes, error: typesError } = await supabase
+        .from('product_filter_types')
+        .select('*')
+        .eq('is_active', true);
+      
+      if (typesError) throw typesError;
 
-    const { data: filterValues, error: valuesError } = await supabase
-      .from('product_filter_values')
-      .select('*, filter_type_id')
-      .eq('is_active', true);
-    
-    if (valuesError) throw valuesError;
+      const { data: filterValues, error: valuesError } = await supabase
+        .from('product_filter_values')
+        .select('*, filter_type_id')
+        .eq('is_active', true);
+      
+      if (valuesError) throw valuesError;
 
-   const groupedValues = (filterTypes || []).reduce((acc: any, type: any) => {
-  acc[type.name.toLowerCase()] = (filterValues || [])
-    .filter((value: any) => value.filter_type_id === type.id)
-    .map((value: any) => ({
-      id: value.id,
-      value: value.value, // هذا ما يُخزَّن في المنتج
-      labelEn: value.display_name || value.value,
-      labelAr: value.display_name_ar || value.value,
-      // مثال: "داخلي / Interior"
-      displayLabel: `${value.display_name_ar || value.value} / ${value.display_name || value.value}`
-    }));
-  return acc;
-}, {});
+      const groupedValues = (filterTypes || []).reduce((acc: any, type: any) => {
+        acc[type.name.toLowerCase()] = (filterValues || [])
+          .filter((value: any) => value.filter_type_id === type.id)
+          .map((value: any) => ({
+            id: value.id,
+            name: value.display_name || value.value,
+            value: value.value
+          }));
+        return acc;
+      }, {});
+ 
+      setBrands(groupedValues.brand || groupedValues.brands || []);
+      setTypes(groupedValues.type || groupedValues.types || []);
+      setMaterials(groupedValues.material || groupedValues.materials || []);
+      setUsages(groupedValues.usage || groupedValues.usages || []);
+    } catch (error) {
+      console.error('Error fetching filter options:', error);
+      setBrands([]);
+      setTypes([]);
+      setMaterials([]);
+      setUsages([]);
+    }
+  };
 
- setBrands(groupedValues.brand || []);
-setTypes(groupedValues.type || []);
-setMaterials(groupedValues.material || []);
-setUsages(groupedValues.usage || []);
-  } catch (error) {
-    console.error('Error fetching filter options:', error);
-    setBrands([]);
-    setTypes([]);
-    setMaterials([]);
-    setUsages([]);
-  }
-};
   const fetchProduct = async () => {
     if (!id) return;
     try {
