@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Calendar, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
-
+import { useTranslation } from 'react-i18next';
 
 interface Bulletin {
   id: string;
@@ -14,41 +14,52 @@ interface Bulletin {
 }
 
 const BlogSection = () => {
+  const { t, i18n } = useTranslation();
   const [featuredPosts, setFeaturedPosts] = useState<Bulletin[]>([]);
+
+  // دالة لتحويل لغة الواجهة إلى كود قاعدة البيانات
+  const getLangForDB = () => {
+    return i18n.language.startsWith('ar') ? 'ar' : 'en';
+  };
 
   useEffect(() => {
     const fetchFeatured = async () => {
+      const lang = getLangForDB();
+      console.log('Fetching featured posts for lang:', lang);
+
       const { data, error } = await supabase
         .from('bulletins')
         .select('id, title, cover_image, created_at, short_description')
-        .eq('featured', true)  
-        .order('created_at', { ascending: false }) 
-        .limit(3); 
+        .eq('featured', true)
+        .eq('lang', lang)
+        .order('created_at', { ascending: false })
+        .limit(3);
 
       if (error) {
-        console.error('Error fetching featured bulletins:', error.message);
+        console.error('Error fetching bulletins:', error);
+        setFeaturedPosts([]); // تأكد من تفريغ المصفوفة عند الخطأ
       } else {
+        console.log('Loaded posts:', data);
         setFeaturedPosts(data || []);
       }
     };
 
     fetchFeatured();
-  }, []);
+  }, [i18n.language]); // يعاد التحميل عند تغيير اللغة
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', { 
-      year: 'numeric', 
-      month: 'long', 
-      day: 'numeric' 
-    });
+    const locale = i18n.language.startsWith('ar') ? 'ar-EG' : 'en-US';
+    return new Intl.DateTimeFormat(locale, {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }).format(date);
   };
 
   return (
     <section className="py-12 sm:py-16 lg:py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* Section Header */}
         <div className="text-center mb-8 sm:mb-12 lg:mb-16">
           <motion.h3
             initial={{ opacity: 0, y: 20 }}
@@ -56,7 +67,7 @@ const BlogSection = () => {
             transition={{ duration: 0.6 }}
             className="text-sm uppercase text-[#0055A3] mb-2"
           >
-            Paint Inspiration
+            {t('blog.sectionTag')}
           </motion.h3>
 
           <motion.h2
@@ -65,61 +76,53 @@ const BlogSection = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4"
           >
-            Latest from Our Blog
+            {t('blog.sectionTitle')}
           </motion.h2>
-
-         
         </div>
 
-        {/* Blog Posts Grid */}
-        
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8 sm:mb-12">
-  {featuredPosts.map((post, index) => (
-    <Link 
-      key={post.id}
-      to={`/bulletin/${post.id}`}
-      className="h-full"
-    >
-      <motion.article
-        initial={{ opacity: 0, y: 30 }} 
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: index * 0.1 }}
-        className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer flex flex-col h-full"
-      >
-        {/* Post Image */}
-        <div className="relative overflow-hidden">
-          <img
-            src={post.cover_image}
-            alt={post.title}
-            className="w-full h-48 sm:h-56 lg:h-60 object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 mb-8 sm:mb-12">
+          {featuredPosts.length > 0 ? (
+            featuredPosts.map((post, index) => (
+              <Link key={post.id} to={`/bulletin/${post.id}`} className="h-full">
+                <motion.article
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer flex flex-col h-full"
+                >
+                  <div className="relative overflow-hidden">
+                    <img
+                      src={post.cover_image}
+                      alt={post.title}
+                      className="w-full h-48 sm:h-56 lg:h-60 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  </div>
+
+                  <div className="p-4 sm:p-6 flex flex-col flex-grow">
+                    <div className="flex items-center text-sm text-gray-500 mb-3">
+                      <Calendar className="w-4 h-4 mr-2" />
+                      <span>{formatDate(post.created_at)}</span>
+                    </div>
+
+                    <h1 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 min-h-[90px] group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
+                      {post.title}
+                    </h1>
+
+                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 flex-grow">
+                      {post.short_description}
+                    </p>
+                  </div>
+                </motion.article>
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full text-center py-8 text-gray-500">
+              {t('blog.noPosts')}
+            </div>
+          )}
         </div>
 
-        {/* Post Content */}
-        <div className="p-4 sm:p-6 flex flex-col flex-grow">
-          <div className="flex items-center text-sm text-gray-500 mb-3">
-            <Calendar className="w-4 h-4 mr-2" />
-            <span>{formatDate(post.created_at)}</span>
-          </div>
-
-          <h1
-            className="text-lg sm:text-xl font-bold text-gray-900 mb-3 min-h-[90px] group-hover:text-[#2C5DB6] transition-colors line-clamp-2"
-          >
-            {post.title}
-          </h1>
-
-          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 flex-grow">
-            {post.short_description}
-          </p>
-        </div>
-      </motion.article>
-    </Link>
-  ))}
-</div>
-
-
-        {/* View All Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -130,8 +133,8 @@ const BlogSection = () => {
             to="/blog"
             className="inline-flex items-center bg-[#003399] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-[#a8a8a8] transition-colors duration-300 font-semibold text-sm sm:text-base"
           >
-            View All Articles
-            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
+            {t('blog.viewAllButton')}
+            <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 mr-2 ml-0" />
           </Link>
         </motion.div>
       </div>
@@ -140,4 +143,3 @@ const BlogSection = () => {
 };
 
 export default BlogSection;
- 
