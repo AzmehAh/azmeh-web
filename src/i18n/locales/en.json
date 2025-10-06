@@ -342,6 +342,12 @@
 
   
 },
+  
+  "brands": {
+    "trustedPartners": "Trusted Partners",
+    "featuredBrands": "Our Featured Brands"
+  
+},
   "social": {
     "inspirationTitle": "Inspiration & Ideas",
     "followUsTitle": "Follow us for inspiration",
