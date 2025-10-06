@@ -358,6 +358,22 @@
     "likeFacebook": "Like on Facebook",
     "whatsappSupport": "WhatsApp Support"
   },
+  
+  "bulletin": {
+    "home": "Home",
+    "blog": "Blog",
+    "backToBlog": "Back to Blog",
+    "notFoundTitle": "Bulletin Not Found",
+    "notFoundText": "The technical bulletin you're looking for doesn't exist.",
+    "related": "Related Technical Bulletins",
+    "suggestions": "You Might Also Like",
+    "noRelated": "No related bulletins available at this time.",
+    "needHelpTitle": "Need Technical Consultation?",
+    "needHelpText": "Our technical experts are ready to help you implement these solutions in your specific application requirements.",
+    "contactTeam": "Contact Technical Team",
+    "downloadPdf": "Download PDF Version"
+  },
+
   "common": {
     "loading": "Loading...",
     "error": "Error",
