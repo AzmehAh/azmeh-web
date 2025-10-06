@@ -2,15 +2,16 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Users } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const AboutFounderSection = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <section className="py-40 bg-[#0055A3] relative overflow-hidden text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-           {/* Combined Section */}
+        {/* Combined Section */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -30,13 +31,15 @@ const AboutFounderSection = () => {
                 <Users className="w-32 h-32 text-gray-500" />
               </div>
               <div className="mt-6 text-center">
-                <h3 className="text-2xl font-bold text-gray-50 mb-2">Ehsan Ezzat Al Azmeh</h3>
-                <p className="text-blue-200">Founder & Visionary</p>
+                <h3 className="text-2xl font-bold text-gray-50 mb-2">
+                  {t('founder.founderName')}
+                </h3>
+                <p className="text-blue-200">{t('founder.founderTitle')}</p>
                 <div className="mt-4 space-y-1 text-sm text-blue-200">
-                  <p>Born: 1918, Damascus</p>
-                  <p>Started Business: 1938</p>
-                  <p>Founded Al Azmeh Paints: 1955</p>
-                  <p>Legacy Continues: 1918 - 1998</p>
+                  <p>{t('founder.details.born')}</p>
+                  <p>{t('founder.details.started')}</p>
+                  <p>{t('founder.details.founded')}</p>
+                  <p>{t('founder.details.legacy')}</p>
                 </div>
               </div>
             </div>
@@ -50,31 +53,23 @@ const AboutFounderSection = () => {
             className="space-y-8 text-gray-100"
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Al Azmeh Paints – Excellence & Vision Since 1955
+              {t('founder.title')}
             </h2>
             <p className="leading-relaxed text-lg">
-              Ahmed Al Azmeh, born in 1918 in Damascus, Syria, began his entrepreneurial journey in 1938. 
-              In 1955, he founded Al Azmeh Paints with a clear vision: to deliver the highest quality paint systems 
-              for every application. With decades of excellence and expertise, the company quickly grew 
-              into a leading name in the paint industry.  
-              <br /><br />
-              Under Ahmed's visionary leadership until 1998, Al Azmeh Paints became synonymous with quality, 
-              innovation, and customer satisfaction. His legacy continues to guide the company today, 
-              maintaining the same commitment to excellence established nearly seven decades ago.
+              {t('founder.description')}
             </p>
 
             <div className="mt-8 grid grid-cols-2 gap-6">
               <div className="text-center">
                 <div className="text-3xl font-bold text-gray-200 mb-2">80</div>
-                <div className="text-gray-200">Years of Leadership</div>
+                <div className="text-gray-200">{t('founder.stats.leadership')}</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-gray-200 mb-2">1955</div>
-                <div className="text-gray-200">Company Founded</div>
+                <div className="text-gray-200">{t('founder.stats.founded')}</div>
               </div>
             </div>
           </motion.div>
-
         </motion.div>
       </div>
     </section>
