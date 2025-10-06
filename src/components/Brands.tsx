@@ -3,10 +3,6 @@ import { motion, useMotionValue } from "framer-motion";
 import { useTranslation } from 'react-i18next';
 
 
-const brands = () => {
-  const { t, i18n } = useTranslation();
-  const currentLang = i18n.language; 
-
 const BrandsSection = () => {
   const isRTL = false; 
 
@@ -15,6 +11,10 @@ const BrandsSection = () => {
   const lastTime = useRef(0);
   const isHovered = useRef(false);
   const isDragging = useRef(false);
+
+const brands2 = () => {
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language; 
 
   const brands = [
     { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
