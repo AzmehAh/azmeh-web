@@ -129,6 +129,7 @@ const BulletinDetail = () => {
           >
             {isRTL ? null : <ArrowLeft className="w-4 h-4 mr-2" />}
             {t('bulletin.backToBlog')}
+            <ArrowLeft className="w-4 h-4 mr-2" />
             
           </button>
 
