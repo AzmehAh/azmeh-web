@@ -13,6 +13,7 @@ const Blog = () => {
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
   const [systemCategories, setSystemCategories] = useState<Record<string, string[]>>({});
   const [bulletinCategories, setBulletinCategories] = useState<BulletinCategoryConfig[]>([]);
+  const [categoryDisplayNames, setCategoryDisplayNames] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
@@ -29,42 +30,37 @@ const Blog = () => {
         api.getBulletinCategoriesConfig()
       ]);
 
-      // ✅ اختيار الحقول حسب اللغة
-      const localizedBulletins = bulletinsData.map(b => ({
-        ...b,
-        title: isRTL ? b.title_ar || b.title : b.title,
-        short_description: isRTL ? b.short_description_ar || b.short_description : b.short_description,
-        category: isRTL ? b.category_ar || b.category : b.category,
-        subcategory: isRTL ? b.subcategory_ar || b.subcategory : b.subcategory
-      }));
-
-      setBulletins(localizedBulletins || []);
+      // ✅ الاحتفاظ بالبيانات الأصلية دون ترجمة
+      setBulletins(bulletinsData || []);
       setBulletinCategories(categoriesData || []);
 
-    const categoriesMap: Record<string, string[]> = {};
-categoriesData?.forEach(category => {
-  if (category.is_active) {
-    // اختيار الاسم حسب اللغة الحالية
-    const categoryName = isRTL
-      ? category.name_ar || category.name
-      : category.name;
+      const categoriesMap: Record<string, string[]> = {};
+      const displayNames: Record<string, string> = {};
 
-    // فلترة النشرات حسب اللغة أيضًا
-    const categoryBulletins = localizedBulletins.filter(b => b.category === categoryName);
-    const subcategories = [
-      ...new Set(
-        categoryBulletins.map(b =>
-          isRTL ? b.subcategory_ar || b.subcategory : b.subcategory
-        )
-      ),
-    ];
+      categoriesData?.forEach(category => {
+        if (category.is_active) {
+          const originalName = category.name;
+          const displayName = isRTL ? category.name_ar || category.name : category.name;
+          
+          displayNames[originalName] = displayName;
 
-    categoriesMap[categoryName] = subcategories;
-  }
-});
+          // جلب النشرات حسب الاسم الأصلي
+          const categoryBulletins = bulletinsData.filter(b => b.category === originalName);
+          const subcategories = [
+            ...new Set(
+              categoryBulletins
+                .map(b => (isRTL ? b.subcategory_ar || b.subcategory : b.subcategory))
+                .filter(Boolean)
+            ),
+          ];
 
+          categoriesMap[originalName] = subcategories;
+        }
+      });
 
       setSystemCategories(categoriesMap);
+      setCategoryDisplayNames(displayNames);
+
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -77,7 +73,7 @@ categoriesData?.forEach(category => {
       const params = new URLSearchParams(window.location.search);
       const newFilters: Record<string, string[]> = {};
       bulletinCategories.forEach(cat => {
-        const key = cat.name;
+        const key = cat.name; // ← دائمًا الاسم الأصلي
         const value = params.get(key);
         newFilters[key] = value ? value.split(',') : [];
       });
@@ -113,21 +109,26 @@ categoriesData?.forEach(category => {
   const filteredBulletins = useMemo(() => {
     let filtered = bulletins;
 
-    Object.entries(selectedFilters).forEach(([category, subcategories]) => {
+    Object.entries(selectedFilters).forEach(([originalCategory, subcategories]) => {
       if (subcategories.length > 0) {
-        filtered = filtered.filter(b => b.category === category && subcategories.includes(b.subcategory));
+        filtered = filtered.filter(b => 
+          b.category === originalCategory && 
+          subcategories.includes(isRTL ? b.subcategory_ar || b.subcategory : b.subcategory)
+        );
       }
     });
 
     if (searchTerm) {
       filtered = filtered.filter(b =>
-        b.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (b.short_description && b.short_description.toLowerCase().includes(searchTerm.toLowerCase()))
+        (isRTL ? b.title_ar || b.title : b.title).toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ((isRTL ? b.short_description_ar || b.short_description : b.short_description) || '')
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
       );
     }
 
     return filtered;
-  }, [selectedFilters, searchTerm, bulletins]);
+  }, [selectedFilters, searchTerm, bulletins, isRTL]);
 
   const handleBulletinClick = (id: string) => {
     navigate(`/bulletin/${id}`);
@@ -176,20 +177,20 @@ categoriesData?.forEach(category => {
 
               {/* Categories */}
               <div className="space-y-4">
-                {Object.entries(systemCategories).map(([category, subcategories]) => (
-                  <div key={category}>
+                {Object.entries(systemCategories).map(([originalCategoryName, subcategories]) => (
+                  <div key={originalCategoryName}>
                     <button
-                      onClick={() => setActiveCategory(activeCategory === category ? null : category)}
+                      onClick={() => setActiveCategory(activeCategory === originalCategoryName ? null : originalCategoryName)}
                       className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-[#2C5DB6] transition-colors"
                     >
-                      <span>{category}</span>
-                      <motion.span animate={{ rotate: activeCategory === category ? 180 : 0 }} className="inline-block">
+                      <span>{categoryDisplayNames[originalCategoryName] || originalCategoryName}</span>
+                      <motion.span animate={{ rotate: activeCategory === originalCategoryName ? 180 : 0 }} className="inline-block">
                         <ChevronDown className="w-4 h-4" />
                       </motion.span>
                     </button>
 
                     <AnimatePresence>
-                      {activeCategory === category && (
+                      {activeCategory === originalCategoryName && (
                         <motion.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: 'auto', opacity: 1 }}
@@ -205,8 +206,8 @@ categoriesData?.forEach(category => {
                               <div className="flex items-center space-x-2">
                                 <input
                                   type="checkbox"
-                                  checked={selectedFilters[category]?.includes(sub) || false}
-                                  onChange={() => toggleFilter(category, sub)}
+                                  checked={selectedFilters[originalCategoryName]?.includes(sub) || false}
+                                  onChange={() => toggleFilter(originalCategoryName, sub)}
                                   className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
                                 />
                                 <span className="text-sm text-gray-700">{sub}</span>
@@ -246,32 +247,44 @@ categoriesData?.forEach(category => {
                 </motion.div>
               ) : (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {filteredBulletins.map((b, idx) => (
-                    <motion.div
-                      key={b.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: idx * 0.1 }}
-                      className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
-                      onClick={() => handleBulletinClick(b.id)}
-                    >
-                      <div className="h-48 overflow-hidden">
-                        <img src={b.cover_image} alt={b.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                      </div>
-                      <div className="p-6">
-                        <span className="inline-block px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
-                          {b.subcategory}
-                        </span>
-                        <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
-                          {b.title}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">{b.short_description}</p>
-                        <button className="w-full bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium group-hover:shadow-lg">
-                          {t('blog.readMore')}
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
+                  {filteredBulletins.map((b, idx) => {
+                    const displayTitle = isRTL ? b.title_ar || b.title : b.title;
+                    const displayDesc = isRTL ? b.short_description_ar || b.short_description : b.short_description;
+                    const displaySubcategory = isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
+
+                    return (
+                      <motion.div
+                        key={b.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.1 }}
+                        className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                        onClick={() => handleBulletinClick(b.id)}
+                      >
+                        <div className="h-48 overflow-hidden">
+                          <img 
+                            src={b.cover_image} 
+                            alt={displayTitle} 
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                          />
+                        </div>
+                        <div className="p-6">
+                          <span className="inline-block px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
+                            {displaySubcategory}
+                          </span>
+                          <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
+                            {displayTitle}
+                          </h3>
+                          <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
+                            {displayDesc}
+                          </p>
+                          <button className="w-full bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium group-hover:shadow-lg">
+                            {t('blog.readMore')}
+                          </button>
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
               )}
             </AnimatePresence>
