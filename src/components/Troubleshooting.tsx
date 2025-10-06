@@ -32,7 +32,7 @@ const Troubleshooting = () => {
       if (error) throw error;
       setTroubleshootingCategories(data || []);
     } catch (error) {
-      console.error('Error fetching troubleshooting data:', error);
+      console.error('Error fetching troubleshooting data:', error); 
     } finally {
       setLoading(false);
     }
@@ -259,7 +259,7 @@ const Troubleshooting = () => {
                           )}`}
                         >
                           {getSeverityIcon(item.severity)}
-                      <span>{t(`troubleshooting.severity.${item.severity}`)} {t('troubleshooting.priority')}</span>
+                          <span>{item.severity} {t('troubleshooting.priority')}</span>
                         </span>
                       </div>
                     </div>
