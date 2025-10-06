@@ -1,40 +1,36 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Tag, FileText } from 'lucide-react';
+import { ArrowLeft, FileText } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { Bulletin } from '../lib/supabase';
 import { api } from '../lib/supabase';
+import { useTranslation } from 'react-i18next';
 
 const BulletinDetail = () => {
+  const { t, i18n } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [bulletin, setBulletin] = useState<Bulletin | null>(null);
   const [relatedBulletins, setRelatedBulletins] = useState<Bulletin[]>([]);
   const [loading, setLoading] = useState(true);
+  const isRTL = i18n.language === 'ar';
 
   useEffect(() => {
-    if (id) {
-      fetchBulletin(id);
-    }
+    if (id) fetchBulletin(id);
   }, [id]);
 
   const fetchBulletin = async (bulletinId: string) => {
     try {
       setLoading(true);
       const data = await api.getBulletin(bulletinId);
-      if (!data) {
-        setBulletin(null);
-        return;
-      }
+      if (!data) return setBulletin(null);
       setBulletin(data);
 
-      // ✅ جلب المقالات المرتبطة من العمود الجديد related_bulletin_ids
-      if (data.related_bulletin_ids && data.related_bulletin_ids.length > 0) {
+      if (data.related_bulletin_ids?.length > 0) {
         const related = await api.getBulletinsByIds(data.related_bulletin_ids);
         setRelatedBulletins(related);
       } else {
-        // ✅ إذا لم يكن هناك مقالات مرتبطة يدوياً، نستخدم الاقتراح التلقائي
         const autoRelated = await api.getRelatedBulletins(data.id, data.category, data.subcategory);
         setRelatedBulletins(autoRelated);
       }
@@ -56,144 +52,146 @@ const BulletinDetail = () => {
 
   if (!bulletin) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Bulletin Not Found</h1>
-          <p className="text-gray-600 mb-8">The technical bulletin you're looking for doesn't exist.</p>
-          <Link to="/blog" className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-            Back to Blog
-          </Link>
-        </div>
+      <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center text-center">
+        <h1 className="text-2xl font-bold text-gray-900 mb-4">{t('bulletin.notFoundTitle')}</h1>
+        <p className="text-gray-600 mb-8">{t('bulletin.notFoundText')}</p>
+        <Link
+          to="/blog"
+          className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+        >
+          {t('bulletin.backToBlog')}
+        </Link>
       </div>
     );
   }
 
+  // 🇴 تحديد الحقول حسب اللغة
+  const title = isRTL ? bulletin.title_ar || bulletin.title : bulletin.title;
+  const shortDescription = isRTL ? bulletin.short_description_ar || bulletin.shortDescription : bulletin.shortDescription;
+  const content = isRTL ? bulletin.content_ar || bulletin.content : bulletin.content;
+  const category = isRTL ? bulletin.category_ar || bulletin.category : bulletin.category;
+  const subcategory = isRTL ? bulletin.subcategory_ar || bulletin.subcategory : bulletin.subcategory;
+
   return (
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className={`min-h-screen bg-gray-50 pt-20 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center text-sm text-gray-600">
-            <Link to="/" className="hover:text-[#2C5DB6] transition-colors">Home</Link>
+          <div className={`flex items-center text-sm text-gray-600 ${isRTL ? 'flex-row-reverse space-x-reverse' : ''}`}>
+            <Link to="/" className="hover:text-[#2C5DB6] transition-colors">{t('bulletin.home')}</Link>
             <span className="mx-2">/</span>
-            <Link to="/blog" className="hover:text-[#2C5DB6] transition-colors">Blog</Link>
+            <Link to="/blog" className="hover:text-[#2C5DB6] transition-colors">{t('bulletin.blog')}</Link>
             <span className="mx-2">/</span>
-            <span className="text-gray-900">{bulletin.subcategory}</span>
+            <span className="text-gray-900">{subcategory}</span>
             <span className="mx-2">/</span>
-            <span className="text-gray-900">{bulletin.title}</span>
+            <span className="text-gray-900">{title}</span>
           </div>
         </div>
       </div>
 
-     
-      
       {/* Article Header */}
       <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-start">
           <button
             onClick={() => navigate('/blog')}
             className="inline-flex items-center text-blue-100 hover:text-white font-medium mb-6 transition-colors"
           >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Back to Blog
+            {isRTL ? null : <ArrowLeft className="w-4 h-4 mr-2" />}
+            {t('bulletin.backToBlog')}
+            {isRTL ? <ArrowLeft className="w-4 h-4 ml-2 rotate-180" /> : null}
           </button>
 
           <div className="flex items-center space-x-3 mb-4">
             <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-              {bulletin.category}
+              {category}
             </span>
             <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-              {bulletin.subcategory}
+              {subcategory}
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            {bulletin.title}
-          </h1>
-
-          <p className="text-xl text-blue-100 leading-relaxed">
-            {bulletin.shortDescription}
-          </p>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">{title}</h1>
+          <p className="text-xl text-blue-100 leading-relaxed">{shortDescription}</p>
         </div>
       </div>
 
       {/* Article Content */}
       <div className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <article className=" max-w-none">
+          <article className="max-w-none">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
               dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(bulletin.content)
+                __html: DOMPurify.sanitize(content)
               }}
             />
-          </article> 
+          </article>
 
-         {/* Related Articles */}
-      <div className="mt-16 pt-8 border-t border-gray-200">
-        <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-          <FileText className="w-6 h-6 text-[#2C5DB6] mr-3" />
-          {bulletin?.related_bulletin_ids?.length > 0 ? 
-            'Related Technical Bulletins' : 
-            'You Might Also Like'
-          }
-        </h3>
-            
-        {relatedBulletins.length > 0 ? (
-          <div className="grid md:grid-cols-2 gap-6">
-            {relatedBulletins.map((relatedBulletin) => (
-              <div
-                key={relatedBulletin.id}
-                onClick={() => navigate(`/bulletin/${relatedBulletin.id}`)}
-                className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
-              >
-                <div className="h-32 overflow-hidden">
-                  <img
-                    src={relatedBulletin.cover_image || '/placeholder-image.jpg'}
-                    alt={relatedBulletin.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
-                    }}
-                  />
-                </div>
-                <div className="p-4">
-                  <span className="inline-block px-2 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
-                    {relatedBulletin.subcategory}
-                  </span>
-                  <h4 className="text-lg font-semibold text-gray-900 group-hover:text-[#2C5DB6] transition-colors mb-2 line-clamp-2">
-                    {relatedBulletin.title}
-                  </h4>
-                  <p className="text-gray-600 text-sm line-clamp-2">
-                    {relatedBulletin.short_description}
-                  </p>
-                </div>
+          {/* Related Articles */}
+          <div className="mt-16 pt-8 border-t border-gray-200">
+            <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
+              <FileText className="w-6 h-6 text-[#2C5DB6] mr-3" />
+              {bulletin?.related_bulletin_ids?.length > 0
+                ? t('bulletin.related')
+                : t('bulletin.suggestions')}
+            </h3>
+
+            {relatedBulletins.length > 0 ? (
+              <div className="grid md:grid-cols-2 gap-6">
+                {relatedBulletins.map((related) => {
+                  const relTitle = isRTL ? related.title_ar || related.title : related.title;
+                  const relShort = isRTL ? related.short_description_ar || related.short_description : related.short_description;
+                  const relSub = isRTL ? related.subcategory_ar || related.subcategory : related.subcategory;
+                  return (
+                    <div
+                      key={related.id}
+                      onClick={() => navigate(`/bulletin/${related.id}`)}
+                      className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                    >
+                      <div className="h-32 overflow-hidden">
+                        <img
+                          src={related.cover_image || '/placeholder-image.jpg'}
+                          alt={relTitle}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/placeholder-image.jpg';
+                          }}
+                        />
+                      </div>
+                      <div className="p-4">
+                        <span className="inline-block px-2 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
+                          {relSub}
+                        </span>
+                        <h4 className="text-lg font-semibold text-gray-900 group-hover:text-[#2C5DB6] transition-colors mb-2 line-clamp-2">
+                          {relTitle}
+                        </h4>
+                        <p className="text-gray-600 text-sm line-clamp-2">{relShort}</p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            ))}
+            ) : (
+              <p className="text-gray-500 text-center py-8 italic">
+                {t('bulletin.noRelated')}
+              </p>
+            )}
           </div>
-        ) : (
-          <p className="text-gray-500 text-center py-8 italic">No related bulletins available at this time.</p>
-        )}
-      </div>
 
           {/* Contact Section */}
           <div className="mt-16">
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white">
-              <div className="text-center">
-                <h3 className="text-2xl font-bold mb-4">Need Technical Consultation?</h3>
-                <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-                  Our technical experts are ready to help you implement these solutions in your specific application requirements.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <button className="bg-[#2C5DB6] hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
-                    Contact Technical Team
-                  </button>
-                  <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm">
-                    Download PDF Version
-                  </button>
-                </div>
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white text-center">
+              <h3 className="text-2xl font-bold mb-4">{t('bulletin.needHelpTitle')}</h3>
+              <p className="text-gray-300 mb-6 max-w-2xl mx-auto">{t('bulletin.needHelpText')}</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button className="bg-[#2C5DB6] hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                  {t('bulletin.contactTeam')}
+                </button>
+                <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm">
+                  {t('bulletin.downloadPdf')}
+                </button>
               </div>
             </div>
           </div>
