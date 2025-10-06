@@ -342,6 +342,13 @@
 
   
 },
+  "social": {
+    "inspirationTitle": "Inspiration & Ideas",
+    "followUsTitle": "Follow us for inspiration",
+    "followInstagram": "Follow on Instagram",
+    "likeFacebook": "Like on Facebook",
+    "whatsappSupport": "WhatsApp Support"
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
