@@ -13,34 +13,54 @@ const BulletinDetail = () => {
   const navigate = useNavigate();
   const [bulletin, setBulletin] = useState<Bulletin | null>(null);
   const [relatedBulletins, setRelatedBulletins] = useState<Bulletin[]>([]);
+  const [categoryConfigs, setCategoryConfigs] = useState<Record<string, { name: string; name_ar: string }>>({});
   const [loading, setLoading] = useState(true);
   const isRTL = i18n.language === 'ar';
 
   useEffect(() => {
-    if (id) fetchBulletin(id);
-  }, [id]);
+    const fetchData = async () => {
+      if (!id) return;
 
-  const fetchBulletin = async (bulletinId: string) => {
-    try {
-      setLoading(true);
-      const data = await api.getBulletin(bulletinId);
-      if (!data) return setBulletin(null);
-      setBulletin(data);
+      try {
+        setLoading(true);
 
-      if (data.related_bulletin_ids?.length > 0) {
-        const related = await api.getBulletinsByIds(data.related_bulletin_ids);
-        setRelatedBulletins(related);
-      } else {
-        const autoRelated = await api.getRelatedBulletins(data.id, data.category, data.subcategory);
-        setRelatedBulletins(autoRelated);
+        // 1. جلب النشرة
+        const bulletinData = await api.getBulletin(id);
+        if (!bulletinData) {
+          setBulletin(null);
+          return;
+        }
+        setBulletin(bulletinData);
+
+        // 2. جلب تكوين التصنيفات
+        const categoriesConfig = await api.getBulletinCategoriesConfig();
+        const configMap: Record<string, { name: string; name_ar: string }> = {};
+        categoriesConfig.forEach(cat => {
+          configMap[cat.name] = { 
+            name: cat.name, 
+            name_ar: cat.name_ar || cat.name 
+          };
+        });
+        setCategoryConfigs(configMap);
+
+        // 3. جلب النشرات المرتبطة
+        if (bulletinData.related_bulletin_ids?.length > 0) {
+          const related = await api.getBulletinsByIds(bulletinData.related_bulletin_ids);
+          setRelatedBulletins(related);
+        } else {
+          const autoRelated = await api.getRelatedBulletins(bulletinData.id, bulletinData.category, bulletinData.subcategory);
+          setRelatedBulletins(autoRelated);
+        }
+      } catch (error) {
+        console.error('Error fetching bulletin:', error);
+        setBulletin(null);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error('Error fetching bulletin:', error);
-      setBulletin(null);
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
+
+    fetchData();
+  }, [id]);
 
   if (loading) {
     return (
@@ -67,10 +87,19 @@ const BulletinDetail = () => {
 
   // 🇴 تحديد الحقول حسب اللغة
   const title = isRTL ? bulletin.title_ar || bulletin.title : bulletin.title;
-  const shortDescription = isRTL ? bulletin.short_description_ar || bulletin.shortDescription : bulletin.shortDescription;
+  const shortDescription = isRTL ? bulletin.short_description_ar || bulletin.short_description : bulletin.short_description;
   const content = isRTL ? bulletin.content_ar || bulletin.content : bulletin.content;
-  const category = isRTL ? bulletin.category_ar || bulletin.category : bulletin.category;
-  const subcategory = isRTL ? bulletin.subcategory_ar || bulletin.subcategory : bulletin.subcategory;
+
+  // ✅ حساب اسم التصنيف المعروض (باستخدام التكوين)
+  const categoryName = bulletin.category;
+  const categoryDisplayName = isRTL
+    ? (categoryConfigs[categoryName]?.name_ar || categoryName)
+    : categoryName;
+
+  // ✅ حساب اسم التصنيف الفرعي المعروض
+  const subcategory = isRTL 
+    ? bulletin.subcategory_ar || bulletin.subcategory 
+    : bulletin.subcategory;
 
   return (
     <div className={`min-h-screen bg-gray-50 pt-20 ${isRTL ? 'rtl' : 'ltr'}`}>
@@ -81,6 +110,8 @@ const BulletinDetail = () => {
             <Link to="/" className="hover:text-[#2C5DB6] transition-colors">{t('bulletin.home')}</Link>
             <span className="mx-2">/</span>
             <Link to="/blog" className="hover:text-[#2C5DB6] transition-colors">{t('bulletin.blog')}</Link>
+            <span className="mx-2">/</span>
+            <span className="text-gray-900">{categoryDisplayName}</span> {/* ✅ هنا تم التعديل */}
             <span className="mx-2">/</span>
             <span className="text-gray-900">{subcategory}</span>
             <span className="mx-2">/</span>
@@ -103,7 +134,7 @@ const BulletinDetail = () => {
 
           <div className="flex items-center space-x-3 mb-4">
             <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-              {category}
+              {categoryDisplayName} {/* ✅ هنا تم التعديل */}
             </span>
             <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
               {subcategory}
@@ -144,6 +175,10 @@ const BulletinDetail = () => {
                   const relTitle = isRTL ? related.title_ar || related.title : related.title;
                   const relShort = isRTL ? related.short_description_ar || related.short_description : related.short_description;
                   const relSub = isRTL ? related.subcategory_ar || related.subcategory : related.subcategory;
+                  const relCategory = isRTL
+                    ? (categoryConfigs[related.category]?.name_ar || related.category)
+                    : related.category;
+
                   return (
                     <div
                       key={related.id}
