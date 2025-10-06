@@ -4,7 +4,10 @@ import { useTranslation } from 'react-i18next';
 
 
 const BrandsSection = () => {
-  const isRTL = false; 
+  const { t, i18n } = useTranslation('brands'); // استخدم namespace 'brands'
+  const currentLang = i18n.language;
+  const isRTL = currentLang === 'ar';
+
 
   const animationRef = useRef<number>();
   const x = useMotionValue(0);
@@ -12,9 +15,7 @@ const BrandsSection = () => {
   const isHovered = useRef(false);
   const isDragging = useRef(false);
 
-const brands2 = () => {
-  const { t, i18n } = useTranslation();
-  const currentLang = i18n.language; 
+
 
   const brands = [
     { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
