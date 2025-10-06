@@ -369,13 +369,13 @@ const ProductFiltersManager = () => {
                           <div key={value.id} className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
                             <div>
                               <h4 className="font-semibold text-gray-900">
-                                {value.display_name || value.value}
-                                {(value.display_name_ar || value.value_ar) && (
-                                  <span className="block text-gray-700 text-sm" dir="rtl">
-                                    {value.display_name_ar || value.value_ar}
-                                  </span>
-                                )}
-                              </h4>
+  {(() => {
+    const en = value.display_name || value.value;
+    const ar = value.display_name_ar || value.value_ar;
+    if (ar && en) return `${ar} / ${en}`;
+    return ar || en || '—';
+  })()}
+</h4>
                               {value.display_name && value.display_name !== value.value && (
                                 <p className="text-xs text-gray-500">{value.value}</p>
                               )}
@@ -803,7 +803,11 @@ const FilterValueModal = ({
               >
                 <option value="">Select a filter type</option>
                 {filterTypes.map(type => (
-                  <option key={type.id} value={type.id}>{type.name}{type.name_ar && ` / ${type.name_ar}`}</option>
+                <option key={type.id} value={type.id}>
+  {type.name_ar && type.name 
+    ? `${type.name_ar} / ${type.name}`
+    : type.name_ar || type.name || 'Unnamed'}
+</option>
                 ))}
               </select>
             </div>
