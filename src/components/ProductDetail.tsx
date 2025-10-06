@@ -114,6 +114,28 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const fetchFilterTranslations = async () => {
+  try {
+    const data = await api.getProductFilterTypes();
+    const map: FilterValueMap = {};
+    data?.forEach(filterType => {
+      const key = filterType.name.toLowerCase();
+      map[key] = {};
+      filterType.product_filter_values
+        .filter(v => v.is_active)
+        .forEach(value => {
+          // ربط القيمة الأصلية (value) بالنص المعروض (باللغة الحالية)
+          const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
+          map[key][value.value] = displayValue;
+        });
+    });
+    setFilterValueMap(map);
+  } catch (error) {
+    console.error('Error fetching filter translations:', error);
+  } finally {
+    setFiltersLoading(false);
+  }
+};
 
   const getLocalizedField = (enValue: any, arValue: any) => {
     if (i18n.language === 'ar') {
@@ -121,7 +143,41 @@ const ProductDetail = () => {
     }
     return enValue;
   };
+// أضف هذا النوع إذا لم يكن موجودًا
+type FilterValueMap = Record<string, Record<string, string>>;
 
+// دالة لترجمة قيمة فلتر بناءً على الفئة والقيمة الأصلية
+const translateFilterValue = (
+  category: string,
+  value: string,
+  filterValueMap: FilterValueMap
+): string => {
+  if (!filterValueMap[category]) return value;
+  return filterValueMap[category][value] || value;
+}; const fetchFilterTranslations = async () => {
+  try {
+    const data = await api.getProductFilterTypes();
+    const map: FilterValueMap = {};
+    data?.forEach(filterType => {
+      const key = filterType.name.toLowerCase();
+      map[key] = {};
+      filterType.product_filter_values
+        .filter(v => v.is_active)
+        .forEach(value => {
+          // ربط القيمة الأصلية (value) بالنص المعروض (باللغة الحالية)
+          const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
+          map[key][value.value] = displayValue;
+        });
+    });
+    setFilterValueMap(map);
+  } catch (error) {
+    console.error('Error fetching filter translations:', error);
+  } finally {
+    setFiltersLoading(false);
+  }
+}; useEffect(() => {
+  fetchFilterTranslations();
+}, [i18n.language]);
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
     if (typeof field === 'string') {
@@ -210,10 +266,12 @@ const ProductDetail = () => {
                    productData.image_url || 
                    "/images/placeholder.jpg",
         images: imagesData.map(img => img.image_url).filter(Boolean),
-        type: getLocalizedField(productData.type, productData.type_ar) || "",
+        
         brand: productData.brand || "",
-        material: getLocalizedField(productData.material, productData.material_ar) || "",
-        usage: getLocalizedField(productData.usage, productData.usage_ar) || "",
+        // سنستخدم القيم الأصلية (بدون _ar) لأننا سنترجمها لاحقًا عند العرض
+type: productData.type || "",
+material: productData.material || "",
+usage: productData.usage || "",
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
  technical_specs: TECHNICAL_FIELDS
   .map(({ key, keyAr }) => {
@@ -344,21 +402,21 @@ const ProductDetail = () => {
               <p className="text-xl text-blue-100 mb-4 leading-relaxed">{product.description}</p>
 
              <div className="flex flex-wrap gap-4 mb-8">
-  {product.type && (
-    <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-      {product.type}
-    </span>
-  )}
-  {product.material && (
-    <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-      {product.material}
-    </span>
-  )}
-  {product.usage && (
-    <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-      {product.usage}
-    </span> 
-  )}
+{product.type && (
+  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+    {translateFilterValue('type', product.type, filterValueMap)}
+  </span>
+)}
+{product.material && (
+  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+    {translateFilterValue('material', product.material, filterValueMap)}
+  </span>
+)}
+{product.usage && (
+  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+    {translateFilterValue('usage', product.usage, filterValueMap)}
+  </span>
+)}
 </div>
   
               {product.technical_description && (
