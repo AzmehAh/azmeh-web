@@ -59,7 +59,6 @@ interface Product {
     recommended_uses?: string[];
   };
 }
-const getLocalized = (ar, en) => (i18n.language === 'ar' ? ar : en);
 
 const TECHNICAL_FIELDS = [
   { key: 'component_a', label: 'Component A', keyAr: 'component_a_ar' },
@@ -345,12 +344,7 @@ const ProductDetail = () => {
               <p className="text-xl text-blue-100 mb-4 leading-relaxed">{product.description}</p>
 
               <div className="flex flex-wrap gap-4 mb-8">
-                {product.type && (
-  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-    {getLocalizedField(product.type, product.type_ar)}
-  </span>
-)}
-      
+                {product.type && <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.type}</span>}
                 {product.material && <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.material}</span>}
                 {product.usage && <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.usage}</span>}
               </div>
