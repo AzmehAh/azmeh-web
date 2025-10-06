@@ -341,7 +341,11 @@
 
   
 },
- 
+  
+ "brands": {
+  "trustedPartners": "Trusted Partners",
+  "featuredBrands": "Our Featured Brands"
+},
   "common": {
     "loading": "Loading...",
     "error": "Error",
