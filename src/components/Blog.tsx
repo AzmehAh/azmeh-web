@@ -11,7 +11,16 @@ const Blog = () => {
   const navigate = useNavigate();
 
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
-  const [systemCategories, setSystemCategories] = useState<Record<string, string[]>>({});
+  const [systemCategories, setSystemCategories] = useState<
+    Record<
+      string,
+      {
+        name_en: string;
+        name_ar?: string;
+        subs: { en: string; ar?: string }[];
+      }
+    >
+  >({});
   const [bulletinCategories, setBulletinCategories] = useState<BulletinCategoryConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -26,34 +35,45 @@ const Blog = () => {
     try {
       const [bulletinsData, categoriesData] = await Promise.all([
         api.getBulletins(),
-        api.getBulletinCategoriesConfig()
+        api.getBulletinCategoriesConfig(),
       ]);
 
-      // ✅ لا نترجم هنا — نستخدم الحقول مباشرة حسب اللغة لاحقًا
       setBulletins(bulletinsData || []);
       setBulletinCategories(categoriesData || []);
 
-      // بناء التصنيفات حسب اللغة الحالية
-      const categoriesMap: Record<string, string[]> = {};
+      // 🟦 بناء نظام التصنيفات بلغتين
+      const categoriesMap: Record<
+        string,
+        {
+          name_en: string;
+          name_ar?: string;
+          subs: { en: string; ar?: string }[];
+        }
+      > = {};
 
-      // تحديد الحقول المستخدمة حسب اللغة
-      const getCategoryField = (b: Bulletin) => isRTL ? b.category_ar || b.category : b.category;
-      const getSubcategoryField = (b: Bulletin) => isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
-      const getCategoryName = (cat: BulletinCategoryConfig) => isRTL ? cat.name_ar || cat.name : cat.name;
+      bulletinsData.forEach((b) => {
+        const cat_en = b.category;
+        const cat_ar = b.category_ar || b.category;
+        const sub_en = b.subcategory;
+        const sub_ar = b.subcategory_ar || b.subcategory;
 
-      // جلب جميع أسماء التصنيفات الفعلية من النشرات (ليس من التكوين فقط)
-      const allCategories = [...new Set(bulletinsData.map(getCategoryField).filter(Boolean))];
+        if (!cat_en) return;
 
-      allCategories.forEach(catName => {
-        const categoryBulletins = bulletinsData.filter(b => getCategoryField(b) === catName);
-        const subcategories = [
-          ...new Set(categoryBulletins.map(getSubcategoryField).filter(Boolean))
-        ];
-        categoriesMap[catName] = subcategories;
+        if (!categoriesMap[cat_en]) {
+          categoriesMap[cat_en] = {
+            name_en: cat_en,
+            name_ar: cat_ar,
+            subs: [],
+          };
+        }
+
+        // أضف التصنيف الفرعي إذا لم يكن موجود مسبقاً
+        if (sub_en && !categoriesMap[cat_en].subs.some((s) => s.en === sub_en)) {
+          categoriesMap[cat_en].subs.push({ en: sub_en, ar: sub_ar });
+        }
       });
 
       setSystemCategories(categoriesMap);
-
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -65,22 +85,22 @@ const Blog = () => {
     if (!loading) {
       const params = new URLSearchParams(window.location.search);
       const newFilters: Record<string, string[]> = {};
-      Object.keys(systemCategories).forEach(catName => {
-        const value = params.get(catName);
-        newFilters[catName] = value ? value.split(',') : [];
+      Object.keys(systemCategories).forEach((catKey) => {
+        const value = params.get(catKey);
+        newFilters[catKey] = value ? value.split(',') : [];
       });
       setSelectedFilters(newFilters);
     }
   }, [loading, systemCategories]);
 
-  const toggleFilter = (category: string, subcategory: string) => {
-    setSelectedFilters(prev => {
-      const prevCategory = prev[category] || [];
-      const updatedCategory = prevCategory.includes(subcategory)
-        ? prevCategory.filter(item => item !== subcategory)
-        : [...prevCategory, subcategory];
+  const toggleFilter = (categoryKey: string, sub_en: string) => {
+    setSelectedFilters((prev) => {
+      const prevCategory = prev[categoryKey] || [];
+      const updatedCategory = prevCategory.includes(sub_en)
+        ? prevCategory.filter((item) => item !== sub_en)
+        : [...prevCategory, sub_en];
 
-      const newFilters = { ...prev, [category]: updatedCategory };
+      const newFilters = { ...prev, [categoryKey]: updatedCategory };
 
       const params = new URLSearchParams();
       Object.entries(newFilters).forEach(([cat, subs]) => {
@@ -101,26 +121,25 @@ const Blog = () => {
   const filteredBulletins = useMemo(() => {
     let filtered = bulletins;
 
-    // تحديد الحقول حسب اللغة
-    const getCategoryField = (b: Bulletin) => isRTL ? b.category_ar || b.category : b.category;
-    const getSubcategoryField = (b: Bulletin) => isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
-    const getTitleField = (b: Bulletin) => isRTL ? b.title_ar || b.title : b.title;
-    const getDescField = (b: Bulletin) => isRTL ? b.short_description_ar || b.short_description : b.short_description;
-
-    Object.entries(selectedFilters).forEach(([category, subcategories]) => {
-      if (subcategories.length > 0) {
-        filtered = filtered.filter(b => 
-          getCategoryField(b) === category && 
-          subcategories.includes(getSubcategoryField(b))
+    Object.entries(selectedFilters).forEach(([catKey, subs]) => {
+      if (subs.length > 0) {
+        filtered = filtered.filter(
+          (b) => b.category === catKey && subs.includes(b.subcategory)
         );
       }
     });
 
     if (searchTerm) {
-      filtered = filtered.filter(b =>
-        getTitleField(b).toLowerCase().includes(searchTerm.toLowerCase()) ||
-        getDescField(b)?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
+      filtered = filtered.filter((b) => {
+        const title = isRTL ? b.title_ar || b.title : b.title;
+        const desc = isRTL
+          ? b.short_description_ar || b.short_description
+          : b.short_description;
+        return (
+          title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          desc?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+      });
     }
 
     return filtered;
@@ -151,7 +170,10 @@ const Blog = () => {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">{t('blog.categoriesTitle')}</h3>
                 {Object.values(selectedFilters).flat().length > 0 && (
-                  <button onClick={clearFilters} className="text-sm text-[#2C5DB6] hover:text-blue-700 font-medium">
+                  <button
+                    onClick={clearFilters}
+                    className="text-sm text-[#2C5DB6] hover:text-blue-700 font-medium"
+                  >
                     {t('blog.clearAll')}
                   </button>
                 )}
@@ -160,61 +182,75 @@ const Blog = () => {
               {/* Search */}
               <div className="mb-6">
                 <div className="relative">
-                  <Search className={`${isRTL ? 'right-3' : 'left-3'} top-3 absolute w-5 h-5 text-gray-400`} />
+                  <Search
+                    className={`${isRTL ? 'right-3' : 'left-3'} top-3 absolute w-5 h-5 text-gray-400`}
+                  />
                   <input
                     type="text"
                     placeholder={t('blog.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] transition-colors`}
+                    className={`w-full ${
+                      isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
+                    } py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] transition-colors`}
                   />
                 </div>
               </div>
 
               {/* Categories */}
               <div className="space-y-4">
-                {Object.entries(systemCategories).map(([category, subcategories]) => (
-                  <div key={category}>
-                    <button
-                      onClick={() => setActiveCategory(activeCategory === category ? null : category)}
-                      className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-[#2C5DB6] transition-colors"
-                    >
-                      <span>{category}</span> {/* ← هذا الاسم باللغة الحالية (عربي أو إنجليزي) */}
-                      <motion.span animate={{ rotate: activeCategory === category ? 180 : 0 }} className="inline-block">
-                        <ChevronDown className="w-4 h-4" />
-                      </motion.span>
-                    </button>
+                {Object.entries(systemCategories).map(([key, cat]) => {
+                  const displayCatName = isRTL ? cat.name_ar : cat.name_en;
 
-                    <AnimatePresence>
-                      {activeCategory === category && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden space-y-2"
+                  return (
+                    <div key={key}>
+                      <button
+                        onClick={() => setActiveCategory(activeCategory === key ? null : key)}
+                        className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-[#2C5DB6] transition-colors"
+                      >
+                        <span>{displayCatName}</span>
+                        <motion.span
+                          animate={{ rotate: activeCategory === key ? 180 : 0 }}
+                          className="inline-block"
                         >
-                          {subcategories.map(sub => (
-                            <label
-                              key={sub}
-                              className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
-                            >
-                              <div className="flex items-center space-x-2">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedFilters[category]?.includes(sub) || false}
-                                  onChange={() => toggleFilter(category, sub)}
-                                  className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
-                                />
-                                <span className="text-sm text-gray-700">{sub}</span>
-                              </div>
-                            </label>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ))}
+                          <ChevronDown className="w-4 h-4" />
+                        </motion.span>
+                      </button>
+
+                      <AnimatePresence>
+                        {activeCategory === key && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden space-y-2"
+                          >
+                            {cat.subs.map((sub) => {
+                              const displaySub = isRTL ? sub.ar : sub.en;
+                              return (
+                                <label
+                                  key={sub.en}
+                                  className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
+                                >
+                                  <div className="flex items-center space-x-2">
+                                    <input
+                                      type="checkbox"
+                                      checked={selectedFilters[key]?.includes(sub.en) || false}
+                                      onChange={() => toggleFilter(key, sub.en)}
+                                      className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
+                                    />
+                                    <span className="text-sm text-gray-700">{displaySub}</span>
+                                  </div>
+                                </label>
+                              );
+                            })}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -234,19 +270,33 @@ const Blog = () => {
 
             <AnimatePresence mode="wait">
               {filteredBulletins.length === 0 ? (
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-center py-16"
+                >
                   <div className="text-gray-400 mb-4">
                     <Search className="w-16 h-16 mx-auto" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('blog.noResults')}</h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    {t('blog.noResults')}
+                  </h3>
                   <p className="text-gray-600">{t('blog.noResultsText')}</p>
                 </motion.div>
               ) : (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+                >
                   {filteredBulletins.map((b, idx) => {
                     const displayTitle = isRTL ? b.title_ar || b.title : b.title;
-                    const displayDesc = isRTL ? b.short_description_ar || b.short_description : b.short_description;
-                    const displaySubcategory = isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
+                    const displayDesc = isRTL
+                      ? b.short_description_ar || b.short_description
+                      : b.short_description;
+                    const displaySubcategory = isRTL
+                      ? b.subcategory_ar || b.subcategory
+                      : b.subcategory;
 
                     return (
                       <motion.div
@@ -258,10 +308,10 @@ const Blog = () => {
                         onClick={() => handleBulletinClick(b.id)}
                       >
                         <div className="h-48 overflow-hidden">
-                          <img 
-                            src={b.cover_image} 
-                            alt={displayTitle} 
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                          <img
+                            src={b.cover_image}
+                            alt={displayTitle}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                           />
                         </div>
                         <div className="p-6">
