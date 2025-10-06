@@ -333,11 +333,9 @@
     "needSupport": "Need Additional Technical Support?",
     "supportDescription": "Our technical experts are available to help you resolve complex coating issues.",
     "contactSupport": "Contact Technical Support",
-    "severity": {
       "High": "High",
       "Medium": "Medium",
-      "Low": "Low"
-    }
+      "Low": "Low",
   
     "scheduleConsultation": "Schedule Consultation"
   },
