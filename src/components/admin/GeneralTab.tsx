@@ -98,18 +98,18 @@ export const GeneralTab: React.FC<Props> = ({
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">Brand / الفرع *</label>
-          <select
-            value={data.brand || ''}
-            onChange={(e) => onChange('brand', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          >
-            <option value="">Select / اختار</option>
-            {brands.map((b) => (
-              <option key={b.id} value={b.value}>
-                {b.display_name || b.value}
-              </option>
-            ))}
-          </select>
+        <select
+  value={data.brand || ''}
+  onChange={(e) => onChange('brand', e.target.value)}
+  className="w-full px-3 py-2 border rounded"
+>
+  <option value="">Select Brand</option>
+  {brands.map(brand => (
+    <option key={brand.id} value={brand.value}>
+      {brand.name} {/* ← هذا سيعرض "عربي / إنجليزي" */}
+    </option>
+  ))}
+</select>
         </div>
 
         <div>
