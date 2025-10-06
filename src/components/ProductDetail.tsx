@@ -833,16 +833,11 @@ const ProductDetail = () => {
       {product.safety_note && (
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto text-center mb-10">
-              <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center">
-                <Shield className="w-8 h-8 text-red-500 mr-3" />
-                {t('products.safety_note')}
-              </h2>
-            </div>
+            
             <div className="max-w-6xl mx-auto">
-              <div className="bg-gray-50 rounded-2xl p-8">
+              <div className=" rounded-2xl p-8">
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {product.safety_note}
+                  Note: {product.safety_note}
                 </p>
               </div>
             </div>
