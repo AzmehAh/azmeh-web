@@ -6,7 +6,10 @@ import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
 import { useTranslation } from "react-i18next";
 
-// تعريف واجهة المنتج - كما هي
+// تعريف النوع خارج المكون
+type FilterValueMap = Record<string, Record<string, string>>;
+
+// تعريف واجهة المنتج
 interface Product {
   id: string;
   name: string;
@@ -109,33 +112,48 @@ const brands = [
 
 const ProductDetail = () => { 
   const { id } = useParams<{ id: string }>();
-  const { t, i18n } = useTranslation(); // ✅ t للترجمة
+  const { t, i18n } = useTranslation();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  
+  // حالات جديدة لترجمة الفلاتر
+  const [filterValueMap, setFilterValueMap] = useState<FilterValueMap>({});
+  const [filtersLoading, setFiltersLoading] = useState(true);
+
+  // دالة ترجمة قيمة الفلتر
+  const translateFilterValue = (
+    category: string,
+    value: string,
+    map: FilterValueMap
+  ): string => {
+    if (!map[category]) return value;
+    return map[category][value] || value;
+  };
+
+  // جلب ترجمات الفلاتر
   const fetchFilterTranslations = async () => {
-  try {
-    const data = await api.getProductFilterTypes();
-    const map: FilterValueMap = {};
-    data?.forEach(filterType => {
-      const key = filterType.name.toLowerCase();
-      map[key] = {};
-      filterType.product_filter_values
-        .filter(v => v.is_active)
-        .forEach(value => {
-          // ربط القيمة الأصلية (value) بالنص المعروض (باللغة الحالية)
-          const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
-          map[key][value.value] = displayValue;
-        });
-    });
-    setFilterValueMap(map);
-  } catch (error) {
-    console.error('Error fetching filter translations:', error);
-  } finally {
-    setFiltersLoading(false);
-  }
-};
+    try {
+      const data = await api.getProductFilterTypes();
+      const map: FilterValueMap = {};
+      data?.forEach(filterType => {
+        const key = filterType.name.toLowerCase();
+        map[key] = {};
+        filterType.product_filter_values
+          .filter(v => v.is_active)
+          .forEach(value => {
+            const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
+            map[key][value.value] = displayValue;
+          });
+      });
+      setFilterValueMap(map);
+    } catch (error) {
+      console.error('Error fetching filter translations:', error);
+    } finally {
+      setFiltersLoading(false);
+    }
+  };
 
   const getLocalizedField = (enValue: any, arValue: any) => {
     if (i18n.language === 'ar') {
@@ -143,41 +161,7 @@ const ProductDetail = () => {
     }
     return enValue;
   };
-// أضف هذا النوع إذا لم يكن موجودًا
-type FilterValueMap = Record<string, Record<string, string>>;
 
-// دالة لترجمة قيمة فلتر بناءً على الفئة والقيمة الأصلية
-const translateFilterValue = (
-  category: string,
-  value: string,
-  filterValueMap: FilterValueMap
-): string => {
-  if (!filterValueMap[category]) return value;
-  return filterValueMap[category][value] || value;
-}; const fetchFilterTranslations = async () => {
-  try {
-    const data = await api.getProductFilterTypes();
-    const map: FilterValueMap = {};
-    data?.forEach(filterType => {
-      const key = filterType.name.toLowerCase();
-      map[key] = {};
-      filterType.product_filter_values
-        .filter(v => v.is_active)
-        .forEach(value => {
-          // ربط القيمة الأصلية (value) بالنص المعروض (باللغة الحالية)
-          const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
-          map[key][value.value] = displayValue;
-        });
-    });
-    setFilterValueMap(map);
-  } catch (error) {
-    console.error('Error fetching filter translations:', error);
-  } finally {
-    setFiltersLoading(false);
-  }
-}; useEffect(() => {
-  fetchFilterTranslations();
-}, [i18n.language]);
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
     if (typeof field === 'string') {
@@ -266,19 +250,17 @@ const translateFilterValue = (
                    productData.image_url || 
                    "/images/placeholder.jpg",
         images: imagesData.map(img => img.image_url).filter(Boolean),
-        
+        type: productData.type || "",
         brand: productData.brand || "",
-        // سنستخدم القيم الأصلية (بدون _ar) لأننا سنترجمها لاحقًا عند العرض
-type: productData.type || "",
-material: productData.material || "",
-usage: productData.usage || "",
+        material: productData.material || "",
+        usage: productData.usage || "",
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
- technical_specs: TECHNICAL_FIELDS
-  .map(({ key, keyAr }) => {
-    const value = getLocalizedField(productData[key], productData[keyAr]);
-    return { key, value: value || '', standard: '' }; 
-  })
-  .filter(spec => spec.value.trim() !== ''),
+        technical_specs: TECHNICAL_FIELDS
+          .map(({ key, keyAr }) => {
+            const value = getLocalizedField(productData[key], productData[keyAr]);
+            return { key, value: value || '', standard: '' }; 
+          })
+          .filter(spec => spec.value.trim() !== ''),
         features: parseArrayField(getLocalizedField(productData.features, productData.features_ar)),
         applications: parseArrayField(getLocalizedField(productData.applications, productData.applications_ar)),
         instructions: parseArrayField(getLocalizedField(productData.instructions, productData.instructions_ar)),
@@ -317,6 +299,10 @@ usage: productData.usage || "",
   };
 
   useEffect(() => {
+    fetchFilterTranslations();
+  }, [i18n.language]);
+
+  useEffect(() => {
     if (id) {
       fetchProduct(id);
     }
@@ -339,7 +325,7 @@ usage: productData.usage || "",
     product.brand ? product.brand.toLowerCase().includes(b.name.toLowerCase()) : false
   )?.logo;
 
-  if (loading) {
+  if (loading || filtersLoading) {
     return (
       <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
@@ -401,23 +387,23 @@ usage: productData.usage || "",
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
               <p className="text-xl text-blue-100 mb-4 leading-relaxed">{product.description}</p>
 
-             <div className="flex flex-wrap gap-4 mb-8">
-{product.type && (
-  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-    {translateFilterValue('type', product.type, filterValueMap)}
-  </span>
-)}
-{product.material && (
-  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-    {translateFilterValue('material', product.material, filterValueMap)}
-  </span>
-)}
-{product.usage && (
-  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-    {translateFilterValue('usage', product.usage, filterValueMap)}
-  </span>
-)}
-</div>
+              <div className="flex flex-wrap gap-4 mb-8">
+                {product.type && (
+                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+                    {translateFilterValue('type', product.type, filterValueMap)}
+                  </span>
+                )}
+                {product.material && (
+                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+                    {translateFilterValue('material', product.material, filterValueMap)}
+                  </span>
+                )}
+                {product.usage && (
+                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+                    {translateFilterValue('usage', product.usage, filterValueMap)}
+                  </span>
+                )}
+              </div>
   
               {product.technical_description && (
                 <p className="text-blue-100/90 mb-6 leading-relaxed">{product.technical_description}</p>
@@ -867,4 +853,4 @@ usage: productData.usage || "",
   );
 };
 
-export default ProductDetail; 
+export default ProductDetail;
