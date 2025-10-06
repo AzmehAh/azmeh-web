@@ -148,7 +148,7 @@ const Footer = () => {
                 {t('footer.termsOfService')}
               </Link>
             </div>
-          </div>
+          </div> 
         </div>
       </div>
     </footer>
