@@ -176,16 +176,23 @@ const ProductForm = () => {
       
       if (valuesError) throw valuesError;
 
-      const groupedValues = (filterTypes || []).reduce((acc: any, type: any) => {
-        acc[type.name.toLowerCase()] = (filterValues || [])
-          .filter((value: any) => value.filter_type_id === type.id)
-          .map((value: any) => ({
-            id: value.id,
-            name: value.display_name || value.value,
-            value: value.value
-          }));
-        return acc;
-      }, {});
+     const groupedValues = (filterTypes || []).reduce((acc: any, type: any) => {
+  acc[type.name.toLowerCase()] = (filterValues || [])
+    .filter((value: any) => value.filter_type_id === type.id)
+    .map((value: any) => {
+      const en = value.display_name || value.value;
+      const ar = value.display_name_ar || value.value_ar;
+      const displayName = ar && en ? `${ar} / ${en}` : ar || en || value.value || 'Unnamed';
+
+      return {
+        id: value.id,
+        name: displayName, // ← الآن يحتوي على "عربي / إنجليزي"
+        value: value.value, // ← القيمة الفعلية التي تُخزّن في قاعدة البيانات (الإنجليزية غالبًا)
+        value_ar: value.value_ar // ← مفيدة لعرض إضافي إن لزم
+      };
+    });
+  return acc;
+}, {});
  
       setBrands(groupedValues.brand || groupedValues.brands || []);
       setTypes(groupedValues.type || groupedValues.types || []);
