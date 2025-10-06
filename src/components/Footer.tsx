@@ -13,7 +13,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
           {/* Company Info */}
-          <div className="space-y-4">
+          <div className="gap-4">
             <div className="flex items-center mb-6">
               <img
                 src="/images/Azmeh-Paints-Logo.png"
@@ -36,7 +36,7 @@ const Footer = () => {
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.quickLinks')}
             </h4>
-            <ul className="space-y-3">
+            <ul className="gap-3">
               <li>
                 <Link to="/" className="text-white hover:text-white transition-colors text-sm">
                   {t('common.home')}
@@ -70,7 +70,7 @@ const Footer = () => {
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.contactInfo')}
             </h4>
-            <div className="space-y-4">
+            <div className="gap-4">
               <div className={`flex items-start ${isRTL ? 'flex-row-reverse gap-reverse' : 'gap-3'}`}>
                 <Mail className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`} />
                 <div>
