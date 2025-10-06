@@ -280,11 +280,17 @@
     }
   },
   "blog": {
-    "title": "Blog",
-    "readMore": "Read More",
-    "noPosts": "No blog posts found",
-    "categories": "Categories",
-    "recent": "Recent Posts"
+    "heroTitle": "Technical Blog",
+    "heroSubtitle": "Explore our comprehensive technical solutions and paint Blog designed for professional applications and specialized environments.",
+    "categoriesTitle": "System Categories",
+    "clearAll": "Clear All",
+    "searchPlaceholder": "Search bulletins...",
+    "filteredTitle": "Filtered Bulletins",
+    "allTitle": "All Technical Bulletins",
+    "bulletinsAvailable": "bulletin(s) available",
+    "noResults": "No bulletins found",
+    "noResultsText": "Try selecting a different filter or adjusting your search",
+    "readMore": "Read More"
   },
   "faq": {
     "title": "Frequently Asked Questions",
