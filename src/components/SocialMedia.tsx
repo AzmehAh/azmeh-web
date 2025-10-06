@@ -1,49 +1,54 @@
 import React from 'react';
 import { Instagram, Facebook, MessageCircle } from 'lucide-react';
 import { motion } from "framer-motion";
+import { useTranslation } from 'react-i18next';
 
 const SocialMedia = () => {
+  const { t, i18n } = useTranslation('social'); // استخدام namespace 'social'
+  const isRTL = i18n.language === 'ar';
+
   const socialPosts = [
     { 
       iframe: 'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02JwdafQwMtxfNuq767fjKzWeWRf12YYs6giSBtNGDQCHqiDjduh9f7gThS8dhmMtil&show_text=true&width=500',
       platform: 'facebook'
     },
     { 
-      iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02DSC5xcLaR4pAGbVZbC5fSvJDdWnDtr8Dd35eBzvfAVCfxkk8nFGXEe4URi6f98p7l&show_text=true&width=500',
+      iframe: 'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02DSC5xcLaR4pAGbVZbC5fSvJDdWnDtr8Dd35eBzvfAVCfxkk8nFGXEe4URi6f98p7l&show_text=true&width=500',
       platform: 'facebook'
     },
     { 
-      iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02XK9BgwYfHT9DBXXNnk67s4CLq8QAGckipURTrYuwLW9ujtuiATAGbzZExN9HbkzQl&show_text=true&width=500',   
+      iframe: 'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02XK9BgwYfHT9DBXXNnk67s4CLq8QAGckipURTrYuwLW9ujtuiATAGbzZExN9HbkzQl&show_text=true&width=500',   
       platform: 'facebook'
     },
     { 
-      iframe :'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid0uQcazGWJCnbXYvWbAppKAjP9Fz3peutyfG62SL97q1uaJsfD79taqKhskcDLmkdTl&show_text=true&width=500',
+      iframe: 'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid0uQcazGWJCnbXYvWbAppKAjP9Fz3peutyfG62SL97q1uaJsfD79taqKhskcDLmkdTl&show_text=true&width=500',
       platform: 'facebook'
     },
   ];
 
   return (
-    <section className="py-20  relative bg-gray-50">
+    <section className="py-20 relative bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* العنوان والنص */}
         <div className="text-center mb-3">
-             <motion.h3
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6 }}
-    className="text-sm uppercase text-[#0055A3] mb-2"
-  >
-      Inspiration & Ideas
-     </motion.h3>
+          <motion.h3
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-sm uppercase text-[#0055A3] mb-2"
+          >
+            {t('inspirationTitle')}
+          </motion.h3>
+          
           <motion.h2
-    initial={{ opacity: 0, y: 20 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6, delay: 0.1 }}
-    className="text-4xl font-bold text-gray-900 mb-4"
-  >
-            Follow us for inspiration
-            </motion.h2>
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="text-4xl font-bold text-gray-900 mb-4"
+          >
+            {t('followUsTitle')}
+          </motion.h2>
          
           <div className="mt-6 w-24 h-1 bg-white/50 mx-auto rounded"></div>
         </div>
@@ -71,49 +76,46 @@ const SocialMedia = () => {
         </div>
 
         {/* Social Follow Buttons */}
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-5
-">
-{/* Instagram */}
-<a
-  href="#"
-  className="flex items-center justify-start bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] 
-  text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out 
-  w-[47px] hover:w-[200px] group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
->
-  <Instagram className="w-5 h-5 flex-shrink-0" />
-  <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-    Follow on Instagram
-  </span>
-</a>
+        <div className={`flex flex-col sm:flex-row items-center justify-center gap-5 ${isRTL ? 'flex-row-reverse' : ''}`}>
+          
+          {/* Instagram */}
+          <a
+            href="#"
+            className="flex items-center justify-start bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] 
+            text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out 
+            w-[47px] hover:w-[200px] group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+          >
+            <Instagram className="w-5 h-5 flex-shrink-0" />
+            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              {t('followInstagram')}
+            </span>
+          </a>
 
-{/* Facebook */}
-<a
-  href="#"
-  className="flex items-center justify-start bg-[#1877F2] text-white rounded-full px-3.5 py-3 h-12 
-  overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
-  group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
->
-  <Facebook className="w-5 h-5 flex-shrink-0" />
-  <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-    Like on Facebook
-  </span>
-</a>
+          {/* Facebook */}
+          <a
+            href="#"
+            className="flex items-center justify-start bg-[#1877F2] text-white rounded-full px-3.5 py-3 h-12 
+            overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
+            group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+          >
+            <Facebook className="w-5 h-5 flex-shrink-0" />
+            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              {t('likeFacebook')}
+            </span>
+          </a>
 
-{/* WhatsApp */} 
-<a
-  href="#"
-  className="flex items-center justify-start bg-[#25D366] text-white rounded-full px-3.5 py-3 h-12 
-  overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
-  group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
->
-  <MessageCircle className="w-5 h-5 flex-shrink-0" />
-  <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-    WhatsApp Support
-  </span>
-</a>
-
-
-
+          {/* WhatsApp */} 
+          <a
+            href="#"
+            className="flex items-center justify-start bg-[#25D366] text-white rounded-full px-3.5 py-3 h-12 
+            overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
+            group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+          >
+            <MessageCircle className="w-5 h-5 flex-shrink-0" />
+            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              {t('whatsappSupport')}
+            </span>
+          </a>
         </div>
       </div>
     </section>
