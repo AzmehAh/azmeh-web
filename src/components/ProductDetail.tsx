@@ -345,24 +345,12 @@ const ProductDetail = () => {
               <p className="text-xl text-blue-100 mb-4 leading-relaxed">{product.description}</p>
 
               <div className="flex flex-wrap gap-4 mb-8">
-               <div className="flex flex-wrap gap-4 mb-8">
-  {product.type && (
+                {product.type && (
     <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
       {getLocalized(product.type_ar, product.type)}
     </span>
-  )}
-  {product.material && (
-    <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-      {getLocalized(product.material_ar, product.material)}
-    </span>
-  )}
-  {product.usage && (
-    <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-      {getLocalized(product.usage_ar, product.usage)}
-    </span>
-  )}
-</div>
-
+                {product.material && <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.material}</span>}
+                {product.usage && <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">{product.usage}</span>}
               </div>
  
               {product.technical_description && (
