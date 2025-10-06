@@ -90,13 +90,13 @@ const Blog = () => {
     }
   }, [loading, systemCategories]);
 
-  // ✅ التعديل هنا: يعتمد على اللغة الحالية في الفلترة
-  const toggleFilter = (categoryKey: string, subKey: string) => {
+  // ✅ التعديل: استخدام القيم الإنجليزية دائماً في selectedFilters
+  const toggleFilter = (categoryKey: string, subKeyEn: string) => {
     setSelectedFilters((prev) => {
       const prevCategory = prev[categoryKey] || [];
-      const updatedCategory = prevCategory.includes(subKey)
-        ? prevCategory.filter((item) => item !== subKey)
-        : [...prevCategory, subKey];
+      const updatedCategory = prevCategory.includes(subKeyEn)
+        ? prevCategory.filter((item) => item !== subKeyEn)
+        : [...prevCategory, subKeyEn];
 
       const newFilters = { ...prev, [categoryKey]: updatedCategory };
 
@@ -116,21 +116,29 @@ const Blog = () => {
     navigate('/blog', { replace: true });
   };
 
-  // ✅ هنا التعديل الرئيسي للفلترة باللغتين
+  // ✅ التعديل: فلترة باستخدام القيم الإنجليزية مع العرض بالعربية
   const filteredBulletins = useMemo(() => {
     let filtered = bulletins;
 
+    // فلترة حسب التصنيفات المختارة
     Object.entries(selectedFilters).forEach(([catKey, subs]) => {
       if (subs.length > 0) {
         filtered = filtered.filter((b) => {
-          const bCat = isRTL ? b.category_ar || b.category : b.category;
-          const bSub = isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
-          return bCat === (isRTL ? systemCategories[catKey]?.name_ar : catKey) &&
-                 subs.includes(bSub);
+          // المقارنة باستخدام القيم الإنجليزية دائماً
+          const bCatEn = b.category;
+          const bSubEn = b.subcategory;
+          
+          // البحث عن التصنيف المناسب
+          const category = systemCategories[catKey];
+          if (!category) return false;
+
+          // المقارنة باستخدام الإنجليزية
+          return bCatEn === catKey && subs.includes(bSubEn);
         });
       }
     });
 
+    // فلترة حسب البحث
     if (searchTerm) {
       filtered = filtered.filter((b) => {
         const title = isRTL ? b.title_ar || b.title : b.title;
@@ -146,6 +154,14 @@ const Blog = () => {
 
     return filtered;
   }, [selectedFilters, searchTerm, bulletins, isRTL, systemCategories]);
+
+  // ✅ دالة مساعدة للحصول على الاسم المعروض للتصنيف الفرعي
+  const getDisplaySubcategory = (bulletin: Bulletin) => {
+    if (isRTL) {
+      return bulletin.subcategory_ar || bulletin.subcategory;
+    }
+    return bulletin.subcategory;
+  };
 
   const handleBulletinClick = (id: string) => {
     navigate(`/bulletin/${id}`);
@@ -229,18 +245,20 @@ const Blog = () => {
                             className="overflow-hidden space-y-2"
                           >
                             {cat.subs.map((sub) => {
-                              const displaySub = isRTL ? sub.ar : sub.en;
-                              const subKey = isRTL ? sub.ar || sub.en : sub.en;
+                              const displaySub = isRTL ? sub.ar || sub.en : sub.en;
+                              // استخدام القيمة الإنجليزية كـ key دائماً
+                              const subKeyEn = sub.en;
+                              
                               return (
                                 <label
-                                  key={subKey}
+                                  key={subKeyEn}
                                   className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
                                 >
                                   <div className="flex items-center space-x-2">
                                     <input
                                       type="checkbox"
-                                      checked={selectedFilters[key]?.includes(subKey) || false}
-                                      onChange={() => toggleFilter(key, subKey)}
+                                      checked={selectedFilters[key]?.includes(subKeyEn) || false}
+                                      onChange={() => toggleFilter(key, subKeyEn)}
                                       className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
                                     />
                                     <span className="text-sm text-gray-700">{displaySub}</span>
@@ -297,9 +315,7 @@ const Blog = () => {
                     const displayDesc = isRTL
                       ? b.short_description_ar || b.short_description
                       : b.short_description;
-                    const displaySubcategory = isRTL
-                      ? b.subcategory_ar || b.subcategory
-                      : b.subcategory;
+                    const displaySubcategory = getDisplaySubcategory(b);
 
                     return (
                       <motion.div
