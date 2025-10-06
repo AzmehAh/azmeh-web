@@ -390,7 +390,7 @@
     "searchPlaceholder": "البحث في النشرات...",
     "filteredTitle": "نتائج التصفية",
     "allTitle": "جميع النشرات",
-    "bulletinsAvailable": "{{count}} نشرة متاحة",
+    "bulletinsAvailable": " نشرة متاحة",
     "noResults": "لم يتم العثور على نشرات",
     "noResultsText": "جرب تعديل بحثك أو التصفية.",
     "readMore": "قراءة المزيد"
