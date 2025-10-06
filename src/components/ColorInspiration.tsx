@@ -12,7 +12,7 @@ const ColorInspiration = () => {
 
   useEffect(() => {
     fetchFeaturedProducts();
-  }, []);
+  }, [i18n.language]); // إعادة الجلب عند تغيير اللغة
 
   const fetchFeaturedProducts = async () => {
     try {
@@ -34,11 +34,12 @@ const ColorInspiration = () => {
         const mainImage = allImages.find(img => img.is_main) || allImages[0];
         const secondaryImage = allImages.find(img => !img.is_main) || allImages[1] || mainImage;
 
+        // تحديد الحقل حسب اللغة
+        const name = i18n.language === 'ar' ? product.name_ar : product.name_en;
+
         return {
           id: product.id,
-          // هنا نعتمد على اللغة لتحديد الحقل
-          name_ar: product.name_ar,
-          name_en: product.name_en,
+          name,
           mainImage: mainImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image',
           secondaryImage: secondaryImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image'
         };
@@ -96,7 +97,7 @@ const ColorInspiration = () => {
                 {/* الصورة الأساسية */}
                 <img
                   src={product.mainImage}
-                  alt={`${i18n.language === 'ar' ? product.name_ar : product.name_en} main`}
+                  alt={`${product.name} main`}
                   className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
                     hoveredColor === index ? 'opacity-0' : 'opacity-100'
                   }`}
@@ -105,7 +106,7 @@ const ColorInspiration = () => {
                 {/* الصورة الثانية */}
                 <img
                   src={product.secondaryImage}
-                  alt={`${i18n.language === 'ar' ? product.name_ar : product.name_en} secondary`}
+                  alt={`${product.name} secondary`}
                   className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
                     hoveredColor === index
                       ? 'opacity-100 scale-y-125'
@@ -117,7 +118,7 @@ const ColorInspiration = () => {
                 {hoveredColor !== index && (
                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
                     <span className="block text-lg font-semibold">
-                      {i18n.language === 'ar' ? product.name_ar : product.name_en}
+                      {product.name}
                     </span>
                   </div>
                 )}
