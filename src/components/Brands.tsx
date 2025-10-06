@@ -105,7 +105,7 @@ const BrandsSection = () => {
     transition={{ duration: 0.6 }}
     className="text-sm uppercase text-[#0055A3] mb-2"
   >
-  {t("services.trustedPartners")}
+  {t("brands.trustedPartners")}
   </motion.h3>
 
  
@@ -115,7 +115,7 @@ const BrandsSection = () => {
     transition={{ duration: 0.6, delay: 0.1 }}
     className="text-4xl font-bold text-gray-900 mb-4"
   >
-      {t("services.featuredBrands")}
+      {t("brands.featuredBrands")}
     </motion.h2>
 </div>
 
