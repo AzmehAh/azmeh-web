@@ -37,7 +37,7 @@ const ColorInspiration = () => {
         return {
           id: product.id,
           // ← هنا نحدد الاسم حسب اللغة
-          name: i18n.language === 'ar' ? product.name_ar : product.name_en,
+          name: i18n.language === 'ar' ? product.name_ar : product.name,
           mainImage: mainImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image',
           secondaryImage: secondaryImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image'
         };
