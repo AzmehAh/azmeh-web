@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom'; // ← أضف هذا السطر
+import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
+import { useTranslation } from 'react-i18next'; // ← أضف هذا
 
 const ColorInspiration = () => {
   const [hoveredColor, setHoveredColor] = useState<number | null>(null);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation(); // ← أضف هذا
 
   useEffect(() => {
     fetchFeaturedProducts();
@@ -35,6 +37,7 @@ const ColorInspiration = () => {
         return {
           id: product.id,
           name: product.name,
+          name_ar: product.name_ar, // ← تأكد من وجود هذا الحقل في قاعدة البيانات
           mainImage: mainImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image',
           secondaryImage: secondaryImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image'
         };
@@ -44,10 +47,16 @@ const ColorInspiration = () => {
     } catch (error) {
       console.error('Error fetching featured products:', error);
       setFeaturedProducts([]);
-      alert('Failed to load featured products. Please try again later.');
+      alert(t('errors.failedToLoadProducts')); // ← استخدم الترجمة هنا أيضاً
     } finally {
       setLoading(false);
     }
+  };
+
+  // دالة للحصول على الاسم بناءً على اللغة
+  const getProductName = (product) => {
+    const currentLang = localStorage.getItem('i18nextLng') || 'en';
+    return currentLang === 'ar' ? product.name_ar || product.name : product.name;
   };
 
   return (
@@ -61,7 +70,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6 }}
             className="text-sm uppercase text-[#0055A3] mb-2"
           >
-            Fresh & Exclusive
+            {t('colorInspiration.freshExclusive')} {/* ← استخدم الترجمة */}
           </motion.h3>
 
           <motion.h2
@@ -70,7 +79,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl font-bold text-gray-900 mb-4"
           >
-            New Drops
+            {t('colorInspiration.newDrops')} {/* ← استخدم الترجمة */}
           </motion.h2>
         </div>
 
@@ -84,7 +93,7 @@ const ColorInspiration = () => {
             {featuredProducts.map((product, index) => (
               <Link
                 key={product.id}
-                to={`/product/${product.id}`} // ← هذا يوجه إلى صفحة التفاصيل
+                to={`/product/${product.id}`}
                 className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-hidden block"
                 onMouseEnter={() => setHoveredColor(index)}
                 onMouseLeave={() => setHoveredColor(null)}
@@ -92,7 +101,7 @@ const ColorInspiration = () => {
                 {/* الصورة الأساسية */}
                 <img
                   src={product.mainImage}
-                  alt={`${product.name} main`}
+                  alt={getProductName(product)} {/* ← استخدم الدالة هنا */}
                   className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
                     hoveredColor === index ? 'opacity-0' : 'opacity-100'
                   }`}
@@ -101,7 +110,7 @@ const ColorInspiration = () => {
                 {/* الصورة الثانية */}
                 <img
                   src={product.secondaryImage}
-                  alt={`${product.name} secondary`}
+                  alt={getProductName(product)} {/* ← واستخدمها هنا أيضاً */}
                   className={`absolute inset-0 w-full h-full object-contain transition-all duration-500 ${
                     hoveredColor === index
                       ? 'opacity-100 scale-y-125'
@@ -112,7 +121,9 @@ const ColorInspiration = () => {
                 {/* العنوان */}
                 {hoveredColor !== index && (
                   <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
-                    <span className="block text-lg font-semibold">{product.name}</span>
+                    <span className="block text-lg font-semibold">
+                      {getProductName(product)} {/* ← واستخدمها هنا */}
+                    </span>
                   </div>
                 )}
               </Link>
@@ -120,12 +131,12 @@ const ColorInspiration = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            No featured products available at the moment.
+            {t('colorInspiration.noProducts')} {/* ← استخدم الترجمة */}
           </div>
-        )} 
+        )}
       </div>
     </section>
   );
 };
 
-export default ColorInspiration; 
+export default ColorInspiration;
