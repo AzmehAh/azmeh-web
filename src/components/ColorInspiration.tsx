@@ -1,23 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom'; // ← أضف هذا السطر
+import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { supabase } from '../lib/supabase';
 
 const ColorInspiration = () => {
   const [hoveredColor, setHoveredColor] = useState<number | null>(null);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t, i18n } = useTranslation();
+  const currentLanguage = i18n.language; // 'ar' أو 'en'
 
   useEffect(() => {
     fetchFeaturedProducts();
-  }, []);
+  }, [currentLanguage]); // إعادة التحميل عند تغيير اللغة
 
   const fetchFeaturedProducts = async () => {
+    setLoading(true);
     try {
       const { data, error } = await supabase
         .from('products')
         .select(`
-          *,
+          id,
+          name_en,
+          name_ar,
+          status,
+          featured,
+          created_at,
           product_images (*)
         `)
         .eq('status', 'active')
@@ -32,9 +41,12 @@ const ColorInspiration = () => {
         const mainImage = allImages.find(img => img.is_main) || allImages[0];
         const secondaryImage = allImages.find(img => !img.is_main) || allImages[1] || mainImage;
 
+        // اختيار الاسم حسب اللغة الحالية
+        const name = currentLanguage === 'ar' ? product.name_ar : product.name_en;
+
         return {
           id: product.id,
-          name: product.name,
+          name: name || product.name_en || product.name_ar || t('colorInspiration.noProducts'),
           mainImage: mainImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image',
           secondaryImage: secondaryImage?.image_url || 'https://via.placeholder.com/300x300?text=No+Image'
         };
@@ -44,7 +56,7 @@ const ColorInspiration = () => {
     } catch (error) {
       console.error('Error fetching featured products:', error);
       setFeaturedProducts([]);
-      alert('Failed to load featured products. Please try again later.');
+      alert(t('colorInspiration.fetchError'));
     } finally {
       setLoading(false);
     }
@@ -61,7 +73,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6 }}
             className="text-sm uppercase text-[#0055A3] mb-2"
           >
-            Fresh & Exclusive
+            {t('colorInspiration.freshExclusive')}
           </motion.h3>
 
           <motion.h2
@@ -70,7 +82,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl font-bold text-gray-900 mb-4"
           >
-            New Drops
+            {t('colorInspiration.newDrops')}
           </motion.h2>
         </div>
 
@@ -84,7 +96,7 @@ const ColorInspiration = () => {
             {featuredProducts.map((product, index) => (
               <Link
                 key={product.id}
-                to={`/product/${product.id}`} // ← هذا يوجه إلى صفحة التفاصيل
+                to={`/product/${product.id}`}
                 className="relative group cursor-pointer w-52 h-[280px] mx-auto overflow-hidden block"
                 onMouseEnter={() => setHoveredColor(index)}
                 onMouseLeave={() => setHoveredColor(null)}
@@ -106,13 +118,15 @@ const ColorInspiration = () => {
                     hoveredColor === index
                       ? 'opacity-100 scale-y-125'
                       : 'opacity-0 scale-y-100'
-                  }`} 
+                  }`}
                 />
 
-                {/* العنوان */}
+                {/* اسم المنتج - يظهر في سطر واحد مع مسافة من الأسفل */}
                 {hoveredColor !== index && (
-                  <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
-                    <span className="block text-lg font-semibold">{product.name}</span>
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-center text-gray-800 z-20">
+                    <span className="block text-lg font-semibold whitespace-nowrap">
+                      {product.name}
+                    </span>
                   </div>
                 )}
               </Link>
@@ -120,9 +134,9 @@ const ColorInspiration = () => {
           </div>
         ) : (
           <div className="text-center py-12 text-gray-500">
-            No featured products available at the moment.
+            {t('colorInspiration.noProducts')}
           </div>
-        )} 
+        )}
       </div>
     </section>
   );
