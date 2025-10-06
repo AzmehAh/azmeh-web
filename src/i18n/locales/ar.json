@@ -364,6 +364,37 @@
 "industrialCoatings": "الطلاءات الصناعية",
 "customSolutions": "حلول مخصصة"
 },
+   "bulletin": {
+    "notFoundTitle": "لم يتم العثور على النشرة",
+    "notFoundText": "النشرة التي تبحث عنها غير موجودة.",
+    "backToBlog": "العودة إلى المدونة",
+    "home": "الرئيسية",
+    "blog": "المدونة",
+    "related": "نشرات ذات صلة",
+    "suggestions": "قد يعجبك أيضًا",
+    "noRelated": "لم يتم العثور على نشرات ذات صلة.",
+    "needHelpTitle": "هل تحتاج مساعدة؟",
+    "needHelpText": "فريقنا جاهز لمساعدتك في أي استفسارات أو دعم قد تحتاجه.",
+    "contactTeam": "اتصل بفريقنا",
+    "downloadPdf": "تنزيل ملف PDF"
+  },
+  "blog": {
+    "sectionTag": "أحدث التحديثات",
+    "sectionTitle": "استكشف نشراتنا الرسمية",
+    "noPosts": "لا توجد نشرات مميزة متاحة حاليًا.",
+    "viewAllButton": "عرض جميع النشرات",
+    "heroTitle": "النشرات والإعلانات الرسمية",
+    "heroSubtitle": "ابقَ على اطلاع بأحدث الاتصالات الرسمية، وتحديثات السياسات، والإشعارات المهمة من مؤسستنا.",
+    "categoriesTitle": "تصفية حسب التصنيف",
+    "clearAll": "مسح الكل",
+    "searchPlaceholder": "البحث في النشرات...",
+    "filteredTitle": "نتائج التصفية",
+    "allTitle": "جميع النشرات",
+    "bulletinsAvailable": "{{count}} نشرة متاحة",
+    "noResults": "لم يتم العثور على نشرات",
+    "noResultsText": "جرب تعديل بحثك أو التصفية.",
+    "readMore": "قراءة المزيد"
+  },
   "common": {
     "loading": "جاري التحميل...",
     "error": "خطأ",
