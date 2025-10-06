@@ -10,14 +10,14 @@ const Footer = () => {
   return (
     <footer className="bg-[#0055A3] text-white" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 ${isRTL ? 'text-right' : 'text-left'}`}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          
+        <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 ${isRTL ? 'md:gap-8' : ''}`}>
+
           {/* --- Company Info --- */}
-          <div>
-            <div className={`flex items-center mb-6 ${isRTL ? 'justify-end' : 'justify-start'}`}>
+          <div className={`${isRTL ? 'order-4' : 'order-1'}`}>
+            <div className={`flex items-center mb-6 ${isRTL ? 'justify-start' : 'justify-start'}`}>
               <img
                 src="/images/Azmeh-Paints-Logo.png"
-                alt="Al Azmeh Paints"
+                alt={t('common.home')}
                 className="h-12 w-auto filter brightness-0 invert"
               />
             </div>
@@ -32,7 +32,7 @@ const Footer = () => {
           </div>
 
           {/* --- Quick Links --- */}
-          <div>
+          <div className={`${isRTL ? 'order-3' : 'order-2'}`}>
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.quickLinks')}
             </h4>
@@ -46,7 +46,7 @@ const Footer = () => {
           </div>
 
           {/* --- Contact Info --- */}
-          <div>
+          <div className={`${isRTL ? 'order-2' : 'order-3'}`}>
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.contactInfo')}
             </h4>
@@ -70,11 +70,11 @@ const Footer = () => {
           </div>
 
           {/* --- Social Media --- */}
-          <div>
+          <div className={`${isRTL ? 'order-1' : 'order-4'}`}>
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.followUs')}
             </h4>
-            <div className={`flex ${isRTL ? 'flex-row-reverse space-x-reverse' : ''} gap-4`}>
+            <div className={`flex ${isRTL ? 'flex-row-reverse gap-4' : 'gap-4'}`}>
               {[Facebook, Instagram, Linkedin, Youtube].map((Icon, i) => (
                 <a
                   key={i}
@@ -89,6 +89,7 @@ const Footer = () => {
               <p className="text-gray-400 text-xs">{t('footer.stayUpdated')}</p>
             </div>
           </div>
+
         </div>
 
         {/* --- Bottom Section --- */}
@@ -97,7 +98,7 @@ const Footer = () => {
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
               {t('footer.professionalSolutions')}
             </p>
-            <div className={`flex ${isRTL ? 'flex-row-reverse space-x-reverse' : ''} gap-6 text-sm`}>
+            <div className={`flex ${isRTL ? 'flex-row-reverse gap-6' : 'gap-6'} text-sm`}>
               <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
                 {t('footer.privacyPolicy')}
               </Link>
