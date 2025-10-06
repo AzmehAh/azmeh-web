@@ -11,16 +11,9 @@ const Blog = () => {
   const navigate = useNavigate();
 
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
-  const [systemCategories, setSystemCategories] = useState<
-    Record<
-      string,
-      {
-        name_en: string;
-        name_ar?: string;
-        subs: { en: string; ar?: string }[];
-      }
-    >
-  >({});
+  const [systemCategories, setSystemCategories] = useState<Record<string, string[]>>({});
+  const [bulletinCategories, setBulletinCategories] = useState<BulletinCategoryConfig[]>([]);
+  const [categoryDisplayNames, setCategoryDisplayNames] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
@@ -34,43 +27,40 @@ const Blog = () => {
     try {
       const [bulletinsData, categoriesData] = await Promise.all([
         api.getBulletins(),
-        api.getBulletinCategoriesConfig(),
+        api.getBulletinCategoriesConfig()
       ]);
 
+      // ✅ الاحتفاظ بالبيانات الأصلية دون ترجمة
       setBulletins(bulletinsData || []);
+      setBulletinCategories(categoriesData || []);
 
-      // 🟦 بناء نظام التصنيفات بلغتين
-      const categoriesMap: Record<
-        string,
-        {
-          name_en: string;
-          name_ar?: string;
-          subs: { en: string; ar?: string }[];
-        }
-      > = {};
+      const categoriesMap: Record<string, string[]> = {};
+      const displayNames: Record<string, string> = {};
 
-      bulletinsData.forEach((b) => {
-        const cat_en = b.category;
-        const cat_ar = b.category_ar || b.category;
-        const sub_en = b.subcategory;
-        const sub_ar = b.subcategory_ar || b.subcategory;
+      categoriesData?.forEach(category => {
+        if (category.is_active) {
+          const originalName = category.name;
+          const displayName = isRTL ? category.name_ar || category.name : category.name;
+          
+          displayNames[originalName] = displayName;
 
-        if (!cat_en) return;
+          // جلب النشرات حسب الاسم الأصلي
+          const categoryBulletins = bulletinsData.filter(b => b.category === originalName);
+          const subcategories = [
+            ...new Set(
+              categoryBulletins
+                .map(b => (isRTL ? b.subcategory_ar || b.subcategory : b.subcategory))
+                .filter(Boolean)
+            ),
+          ];
 
-        if (!categoriesMap[cat_en]) {
-          categoriesMap[cat_en] = {
-            name_en: cat_en,
-            name_ar: cat_ar,
-            subs: [],
-          };
-        }
-
-        if (sub_en && !categoriesMap[cat_en].subs.some((s) => s.en === sub_en)) {
-          categoriesMap[cat_en].subs.push({ en: sub_en, ar: sub_ar });
+          categoriesMap[originalName] = subcategories;
         }
       });
 
       setSystemCategories(categoriesMap);
+      setCategoryDisplayNames(displayNames);
+
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
@@ -82,23 +72,23 @@ const Blog = () => {
     if (!loading) {
       const params = new URLSearchParams(window.location.search);
       const newFilters: Record<string, string[]> = {};
-      Object.keys(systemCategories).forEach((catKey) => {
-        const value = params.get(catKey);
-        newFilters[catKey] = value ? value.split(',') : [];
+      bulletinCategories.forEach(cat => {
+        const key = cat.name; // ← دائمًا الاسم الأصلي
+        const value = params.get(key);
+        newFilters[key] = value ? value.split(',') : [];
       });
       setSelectedFilters(newFilters);
     }
-  }, [loading, systemCategories]);
+  }, [loading, bulletinCategories]);
 
-  // ✅ التعديل: استخدام القيم الإنجليزية دائماً في selectedFilters
-  const toggleFilter = (categoryKey: string, subKeyEn: string) => {
-    setSelectedFilters((prev) => {
-      const prevCategory = prev[categoryKey] || [];
-      const updatedCategory = prevCategory.includes(subKeyEn)
-        ? prevCategory.filter((item) => item !== subKeyEn)
-        : [...prevCategory, subKeyEn];
+  const toggleFilter = (category: string, subcategory: string) => {
+    setSelectedFilters(prev => {
+      const prevCategory = prev[category] || [];
+      const updatedCategory = prevCategory.includes(subcategory)
+        ? prevCategory.filter(item => item !== subcategory)
+        : [...prevCategory, subcategory];
 
-      const newFilters = { ...prev, [categoryKey]: updatedCategory };
+      const newFilters = { ...prev, [category]: updatedCategory };
 
       const params = new URLSearchParams();
       Object.entries(newFilters).forEach(([cat, subs]) => {
@@ -116,52 +106,29 @@ const Blog = () => {
     navigate('/blog', { replace: true });
   };
 
-  // ✅ التعديل: فلترة باستخدام القيم الإنجليزية مع العرض بالعربية
   const filteredBulletins = useMemo(() => {
     let filtered = bulletins;
 
-    // فلترة حسب التصنيفات المختارة
-    Object.entries(selectedFilters).forEach(([catKey, subs]) => {
-      if (subs.length > 0) {
-        filtered = filtered.filter((b) => {
-          // المقارنة باستخدام القيم الإنجليزية دائماً
-          const bCatEn = b.category;
-          const bSubEn = b.subcategory;
-          
-          // البحث عن التصنيف المناسب
-          const category = systemCategories[catKey];
-          if (!category) return false;
-
-          // المقارنة باستخدام الإنجليزية
-          return bCatEn === catKey && subs.includes(bSubEn);
-        });
+    Object.entries(selectedFilters).forEach(([originalCategory, subcategories]) => {
+      if (subcategories.length > 0) {
+        filtered = filtered.filter(b => 
+          b.category === originalCategory && 
+          subcategories.includes(isRTL ? b.subcategory_ar || b.subcategory : b.subcategory)
+        );
       }
     });
 
-    // فلترة حسب البحث
     if (searchTerm) {
-      filtered = filtered.filter((b) => {
-        const title = isRTL ? b.title_ar || b.title : b.title;
-        const desc = isRTL
-          ? b.short_description_ar || b.short_description
-          : b.short_description;
-        return (
-          title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          desc?.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-      });
+      filtered = filtered.filter(b =>
+        (isRTL ? b.title_ar || b.title : b.title).toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ((isRTL ? b.short_description_ar || b.short_description : b.short_description) || '')
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      );
     }
 
     return filtered;
-  }, [selectedFilters, searchTerm, bulletins, isRTL, systemCategories]);
-
-  // ✅ دالة مساعدة للحصول على الاسم المعروض للتصنيف الفرعي
-  const getDisplaySubcategory = (bulletin: Bulletin) => {
-    if (isRTL) {
-      return bulletin.subcategory_ar || bulletin.subcategory;
-    }
-    return bulletin.subcategory;
-  };
+  }, [selectedFilters, searchTerm, bulletins, isRTL]);
 
   const handleBulletinClick = (id: string) => {
     navigate(`/bulletin/${id}`);
@@ -188,10 +155,7 @@ const Blog = () => {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">{t('blog.categoriesTitle')}</h3>
                 {Object.values(selectedFilters).flat().length > 0 && (
-                  <button
-                    onClick={clearFilters}
-                    className="text-sm text-[#2C5DB6] hover:text-blue-700 font-medium"
-                  >
+                  <button onClick={clearFilters} className="text-sm text-[#2C5DB6] hover:text-blue-700 font-medium">
                     {t('blog.clearAll')}
                   </button>
                 )}
@@ -200,78 +164,61 @@ const Blog = () => {
               {/* Search */}
               <div className="mb-6">
                 <div className="relative">
-                  <Search
-                    className={`${isRTL ? 'right-3' : 'left-3'} top-3 absolute w-5 h-5 text-gray-400`}
-                  />
+                  <Search className={`${isRTL ? 'right-3' : 'left-3'} top-3 absolute w-5 h-5 text-gray-400`} />
                   <input
                     type="text"
                     placeholder={t('blog.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`w-full ${
-                      isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'
-                    } py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] transition-colors`}
+                    className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] transition-colors`}
                   />
                 </div>
               </div>
 
               {/* Categories */}
               <div className="space-y-4">
-                {Object.entries(systemCategories).map(([key, cat]) => {
-                  const displayCatName = isRTL ? cat.name_ar : cat.name_en;
+                {Object.entries(systemCategories).map(([originalCategoryName, subcategories]) => (
+                  <div key={originalCategoryName}>
+                    <button
+                      onClick={() => setActiveCategory(activeCategory === originalCategoryName ? null : originalCategoryName)}
+                      className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-[#2C5DB6] transition-colors"
+                    >
+                      <span>{categoryDisplayNames[originalCategoryName] || originalCategoryName}</span>
+                      <motion.span animate={{ rotate: activeCategory === originalCategoryName ? 180 : 0 }} className="inline-block">
+                        <ChevronDown className="w-4 h-4" />
+                      </motion.span>
+                    </button>
 
-                  return (
-                    <div key={key}>
-                      <button
-                        onClick={() => setActiveCategory(activeCategory === key ? null : key)}
-                        className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-[#2C5DB6] transition-colors"
-                      >
-                        <span>{displayCatName}</span>
-                        <motion.span
-                          animate={{ rotate: activeCategory === key ? 180 : 0 }}
-                          className="inline-block"
+                    <AnimatePresence>
+                      {activeCategory === originalCategoryName && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden space-y-2"
                         >
-                          <ChevronDown className="w-4 h-4" />
-                        </motion.span>
-                      </button>
-
-                      <AnimatePresence>
-                        {activeCategory === key && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.3 }}
-                            className="overflow-hidden space-y-2"
-                          >
-                            {cat.subs.map((sub) => {
-                              const displaySub = isRTL ? sub.ar || sub.en : sub.en;
-                              // استخدام القيمة الإنجليزية كـ key دائماً
-                              const subKeyEn = sub.en;
-                              
-                              return (
-                                <label
-                                  key={subKeyEn}
-                                  className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
-                                >
-                                  <div className="flex items-center space-x-2">
-                                    <input
-                                      type="checkbox"
-                                      checked={selectedFilters[key]?.includes(subKeyEn) || false}
-                                      onChange={() => toggleFilter(key, subKeyEn)}
-                                      className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
-                                    />
-                                    <span className="text-sm text-gray-700">{displaySub}</span>
-                                  </div>
-                                </label>
-                              );
-                            })}
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
+                          {subcategories.map(sub => (
+                            <label
+                              key={sub}
+                              className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
+                            >
+                              <div className="flex items-center space-x-2">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedFilters[originalCategoryName]?.includes(sub) || false}
+                                  onChange={() => toggleFilter(originalCategoryName, sub)}
+                                  className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
+                                />
+                                <span className="text-sm text-gray-700">{sub}</span>
+                              </div>
+                            </label>
+                          ))}
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -291,31 +238,19 @@ const Blog = () => {
 
             <AnimatePresence mode="wait">
               {filteredBulletins.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-center py-16"
-                >
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16">
                   <div className="text-gray-400 mb-4">
                     <Search className="w-16 h-16 mx-auto" />
                   </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {t('blog.noResults')}
-                  </h3>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('blog.noResults')}</h3>
                   <p className="text-gray-600">{t('blog.noResultsText')}</p>
                 </motion.div>
               ) : (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
-                >
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {filteredBulletins.map((b, idx) => {
                     const displayTitle = isRTL ? b.title_ar || b.title : b.title;
-                    const displayDesc = isRTL
-                      ? b.short_description_ar || b.short_description
-                      : b.short_description;
-                    const displaySubcategory = getDisplaySubcategory(b);
+                    const displayDesc = isRTL ? b.short_description_ar || b.short_description : b.short_description;
+                    const displaySubcategory = isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
 
                     return (
                       <motion.div
@@ -327,10 +262,10 @@ const Blog = () => {
                         onClick={() => handleBulletinClick(b.id)}
                       >
                         <div className="h-48 overflow-hidden">
-                          <img
-                            src={b.cover_image}
-                            alt={displayTitle}
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          <img 
+                            src={b.cover_image} 
+                            alt={displayTitle} 
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                           />
                         </div>
                         <div className="p-6">
