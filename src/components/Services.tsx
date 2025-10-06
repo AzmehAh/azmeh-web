@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 
 const Services = () => {
   const { t, i18n } = useTranslation();
-  const currentLang = i18n.language; // 'ar' or 'en'
+  const currentLang = i18n.language; 
 
-  // العناوين مترجمة عبر ملفات JSON
+
   const services = [
     { number: '01', title: t('services.ecoFriendly') },
     { number: '02', title: t('services.precisionInterior') },
@@ -20,8 +20,8 @@ const Services = () => {
           {services.map((service, index) => (
             <div
               key={index}
-              className={`flex items-center p-2 sm:p-0 cursor-pointer group ${
-                currentLang === 'ar' ? 'gap-reverse' : ''
+              className={`flex items-center p-2 sm:p-0 cursor-pointer group  gap-3${
+                currentLang === 'ar' ? 'flex-row-reverse' : ''
               }`}
             >
               <span className="text-2xl sm:text-3xl font-bold text-gray-200 group-hover:text-[#0055A3] transition-colors duration-300 flex-shrink-0">
