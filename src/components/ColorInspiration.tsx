@@ -46,7 +46,7 @@ const ColorInspiration = () => {
     } catch (error) {
       console.error('Error fetching featured products:', error);
       setFeaturedProducts([]);
-      alert(t('errors.failedToLoadProducts')); // ← يمكنك ترجمة الرسائل أيضًا
+      alert(t('errors.failedToLoadProducts')); 
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6 }}
             className="text-sm uppercase text-[#0055A3] mb-2"
           >
-            {t('colorInspiration.subtitle')} {/* ← Fresh & Exclusive */}
+            {t('colorInspiration.subtitle')} 
           </motion.h3>
 
           <motion.h2
@@ -72,7 +72,7 @@ const ColorInspiration = () => {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-4xl font-bold text-gray-900 mb-4"
           >
-            {t('colorInspiration.title')} {/* ← New Drops */}
+            {t('colorInspiration.title')} 
           </motion.h2>
         </div>
 
