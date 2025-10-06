@@ -38,7 +38,7 @@ const BulletinForm = () => {
   const [saving, setSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
-  const [categories, setCategories] = useState([]);
+ const [categoryOptions, setCategoryOptions] = useState([]);
   const [bulletin, setBulletin] = useState(null);
   const [loading, setLoading] = useState(!!id);
   const quillRef = useRef(null);
@@ -392,9 +392,7 @@ useEffect(() => {
         if (error) throw error;
       }
 
-      if (!id && formData.category && !categories.includes(formData.category)) {
-        setCategories(prev => [...prev, formData.category]);
-      }
+     
 
       navigate('/admin/bulletins');
     } catch (error) {
