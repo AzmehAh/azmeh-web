@@ -259,7 +259,7 @@ const Troubleshooting = () => {
                           )}`}
                         >
                           {getSeverityIcon(item.severity)}
-                          <span>{item.severity} {t('troubleshooting.priority')}</span>
+                      <span>{t(`troubleshooting.severity.${item.severity}`)} {t('troubleshooting.priority')}</span>
                         </span>
                       </div>
                     </div>
