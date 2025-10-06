@@ -259,7 +259,19 @@ const Troubleshooting = () => {
                           )}`}
                         >
                           {getSeverityIcon(item.severity)}
-                          <span>{item.severity} {t('troubleshooting.priority')}</span>
+                       <span>
+  {lang === 'ar'
+    ? item.severity === 'High'
+      ? 'عالية'
+      : item.severity === 'Medium'
+      ? 'متوسطة'
+      : item.severity === 'Low'
+      ? 'منخفضة'
+      : item.severity
+    : item.severity}{' '}
+  {t('troubleshooting.priority')}
+</span>
+
                         </span>
                       </div>
                     </div>
