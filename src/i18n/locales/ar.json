@@ -401,6 +401,15 @@
     "downloadPdf": "تحميل النسخة PDF"
   },
 
+  "colorInspiration": {
+    "subtitle": "جديد وحصري",
+    "title": "إصدارات جديدة",
+    "noProducts": "لا توجد منتجات مميزة متاحة حاليًا."
+  },
+  "errors": {
+    "failedToLoadProducts": "فشل تحميل المنتجات المميزة. يرجى المحاولة لاحقًا."
+  },
+
   "common": {
     "loading": "جاري التحميل...",
     "error": "خطأ",
