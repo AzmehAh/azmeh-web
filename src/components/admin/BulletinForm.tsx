@@ -28,6 +28,7 @@ const BulletinForm = () => {
     cover_image: '',
     category: '',
     subcategory: '',
+    subcategory_ar: '',
     content: '',
     content_ar: '',
     status: 'draft',
@@ -100,7 +101,8 @@ const BulletinForm = () => {
           short_description_ar: data.short_description_ar || '',
           cover_image: data.cover_image || '',
           category: data.category,
-          subcategory: data.subcategory,
+          subcategory: data.subcategory || '',
+           subcategory_ar: data.subcategory_ar || '',
           content: typeof data.content === 'string' ? data.content : '',
           content_ar: typeof data.content_ar === 'string' ? data.content_ar : '',
           status: data.status || 'draft',
@@ -366,6 +368,7 @@ useEffect(() => {
         cover_image: formData.cover_image || null,
         category: formData.category,
         subcategory: formData.subcategory,
+         subcategory_ar: formData.subcategory_ar || null,
         content: formData.content,
         content_ar: formData.content_ar || null,
         status: formData.status,
@@ -516,56 +519,39 @@ useEffect(() => {
   )}
 </div>
 
-            {/* Subcategory */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Subcategory *</label>
-              {isEditing || !id ? (
-                <input 
-                  type="text"
-                  value={formData.subcategory}
-                  onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="Enter subcategory"
-                />
-              ) : (
-                <p className="text-gray-900">{formData.subcategory}</p>
-              )}
-            </div>
-
-            {/* Short Description - Bilingual */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Short Description
-              </label>
-              {isEditing || !id ? (
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="flex-1">
-                    <textarea
-                      value={formData.short_description}
-                      onChange={(e) => setFormData(prev => ({ ...prev, short_description: e.target.value }))}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      placeholder="Short description (English)"
-                    />
-                  </div>
-                  <div className="flex-1" dir="rtl">
-                    <textarea
-                      value={formData.short_description_ar}
-                      onChange={(e) => setFormData(prev => ({ ...prev, short_description_ar: e.target.value }))}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                      placeholder="وصف مختصر (العربية)"
-                    />
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <p className="flex-1 text-gray-900">{formData.short_description || '—'}</p>
-                  <p className="flex-1 text-gray-900" dir="rtl">{formData.short_description_ar || '—'}</p>
-                </div>
-              )}
-            </div>
-
+          {/* Subcategory - Bilingual */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Subcategory *
+  </label>
+  {isEditing || !id ? (
+    <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex-1">
+        <input
+          type="text"
+          value={formData.subcategory}
+          onChange={(e) => setFormData(prev => ({ ...prev, subcategory: e.target.value }))}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+          placeholder="Subcategory (English)"
+        />
+      </div>
+      <div className="flex-1" dir="rtl">
+        <input
+          type="text"
+          value={formData.subcategory_ar}
+          onChange={(e) => setFormData(prev => ({ ...prev, subcategory_ar: e.target.value }))}
+          className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+          placeholder="التصنيف الفرعي (العربية)"
+        />
+      </div>
+    </div>
+  ) : (
+    <div className="flex flex-col sm:flex-row gap-4">
+      <p className="flex-1 text-gray-900">{formData.subcategory || '—'}</p>
+      <p className="flex-1 text-gray-900" dir="rtl">{formData.subcategory_ar || '—'}</p>
+    </div>
+  )}
+</div>
             {/* Cover Image */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
