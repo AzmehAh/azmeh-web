@@ -133,7 +133,7 @@ useEffect(() => {
 
       if (error) throw error;
 
-      if (data && data.length > 0) { 
+      if (data && data.length > 0) {
         setCategoryOptions(data);
       } else {
         // fallback: جلب من المقالات إذا لم يوجد تكوين
