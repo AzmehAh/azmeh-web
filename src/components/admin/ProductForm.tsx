@@ -189,10 +189,10 @@ const ProductForm = () => {
   return acc;
 }, {});
 
-    setBrands(groupedValues.brand || []);
-    setTypes(groupedValues.type || []);
-    setMaterials(groupedValues.material || []);
-    setUsages(groupedValues.usage || []);
+ setBrands(groupedValues.brand || []);
+setTypes(groupedValues.type || []);
+setMaterials(groupedValues.material || []);
+setUsages(groupedValues.usage || []);
   } catch (error) {
     console.error('Error fetching filter options:', error);
     setBrands([]);
