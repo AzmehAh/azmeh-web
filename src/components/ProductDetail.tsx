@@ -59,6 +59,7 @@ interface Product {
     recommended_uses?: string[];
   };
 }
+const getLocalized = (ar, en) => (i18n.language === 'ar' ? ar : en);
 
 const TECHNICAL_FIELDS = [
   { key: 'component_a', label: 'Component A', keyAr: 'component_a_ar' },
