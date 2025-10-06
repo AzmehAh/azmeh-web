@@ -333,6 +333,12 @@
     "needSupport": "Need Additional Technical Support?",
     "supportDescription": "Our technical experts are available to help you resolve complex coating issues.",
     "contactSupport": "Contact Technical Support",
+    "severity": {
+      "High": "High",
+      "Medium": "Medium",
+      "Low": "Low"
+    }
+  
     "scheduleConsultation": "Schedule Consultation"
   },
   "footer": {
@@ -395,6 +401,7 @@
     "failedToLoadProducts": "Failed to load featured products. Please try again later."
   
 },
+  
   "common": {
     "loading": "Loading...",
     "error": "Error",
