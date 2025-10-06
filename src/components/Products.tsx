@@ -30,6 +30,7 @@ const Products = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [products, setProducts] = useState<Product[]>([]);
   const [filterOptions, setFilterOptions] = useState<Record<string, string[]>>({});
+  const [translatedFilterValues, setTranslatedFilterValues] = useState<Record<string, Record<string, string>>>({});
   const [filterTypes, setFilterTypes] = useState<(ProductFilterType & { product_filter_values: ProductFilterValue[] })[]>([]);
   const [loading, setLoading] = useState(true);
   const [productsLoading, setProductsLoading] = useState(true);
@@ -40,29 +41,50 @@ const Products = () => {
 
   const isRTL = i18n.language === 'ar';
 
-  useEffect(() => {
-    fetchFilterData();
-    fetchProducts();
-  }, []);
+  // دالة مساعدة لترجمة قيم الفلاتر
+  const translateFilterValue = (category: string, value: string): string => {
+    if (!translatedFilterValues[category]) return value;
+    return translatedFilterValues[category][value] || value;
+  };
+
+  // دالة للحصول على النص المترجم للحقول النصية (مثل الاسم والوصف)
+  const getTranslatedText = (product: Product, field: string): string => {
+    const fieldAr = `${field}_ar` as keyof Product;
+    return (i18n.language === 'ar' && product[fieldAr]) ? String(product[fieldAr]) : String(product[field as keyof Product]);
+  };
 
   const fetchFilterData = async () => {
     try {
       const data = await api.getProductFilterTypes();
       setFilterTypes(data || []);
       
-      // Transform data into filter options format
       const options: Record<string, string[]> = {};
+      const translations: Record<string, Record<string, string>> = {};
+
       data?.forEach(filterType => {
         const key = filterType.name.toLowerCase();
-        options[key] = filterType.product_filter_values
+        const translatedValues = filterType.product_filter_values
           .filter(value => value.is_active)
           .sort((a, b) => a.sort_order - b.sort_order)
-          .map(value => i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value);
+          .map(value => {
+            const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
+            // ربط القيمة الأصلية والترجمة العربية بالقيمة المعروضة
+            translations[key] = {
+              ...translations[key],
+              [value.value]: displayValue,
+              ...(value.value_ar && { [value.value_ar]: displayValue })
+            };
+            return displayValue;
+          });
+
+        options[key] = translatedValues;
+        translations[key] = translations[key] || {};
       });
       
       setFilterOptions(options);
+      setTranslatedFilterValues(translations);
       
-      // Initialize selectedFilters with empty arrays for each filter type
+      // Initialize selectedFilters
       const initialFilters: Record<string, string[]> = {};
       data?.forEach(filterType => {
         initialFilters[filterType.name.toLowerCase()] = [];
@@ -79,7 +101,6 @@ const Products = () => {
   const fetchProducts = async () => {
     try {
       setProductsLoading(true);
-      // استدعاء API لجلب المنتجات مع الصور
       const { data: productsData, error } = await supabase
         .from('products')
         .select(`
@@ -91,7 +112,6 @@ const Products = () => {
 
       if (error) throw error;
 
-      // تحويل البيانات لتتضمن الصورة الرئيسية
       const formattedProducts = (productsData || []).map(product => {
         const mainImage = product.product_images.find((img: any) => img.is_main) || 
                           product.product_images[0];
@@ -123,44 +143,13 @@ const Products = () => {
     }
   };
 
-  // دالة للحصول على النص المترجم بناءً على اللغة
-  const getTranslatedText = (product: Product, field: string): string => {
-    const fieldAr = `${field}_ar` as keyof Product;
-    return (i18n.language === 'ar' && product[fieldAr]) ? String(product[fieldAr]) : String(product[field as keyof Product]);
-  };
-
-  // Filter and sort products
-  const filteredProducts = useMemo(() => {
-    let filtered = products.filter(product => {
-      // Search filter
-      const productName = getTranslatedText(product, 'name');
-      const productDescription = getTranslatedText(product, 'description');
-      
-      const matchesSearch = productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           productDescription.toLowerCase().includes(searchTerm.toLowerCase());
-
-      // Category filters
-      const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
-        if (values.length === 0) return true;
-        
-        const productValue = getTranslatedText(product, category as keyof Product);
-        return values.includes(productValue);
-      });
-
-      return matchesSearch && matchesFilters;
-    });
-
-    // Sort alphabetically
-    filtered.sort((a, b) => {
-      const aName = getTranslatedText(a, 'name');
-      const bName = getTranslatedText(b, 'name');
-      const compareValue = aName.localeCompare(bName, i18n.language);
-      return sortOrder === 'asc' ? compareValue : -compareValue;
-    });
-
-    return filtered;
-  }, [searchTerm, selectedFilters, sortOrder, products, i18n.language]);
+  // إعادة تحميل البيانات عند تغيير اللغة
+  useEffect(() => {
+    setLoading(true);
+    setProductsLoading(true);
+    fetchFilterData();
+    fetchProducts();
+  }, [i18n.language]);
 
   // عند تحميل الصفحة وتهيئة الفلاتر من الـ URL
   useEffect(() => {
@@ -176,7 +165,6 @@ const Products = () => {
     }
   }, [loading, filterTypes]);
 
-  // تعديل toggleFilter لتحديث URL تلقائياً
   const toggleFilter = (category: string, value: string) => {
     setSelectedFilters(prev => {
       const newValues = prev[category].includes(value)
@@ -185,19 +173,16 @@ const Products = () => {
 
       const newFilters = { ...prev, [category]: newValues };
 
-      // تحديث الـ URL
       const params = new URLSearchParams();
       Object.entries(newFilters).forEach(([key, values]) => {
         if (values.length > 0) params.set(key, values.join(','));
       });
 
       navigate(`/products?${params.toString()}`, { replace: true });
-
       return newFilters;
     });
   };
 
-  // تعديل clearFilters لتفريغ URL أيضاً
   const clearFilters = () => {
     const emptyFilters: Record<string, string[]> = {};
     filterTypes.forEach(filterType => {
@@ -212,7 +197,6 @@ const Products = () => {
     return Object.values(selectedFilters).flat().length;
   };
 
-  // دالة لترجمة أسماء الفلاتر
   const getFilterCategoryName = (category: string): string => {
     const filterNames: Record<string, string> = {
       'brand': t('products.brand'),
@@ -222,6 +206,35 @@ const Products = () => {
     };
     return filterNames[category] || category;
   };
+
+  const filteredProducts = useMemo(() => {
+    let filtered = products.filter(product => {
+      const productName = getTranslatedText(product, 'name');
+      const productDescription = getTranslatedText(product, 'description');
+      
+      const matchesSearch = productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           productDescription.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
+        if (values.length === 0) return true;
+        const productValue = product[category as keyof Product] as string;
+        const translatedValue = translateFilterValue(category, productValue);
+        return values.includes(translatedValue);
+      });
+
+      return matchesSearch && matchesFilters;
+    });
+
+    filtered.sort((a, b) => {
+      const aName = getTranslatedText(a, 'name');
+      const bName = getTranslatedText(b, 'name');
+      const compareValue = aName.localeCompare(bName, i18n.language);
+      return sortOrder === 'asc' ? compareValue : -compareValue;
+    });
+
+    return filtered;
+  }, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
@@ -440,75 +453,75 @@ const Products = () => {
                   {filteredProducts.map((product, index) => {
                     const productName = getTranslatedText(product, 'name');
                     const productDescription = getTranslatedText(product, 'description');
-                    const productBrand = getTranslatedText(product, 'brand');
-                    const productType = getTranslatedText(product, 'type');
-                    const productMaterial = getTranslatedText(product, 'material');
-                    const productUsage = getTranslatedText(product, 'usage');
+                    const productBrand = translateFilterValue('brand', product.brand);
+                    const productType = translateFilterValue('type', product.type);
+                    const productMaterial = translateFilterValue('material', product.material);
+                    const productUsage = translateFilterValue('usage', product.usage);
 
-                  return (
-    <motion.div
-      key={product.id}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group 
-        ${viewMode === 'list' ? 'flex items-center' : 'flex flex-col'}
-      `}
-      onClick={() => navigate(`/product/${product.id}`)}
-    >
-      {/* Product Image */}
-      <div className={`${viewMode === 'list' ? 'w-24 h-24 flex-shrink-0' : 'h-48'} overflow-hidden`}>
-        <img
-          src={product.image}
-          alt={productName}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
-      </div>
+                    return (
+                      <motion.div
+                        key={product.id}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        className={`bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group 
+                          ${viewMode === 'list' ? 'flex items-center' : 'flex flex-col'}
+                        `}
+                        onClick={() => navigate(`/product/${product.id}`)}
+                      >
+                        {/* Product Image */}
+                        <div className={`${viewMode === 'list' ? 'w-24 h-24 flex-shrink-0' : 'h-48'} overflow-hidden`}>
+                          <img
+                            src={product.image}
+                            alt={productName}
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          />
+                        </div>
 
-      {/* Product Info */}
-      <div className="p-6 flex-1 grid grid-rows-[auto,1fr,auto] items-stretch">
-        {/* Title & Brand */}
-        <div className="flex items-start justify-between mb-3">
-          <div>
-            <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors">
-              {productName}
-            </h3>
-            <p className="text-sm text-gray-500 font-mono">{product.code}</p>
-          </div>
-          <span className="px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full">
-            {productBrand}
-          </span>
-        </div>
+                        {/* Product Info */}
+                        <div className="p-6 flex-1 grid grid-rows-[auto,1fr,auto] items-stretch">
+                          {/* Title & Brand */}
+                          <div className="flex items-start justify-between mb-3">
+                            <div>
+                              <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors">
+                                {productName}
+                              </h3>
+                              <p className="text-sm text-gray-500 font-mono">{product.code}</p>
+                            </div>
+                            <span className="px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full">
+                              {productBrand}
+                            </span>
+                          </div>
 
-        {/* Description + Tags */}
-        <div className="flex flex-col justify-between">
-          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-            {productDescription}
-          </p>
+                          {/* Description + Tags */}
+                          <div className="flex flex-col justify-between">
+                            <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                              {productDescription}
+                            </p>
 
-          <div className="flex flex-wrap gap-2 mb-4">
-            <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-              {productType}
-            </span>
-            <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-              {productMaterial}
-            </span>
-            <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
-              {productUsage}
-            </span>
-          </div>
-        </div>
+                            <div className="flex flex-wrap gap-2 mb-4">
+                              <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                                {productType}
+                              </span>
+                              <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                                {productMaterial}
+                              </span>
+                              <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded">
+                                {productUsage}
+                              </span>
+                            </div>
+                          </div>
 
-        {/* Button */}
-        {viewMode === 'grid' && (
-          <button className="w-full bg-[#2C5DB6] text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
-            {t('products.viewDetails')}
-          </button>
-        )}
-      </div>
-    </motion.div>
-  );
-})}
+                          {/* Button */}
+                          {viewMode === 'grid' && (
+                            <button className="w-full bg-[#2C5DB6] text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
+                              {t('products.viewDetails')}
+                            </button>
+                          )}
+                        </div>
+                      </motion.div>
+                    );
+                  })}
                 </motion.div>
               )}
             </AnimatePresence>
