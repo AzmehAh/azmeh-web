@@ -107,7 +107,7 @@ const brands = [
   { name: "AlDahab", logo: "/images/AlDahab.png" },
 ];
 
-const ProductDetail = () => {
+const ProductDetail = () => { 
   const { id } = useParams<{ id: string }>();
   const { t, i18n } = useTranslation(); // ✅ t للترجمة
   const [product, setProduct] = useState<Product | null>(null);
@@ -116,11 +116,11 @@ const ProductDetail = () => {
   const [error, setError] = useState<string | null>(null);
 
   const getLocalizedField = (enValue: any, arValue: any) => {
-  if (i18n.language === 'ar') {
-    return (arValue && arValue.trim() !== '') ? arValue : enValue;
-  }
-  return enValue;
-};
+    if (i18n.language === 'ar') {
+      return arValue || enValue;
+    }
+    return enValue;
+  };
 
   const parseArrayField = (field: any): any[] => {
     if (Array.isArray(field)) return field;
