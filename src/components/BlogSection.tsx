@@ -5,15 +5,13 @@ import { motion } from 'framer-motion';
 import { supabase } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
 
-// تعديل الواجهة لتشمل الحقول باللغتين
+// الآن الواجهة بسيطة: حقول واحدة فقط
 interface Bulletin {
   id: string;
-  title_en: string;
-  title_ar: string;
+  title: string;
   cover_image: string;
   created_at: string;
-  short_description_en: string;
-  short_description_ar: string;
+  short_description: string;
 }
 
 const BlogSection = () => {
@@ -22,18 +20,12 @@ const BlogSection = () => {
 
   useEffect(() => {
     const fetchFeatured = async () => {
+      // جلب المقالات التي تطابق اللغة الحالية
       const { data, error } = await supabase
         .from('bulletins')
-        .select(`
-          id,
-          title_en,
-          title_ar,
-          cover_image,
-          created_at,
-          short_description_en,
-          short_description_ar
-        `)
+        .select('id, title, cover_image, created_at, short_description')
         .eq('featured', true)
+        .eq('lang', i18n.language) // ← هذا هو المفتاح!
         .order('created_at', { ascending: false })
         .limit(3);
 
@@ -45,9 +37,9 @@ const BlogSection = () => {
     };
 
     fetchFeatured();
-  }, []);
+  }, [i18n.language]); // ← أضف i18n.language كـ dependency
 
-  // تنسيق التاريخ حسب اللغة الحالية
+  // تنسيق التاريخ حسب اللغة
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const locale = i18n.language === 'ar' ? 'ar-EG' : 'en-US';
@@ -56,11 +48,6 @@ const BlogSection = () => {
       month: 'long',
       day: 'numeric'
     }).format(date);
-  };
-
-  // تحديد الحقل المناسب حسب اللغة
-  const getLocalizedField = (en: string, ar: string) => {
-    return i18n.language === 'ar' ? ar : en;
   };
 
   return (
@@ -97,17 +84,15 @@ const BlogSection = () => {
                 transition={{ duration: 0.6, delay: index * 0.1 }}
                 className="bg-white shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 group cursor-pointer flex flex-col h-full"
               >
-                {/* Post Image */}
                 <div className="relative overflow-hidden">
                   <img
                     src={post.cover_image}
-                    alt={getLocalizedField(post.title_en, post.title_ar)}
+                    alt={post.title}
                     className="w-full h-48 sm:h-56 lg:h-60 object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
 
-                {/* Post Content */}
                 <div className="p-4 sm:p-6 flex flex-col flex-grow">
                   <div className="flex items-center text-sm text-gray-500 mb-3">
                     <Calendar className="w-4 h-4 mr-2" />
@@ -115,11 +100,11 @@ const BlogSection = () => {
                   </div>
 
                   <h1 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 min-h-[90px] group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
-                    {getLocalizedField(post.title_en, post.title_ar)}
+                    {post.title}
                   </h1>
 
                   <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 flex-grow">
-                    {getLocalizedField(post.short_description_en, post.short_description_ar)}
+                    {post.short_description}
                   </p>
                 </div>
               </motion.article>
