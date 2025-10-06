@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue } from "framer-motion";
+import { useTranslation } from 'react-i18next';
+
+
+const brands = () => {
+  const { t, i18n } = useTranslation();
+  const currentLang = i18n.language; 
 
 const BrandsSection = () => {
   const isRTL = false; 
