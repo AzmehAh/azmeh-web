@@ -325,12 +325,16 @@
     "contactSupport": "تواصل مع الدعم الفني",
     "scheduleConsultation": "احجز استشارة"
   },
-  "footer": {
-    "about": "معلومات عنا",
+   "footer": {
+    "companyDescription": "التميز في أنظمة الدهانات والطلاءات منذ عام 1955. موثوق به من قبل المحترفين حول العالم.",
+    "copyright": "© {{year}} الأصبغة الأزمة. جميع الحقوق محفوظة.",
     "quickLinks": "روابط سريعة",
-    "contact": "اتصل بنا",
+    "contactInfo": "معلومات الاتصال",
     "followUs": "تابعنا",
-    "rights": "جميع الحقوق محفوظة"
+    "stayUpdated": "ابق على اطلاع بآخر أخبارنا ومنتجاتنا",
+    "professionalSolutions": "حلول دهانات احترافية لكل تطبيق",
+    "privacyPolicy": "سياسة الخصوصية",
+    "termsOfService": "شروط الخدمة"
   },
   
   "colorInspiration": {
@@ -356,7 +360,14 @@
     "filter": "تصفية",
     "clear": "مسح",
     "apply": "تطبيق",
-    "reset": "إعادة تعيين"
+    "reset": "إعادة تعيين",
+
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "blog": "المدونة",
+    "about": "من نحن",
+    "contact": "اتصل بنا"
+  
   }
    
 }
