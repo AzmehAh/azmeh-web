@@ -9,7 +9,8 @@ const AboutSection = () => {
   const currentYear = new Date().getFullYear();
   const targetYears = currentYear - 1955;
   const duration = 2000;
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
 
   useEffect(() => {
     const steps = 60;
@@ -33,13 +34,13 @@ const AboutSection = () => {
   return (
     <section className="py-20 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className={`grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center ${isRTL ? 'flex-row-reverse' : ''}`}>
           {/* Left Content */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            initial={{ opacity: 0, x: isRTL ? 20 : -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center lg:text-left"
+            className={`text-center lg:text-left ${isRTL ? 'lg:text-right' : ''}`}
           >
             <h3 className="text-sm uppercase text-[#0055A3] mb-2">
               {t('about.legacy')}
@@ -59,16 +60,16 @@ const AboutSection = () => {
             >
               {t('about.readMore')}
               <ArrowRight
-              className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
-                isArabic ? 'mr-2 rotate-180' : 'ml-2'
-              }`}
-            />
+                className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
+                  isRTL ? 'mr-2 rotate-180' : 'ml-2'
+                }`}
+              />
             </Link>
           </motion.div>
 
           {/* Right Content - Company Image with Counter Badge */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="relative flex justify-center"
@@ -80,9 +81,11 @@ const AboutSection = () => {
               className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg"
             />
 
-            {/* Counter Badge */}
+            {/* Counter Badge - يمين في العربية، يسار في الإنجليزية */}
             <motion.div
-              className="absolute bottom-0 left-2 bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo"
+              className={`absolute bottom-0 ${
+                isRTL ? 'right-2' : 'left-2'
+              } bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo`}
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
