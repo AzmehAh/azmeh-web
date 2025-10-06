@@ -359,6 +359,37 @@
     "likeFacebook": "Like on Facebook",
     "whatsappSupport": "WhatsApp Support"
   },
+   "bulletin": {
+    "notFoundTitle": "Bulletin Not Found",
+    "notFoundText": "The bulletin you're looking for doesn't exist.",
+    "backToBlog": "Back to Blog",
+    "home": "Home",
+    "blog": "Blog",
+    "related": "Related Bulletins",
+    "suggestions": "You Might Also Like",
+    "noRelated": "No related bulletins found.",
+    "needHelpTitle": "Need Help?",
+    "needHelpText": "Our team is ready to assist you with any questions or support you may need.",
+    "contactTeam": "Contact Our Team",
+    "downloadPdf": "Download PDF"
+  }, 
+  "blog": {
+    "sectionTag": "Latest Updates",
+    "sectionTitle": "Explore Our Bulletins",
+    "noPosts": "No featured bulletins available at the moment.",
+    "viewAllButton": "View All Bulletins",
+    "heroTitle": "Official Bulletins & Announcements",
+    "heroSubtitle": "Stay updated with the latest official communications, policy updates, and important notices from our organization.",
+    "categoriesTitle": "Filter by Category",
+    "clearAll": "Clear All",
+    "searchPlaceholder": "Search bulletins...",
+    "filteredTitle": "Filtered Results",
+    "allTitle": "All Bulletins",
+    "bulletinsAvailable": "{{count}} bulletins available",
+    "noResults": "No bulletins found",
+    "noResultsText": "Try adjusting your search or filters.",
+    "readMore": "Read More"
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
