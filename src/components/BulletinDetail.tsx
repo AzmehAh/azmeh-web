@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, FileText ,ArrowRight } from 'lucide-react';
+import { ArrowLeft, FileText } from 'lucide-react';
 import DOMPurify from 'dompurify';
 import { Bulletin } from '../lib/supabase';
 import { api } from '../lib/supabase';
@@ -123,22 +123,14 @@ const BulletinDetail = () => {
       {/* Article Header */}
       <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-start">
-         <button
-  onClick={() => navigate('/blog')}
-  className="inline-flex items-center text-blue-100 hover:text-white font-medium mb-6 transition-colors"
->
-  {isRTL ? (
-    <>
-      {t('bulletin.backToBlog')}
-      <ArrowRight className="w-4 h-4 mr-2" /> {/* السهم على اليمين في واجهة RTL */}
-    </>
-  ) : (
-    <>
-      <ArrowLeft className="w-4 h-4 mr-2" />
-      {t('bulletin.backToBlog')}
-    </>
-  )}
-</button>
+          <button
+            onClick={() => navigate('/blog')}
+            className="inline-flex items-center text-blue-100 hover:text-white font-medium mb-6 transition-colors"
+          >
+            {isRTL ? null : <ArrowLeft className="w-4 h-4 mr-2" />}
+            {t('bulletin.backToBlog')}
+            
+          </button>
 
           <div className="flex items-center gap-3 mb-4">
             <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
