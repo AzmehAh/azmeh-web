@@ -12,12 +12,12 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           
-          {/* معلومات الشركة */}
-          <div className="space-y-4">
+          {/* Company Info - Order 4 in RTL */}
+          <div className={`order-4 md:order-1 ${isRTL ? 'md:order-4' : ''} space-y-4`}>
             <div className="flex items-center mb-6">
               <img
                 src="/images/Azmeh-Paints-Logo.png"
-                alt="دهانات العظمة"
+                alt="Al Azmeh Paints"
                 className="h-12 w-auto filter brightness-0 invert"
               />
             </div>
@@ -31,8 +31,8 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* الروابط السريعة */}
-          <div>
+          {/* Quick Links - Order 3 in RTL */}
+          <div className={`order-3 md:order-2 ${isRTL ? 'md:order-3' : ''}`}>
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.quickLinks')}
             </h4>
@@ -65,26 +65,26 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* معلومات الاتصال */}
-          <div>
+          {/* Contact Information - Order 2 in RTL */}
+          <div className={`order-2 md:order-3 ${isRTL ? 'md:order-2' : ''}`}>
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.contactInfo')}
             </h4>
             <div className="space-y-4">
               <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                <Mail className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`} />
+                <Mail className="w-5 h-5 text-white mt-0.5 flex-shrink-0 rtl:ml-3 ltr:mr-3" />
                 <div>
                   <p className="text-gray-300 text-sm">manager@dkl-syria.com</p>
                 </div>
               </div>
               <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                <Phone className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`} />
+                <Phone className="w-5 h-5 text-white mt-0.5 flex-shrink-0 rtl:ml-3 ltr:mr-3" />
                 <div>
-                  <p className="text-gray-300 text-sm">٩٨٨ ٦٩١ ٧١٢ (٩٦٣+)</p>
+                  <p className="text-gray-300 text-sm">(+963) 988 691 712</p>
                 </div>
               </div>
               <div className={`flex items-start ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
-                <MapPin className={`w-5 h-5 text-white mt-0.5 flex-shrink-0 ${isRTL ? 'ml-3' : 'mr-3'}`} />
+                <MapPin className="w-5 h-5 text-white mt-0.5 flex-shrink-0 rtl:ml-3 ltr:mr-3" />
                 <div>
                   <p className="text-gray-300 text-sm">
                     {t('footer.address')}
@@ -94,37 +94,37 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* وسائل التواصل الاجتماعي */}
-          <div>
+          {/* Social Media - Order 1 in RTL */}
+          <div className={`order-1 md:order-4 ${isRTL ? 'md:order-1' : ''}`}>
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.followUs')}
             </h4>
-            <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} ${isRTL ? 'space-x-reverse' : ''} space-x-4`}>
+            <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} space-x-4 rtl:space-x-reverse`}>
               <a
                 href="#"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
-                aria-label={t('common.facebook')}
+                aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
-                aria-label={t('common.instagram')}
+                aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
-                aria-label={t('common.linkedin')}
+                aria-label="LinkedIn"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
                 href="#"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
-                aria-label={t('common.youtube')}
+                aria-label="YouTube"
               >
                 <Youtube className="w-5 h-5" />
               </a>
@@ -137,13 +137,13 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* الحد السفلي */}
+        {/* Bottom Border */}
         <div className="mt-12 pt-8 border-t border-gray-800">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
               {t('footer.professionalSolutions')}
             </p>
-            <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} ${isRTL ? 'space-x-reverse' : ''} space-x-6 text-sm`}>
+            <div className={`flex ${isRTL ? 'flex-row-reverse' : 'flex-row'} space-x-6 rtl:space-x-reverse text-sm`}>
               <Link to="/privacy" className="text-gray-400 hover:text-white transition-colors">
                 {t('footer.privacyPolicy')}
               </Link>
@@ -158,4 +158,4 @@ const Footer = () => {
   );
 };
 
-export default Footer; 
+export default Footer;
