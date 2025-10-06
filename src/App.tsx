@@ -37,7 +37,7 @@ import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
 import Contact from './components/Contact';
 import JobApplication from './components/JobApplication';
-import About from './ComponentAbout/About.tsx'; // تم إصلاح هذا السطر
+import About from './ComponentAbout/About.tsx'; 
 import { auth } from './lib/auth';
 
 const HomePage = () => ( 
