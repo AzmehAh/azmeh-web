@@ -337,6 +337,10 @@
     "termsOfService": "شروط الخدمة"
   },
   
+  "brands": {
+    "trustedPartners": "شركاء موثوقون",
+    "featuredBrands": "علاماتنا المميزة"
+  },
   "colorInspiration": {
     "subtitle": "جديد وحصري",
     "title": "إصدارات جديدة",
