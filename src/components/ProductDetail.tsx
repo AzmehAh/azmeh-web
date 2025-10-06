@@ -837,7 +837,7 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <div className=" rounded-2xl p-8">
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  Note: {product.safety_note}
+                 {product.safety_note}
                 </p>
               </div>
             </div>
