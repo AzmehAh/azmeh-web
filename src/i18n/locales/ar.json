@@ -349,7 +349,7 @@
 "industrialCoatings": "الطلاءات الصناعية",
 "customSolutions": "حلول مخصصة"
 },
-  "brands": {
+  "BrandsSection": {
     "trustedPartners": "شركاء موثوقون",
     "featuredBrands": "علاماتنا المميزة"
   },
