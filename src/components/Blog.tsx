@@ -21,7 +21,6 @@ const Blog = () => {
       }
     >
   >({});
-  const [bulletinCategories, setBulletinCategories] = useState<BulletinCategoryConfig[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
@@ -39,7 +38,6 @@ const Blog = () => {
       ]);
 
       setBulletins(bulletinsData || []);
-      setBulletinCategories(categoriesData || []);
 
       // 🟦 بناء نظام التصنيفات بلغتين
       const categoriesMap: Record<
@@ -67,7 +65,6 @@ const Blog = () => {
           };
         }
 
-        // أضف التصنيف الفرعي إذا لم يكن موجود مسبقاً
         if (sub_en && !categoriesMap[cat_en].subs.some((s) => s.en === sub_en)) {
           categoriesMap[cat_en].subs.push({ en: sub_en, ar: sub_ar });
         }
@@ -93,12 +90,13 @@ const Blog = () => {
     }
   }, [loading, systemCategories]);
 
-  const toggleFilter = (categoryKey: string, sub_en: string) => {
+  // ✅ التعديل هنا: يعتمد على اللغة الحالية في الفلترة
+  const toggleFilter = (categoryKey: string, subKey: string) => {
     setSelectedFilters((prev) => {
       const prevCategory = prev[categoryKey] || [];
-      const updatedCategory = prevCategory.includes(sub_en)
-        ? prevCategory.filter((item) => item !== sub_en)
-        : [...prevCategory, sub_en];
+      const updatedCategory = prevCategory.includes(subKey)
+        ? prevCategory.filter((item) => item !== subKey)
+        : [...prevCategory, subKey];
 
       const newFilters = { ...prev, [categoryKey]: updatedCategory };
 
@@ -118,14 +116,18 @@ const Blog = () => {
     navigate('/blog', { replace: true });
   };
 
+  // ✅ هنا التعديل الرئيسي للفلترة باللغتين
   const filteredBulletins = useMemo(() => {
     let filtered = bulletins;
 
     Object.entries(selectedFilters).forEach(([catKey, subs]) => {
       if (subs.length > 0) {
-        filtered = filtered.filter(
-          (b) => b.category === catKey && subs.includes(b.subcategory)
-        );
+        filtered = filtered.filter((b) => {
+          const bCat = isRTL ? b.category_ar || b.category : b.category;
+          const bSub = isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
+          return bCat === (isRTL ? systemCategories[catKey]?.name_ar : catKey) &&
+                 subs.includes(bSub);
+        });
       }
     });
 
@@ -143,7 +145,7 @@ const Blog = () => {
     }
 
     return filtered;
-  }, [selectedFilters, searchTerm, bulletins, isRTL]);
+  }, [selectedFilters, searchTerm, bulletins, isRTL, systemCategories]);
 
   const handleBulletinClick = (id: string) => {
     navigate(`/bulletin/${id}`);
@@ -228,16 +230,17 @@ const Blog = () => {
                           >
                             {cat.subs.map((sub) => {
                               const displaySub = isRTL ? sub.ar : sub.en;
+                              const subKey = isRTL ? sub.ar || sub.en : sub.en;
                               return (
                                 <label
-                                  key={sub.en}
+                                  key={subKey}
                                   className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
                                 >
                                   <div className="flex items-center space-x-2">
                                     <input
                                       type="checkbox"
-                                      checked={selectedFilters[key]?.includes(sub.en) || false}
-                                      onChange={() => toggleFilter(key, sub.en)}
+                                      checked={selectedFilters[key]?.includes(subKey) || false}
+                                      onChange={() => toggleFilter(key, subKey)}
                                       className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
                                     />
                                     <span className="text-sm text-gray-700">{displaySub}</span>
