@@ -13,6 +13,7 @@ const Blog = () => {
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
   const [systemCategories, setSystemCategories] = useState<Record<string, string[]>>({});
   const [bulletinCategories, setBulletinCategories] = useState<BulletinCategoryConfig[]>([]);
+  const [categoryDisplayNames, setCategoryDisplayNames] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
@@ -29,30 +30,36 @@ const Blog = () => {
         api.getBulletinCategoriesConfig()
       ]);
 
-      // ✅ لا نترجم هنا — نستخدم الحقول مباشرة حسب اللغة لاحقًا
+      // ✅ الاحتفاظ بالبيانات الأصلية دون ترجمة
       setBulletins(bulletinsData || []);
       setBulletinCategories(categoriesData || []);
 
-      // بناء التصنيفات حسب اللغة الحالية
       const categoriesMap: Record<string, string[]> = {};
+      const displayNames: Record<string, string> = {};
 
-      // تحديد الحقول المستخدمة حسب اللغة
-      const getCategoryField = (b: Bulletin) => isRTL ? b.category_ar || b.category : b.category;
-      const getSubcategoryField = (b: Bulletin) => isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
-      const getCategoryName = (cat: BulletinCategoryConfig) => isRTL ? cat.name_ar || cat.name : cat.name;
+      categoriesData?.forEach(category => {
+        if (category.is_active) {
+          const originalName = category.name;
+          const displayName = isRTL ? category.name_ar || category.name : category.name;
+          
+          displayNames[originalName] = displayName;
 
-      // جلب جميع أسماء التصنيفات الفعلية من النشرات (ليس من التكوين فقط)
-      const allCategories = [...new Set(bulletinsData.map(getCategoryField).filter(Boolean))];
+          // جلب النشرات حسب الاسم الأصلي
+          const categoryBulletins = bulletinsData.filter(b => b.category === originalName);
+          const subcategories = [
+            ...new Set(
+              categoryBulletins
+                .map(b => (isRTL ? b.subcategory_ar || b.subcategory : b.subcategory))
+                .filter(Boolean)
+            ),
+          ];
 
-      allCategories.forEach(catName => {
-        const categoryBulletins = bulletinsData.filter(b => getCategoryField(b) === catName);
-        const subcategories = [
-          ...new Set(categoryBulletins.map(getSubcategoryField).filter(Boolean))
-        ];
-        categoriesMap[catName] = subcategories;
+          categoriesMap[originalName] = subcategories;
+        }
       });
 
       setSystemCategories(categoriesMap);
+      setCategoryDisplayNames(displayNames);
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -65,13 +72,14 @@ const Blog = () => {
     if (!loading) {
       const params = new URLSearchParams(window.location.search);
       const newFilters: Record<string, string[]> = {};
-      Object.keys(systemCategories).forEach(catName => {
-        const value = params.get(catName);
-        newFilters[catName] = value ? value.split(',') : [];
+      bulletinCategories.forEach(cat => {
+        const key = cat.name; // ← دائمًا الاسم الأصلي
+        const value = params.get(key);
+        newFilters[key] = value ? value.split(',') : [];
       });
       setSelectedFilters(newFilters);
     }
-  }, [loading, systemCategories]);
+  }, [loading, bulletinCategories]);
 
   const toggleFilter = (category: string, subcategory: string) => {
     setSelectedFilters(prev => {
@@ -101,25 +109,21 @@ const Blog = () => {
   const filteredBulletins = useMemo(() => {
     let filtered = bulletins;
 
-    // تحديد الحقول حسب اللغة
-    const getCategoryField = (b: Bulletin) => isRTL ? b.category_ar || b.category : b.category;
-    const getSubcategoryField = (b: Bulletin) => isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
-    const getTitleField = (b: Bulletin) => isRTL ? b.title_ar || b.title : b.title;
-    const getDescField = (b: Bulletin) => isRTL ? b.short_description_ar || b.short_description : b.short_description;
-
-    Object.entries(selectedFilters).forEach(([category, subcategories]) => {
+    Object.entries(selectedFilters).forEach(([originalCategory, subcategories]) => {
       if (subcategories.length > 0) {
         filtered = filtered.filter(b => 
-          getCategoryField(b) === category && 
-          subcategories.includes(getSubcategoryField(b))
+          b.category === originalCategory && 
+          subcategories.includes(isRTL ? b.subcategory_ar || b.subcategory : b.subcategory)
         );
       }
     });
 
     if (searchTerm) {
       filtered = filtered.filter(b =>
-        getTitleField(b).toLowerCase().includes(searchTerm.toLowerCase()) ||
-        getDescField(b)?.toLowerCase().includes(searchTerm.toLowerCase())
+        (isRTL ? b.title_ar || b.title : b.title).toLowerCase().includes(searchTerm.toLowerCase()) ||
+        ((isRTL ? b.short_description_ar || b.short_description : b.short_description) || '')
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
       );
     }
 
@@ -173,20 +177,20 @@ const Blog = () => {
 
               {/* Categories */}
               <div className="space-y-4">
-                {Object.entries(systemCategories).map(([category, subcategories]) => (
-                  <div key={category}>
+                {Object.entries(systemCategories).map(([originalCategoryName, subcategories]) => (
+                  <div key={originalCategoryName}>
                     <button
-                      onClick={() => setActiveCategory(activeCategory === category ? null : category)}
+                      onClick={() => setActiveCategory(activeCategory === originalCategoryName ? null : originalCategoryName)}
                       className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-[#2C5DB6] transition-colors"
                     >
-                      <span>{category}</span> {/* ← هذا الاسم باللغة الحالية (عربي أو إنجليزي) */}
-                      <motion.span animate={{ rotate: activeCategory === category ? 180 : 0 }} className="inline-block">
+                      <span>{categoryDisplayNames[originalCategoryName] || originalCategoryName}</span>
+                      <motion.span animate={{ rotate: activeCategory === originalCategoryName ? 180 : 0 }} className="inline-block">
                         <ChevronDown className="w-4 h-4" />
                       </motion.span>
                     </button>
 
                     <AnimatePresence>
-                      {activeCategory === category && (
+                      {activeCategory === originalCategoryName && (
                         <motion.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: 'auto', opacity: 1 }}
@@ -202,8 +206,8 @@ const Blog = () => {
                               <div className="flex items-center space-x-2">
                                 <input
                                   type="checkbox"
-                                  checked={selectedFilters[category]?.includes(sub) || false}
-                                  onChange={() => toggleFilter(category, sub)}
+                                  checked={selectedFilters[originalCategoryName]?.includes(sub) || false}
+                                  onChange={() => toggleFilter(originalCategoryName, sub)}
                                   className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
                                 />
                                 <span className="text-sm text-gray-700">{sub}</span>
@@ -291,4 +295,4 @@ const Blog = () => {
   );
 };
 
-export default Blog;
+export default Blog; 
