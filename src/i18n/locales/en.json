@@ -336,11 +336,14 @@
     "ecoFriendly": "ECO-FRIENDLY PAINTING",
     "precisionInterior": "PRECISION INTERIOR",
     "industrialCoatings": "INDUSTRIAL COATINGS",
-    "customSolutions": "CUSTOM SOLUTIONS"
+    "customSolutions": "CUSTOM SOLUTIONS",
+     "trustedPartners": "Trusted Partners",
+     "featuredBrands": "Our Featured Brands"
   
 
   
 },
+ 
   "common": {
     "loading": "Loading...",
     "error": "Error",
