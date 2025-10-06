@@ -385,7 +385,7 @@
     "searchPlaceholder": "Search bulletins...",
     "filteredTitle": "Filtered Results",
     "allTitle": "All Bulletins",
-    "bulletinsAvailable": "{{count}} bulletins available",
+    "bulletinsAvailable": " bulletins available",
     "noResults": "No bulletins found",
     "noResultsText": "Try adjusting your search or filters.",
     "readMore": "Read More"
