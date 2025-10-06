@@ -121,51 +121,44 @@ const BulletinForm = () => {
   }, [id, navigate]);
 
   // جلب التصنيفات
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const { data, error } = await supabase
-          .from('bulletin_categories_config')
-          .select('name')
-          .eq('is_active', true)
-          .order('sort_order', { ascending: true });
+ // جلب التصنيفات مع الترجمة العربية
+useEffect(() => {
+  const fetchCategories = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('bulletin_categories_config')
+        .select('name, name_ar')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
 
-        if (error) throw error;
-        
-        if (!data || data.length === 0) {
-          const { data: bulletinsData } = await supabase
-            .from('bulletins')
-            .select('category')
-            .not('category', 'is', null);
-          
-          if (bulletinsData) {
-            const uniqueCategories = [...new Set(bulletinsData.map(b => b.category))].filter(Boolean);
-            setCategories(uniqueCategories);
-          }
+      if (error) throw error;
+
+      if (data && data.length > 0) { 
+        setCategoryOptions(data);
+      } else {
+        // fallback: جلب من المقالات إذا لم يوجد تكوين
+        const { data: bulletinsData } = await supabase
+          .from('bulletins')
+          .select('category')
+          .not('category', 'is', null);
+
+        if (bulletinsData) {
+          const uniqueCategories = [...new Set(bulletinsData.map(b => b.category))].filter(Boolean);
+          // لا يوجد ترجمة عربية في هذه الحالة، لذا نستخدم نفس الاسم مرتين
+          const fallbackOptions = uniqueCategories.map(cat => ({ name: cat, name_ar: cat }));
+          setCategoryOptions(fallbackOptions);
         } else {
-          setCategories(data.map(cat => cat.name));
-        }
-      } catch (error) {
-        console.error('Error fetching categories:', error);
-        try {
-          const { data: bulletinsData } = await supabase
-            .from('bulletins')
-            .select('category')
-            .not('category', 'is', null);
-          
-          if (bulletinsData) {
-            const uniqueCategories = [...new Set(bulletinsData.map(b => b.category))].filter(Boolean);
-            setCategories(uniqueCategories);
-          }
-        } catch (fallbackError) {
-          console.error('Fallback category fetch failed:', fallbackError);
-          setCategories([]);
+          setCategoryOptions([]);
         }
       }
-    };
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      setCategoryOptions([]);
+    }
+  };
 
-    fetchCategories();
-  }, []);
+  fetchCategories();
+}, []);
 
   // Upload image to storage
   const uploadImage = async (file, path) => {
@@ -502,24 +495,28 @@ const BulletinForm = () => {
 
            
 
-            {/* Category */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
-              {isEditing || !id ? (
-                <select
-                  value={formData.category}
-                  onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
-                  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                >
-                  <option value="">Select a category</option>
-                  {categories.map(cat => (
-                    <option key={cat} value={cat}>{cat}</option>
-                  ))}
-                </select>
-              ) : (
-                <p className="text-gray-900">{formData.category}</p>
-              )}
-            </div>
+         {/* Category */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+  {isEditing || !id ? (
+    <select
+      value={formData.category}
+      onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+      className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    >
+      <option value="">Select a category</option>
+      {categoryOptions.map(cat => (
+        <option key={cat.name} value={cat.name}>
+          {cat.name_ar} / {cat.name}
+        </option>
+      ))}
+    </select>
+  ) : (
+    <p className="text-gray-900">
+      {categoryOptions.find(c => c.name === formData.category)?.name_ar || formData.category} / {formData.category}
+    </p>
+  )}
+</div>
 
             {/* Subcategory */}
             <div>
