@@ -6,7 +6,7 @@ import { supabase } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
 
 // الآن الواجهة بسيطة: حقول واحدة فقط
-interface Bulletin {
+interface Bulletin { 
   id: string;
   title: string;
   cover_image: string;
