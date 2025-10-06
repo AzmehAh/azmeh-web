@@ -41,14 +41,28 @@ const Blog = () => {
       setBulletins(localizedBulletins || []);
       setBulletinCategories(categoriesData || []);
 
-      const categoriesMap: Record<string, string[]> = {};
-      categoriesData?.forEach(category => {
-        if (category.is_active) {
-          const categoryBulletins = localizedBulletins.filter(b => b.category === category.name);
-          const subcategories = [...new Set(categoryBulletins.map(b => b.subcategory))];
-          categoriesMap[category.name] = subcategories;
-        }
-      });
+    const categoriesMap: Record<string, string[]> = {};
+categoriesData?.forEach(category => {
+  if (category.is_active) {
+    // اختيار الاسم حسب اللغة الحالية
+    const categoryName = isRTL
+      ? category.name_ar || category.name
+      : category.name;
+
+    // فلترة النشرات حسب اللغة أيضًا
+    const categoryBulletins = localizedBulletins.filter(b => b.category === categoryName);
+    const subcategories = [
+      ...new Set(
+        categoryBulletins.map(b =>
+          isRTL ? b.subcategory_ar || b.subcategory : b.subcategory
+        )
+      ),
+    ];
+
+    categoriesMap[categoryName] = subcategories;
+  }
+});
+
 
       setSystemCategories(categoriesMap);
     } catch (error) {
