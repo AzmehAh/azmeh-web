@@ -35,15 +35,31 @@ const Header = () => {
       setIsScrolled(window.scrollY > 50);
     }
 
-    const handleScroll = () => {
-      if (location.pathname === '/') {
+   useEffect(() => {
+  const updateScrolledState = () => {
+    // إذا كان الموبايل AND الصفحة الرئيسية (الهيرو)
+    if (isMobile && location.pathname === '/') {
+      // نجعل isScrolled = false فقط عندما لم يتم التمرير
+      setIsScrolled(window.scrollY > 50);
+    } else {
+      // في غير ذلك (الصفحات الأخرى أو الديسكتوب): السلوك الأصلي
+      if (location.pathname !== '/') {
+        setIsScrolled(true);
+      } else {
         setIsScrolled(window.scrollY > 50);
-      } 
-    };
+      }
+    }
+  };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location]);
+  updateScrolledState();
+
+  const handleScroll = () => {
+    updateScrolledState();
+  };
+
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, [location, isMobile]);
 
   // جلب بيانات الأسئلة الشائعة من Supabase
   useEffect(() => {
