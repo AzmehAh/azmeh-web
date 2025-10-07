@@ -21,9 +21,7 @@ useEffect(() => {
     setIsMobile(window.innerWidth < 768);
   };
 
-  window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize);
-}, []);
+  
   return (
     <motion.h1
       variants={container}
@@ -128,7 +126,9 @@ const Hero = () => {
       </div>
     );
   }
-
+window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
 return (
   <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
     {isMobile ? (
