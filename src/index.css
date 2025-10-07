@@ -302,36 +302,4 @@
   border-radius: 8px; /* اختياري */
   display: inline-block; /* عشان ما تتمدد */
 }
- /* تحسينات للهاتف المحمول */
-.hero-title {
-  font-weight: 900;
-  color: white;
-  line-height: 1.1;
-  white-space: normal;
-  word-wrap: break-word;
-}
-
-@media (max-width: 640px) {
-  .hero-title {
-    font-size: 2.5rem !important;
-    text-align: center !important;
-  }
-}
-
-@media (min-width: 641px) and (max-width: 767px) {
-  .hero-title {
-    font-size: 3rem !important;
-  }
-}
-
-@media (min-width: 768px) {
-  .hero-title {
-    font-size: 4rem !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  .hero-title {
-    font-size: 5rem !important;
-  }
-}
+  
