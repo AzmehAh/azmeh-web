@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 const Troubleshooting = () => {
   const { t, i18n } = useTranslation();
+  const isRTL = currentLang === 'ar';
   const { category } = useParams<{ category?: string }>();
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -95,7 +96,7 @@ const Troubleshooting = () => {
               <div className="mt-auto pt-4 border-t border-gray-100">
                 <div className="flex items-center text-orange-600 font-semibold group-hover:translate-x-2 transition-transform">
                   <span>{t('troubleshooting.viewSolutions')}</span>
-                  <ChevronDown className="w-4 h-4 ml-2 rotate-[-90deg]" />
+                  <ChevronDown className={`w-4 h-4 ml-2 ${ isRTL ? 'rotate-[90deg]' : 'rotate-[-90deg]'}`} />
                 </div>
                 <div className="mt-2 text-sm text-gray-500">
                   {cat.troubleshooting_items.length} {t('troubleshooting.issuesCovered')}
