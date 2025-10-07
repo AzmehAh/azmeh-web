@@ -1,32 +1,146 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from "framer-motion";
-import { Link, useLocation } from 'react-router-dom';
-import { ChevronDown, Menu, X } from 'lucide-react';
-import { supabase, FAQCategory, TroubleshootingCategory,FAQItem,TroubleshootingItem } from '../lib/supabase';
-import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from './LanguageSwitcher';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { supabase } from "../lib/supabase";
+import { useTranslation } from "react-i18next";
 
-const Header = () => {
+// 🔹 مكوّن العنوان المتحرك (كما هو)
+const AnimatedTitle = ({ text, isActive, isRTL }) => {
+  const container = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 0.8, type: "spring" } 
+    },
+  };
+
+  return (
+    <motion.h1
+      variants={container}
+      initial="hidden"
+      animate="visible"
+      style={{
+        fontSize: isActive 
+          ? window.innerWidth < 640
+            ? "2.5rem"
+            : window.innerWidth < 768
+            ? "3rem"
+            : "4rem"
+          : window.innerWidth < 640
+          ? "3rem"
+          : window.innerWidth < 768
+          ? "4rem"
+          : "5rem",
+        fontWeight: "900",
+        color: "white",
+        textAlign: isRTL ? "right" : "left",
+        lineHeight: "1.1",
+        direction: isRTL ? "rtl" : "ltr",
+        whiteSpace: "nowrap",
+        transform: isRTL && !isActive ? "rotate(-90deg) translateX(50%)" : "none",
+        transformOrigin: isRTL && !isActive ? "top right" : "center center",
+      }}
+    >
+      {text}
+    </motion.h1>
+  );
+}; 
+
+// 🔹 مكوّن السلايدر للهواتف فقط - بدون فلاش أبيض، مع نقاط فقط
+const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, setIsManual, t, isRTL, isMobile }) => {
+  useEffect(() => {
+    if (isManual || categories.length <= 1) return;
+
+    const interval = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % categories.length);
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isManual, categories.length]);
+
+  const goToSlide = (index) => {
+    setActiveIndex(index);
+    setIsManual(true);
+  };
+
+  return (
+    <div className={`relative w-full h-screen overflow-hidden ${isMobile ? '' : 'mt-20'}`}>
+      {categories.map((category, index) => {
+        const isActive = index === activeIndex;
+        return (
+          <motion.div
+            key={category.id}
+            className="absolute inset-0"
+            style={{ zIndex: isActive ? 1 : 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
+            <img
+              src={category.image_url}
+              alt={category.name}
+              className="w-full h-full object-cover"
+              style={{ filter: "brightness(0.4) contrast(1.2)" }}
+            />
+            <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6">
+              <AnimatedTitle 
+                text={isRTL && category.name_ar ? category.name_ar : category.name} 
+                isActive={true}  
+                isRTL={isRTL} 
+              />
+              <div className="w-full max-w-sm mt-4">
+                <p className="text-base mb-4 text-white leading-relaxed drop-shadow-lg">
+                  {isRTL && category.description_ar ? category.description_ar : category.description}
+                </p>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (category.button_link) {
+                      window.open(category.button_link, "_blank");
+                      setIsManual(true);
+                    }
+                  }}
+                  className="group inline-flex items-center space-x-2 px-4 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm"
+                >
+                  <span>{t('hero.readMore')}</span>
+                  <ArrowRight 
+                    className={`w-4 h-4 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
+                  />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        );
+      })}
+
+      {/* نقاط التقدم فقط - بدون أزرار اتجاه */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
+        {categories.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => goToSlide(idx)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              idx === activeIndex ? 'bg-white w-4' : 'bg-white/50'
+            }`}
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// 🔹 المكوّن الرئيسي
+const Hero = () => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeMobileDropdown, setActiveMobileDropdown] = useState<string | null>(null);
-  const [faqCategories, setFaqCategories] = useState<FAQCategory[]>([]);
-  const [troubleshootingCategories, setTroubleshootingCategories] = useState<TroubleshootingCategory[]>([]);
-
-  const location = useLocation();
-  let timeoutId: NodeJS.Timeout;
-
-  const handleMouseEnter = (menu: string) => {
-    clearTimeout(timeoutId);
-    setActiveDropdown(menu);
-  };
-
-  const handleMouseLeave = () => {
-    timeoutId = setTimeout(() => setActiveDropdown(null), 300);
-  };
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isManual, setIsManual] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState([]);
+  const intervalRef = useRef(null);
 
   // 🔥 اكتشاف إذا كان الجهاز موبايل
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
@@ -37,406 +151,181 @@ const Header = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 🔥 تحسين منطق isScrolled للموبايل
   useEffect(() => {
-    const updateScrolledState = () => {
-      // إذا كان موبايل والصفحة الرئيسية
-      if (isMobile && location.pathname === '/') {
-        // على الموبايل، نجعله يتغير عند السكرول مباشرة
-        setIsScrolled(window.scrollY > 20);
-      } else {
-        // في غير ذلك: السلوك الأصلي
-        if (location.pathname !== '/') {
-          setIsScrolled(true);
-        } else {
-          setIsScrolled(window.scrollY > 50);
+    const fetchHeroCategories = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("product_categories")
+          .select("id, name, name_ar, description, description_ar, image_url, button_link")
+          .eq("is_active", true)
+          .order("sort_order", { ascending: true });
+
+        if (error) throw error;
+
+        const validCategories = data.filter(
+          (cat) => cat.image_url && cat.description && cat.name
+        );
+
+        setCategories(validCategories);
+        if (validCategories.length > 0) {
+          setActiveIndex(0);
         }
+      } catch (error) {
+        console.error("Error fetching hero categories:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    updateScrolledState();
-
-    const handleScroll = () => {
-      updateScrolledState();
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [location, isMobile]);
-
-  // جلب بيانات الأسئلة الشائعة من Supabase
-  useEffect(() => {
-    const fetchFAQCategories = async () => {
-      const { data, error } = await supabase
-        .from('faq_categories')
-        .select('*')
-        .order('name');
-      
-      if (!error && data) {
-        setFaqCategories(data);
-      }
-    };
-
-    // جلب بيانات استكشاف الأخطاء من Supabase
-    const fetchTroubleshootingCategories = async () => {
-      const { data, error } = await supabase
-        .from('troubleshooting_categories')
-        .select('*')
-        .order('name');
-      
-      if (!error && data) {
-        setTroubleshootingCategories(data);
-      }
-    };
-
-    fetchFAQCategories();
-    fetchTroubleshootingCategories();
+    fetchHeroCategories();
   }, []);
 
-  const curtainVariants = {
-    hidden: { scaleY: 0, opacity: 0 },
-    visible: { scaleY: 1, opacity: 1 },
-    exit: { scaleY: 0, opacity: 0 }
-  };
-  
-  return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-white shadow-lg backdrop-blur-sm' : 'bg-transparent'
-      } ${isMobile ? 'h-16' : 'h-20'}`} // 🔥 تعديل ارتفاع الهيدر للموبايل
-    >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
-        {/* استخدام grid مع ارتفاع كامل */}
-        <div className="grid grid-cols-3 items-center h-full">
+  // تشغيل السلايدر التلقائي فقط في الشاشات غير الموبايل
+  useEffect(() => {
+    if (isMobile || isManual || categories.length <= 1) return;
 
-          {/* Left Navigation - يصبح يمين في RTL */}
-          <nav className="hidden lg:flex items-center gap-8 justify-self-start">
-            <Link
-              to="/products"
-              className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-            >
-              {t('header.products')}
-            </Link>
-            <Link
-              to="/about"
-              className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-            >
-              {t('header.about')}
-            </Link>
+    intervalRef.current = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % categories.length);
+    }, 4000);
 
-            {/* Technical Support Dropdown */}
-            <div 
-              className="relative" 
-              onMouseEnter={() => handleMouseEnter('technical')} 
-              onMouseLeave={handleMouseLeave}
-            >
-              <button 
-                className={`flex items-center text-base font-medium transition-colors duration-200 ${
-                  isScrolled ? 'text-gray-900' : 'text-white'
-                } nav-link`}
-              >
-                {t('header.technicalSupport')} 
-                <ChevronDown className={`${isRTL ? 'mr-1' : 'ml-1'} h-4 w-4`} />
-              </button> 
-              <AnimatePresence>
-                {activeDropdown === 'technical' && (
-                  <motion.div
-                    key="technical-dropdown"
-                    variants={curtainVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className={`absolute top-full mt-2 ${
-                      isRTL ? 'right-0' : 'left-0'
-                    } w-max bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden flex ${
-                      isRTL ? 'flex-row-reverse' : 'flex-row'
-                    }`}
-                  >
-                    {/* Troubleshooting - أولًا في RTL */}
-                    <div className={`min-w-[25rem] p-4 ${isRTL ? 'border-l' : 'border-r'} border-gray-200`}>
-                      <h4 className="font-semibold text-gray-900 mb-2">{t('header.troubleshooting')}</h4>
-                      {troubleshootingCategories.map(category => (
-                        <Link
-                          key={category.id}
-                          to={`/troubleshooting/${category.id}`}
-                          className="menu-item block text-gray-600 hover:text-logo px-3 py-2 rounded-md transition-colors duration-200 mb-1"
-                        >
-                          {isRTL && category.name_ar ? category.name_ar : category.name}
-                        </Link>
-                      ))}
-                      <Link
-                        to="/troubleshooting"
-                        className="menu-item block text-logo px-3 py-2 rounded-md transition-colors duration-200"
-                      >
-                        {t('header.viewAllTroubleshooting')}
-                      </Link>
-                    </div>
-                    
-                    {/* FAQ - ثانيًا في RTL */}
-                    <div className="min-w-[25rem] p-4">
-                      <h4 className="font-semibold text-gray-900 mb-2">{t('header.faq')}</h4>
-                      {faqCategories.map(category => (
-                        <Link
-                          key={category.id}
-                          to={`/faq/${category.id}`}
-                          className="menu-item block text-gray-600 hover:text-logo px-3 py-2 rounded-md transition-colors duration-200 mb-1"
-                        >
-                          {isRTL && category.name_ar ? category.name_ar : category.name}
-                        </Link>
-                      ))}
-                      <Link
-                        to="/faq"
-                        className="menu-item block text-logo px-3 py-2 rounded-md transition-colors duration-200"
-                      >
-                        {t('header.viewAllFaq')}
-                      </Link>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </nav>
+    return () => clearInterval(intervalRef.current);
+  }, [isMobile, isManual, categories.length]);
 
-          {/* Logo - دائمًا في المنتصف */}
-          <div className="justify-self-center flex-shrink-0">
-            <Link to="/" className="flex items-center transition-opacity">
-              <img 
-                src="/images/Azmeh-Paints-Logo.png" 
-                alt="AL AZMEH PAINTS" 
-                className={`transition-all duration-300 ${
-                  isScrolled ? "filter-none h-8" : "brightness-0 invert h-8" // 🔥 تعديل حجم اللوجو للموبايل
-                } ${isMobile ? 'h-7' : 'h-10'}`} // حجم مختلف للموبايل
-              />
-            </Link>
-          </div>
+  if (loading) {
+    return <div className="w-full h-screen bg-white"></div>;
+  }
 
-          {/* Right Navigation - يصبح يسار في RTL */}
-          <nav className="hidden lg:flex items-center gap-8 justify-self-end">
-           
-            <Link
-              to="/blog"
-              className={`text-base font-medium transition-colors duration-200 nav-link ${isScrolled ? 'text-gray-900' : 'text-white'}`}
-            >
-              {t('header.blog')}
-            </Link>
-
-            {/* Contact Dropdown */}
-            <div 
-              className="relative" 
-              onMouseEnter={() => handleMouseEnter('contact')} 
-              onMouseLeave={handleMouseLeave}
-            >
-              <button 
-                className={`flex items-center text-base font-medium transition-colors duration-200 ${
-                  isScrolled ? 'text-gray-900' : 'text-white'
-                } nav-link`}
-              >
-                {t('header.contact')} 
-                <ChevronDown className={`${isRTL ? 'mr-1' : 'ml-1'} h-4 w-4`} />
-              </button>
-
-              <AnimatePresence>
-                {activeDropdown === 'contact' && (
-                  <motion.div
-                    key="contact-dropdown"
-                    variants={curtainVariants} 
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className={`absolute top-full mt-2 ${
-                      isRTL ? 'right-0' : 'left-0'
-                    } w-64 bg-white rounded-lg shadow-xl border border-gray-200 origin-top overflow-hidden`}
-                  >
-                    <div className="p-4">
-                      <Link
-                        to="/contact"
-                        className="menu-item block text-gray-600 hover:text-logo px-3 py-2 rounded-md mb-1 transition-colors duration-200"
-                      >
-                        {t('header.contactUs')}
-                      </Link>
-                      <Link
-                        to="/job-application"
-                        className="menu-item block text-gray-600 hover:text-logo px-3 py-2 rounded-md transition-colors duration-200"
-                      >
-                        {t('header.applyForJob')}
-                      </Link>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-           <div className={`flex items-center ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-              <LanguageSwitcher />
-            </div>
-          </nav>
-
-          {/* Mobile menu button - تم تعديله */}
-          <div className="lg:hidden flex items-center justify-end w-full">
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className={`p-2 rounded-md transition-colors ${
-                isScrolled ? 'text-gray-900 hover:text-logo' : 'text-white hover:text-gray-200'
-              }`}
-            >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+  if (categories.length === 0) {
+    return (
+      <div className="relative w-full h-screen flex items-center justify-center bg-gray-900">
+        <div className="text-white text-center">
+          <div className="text-2xl mb-4">No active categories found for Hero.</div>
+          <div className="text-sm">Please add categories with image and description.</div>
         </div>
       </div>
+    );
+  }
 
-      {/* Mobile menu - تم تحسينه */}
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, maxHeight: 0 }}
-            animate={{ 
-              opacity: 1, 
-              maxHeight: 'calc(100vh - 4rem)', // 🔥 استخدام viewport height ناقص ارتفاع الهيدر
-              transition: { duration: 0.35, ease: "easeOut" }
-            }}
-            exit={{ 
-              opacity: 0, 
-              maxHeight: 0,
-              transition: { duration: 0.25, ease: "easeIn" }
-            }} 
-            className="lg:hidden bg-white border-t border-gray-200 overflow-hidden shadow-lg absolute top-full left-0 right-0"
-            style={{ top: isMobile ? '4rem' : '5rem' }} // 🔥 يبدأ من أسفل الهيدر مباشرة
-          >
-            <div className="px-4 py-4 space-y-1 max-h-[calc(100vh-5rem)] overflow-y-auto">
-              {/* Home */}
-              <Link
-                to="/"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
-              >
-                {t('header.home')}
-              </Link>
-              
-              {/* About */}
-              <Link
-                to="/about"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
-              >
-                {t('header.about')}
-              </Link>
-              
-              {/* Blog */}
-              <Link
-                to="/blog"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
-              >
-                {t('header.blog')}
-              </Link>
-              
-              {/* Products */}
-              <Link
-                to="/products"
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="block text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
-              >
-                {t('header.products')}
-              </Link>
+  // 🔥 عرض السلايدر في الموبايل فقط
+  if (isMobile) {
+    return (
+      <MobileHeroSlider
+        categories={categories}
+        activeIndex={activeIndex}
+        setActiveIndex={setActiveIndex}
+        isManual={isManual}
+        setIsManual={setIsManual}
+        t={t}
+        isRTL={isRTL}
+        isMobile={isMobile} // ⚠️ مرر isMobile هنا
+      />
+    );
+  }
 
-              {/* Technical Support Dropdown */}
-              <div className="border-t border-gray-100 pt-3 mt-3">
-                <button
-                  onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'technical' ? null : 'technical')}
-                  className="flex items-center justify-between w-full text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
+  // 🔥 عرض التصميم الأصلي في الشاشات المتوسطة والكبيرة
+  return (
+    <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
+      <div className="flex h-full">
+        {categories.map((category, index) => {
+          const isActive = activeIndex === index;
+
+          return (
+            <motion.div
+              key={category.id}
+              className={`relative h-full cursor-pointer ${
+                isActive ? "flex-grow" : "flex-shrink"
+              }`}
+              initial={{ flex: 1 }}
+              animate={{
+                flex: isActive ? 5 : 1,
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
+                marginLeft: "-25px",
+                marginRight: "-25px",
+              }}
+              style={{ transformOrigin: "center center" }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              onClick={() => {
+                setActiveIndex(index);
+                setIsManual(true);
+              }}
+            >
+              <motion.img
+                src={category.image_url}
+                alt={category.name}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{
+                  filter: isActive
+                    ? "brightness(0.4) contrast(1.2)"
+                    : "brightness(0.4) contrast(1.1)", 
+                }}
+                initial={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.1 }}
+                transition={{ duration: 0.5 }}
+              />
+
+              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-8 md:p-16">
+                <div
+                  className="text-white pointer-events-none mb-6"
+                  style={{
+                    position: isActive ? "static" : "absolute",
+                    top: isActive ? "auto" : "50%",
+                    left: isActive
+                      ? "auto"
+                      : isRTL
+                        ? "55%"
+                        : "40%",
+                    transform: isActive
+                      ? "none"
+                      : "translate(-50%, -50%) rotate(-90deg)",
+                    transition: "all 0.6s ease-in-out",
+                    width: isActive ? "100%" : "auto",
+                    textAlign: isActive ? (isRTL ? "right" : "left") : "center",
+                    direction: isRTL ? "rtl" : "ltr",
+                  }}
                 >
-                  <span>{t('header.technicalSupport')}</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'technical' ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {activeMobileDropdown === 'technical' && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.25 }}
-                      className="overflow-hidden bg-gray-50 rounded-lg mt-2"
-                    >
-                      <div className="p-3 space-y-3">
-                        <div>
-                          <h5 className="text-sm font-semibold text-gray-700 mb-2">{t('header.faq')}</h5>
-                          {faqCategories.map(category => (
-                            <Link
-                              key={category.id}
-                              to={`/faq/${category.id}`}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
-                            >
-                              {isRTL && category.name_ar ? category.name_ar : category.name}
-                            </Link>
-                          ))}
-                        </div>
-                        <div>
-                          <h5 className="text-sm font-semibold text-gray-700 mb-2">{t('header.troubleshooting')}</h5>
-                          {troubleshootingCategories.map(category => (
-                            <Link
-                              key={category.id}
-                              to={`/troubleshooting/${category.id}`}
-                              onClick={() => setIsMobileMenuOpen(false)}
-                              className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
-                            >
-                              {isRTL && category.name_ar ? category.name_ar : category.name}
-                            </Link>
-                          ))}
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+                  <AnimatedTitle 
+                    text={isRTL && category.name_ar ? category.name_ar : category.name} 
+                    isActive={isActive}  
+                    isRTL={isRTL} 
+                  />
+                </div>
 
-              {/* Contact Dropdown */}
-              <div className="border-t border-gray-100 pt-3 mt-3">
-                <button
-                  onClick={() => setActiveMobileDropdown(activeMobileDropdown === 'contact' ? null : 'contact')}
-                  className="flex items-center justify-between w-full text-gray-900 hover:text-logo hover:bg-blue-50 font-medium py-3 px-4 rounded-lg transition-all duration-200"
-                >
-                  <span>{t('header.contactAndJob')}</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
-                </button>
-                <AnimatePresence>
-                  {activeMobileDropdown === 'contact' && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.25 }}
-                      className="overflow-hidden bg-gray-50 rounded-lg mt-2 p-3 space-y-2"
+                {isActive && (
+                  <motion.div
+                    className="w-full max-w-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                  >
+                    <p className="text-xl mb-6 text-white leading-relaxed drop-shadow-lg">
+                      {isRTL && category.description_ar ? category.description_ar : category.description}
+                    </p>
+                    <motion.button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (category.button_link) {
+                          window.open(category.button_link, "_blank");
+                          setIsManual(true);
+                        }
+                      }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300"
                     >
-                      <Link
-                        to="/contact"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
-                      >
-                        {t('header.contactUs')}
-                      </Link>
-                      <Link
-                        to="/job-application"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                        className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
-                      >
-                        {t('header.applyForJob')}
-                      </Link>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                      <span>{t('hero.readMore')}</span>
+                      <ArrowRight 
+                        className={`w-5 h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
+                      />
+                    </motion.button>
+                  </motion.div>
+                )}
               </div>
- 
-              {/* Language Switcher */}
-              <div className="border-t border-gray-100 pt-3 mt-3 flex justify-center">
-                <LanguageSwitcher />
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </header> 
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
-export default Header;
+export default Hero;
