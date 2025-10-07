@@ -113,7 +113,7 @@ const Footer = () => {
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.followUs')}
             </h4>
-            <div className={`flex gap-4 ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div className="flex gap-4">
               {[Facebook, Instagram, Linkedin, Youtube].map((Icon, index) => (
                 <a
                   key={index}
