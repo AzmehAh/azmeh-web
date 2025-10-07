@@ -14,7 +14,7 @@ const Footer = () => {
 
           {/* --- Company Info --- */}
           <div>
-            <div className="flex items-center mb-6 justify-end">
+            <div className="flex items-center mb-6 justify-start">
               <img
                 src="/images/Azmeh-Paints-Logo.png"
                 alt="Al Azmeh Paints"
