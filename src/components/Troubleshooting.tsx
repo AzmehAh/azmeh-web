@@ -15,7 +15,8 @@ const Troubleshooting = () => {
     (TroubleshootingCategory & { troubleshooting_items: TroubleshootingItem[] })[]
   >([]);
   const [loading, setLoading] = useState(true);
-    const isRTL = currentLang === 'ar';
+  const currentLang = i18n.language;
+  const isRTL = currentLang === 'ar';
 
   useEffect(() => {
     fetchTroubleshootingData();
