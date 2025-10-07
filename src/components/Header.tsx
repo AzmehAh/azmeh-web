@@ -28,40 +28,22 @@ const Header = () => {
     timeoutId = setTimeout(() => setActiveDropdown(null), 300);
   };
 
-  // 🔥 اكتشاف إذا كان الجهاز موبايل
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  // 🔥 تعديل منطق isScrolled
-  useEffect(() => {
-    const updateScrolledState = () => {
-      // إذا كان الموبايل AND الصفحة الرئيسية (الهيرو)
-      if (isMobile && location.pathname === '/') {
-        setIsScrolled(window.scrollY > 50);
-      } else {
-        // في غير ذلك: السلوك الأصلي
-        if (location.pathname !== '/') {
-          setIsScrolled(true);
-        } else {
-          setIsScrolled(window.scrollY > 50);
-        }
-      }
-    };
-
-    updateScrolledState();
+    if (location.pathname !== '/') {
+      setIsScrolled(true);
+    } else {
+      setIsScrolled(window.scrollY > 50);
+    }
 
     const handleScroll = () => {
-      updateScrolledState();
+      if (location.pathname === '/') {
+        setIsScrolled(window.scrollY > 50);
+      } 
     };
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [location, isMobile]);
+  }, [location]);
 
   // جلب بيانات الأسئلة الشائعة من Supabase
   useEffect(() => {
@@ -433,4 +415,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Header; 
