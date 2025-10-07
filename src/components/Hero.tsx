@@ -5,7 +5,6 @@ import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import { useTranslation } from "react-i18next";
 
-// ✅ مكون العنوان بدون أي hooks
 const AnimatedTitle = ({ text, isActive, isRTL }) => {
   const container = {
     hidden: { opacity: 0, y: 30 },
@@ -35,31 +34,22 @@ const AnimatedTitle = ({ text, isActive, isRTL }) => {
           : "5rem",
         fontWeight: "900",
         color: "white",
-        textAlign: isRTL ? "right" : "left",
+        textAlign: isRTL ? "right" : "left", // ⭐ تعديل مهم للغة العربية
         lineHeight: "1.1",
-        direction: isRTL ? "rtl" : "ltr",
+        direction: isRTL ? "rtl" : "ltr", // ⭐ ضبط اتجاه النص
         whiteSpace: "nowrap",
-        transform: isRTL && !isActive ? "rotate(-90deg) translateX(50%)" : "none",
-        transformOrigin: isRTL && !isActive ? "top right" : "center center",
+        transform: isRTL && !isActive ? "rotate(-90deg) translateX(50%)" : "none", // ⭐ تعديل لجعل النص العربي يظهر بشكل مائل لكن قابل للقراءة
+        transformOrigin: isRTL && !isActive ? "top right" : "center center", // ⭐ تعديل لمركز التدوير
       }}
     >
       {text}
     </motion.h1>
   );
-};
+}; 
 
 const Hero = () => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
-
-  // ✅ تعريف isMobile في المكون الرئيسي
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
   const [activeIndex, setActiveIndex] = useState(0);
   const [isManual, setIsManual] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -77,7 +67,7 @@ const Hero = () => {
       try {
         const { data, error } = await supabase
           .from("product_categories")
-          .select("id, name, name_ar, description, description_ar, image_url, button_link")
+          .select("id, name, name_ar, description, description_ar, image_url , button_link")
           .eq("is_active", true)
           .order("sort_order", { ascending: true });
 
@@ -101,9 +91,8 @@ const Hero = () => {
     fetchHeroCategories();
   }, []);
 
-  // ✅ السلايدر التلقائي يعمل فقط على الجوال
   useEffect(() => {
-    if (isManual || categories.length === 0 || !isMobile) return;
+    if (isManual || categories.length === 0) return;
 
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) =>
@@ -112,10 +101,12 @@ const Hero = () => {
     }, 4000);
 
     return () => clearInterval(intervalRef.current);
-  }, [isManual, categories.length, isMobile]);
+  }, [isManual, categories.length]);
 
   if (loading) {
-    return <div className="w-full h-screen bg-white"></div>;
+    return (
+      <div className="w-full h-screen bg-white"></div>
+    );
   }
 
   if (categories.length === 0) {
@@ -131,186 +122,113 @@ const Hero = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
-{isMobile ? (
-  // 📱 Mobile Slider Design - Smooth Horizontal Swipe with Dots Only
-  <div className="h-full relative overflow-hidden">
-    <motion.div
-      className="flex h-full"
-      animate={{ x: `-${activeIndex * 100}%` }}
-      transition={{ type: "tween", duration: 0.6, ease: "easeInOut" }}
-      style={{ width: `${categories.length * 100}%` }}
-    >
-      {categories.map((category, index) => (
-        <div key={category.id} className="w-full h-full flex-shrink-0 relative">
-          <img
-            src={category.image_url}
-            alt={category.name}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: "brightness(0.4) contrast(1.2)" }}
-          />
-          <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
-            <div className="text-white mb-3 sm:mb-4 md:mb-6 lg:mb-8">
-              <AnimatedTitle 
-                text={isRTL && category.name_ar ? category.name_ar : category.name} 
-                isActive={true}  
-                isRTL={isRTL} 
-              />
-            </div>
+      <div className="flex h-full">
+        {categories.map((category, index) => {
+          const isActive = activeIndex === index;
+
+          return (
             <motion.div
-              className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-            >
-              <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
-                {isRTL && category.description_ar ? category.description_ar : category.description}
-              </p>
-              <motion.button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (category.button_link) {
-                    window.open(category.button_link, "_blank");
-                    setIsManual(true);
-                  }
-                }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm sm:text-base"
-              >
-                <span>{t('hero.readMore')}</span>
-                <ArrowRight 
-                  className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
-                />
-              </motion.button>
-            </motion.div>
-          </div>
-        </div>
-      ))}
-    </motion.div>
-
-    {/* Dots Indicator - Only Navigation */}
-    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
-      {categories.map((_, index) => (
-        <button
-          key={index}
-          onClick={(e) => {
-            e.stopPropagation();
-            setActiveIndex(index);
-            setIsManual(true);
-          }}
-          className={`w-2 h-2 rounded-full transition-all ${
-            activeIndex === index ? 'bg-white' : 'bg-white/50'
-          }`}
-          aria-label={`Go to slide ${index + 1}`}
-        />
-      ))}
-    </div>
-  </div>
-) : (
-  // 💻 Desktop & Tablet Design (Original - unchanged)
-  <div className="flex h-full">
-    {categories.map((category, index) => {
-      const isActive = activeIndex === index;
-
-      return (
-        <motion.div
-          key={category.id}
-          className={`relative h-full cursor-pointer ${
-            isActive ? "flex-grow" : "flex-shrink"
-          }`}
-          initial={{ flex: 1 }}
-          animate={{
-            flex: isActive ? 5 : 1,
-            transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
-            marginLeft: "-25px",
-            marginRight: "-25px",
-          }}
-          style={{ transformOrigin: "center center" }}
-          transition={{ duration: 0.5, ease: "easeInOut" }}
-          onClick={() => {
-            setActiveIndex(index);
-            setIsManual(true);
-          }}
-        >
-          <motion.img
-            src={category.image_url}
-            alt={category.name}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{
-              filter: isActive
-                ? "brightness(0.4) contrast(1.2)"
-                : "brightness(0.4) contrast(1.1)", 
-            }}
-            initial={{ scale: 1.1 }}
-            animate={{ scale: isActive ? 1 : 1.1 }}
-            transition={{ duration: 0.5 }}
-          />
-
-          <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
-            <div
-              className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
-              style={{
-                position: isActive ? "static" : "absolute",
-                top: isActive ? "auto" : "50%",
-                left: isActive
-                  ? "auto"
-                  : isRTL
-                    ? "55%"
-                    : "40%",
-                transform: isActive
-                  ? "none"
-                  : "translate(-50%, -50%) rotate(-90deg)",
-                transition: "all 0.6s ease-in-out",
-                width: isActive ? "100%" : "auto",
-                textAlign: isActive ? (isRTL ? "right" : "left") : "center",
-                direction: isRTL ? "rtl" : "ltr",
+              key={category.id}
+              className={`relative h-full cursor-pointer ${
+                isActive ? "flex-grow" : "flex-shrink"
+              }`}
+              initial={{ flex: 1 }}
+              animate={{
+                flex: isActive ? 5 : 1,
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
+                marginLeft: window.innerWidth < 768 ? "-15px" : "-25px",
+                marginRight: window.innerWidth < 768 ? "-15px" : "-25px",
+              }}
+              style={{ transformOrigin: "center center" }}
+              transition={{ duration: 0.5, ease: "easeInOut" }}
+              onClick={() => {
+                setActiveIndex(index);
+                setIsManual(true);
               }}
             >
-              <AnimatedTitle 
-                text={isRTL && category.name_ar ? category.name_ar : category.name} 
-                isActive={isActive}  
-                isRTL={isRTL} 
+              <motion.img
+                src={category.image_url}
+                alt={category.name}
+                className="absolute inset-0 w-full h-full object-cover"
+                style={{
+                  filter: isActive
+                    ? "brightness(0.4) contrast(1.2)"
+                    : "brightness(0.4) contrast(1.1)", 
+                }}
+                initial={{ scale: 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.1 }}
+                transition={{ duration: 0.5 }}
               />
-            </div>
 
-            {isActive && (
-              <motion.div
-                className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-              >
-                <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
-                  {isRTL && category.description_ar ? category.description_ar : category.description}
-                </p>
-                <motion.button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    if (category.button_link) {
-                      window.open(category.button_link, "_blank");
-                      setIsManual(true);
-                    }
+              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
+                
+                {/* العنوان - يظهر فقط عند النشاط */}
+                <div
+                  className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+                  style={{
+                    position: isActive ? "static" : "absolute",
+                    top: isActive ? "auto" : "50%",
+                  left: isActive
+  ? "auto"
+  : isRTL
+    ? "55%" // ← عند اللغة العربية وغير نشط
+    : window.innerWidth < 768
+      ? "50%"
+      : "40%",
+                    transform: isActive
+                      ? "none"
+                      : window.innerWidth < 768
+                      ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
+                      : "translate(-50%, -50%) rotate(-90deg)",
+                    transition: "all 0.6s ease-in-out",
+                    width: isActive ? "100%" : "auto",
+                    textAlign: isActive ? (isRTL ? "right" : "left") : "center",
+                    direction: isRTL ? "rtl" : "ltr",
                   }}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm sm:text-base"
                 >
-                  <span>{t('hero.readMore')}</span>
-                  <ArrowRight 
-                    className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
+                  <AnimatedTitle 
+                    text={isRTL && category.name_ar ? category.name_ar : category.name} 
+                    isActive={isActive}  
+                    isRTL={isRTL} 
                   />
-                </motion.button>
-              </motion.div>
-            )}
-          </div>
-        </motion.div>
-      );
-    })}
-  </div>
-)}
-     
+                </div>
+
+                {/* الشرح - يظهر فقط عند النشاط */}
+                {isActive && (
+                  <motion.div
+                    className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3, duration: 0.5 }}
+                  >
+                    <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
+                      {isRTL && category.description_ar ? category.description_ar : category.description}
+                    </p>
+                    <motion.button
+                      onClick={() => {
+                        if (category.button_link) {
+                          window.open(category.button_link, "_blank");
+                          setIsManual(true);
+                        }
+                      }}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm sm:text-base"
+                    >
+                      <span>{t('hero.readMore')}</span>
+                      <ArrowRight 
+                        className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
+                      />
+                    </motion.button>
+                  </motion.div>
+                )}
+              </div>
+            </motion.div>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
-export default Hero;
+export default Hero; 
