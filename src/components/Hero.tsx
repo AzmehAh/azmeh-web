@@ -15,15 +15,6 @@ const AnimatedTitle = ({ text, isActive, isRTL }) => {
     },
   };
 
-
-useEffect(() => {
-  const handleResize = () => {
-    setIsMobile(window.innerWidth < 768);
-  };
-
-  window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize);
-}, []);
   return (
     <motion.h1
       variants={container}
@@ -65,7 +56,6 @@ const Hero = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const intervalRef = useRef(null);
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const handleExplore = (id) => {
     navigate(`/products?category=${id}`);
@@ -130,97 +120,8 @@ const Hero = () => {
     );
   }
 
-return (
-  <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
-    {isMobile ? (
-      // 📱 Mobile Slider Design
-      <div className="h-full relative">
-        {/* Current Slide */}
-        <div className="h-full relative">
-          <img
-            src={categories[activeIndex]?.image_url}
-            alt={categories[activeIndex]?.name}
-            className="absolute inset-0 w-full h-full object-cover"
-            style={{ filter: "brightness(0.4) contrast(1.2)" }}
-          />
-
-          <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
-            <div className="text-white mb-3 sm:mb-4 md:mb-6 lg:mb-8">
-              <AnimatedTitle 
-                text={isRTL && categories[activeIndex]?.name_ar ? categories[activeIndex].name_ar : categories[activeIndex].name} 
-                isActive={true}  
-                isRTL={isRTL} 
-              />
-            </div>
-
-            <motion.div
-              className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-            >
-              <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
-                {isRTL && categories[activeIndex]?.description_ar ? categories[activeIndex].description_ar : categories[activeIndex].description}
-              </p>
-              <motion.button
-                onClick={() => {
-                  if (categories[activeIndex]?.button_link) {
-                    window.open(categories[activeIndex].button_link, "_blank");
-                    setIsManual(true);
-                  }
-                }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm sm:text-base"
-              >
-                <span>{t('hero.readMore')}</span>
-                <ArrowRight 
-                  className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
-                />
-              </motion.button>
-            </motion.div>
-          </div>
-        </div>
-
-        {/* Dots Indicator */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-          {categories.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => {
-                setActiveIndex(index);
-                setIsManual(true);
-              }}
-              className={`w-2 h-2 rounded-full transition-all ${
-                activeIndex === index ? 'bg-white' : 'bg-white/50'
-              }`}
-            />
-          ))}
-        </div>
-
-        {/* Swipe Navigation (Optional - for touch devices) */}
-        <div className="absolute top-1/2 left-4 transform -translate-y-1/2 cursor-pointer" onClick={() => {
-          const newIndex = activeIndex === 0 ? categories.length - 1 : activeIndex - 1;
-          setActiveIndex(newIndex);
-          setIsManual(true);
-        }}>
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
-        </div>
-        <div className="absolute top-1/2 right-4 transform -translate-y-1/2 cursor-pointer" onClick={() => {
-          const newIndex = activeIndex === categories.length - 1 ? 0 : activeIndex + 1;
-          setActiveIndex(newIndex);
-          setIsManual(true);
-        }}>
-          <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </div>
-
-      </div>
-    ) : (
-      // 💻 Desktop & Tablet Design (Original)
+  return (
+    <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
       <div className="flex h-full">
         {categories.map((category, index) => {
           const isActive = activeIndex === index;
@@ -261,23 +162,24 @@ return (
 
               <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
                 
+                {/* العنوان - يظهر فقط عند النشاط */}
                 <div
                   className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
                   style={{
                     position: isActive ? "static" : "absolute",
                     top: isActive ? "auto" : "50%",
-                    left: isActive
-                      ? "auto"
-                      : isRTL
-                        ? "55%"
-                        : window.innerWidth < 768
-                          ? "50%"
-                          : "40%",
+                  left: isActive
+  ? "auto"
+  : isRTL
+    ? "55%" // ← عند اللغة العربية وغير نشط
+    : window.innerWidth < 768
+      ? "50%"
+      : "40%",
                     transform: isActive
                       ? "none"
                       : window.innerWidth < 768
-                        ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
-                        : "translate(-50%, -50%) rotate(-90deg)",
+                      ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
+                      : "translate(-50%, -50%) rotate(-90deg)",
                     transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
                     textAlign: isActive ? (isRTL ? "right" : "left") : "center",
@@ -291,6 +193,7 @@ return (
                   />
                 </div>
 
+                {/* الشرح - يظهر فقط عند النشاط */}
                 {isActive && (
                   <motion.div
                     className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
@@ -315,7 +218,7 @@ return (
                       <span>{t('hero.readMore')}</span>
                       <ArrowRight 
                         className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
-                      />
+                      /> 
                     </motion.button>
                   </motion.div>
                 )}
@@ -324,11 +227,8 @@ return (
           );
         })}
       </div>
-    )}
-  </div>
-);
-        
-   
+    </div>
+  );
 };
 
 export default Hero; 
