@@ -99,7 +99,7 @@ const Footer = () => {
                 </span>
               </div>
               {/* Address */}
-              <div className={`flex items-start gap-3 ${isRTL ? 'flex-row-reverse text-right' : 'flex-row text-left'}`}>
+              <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span className="text-gray-300 text-sm leading-relaxed">
                   {t('footer.address')}
