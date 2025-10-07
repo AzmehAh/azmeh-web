@@ -14,7 +14,7 @@ const Footer = () => {
 
           {/* --- Company Info --- */}
           <div>
-            <div className="flex items-center mb-6 justify-start">
+            <div className={`flex items-center mb-6 justify-${isRTL ? 'end' : 'start'}`}>
               <img
                 src="/images/Azmeh-Paints-Logo.png"
                 alt="Al Azmeh Paints"
@@ -28,11 +28,11 @@ const Footer = () => {
               </p>
             </div>
           </div> 
-
+ 
           {/* --- Quick Links --- */} 
           <div>
             <h4 className="font-semibold mb-6 text-white text-lg">{t('footer.quickLinks')}</h4>
-            <ul className="space-y-3 pl-2">
+            <ul className="space-y-3">
               <li><Link to="/" className="hover:text-gray-200 text-sm ">{t('common.home')}</Link></li>
               <li><Link to="/products" className="hover:text-gray-200 text-sm">{t('common.products')}</Link></li>
               <li><Link to="/blog" className="hover:text-gray-200 text-sm">{t('common.blog')}</Link></li>
@@ -46,7 +46,7 @@ const Footer = () => {
             <h4 className="font-semibold mb-6 text-white text-lg">{t('footer.contactInfo')}</h4>
             <div className={`space-y-4`}>
               {/* Email */}
-              <div className="flex items-start gap-3">
+              <div className={`flex items-start ${isRTL ? 'flex-row-reverse space-x-reverse' : 'flex-row space-x-3'}`}>
                 <Mail className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <p className="text-gray-300 text-sm">manager@dkl-syria.com</p>
               </div>
