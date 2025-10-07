@@ -14,14 +14,16 @@ const AnimatedTitle = ({ text, isActive, isRTL }) => {
       transition: { duration: 0.8, type: "spring" } 
     },
   };
-const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+
 
 useEffect(() => {
   const handleResize = () => {
     setIsMobile(window.innerWidth < 768);
   };
 
-  
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
   return (
     <motion.h1
       variants={container}
@@ -63,6 +65,7 @@ const Hero = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const intervalRef = useRef(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   const handleExplore = (id) => {
     navigate(`/products?category=${id}`);
@@ -126,9 +129,7 @@ const Hero = () => {
       </div>
     );
   }
-window.addEventListener('resize', handleResize);
-  return () => window.removeEventListener('resize', handleResize);
-}, []);
+
 return (
   <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
     {isMobile ? (
