@@ -89,7 +89,7 @@ return (
               <div className="mt-auto pt-4 border-t border-gray-100">
                 <div className="flex items-center text-[#0055A3] font-semibold group-hover:translate-x-2 transition-transform">
                   <span>{t('faq.viewQuestions')}</span>
-                  <ChevronDown className=" rotate-[-90deg] w-4 h-4 ml-2 />
+                  <ChevronDown className=" rotate-[-90deg] w-4 h-4 ml-2" />
                 </div>
                 <div className="mt-2 text-sm text-gray-500">
                   {cat.faq_items.length} {t('faq.questionsAvailable')}
