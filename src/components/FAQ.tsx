@@ -13,7 +13,7 @@ const FAQ = () => {
   const [loading, setLoading] = useState(true);
   const { i18n, t } = useTranslation();
   const currentLang = i18n.language; // "ar" or "en"
-
+const isRTL = currentLang === 'ar';
   useEffect(() => {
     fetchFAQData();
   }, []);
