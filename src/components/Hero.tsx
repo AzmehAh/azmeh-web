@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import { useTranslation } from "react-i18next";
 
@@ -20,16 +20,32 @@ const AnimatedTitle = ({ text, isActive, isRTL }) => {
       variants={container}
       initial="hidden"
       animate="visible"
-      className="hero-title"
       style={{
-        textAlign: isRTL ? "right" : "left",
-        direction: isRTL ? "rtl" : "ltr",
+        fontSize: isActive
+          ? window.innerWidth < 640
+            ? "2.5rem"
+            : window.innerWidth < 768
+            ? "3rem"
+            : "4rem"
+          : window.innerWidth < 640
+          ? "3rem"
+          : window.innerWidth < 768
+          ? "4rem"
+          : "5rem",
+        fontWeight: "900",
+        color: "white",
+        textAlign: isRTL ? "right" : "left", // ⭐ تعديل مهم للغة العربية
+        lineHeight: "1.1",
+        direction: isRTL ? "rtl" : "ltr", // ⭐ ضبط اتجاه النص
+        whiteSpace: "nowrap",
+        transform: isRTL && !isActive ? "rotate(-90deg) translateX(50%)" : "none", // ⭐ تعديل لجعل النص العربي يظهر بشكل مائل لكن قابل للقراءة
+        transformOrigin: isRTL && !isActive ? "top right" : "center center", // ⭐ تعديل لمركز التدوير
       }}
     >
       {text}
     </motion.h1>
   );
-};
+}; 
 
 const Hero = () => {
   const { t, i18n } = useTranslation();
@@ -38,69 +54,11 @@ const Hero = () => {
   const [isManual, setIsManual] = useState(false);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
-  const [isMobile, setIsMobile] = useState(false);
   const navigate = useNavigate();
   const intervalRef = useRef(null);
-  const touchStartX = useRef(0);
-  const touchEndX = useRef(0);
-
-  // الكشف عن حجم الشاشة
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const handleExplore = (id) => {
     navigate(`/products?category=${id}`);
-    setIsManual(true);
-  };
-
-  // معالجة السحب باللمس
-  const handleTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchMove = (e) => {
-    touchEndX.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStartX.current || !touchEndX.current) return;
-
-    const diff = touchStartX.current - touchEndX.current;
-    const minSwipeDistance = 50;
-
-    if (Math.abs(diff) > minSwipeDistance) {
-      if (diff > 0) {
-        // سحب لليسار - التالي
-        handleNext();
-      } else {
-        // سحب لليمين - السابق
-        handlePrev();
-      }
-    }
-
-    touchStartX.current = 0;
-    touchEndX.current = 0;
-  };
-
-  const handleNext = () => {
-    setActiveIndex(prev => 
-      prev + 1 < categories.length ? prev + 1 : 0
-    );
-    setIsManual(true);
-  };
-
-  const handlePrev = () => {
-    setActiveIndex(prev => 
-      prev - 1 >= 0 ? prev - 1 : categories.length - 1
-    );
     setIsManual(true);
   };
 
@@ -109,7 +67,7 @@ const Hero = () => {
       try {
         const { data, error } = await supabase
           .from("product_categories")
-          .select("id, name, name_ar, description, description_ar, image_url, button_link")
+          .select("id, name, name_ar, description, description_ar, image_url , button_link")
           .eq("is_active", true)
           .order("sort_order", { ascending: true });
 
@@ -134,7 +92,7 @@ const Hero = () => {
   }, []);
 
   useEffect(() => {
-    if (isManual || categories.length === 0 || isMobile) return;
+    if (isManual || categories.length === 0) return;
 
     intervalRef.current = setInterval(() => {
       setActiveIndex((prev) =>
@@ -143,13 +101,11 @@ const Hero = () => {
     }, 4000);
 
     return () => clearInterval(intervalRef.current);
-  }, [isManual, categories.length, isMobile]);
+  }, [isManual, categories.length]);
 
   if (loading) {
     return (
-      <div className="w-full h-screen bg-gray-100 flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
-      </div>
+      <div className="w-full h-screen bg-white"></div>
     );
   }
 
@@ -164,115 +120,6 @@ const Hero = () => {
     );
   }
 
-  // تصميم الجوال - سلايدر
-  if (isMobile) {
-    return (
-      <div className="relative w-full h-screen overflow-hidden mt-16">
-        <div 
-          className="relative w-full h-full"
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <AnimatePresence initial={false}>
-            <motion.div
-              key={activeIndex}
-              className="absolute inset-0 w-full h-full"
-              initial={{ opacity: 0, x: 300 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -300 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
-            >
-              <div className="relative w-full h-full">
-                <img
-                  src={categories[activeIndex].image_url}
-                  alt={categories[activeIndex].name}
-                  className="w-full h-full object-cover"
-                  style={{ filter: "brightness(0.5) contrast(1.2)" }}
-                />
-                
-                <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-6">
-                  <div className="w-full text-center mb-6">
-                    <AnimatedTitle 
-                      text={isRTL && categories[activeIndex].name_ar ? 
-                        categories[activeIndex].name_ar : categories[activeIndex].name} 
-                      isActive={true}  
-                      isRTL={isRTL} 
-                    />
-                  </div>
-
-                  <div className="w-full max-w-full px-4">
-                    <p className="text-lg mb-6 text-white leading-relaxed text-center drop-shadow-lg">
-                      {isRTL && categories[activeIndex].description_ar ? 
-                        categories[activeIndex].description_ar : categories[activeIndex].description}
-                    </p>
-                    
-                    <div className="flex justify-center">
-                      <motion.button
-                        onClick={() => {
-                          if (categories[activeIndex].button_link) {
-                            window.open(categories[activeIndex].button_link, "_blank");
-                          } else {
-                            handleExplore(categories[activeIndex].id);
-                          }
-                        }}
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        className="group inline-flex items-center space-x-3 px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-gray-900 transition-all duration-300"
-                      >
-                        <span>{t('hero.readMore')}</span>
-                        <ArrowRight 
-                          className={`w-5 h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
-                        /> 
-                      </motion.button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* أزرار التنقل */}
-          {categories.length > 1 && (
-            <>
-              <button
-                onClick={handlePrev}
-                className="absolute left-2 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-50 text-white p-2 rounded-full"
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-              <button
-                onClick={handleNext}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 z-20 bg-black bg-opacity-50 text-white p-2 rounded-full"
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </>
-          )}
-
-          {/* النقاط الإرشادية */}
-          {categories.length > 1 && (
-            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
-              {categories.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setActiveIndex(index);
-                    setIsManual(true);
-                  }}
-                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                    index === activeIndex ? 'bg-white' : 'bg-gray-400'
-                  }`}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
-
-  // تصميم سطح المكتب (يبقى كما هو مع تحسينات طفيفة)
   return (
     <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
       <div className="flex h-full">
@@ -283,12 +130,16 @@ const Hero = () => {
             <motion.div
               key={category.id}
               className={`relative h-full cursor-pointer ${
-                isActive ? "flex-grow" : "flex-shrink-0"
+                isActive ? "flex-grow" : "flex-shrink"
               }`}
               initial={{ flex: 1 }}
               animate={{
                 flex: isActive ? 5 : 1,
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
+                marginLeft: window.innerWidth < 768 ? "-15px" : "-25px",
+                marginRight: window.innerWidth < 768 ? "-15px" : "-25px",
               }}
+              style={{ transformOrigin: "center center" }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               onClick={() => {
                 setActiveIndex(index);
@@ -309,21 +160,25 @@ const Hero = () => {
                 transition={{ duration: 0.5 }}
               />
 
-              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-8 lg:p-16">
+              <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
                 
-                {/* العنوان */}
+                {/* العنوان - يظهر فقط عند النشاط */}
                 <div
-                  className="text-white pointer-events-none mb-6 lg:mb-8"
+                  className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
                   style={{
                     position: isActive ? "static" : "absolute",
                     top: isActive ? "auto" : "50%",
-                    left: isActive
-                      ? "auto"
-                      : isRTL
-                      ? "55%"
-                      : "40%",
+                  left: isActive
+  ? "auto"
+  : isRTL
+    ? "55%" // ← عند اللغة العربية وغير نشط
+    : window.innerWidth < 768
+      ? "50%"
+      : "40%",
                     transform: isActive
                       ? "none"
+                      : window.innerWidth < 768
+                      ? "translate(-50%, -50%) rotate(-90deg) scale(0.8)"
                       : "translate(-50%, -50%) rotate(-90deg)",
                     transition: "all 0.6s ease-in-out",
                     width: isActive ? "100%" : "auto",
@@ -338,15 +193,15 @@ const Hero = () => {
                   />
                 </div>
 
-                {/* الشرح */}
+                {/* الشرح - يظهر فقط عند النشاط */}
                 {isActive && (
                   <motion.div
-                    className="w-full max-w-md lg:max-w-lg"
+                    className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.5 }}
                   >
-                    <p className="text-xl mb-6 text-white leading-relaxed drop-shadow-lg">
+                    <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
                       {isRTL && category.description_ar ? category.description_ar : category.description}
                     </p>
                     <motion.button
@@ -358,12 +213,12 @@ const Hero = () => {
                       }}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-white transition-all duration-300"
+                      className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm sm:text-base"
                     >
                       <span>{t('hero.readMore')}</span>
                       <ArrowRight 
-                        className={`w-5 h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
-                      /> 
+                        className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
+                      />
                     </motion.button>
                   </motion.div>
                 )}
