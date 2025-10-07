@@ -135,11 +135,11 @@ const Footer = () => {
 
         {/* --- Bottom Section --- */}
         <div className="mt-12 pt-8 border-t border-gray-800">
-          <div className={`flex flex-col md:flex-row justify-between items-center gap-4 ${isRTL ? 'md:flex-row-reverse' : ''}`}>
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 ">
             <p className={`text-gray-400 text-sm ${isRTL ? 'text-center md:text-right' : 'text-center md:text-left'}`}>
               {t('footer.professionalSolutions')}
             </p>
-            <div className={`flex gap-6 text-sm ${isRTL ? 'flex-row-reverse' : 'flex-row'}`}>
+            <div className="flex gap-6 text-sm ">
               <Link
                 to="/privacy"
                 className="text-gray-400 hover:text-white transition-colors duration-200"
