@@ -14,7 +14,7 @@ const Footer = () => {
 
           {/* --- Company Info --- */}
           <div>
-            <div className={`flex items-center mb-6 justify-${isRTL ? 'end' : 'start'}`}>
+            <div className="flex items-center mb-6 justify-end">
               <img
                 src="/images/Azmeh-Paints-Logo.png"
                 alt="Al Azmeh Paints"
