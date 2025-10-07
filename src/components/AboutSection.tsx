@@ -84,7 +84,7 @@ const AboutSection = () => {
             {/* Counter Badge - يمين في العربية، يسار في الإنجليزية */}
             <motion.div
               className={`absolute bottom-0 ${
-                isRTL ? 'right-2' : 'left-2'
+              ${isRTL ? 'right-1 sm:right-4 md:right-8' : 'left-1 sm:left-4 md:left-8'}
               } bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo`}
               initial={{ scale: 0.5, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
