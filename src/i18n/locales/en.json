@@ -229,7 +229,7 @@
   "partnershipInquiry": "Partnership Inquiry",
   "generalQuestion": "General Question",
   "other": "Other",
-  "message": "Message",
+  "message": "Message", 
   "messagePlaceholder": "Tell us about your project or question...",
   "send": "Send Message",
   "sending": "Sending...",
@@ -237,7 +237,12 @@
   "errorMessage": "✗ Sorry, there was an error sending your message. Please try again.",
   "findUs": "Find Us on the Map"
 },
-
+"colorInspiration": {
+  "subtitle": "New & Exclusive",
+  "title": "New Releases",
+  "noProducts": "No featured products available at the moment.",
+  "loadError": "Failed to load featured products. Please try again later."
+},
  "jobApplication": {
     "title": "Job Application",
     "heroTitle": "Join Our Team",
