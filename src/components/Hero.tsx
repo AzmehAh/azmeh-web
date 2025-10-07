@@ -102,7 +102,7 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
                       setIsManual(true);
                     }
                   }}
-                  className="group inline-flex items-center space-x-2 px-4 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm"
+                  className="group inline-flex items-center gap-2 px-4 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm"
                 >
                   <span>{t('hero.readMore')}</span>
                   <ArrowRight 
@@ -116,7 +116,7 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
       })}
 
       {/* نقاط التقدم فقط - بدون أزرار اتجاه */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
         {categories.map((_, idx) => (
           <button
             key={idx}
@@ -308,7 +308,7 @@ const Hero = () => {
                       }}
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="group inline-flex items-center space-x-3 px-8 py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300"
+                      className="group inline-flex items-center gap-3 px-8 py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300"
                     >
                       <span>{t('hero.readMore')}</span>
                       <ArrowRight 
