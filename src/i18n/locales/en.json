@@ -295,7 +295,7 @@
   "faq": {
     "title": "Frequently Asked Questions",
     "subtitle": "Find answers to common questions about our paint systems, application techniques, and technical specifications.",
-    "viewQuestions": "View Questions",
+    "viewQuestions": "View Questions →",
     "questionsAvailable": "questions available",
     "notFoundTitle": "Category Not Found",
     "notFoundDesc": "The FAQ category you're looking for doesn't exist.",
@@ -313,7 +313,7 @@
   "troubleshooting": {
     "title": "Troubleshooting Guide",
     "subtitle": "Find solutions to common coating problems and application defects.",
-    "viewSolutions": "View Solutions",
+    "viewSolutions": "View Solutions →",
     "issuesCovered": "issues covered",
     "categoryNotFound": "Category Not Found",
     "categoryNotFoundDesc": "The troubleshooting category you're looking for doesn't exist.",
