@@ -131,25 +131,31 @@ const Hero = () => {
 
   return (
     <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
-      {isMobile ? (
-        // 📱 Mobile Slider Design
-        <div className="h-full relative">
+{isMobile ? (
+  // 📱 Mobile Slider Design - Smooth Horizontal Swipe with Dots Only
+  <div className="h-full relative overflow-hidden">
+    <motion.div
+      className="flex h-full"
+      animate={{ x: `-${activeIndex * 100}%` }}
+      transition={{ type: "tween", duration: 0.6, ease: "easeInOut" }}
+      style={{ width: `${categories.length * 100}%` }}
+    >
+      {categories.map((category, index) => (
+        <div key={category.id} className="w-full h-full flex-shrink-0 relative">
           <img
-            src={categories[activeIndex]?.image_url}
-            alt={categories[activeIndex]?.name}
+            src={category.image_url}
+            alt={category.name}
             className="absolute inset-0 w-full h-full object-cover"
             style={{ filter: "brightness(0.4) contrast(1.2)" }}
           />
-
           <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
             <div className="text-white mb-3 sm:mb-4 md:mb-6 lg:mb-8">
               <AnimatedTitle 
-                text={isRTL && categories[activeIndex]?.name_ar ? categories[activeIndex].name_ar : categories[activeIndex].name} 
+                text={isRTL && category.name_ar ? category.name_ar : category.name} 
                 isActive={true}  
                 isRTL={isRTL} 
               />
             </div>
-
             <motion.div
               className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
               initial={{ opacity: 0, y: 20 }}
@@ -157,13 +163,13 @@ const Hero = () => {
               transition={{ delay: 0.3, duration: 0.5 }}
             >
               <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
-                {isRTL && categories[activeIndex]?.description_ar ? categories[activeIndex].description_ar : categories[activeIndex].description}
+                {isRTL && category.description_ar ? category.description_ar : category.description}
               </p>
               <motion.button
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (categories[activeIndex]?.button_link) {
-                    window.open(categories[activeIndex].button_link, "_blank");
+                  if (category.button_link) {
+                    window.open(category.button_link, "_blank");
                     setIsManual(true);
                   }
                 }}
@@ -178,157 +184,131 @@ const Hero = () => {
               </motion.button>
             </motion.div>
           </div>
+        </div>
+      ))}
+    </motion.div>
 
-          {/* Dots Indicator */}
-          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-            {categories.map((_, index) => (
-              <button
-                key={index}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setActiveIndex(index);
-                  setIsManual(true);
-                }}
-                className={`w-2 h-2 rounded-full transition-all ${
-                  activeIndex === index ? 'bg-white' : 'bg-white/50'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
+    {/* Dots Indicator - Only Navigation */}
+    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+      {categories.map((_, index) => (
+        <button
+          key={index}
+          onClick={(e) => {
+            e.stopPropagation();
+            setActiveIndex(index);
+            setIsManual(true);
+          }}
+          className={`w-2 h-2 rounded-full transition-all ${
+            activeIndex === index ? 'bg-white' : 'bg-white/50'
+          }`}
+          aria-label={`Go to slide ${index + 1}`}
+        />
+      ))}
+    </div>
+  </div>
+) : (
+  // 💻 Desktop & Tablet Design (Original - unchanged)
+  <div className="flex h-full">
+    {categories.map((category, index) => {
+      const isActive = activeIndex === index;
+
+      return (
+        <motion.div
+          key={category.id}
+          className={`relative h-full cursor-pointer ${
+            isActive ? "flex-grow" : "flex-shrink"
+          }`}
+          initial={{ flex: 1 }}
+          animate={{
+            flex: isActive ? 5 : 1,
+            transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
+            marginLeft: "-25px",
+            marginRight: "-25px",
+          }}
+          style={{ transformOrigin: "center center" }}
+          transition={{ duration: 0.5, ease: "easeInOut" }}
+          onClick={() => {
+            setActiveIndex(index);
+            setIsManual(true);
+          }}
+        >
+          <motion.img
+            src={category.image_url}
+            alt={category.name}
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{
+              filter: isActive
+                ? "brightness(0.4) contrast(1.2)"
+                : "brightness(0.4) contrast(1.1)", 
+            }}
+            initial={{ scale: 1.1 }}
+            animate={{ scale: isActive ? 1 : 1.1 }}
+            transition={{ duration: 0.5 }}
+          />
+
+          <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
+            <div
+              className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
+              style={{
+                position: isActive ? "static" : "absolute",
+                top: isActive ? "auto" : "50%",
+                left: isActive
+                  ? "auto"
+                  : isRTL
+                    ? "55%"
+                    : "40%",
+                transform: isActive
+                  ? "none"
+                  : "translate(-50%, -50%) rotate(-90deg)",
+                transition: "all 0.6s ease-in-out",
+                width: isActive ? "100%" : "auto",
+                textAlign: isActive ? (isRTL ? "right" : "left") : "center",
+                direction: isRTL ? "rtl" : "ltr",
+              }}
+            >
+              <AnimatedTitle 
+                text={isRTL && category.name_ar ? category.name_ar : category.name} 
+                isActive={isActive}  
+                isRTL={isRTL} 
               />
-            ))}
-          </div>
+            </div>
 
-          {/* Navigation Arrows */}
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              const newIndex = activeIndex === 0 ? categories.length - 1 : activeIndex - 1;
-              setActiveIndex(newIndex);
-              setIsManual(true);
-            }}
-            className="absolute top-1/2 left-4 transform -translate-y-1/2 text-white bg-black/30 rounded-full p-2 focus:outline-none"
-            aria-label="Previous slide"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-          </button>
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              const newIndex = activeIndex === categories.length - 1 ? 0 : activeIndex + 1;
-              setActiveIndex(newIndex);
-              setIsManual(true);
-            }}
-            className="absolute top-1/2 right-4 transform -translate-y-1/2 text-white bg-black/30 rounded-full p-2 focus:outline-none"
-            aria-label="Next slide"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-            </svg>
-          </button>
-        </div>
-      ) : (
-        // 💻 Desktop & Tablet Design (Original)
-        <div className="flex h-full">
-          {categories.map((category, index) => {
-            const isActive = activeIndex === index;
-
-            return (
+            {isActive && (
               <motion.div
-                key={category.id}
-                className={`relative h-full cursor-pointer ${
-                  isActive ? "flex-grow" : "flex-shrink"
-                }`}
-                initial={{ flex: 1 }}
-                animate={{
-                  flex: isActive ? 5 : 1,
-                  transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
-                  marginLeft: "-25px",
-                  marginRight: "-25px",
-                }}
-                style={{ transformOrigin: "center center" }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                onClick={() => {
-                  setActiveIndex(index);
-                  setIsManual(true);
-                }}
+                className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.5 }}
               >
-                <motion.img
-                  src={category.image_url}
-                  alt={category.name}
-                  className="absolute inset-0 w-full h-full object-cover"
-                  style={{
-                    filter: isActive
-                      ? "brightness(0.4) contrast(1.2)"
-                      : "brightness(0.4) contrast(1.1)", 
+                <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
+                  {isRTL && category.description_ar ? category.description_ar : category.description}
+                </p>
+                <motion.button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (category.button_link) {
+                      window.open(category.button_link, "_blank");
+                      setIsManual(true);
+                    }
                   }}
-                  initial={{ scale: 1.1 }}
-                  animate={{ scale: isActive ? 1 : 1.1 }}
-                  transition={{ duration: 0.5 }}
-                />
-
-                <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6 md:p-8 lg:p-16">
-                  <div
-                    className="text-white pointer-events-none mb-3 sm:mb-4 md:mb-6 lg:mb-8"
-                    style={{
-                      position: isActive ? "static" : "absolute",
-                      top: isActive ? "auto" : "50%",
-                      left: isActive
-                        ? "auto"
-                        : isRTL
-                          ? "55%"
-                          : "40%",
-                      transform: isActive
-                        ? "none"
-                        : "translate(-50%, -50%) rotate(-90deg)",
-                      transition: "all 0.6s ease-in-out",
-                      width: isActive ? "100%" : "auto",
-                      textAlign: isActive ? (isRTL ? "right" : "left") : "center",
-                      direction: isRTL ? "rtl" : "ltr",
-                    }}
-                  >
-                    <AnimatedTitle 
-                      text={isRTL && category.name_ar ? category.name_ar : category.name} 
-                      isActive={isActive}  
-                      isRTL={isRTL} 
-                    />
-                  </div>
-
-                  {isActive && (
-                    <motion.div
-                      className="w-full max-w-sm sm:max-w-md lg:max-w-lg"
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3, duration: 0.5 }}
-                    >
-                      <p className="text-base sm:text-lg md:text-xl mb-3 sm:mb-4 md:mb-6 text-white leading-relaxed drop-shadow-lg">
-                        {isRTL && category.description_ar ? category.description_ar : category.description}
-                      </p>
-                      <motion.button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (category.button_link) {
-                            window.open(category.button_link, "_blank");
-                            setIsManual(true);
-                          }
-                        }}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm sm:text-base"
-                      >
-                        <span>{t('hero.readMore')}</span>
-                        <ArrowRight 
-                          className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
-                        />
-                      </motion.button>
-                    </motion.div>
-                  )}
-                </div>
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group inline-flex items-center space-x-2 sm:space-x-3 px-4 py-2 sm:px-6 sm:py-3 md:px-8 md:py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm sm:text-base"
+                >
+                  <span>{t('hero.readMore')}</span>
+                  <ArrowRight 
+                    className={`w-4 h-4 sm:w-5 sm:h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
+                  />
+                </motion.button>
               </motion.div>
-            );
-          })}
-        </div>
-      )}
+            )}
+          </div>
+        </motion.div>
+      );
+    })}
+  </div>
+)}
+     
     </div>
   );
 };
