@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 const Troubleshooting = () => {
   const { t, i18n } = useTranslation();
-  const isRTL = currentLang === 'ar';
+ 
   const { category } = useParams<{ category?: string }>();
   const [openItem, setOpenItem] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
