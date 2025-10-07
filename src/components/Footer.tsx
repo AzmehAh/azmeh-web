@@ -8,7 +8,7 @@ const Footer = () => {
   const isRTL = i18n.language === 'ar';
 
   return (
-    <footer className="bg-[#0055A3] text-white" >
+    <footer className="bg-[#0055A3] text-white" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 ${isRTL ? 'text-right' : 'text-left'}`}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
 
@@ -19,7 +19,7 @@ const Footer = () => {
                 src="/images/Azmeh-Paints-Logo.png"
                 alt="Al Azmeh Paints"
                 className="h-12 w-auto filter brightness-0 invert"
-              />
+              /> 
             </div>
             <p className="text-white text-sm leading-relaxed">{t('footer.companyDescription')}</p>
             <div className="pt-4">
@@ -28,11 +28,11 @@ const Footer = () => {
               </p>
             </div>
           </div> 
- 
+
           {/* --- Quick Links --- */} 
           <div>
             <h4 className="font-semibold mb-6 text-white text-lg">{t('footer.quickLinks')}</h4>
-            <ul className="space-y-3">
+            <ul className={`space-y-3 ${isRTL ? 'pr-2 text-right' : 'pl-2 text-left'}`}>
               <li><Link to="/" className="hover:text-gray-200 text-sm ">{t('common.home')}</Link></li>
               <li><Link to="/products" className="hover:text-gray-200 text-sm">{t('common.products')}</Link></li>
               <li><Link to="/blog" className="hover:text-gray-200 text-sm">{t('common.blog')}</Link></li>
