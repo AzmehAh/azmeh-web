@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import { useTranslation } from "react-i18next";
 
-// 🔹 نفس مكوّن AnimatedTitle (لا حاجة لتغييره)
+// 🔹 مكوّن العنوان المتحرك (كما هو)
 const AnimatedTitle = ({ text, isActive, isRTL }) => {
   const container = {
     hidden: { opacity: 0, y: 30 },
@@ -48,10 +48,8 @@ const AnimatedTitle = ({ text, isActive, isRTL }) => {
   );
 }; 
 
-// 🔹 مكوّن السلايدر للهواتف فقط
+// 🔹 مكوّن السلايدر للهواتف فقط - بدون فلاش أبيض، مع نقاط فقط
 const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, setIsManual, t, isRTL }) => {
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (isManual || categories.length <= 1) return;
 
@@ -62,91 +60,71 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
     return () => clearInterval(interval);
   }, [isManual, categories.length]);
 
-  const handleNext = () => {
-    setActiveIndex((prev) => (prev + 1) % categories.length);
+  const goToSlide = (index) => {
+    setActiveIndex(index);
     setIsManual(true);
   };
-
-  const handlePrev = () => {
-    setActiveIndex((prev) => (prev - 1 + categories.length) % categories.length);
-    setIsManual(true);
-  };
-
-  const currentCategory = categories[activeIndex];
 
   return (
     <div className="relative w-full h-screen overflow-hidden mt-20">
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeIndex}
-          className="absolute inset-0"
-          initial={{ x: "100%" }}
-          animate={{ x: 0 }}
-          exit={{ x: "-100%" }}
-          transition={{ type: "tween", duration: 0.5 }}
-        >
-          <img
-            src={currentCategory.image_url}
-            alt={currentCategory.name}
-            className="w-full h-full object-cover"
-            style={{ filter: "brightness(0.4) contrast(1.2)" }}
-          />
-          <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6">
-            <AnimatedTitle 
-              text={isRTL && currentCategory.name_ar ? currentCategory.name_ar : currentCategory.name} 
-              isActive={true}  
-              isRTL={isRTL} 
+      {categories.map((category, index) => {
+        const isActive = index === activeIndex;
+        return (
+          <motion.div
+            key={category.id}
+            className="absolute inset-0"
+            style={{ zIndex: isActive ? 1 : 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isActive ? 1 : 0 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+          >
+            <img
+              src={category.image_url}
+              alt={category.name}
+              className="w-full h-full object-cover"
+              style={{ filter: "brightness(0.4) contrast(1.2)" }}
             />
-            <div className="w-full max-w-sm mt-4">
-              <p className="text-base mb-4 text-white leading-relaxed drop-shadow-lg">
-                {isRTL && currentCategory.description_ar ? currentCategory.description_ar : currentCategory.description}
-              </p>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  if (currentCategory.button_link) {
-                    window.open(currentCategory.button_link, "_blank");
-                    setIsManual(true);
-                  }
-                }}
-                className="group inline-flex items-center space-x-2 px-4 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm"
-              >
-                <span>{t('hero.readMore')}</span>
-                <ArrowRight 
-                  className={`w-4 h-4 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
-                />
-              </button>
+            <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6">
+              <AnimatedTitle 
+                text={isRTL && category.name_ar ? category.name_ar : category.name} 
+                isActive={true}  
+                isRTL={isRTL} 
+              />
+              <div className="w-full max-w-sm mt-4">
+                <p className="text-base mb-4 text-white leading-relaxed drop-shadow-lg">
+                  {isRTL && category.description_ar ? category.description_ar : category.description}
+                </p>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (category.button_link) {
+                      window.open(category.button_link, "_blank");
+                      setIsManual(true);
+                    }
+                  }}
+                  className="group inline-flex items-center space-x-2 px-4 py-2 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300 text-sm"
+                >
+                  <span>{t('hero.readMore')}</span>
+                  <ArrowRight 
+                    className={`w-4 h-4 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
+                  />
+                </button>
+              </div>
             </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        );
+      })}
 
-      {/* أزرار التنقل (اختياري) */}
-      {categories.length > 1 && (
-        <>
-          <button
-            onClick={handlePrev}
-            className="absolute left-2 top-1/2 z-20 bg-black/30 text-white p-2 rounded-full"
-            aria-label="Previous"
-          >
-            ‹
-          </button>
-          <button
-            onClick={handleNext}
-            className="absolute right-2 top-1/2 z-20 bg-black/30 text-white p-2 rounded-full"
-            aria-label="Next"
-          >
-            ›
-          </button>
-        </>
-      )}
-
-      {/* نقاط التقدم */}
+      {/* نقاط التقدم فقط - بدون أزرار اتجاه */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex space-x-2">
         {categories.map((_, idx) => (
-          <div
+          <button
             key={idx}
-            className={`w-2 h-2 rounded-full ${idx === activeIndex ? 'bg-white' : 'bg-white/50'}`}
+            onClick={() => goToSlide(idx)}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              idx === activeIndex ? 'bg-white w-4' : 'bg-white/50'
+            }`}
+            aria-label={`Go to slide ${idx + 1}`}
           />
         ))}
       </div>
@@ -164,7 +142,6 @@ const Hero = () => {
   const [categories, setCategories] = useState([]);
   const intervalRef = useRef(null);
 
-  // 🔥 اكتشاف نوع الشاشة
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
@@ -202,7 +179,7 @@ const Hero = () => {
     fetchHeroCategories();
   }, []);
 
-  // 🔥 تشغيل السلايدر التلقائي فقط في التصميم الأصلي (غير الموبايل)
+  // تشغيل السلايدر التلقائي فقط في الشاشات غير الموبايل
   useEffect(() => {
     if (isMobile || isManual || categories.length <= 1) return;
 
@@ -228,7 +205,7 @@ const Hero = () => {
     );
   }
 
-  // 🔥 إذا كان موبايل: استخدم السلايدر الجديد
+  // 🔥 عرض السلايدر في الموبايل فقط
   if (isMobile) {
     return (
       <MobileHeroSlider
@@ -243,7 +220,7 @@ const Hero = () => {
     );
   }
 
-  // 🔥 إذا لم يكن موبايل: استخدم التصميم الأصلي كما هو (بدون أي تغيير)
+  // 🔥 عرض التصميم الأصلي في الشاشات المتوسطة والكبيرة
   return (
     <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
       <div className="flex h-full">
