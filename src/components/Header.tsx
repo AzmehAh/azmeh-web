@@ -37,7 +37,7 @@ const Header = () => {
 
     const handleScroll = () => {
       if (location.pathname === '/') {
-        setIsScrolled(window.scrollY > 50); 
+        setIsScrolled(window.scrollY > 50);
       } 
     };
 
@@ -408,11 +408,11 @@ const Header = () => {
 </div>
 
       </div>
-    </motion.div> 
+    </motion.div>
   )}
 </AnimatePresence>
     </header> 
   );
-};
+}; 
 
-export default Header; 
+export default Header;
