@@ -6,10 +6,10 @@ import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
 import { useTranslation } from "react-i18next";
 
-// تعريف النوع خارج المكون
+
 type FilterValueMap = Record<string, Record<string, string>>;
 
-// تعريف واجهة المنتج
+
 interface Product {
   id: string;
   name: string;
@@ -118,11 +118,11 @@ const ProductDetail = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [error, setError] = useState<string | null>(null);
   
-  // حالات جديدة لترجمة الفلاتر
+
   const [filterValueMap, setFilterValueMap] = useState<FilterValueMap>({});
   const [filtersLoading, setFiltersLoading] = useState(true);
 
-  // دالة ترجمة قيمة الفلتر
+
   const translateFilterValue = (
     category: string,
     value: string,
@@ -132,7 +132,7 @@ const ProductDetail = () => {
     return map[category][value] || value;
   };
 
-  // جلب ترجمات الفلاتر
+
   const fetchFilterTranslations = async () => {
     try {
       const data = await api.getProductFilterTypes();
