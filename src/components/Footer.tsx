@@ -29,10 +29,10 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* --- Quick Links --- */}
+          {/* --- Quick Links --- */} 
           <div>
             <h4 className="font-semibold mb-6 text-white text-lg">{t('footer.quickLinks')}</h4>
-            <ul className={`space-y-3 ${isRTL ? 'pr-2 text-left' : 'pl-2 text-left'}`}>
+            <ul className={`space-y-3 ${isRTL ? 'pr-2 text-right' : 'pl-2 text-left'}`}>
               <li><Link to="/" className="hover:text-gray-200 text-sm ">{t('common.home')}</Link></li>
               <li><Link to="/products" className="hover:text-gray-200 text-sm">{t('common.products')}</Link></li>
               <li><Link to="/blog" className="hover:text-gray-200 text-sm">{t('common.blog')}</Link></li>
