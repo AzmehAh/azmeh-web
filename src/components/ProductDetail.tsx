@@ -494,7 +494,7 @@ const ProductDetail = () => {
  
     <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
       {brandLogo && (
-        <div className="absolute top-0 right-10 flex items-center justify-center">
+        <div className={`absolute top-0  flex items-center justify-center ${ isRTL ? " left-10" : " right-10" } `}>
           <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
             <img
               src={brandLogo}
