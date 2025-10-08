@@ -152,7 +152,7 @@ const Blog = () => {
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">{t('blog.categoriesTitle')}</h3>
                 {Object.values(selectedFilters).flat().length > 0 && (
-                  <button onClick={clearFilters} className="text-sm text-[#2C5DB6] hover:text-blue-700 font-medium">
+                  <button onClick={clearFilters} className="text-sm text-logo hover:text-blue-700 font-medium">
                     {t('blog.clearAll')}
                   </button>
                 )}
@@ -167,7 +167,7 @@ const Blog = () => {
                     placeholder={t('blog.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] transition-colors`}
+                    className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-logo transition-colors`}
                   />
                 </div>
               </div>
@@ -178,7 +178,7 @@ const Blog = () => {
                   <div key={originalCategoryName}>
                     <button
                       onClick={() => setActiveCategory(activeCategory === originalCategoryName ? null : originalCategoryName)}
-                      className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-[#2C5DB6] transition-colors"
+                      className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-logo transition-colors"
                     >
                       <span>{categoryDisplayNames[originalCategoryName] || originalCategoryName}</span>
                       <motion.span animate={{ rotate: activeCategory === originalCategoryName ? 180 : 0 }} className="inline-block">
@@ -205,7 +205,7 @@ const Blog = () => {
                                   type="checkbox"
                                   checked={selectedFilters[originalCategoryName]?.includes(sub) || false}
                                   onChange={() => toggleFilter(originalCategoryName, sub)}
-                                  className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
+                                  className="w-4 h-4 text-logo border-gray-300 rounded focus:ring-logo"
                                 />
                                 <span className="text-sm text-gray-700">{sub}</span>
                               </div>
@@ -266,16 +266,16 @@ const Blog = () => {
                           />
                         </div>
                         <div className="p-6">
-                          <span className="inline-block px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
+                          <span className="inline-block px-3 py-1 bg-blue-50 text-logo text-xs font-medium rounded-full mb-2">
                             {displaySubcategory}
                           </span>
-                          <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
+                          <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-logo transition-colors line-clamp-2">
                             {displayTitle}
                           </h3>
                           <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
                             {displayDesc}
                           </p>
-                          <button className="w-full bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium group-hover:shadow-lg">
+                          <button className="w-full bg-gradient-to-r from-logo to-blue-700 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium group-hover:shadow-lg">
                             {t('blog.readMore')}
                           </button>
                         </div>
