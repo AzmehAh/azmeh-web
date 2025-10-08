@@ -26,7 +26,7 @@ const AboutFounderSection = () => {
             className="relative"
           >
             <div className="absolute -inset-4 bg-logo rounded-3xl opacity-20 blur-xl"></div>
-            <div className="relative bg-white/20 rounded-3xl p-8 shadow-2xl">
+            <div className="relative bg-white/30 rounded-3xl p-8 shadow-2xl">
               <div className="w-64 h-64 mx-auto bg-gray-300 rounded-2xl flex items-center justify-center">
                 <Users className="w-32 h-32 text-gray-500" />
               </div>
