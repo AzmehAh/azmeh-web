@@ -671,7 +671,7 @@ const ProductDetail = () => {
         {t('products.surface_preparation')}
       </h2>
       <div className="max-w-6xl mx-auto bg-gray-50 rounded-2xl p-8">
-        <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
+        <p className="text-gray-700 text-lg ">
           {product.surface_preparation}
         </p>
       </div>
