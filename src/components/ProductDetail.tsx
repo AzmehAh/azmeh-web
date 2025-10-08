@@ -491,7 +491,7 @@ const ProductDetail = () => {
       )}
     </>
   ) : (
- {/* Placeholder */}
+ 
     <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
       {brandLogo && (
         <div className="absolute top-0 right-10 flex items-center justify-center">
