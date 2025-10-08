@@ -442,7 +442,7 @@ const ProductDetail = () => {
               </button>
             </div>
 
-         <div className="relative">
+       <div className="relative">
   {product.images && product.images.length > 0 ? (
     <>
       <motion.img
@@ -505,7 +505,8 @@ const ProductDetail = () => {
     </div>
   )}
 </div>
-       
+          </div>
+        </div>
       </section>
 
          {/* Features */}
