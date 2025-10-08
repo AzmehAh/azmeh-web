@@ -385,7 +385,7 @@ const ProductDetail = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
-              <p className="text-xl text-logo mb-4 leading-relaxed">{product.description}</p>
+              <p className="text-xl text-white mb-4 leading-relaxed">{product.description}</p>
 
               <div className="flex flex-wrap gap-4 mb-8">
                 {product.type && (
@@ -411,7 +411,7 @@ const ProductDetail = () => {
       <Lightbulb className="w-5 h-5 text-white mr-2" />
       {t('products.recommended_uses')}
     </h3>
-    <p className="text-logo mb-6 leading-relaxed">
+    <p className="text-white mb-6 leading-relaxed">
       {product.recommended_uses}
     </p>
   </>
