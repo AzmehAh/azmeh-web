@@ -441,69 +441,47 @@ const ProductDetail = () => {
                 {t('products.download_datasheet')}
               </button>
             </div>
-<div className="relative">
-  {product.images && product.images.length > 0 ? (
-    <>
-      <motion.img
-        key={currentImageIndex}
-        src={product.images[currentImageIndex]}
-        alt={product.name}
-        className="w-full h-80 lg:h-96 object-cover rounded-2xl"
-        initial={{ opacity: 0, scale: 1.1 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.7 }}
-        onError={(e) => { e.currentTarget.src = "/images/placeholder.jpg"; }}
-      />
+ 
+            <div className="relative">
+              {brandLogo && (
+                <div className="mb-4 text-right">
+                  <img src={brandLogo} alt={product.brand || "Brand"} className="w-24 h-auto object-contain inline-block" />
+                </div>
+              )}
 
-      {/* Brand Logo - Top Left Corner */}
-      {brandLogo && (
-        <div className="absolute top-3 left-3">
-          <div className="bg-white rounded-md p-1.5 shadow-sm">
-            <img
-              src={brandLogo}
-              alt=""
-              className="w-10 h-10 object-contain"
-              onError={(e) => { e.currentTarget.style.display = 'none'; }}
-            />
-          </div>
-        </div>
-      )}
+              {product.images && product.images.length > 0 ? (
+                <>
+                  <motion.img
+                    key={currentImageIndex}
+                    src={product.images[currentImageIndex]}
+                    alt={product.name}
+                    className="w-full h-80 lg:h-96 object-cover rounded-2xl"
+                    initial={{ opacity: 0, scale: 1.1 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.7 }}
+                    onError={(e) => { e.currentTarget.src = "/images/placeholder.jpg"; }}
+                  />
 
-      {/* Indicators (dots) */}
-      {product.images.length > 1 && (
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {product.images.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentImageIndex(index)}
-              className={`w-3 h-3 rounded-full transition-all ${
-                index === currentImageIndex ? "bg-white shadow-lg" : "bg-white/50 hover:bg-white/70"
-              }`}
-            />
-          ))}
-        </div>
-      )}
-    </>
-  ) : (
-    <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
-      {/* Optional: Show logo in placeholder too */}
-  {/* Brand Logo - Top Left Corner (flush to edges) */}
-{brandLogo && (
-  <div className="absolute top-0 left-0">
-    <div className="bg-white rounded-sm p-1.5 shadow">
-      <img
-        src={brandLogo}
-        alt=""
-        className="w-10 h-10 object-contain"
-        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-      />
-    </div>
-  </div>
-)}
-      <p className="text-gray-500">No images available</p>
-    </div>
-  )}
-</div>
+                  {product.images.length > 1 && (
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                      {product.images.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setCurrentImageIndex(index)}
+                          className={`w-3 h-3 rounded-full transition-all ${
+                            index === currentImageIndex ? "bg-white shadow-lg" : "bg-white/50 hover:bg-white/70"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center">
+                  <p className="text-gray-500">No images available</p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
