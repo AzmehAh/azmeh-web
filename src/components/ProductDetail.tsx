@@ -459,7 +459,7 @@ const ProductDetail = () => {
       {brandLogo && (
         <div className="absolute top-0 right-10 flex items-center justify-center">
           {/* خلفية بيضاء دائرية أو مربعة خلف الشعار */}
-          <div className="bg-white  rounded-t-none rounded-bl-full p-4 shadow-md">
+          <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
             <img
               src={brandLogo}
               alt=""
