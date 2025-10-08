@@ -663,18 +663,7 @@ const ProductDetail = () => {
               </h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="divide-y divide-gray-200">
-                  {product.recommended_uses && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.recommended_uses')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">
-                          {Array.isArray(product.recommended_uses) 
-                            ? product.recommended_uses.join(', ') 
-                            : product.recommended_uses}
-                        </span>
-                      </div>
-                    </div>
-                  )}
+                
                   {product.joint_preparation && (
                     <div className="px-6 py-4">
                       <div className="flex items-start gap-2">
