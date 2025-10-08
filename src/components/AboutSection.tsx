@@ -56,7 +56,7 @@ const AboutSection = () => {
             </p>
             <Link
               to="/about"
-              className="inline-flex items-center bg-[#2C5DB6] text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:bg-blue-700 transition-colors duration-300 font-semibold text-sm sm:text-base"
+              className="inline-flex items-center  bg-gradient-to-r from-logo to-blue-700 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20 transition-colors duration-300 font-semibold text-sm sm:text-base"
             >
               {t('about.readMore')}
               <ArrowRight
