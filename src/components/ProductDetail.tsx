@@ -425,7 +425,7 @@ const ProductDetail = () => {
                   </h3>
                   <div className="flex flex-wrap gap-4">
                     {product.packaging.map((pack, index) => (
-                      <div key={index} className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28">
+                      <div key={index} className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28"> 
                         <h4 className="text-sm font-bold text-white">{pack.size}</h4>
                       </div>
                     ))}
@@ -435,8 +435,9 @@ const ProductDetail = () => {
 
               <button
                 onClick={handleDownloadDatasheet}
-                className="bg-white/20  text-white  px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform  transition-all duration-200 flex items-center" >
-                <Download className="w-6 h-6 mr-3 text-white" />
+                className="bg-white/20 hover:from-yellow-500 hover:to-yellow-600 text-black px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200 flex items-center"
+              >
+                <Download className="w-6 h-6 mr-3" />
                 {t('products.download_datasheet')}
               </button>
             </div>
