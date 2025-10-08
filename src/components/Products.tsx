@@ -486,7 +486,7 @@ const Products = () => {
                               </h3>
                               <p className="text-sm text-gray-500 font-mono">{product.code}</p>
                             </div>
-                            <span className="px-3 py-1 bg-logo text-logo text-xs font-medium rounded-full">
+                            <span className="px-3 py-1 bg-logo text-white text-xs font-medium rounded-full">
                               {productBrand}
                             </span>
                           </div>
