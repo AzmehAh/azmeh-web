@@ -505,6 +505,7 @@ const ProductDetail = () => {
     </div>
   )}
 </div>
+        </div>
       </section>
 
          {/* Features */}
