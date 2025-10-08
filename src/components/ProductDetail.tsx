@@ -490,7 +490,7 @@ const ProductDetail = () => {
       {/* Brand Logo in placeholder too (optional) */}
       {brandLogo && (
         <div className="absolute top-0 right-0 flex items-center justify-center">
-          <div className="bg-white rounded-xl p-1 shadow-md">
+          <div className="bg-white rounded-xl p-4 shadow-md">
             <img
               src={brandLogo}
               alt=""
