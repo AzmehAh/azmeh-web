@@ -491,8 +491,8 @@ const ProductDetail = () => {
       )}
     </>
   ) : (
-    {/* Placeholder */}
-     <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
+ {/* Placeholder */}
+    <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
       {brandLogo && (
         <div className="absolute top-0 right-10 flex items-center justify-center">
           <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
@@ -500,11 +500,10 @@ const ProductDetail = () => {
               src={brandLogo}
               alt=""
               className="w-16 h-16 object-contain"
-              onError={(e) => { e.currentTarget.style.display = 'none' }}
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
           </div>
         </div>
-        
       )}
       <p className="text-gray-500">No images available</p>
     </div>
