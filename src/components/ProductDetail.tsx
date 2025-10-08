@@ -435,8 +435,7 @@ const ProductDetail = () => {
 
               <button
                 onClick={handleDownloadDatasheet}
-                className="bg-white/20  text-white  px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform  transition-all duration-200 flex items-center"
-              >
+                className="bg-white/20  text-white  px-8 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transform  transition-all duration-200 flex items-center" >
                 <Download className="w-6 h-6 mr-3 text-white" />
                 {t('products.download_datasheet')}
               </button>
