@@ -448,7 +448,7 @@ const ProductDetail = () => {
         key={currentImageIndex}
         src={product.images[currentImageIndex]}
         alt={product.name}
-        className="w-full h-80 lg:h-96 object-cover rounded-2xl"
+        className="w-full h-80 lg:h-96 object-contain rounded-2xl"
         initial={{ opacity: 0, scale: 1.1 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7 }}
