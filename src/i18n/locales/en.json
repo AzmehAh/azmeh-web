@@ -201,7 +201,8 @@
     "noProductsFound": "No products found",
     "tryAdjustingSearch": "Try adjusting your search terms or filters",
     "clearFilters": "Clear Filters",
-    "code": "Code"
+    "code": "Code",
+    "products.activeFilters": "products.activeFilters"
   },
 "contact": {
   "title": "Contact Us",
