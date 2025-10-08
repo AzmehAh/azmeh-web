@@ -627,7 +627,7 @@ const ProductDetail = () => {
           </div>
         </section>
       )}
-{/* Surface Preparation Section */}
+{/* Surface Preparation */}
 {product.surface_preparation && (
   <section className="py-16 bg-white">
     <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -635,8 +635,10 @@ const ProductDetail = () => {
         <Shield className="w-8 h-8 text-green-600 mr-3" />
         {t('products.surface_preparation')}
       </h2>
-      <div className="text-gray-700 text-lg leading-relaxed text-center max-w-3xl mx-auto">
-        {product.surface_preparation}
+      <div className="max-w-4xl mx-auto bg-gray-50 rounded-2xl p-8">
+        <p className="text-gray-700 text-lg leading-relaxed whitespace-pre-line">
+          {product.surface_preparation}
+        </p>
       </div>
     </div>
   </section>
