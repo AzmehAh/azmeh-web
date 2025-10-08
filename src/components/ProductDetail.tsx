@@ -516,113 +516,96 @@ const ProductDetail = () => {
       )}
 
   {/* Application Instructions */}
-{product.application && (
-  <section className="py-16 bg-white">
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-          <Layers className="w-8 h-8 text-green-600 mr-3" />
-          {t('products.application_instructions')}
-        </h2>
-        <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-          <div className="divide-y divide-gray-100">
-            {product.application.method_of_application && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 sm:grid-cols-1 sm:gap-x-0">
-                  <span className="font-bold text-gray-800 min-w-0">
-                    {t('products.method_of_application')}:
-                  </span>
-                  <span className="text-gray-700 leading-relaxed">{product.application.method_of_application}</span>
+      {product.application && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+                <Layers className="w-8 h-8 text-green-600 mr-3" />
+                {t('products.application_instructions')}
+              </h2>
+              <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="divide-y divide-gray-100">
+                  {product.application.method_of_application && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.method_of_application')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.method_of_application}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.mixing_ratio && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.mixing_ratio')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.mixing_ratio}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.mixing_note && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.mixing_note')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.mixing_note}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.mixing_steps && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.mixing_steps')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.mixing_steps}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.cleaner && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.cleaner')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.cleaner}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.thinner && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.thinner')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.thinner}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.application_temperature && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.application_temperature')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.application_temperature}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.curing_note && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.curing_note')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.curing_note}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.application.note_application && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.note_application')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.application.note_application}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
-            )}
-            {product.application.mixing_ratio && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 sm:grid-cols-1 sm:gap-x-0">
-                  <span className="font-bold text-gray-800 min-w-0">
-                    {t('products.mixing_ratio')}:
-                  </span>
-                  <span className="text-gray-700 leading-relaxed">{product.application.mixing_ratio}</span>
-                </div>
-              </div>
-            )}
-            {product.application.mixing_note && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 sm:grid-cols-1 sm:gap-x-0">
-                  <span className="font-bold text-gray-800 min-w-0">
-                    {t('products.mixing_note')}:
-                  </span>
-                  <span className="text-gray-700 leading-relaxed">{product.application.mixing_note}</span>
-                </div>
-              </div>
-            )}
-            {product.application.mixing_steps && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 sm:grid-cols-1 sm:gap-x-0">
-                  <span className="font-bold text-gray-800 min-w-0">
-                    {t('products.mixing_steps')}:
-                  </span>
-                  <span className="text-gray-700 leading-relaxed">{product.application.mixing_steps}</span>
-                </div>
-              </div>
-            )}
-            {product.application.cleaner && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 sm:grid-cols-1 sm:gap-x-0">
-                  <span className="font-bold text-gray-800 min-w-0">
-                    {t('products.cleaner')}:
-                  </span>
-                  <span className="text-gray-700 leading-relaxed">{product.application.cleaner}</span>
-                </div>
-              </div>
-            )}
-            {product.application.thinner && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 sm:grid-cols-1 sm:gap-x-0">
-                  <span className="font-bold text-gray-800 min-w-0">
-                    {t('products.thinner')}:
-                  </span>
-                  <span className="text-gray-700 leading-relaxed">{product.application.thinner}</span>
-                </div>
-              </div>
-            )}
-            {product.application.application_temperature && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 sm:grid-cols-1 sm:gap-x-0">
-                  <span className="font-bold text-gray-800 min-w-0">
-                    {t('products.application_temperature')}:
-                  </span>
-                  <span className="text-gray-700 leading-relaxed">{product.application.application_temperature}</span>
-                </div>
-              </div>
-            )}
-            {product.application.curing_note && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 sm:grid-cols-1 sm:gap-x-0">
-                  <span className="font-bold text-gray-800 min-w-0">
-                    {t('products.curing_note')}:
-                  </span>
-                  <span className="text-gray-700 leading-relaxed">{product.application.curing_note}</span>
-                </div>
-              </div>
-            )}
-            {product.application.note_application && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 sm:grid-cols-1 sm:gap-x-0">
-                  <span className="font-bold text-gray-800 min-w-0">
-                    {t('products.note_application')}:
-                  </span>
-                  <span className="text-gray-700 leading-relaxed">{product.application.note_application}</span>
-                </div>
-              </div>
-            )}
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
-  </section>
-)}
+        </section>
+      )} 
 
+ 
        {/* Technical Specifications */}
       {product.technical_specs && product.technical_specs.length > 0 && (
         <section className="py-16 bg-white">
