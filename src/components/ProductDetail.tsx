@@ -505,7 +505,7 @@ const ProductDetail = () => {
           </div>
         </div>
       )}
-      <p className="text-gray-500">No images available</p>
+      <p className="text-gray-500">  {t('products.image')}</p>
     </div>
   )}
 </div>
