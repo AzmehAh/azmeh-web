@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers } from "lucide-react";
+import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers,Lightbulb} from "lucide-react";
 import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
 import { useTranslation } from "react-i18next";
@@ -408,7 +408,7 @@ const ProductDetail = () => {
              {product.recommended_uses && (
   <>
     <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-      <Package className="w-5 h-5 text-white mr-2" />
+      <Lightbulb className="w-5 h-5 text-white mr-2" />
       {t('products.recommended_uses')}
     </h3>
     <p className="text-blue-100/90 mb-6 leading-relaxed">
