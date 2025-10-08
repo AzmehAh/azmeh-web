@@ -239,7 +239,7 @@ const Products = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
+      <div className="bg-gradient-to-r from-blog to-blue-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
@@ -265,13 +265,13 @@ const Products = () => {
                           max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900 flex items-center">
-                  <Filter className="w-5 h-5 text-[#2C5DB6] mr-2" />
+                  <Filter className="w-5 h-5 text-blog mr-2" />
                   {t('products.filter')}
                 </h3>
                 {getActiveFiltersCount() > 0 && (
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-[#2C5DB6] hover:text-blue-700 font-medium"
+                    className="text-sm text-blog hover:text-blue-700 font-medium"
                   >
                     {t('products.clearAll')}
                   </button>
@@ -287,7 +287,7 @@ const Products = () => {
                     placeholder={t('products.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] transition-colors`}
+                    className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-blog transition-colors`}
                   />
                 </div>
               </div>
@@ -315,7 +315,7 @@ const Products = () => {
                     onClick={() =>
                       setActiveFilterCategory(activeFilterCategory === category ? null : category)
                     }
-                    className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-[#2C5DB6] transition-colors"
+                    className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-blog transition-colors"
                   >
                     <span>{getFilterCategoryName(category)}</span>
                     <ChevronDown
@@ -344,7 +344,7 @@ const Products = () => {
                                 type="checkbox"
                                 checked={selectedFilters[category]?.includes(option) || false}
                                 onChange={() => toggleFilter(category, option)}
-                                className="w-4 h-4 text-[#2C5DB6] border-gray-300 rounded focus:ring-[#2C5DB6]"
+                                className="w-4 h-4 text-blog border-gray-300 rounded focus:ring-blog"
                               />
                               <span className="text-sm text-gray-700">{option}</span>
                             </label>
@@ -367,7 +367,7 @@ const Products = () => {
                       values.map((value) => (
                         <span
                           key={`${category}-${value}`}
-                          className="inline-flex items-center space-x-1 px-3 py-1 bg-[#2C5DB6] text-white text-xs rounded-full"
+                          className="inline-flex items-center space-x-1 px-3 py-1 bg-blog text-white text-xs rounded-full"
                         >
                           <span>{value}</span>
                           <button
@@ -401,7 +401,7 @@ const Products = () => {
                     onClick={() => setViewMode('grid')}
                     className={`p-2 ${isRTL ? 'rounded-r-lg' : 'rounded-l-lg'} transition-colors ${
                       viewMode === 'grid'
-                        ? 'bg-[#2C5DB6] text-white'
+                        ? 'bg-blog text-white'
                         : 'text-gray-400 hover:text-gray-600'
                     }`}
                   >
@@ -411,7 +411,7 @@ const Products = () => {
                     onClick={() => setViewMode('list')}
                     className={`p-2 ${isRTL ? 'rounded-l-lg' : 'rounded-r-lg'} transition-colors ${
                       viewMode === 'list'
-                        ? 'bg-[#2C5DB6] text-white'
+                        ? 'bg-blog text-white'
                         : 'text-gray-400 hover:text-gray-600'
                     }`}
                   >
@@ -483,12 +483,12 @@ const Products = () => {
                           {/* Title & Brand */}
                           <div className="flex items-start justify-between mb-3">
                             <div>
-                              <h3 className="text-xl font-bold text-gray-900 group-hover:text-[#2C5DB6] transition-colors">
+                              <h3 className="text-xl font-bold text-gray-900 group-hover:text-blog transition-colors">
                                 {productName}
                               </h3>
                               <p className="text-sm text-gray-500 font-mono">{product.code}</p>
                             </div>
-                            <span className="px-3 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full">
+                            <span className="px-3 py-1 bg-blue-50 text-blog text-xs font-medium rounded-full">
                               {productBrand}
                             </span>
                           </div>
@@ -514,7 +514,7 @@ const Products = () => {
 
                           {/* Button */}
                           {viewMode === 'grid' && (
-                            <button className="w-full bg-[#2C5DB6] text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
+                            <button className="w-full bg-blog text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
                               {t('products.viewDetails')}
                             </button>
                           )}
