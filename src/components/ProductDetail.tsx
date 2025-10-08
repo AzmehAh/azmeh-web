@@ -481,7 +481,7 @@ const ProductDetail = () => {
               className={`w-3 h-3 rounded-full transition-all ${
                 index === currentImageIndex ? "bg-white shadow-lg" : "bg-white/50 hover:bg-white/70"
               }`}
-            />
+            /> 
           ))}
         </div>
       )}
@@ -491,7 +491,7 @@ const ProductDetail = () => {
       {/* Brand Logo in placeholder too (optional) */}
       {brandLogo && (
         <div className="absolute top-0 right-4 flex items-center justify-center">
-          <div className="bg-white  p-4 shadow-md">
+          <div className="bg-white rounded-full p-1 shadow-md">
             <img
               src={brandLogo}
               alt=""
