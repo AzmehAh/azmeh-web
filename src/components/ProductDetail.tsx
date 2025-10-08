@@ -520,7 +520,7 @@ const ProductDetail = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-800 mb-10 flex items-center justify-center">
-                <CheckCircle className="w-8 h-8 text-green-500 mr-3" />
+                <CheckCircle className="w-8 h-8 text-logo mr-3" />
                 {t('products.key_features')}
               </h2>
               <div className="space-y-4">
@@ -533,7 +533,7 @@ const ProductDetail = () => {
                     viewport={{ once: true }}
                     className="flex items-center bg-white p-4 rounded-xl shadow-sm"
                   >
-                    <div className="w-3 h-3 bg-green-500 rounded-full mr-4 flex-shrink-0" />
+                    <div className="w-3 h-3 bg-logo rounded-full mr-4 flex-shrink-0" />
                     <span className="text-gray-700 font-medium">{feature}</span>
                   </motion.div>
                 ))}
@@ -548,7 +548,7 @@ const ProductDetail = () => {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-          <Layers className="w-8 h-8 text-green-600 mr-3" />
+          <Layers className="w-8 h-8 text-logo mr-3" />
           {t('products.application_instructions')}
         </h2>
         <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
@@ -667,7 +667,7 @@ const ProductDetail = () => {
   <section className="py-16 bg-white">
     <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-        <Brush className="w-8 h-8 text-green-600 mr-3" />
+        <Brush className="w-8 h-8 text-logo mr-3" />
         {t('products.surface_preparation')}
       </h2>
       <div className="max-w-6xl mx-auto bg-gray-50 rounded-2xl p-8">
@@ -694,7 +694,7 @@ const ProductDetail = () => {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-          <Info className="w-8 h-8 text-green-600 mr-3" />
+          <Info className="w-8 h-8 text-logo mr-3" />
           {t('products.general_information')}
         </h2>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
@@ -875,7 +875,7 @@ const ProductDetail = () => {
         <section className="py-16 bg-white">
           <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-              <Shield className="w-8 h-8 text-green-600 mr-3" />
+              <Shield className="w-8 h-8 text-logo mr-3" />
               {t('products.storing_conditions')}
             </h2>
             <div
