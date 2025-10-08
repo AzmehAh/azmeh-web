@@ -463,7 +463,7 @@ const ProductDetail = () => {
             <img
               src={brandLogo}
               alt=""
-              className="w-18 h-18 object-contain"
+              className="w-16 h-16 object-contain"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
           </div>
@@ -494,7 +494,7 @@ const ProductDetail = () => {
             <img
               src={brandLogo}
               alt=""
-              className="w-12 h-12 object-cover"
+              className="w-12 h-12 object-contain"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
           </div>
