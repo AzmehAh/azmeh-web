@@ -627,16 +627,20 @@ const ProductDetail = () => {
           </div>
         </section>
       )}
-{/* Surface Preparation */}
-      {product.surface_preparation && (
-        <section className="py-16 bg-white">
-          <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-              <Shield className="w-8 h-8 text-green-600 mr-3" />
-              {t('surface_preparation')}
-            </h2>
-          </div>
-        </section>
+{/* Surface Preparation Section */}
+{product.surface_preparation && (
+  <section className="py-16 bg-white">
+    <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+        <Shield className="w-8 h-8 text-green-600 mr-3" />
+        {t('products.surface_preparation')}
+      </h2>
+      <div className="text-gray-700 text-lg leading-relaxed text-center max-w-3xl mx-auto">
+        {product.surface_preparation}
+      </div>
+    </div>
+  </section>
+
       )}
       
       {/* General Information */}
