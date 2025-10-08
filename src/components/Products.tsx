@@ -388,9 +388,9 @@ const Products = () => {
             {/* Toolbar */}
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center space-x-4">
-                <h2 className="text-2xl font-bold text-logo">
+                <h2 className="text-2xl font-bold text-gray-900">
                   {t('products.ourProducts')} ({filteredProducts.length})
-                </h2>
+                </h2> 
               </div>
               
               <div className="flex items-center space-x-3">
