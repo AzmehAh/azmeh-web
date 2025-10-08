@@ -341,7 +341,7 @@ const ProductDetail = () => {
           <p className="text-gray-600 mb-4">{error}</p>
           <Link
             to="/products"
-            className="bg-logo text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-logo text-white px-6 py-3 rounded-lg hover:bg-logo transition-colors"
           >
             {t('back_to_products')}
           </Link>
@@ -358,7 +358,7 @@ const ProductDetail = () => {
           <p className="text-gray-600 mb-8">{t('product_not_found_desc')}</p>
           <Link
             to="/products"
-            className="bg-logo text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-logo text-white px-6 py-3 rounded-lg hover:bg-logo transition-colors"
           >
             {t('back_to_products')}
           </Link>
@@ -385,7 +385,7 @@ const ProductDetail = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
-              <p className="text-xl text-blue-100 mb-4 leading-relaxed">{product.description}</p>
+              <p className="text-xl text-logo mb-4 leading-relaxed">{product.description}</p>
 
               <div className="flex flex-wrap gap-4 mb-8">
                 {product.type && (
@@ -411,7 +411,7 @@ const ProductDetail = () => {
       <Lightbulb className="w-5 h-5 text-white mr-2" />
       {t('products.recommended_uses')}
     </h3>
-    <p className="text-blue-100/90 mb-6 leading-relaxed">
+    <p className="text-logo mb-6 leading-relaxed">
       {product.recommended_uses}
     </p>
   </>
@@ -778,7 +778,7 @@ const ProductDetail = () => {
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-          <Wrench className="w-8 h-8 text-blue-600 mr-3" />
+          <Wrench className="w-8 h-8 text-logo mr-3" />
           {t('products.drying_time')}
         </h2>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
