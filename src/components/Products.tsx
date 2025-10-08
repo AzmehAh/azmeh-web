@@ -245,9 +245,7 @@ const Products = () => {
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               {t('products.title')}
             </h1>
-            <p className="text-xl opacity-90 max-w-3xl leading-relaxed">
-              {t('products.discoverOurRange')}
-            </p>
+          
          
         </div>
       </div>
