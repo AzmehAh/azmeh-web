@@ -224,12 +224,12 @@ const BulletinDetail = () => {
       {/* ✅ هذا الزر سيأخذك إلى صفحة /contact */}
       <Link
         to="/contact"
-        className="bg-logo hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center"
+        className=" bg-gradient-to-r from-logo to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20  text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center"
       >
         {t('bulletin.contactTeam')}
       </Link>
 
-      <button className="bg-white/10 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm">
+      <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm">
         {t('bulletin.downloadPdf')}
       </button>
     </div>
