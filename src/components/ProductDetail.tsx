@@ -459,11 +459,11 @@ const ProductDetail = () => {
       {brandLogo && (
         <div className="absolute top-0 right-0 flex items-center justify-center">
           {/* خلفية بيضاء دائرية أو مربعة خلف الشعار */}
-          <div className="bg-white rounded-2xl p-4 shadow-md">
+          <div className="bg-white rounded-xl p-4 shadow-md">
             <img
               src={brandLogo}
               alt=""
-              className="w-12 h-12 object-contain"
+              className="w-14 h-14 object-contain"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
           </div>
