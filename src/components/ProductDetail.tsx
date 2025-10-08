@@ -462,7 +462,7 @@ const ProductDetail = () => {
 
         {/* Brand Logo - Top Right */}
         {brandLogo && (
-          <div className="absolute top-0 right-10 flex items-center justify-center">
+          <div className={`absolute top-0 flex items-center justify-center ${ isRTL ? " left-10" : " right-10" } `}>
             <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
               <img
                 src={brandLogo}
