@@ -338,12 +338,7 @@ const Troubleshooting = () => {
                 {t('troubleshooting.contactSupport')}
               </Link>
 
-              <Link
-                to="/contact"
-                className="bg-white/20 text-white px-8 py-3 rounded-lg font-semibold hover:bg-white/30 transition-colors backdrop-blur-sm block text-center"
-              >
-                {t('troubleshooting.scheduleConsultation')}
-              </Link>
+            
             </div>
           </div>
         </div>
