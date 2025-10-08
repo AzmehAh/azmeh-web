@@ -651,7 +651,7 @@ const ProductDetail = () => {
                       {product.technical_specs.map((spec, index) => (
                         <tr key={index} className="border-b border-gray-100">
                           <td className="px-4 py-3 font-bold text-gray-800">{t(`products.${spec.key}`)}</td>
-                          <td className="px-4 py-3 text-logo font-medium">{spec.value}</td>
+                          <td className="px-4 py-3 text-gray-700 font-medium">{spec.value}</td>
                         </tr>
                       ))}
                     </tbody>
