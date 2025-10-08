@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers,Lightbulb} from "lucide-react";
+import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers,Lightbulb ,Brush} from "lucide-react";
 import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
 import { useTranslation } from "react-i18next";
@@ -667,7 +667,7 @@ const ProductDetail = () => {
   <section className="py-16 bg-white">
     <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
       <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-        <Shield className="w-8 h-8 text-green-600 mr-3" />
+        <Brush className="w-8 h-8 text-green-600 mr-3" />
         {t('products.surface_preparation')}
       </h2>
       <div className="max-w-6xl mx-auto bg-gray-50 rounded-2xl p-8">
