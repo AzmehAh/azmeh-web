@@ -405,9 +405,17 @@ const ProductDetail = () => {
                 )}
               </div>
   
-              {product.recommended_uses && (
-                <p className="text-blue-100/90 mb-6 leading-relaxed">{product.recommended_uses}</p>
-              )}
+             {product.recommended_uses && (
+  <>
+    <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+      <Package className="w-5 h-5 text-white mr-2" />
+      {t('products.recommended_uses')}
+    </h3>
+    <p className="text-blue-100/90 mb-6 leading-relaxed">
+      {product.recommended_uses}
+    </p>
+  </>
+)}
      
               {product.packaging && product.packaging.length > 0 && (
                 <div className="mb-8">
