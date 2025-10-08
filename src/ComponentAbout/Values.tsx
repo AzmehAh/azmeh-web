@@ -32,16 +32,16 @@ const Values = () => {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className="group bg-white shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 hover:border-[#0055A3]/20"
+              className="group bg-white shadow-lg hover:shadow-2xl transition-all duration-500 p-8 border border-gray-100 hover:border-logo/20"
             >
               <div className="flex flex-col items-start gap-2">
                 <div className="flex items-center gap-3">
                   <div className="w-16 h-16 flex items-center justify-center">
                     {React.createElement(icons[index], {
-                      className: "w-8 h-8 group-hover:text-[#0055A3] text-gray-600"
+                      className: "w-8 h-8 group-hover:text-logo text-gray-600"
                     })}
                   </div>
-                  <h3 className="text-xl font-bold group-hover:text-[#0055A3] text-gray-900">
+                  <h3 className="text-xl font-bold group-hover:text-logo text-gray-900">
                     {value.title}
                   </h3>
                 </div>
