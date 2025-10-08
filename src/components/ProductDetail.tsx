@@ -457,7 +457,7 @@ const ProductDetail = () => {
 
       {/* Brand Logo Overlay - Top Left */}
       {brandLogo && (
-        <div className="absolute top-0 left-0 flex items-center justify-center">
+        <div className="absolute top-0 right-0 flex items-center justify-center">
           {/* خلفية بيضاء دائرية أو مربعة خلف الشعار */}
           <div className="bg-white rounded-2xl p-4 shadow-md">
             <img
