@@ -374,7 +374,7 @@ const ProductDetail = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative mb-8">
             <div className="flex items-center text-sm text-white">
-              <Link to="/" className="hover:text-black transition-colors">{t('products.home')}</Link>
+              <Link to="/" className="hover:text-gray-100 transition-colors">{t('products.home')}</Link>
               <span className="mx-2">/</span>
               <Link to="/products" className="hover:text-[#0055A3] transition-colors">{t('products.title')}</Link>
               <span className="mx-2">/</span>
