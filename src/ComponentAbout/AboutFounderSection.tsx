@@ -5,11 +5,11 @@ import { Users } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 const AboutFounderSection = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
   const { t } = useTranslation();
 
   return (
-    <section className="py-40 bg-[#0055A3] relative overflow-hidden text-white">
+    <section className="py-40 bg-logo relative overflow-hidden text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Combined Section */}
         <motion.div
@@ -25,7 +25,7 @@ const AboutFounderSection = () => {
             transition={{ duration: 0.8 }}
             className="relative"
           >
-            <div className="absolute -inset-4 bg-[#0055A3] rounded-3xl opacity-20 blur-xl"></div>
+            <div className="absolute -inset-4 bg-logo rounded-3xl opacity-20 blur-xl"></div>
             <div className="relative bg-gradient-to-br from-[#2C5DB6] to-blue-800 rounded-3xl p-8 shadow-2xl">
               <div className="w-64 h-64 mx-auto bg-gray-300 rounded-2xl flex items-center justify-center">
                 <Users className="w-32 h-32 text-gray-500" />
