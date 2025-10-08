@@ -622,7 +622,7 @@ const ProductDetail = () => {
                     <tbody>
                       {product.technical_specs.map((spec, index) => (
                         <tr key={index} className="border-b border-gray-100">
-                          <td className="px-4 py-3 font-medium text-gray-800">{t(`products.${spec.key}`)}</td>
+                          <td className="px-4 py-3 font-bold text-gray-800">{t(`products.${spec.key}`)}</td>
                           <td className="px-4 py-3 text-[#2C5DB6] font-medium">{spec.value}</td>
                         </tr>
                       ))}
