@@ -341,7 +341,7 @@ const ProductDetail = () => {
           <p className="text-gray-600 mb-4">{error}</p>
           <Link
             to="/products"
-            className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-[logo] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
             {t('back_to_products')}
           </Link>
@@ -358,7 +358,7 @@ const ProductDetail = () => {
           <p className="text-gray-600 mb-8">{t('product_not_found_desc')}</p>
           <Link
             to="/products"
-            className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-[logo] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
           >
             {t('back_to_products')}
           </Link>
@@ -639,7 +639,7 @@ const ProductDetail = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <div className="bg-[#2C5DB6] px-6 py-4">
+                <div className="bg-[logo] px-6 py-4">
                   <h2 className="text-lg font-bold text-white flex items-center">
                     <FileText className="w-5 h-5 mr-2" />
                     {t('products.technical_specifications')}
@@ -651,7 +651,7 @@ const ProductDetail = () => {
                       {product.technical_specs.map((spec, index) => (
                         <tr key={index} className="border-b border-gray-100">
                           <td className="px-4 py-3 font-bold text-gray-800">{t(`products.${spec.key}`)}</td>
-                          <td className="px-4 py-3 text-[#2C5DB6] font-medium">{spec.value}</td>
+                          <td className="px-4 py-3 text-[logo] font-medium">{spec.value}</td>
                         </tr>
                       ))}
                     </tbody>
