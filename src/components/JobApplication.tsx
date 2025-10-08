@@ -193,7 +193,7 @@ const JobApplication = () => {
           transition={{ duration: 0.6 }}
           className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 mb-8"
         >
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 mb-6">
             {t('jobApplication.whyWorkWithUs')}
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
