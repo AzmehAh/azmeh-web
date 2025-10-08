@@ -512,7 +512,7 @@ const Products = () => {
 
                           {/* Button */}
                           {viewMode === 'grid' && (
-                            <button className="w-full bg-logo text-white py-2 rounded-lg hover:bg-gray-50 transition-colors duration-200 font-medium">
+                            <button className="w-full bg-logo text-white py-2 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-medium">
                               {t('products.viewDetails')}
                             </button>
                           )}
