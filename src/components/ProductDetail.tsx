@@ -478,114 +478,7 @@ const ProductDetail = () => {
         </div>
       </section>
 
-      {/* General Information */}
-      {(
-        product.joint_preparation ||
-        product.joint_size ||
-        product.movement_capacity ||
-        product.substrate_treatment ||
-        product.surface_preparation ||
-        (product.recommended_uses && product.recommended_uses.length > 0)
-      ) && (
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-                <Info className="w-8 h-8 text-green-600 mr-3" />
-                {t('products.general_information')}
-              </h2>
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="divide-y divide-gray-200">
-                  {product.recommended_uses && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.recommended_uses')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">
-                          {Array.isArray(product.recommended_uses) 
-                            ? product.recommended_uses.join(', ') 
-                            : product.recommended_uses}
-                        </span>
-                      </div>
-                    </div>
-                  )}
-                  {product.joint_preparation && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.joint_preparation')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.joint_preparation}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.joint_size && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.joint_size')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.joint_size}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.movement_capacity && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.movement_capacity')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.movement_capacity}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.substrate_treatment && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.substrate_treatment')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.substrate_treatment}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.surface_preparation && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.surface_preparation')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.surface_preparation}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Technical Specifications */}
-      {product.technical_specs && product.technical_specs.length > 0 && (
-        <section className="py-16 bg-white">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-                <div className="bg-[#2C5DB6] px-6 py-4">
-                  <h2 className="text-lg font-bold text-white flex items-center">
-                    <FileText className="w-5 h-5 mr-2" />
-                    {t('products.technical_specifications')}
-                  </h2>
-                </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <tbody>
-                      {product.technical_specs.map((spec, index) => (
-                        <tr key={index} className="border-b border-gray-100">
-                          <td className="px-4 py-3 font-medium text-gray-800">{t(`products.${spec.key}`)}</td>
-                          <td className="px-4 py-3 text-[#2C5DB6] font-medium">{spec.value}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Features */}
+         {/* Features */}
       {product.features && product.features.length > 0 && (
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -614,7 +507,7 @@ const ProductDetail = () => {
         </section>
       )}
 
-      {/* Application Instructions */}
+  {/* Application Instructions */}
       {product.application && (
         <section className="py-16 bg-white">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -702,7 +595,125 @@ const ProductDetail = () => {
             </div>
           </div>
         </section>
+      )} 
+
+
+       {/* Technical Specifications */}
+      {product.technical_specs && product.technical_specs.length > 0 && (
+        <section className="py-16 bg-white">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+                <div className="bg-[#2C5DB6] px-6 py-4">
+                  <h2 className="text-lg font-bold text-white flex items-center">
+                    <FileText className="w-5 h-5 mr-2" />
+                    {t('products.technical_specifications')}
+                  </h2>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full text-sm">
+                    <tbody>
+                      {product.technical_specs.map((spec, index) => (
+                        <tr key={index} className="border-b border-gray-100">
+                          <td className="px-4 py-3 font-medium text-gray-800">{t(`products.${spec.key}`)}</td>
+                          <td className="px-4 py-3 text-[#2C5DB6] font-medium">{spec.value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
       )}
+
+  {/* Storage */}
+     {product.surface_preparation && (
+        <section className="py-16 bg-white">
+          <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+              <Shield className="w-8 h-8 text-green-600 mr-3" />
+              {t('product.surface_preparation')}
+            </h2>
+           
+          </div>
+        </section>
+      )}
+      
+      {/* General Information */}
+      {(
+        product.joint_preparation ||
+        product.joint_size ||
+        product.movement_capacity ||
+        product.substrate_treatment ||
+        product.surface_preparation ||
+        (product.recommended_uses && product.recommended_uses.length > 0)
+      ) && (
+        <section className="py-16 bg-gray-50">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+                <Info className="w-8 h-8 text-green-600 mr-3" />
+                {t('products.general_information')}
+              </h2>
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="divide-y divide-gray-200">
+                  {product.recommended_uses && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.recommended_uses')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">
+                          {Array.isArray(product.recommended_uses) 
+                            ? product.recommended_uses.join(', ') 
+                            : product.recommended_uses}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                  {product.joint_preparation && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.joint_preparation')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.joint_preparation}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.joint_size && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.joint_size')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.joint_size}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.movement_capacity && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.movement_capacity')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.movement_capacity}</span>
+                      </div>
+                    </div>
+                  )}
+                  {product.substrate_treatment && (
+                    <div className="px-6 py-4">
+                      <div className="flex items-start gap-2">
+                        <span className="font-medium text-gray-800">{t('products.substrate_treatment')}:</span>
+                        <span className="text-gray-700 leading-relaxed flex-1">{product.substrate_treatment}</span>
+                      </div>
+                    </div>
+                  )}
+                 
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+     
+   
+    
 
       {/* Drying Time */}
       {(
