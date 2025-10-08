@@ -198,7 +198,7 @@ const JobApplication = () => {
           </h2>
           <div className="grid md:grid-cols-3 gap-6">
             <div className="text-center">
-              <div className="w-12 h-12 bg-[#2C5DB6] rounded-lg flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-logo rounded-lg flex items-center justify-center mx-auto mb-3">
                 <CheckCircle className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">
@@ -209,7 +209,7 @@ const JobApplication = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-[#2C5DB6] rounded-lg flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-logo rounded-lg flex items-center justify-center mx-auto mb-3">
                 <User className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">
@@ -220,7 +220,7 @@ const JobApplication = () => {
               </p>
             </div>
             <div className="text-center">
-              <div className="w-12 h-12 bg-[#2C5DB6] rounded-lg flex items-center justify-center mx-auto mb-3">
+              <div className="w-12 h-12 bg-logo rounded-lg flex items-center justify-center mx-auto mb-3">
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <h3 className="font-semibold text-gray-900 mb-2">
@@ -260,7 +260,7 @@ const JobApplication = () => {
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition-all ${
                   errors.fullName 
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
-                    : 'border-gray-200 focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20'
+                    : 'border-gray-200 focus:border-logo focus:ring-2 focus:ring-logo/20'
                 }`}
                 placeholder={t('jobApplication.fullName')}
               />
@@ -291,7 +291,7 @@ const JobApplication = () => {
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition-all ${
                   errors.email 
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
-                    : 'border-gray-200 focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20'
+                    : 'border-gray-200 focus:border-logo focus:ring-2 focus:ring-logo/20'
                 }`}
                 placeholder="your.email@example.com"
               />
@@ -322,7 +322,7 @@ const JobApplication = () => {
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition-all ${
                   errors.phone 
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
-                    : 'border-gray-200 focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20'
+                    : 'border-gray-200 focus:border-logo focus:ring-2 focus:ring-logo/20'
                 }`}
                 placeholder="+1 (555) 123-4567"
               />
@@ -353,7 +353,7 @@ const JobApplication = () => {
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition-all resize-vertical ${
                   errors.coverLetter 
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
-                    : 'border-gray-200 focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20'
+                    : 'border-gray-200 focus:border-logo focus:ring-2 focus:ring-logo/20'
                 }`}
                 placeholder={t('jobApplication.coverLetter')}
               />
@@ -375,13 +375,13 @@ const JobApplication = () => {
                 <UploadIcon className="w-4 h-4 inline mr-2" />
                 {t('jobApplication.uploadCV')} *
               </label>
-              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-[#2C5DB6] transition-colors">
+              <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-logo transition-colors">
                 <div className="space-y-1 text-center">
                   <UploadIcon className="mx-auto h-12 w-12 text-gray-400" />
                   <div className="flex text-sm text-gray-600">
                     <label
                       htmlFor="cvFile"
-                      className="relative cursor-pointer rounded-md font-medium text-[#2C5DB6] hover:text-blue-700 focus-within:outline-none"
+                      className="relative cursor-pointer rounded-md font-medium text-logo hover:text-blue-700 focus-within:outline-none"
                     >
                       <span>{t('jobApplication.uploadFile')}</span>
                       <input
@@ -461,7 +461,7 @@ const JobApplication = () => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-4 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-[#2C5DB6]/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-gradient-to-r from-logo to-blue-700 text-white py-4 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isSubmitting ? (
                 <>
