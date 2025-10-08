@@ -269,7 +269,7 @@ const Products = () => {
                 {getActiveFiltersCount() > 0 && (
                   <button
                     onClick={clearFilters}
-                    className="text-sm text-logo hover:text-blue-700 font-medium"
+                    className="text-sm text-logo hover:text-white/20 font-medium"
                   >
                     {t('products.clearAll')}
                   </button>
