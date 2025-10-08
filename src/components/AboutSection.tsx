@@ -42,7 +42,7 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
             className={`text-center lg:text-left ${isRTL ? 'lg:text-right' : ''}`}
           >
-            <h3 className="text-sm uppercase text-[#0055A3] mb-2">
+            <h3 className="text-sm uppercase text-logo mb-2">
               {t('about.legacy')}
             </h3>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
@@ -90,10 +90,10 @@ const AboutSection = () => {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.5 }}
             >
-              <div className="text-xl sm:text-2xl font-bold text-[#0055A3]">
+              <div className="text-xl sm:text-2xl font-bold text-logo">
                 {count}Y+
               </div>
-              <div className="text-[10px] sm:text-xs text-[#0055A3] font-semibold uppercase">
+              <div className="text-[10px] sm:text-xs text-logo font-semibold uppercase">
                 {t('about.experience')}
               </div>
             </motion.div>
