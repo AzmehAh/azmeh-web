@@ -652,177 +652,195 @@ const ProductDetail = () => {
 
       )}
       
-      {/* General Information */}
-      {(
-        product.joint_preparation ||
-        product.joint_size ||
-        product.movement_capacity ||
-        product.substrate_treatment ||
-        product.surface_preparation ||
-        (product.recommended_uses && product.recommended_uses.length > 0)
-      ) && (
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-                <Info className="w-8 h-8 text-green-600 mr-3" />
-                {t('products.general_information')}
-              </h2>
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="divide-y divide-gray-200">
-                
-                  {product.joint_preparation && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.joint_preparation')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.joint_preparation}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.joint_size && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.joint_size')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.joint_size}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.movement_capacity && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.movement_capacity')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.movement_capacity}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.substrate_treatment && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.substrate_treatment')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.substrate_treatment}</span>
-                      </div>
-                    </div>
-                  )}
-                 
+    
+{/* General Information */}
+{(
+  product.joint_preparation ||
+  product.joint_size ||
+  product.movement_capacity ||
+  product.substrate_treatment ||
+  product.surface_preparation ||
+  (product.recommended_uses && product.recommended_uses.length > 0)
+) && (
+  <section className="py-16 bg-gray-50">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+          <Info className="w-8 h-8 text-green-600 mr-3" />
+          {t('products.general_information')}
+        </h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="divide-y divide-gray-200">
+            {product.joint_preparation && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.joint_preparation')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.joint_preparation}</span>
                 </div>
               </div>
-            </div>
+            )}
+            {product.joint_size && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.joint_size')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.joint_size}</span>
+                </div>
+              </div>
+            )}
+            {product.movement_capacity && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.movement_capacity')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.movement_capacity}</span>
+                </div>
+              </div>
+            )}
+            {product.substrate_treatment && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.substrate_treatment')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.substrate_treatment}</span>
+                </div>
+              </div>
+            )}
+            {product.surface_preparation && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.surface_preparation')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.surface_preparation}</span>
+                </div>
+              </div>
+            )}
+            {product.recommended_uses && product.recommended_uses.length > 0 && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.recommended_uses')}:</span>
+                  <ul className="text-gray-700 leading-relaxed list-disc list-inside">
+                    {product.recommended_uses.map((use, index) => (
+                      <li key={index}>{use}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
-        </section>
-      )}
-
+        </div>
+      </div>
+    </div>
+  </section>
+)}
      
    
     
 
-      {/* Drying Time */}
-      {(
-        product.dry_to_touch ||
-        product.dry_to_handle ||
-        product.complete_setting ||
-        product.grouting_time ||
-        product.adjustability_time ||
-        product.dry_to_topcoat ||
-        product.initial_setting ||
-        product.fully_cured ||
-        product.dry_to_sand ||
-        product.drying_time_note
-      ) && (
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-                <Wrench className="w-8 h-8 text-blue-600 mr-3" />
-                {t('products.drying_time')}
-              </h2>
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="divide-y divide-gray-100">
-                  {product.dry_to_touch && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.dry_to_touch')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_touch}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.dry_to_handle && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.dry_to_handle')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_handle}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.complete_setting && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.complete_setting')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.complete_setting}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.grouting_time && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.grouting_time')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.grouting_time}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.adjustability_time && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.adjustability_time')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.adjustability_time}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.dry_to_topcoat && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.dry_to_topcoat')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_topcoat}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.initial_setting && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.initial_setting')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.initial_setting}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.fully_cured && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.fully_cured')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.fully_cured}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.dry_to_sand && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.dry_to_sand')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.dry_to_sand}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.drying_time_note && (
-                    <div className="px-6 py-4">
-                      <div className="flex items-start gap-2">
-                        <span className="font-medium text-gray-800">{t('products.drying_time_note')}:</span>
-                        <span className="text-gray-700 leading-relaxed flex-1">{product.drying_time_note}</span>
-                      </div>
-                    </div>
-                  )}
+    {/* Drying Time */}
+{(
+  product.dry_to_touch ||
+  product.dry_to_handle ||
+  product.complete_setting ||
+  product.grouting_time ||
+  product.adjustability_time ||
+  product.dry_to_topcoat ||
+  product.initial_setting ||
+  product.fully_cured ||
+  product.dry_to_sand ||
+  product.drying_time_note
+) && (
+  <section className="py-16 bg-gray-50">
+    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto">
+        <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+          <Wrench className="w-8 h-8 text-blue-600 mr-3" />
+          {t('products.drying_time')}
+        </h2>
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="divide-y divide-gray-100">
+            {product.dry_to_touch && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.dry_to_touch')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.dry_to_touch}</span>
                 </div>
               </div>
-            </div>
+            )}
+            {product.dry_to_handle && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.dry_to_handle')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.dry_to_handle}</span>
+                </div>
+              </div>
+            )}
+            {product.complete_setting && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.complete_setting')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.complete_setting}</span>
+                </div>
+              </div>
+            )}
+            {product.grouting_time && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.grouting_time')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.grouting_time}</span>
+                </div>
+              </div>
+            )}
+            {product.adjustability_time && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.adjustability_time')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.adjustability_time}</span>
+                </div>
+              </div>
+            )}
+            {product.dry_to_topcoat && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.dry_to_topcoat')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.dry_to_topcoat}</span>
+                </div>
+              </div>
+            )}
+            {product.initial_setting && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.initial_setting')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.initial_setting}</span>
+                </div>
+              </div>
+            )}
+            {product.fully_cured && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.fully_cured')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.fully_cured}</span>
+                </div>
+              </div>
+            )}
+            {product.dry_to_sand && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.dry_to_sand')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.dry_to_sand}</span>
+                </div>
+              </div>
+            )}
+            {product.drying_time_note && (
+              <div className="px-6 py-4">
+                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                  <span className="font-bold text-gray-800">{t('products.drying_time_note')}:</span>
+                  <span className="text-gray-700 leading-relaxed">{product.drying_time_note}</span>
+                </div>
+              </div>
+            )}
           </div>
-        </section>
-      )}
+        </div>
+      </div>
+    </div>
+  </section>
+)}
 
       {/* Storage */}
       {product.storing_conditions && (
