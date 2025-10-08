@@ -92,6 +92,7 @@
     "experience": "سنوات الخبرة"
   },
   "products": {
+    
     "title": "المنتجات",
     "filter": "تصفية",
     "search": "ابحث عن المنتجات...",
@@ -202,6 +203,7 @@
     "tryAdjustingSearch": "حاول تعديل مصطلحات البحث أو الفلاتر",
     "clearFilters": "مسح الفلاتر",
     "code": "الكود",
+    "image" : "لا يوجد صور" ,
     "activeFilters": "الفلاتر النشطة"
   },
 
