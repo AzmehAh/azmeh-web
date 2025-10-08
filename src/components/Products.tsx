@@ -262,7 +262,7 @@ const Products = () => {
             <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24  
                           max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-logo flex items-center">
+                <h3 className="text-xl font-bold text-gray-900 flex items-center">
                   <Filter className="w-5 h-5 text-logo mr-2" />
                   {t('products.filter')}
                 </h3>
@@ -313,7 +313,7 @@ const Products = () => {
                     onClick={() =>
                       setActiveFilterCategory(activeFilterCategory === category ? null : category)
                     }
-                    className="flex items-center justify-between w-full text-left font-medium text-logo mb-3 hover:text-logo transition-colors"
+                    className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-3 hover:text-logo transition-colors"
                   >
                     <span>{getFilterCategoryName(category)}</span>
                     <ChevronDown
@@ -357,7 +357,7 @@ const Products = () => {
               {/* Active Filters */}
               {getActiveFiltersCount() > 0 && (
                 <div className="mt-6 pt-6 border-t border-gray-200">
-                  <h4 className="text-sm font-medium text-logo mb-3">
+                  <h4 className="text-sm font-medium text-gray-900 mb-3">
                     {t('products.activeFilters')}
                   </h4>
                   <div className="flex flex-wrap gap-2">
@@ -388,7 +388,7 @@ const Products = () => {
             {/* Toolbar */}
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center space-x-4">
-                <h2 className="text-2xl font-bold text-logo">
+                <h2 className="text-2xl font-bold text-gray-900">
                   {t('products.ourProducts')} ({filteredProducts.length})
                 </h2>
               </div>
@@ -430,7 +430,7 @@ const Products = () => {
                   <div className="text-gray-400 mb-4">
                     <Filter className="w-16 h-16 mx-auto" />
                   </div>
-                  <h3 className="text-xl font-semibold text-logo mb-2">
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     {t('products.noProductsFound')}
                   </h3>
                   <p className="text-gray-600">
@@ -481,7 +481,7 @@ const Products = () => {
                           {/* Title & Brand */}
                           <div className="flex items-start justify-between mb-3">
                             <div>
-                              <h3 className="text-xl font-bold text-logo group-hover:text-logo transition-colors">
+                              <h3 className="text-xl font-bold text-gray-900 group-hover:text-logo transition-colors">
                                 {productName}
                               </h3>
                               <p className="text-sm text-gray-500 font-mono">{product.code}</p>
@@ -494,7 +494,7 @@ const Products = () => {
                           {/* Description + Tags */}
                           <div className="flex flex-col justify-between">
                             <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                              {productDescription}
+                              {productDescription} 
                             </p>
 
                             <div className="flex flex-wrap gap-2 mb-4">
@@ -512,7 +512,7 @@ const Products = () => {
 
                           {/* Button */}
                           {viewMode === 'grid' && (
-                            <button className="w-full bg-logo text-white py-2 rounded-lg hover:bg-gray-100  hover:text-logo transition-colors duration-200 font-medium">
+                            <button className="w-full bg-logo text-white py-2 rounded-lg hover:bg-gray-00  hover:text-logo transition-colors duration-200 font-medium">
                               {t('products.viewDetails')}
                             </button>
                           )}
