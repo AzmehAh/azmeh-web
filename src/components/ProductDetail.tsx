@@ -487,18 +487,19 @@ const ProductDetail = () => {
   ) : (
     <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
       {/* Optional: Show logo in placeholder too */}
-      {brandLogo && (
-        <div className="absolute top-0 left-3">
-          <div className="bg-white rounded-md p-3 shadow-sm">
-            <img
-              src={brandLogo}
-              alt=""
-              className="w-10 h-10 object-contain"
-              onError={(e) => { e.currentTarget.style.display = 'none'; }}
-            />
-          </div>
-        </div>
-      )}
+  {/* Brand Logo - Top Left Corner (flush to edges) */}
+{brandLogo && (
+  <div className="absolute top-0 left-0">
+    <div className="bg-white rounded-sm p-1.5 shadow">
+      <img
+        src={brandLogo}
+        alt=""
+        className="w-10 h-10 object-contain"
+        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+      />
+    </div>
+  </div>
+)}
       <p className="text-gray-500">No images available</p>
     </div>
   )}
