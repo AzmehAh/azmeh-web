@@ -441,8 +441,7 @@ const ProductDetail = () => {
                 {t('products.download_datasheet')}
               </button>
             </div>
-
-       <div className="relative">
+<div className="relative">
   {product.images && product.images.length > 0 ? (
     <>
       <motion.img
@@ -456,15 +455,14 @@ const ProductDetail = () => {
         onError={(e) => { e.currentTarget.src = "/images/placeholder.jpg"; }}
       />
 
-      {/* Brand Logo Overlay - Top Left */}
+      {/* Brand Logo - Top Left Corner */}
       {brandLogo && (
-        <div className="absolute top-4 left-4 flex items-center justify-center">
-          {/* خلفية بيضاء دائرية أو مربعة خلف الشعار */}
-          <div className="bg-white rounded-full p-1 shadow-md">
+        <div className="absolute top-3 left-3">
+          <div className="bg-white rounded-md p-1.5 shadow-sm">
             <img
               src={brandLogo}
               alt=""
-              className="w-12 h-12 object-contain"
+              className="w-10 h-10 object-contain"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
           </div>
@@ -481,21 +479,21 @@ const ProductDetail = () => {
               className={`w-3 h-3 rounded-full transition-all ${
                 index === currentImageIndex ? "bg-white shadow-lg" : "bg-white/50 hover:bg-white/70"
               }`}
-            /> 
+            />
           ))}
         </div>
       )}
-    </> 
+    </>
   ) : (
     <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
-      {/* Brand Logo in placeholder too (optional) */}
+      {/* Optional: Show logo in placeholder too */}
       {brandLogo && (
-        <div className="absolute top-0 left-39 flex items-center justify-center">
-          <div className="bg-white rounded-full p-1 shadow-md">
+        <div className="absolute top-3 left-3">
+          <div className="bg-white rounded-md p-1.5 shadow-sm">
             <img
               src={brandLogo}
               alt=""
-              className="w-12 h-12 object-contain"
+              className="w-10 h-10 object-contain"
               onError={(e) => { e.currentTarget.style.display = 'none'; }}
             />
           </div>
