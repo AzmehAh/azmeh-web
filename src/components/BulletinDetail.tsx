@@ -77,7 +77,7 @@ const BulletinDetail = () => {
         <p className="text-gray-600 mb-8">{t('bulletin.notFoundText')}</p>
         <Link
           to="/blog"
-          className="bg-[#2C5DB6] text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          className="bg-logo text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
         >
           {t('bulletin.backToBlog')}
         </Link>
@@ -107,9 +107,9 @@ const BulletinDetail = () => {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className={`flex items-center text-sm text-gray-600 ${isRTL ? 'flex-row-reverse gap-reverse' : ''}`}>
-            <Link to="/" className="hover:text-[#2C5DB6] transition-colors">{t('bulletin.home')}</Link>
+            <Link to="/" className="hover:text-logo transition-colors">{t('bulletin.home')}</Link>
             <span className="mx-2">/</span>
-            <Link to="/blog" className="hover:text-[#2C5DB6] transition-colors">{t('bulletin.blog')}</Link>
+            <Link to="/blog" className="hover:text-logo transition-colors">{t('bulletin.blog')}</Link>
             <span className="mx-2">/</span>
             <span className="text-gray-900">{categoryDisplayName}</span> {/* ✅ هنا تم التعديل */}
             <span className="mx-2">/</span>
@@ -121,7 +121,7 @@ const BulletinDetail = () => {
       </div>
 
       {/* Article Header */}
-      <div className="bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-16">
+      <div className="bg-gradient-to-r from-logo to-blue-700 text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-start">
           <button
             onClick={() => navigate('/blog')}
@@ -163,7 +163,7 @@ const BulletinDetail = () => {
           {/* Related Articles */}
           <div className="mt-16 pt-8 border-t border-gray-200">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-              <FileText className="w-6 h-6 text-[#2C5DB6] mr-3" />
+              <FileText className="w-6 h-6 text-logo mr-3" />
               {bulletin?.related_bulletin_ids?.length > 0
                 ? t('bulletin.related')
                 : t('bulletin.suggestions')}
@@ -196,10 +196,10 @@ const BulletinDetail = () => {
                         />
                       </div>
                       <div className="p-4">
-                        <span className="inline-block px-2 py-1 bg-blue-50 text-[#2C5DB6] text-xs font-medium rounded-full mb-2">
+                        <span className="inline-block px-2 py-1 bg-blue-50 text-logo text-xs font-medium rounded-full mb-2">
                           {relSub}
                         </span>
-                        <h4 className="text-lg font-semibold text-gray-900 group-hover:text-[#2C5DB6] transition-colors mb-2 line-clamp-2">
+                        <h4 className="text-lg font-semibold text-gray-900 group-hover:text-logo transition-colors mb-2 line-clamp-2">
                           {relTitle}
                         </h4>
                         <p className="text-gray-600 text-sm line-clamp-2">{relShort}</p>
@@ -224,7 +224,7 @@ const BulletinDetail = () => {
       {/* ✅ هذا الزر سيأخذك إلى صفحة /contact */}
       <Link
         to="/contact"
-        className="bg-[#2C5DB6] hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center"
+        className="bg-logo hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center"
       >
         {t('bulletin.contactTeam')}
       </Link>
