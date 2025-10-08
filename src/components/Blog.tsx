@@ -137,10 +137,10 @@ const Blog = () => {
   return (
     <div className={`min-h-screen bg-gray-50 pt-20 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Hero Section */}
-     <div className=" text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className=" text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
       
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              {t('blog.herotitle')}
+              {t('blog.heroTitle')}
             </h1>
             
       </div>
