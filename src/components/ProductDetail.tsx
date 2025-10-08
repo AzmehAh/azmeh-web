@@ -444,33 +444,38 @@ const ProductDetail = () => {
  <div className="relative">
   {product.images && product.images.length > 0 ? (
     <>
-      <motion.img
-        key={currentImageIndex}
-        src={product.images[currentImageIndex]} 
-        alt={product.name}
-        className="w-full h-80 lg:h-96 object-cover rounded-2xl"
+      {/* حاوية متحركة واحدة تحتوي الصورة + اللوغو */}
+      <motion.div
+        key={currentImageIndex} // مهم لتكرار التأثير عند التغيير
+        className="relative w-full h-80 lg:h-96 rounded-2xl overflow-hidden"
         initial={{ opacity: 0, scale: 1.1 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.7 }}
-        onError={(e) => { e.currentTarget.src = "/images/placeholder.jpg"; }}
-      />
+      >
+        {/* الصورة */}
+        <img
+          src={product.images[currentImageIndex]}
+          alt={product.name}
+          className="w-full h-full object-cover"
+          onError={(e) => { e.currentTarget.src = "/images/placeholder.jpg"; }}
+        />
 
-      {/* Brand Logo Overlay - Top Left */}
-      {brandLogo && (
-        <div className="absolute top-0 right-10 flex items-center justify-center">
-          {/* خلفية بيضاء دائرية أو مربعة خلف الشعار */}
-          <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
-            <img
-              src={brandLogo}
-              alt=""
-              className="w-16 h-16 object-contain"
-              onError={(e) => { e.currentTarget.style.display = 'none'; }}
-            />
+        {/* Brand Logo - Top Right */}
+        {brandLogo && (
+          <div className="absolute top-0 right-10 flex items-center justify-center">
+            <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
+              <img
+                src={brandLogo}
+                alt=""
+                className="w-16 h-16 object-contain"
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </motion.div>
 
-      {/* Indicators (dots) */}
+      {/* Indicators (dots) - خارج الحركة لأنها ثابتة */}
       {product.images.length > 1 && (
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
           {product.images.map((_, index) => (
@@ -486,8 +491,8 @@ const ProductDetail = () => {
       )}
     </>
   ) : (
+    {/* Placeholder */}
     <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
-      {/* Brand Logo in placeholder too (optional) */}
       {brandLogo && (
         <div className="absolute top-0 right-10 flex items-center justify-center">
           <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
