@@ -488,7 +488,7 @@ const ProductDetail = () => {
     <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
       {/* Optional: Show logo in placeholder too */}
       {brandLogo && (
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-0 left-3">
           <div className="bg-white rounded-md p-1.5 shadow-sm">
             <img
               src={brandLogo}
