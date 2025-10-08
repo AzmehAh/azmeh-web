@@ -370,7 +370,7 @@ const Products = () => {
                           <span>{value}</span>
                           <button
                             onClick={() => toggleFilter(category, value)}
-                            className="hover:bg-blue-700 rounded-full p-0.5 transition-colors"
+                            className="hover:bg-white/20 rounded-full p-0.5 transition-colors"
                           >
                             <X className="w-3 h-3" />
                           </button>
@@ -486,7 +486,7 @@ const Products = () => {
                               </h3>
                               <p className="text-sm text-gray-500 font-mono">{product.code}</p>
                             </div>
-                            <span className="px-3 py-1 bg-blue-50 text-logo text-xs font-medium rounded-full">
+                            <span className="px-3 py-1 bg-logo text-logo text-xs font-medium rounded-full">
                               {productBrand}
                             </span>
                           </div>
@@ -512,7 +512,7 @@ const Products = () => {
 
                           {/* Button */}
                           {viewMode === 'grid' && (
-                            <button className="w-full bg-logo text-white py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200 font-medium">
+                            <button className="w-full bg-logo text-white py-2 rounded-lg hover:bg-wite/20 transition-colors duration-200 font-medium">
                               {t('products.viewDetails')}
                             </button>
                           )}
