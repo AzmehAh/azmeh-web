@@ -201,7 +201,8 @@
     "noProductsFound": "لم يتم العثور على منتجات",
     "tryAdjustingSearch": "حاول تعديل مصطلحات البحث أو الفلاتر",
     "clearFilters": "مسح الفلاتر",
-    "code": "الكود"
+    "code": "الكود",
+    "products.activeFilters": "الفلاتر النشطة"
   },
 
    "contact": {
