@@ -61,7 +61,7 @@ const ColorInspiration = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-sm uppercase text-[#0055A3] mb-2"
+            className="text-sm uppercase text-logo mb-2"
           >
             {t('colorInspiration.subtitle')} 
           </motion.h3>
@@ -79,7 +79,7 @@ const ColorInspiration = () => {
         {/* Grid */}
         {loading ? (
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-logo"></div>
           </div>
         ) : featuredProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-20">
