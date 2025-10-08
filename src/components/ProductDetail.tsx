@@ -121,7 +121,7 @@ const ProductDetail = () => {
 
   const [filterValueMap, setFilterValueMap] = useState<FilterValueMap>({});
   const [filtersLoading, setFiltersLoading] = useState(true);
-
+ const isRTL = i18n.language === 'ar';
 
   const translateFilterValue = (
     category: string,
