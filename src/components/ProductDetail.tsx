@@ -370,7 +370,7 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="py-24 bg-gradient-to-br from-[#2C5DB6] to-[#1e4080] text-white">
+      <section className="py-24 bg-logo text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative mb-8">
             <div className="flex items-center text-sm text-white">
