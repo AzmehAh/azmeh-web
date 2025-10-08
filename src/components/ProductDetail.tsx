@@ -405,10 +405,10 @@ const ProductDetail = () => {
                 )}
               </div>
   
-              {product.technical_description && (
-                <p className="text-blue-100/90 mb-6 leading-relaxed">{product.technical_description}</p>
+              {product.recommended_uses && (
+                <p className="text-blue-100/90 mb-6 leading-relaxed">{product.recommended_uses}</p>
               )}
-
+     
               {product.packaging && product.packaging.length > 0 && (
                 <div className="mb-8">
                   <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
