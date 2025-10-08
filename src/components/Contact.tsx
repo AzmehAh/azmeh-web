@@ -55,15 +55,13 @@ const Contact = () => {
   return (
     <div className="min-h-screen bg-gray-50 pt-28">
       {/* Hero Section */}
-      <div className=" text-logo pt-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
+      <div className=" text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+       
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               {t('contact.title')}
             </h1>
             
-          </div>
-        </div>
+        
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
