@@ -88,7 +88,7 @@ const Contact = () => {
             <div className="space-y-6">
               <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#2C5DB6] rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-logo rounded-lg flex items-center justify-center flex-shrink-0">
                     <Mail className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -98,7 +98,7 @@ const Contact = () => {
                     <p className="text-gray-600 mb-2">
                       {t('contact.emailDescription')}
                     </p>
-                    <a href="mailto:manager@dkl-syria.com" className="text-[#2C5DB6] font-medium hover:underline">
+                    <a href="mailto:manager@dkl-syria.com" className="text-logo font-medium hover:underline">
                       manager@dkl-syria.com
                     </a>
                   </div>
@@ -107,7 +107,7 @@ const Contact = () => {
 
               <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#2C5DB6] rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-logo rounded-lg flex items-center justify-center flex-shrink-0">
                     <Phone className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -117,7 +117,7 @@ const Contact = () => {
                     <p className="text-gray-600 mb-2">
                       {t('contact.callDescription')}
                     </p>
-                    <a href="tel:+963988691712" className="text-[#2C5DB6] font-medium hover:underline">
+                    <a href="tel:+963988691712" className="text-logo font-medium hover:underline">
                       (+963) 988 691 712
                     </a>
                   </div>
@@ -126,7 +126,7 @@ const Contact = () => {
 
               <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-100">
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#2C5DB6] rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="w-12 h-12 bg-logo rounded-lg flex items-center justify-center flex-shrink-0">
                     <MapPin className="w-6 h-6 text-white" />
                   </div>
                   <div>
@@ -169,7 +169,7 @@ const Contact = () => {
                     required
                     value={formData.name}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20 transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-logo focus:ring-2 focus:ring-logo/20 transition-all"
                     placeholder={t('contact.namePlaceholder')}
                   />
                 </div>
@@ -185,7 +185,7 @@ const Contact = () => {
                     required
                     value={formData.email}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20 transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-logo focus:ring-2 focus:ring-logo/20 transition-all"
                     placeholder={t('contact.emailPlaceholder')}
                   />
                 </div>
@@ -202,7 +202,7 @@ const Contact = () => {
                     name="phone"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20 transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-logo focus:ring-2 focus:ring-logo/20 transition-all"
                     placeholder={t('contact.phonePlaceholder')}
                   />
                 </div>
@@ -216,7 +216,7 @@ const Contact = () => {
                     name="subject"
                     value={formData.subject}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20 transition-all"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-logo focus:ring-2 focus:ring-logo/20 transition-all"
                   >
                     <option value="">{t('contact.selectSubject')}</option>
                     <option value="technical">{t('contact.technicalSupport')}</option>
@@ -239,7 +239,7 @@ const Contact = () => {
                   rows={6}
                   value={formData.message}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-[#2C5DB6] focus:ring-2 focus:ring-[#2C5DB6]/20 transition-all resize-vertical"
+                  className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-logo focus:ring-2 focus:ring-logo/20 transition-all resize-vertical"
                   placeholder={t('contact.messagePlaceholder')}
                 />
               </div>
@@ -272,7 +272,7 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-[#2C5DB6] to-blue-700 text-white py-4 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-[#2C5DB6]/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
+                className="w-full bg-gradient-to-r from-logo to-blue-700 text-white py-4 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {isSubmitting ? (
                   <>
