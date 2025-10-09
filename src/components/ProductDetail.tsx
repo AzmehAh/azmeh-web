@@ -638,7 +638,7 @@ const ProductDetail = () => {
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
              
-       <h2 className="text-lg font-bold text-white flex items-center">
+       <h2 className="text-lg font-bold text-gray-900 flex items-center">
                     <FileText className="w-5 h-5 mr-2" />
                     {t('products.technical_specifications')}
                   </h2>
