@@ -36,8 +36,8 @@ export const SafetyTab: React.FC<Props> = ({ data, onChange }) => {
         labelAr="ملاحظة السلامة"
         nameEn="safety_note"
         nameAr="safety_note_ar"
-        valueEn={data.safety_note || ''}
-        valueAr={data.safety_note_ar || ''}
+        valueEn={data.safety_note || 'information in this data sheet and in all our data sheets are given to the best of our knowledge based on laboratory testing and practical experience. Final results depend on following instructions and on consumer skill. Our responsibility is limited to providing products that Conform to samples and specimens provided by us. Due to technical needs, we reserve the right to change any given specification without notice.'}
+        valueAr={data.safety_note_ar || 'information in this data sheet and in all our data sheets are given to the best of our knowledge based on laboratory testing and practical experience. Final results depend on following instructions and on consumer skill. Our responsibility is limited to providing products that Conform to samples and specimens provided by us. Due to technical needs, we reserve the right to change any given specification without notice.'}
         onChange={handleChange}
         type="textarea"
       />
