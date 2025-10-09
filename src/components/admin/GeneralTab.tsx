@@ -187,16 +187,7 @@ export const GeneralTab: React.FC<Props> = ({
   required
 />
 
-        <BilingualInput
-  labelEn="Technical Description"
-  labelAr="الوصف الفني"
-  nameEn="technical_description"
-  nameAr="technical_description_ar"
-  valueEn={data.technical_description || ''}
-  valueAr={data.technical_description_ar || ''}
-  onChange={(e) => onChange(e.target.name, e.target.value)}
-  type="textarea"
-/>
+      
 
         <div className="space-y-4">
 
