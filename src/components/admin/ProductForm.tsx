@@ -37,8 +37,7 @@ const ProductForm = () => {
     usage: '',
     description: '',
     description_ar: '',
-    technical_description: '',
-    technical_description_ar: '',
+  
     features: [],
     features_ar: [],
     applications: [],
@@ -310,7 +309,7 @@ const ProductForm = () => {
       // Define valid database columns to prevent schema errors
       const validColumns = [
         'name', 'name_ar', 'code', 'brand', 'type', 'material', 'usage', 'description', 'description_ar',
-        'technical_description', 'technical_description_ar', 'features', 'features_ar', 'applications', 'applications_ar',
+         'features', 'features_ar', 'applications', 'applications_ar',
         'instructions', 'instructions_ar', 'packaging', 'storage', 'storage_ar', 'safety_precautions', 'safety_precautions_ar',
         'safety_first_aid', 'safety_first_aid_ar', 'technical_specs', 'status', 'category_id', 'featured',
         'storing_conditions', 'storing_conditions_ar', 'joint_preparation', 'joint_preparation_ar',
