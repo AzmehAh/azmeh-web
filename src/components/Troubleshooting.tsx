@@ -325,7 +325,7 @@ const Troubleshooting = () => {
 
         {/* Contact Section */}
         <div className="mt-16 text-center">
-          <div className="bg-gradient-to-r from-logo to-red-600 rounded-2xl p-8 text-white">
+          <div className=" bg-gradient-to-br from-logo to-blue-700 rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">{t('troubleshooting.needSupport')}</h3>
             <p className="text-logo mb-6 max-w-2xl mx-auto">
               {t('troubleshooting.supportDescription')}
