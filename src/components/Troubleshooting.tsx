@@ -81,10 +81,10 @@ const Troubleshooting = () => {
           >
             <div className="p-8 flex flex-col flex-grow">
               <div className="flex mb-4">
-                <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-orange-500 to-red-600 rounded-xl flex items-center justify-center mr-4">
+                <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-logo to-red-600 rounded-xl flex items-center justify-center mr-4">
                   <Wrench className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 group-hover:text-orange-600 min-h-[64px] transition-colors leading-snug">
+                <h3 className="text-2xl font-bold text-gray-900 group-hover:text-logo min-h-[64px] transition-colors leading-snug">
                   {lang === 'ar' ? cat.name_ar : cat.name}
                 </h3>
               </div>
@@ -96,7 +96,7 @@ const Troubleshooting = () => {
 
               {/* ✅ لف القسم السفلي وادفعه للأسفل */}
               <div className="mt-auto pt-4 border-t border-gray-100">
-                <div className="flex items-center text-orange-600 font-semibold group-hover:translate-x-2 transition-transform">
+                <div className="flex items-center text-logo font-semibold group-hover:translate-x-2 transition-transform">
                   <span>{t('troubleshooting.viewSolutions')}</span>
                   <ChevronDown className={`w-4 h-4 ml-2 ${ isRTL ? 'rotate-[90deg]' : 'rotate-[-90deg]'}`} />
                 </div>
@@ -122,7 +122,7 @@ const Troubleshooting = () => {
           <p className="text-gray-600 mb-8">{t('troubleshooting.categoryNotFoundDesc')}</p>
           <Link
             to="/troubleshooting"
-            className="bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors"
+            className="bg-logo text-white px-6 py-3 rounded-lg hover:bg-logo transition-colors"
           >
             {t('troubleshooting.backToMain')}
           </Link>
@@ -152,7 +152,7 @@ const Troubleshooting = () => {
       case 'High':
         return 'text-red-600 bg-red-50 border-red-200';
       case 'Medium':
-        return 'text-orange-600 bg-orange-50 border-orange-200';
+        return 'text-logo bg-logo border-logo';
       case 'Low':
         return 'text-green-600 bg-green-50 border-green-200';
       default:
@@ -179,11 +179,11 @@ const Troubleshooting = () => {
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center text-sm text-gray-600">
-            <Link to="/" className="hover:text-orange-600 transition-colors">
+            <Link to="/" className="hover:text-logo transition-colors">
               {t('faq.home')}
             </Link>
             <span className="mx-2">/</span>
-            <Link to="/troubleshooting" className="hover:text-orange-600 transition-colors">
+            <Link to="/troubleshooting" className="hover:text-logo transition-colors">
               {t('troubleshooting.title')}
             </Link>
             <span className="mx-2">/</span>
@@ -210,7 +210,7 @@ const Troubleshooting = () => {
               placeholder={t('troubleshooting.searchPlaceholder')}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-orange-600 focus:ring-2 focus:ring-orange-600/20 transition-all"
+              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-logo focus:ring-2 focus:ring-logo/20 transition-all"
             />
           </div>
           {searchTerm && (
@@ -247,12 +247,12 @@ const Troubleshooting = () => {
                 >
                   <div className="flex items-start space-x-4 flex-1">
                     <div className="flex-shrink-0 mt-1">
-                      <div className="w-8 h-8 bg-gradient-to-br from-orange-500 to-red-600 rounded-lg flex items-center justify-center">
+                      <div className="w-8 h-8 bg-gradient-to-br from-logo to-red-600 rounded-lg flex items-center justify-center">
                         <span className="text-white font-bold text-sm">{index + 1}</span>
                       </div>
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-orange-600 transition-colors leading-relaxed mb-2">
+                      <h3 className="text-lg font-semibold text-gray-900 group-hover:text-logo transition-colors leading-relaxed mb-2">
                         {lang === 'ar' ? item.problem_ar : item.problem}
                       </h3>
                       <div className="flex items-center space-x-2">
@@ -284,7 +284,7 @@ const Troubleshooting = () => {
                       animate={{ rotate: openItem === item.id ? 180 : 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-orange-600 transition-colors" />
+                      <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-logo transition-colors" />
                     </motion.div>
                   </div>
                 </button>
@@ -300,9 +300,9 @@ const Troubleshooting = () => {
                     >
                       <div className="px-6 pb-6">
                         <div className="pl-12 pr-4">
-                          <div className="bg-orange-50 rounded-lg p-6 border-l-4 border-orange-500">
+                          <div className="bg-logo rounded-lg p-6 border-l-4 border-logo">
                             <div className="flex items-start space-x-3">
-                              <CheckCircle className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                              <CheckCircle className="w-5 h-5 text-logo mt-0.5 flex-shrink-0" />
                               <div>
                                 <h4 className="font-semibold text-gray-900 mb-2">
                                   {t('troubleshooting.solution')}
@@ -325,15 +325,15 @@ const Troubleshooting = () => {
 
         {/* Contact Section */}
         <div className="mt-16 text-center">
-          <div className="bg-gradient-to-r from-orange-500 to-red-600 rounded-2xl p-8 text-white">
+          <div className="bg-gradient-to-r from-logo to-red-600 rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">{t('troubleshooting.needSupport')}</h3>
-            <p className="text-orange-100 mb-6 max-w-2xl mx-auto">
+            <p className="text-logo mb-6 max-w-2xl mx-auto">
               {t('troubleshooting.supportDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/contact"
-                className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors block text-center"
+                className="bg-white text-logo px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors block text-center"
               >
                 {t('troubleshooting.contactSupport')}
               </Link>
