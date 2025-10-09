@@ -247,7 +247,7 @@ const Troubleshooting = () => {
                 >
                   <div className="flex items-start space-x-4 flex-1">
                     <div className="flex-shrink-0 mt-1">
-                      <div className="w-8 h-8 bg-gradient-to-br from-logo to-red-600 rounded-lg flex items-center justify-center">
+                      <div className="w-8 h-8  bg-gradient-to-br from-logo to-blue-700 rounded-lg flex items-center justify-center">
                         <span className="text-white font-bold text-sm">{index + 1}</span>
                       </div>
                     </div>
