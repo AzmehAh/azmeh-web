@@ -327,7 +327,7 @@ const Troubleshooting = () => {
         <div className="mt-16 text-center">
           <div className=" bg-logo rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">{t('troubleshooting.needSupport')}</h3>
-            <p className="text-logo mb-6 max-w-2xl mx-auto">
+            <p className="text-white mb-6 max-w-2xl mx-auto">
               {t('troubleshooting.supportDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
