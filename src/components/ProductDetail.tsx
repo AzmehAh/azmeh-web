@@ -640,10 +640,7 @@ const ProductDetail = () => {
             <div className="max-w-6xl mx-auto">
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
                 <div className="bg-logo px-6 py-4">
-                  <h2 className="text-lg font-bold text-white flex items-center">
-                    <FileText className="w-5 h-5 mr-2" />
-                    {t('products.technical_specifications')}
-                  </h2>
+                 
                 </div>
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
@@ -731,26 +728,8 @@ const ProductDetail = () => {
                 </div>
               </div>
             )}
-            {product.surface_preparation && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                  <span className="font-bold text-gray-800">{t('products.surface_preparation')}:</span>
-                  <span className="text-gray-700 leading-relaxed">{product.surface_preparation}</span>
-                </div>
-              </div>
-            )}
-            {product.recommended_uses && product.recommended_uses.length > 0 && (
-              <div className="px-6 py-4">
-                <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                  <span className="font-bold text-gray-800">{t('products.recommended_uses')}:</span>
-                  <ul className="text-gray-700 leading-relaxed list-disc list-inside">
-                    {product.recommended_uses.map((use, index) => (
-                      <li key={index}>{use}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            )}
+          
+           
           </div>
         </div>
       </div>
