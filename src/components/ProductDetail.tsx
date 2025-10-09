@@ -639,7 +639,7 @@ const ProductDetail = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
              
        <h2 className="text-lg font-bold text-gray-900 flex items-center">
-                    <FileText className="w-5 h-5 mr-2" />
+                    <FileText className="w-5 h-5 mr-2  text-logo " />
                     {t('products.technical_specifications')}
                   </h2>
             <div className="max-w-6xl mx-auto">
