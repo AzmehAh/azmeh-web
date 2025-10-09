@@ -637,7 +637,7 @@ const ProductDetail = () => {
       {product.technical_specs && product.technical_specs.length > 0 && (
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-6xl mx-auto">
+             
        <h2 className="text-lg font-bold text-white flex items-center">
                     <FileText className="w-5 h-5 mr-2" />
                     {t('products.technical_specifications')}
@@ -660,7 +660,7 @@ const ProductDetail = () => {
                   </table>
                 </div>
               </div>
-            </div>
+           
                  </div>
           </div>
         </section>
