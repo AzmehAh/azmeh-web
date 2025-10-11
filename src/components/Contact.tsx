@@ -5,7 +5,10 @@ import { supabase } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
 
 const Contact = () => {
-  const { t } = useTranslation();
+
+   const { i18n, t } = useTranslation();
+  const currentLang = i18n.language; // "ar" or "en"
+const isRTL = currentLang === 'ar';
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -51,9 +54,7 @@ const Contact = () => {
       setIsSubmitting(false);
     }
   };
-const PhoneLink = () => {
-  const { i18n } = useTranslation();
-  const phoneHref = "+963115425058";
+
   return (
     <div className="min-h-screen bg-gray-50 pt-28">
       {/* Hero Section */}
@@ -117,9 +118,10 @@ const PhoneLink = () => {
                     <p className="text-gray-600 mb-2">
                       {t('contact.callDescription')}
                     </p>
-                    <a href={`tel:${phoneHref}`} className="text-logo font-medium hover:underline">
-      {i18n.language === "ar" ? "+963 11 542 50 58" : "+963 11 542 50 58"}
-    </a>
+                 <a href="tel:+963115425058" className="text-logo font-medium hover:underline">
+  {isRTL ? "+963 11 542 50 58" : "+963 11 542 50 58"}
+</a>
+
                   </div>
                 </div>
               </div>
