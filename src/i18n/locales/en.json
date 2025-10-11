@@ -17,36 +17,37 @@
   "hero": {
     "readMore": "READ MORE"
   },
-  "values": {
-    "title": "Our Core Values",
-    "subtitle": "The principles that guide every decision we make and every solution we create for our customers.",
-    "values": [
-      {
-        "title": "Quality Excellence",
-        "description": "Unwavering commitment to delivering the highest quality paint systems."
-      },
-      {
-        "title": "Innovation",
-        "description": "Continuous research and development to create cutting-edge coating technologies."
-      },
-      {
-        "title": "Social Responsibility",
-        "description": "Environmental stewardship through eco-friendly formulations and sustainable practices."
-      },
-      {
-        "title": "Employee Growth",
-        "description": "Investing in our team through training and career advancement opportunities."
-      },
-      {
-        "title": "Customer Trust",
-        "description": "Building lasting relationships through exceptional service and reliable products."
-      },
-      {
-        "title": "Industry Leadership",
-        "description": "Setting standards for excellence and innovation in the paint and coatings industry."
-      }
-    ]
-  },
+ "values": {
+  "title": "Our Core Values",
+  "subtitle": "The principles that guide every decision we make and every solution we create for our customers.",
+  "values": [
+    {
+      "title": "Quality Excellence",
+      "description": "Unwavering commitment to delivering the highest quality paint systems."
+    },
+    {
+      "title": "National Pride",
+      "description": "We believe that national products can compete with international ones and earn customers’ trust and satisfaction."
+    },
+    {
+      "title": "Social Responsibility",
+      "description": "We believe social responsibility is not an optional initiative, but a national duty — the foundation of our commitment to the community and the environment."
+    },
+    {
+      "title": "Innovation & Green Solutions",
+      "description": "Continuous research and development to create environmentally friendly and sustainable coating technologies."
+    },
+    {
+      "title": "Human Development",
+      "description": "We believe the individual comes first — improving him enriches the company and the nation alike."
+    },
+    {
+      "title": "Shared Growth",
+      "description": "Profit is not our top priority; instead, we uphold shared values with our customers, suppliers, and even competitors to advance the national industry together."
+    }
+  ]
+},
+
 "goals": {
   "title": "Our Vision & Mission",
   "subtitle": "Driving innovation, quality, and responsibility across every aspect of our work.",
