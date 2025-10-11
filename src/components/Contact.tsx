@@ -115,9 +115,9 @@ const Contact = () => {
                     <p className="text-gray-600 mb-2">
                       {t('contact.callDescription')}
                     </p>
-                    <a href="tel:+963**********" className="text-logo font-medium hover:underline"> 
-                +963 11 542 50 58
-                    </a>
+                    <a href={`tel:${phoneHref}`} className="text-logo font-medium hover:underline">
+      {i18n.language === "ar" ? "+963 11 542 50 58" : "+963 11 542 50 58"}
+    </a>
                   </div>
                 </div>
               </div>
