@@ -95,7 +95,7 @@ const Footer = () => {
               <div className="flex items-start gap-3">
                 <Phone className="w-5 h-5 text-white mt-0.5 flex-shrink-0" />
                 <span className="text-gray-300 text-sm" dir="ltr">
-                  (+963) 988 691 712
+                  {isRTL ? "58 50 542 11 963+" : "+963 11 542 50 58"}
                 </span>
               </div>
               {/* Address */}
