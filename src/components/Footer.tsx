@@ -114,7 +114,7 @@ const Footer = () => {
               {t('footer.followUs')}
             </h4>
             <div className="flex gap-4">
-              {[Facebook, Instagram, Linkedin, Youtube].map((Icon, index) => (
+              {[Facebook, Instagram,].map((Icon, index) => (
                 <a
                   key={index}
                   href="#"
