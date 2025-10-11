@@ -97,7 +97,7 @@ const Contact = () => {
                       {t('contact.emailDescription')}
                     </p>
                     <a href="mailto:manager@dkl-syria.com" className="text-logo font-medium hover:underline">
-                      manager@dkl-syria.com
+                    azmeh@azmeh.com
                     </a>
                   </div>
                 </div>
@@ -116,7 +116,8 @@ const Contact = () => {
                       {t('contact.callDescription')}
                     </p>
                     <a href="tel:+963988691712" className="text-logo font-medium hover:underline">
-                      (+963) 988 691 712
+                   58 50 542 11 963+ 
+                   444 431 933 963+
                     </a>
                   </div>
                 </div>
