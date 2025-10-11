@@ -113,18 +113,38 @@ const Footer = () => {
             <h4 className="font-semibold mb-6 text-white text-lg">
               {t('footer.followUs')}
             </h4>
-            <div className="flex gap-4">
-              {[Facebook, Instagram,MessageCircle].map((Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
-                  aria-label={`Social media ${index}`}
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
-            </div>
+           <div className="flex gap-4">
+  {/* Facebook */}
+  <a
+    href="#"
+    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center 
+               hover:bg-[#1877F2] transition-colors duration-300"
+    aria-label="Facebook"
+  >
+    <Facebook className="w-5 h-5 text-white" />
+  </a>
+
+  {/* Instagram */}
+  <a
+    href="#"
+    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center 
+               transition-colors duration-300 hover:bg-gradient-to-r hover:from-[#f58529] hover:via-[#dd2a7b] hover:to-[#8134af]"
+    aria-label="Instagram"
+  >
+    <Instagram className="w-5 h-5 text-white" />
+  </a>
+
+  {/* WhatsApp */}
+  <a
+    href="#"
+    className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center 
+               hover:bg-[#25D366] transition-colors duration-300"
+    aria-label="WhatsApp"
+  >
+    <MessageCircle className="w-5 h-5 text-white" />
+  </a>
+</div>
+
             <div className="mt-6 pt-6 border-t border-gray-800">
               <p className="text-gray-400 text-xs">
                 {t('footer.stayUpdated')}
