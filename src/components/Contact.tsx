@@ -116,7 +116,7 @@ const Contact = () => {
                       {t('contact.callDescription')}
                     </p>
                     <a href="tel:+963**********" className="text-logo font-medium hover:underline"> 
-                   58 50 542 11 963+ 
+                +963 11 542 50 58
                     </a>
                   </div>
                 </div>
