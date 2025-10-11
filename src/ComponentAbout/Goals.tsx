@@ -31,19 +31,19 @@ const Goals = () => {
           <div className="bg-gray-100 rounded-2xl p-8 text-white flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <Eye className="w-6 h-6 text-logo" />
-              <h3 className="text-2xl font-bold text-gray-900">{t('goals.vision.title')}</h3>
+              <h3 className="text-2xl font-bold text-logo">{t('goals.vision.title')}</h3>
             </div>
-            <p className="text-sm leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               {t('goals.vision.description')}
             </p>
           </div>
 
           <div className="bg-gray-100 rounded-2xl p-8 text-white flex flex-col gap-4">
             <div className="flex items-center gap-3">
-              <Target className="w-6 h-6 text-white" />
-              <h3 className="text-2xl font-bold">{t('goals.mission.title')}</h3>
+              <Target className="w-6 h-6 text-logo" />
+              <h3 className="text-2xl text-logo font-bold">{t('goals.mission.title')}</h3>
             </div>
-            <p className="text-sm leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               {t('goals.mission.description')}
             </p>
           </div>
