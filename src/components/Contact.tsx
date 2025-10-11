@@ -115,9 +115,8 @@ const Contact = () => {
                     <p className="text-gray-600 mb-2">
                       {t('contact.callDescription')}
                     </p>
-                    <a href="tel:+963988691712" className="text-logo font-medium hover:underline">
+                    <a href="tel:+963988691712" className="text-logo font-medium hover:underline"> 
                    58 50 542 11 963+ 
-                   444 431 933 963+
                     </a>
                   </div>
                 </div>
