@@ -20,7 +20,9 @@ const Contact = () => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-
+const PhoneLink = () => {
+  const { i18n } = useTranslation();
+  const phoneHref = "+963115425058";
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
