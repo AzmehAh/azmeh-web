@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mail, Phone, MapPin, Facebook, Instagram, Linkedin, Youtube } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Instagram, MessageCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -114,16 +114,44 @@ const Footer = () => {
               {t('footer.followUs')}
             </h4>
             <div className="flex gap-4">
-              {[Facebook, Instagram,].map((Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-[#2C5DB6] transition-colors duration-300"
-                  aria-label={`Social media ${index}`}
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              ))}
+{/* Instagram */}
+          <a
+            href="#"
+            className="flex items-center justify-start bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] 
+            text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out 
+            w-[47px] hover:w-[200px] group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+          >
+            <Instagram className="w-5 h-5 flex-shrink-0" />
+            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              {t('social.followInstagram')}
+            </span>
+          </a>
+
+          {/* Facebook */}
+          <a
+            href="#"
+            className="flex items-center justify-start bg-[#1877F2] text-white rounded-full px-3.5 py-3 h-12 
+            overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
+            group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+          >
+            <Facebook className="w-5 h-5 flex-shrink-0" />
+            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              {t('social.likeFacebook')}
+            </span>
+          </a>
+
+          {/* WhatsApp */} 
+          <a
+            href="#"
+            className="flex items-center justify-start bg-[#25D366] text-white rounded-full px-3.5 py-3 h-12 
+            overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
+            group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+          >
+            <MessageCircle className="w-5 h-5 flex-shrink-0" />
+            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+              {t('social.whatsappSupport')}
+            </span>
+          </a>
             </div>
             <div className="mt-6 pt-6 border-t border-gray-800">
               <p className="text-gray-400 text-xs">
