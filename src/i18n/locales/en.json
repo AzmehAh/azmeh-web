@@ -47,18 +47,19 @@
       }
     ]
   },
-  "goals": {
-    "title": "Our Vision & Mission",
-    "subtitle": "Driving innovation and excellence in every aspect of our business.",
-    "vision": {
-      "title": "Vision",
-      "description": "To be the leading innovator in paint and coating technologies, providing sustainable solutions that protect and beautify homes, furniture, vehicles, and industrial facilities worldwide."
-    },
-    "mission": {
-      "title": "Mission",
-      "description": "To provide superior paint and coating solutions that protect, beautify, and enhance every surface we touch. We are committed to innovation, quality, and customer satisfaction while maintaining our responsibility to the environment."
-    }
+"goals": {
+  "title": "Our Vision & Mission",
+  "subtitle": "Driving innovation, quality, and responsibility across every aspect of our work.",
+  "vision": {
+    "title": "Vision",
+    "description": "Azmeh Paints seeks to be one of the national models that focuses on the highest levels of quality and service. The company strives to lead in developing its people across all fields while giving social responsibility its utmost importance."
   },
+  "mission": {
+    "title": "Mission",
+    "description": "To meet local market demands for diverse coating systems that meet high international standards, while expanding into new territories to compete with leading global brands. We are dedicated to developing and motivating our people — our greatest asset — and maintaining strong administrative and technical expertise through long-term sustainable relationships. We aim to build solid, trust-based partnerships with customers for generations to come, and to embed the principles of quality and continuous improvement in all aspects of our operations."
+  }
+},
+
   "cta": {
     "title": "Ready to Transform Your Project?",
     "subtitle": "Let our 69+ years of experience and innovative solutions bring your vision to life. Whether it's for your home, furniture, vehicle, or industrial facility, we have the perfect paint solution.",
