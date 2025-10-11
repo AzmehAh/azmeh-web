@@ -347,18 +347,21 @@
     "contactSupport": "تواصل مع الدعم الفني",
     "scheduleConsultation": "احجز استشارة"
   },
-   "footer": {
-    "companyDescription": "التميز في أنظمة الدهانات والطلاءات منذ عام 1955. موثوق به من قبل المحترفين حول العالم.",
-    "copyright": "© {{year}} الأصبغة الأزمة. جميع الحقوق محفوظة.",
-    "quickLinks": "روابط سريعة",
-    "contactInfo": "معلومات الاتصال",
-    "followUs": "تابعنا",
-    "stayUpdated": "ابق على اطلاع بآخر أخبارنا ومنتجاتنا",
-    "professionalSolutions": "حلول دهانات احترافية لكل تطبيق",
-    "privacyPolicy": "سياسة الخصوصية",
-    "termsOfService": "شروط الخدمة",
-    "address": "دمشق، سوريا - المزة، شارع فايز منصور"
-  },
+  "footer": {
+  "companyDescription": "التميز في أنظمة الدهانات والطلاءات منذ عام 1955. موثوق به من قبل المحترفين حول العالم.",
+  "copyright": "© {{year}} الأصبغة الأزمة. جميع الحقوق محفوظة.",
+  "quickLinks": "روابط سريعة",
+  "contactInfo": "معلومات الاتصال",
+  "followUs": "تابعنا",
+  "stayUpdated": "ابق على اطلاع بآخر أخبارنا ومنتجاتنا",
+  "professionalSolutions": "حلول دهانات احترافية لكل تطبيق",
+  "privacyPolicy": "سياسة الخصوصية",
+  "termsOfService": "شروط الخدمة",
+  "address": "دمشق، سوريا - المنطقة الصناعية تل كردي، ريف دمشق",
+  "phone": "هاتف: +963 11 542 50 58",
+  "whatsapp": "واتس اب: +963 933 431 444",
+  "email": "البريد الإلكتروني: azmeh@azmeh.com"
+},
   
   "BrandsSection": {
     "trustedPartners": "شركاء موثوقون",
