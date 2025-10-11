@@ -67,22 +67,26 @@
       "products": "View Our Products"
     }
   },
-  "founder": {
-    "title": "Al Azmeh Paints – Excellence & Vision Since 1955",
-    "founderName": "Ehsan Ezzat Al Azmeh",
-    "founderTitle": "Founder & Visionary",
-    "details": {
-      "born": "Born: 1918, Damascus",
-      "started": "Started Business: 1938",
-      "founded": "Founded Al Azmeh Paints: 1955",
-      "legacy": "Legacy Continues: 1918 - 1998"
-    },
-    "description": "Ahmed Al Azmeh, born in 1918 in Damascus, Syria, began his entrepreneurial journey in 1938. In 1955, he founded Al Azmeh Paints with a clear vision: to deliver the highest quality paint systems for every application. With decades of excellence and expertise, the company quickly grew into a leading name in the paint industry. Under Ahmed's visionary leadership until 1998, Al Azmeh Paints became synonymous with quality, innovation, and customer satisfaction. His legacy continues to guide the company today, maintaining the same commitment to excellence established nearly seven decades ago.",
-    "stats": {
-      "leadership": "Years of Leadership",
-      "founded": "Company Founded"
-    }
+ "founder": {
+  "title": "Al Azmeh Paints – Excellence and Vision Since 1955",
+  "founderName": "Ehsan Ezzat Al Azmeh",
+  "founderTitle": "Founder & Visionary",
+  "details": {
+    "born": "Born: 1918, Damascus",
+    "started": "Started Business: 1938",
+    "founded": "Founded Al Azmeh Paints: 1955",
+    "legacy": "Legacy Continues: 1918 - 1998"
   },
+  "description": "Ehsan Ezzat Al Azmeh, born in Damascus in 1918, received his education there. He began his commercial career in 1938 as an assistant to his father, but his great ambition soon drove him to start his own path in the mid-1940s through import and export activities — with decorative paints among his main imports. Focusing his interest on paints, he purchased a used factory and began producing specific paint types. He devoted great effort to mastering the techniques and details of the paint industry, always seeking to develop and improve his work. His efforts were crowned with success from the very beginning, which encouraged him to establish a modern paint factory to meet the growing demand.\n\nThe founder — may he rest in peace — was self-made, ambitious, diligent, and kind. Everyone who knew or worked with him loved and respected him, for he was an honest and honorable man in all his dealings. Ehsan Al Azmeh passed away on July 12, 1998, leaving behind one of the most advanced paint factories in Syria, which continued under the management of his sons, Engineer Maher and Chemist Samer.\n\nAs we remember his remarkable achievements, we pray that God rewards him abundantly and grants him eternal peace.",
+  "companyOverview": {
+    "title": "Company Overview",
+    "text": "Al Azmeh Paints was established in 1955 and was among the very few paint factories in Syria at that time. From the beginning, the factory adopted a policy of producing high-quality products, even if the quantities were limited. It started producing paint types that other local factories did not, boldly competing with imported products. The factory expanded several times as demand grew both in quantity and variety, becoming one of the leading paint manufacturers in Syria.\n\nToday, Al Azmeh Paints’ products cover most coating applications: decorative, furniture, automotive, industrial, protection, insulation, and more. The company offers various paint systems, including industrial alkyds, nitrocellulose, polyester, single- and two-component acrylics, polyurethane, epoxy, water-based epoxy, self-leveling epoxy, chlorinated rubber, zinc silicate, silicon/siloxane, acrylic emulsion, alkyd emulsion, and many others.\n\nUnder the slogan “Quality First,” the company obtained the ISO 9001:2008 Quality Certification, reinforcing its role in supporting national industry with world-class standards."
+  },
+  "stats": {
+    "leadership": "Years of Leadership",
+    "founded": "Year Founded"
+  }
+},
   "about": {
     "legacy": "Our Legacy",
     "title": "Excellence in Paint Solutions",
