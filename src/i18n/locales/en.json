@@ -17,36 +17,37 @@
   "hero": {
     "readMore": "READ MORE"
   },
- "values": {
+"values": {
   "title": "Our Core Values",
   "subtitle": "The principles that guide every decision we make and every solution we create for our customers.",
   "values": [
     {
-      "title": "Quality Excellence",
-      "description": "Unwavering commitment to delivering the highest quality paint systems."
-    },
-    {
       "title": "National Pride",
-      "description": "We believe that national products can compete with international ones and earn customers’ trust and satisfaction."
+      "description": "We believe that national products can compete with international ones and meet customers’ trust and expectations."
     },
     {
-      "title": "Social Responsibility",
-      "description": "We believe social responsibility is not an optional initiative, but a national duty — the foundation of our commitment to the community and the environment."
+      "title": "Shared Values over Profit",
+      "description": "Making a profit is not our top priority; we focus on preserving social values among our team, and sharing them with customers, suppliers, and even competitors to advance national products together."
     },
     {
-      "title": "Innovation & Green Solutions",
-      "description": "Continuous research and development to create environmentally friendly and sustainable coating technologies."
+      "title": "Green Solutions",
+      "description": "We offer our customers environmentally friendly, practical solutions through the great diversity of our products."
     },
     {
       "title": "Human Development",
-      "description": "We believe the individual comes first — improving him enriches the company and the nation alike."
+      "description": "We believe that the individual comes first; by improving people, we add value both to the company and to the nation."
     },
     {
-      "title": "Shared Growth",
-      "description": "Profit is not our top priority; instead, we uphold shared values with our customers, suppliers, and even competitors to advance the national industry together."
+      "title": "Social Responsibility",
+      "description": "Social responsibility is our utmost priority; it is not merely an optional initiative but a national social commitment."
+    },
+    {
+      "title": "Innovation & Excellence",
+      "description": "We constantly strive to innovate and improve our products and processes, ensuring that excellence is at the heart of everything we do."
     }
   ]
 },
+
 
 "goals": {
   "title": "Our Vision & Mission",
