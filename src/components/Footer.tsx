@@ -115,43 +115,44 @@ const Footer = () => {
             </h4>
             <div className="flex gap-4">
 {/* Instagram */}
-          <a
-            href="#"
-            className="flex items-center justify-start bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] 
-            text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out 
-            w-[47px] hover:w-[200px] group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
-          >
-            <Instagram className="w-5 h-5 flex-shrink-0" />
-            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              {t('social.followInstagram')}
-            </span>
-          </a>
+<a
+  href="#"
+  className={`flex items-center justify-start bg-gray-300 text-white rounded-full px-3.5 py-3 h-12 overflow-hidden
+  transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap
+  hover:bg-gradient-to-r hover:from-[#f58529] hover:via-[#dd2a7b] hover:to-[#8134af]`}
+>
+  <Instagram className="w-5 h-5 flex-shrink-0" />
+  <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+    {t('social.followInstagram')}
+  </span>
+</a>
 
-          {/* Facebook */}
-          <a
-            href="#"
-            className="flex items-center justify-start bg-[#1877F2] text-white rounded-full px-3.5 py-3 h-12 
-            overflow-hidden transition-all duration-500 ease-in-out w-[47px] 
-            group shadow-lg"
-          >
-            <Facebook className="w-5 h-5 flex-shrink-0" />
-            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              {t('social.likeFacebook')}
-            </span>
-          </a>
+{/* Facebook */}
+<a
+  href="#"
+  className={`flex items-center justify-start bg-gray-300 text-white rounded-full px-3.5 py-3 h-12 overflow-hidden
+  transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap
+  hover:bg-[#1877F2]`}
+>
+  <Facebook className="w-5 h-5 flex-shrink-0" />
+  <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+    {t('social.likeFacebook')}
+  </span>
+</a>
 
-          {/* WhatsApp */} 
-          <a
-            href="#"
-            className="flex items-center justify-start bg-[#25D366] text-white rounded-full px-3.5 py-3 h-12 
-            overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
-            group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
-          >
-            <MessageCircle className="w-5 h-5 flex-shrink-0" />
-            <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
-              {t('social.whatsappSupport')}
-            </span>
-          </a>
+{/* WhatsApp */}
+<a
+  href="#"
+  className={`flex items-center justify-start bg-gray-300 text-white rounded-full px-3.5 py-3 h-12 overflow-hidden
+  transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap
+  hover:bg-[#25D366]`}
+>
+  <MessageCircle className="w-5 h-5 flex-shrink-0" />
+  <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
+    {t('social.whatsappSupport')}
+  </span>
+</a>
+
             </div>
             <div className="mt-6 pt-6 border-t border-gray-800">
               <p className="text-gray-400 text-xs">
