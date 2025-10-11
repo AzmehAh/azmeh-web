@@ -119,7 +119,7 @@ const isRTL = currentLang === 'ar';
                       {t('contact.callDescription')}
                     </p>
                  <a href="tel:+963115425058" className="text-logo font-medium hover:underline">
-  {isRTL ? "+963 11 542 50 58" : "+963 11 542 50 58"}
+  {isRTL ? "58 50 542 11 963+" : "+963 11 542 50 58"}
 </a>
 
                   </div>
