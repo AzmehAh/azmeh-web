@@ -304,16 +304,7 @@ const isRTL = currentLang === 'ar';
               {t('contact.findUs')}
             </h3>
             <div className="w-full h-96 bg-gray-100 rounded-xl overflow-hidden">
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3325.4!2d36.2765!3d33.5028!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1518e6dc413cc6a7%3A0x877546f4882af7dd!2sMazzeh%2C%20Damascus%2C%20Syria!5e0!3m2!1sen!2sus!4v1635959999999!5m2!1sen!2sus"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                title="Al Azmeh Paints Location"
-              ></iframe>
+             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3193.765402306282!2d36.47489567739242!3d33.58990830926161!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1518f10578529fd7%3A0xd3f563fa0f9d2313!2z2KrZhCDZg9ix2K_ZiiAxMzU!5e1!3m2!1snl!2snl!4v1760183336810!5m2!1snl!2snl" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <div className="mt-4 text-center">
               <p className="text-gray-600">
