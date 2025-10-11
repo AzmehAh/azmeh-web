@@ -316,7 +316,7 @@ const JobApplication = () => {
               <input
                 type="tel"
                 id="phone"
-                name="phone"
+                name="phone" 
                 value={formData.phone}
                 onChange={handleInputChange}
                 className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition-all ${
