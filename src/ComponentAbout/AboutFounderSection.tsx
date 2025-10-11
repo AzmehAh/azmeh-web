@@ -31,7 +31,7 @@ const AboutFounderSection = () => {
                 <img 
       src="/images/historyTitle.png" 
       alt="History Title" 
-      className="w-full h-full object-cover rounded-2xl"
+      className="w-full h-full object-contain rounded-2xl"
     />
               </div>
               <div className="mt-6 text-center">
