@@ -131,8 +131,8 @@ const Footer = () => {
           <a
             href="#"
             className="flex items-center justify-start bg-[#1877F2] text-white rounded-full px-3.5 py-3 h-12 
-            overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
-            group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
+            overflow-hidden transition-all duration-500 ease-in-out w-[47px] 
+            group shadow-lg"
           >
             <Facebook className="w-5 h-5 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
