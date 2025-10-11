@@ -139,20 +139,7 @@ const Footer = () => {
             <p className={`text-gray-400 text-sm ${isRTL ? 'text-center md:text-right' : 'text-center md:text-left'}`}>
               {t('footer.professionalSolutions')}
             </p>
-            <div className="flex gap-6 text-sm ">
-              <Link
-                to="/privacy"
-                className="text-gray-400 hover:text-white transition-colors duration-200"
-              >
-                {t('footer.privacyPolicy')}
-              </Link>
-              <Link
-                to="/terms"
-                className="text-gray-400 hover:text-white transition-colors duration-200"
-              >
-                {t('footer.termsOfService')}
-              </Link>
-            </div>
+   
           </div>
         </div>
       </div>
