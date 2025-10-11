@@ -348,18 +348,20 @@
     "scheduleConsultation": "Schedule Consultation"
   },
   "footer": {
-    "companyDescription": "Excellence in paint systems and coatings since 1955. Trusted by professionals worldwide.",
-    "copyright": "© {{year}} Al Azmeh Paints. All rights reserved.",
-    "quickLinks": "Quick Links",
-    "contactInfo": "Contact Info",
-    "followUs": "Follow Us",
-    "stayUpdated": "Stay updated with our latest news and products",
-    "professionalSolutions": "Professional paint solutions for every application",
-    "privacyPolicy": "Privacy Policy",
-    "termsOfService": "Terms of Service",
-    "address": "Damascus, Syria – Mazzeh, Fayez Mansour Street"
-  },
-  
+  "companyDescription": "Excellence in paint systems and coatings since 1955. Trusted by professionals worldwide.",
+  "copyright": "© {{year}} Al Azmeh Paints. All rights reserved.",
+  "quickLinks": "Quick Links",
+  "contactInfo": "Contact Info",
+  "followUs": "Follow Us",
+  "stayUpdated": "Stay updated with our latest news and products",
+  "professionalSolutions": "Professional paint solutions for every application",
+  "privacyPolicy": "Privacy Policy",
+  "termsOfService": "Terms of Service",
+  "address": "Damascus, Syria – Tel Kurdi Industrial Area, Rif Dimashq",
+  "phone": "Phone: +963 11 542 50 58",
+  "whatsapp": "WhatsApp: +963 933 431 444",
+  "email": "Email: azmeh@azmeh.com"
+},
   
   "services": {
     "ecoFriendly": "ECO-FRIENDLY PAINTING",
