@@ -20,9 +20,7 @@ const Contact = () => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-const PhoneLink = () => {
-  const { i18n } = useTranslation();
-  const phoneHref = "+963115425058";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -53,7 +51,9 @@ const PhoneLink = () => {
       setIsSubmitting(false);
     }
   };
-
+const PhoneLink = () => {
+  const { i18n } = useTranslation();
+  const phoneHref = "+963115425058";
   return (
     <div className="min-h-screen bg-gray-50 pt-28">
       {/* Hero Section */}
