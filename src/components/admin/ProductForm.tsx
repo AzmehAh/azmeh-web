@@ -45,6 +45,7 @@ const ProductForm = () => {
     instructions: [],
     instructions_ar: [],
     packaging: [],
+    packaging_ar: [], 
     safety_precautions: [],
     safety_precautions_ar: [],
     safety_first_aid: [],
@@ -239,6 +240,7 @@ const ProductForm = () => {
         safety_precautions: parseArrayField(productData?.safety_precautions),
         safety_first_aid: parseArrayField(productData?.safety_first_aid),
         packaging: parseArrayField(productData?.packaging),
+        packaging_ar: parseArrayField(productData?.packaging_ar),
       };
 
       setFormData(parsed);
@@ -310,7 +312,7 @@ const ProductForm = () => {
       const validColumns = [
         'name', 'name_ar', 'code', 'brand', 'type', 'material', 'usage', 'description', 'description_ar',
          'features', 'features_ar', 'applications', 'applications_ar',
-        'instructions', 'instructions_ar', 'packaging', 'storage', 'storage_ar', 'safety_precautions', 'safety_precautions_ar',
+        'instructions', 'instructions_ar', 'packaging', 'packaging_ar', 
         'safety_first_aid', 'safety_first_aid_ar', 'technical_specs', 'status', 'category_id', 'featured',
         'storing_conditions', 'storing_conditions_ar', 'joint_preparation', 'joint_preparation_ar',
         'joint_size', 'joint_size_ar', 'movement_capacity', 'movement_capacity_ar',
@@ -356,8 +358,8 @@ const ProductForm = () => {
   safety_precautions: formData.safety_precautions || [],
   safety_first_aid: formData.safety_first_aid || [],
   packaging: JSON.stringify(formData.packaging || []),
+ packaging_ar: JSON.stringify(formData.packaging_ar || []),
   general_features: formData.general_features || [],
- 
   mixing_steps: formData.mixing_steps || [],
 };
 
