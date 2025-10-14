@@ -189,41 +189,78 @@ export const GeneralTab: React.FC<Props> = ({
 
       
 
-        <div className="space-y-4">
-
-        {/* Packaging */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Packaging Sizes / الاحجام</label>
-          <div className="space-y-2">
-            {(data.packaging || []).map((item: any, idx: number) => (
-              <div key={idx} className="flex gap-2">
-                <input
-                  type="text"
-                  value={item.size || ''}
-                  onChange={(e) => handlePackagingChange(idx, e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-                  placeholder="e.g., 1L, 5kg"
-                />
-                <button
-                  type="button"
-                  onClick={() => removePackaging(idx)}
-                  className="px-3 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
-            <button
-              type="button"
-              onClick={addPackaging}
-              className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
-            >
-              + Add Size
-            </button>
-          </div>
+  {/* Packaging - Bilingual */}
+<div className="md:col-span-2">
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Packaging Sizes / أحجام العبوة
+  </label>
+  <div className="space-y-3">
+    {(data.packaging || []).map((_: any, idx: number) => (
+      <div key={idx} className="grid grid-cols-1 md:grid-cols-2 gap-3 items-end">
+        {/* English */}
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">Size (EN)</label>
+          <input
+            type="text"
+            value={(data.packaging[idx] && data.packaging[idx].size) || ''}
+            onChange={(e) => {
+              const newPack = [...(data.packaging || [])];
+              newPack[idx] = { size: e.target.value };
+              onChange('packaging', newPack);
+            }}
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+            placeholder="e.g., 1L, 5kg"
+          />
         </div>
 
+        {/* Arabic */}
+        <div>
+          <label className="block text-xs text-gray-500 mb-1">الحجم (AR)</label>
+          <input
+            type="text"
+            value={(data.packaging_ar[idx] && data.packaging_ar[idx].size) || ''}
+            onChange={(e) => {
+              const newPackAr = [...(data.packaging_ar || [])];
+              newPackAr[idx] = { size: e.target.value };
+              onChange('packaging_ar', newPackAr);
+            }}
+            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+            placeholder="مثال: ١ لتر، ٥ كغ"
+          />
         </div>
+
+        {/* Remove Button */}
+        <div className="md:col-start-2 flex justify-end">
+          <button
+            type="button"
+            onClick={() => {
+              const newPack = [...(data.packaging || [])];
+              const newPackAr = [...(data.packaging_ar || [])];
+              newPack.splice(idx, 1);
+              newPackAr.splice(idx, 1);
+              onChange('packaging', newPack);
+              onChange('packaging_ar', newPackAr);
+            }}
+            className="px-3 py-1 text-red-600 border border-red-200 rounded hover:bg-red-50"
+          >
+            Remove
+          </button>
+        </div>
+      </div>
+    ))}
+
+    <button
+      type="button"
+      onClick={() => {
+        onChange('packaging', [...(data.packaging || []), { size: '' }]);
+        onChange('packaging_ar', [...(data.packaging_ar || []), { size: '' }]);
+      }}
+      className="px-3 py-1 bg-gray-100 text-gray-700 rounded hover:bg-gray-200"
+    >
+      + Add Size / إضافة حجم
+    </button>
+  </div>
+</div>
 
         {/* Features */}
         <BilingualArrayInput
