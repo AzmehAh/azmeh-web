@@ -300,7 +300,7 @@ const Troubleshooting = () => {
                     >
                       <div className="px-6 pb-6">
                         <div className="pl-12 pr-4">
-                          <div className="bg-logo rounded-lg p-6 border-l-4 border-logo">
+                          <div className="bg-blue-50  rounded-lg p-6 border-l-4 border-logo">
                             <div className="flex items-start space-x-3">
                               <CheckCircle className="w-5 h-5 text-logo mt-0.5 flex-shrink-0" />
                               <div>
