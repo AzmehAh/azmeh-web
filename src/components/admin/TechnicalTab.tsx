@@ -30,7 +30,7 @@ export const TechnicalTab: React.FC<Props> = ({ data, onChange }) => {
     { en: 'friction_resistance', labelEn: 'Friction Resistance', labelAr: 'مقاومة الاحتكاك' },
     { en: 'washability', labelEn: 'Washability', labelAr: 'قابلية الغسل' },
     { en: 'water_resistance', labelEn: 'Water Resistance', labelAr: 'مقاومة الماء' },
-    { en: 'theoretical_spreading_rate', llabelEn: 'Theoretical Spreading Rate', labelAr: 'معدل الانتشار النظري' },
+    { en: 'theoretical_spreading_rate', labelEn: 'Theoretical Spreading Rate', labelAr: 'معدل الانتشار النظري' },
     { en: 'recommended_film_thickness', labelEn: 'Recommended Film Thickness', labelAr: 'سماكة الطبقة الموصى بها' },
     { en: 'temperature_resistance', labelEn: 'Temperature Resistance', labelAr: 'مقاومة درجات الحرارة' },
     { en: 'solvent_splash_resistance',labelEn: 'Solvent Splash Resistance', labelAr: 'مقاومة رش المذيبات' },
