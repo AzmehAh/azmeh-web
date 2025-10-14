@@ -81,7 +81,7 @@ const Troubleshooting = () => {
           >
             <div className="p-8 flex flex-col flex-grow">
               <div className="flex mb-4">
-                <div className="w-12 h-12 flex-shrink-0 bg-gradient-to-br from-logo to-red-600 rounded-xl flex items-center justify-center mr-4">
+                <div className="w-12 h-12 flex-shrink-0 bg-logo rounded-xl flex items-center justify-center mr-4">
                   <Wrench className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-900 group-hover:text-logo min-h-[64px] transition-colors leading-snug">
