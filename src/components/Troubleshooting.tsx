@@ -152,7 +152,7 @@ const Troubleshooting = () => {
       case 'High':
         return 'text-red-600 bg-red-50 border-red-200';
       case 'Medium':
-        return 'text-logo bg-logo border-logo';
+        return 'text-logo bg-yallow border-logo';
       case 'Low':
         return 'text-green-600 bg-green-50 border-green-200';
       default:
