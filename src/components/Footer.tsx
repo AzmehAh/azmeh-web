@@ -136,7 +136,7 @@ const Footer = () => {
 
   {/* WhatsApp */}
   <a
-    href="#"
+    href="https://www.instagram.com/azmehpaints/"
     className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center 
                hover:bg-[#25D366] transition-colors duration-300"
     aria-label="WhatsApp"
