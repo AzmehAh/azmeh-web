@@ -252,7 +252,7 @@ const Header = () => {
           </nav>
 
           {/* Mobile menu button */}
-         <div className="lg:hidden flex justify-end px-4">
+         <div className="lg:hidden flex justify-end ">
 
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
