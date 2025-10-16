@@ -279,18 +279,21 @@ const Header = () => {
     {/* Mobile menu */}
 <AnimatePresence>
   {isMobileMenuOpen && (
-    <motion.div
-      initial={{ opacity: 0, maxHeight: 0 }}
-      animate={{ 
-        opacity: 1, 
-        maxHeight: 800, // قيمة كافية لتغطية المحتوى
-        transition: { duration: 0.35, ease: "easeOut" }
-      }}
-      exit={{ 
-        opacity: 0, 
-        maxHeight: 0,
-        transition: { duration: 0.25, ease: "easeIn" }
-      }} 
+  <motion.div
+  initial={{ opacity: 0, y: -20, maxHeight: 0 }}
+  animate={{ 
+    opacity: 1,
+    y: 0,
+    maxHeight: 800,
+    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } // smoother curve
+  }}
+  exit={{ 
+    opacity: 0,
+    y: -15,
+    maxHeight: 0,
+    transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] }
+  }}
+
       className="lg:hidden bg-white border-t border-gray-200 overflow-hidden shadow-lg"
     >
       <div className="px-6 py-6 space-y-1 max-h-[80vh] overflow-y-auto">
