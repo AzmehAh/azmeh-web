@@ -253,10 +253,16 @@ const Header = () => {
 
           {/* Mobile menu button */}
        {/* Mobile menu button */}
-<div className="lg:hidden flex justify-end w-full px-4 py-3">
-  <button 
+<div
+  className={`lg:hidden flex ${
+    i18n.dir() === "rtl" ? "justify-start" : "justify-end"
+  } w-full px-4 py-3`}
+>
+  <button
     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-    className="p-2 rounded-md text-gray-900 hover:text-logo transition-colors"
+    className={`p-2 rounded-md ${
+      isScrolled ? "text-gray-900" : "text-white"
+    } hover:text-logo transition-colors duration-300`}
   >
     {isMobileMenuOpen ? (
       <X className="h-6 w-6" />
@@ -265,6 +271,7 @@ const Header = () => {
     )}
   </button>
 </div>
+
 
         </div>
       </div>
