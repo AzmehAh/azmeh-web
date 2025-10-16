@@ -256,7 +256,7 @@ const Header = () => {
 {/* Mobile menu button */}
 <div
   className={`lg:hidden absolute top-6 ${
-    i18n.dir() === "rtl" ? "right-4" : "left-4"
+    i18n.dir() === "rtl" ? "left-4" : "right-4"
   } z-[60]`}
 >
   <button
