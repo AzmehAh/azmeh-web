@@ -279,20 +279,19 @@ const Header = () => {
     {/* Mobile menu */}
 <AnimatePresence>
   {isMobileMenuOpen && (
-  <motion.div
-  initial={{ opacity: 0, y: -20, maxHeight: 0 }}
-  animate={{ 
-    opacity: 1,
-    y: 0,
-    maxHeight: 800,
-    transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] } // smoother curve
-  }}
-  exit={{ 
-    opacity: 0,
-    y: -15,
-    maxHeight: 0,
-    transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] }
-  }}
+   <motion.div
+      key="mobile-menu"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.5, ease: [0.25, 0.1, 0.25, 1] },
+      }}
+      exit={{
+        opacity: 0,
+        y: -15,
+        transition: { duration: 0.4, ease: [0.4, 0, 0.2, 1] },
+      }}
 
       className="lg:hidden bg-white border-t border-gray-200 overflow-hidden shadow-lg"
     >
