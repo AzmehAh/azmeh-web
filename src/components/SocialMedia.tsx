@@ -80,7 +80,7 @@ const SocialMedia = () => {
           
           {/* Instagram */}
           <a
-            href="https://www.instagram.com/azmehpaints"
+            href="https://www.instagram.com/azmehpaints/"
             className="flex items-center justify-start bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af] 
             text-white rounded-full px-3.5 py-3 h-12 overflow-hidden transition-all duration-500 ease-in-out 
             w-[47px] hover:w-[200px] group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
@@ -88,7 +88,7 @@ const SocialMedia = () => {
             <Instagram className="w-5 h-5 flex-shrink-0" />
             <span className="ml-3 opacity-0 group-hover:opacity-100 transition-all duration-300">
               {t('social.followInstagram')}
-            </span>
+            </span> 
           </a>
 
           {/* Facebook */}
