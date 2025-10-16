@@ -66,7 +66,7 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden mt-20">
+    <div className="relative w-full h-screen overflow-hidden ">
       {categories.map((category, index) => {
         const isActive = index === activeIndex;
         return (
