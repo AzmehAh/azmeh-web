@@ -251,9 +251,7 @@ const Header = () => {
 </div>
           </nav>
 
-          {/* Mobile menu button */}
-       {/* Mobile menu button */}
-{/* Mobile menu button */}
+        
 <div
   className={`lg:hidden absolute top-6 ${
     i18n.dir() === "rtl" ? "left-4" : "right-4"
