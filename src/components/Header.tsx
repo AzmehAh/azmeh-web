@@ -253,21 +253,22 @@ const Header = () => {
 
           {/* Mobile menu button */}
        {/* Mobile menu button */}
+{/* Mobile menu button */}
 <div
-  className={`lg:hidden flex ${
-    i18n.dir() === "rtl" ? "justify-start" : "justify-end"
-  } w-full px-4 py-3`}
+  className={`lg:hidden absolute top-6 ${
+    i18n.dir() === "rtl" ? "right-4" : "left-4"
+  } z-[60]`}
 >
   <button
     onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
     className={`p-2 rounded-md ${
       isScrolled ? "text-gray-900" : "text-white"
-    } hover:text-logo transition-colors duration-300`}
+    } hover:text-logo transition-all duration-300`}
   >
     {isMobileMenuOpen ? (
-      <X className="h-6 w-6" />
+      <X className="h-7 w-7" />
     ) : (
-      <Menu className="h-6 w-6" />
+      <Menu className="h-7 w-7" />
     )}
   </button>
 </div>
