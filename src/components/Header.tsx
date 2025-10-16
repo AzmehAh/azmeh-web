@@ -184,10 +184,10 @@ const Header = () => {
               <img 
                 src="/images/Azmeh-Paints-Logo.png" 
                 alt="AL AZMEH PAINTS" 
-                className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-    isScrolled ? 'bg-white shadow-lg backdrop-blur-sm' : 'bg-white/10 backdrop-blur-sm'
-  }`}
-              />
+                className={`h-10 w-auto transition-all duration-300 ${
+                  isScrolled ? "filter-none" : "brightness-0 invert"
+                }`}
+              /> 
             </Link>
           </div> 
 
