@@ -189,7 +189,7 @@ const Header = () => {
                 }`}
               />
             </Link>
-          </div>
+          </div> 
 
           {/* Right Navigation - يصبح يسار في RTL */}
           <nav className="hidden lg:flex items-center gap-8 justify-self-end">
@@ -252,7 +252,8 @@ const Header = () => {
           </nav>
 
           {/* Mobile menu button */}
-          <div className="lg:hidden justify-between w-full px-40">
+         <div className="lg:hidden flex justify-end px-4">
+
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="p-2 rounded-md text-gray-900 hover:text-logo transition-colors"
