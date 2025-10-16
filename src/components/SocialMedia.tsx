@@ -93,7 +93,7 @@ const SocialMedia = () => {
 
           {/* Facebook */}
           <a
-            href="#"
+            href="https://www.facebook.com/azmehpaints/about?locale=ar_AR"
             className="flex items-center justify-start bg-[#1877F2] text-white rounded-full px-3.5 py-3 h-12 
             overflow-hidden transition-all duration-500 ease-in-out w-[47px] hover:w-[200px] 
             group shadow-lg hover:shadow-2xl origin-left whitespace-nowrap"
