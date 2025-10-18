@@ -510,11 +510,14 @@ const Products = () => {
                             </div>
                           </div>
 
-                          {/* Button */}
-                          {viewMode === 'grid' && (
-                            <button className="w-full  bg-gradient-to-r from-logo to-blue-700 text-white py-2 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20   transition-colors duration-200 font-medium">
-                              {t('products.viewDetails')}
-                            </button>
+                     {/* Button */}
+{viewMode === 'grid' && (
+  <button className="w-full but py-2 rounded-lg 
+                     focus:outline-none focus:ring-2 focus:ring-logo/20 
+                     font-medium">
+    {t('products.viewDetails')}
+  </button>
+)}
                           )}
                         </div>
                       </motion.div>
