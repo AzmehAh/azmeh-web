@@ -55,7 +55,7 @@ const Troubleshooting = () => {
       <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-[#0055A3]" />
       </div>
-    );
+    ); 
   }
 
   // إذا لم يتم تحديد فئة
@@ -321,7 +321,7 @@ const Troubleshooting = () => {
               </motion.div>
             ))
           )}
-        </div> 
+        </div>
 
         {/* Contact Section */}
         <div className="mt-16 text-center">
@@ -331,13 +331,13 @@ const Troubleshooting = () => {
               {t('troubleshooting.supportDescription')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-  to="/contact"
-  className="but bg-white text-logo px-8 py-3 rounded-lg font-semibold 
-             hover:bg-gray-100 transition-colors block text-center"
->
-  {t('troubleshooting.contactSupport')}
-</Link>
+              <Link
+                to="/contact"
+                className="bg-white text-logo px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors block text-center"
+              >
+                {t('troubleshooting.contactSupport')}
+              </Link>
+
             
             </div>
           </div>
