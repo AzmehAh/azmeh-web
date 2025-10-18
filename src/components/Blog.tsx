@@ -275,9 +275,13 @@ const Blog = () => {
                           <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
                             {displayDesc}
                           </p>
-                          <button className="w-full bg-gradient-to-r from-logo to-blue-700 text-white py-3 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-200 font-medium group-hover:shadow-lg">
-                            {t('blog.readMore')}
-                          </button>
+                        <button
+  className="w-full but py-3 rounded-lg 
+             focus:outline-none focus:ring-2 focus:ring-logo/20 
+             font-medium"
+>
+  {t('blog.readMore')}
+</button>
                         </div>
                       </motion.div>
                     );
