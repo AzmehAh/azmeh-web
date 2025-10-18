@@ -39,7 +39,7 @@ import Contact from './components/Contact';
 import JobApplication from './components/JobApplication';
 import About from './ComponentAbout/About.tsx'; 
 import { auth } from './lib/auth';
-
+import ScrollToTopButton from './components/ScrollToTopButton';
 const HomePage = () => ( 
   <>
     <Hero />
@@ -224,9 +224,13 @@ function App() {
           } />
         </Route>
       </Routes>
-      {!location.pathname.startsWith('/admin') && <Footer />}
+           {!location.pathname.startsWith('/admin') && <Footer />}
+
+    
+      {!location.pathname.startsWith('/admin') && <ScrollToTopButton />}
     </div>
   );
 }
+
 
 export default App;
