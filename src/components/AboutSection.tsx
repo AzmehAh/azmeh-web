@@ -54,17 +54,27 @@ const AboutSection = () => {
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
               {t('about.description2')}
             </p>
-            <Link
-              to="/about"
-              className="inline-flex items-center  bg-gradient-to-r from-logo to-blue-700 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20 transition-colors duration-300 font-semibold text-sm sm:text-base"
-            >
-              {t('about.readMore')}
-              <ArrowRight
-                className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
-                  isRTL ? 'mr-2 rotate-180' : 'ml-2'
-                }`}
-              />
-            </Link>
+         <Link
+  to="/about"
+  className={`relative inline-flex items-center overflow-hidden text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
+  font-semibold text-sm sm:text-base
+  bg-gradient-to-r from-logo to-blue-700
+  transition-all duration-500 ease-out
+  before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-700 before:via-logo before:to-blue-700
+  before:opacity-0 before:translate-x-[-100%] hover:before:opacity-100 hover:before:translate-x-[100%]
+  before:transition-all before:duration-700 before:ease-in-out
+  focus:outline-none focus:ring-2 focus:ring-logo/20`}
+>
+  <span className="relative z-10 flex items-center">
+    {t('about.readMore')}
+    <ArrowRight
+      className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
+        isRTL ? 'mr-2 rotate-180' : 'ml-2'
+      }`}
+    />
+  </span>
+</Link>
+
           </motion.div>
 
           {/* Right Content - Company Image with Counter Badge */}
