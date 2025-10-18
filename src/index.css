@@ -302,7 +302,7 @@
   border-radius: 8px; /* اختياري */
   display: inline-block; /* عشان ما تتمدد */
 }
-  .scroll-progress-btn {
+  .scroll-btn {
   position: fixed;
   bottom: 30px;
   right: 30px;
@@ -322,46 +322,26 @@
   z-index: 1000;
 }
 
-.scroll-progress-btn.active {
+.scroll-btn.active {
   opacity: 1;
   visibility: visible;
 }
 
-.scroll-progress-btn:hover {
+.scroll-btn:hover {
   transform: scale(1.05);
 }
 
-.progress-circle {
+.progress-ring {
   position: absolute;
   top: 0;
   left: 0;
   transform: rotate(-90deg);
 }
 
-.progress-circle circle {
-  fill: none;
-  stroke-width: 4;
-  cx: 30;
-  cy: 30;
-  r: 26;
-}
-
-.progress-circle .bg {
-  stroke: #e0e0e0;
-}
-
-.progress-circle .progress {
-  stroke: #4CAF50;
-  stroke-linecap: round;
-  stroke-dasharray: 283;
-  stroke-dashoffset: 283;
-  transition: stroke-dashoffset 0.25s linear;
-}
-
 .arrow {
   position: relative;
   z-index: 2;
   font-size: 20px;
-  color: #4CAF50;
+  color: #2C5DB6;
   pointer-events: none;
 }
