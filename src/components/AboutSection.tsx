@@ -54,17 +54,20 @@ const AboutSection = () => {
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
               {t('about.description2')}
             </p>
-         <Link
+       <Link
   to="/about"
-  className={`relative inline-flex items-center overflow-hidden text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
-  font-semibold text-sm sm:text-base
-  bg-gradient-to-r from-logo to-blue-700
+  className={`relative inline-flex items-center overflow-hidden 
+  bg-gradient-to-r from-logo to-blue-700 text-white px-6 py-3 sm:px-8 sm:py-4 
+  rounded-lg font-semibold text-sm sm:text-base
   transition-all duration-500 ease-out
-  before:absolute before:inset-0 before:bg-gradient-to-r before:from-blue-700 before:via-logo before:to-blue-700
-  before:opacity-0 before:translate-x-[-100%] hover:before:opacity-100 hover:before:translate-x-[100%]
-  before:transition-all before:duration-700 before:ease-in-out
   focus:outline-none focus:ring-2 focus:ring-logo/20`}
 >
+  {/* تأثير اللمعة */}
+  <span
+    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent 
+    translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"
+  />
+
   <span className="relative z-10 flex items-center">
     {t('about.readMore')}
     <ArrowRight
@@ -74,6 +77,7 @@ const AboutSection = () => {
     />
   </span>
 </Link>
+
 
           </motion.div>
 
