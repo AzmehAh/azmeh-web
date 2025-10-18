@@ -54,26 +54,19 @@ const AboutSection = () => {
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
               {t('about.description2')}
             </p>
-      <Link
+           <Link
   to="/about"
-  className="inline-flex items-center bg-gradient-to-r from-logo to-blue-700 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
-             relative overflow-hidden group focus:outline-none focus:ring-2 focus:ring-logo/20 font-semibold text-sm sm:text-base"
+  className="inline-flex items-center but px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
+             focus:outline-none focus:ring-2 focus:ring-logo/20 
+             font-semibold text-sm sm:text-base"
 >
-  {/* طبقة اللمعة المتحركة */}
-  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent 
-                   opacity-0 group-hover:opacity-100 transition-opacity duration-300 
-                   animate-shine"></span>
-
-  <span className="relative z-10">
-    {t('about.readMore')}
-    <ArrowRight
-      className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
-        isRTL ? 'mr-2 rotate-180' : 'ml-2'
-      }`}
-    />
-  </span>
+  {t('about.readMore')}
+  <ArrowRight
+    className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
+      isRTL ? 'mr-2 rotate-180' : 'ml-2'
+    }`}
+  />
 </Link>
-
           </motion.div>
 
           {/* Right Content - Company Image with Counter Badge */}
