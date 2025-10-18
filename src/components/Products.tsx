@@ -518,7 +518,7 @@ const Products = () => {
     {t('products.viewDetails')}
   </button>
 )}
-                          )}
+                        
                         </div>
                       </motion.div>
                     );
