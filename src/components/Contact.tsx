@@ -270,24 +270,26 @@ const isRTL = currentLang === 'ar';
                   </p>
                 </motion.div>
               )}
-
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full bg-gradient-to-r from-logo to-blue-700 text-white py-4 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20 transition-all duration-200 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center"
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                    {t('contact.sending')}
-                  </>
-                ) : (
-                  <>
-                    <Send className="w-5 h-5 mr-2" />
-                    {t('contact.send')}
-                  </>
-                )}
-              </button>
+<button
+  type="submit"
+  disabled={isSubmitting}
+  className="w-full but py-4 px-6 rounded-lg font-semibold 
+             focus:outline-none focus:ring-2 focus:ring-logo/20 
+             disabled:opacity-70 disabled:cursor-not-allowed 
+             flex items-center justify-center"
+>
+  {isSubmitting ? (
+    <>
+      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+      {t('contact.sending')}
+    </>
+  ) : (
+    <>
+      <Send className="w-5 h-5 mr-2" />
+      {t('contact.send')}
+    </>
+  )}
+</button>
             </form>
           </motion.div>
         </div>
