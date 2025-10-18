@@ -223,10 +223,10 @@ function App() {
             </ProtectedRoute>
           } />
         </Route>
-      </Routes>
+      </Routes> 
            {!location.pathname.startsWith('/admin') && <Footer />}
 
-    
+      {/* زر الرجوع إلى الأعلى يظهر فقط خارج لوحة التحكم */}
       {!location.pathname.startsWith('/admin') && <ScrollToTopButton />}
     </div>
   );
