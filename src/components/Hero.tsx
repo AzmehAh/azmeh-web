@@ -306,7 +306,7 @@ const Hero = () => {
       setIsManual(true);
     }
   }}
-  whileHover={{ scale: 1.02 }}
+ 
   whileTap={{ scale: 0.98 }}
   className="group but inline-flex items-center gap-3 px-8 py-3 
              text-white font-semibold rounded-lg 
