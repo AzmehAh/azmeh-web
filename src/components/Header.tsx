@@ -134,7 +134,7 @@ const Header = () => {
                     }`}
                   >
                     {/* Troubleshooting - أولًا في RTL */}
-                    <div className={`min-w-[27rem] p-4 ${isRTL ? 'border-l' : 'border-r'} border-gray-200`}>
+                    <div className={`min-w-[30rem] p-4 ${isRTL ? 'border-l' : 'border-r'} border-gray-200`}>
                       <h4 className="font-semibold text-gray-900 mb-2">{t('header.troubleshooting')}</h4>
                       {troubleshootingCategories.map(category => (
                         <Link
@@ -154,7 +154,7 @@ const Header = () => {
                     </div>
                      
                     {/* FAQ - ثانيًا في RTL */}
-                    <div className="min-w-[27rem] p-4">
+                    <div className="min-w-[30rem] p-4">
                       <h4 className="font-semibold text-gray-900 mb-2">{t('header.faq')}</h4>
                       {faqCategories.map(category => (
                         <Link
