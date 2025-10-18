@@ -302,4 +302,15 @@
   border-radius: 8px; /* اختياري */
   display: inline-block; /* عشان ما تتمدد */
 }
-  
+  @keyframes shine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shine {
+  animation: shine 1.2s ease-in-out infinite;
+}
