@@ -56,25 +56,19 @@ const AboutSection = () => {
             </p>
        <Link
   to="/about"
-  className="group relative inline-flex items-center overflow-hidden 
+  className={`inline-flex items-center justify-center 
   bg-gradient-to-r from-logo to-blue-700 text-white px-6 py-3 sm:px-8 sm:py-4 
   rounded-lg font-semibold text-sm sm:text-base
   transition-all duration-500 ease-out
-  focus:outline-none focus:ring-2 focus:ring-logo/20"
+  focus:outline-none focus:ring-2 focus:ring-logo/20
+  bg-[length:200%_200%] hover:bg-[position:100%_0]`}
 >
-  <span
-    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent 
-    translate-x-[-100%] group-hover:translate-x-[100%] 
-    transition-transform duration-1000 ease-in-out"
+  {t('about.readMore')}
+  <ArrowRight
+    className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
+      isRTL ? 'mr-2 rotate-180' : 'ml-2'
+    }`}
   />
-  <span className="relative z-10 flex items-center">
-    {t('about.readMore')}
-    <ArrowRight
-      className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
-        isRTL ? 'mr-2 rotate-180' : 'ml-2'
-      }`}
-    />
-  </span>
 </Link>
 
 
