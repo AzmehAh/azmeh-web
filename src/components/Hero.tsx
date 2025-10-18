@@ -298,23 +298,29 @@ const Hero = () => {
                     <p className="text-xl mb-6 text-white leading-relaxed drop-shadow-lg">
                       {isRTL && category.description_ar ? category.description_ar : category.description}
                     </p>
-                    <motion.button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (category.button_link) {
-                          window.open(category.button_link, "_blank");
-                          setIsManual(true);
-                        }
-                      }}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group inline-flex items-center gap-3 px-8 py-3 border-2 border-gray-300 text-white font-semibold rounded-lg hover:border-logo transition-all duration-300"
-                    >
-                      <span>{t('hero.readMore')}</span>
-                      <ArrowRight 
-                        className={`w-5 h-5 group-hover:${isRTL ? '-translate-x-1' : 'translate-x-1'} transition-transform ${isRTL ? 'rotate-180' : ''}`} 
-                      />
-                    </motion.button>
+                 <motion.button
+  onClick={(e) => {
+    e.stopPropagation();
+    if (category.button_link) {
+      window.open(category.button_link, "_blank");
+      setIsManual(true);
+    }
+  }}
+  whileHover={{ scale: 1.02 }}
+  whileTap={{ scale: 0.98 }}
+  className="group but inline-flex items-center gap-3 px-8 py-3 
+             border-2 border-gray-300 text-white font-semibold rounded-lg 
+             hover:border-logo transition-all duration-300"
+>
+  <span>{t('hero.readMore')}</span>
+  <ArrowRight 
+    className={`w-5 h-5 transition-transform ${
+      isRTL 
+        ? 'rotate-180 group-hover:-translate-x-1' 
+        : 'group-hover:translate-x-1'
+    }`} 
+  />
+</motion.button>
                   </motion.div>
                 )}
               </div>
