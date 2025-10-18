@@ -138,17 +138,19 @@ const BlogSection = () => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <Link
-            to="/blog"
-            className="inline-flex items-center bg-gradient-to-r from-logo to-blue-700 text-white px-6 py-3 sm:px-8 sm:py-4 rounded-lg hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20 transition-colors duration-300 font-semibold text-sm sm:text-base"
-          >
-            {t('blog.viewAllButton')}
-            <ArrowRight
-              className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
-                isArabic ? 'mr-2 rotate-180' : 'ml-2'
-              }`}
-            />
-          </Link>
+        <Link
+  to="/blog"
+  className="inline-flex items-center but px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
+             focus:outline-none focus:ring-2 focus:ring-logo/20 
+             font-semibold text-sm sm:text-base"
+>
+  {t('blog.viewAllButton')}
+  <ArrowRight
+    className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
+      isArabic ? 'mr-2 rotate-180' : 'ml-2'
+    }`}
+  />
+</Link>
         </motion.div>
       </div>
     </section>
