@@ -310,7 +310,7 @@ const Hero = () => {
   whileTap={{ scale: 0.98 }}
   className="group but inline-flex items-center gap-3 px-8 py-3 
              text-white font-semibold rounded-lg 
-             hover:border-logo transition-all duration-300"
+             "
 >
   <span>{t('hero.readMore')}</span>
   <ArrowRight 
