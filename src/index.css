@@ -302,15 +302,25 @@
   border-radius: 8px; /* اختياري */
   display: inline-block; /* عشان ما تتمدد */
 }
-  @keyframes shine {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(100%);
-  }
+  .but {
+  @apply relative overflow-hidden inline-flex items-center justify-center 
+         bg-gradient-to-r from-logo to-blue-700 text-white 
+         px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
+         font-semibold text-sm sm:text-base 
+         focus:outline-none focus:ring-2 focus:ring-logo/20 
+         transition-all duration-300;
 }
 
-.animate-shine {
-  animation: shine 1.2s ease-in-out infinite;
+/* طبقة اللمعة */
+.but::before {
+  content: '';
+  @apply absolute inset-0 
+         bg-gradient-to-r from-transparent via-white/30 to-transparent 
+         translate-x-[-100%] opacity-0;
+  transition: opacity 0.3s, transform 0.6s ease-out;
+}
+
+/* عند الهوفر */
+.but:hover::before {
+  @apply opacity-100 translate-x-[100%];
 }
