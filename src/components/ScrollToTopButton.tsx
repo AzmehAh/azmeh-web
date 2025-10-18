@@ -10,7 +10,7 @@ const ScrollToTopButton = () => {
     const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
     const progress = (scrollTop / scrollHeight) * 100;
     setScrollProgress(progress);
-    setIsVisible(scrollTop > 300);
+    setIsVisible(scrollTop > 300); 
   };
 
   useEffect(() => {
