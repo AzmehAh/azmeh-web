@@ -54,95 +54,93 @@ const Products = () => {
   };
 
   const fetchFilterData = async () => {
-    try {
-      const data = await api.getProductFilterTypes();
-      setFilterTypes(data || []);
+  try {
+    const data = await api.getProductFilterTypes();
+    setFilterTypes(data || []);
+    
+    const options: Record<string, string[]> = {};
+    const translations: Record<string, Record<string, string>> = {};
+
+    data?.forEach(filterType => {
+      const key = filterType.name.toLowerCase();
+      // سنقوم بتخزين القيم المترجمة باستخدام الـ id كمفتاح
+      const translatedValuesMap: Record<string, string> = {};
+      const translatedValuesList: string[] = [];
+
+      filterType.product_filter_values
+        .filter(value => value.is_active)
+        .sort((a, b) => a.sort_order - b.sort_order)
+        .forEach(value => {
+          const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
+          // ⚠️ المفتاح الآن هو الـ id
+          translatedValuesMap[value.id] = displayValue;
+          translatedValuesList.push(displayValue);
+        });
+
+      options[key] = translatedValuesList;
+      translations[key] = translatedValuesMap; // ← خريطة الـ IDs إلى القيم المترجمة
+    });
+    
+    setFilterOptions(options);
+    setTranslatedFilterValues(translations);
+    
+    // Initialize selectedFilters
+    const initialFilters: Record<string, string[]> = {};
+    data?.forEach(filterType => {
+      initialFilters[filterType.name.toLowerCase()] = [];
+    });
+    setSelectedFilters(initialFilters);
+    
+  } catch (error) {
+    console.error('Error fetching filter data:', error);
+  } finally {
+    setLoading(false);
+  }
+};
+
+ const fetchProducts = async () => {
+  try {
+    setProductsLoading(true);
+    const { data: productsData, error } = await supabase
+      .from('products')
+      .select(`
+        *,
+        product_images(*)
+      `)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    const formattedProducts = (productsData || []).map(product => {
+      const mainImage = product.product_images.find((img: any) => img.is_main) || 
+                        product.product_images[0];
       
-      const options: Record<string, string[]> = {};
-      const translations: Record<string, Record<string, string>> = {};
+      return {
+        id: product.id,
+        name: product.name,
+        name_ar: product.name_ar || product.name,
+        code: product.code,
+        description: product.description,
+        description_ar: product.description_ar || product.description,
+        image: mainImage?.image_url || '',
+        // ✅ استخدم الـ IDs هنا
+        type: product.type_id || "", // ← هذا هو الـ ID
+        brand: product.brand_id || "", // ← هذا هو الـ ID
+        material: product.material_id || "", // ← هذا هو الـ ID
+        usage: product.usage_id || "", // ← هذا هو الـ ID
+        // يمكنك حذف الحقول *_ar للـ type, brand, etc. لأنها غير مستخدمة
+      };
+    });
 
-      data?.forEach(filterType => {
-        const key = filterType.name.toLowerCase();
-        const translatedValues = filterType.product_filter_values
-          .filter(value => value.is_active)
-          .sort((a, b) => a.sort_order - b.sort_order)
-          .map(value => {
-            const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
-            // ربط القيمة الأصلية والترجمة العربية بالقيمة المعروضة
-            translations[key] = {
-              ...translations[key],
-              [value.value]: displayValue,
-              ...(value.value_ar && { [value.value_ar]: displayValue })
-            };
-            return displayValue;
-          });
-
-        options[key] = translatedValues;
-        translations[key] = translations[key] || {};
-      });
+    setProducts(formattedProducts);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  } finally {
+    setProductsLoading(false);
+  }
+};
       
-      setFilterOptions(options);
-      setTranslatedFilterValues(translations);
-      
-      // Initialize selectedFilters
-      const initialFilters: Record<string, string[]> = {};
-      data?.forEach(filterType => {
-        initialFilters[filterType.name.toLowerCase()] = [];
-      });
-      setSelectedFilters(initialFilters);
-      
-    } catch (error) {
-      console.error('Error fetching filter data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchProducts = async () => {
-    try {
-      setProductsLoading(true);
-      const { data: productsData, error } = await supabase
-        .from('products')
-        .select(`
-          *,
-          product_images(*)
-        `)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-
-      const formattedProducts = (productsData || []).map(product => {
-        const mainImage = product.product_images.find((img: any) => img.is_main) || 
-                          product.product_images[0];
-        
-        return {
-          id: product.id,
-          name: product.name,
-          name_ar: product.name_ar || product.name,
-          code: product.code,
-          description: product.description,
-          description_ar: product.description_ar || product.description,
-          image: mainImage?.image_url || '',
-          type: product.type,
-          type_ar: product.type_ar || product.type,
-          brand: product.brand,
-          brand_ar: product.brand_ar || product.brand,
-          material: product.material,
-          material_ar: product.material_ar || product.material,
-          usage: product.usage,
-          usage_ar: product.usage_ar || product.usage
-        };
-      });
-
-      setProducts(formattedProducts);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    } finally {
-      setProductsLoading(false);
-    }
-  };
-
   // إعادة تحميل البيانات عند تغيير اللغة
   useEffect(() => {
     setLoading(true);
@@ -198,14 +196,14 @@ const Products = () => {
   };
 
   const getFilterCategoryName = (category: string): string => {
-    const filterNames: Record<string, string> = {
-      'brand': t('products.brand'),
-      'type': t('products.type'),
-      'material': t('products.material'),
-      'usage': t('products.usage')
-    };
-    return filterNames[category] || category;
+  const filterNames: Record<string, string> = {
+    'brand': t('products.brand'),
+    'type': t('products.type'),
+    'material type': t('products.material'), // ← اسم الفئة الصحيح
+    'application fields': t('products.usage') // ← اسم الفئة الصحيح
   };
+  return filterNames[category] || category;
+};
 
   const filteredProducts = useMemo(() => {
     let filtered = products.filter(product => {
@@ -449,12 +447,14 @@ const Products = () => {
                   }
                 >
                   {filteredProducts.map((product, index) => {
-                    const productName = getTranslatedText(product, 'name');
-                    const productDescription = getTranslatedText(product, 'description');
-                    const productBrand = translateFilterValue('brand', product.brand);
-                    const productType = translateFilterValue('type', product.type);
-                    const productMaterial = translateFilterValue('material', product.material);
-                    const productUsage = translateFilterValue('usage', product.usage);
+  const productName = getTranslatedText(product, 'name');
+  const productDescription = getTranslatedText(product, 'description');
+  // ✅ استخدم الـ IDs للترجمة
+  const productBrand = translateFilterValue('brand', product.brand); // product.brand هو الـ ID
+  const productType = translateFilterValue('type', product.type); // product.type هو الـ ID
+  const productMaterial = translateFilterValue('material', product.material); // product.material هو الـ ID
+  const productUsage = translateFilterValue('usage', product.usage); // product.usage هو الـ ID
+
 
                     return (
                       <motion.div
