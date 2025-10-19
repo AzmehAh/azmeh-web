@@ -24,6 +24,7 @@ export const TechnicalTab: React.FC<Props> = ({ data, onChange }) => {
     { en: 'tensile_strength_100', labelEn: 'Tensile Strength at 100% Elongation', labelAr: 'مقاومة الشد عند استطالة 100%' },
     { en: 'tensile_strength_50', labelEn: 'Tensile Strength at 50% Elongation', labelAr: 'مقاومة الشد عند استطالة 50%' },
     { en: 'specific_gravity_mixed', labelEn: 'Specific Gravity (Mixed)', labelAr: 'الكثافة النوعية (بعد الخلط)' },
+    { en: 'specific_gravity', labelEn: 'Specific Gravity', labelAr: 'الكثافة النوعية' },
     { en: 'solvent_resistance', labelEn: 'Solvent Resistance', labelAr: 'مقاومة المذيبات' },
     { en: 'chemical_resistance', labelEn: 'Chemical Resistance', labelAr: 'مقاومة المواد الكيميائية' },
     { en: 'abrasion_resistance', labelEn: 'Abrasion Resistance', labelAr: 'مقاومة التآكل' },
