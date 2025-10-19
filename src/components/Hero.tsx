@@ -227,22 +227,19 @@ const Hero = () => {
         {categories.map((category, index) => {
           const isActive = activeIndex === index;
 
-          return (
+          return ( 
             <motion.div
               key={category.id}
               className={`relative h-full cursor-pointer ${
                 isActive ? "flex-grow" : "flex-shrink"
               }`}
               initial={{ flex: 1 }}
-            animate={{
-  flex: isActive ? 5 : 1,
-  transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
-- marginLeft: "-25px",
-- marginRight: "-25px",
-+ marginLeft: isActive ? "-25px" : "-40px",
-+ marginRight: isActive ? "-25px" : "-40px",
-+ zIndex: isActive ? 10 : 1,
-}}
+              animate={{
+                flex: isActive ? 5 : 1,
+                transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
+                marginLeft: "-25px",
+                marginRight: "-25px",
+              }}
               style={{ transformOrigin: "center center" }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               onClick={() => {
@@ -260,10 +257,7 @@ const Hero = () => {
                     : "brightness(0.4) contrast(1.1)", 
                 }}
                 initial={{ scale: 1.1 }}
-             animate={{ 
-- scale: isActive ? 1 : 1.1 
-+ scale: isActive ? 1 : 1.05 
-}}
+                animate={{ scale: isActive ? 1 : 1.1 }}
                 transition={{ duration: 0.5 }}
               />
 
