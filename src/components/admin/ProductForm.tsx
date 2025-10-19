@@ -127,7 +127,7 @@ const ProductForm = () => {
    specific_gravity_ar: '',
     
     // Drying Time
-    dry_to_touch: '',
+    dry_to_touch: '', 
     dry_to_touch_ar: '',
     dry_to_handle: '',
     dry_to_handle_ar: '',
@@ -164,7 +164,7 @@ const ProductForm = () => {
   };
 
   // =============== Fetch Functions ===============
- const fetchFilterOptions = async () => {
+const fetchFilterOptions = async () => {
   try {
     const { data: filterTypes, error: typesError } = await supabase
       .from('product_filter_types')
@@ -195,18 +195,23 @@ const ProductForm = () => {
           filter_type: type.name.toLowerCase()
         }));
       
-      groupedValues[type.name.toLowerCase()] = valuesForType;
+      // استخدم اسم النوع كما هو (بدون lowerCase) كمفتاح في groupedValues
+      groupedValues[type.name] = valuesForType;
     });
 
-    console.log('Brands:', groupedValues.brand);
-    console.log('Types:', groupedValues.type);
-    console.log('Materials:', groupedValues.material);
-    console.log('Usages:', groupedValues.usage);
+    console.log('Grouped Values:', groupedValues); // للتحقق
 
-    setBrands(groupedValues.brand || []);
-    setTypes(groupedValues.type || []);
-    setMaterials(groupedValues.material || []);
-    setUsages(groupedValues.usage || []);
+    // ⚠️ هنا نقوم بتعيين القيم بناءً على الأسماء الفعلية في قاعدة البيانات
+    setBrands(groupedValues['Brand'] || []);
+    setTypes(groupedValues['Type'] || []);
+
+    // ⚠️ تعديل هنا: استخدام 'Material Type' بدلاً من 'material'
+    setMaterials(groupedValues['Material Type'] || []);
+
+    // ⚠️ تعديل هنا: استخدام 'Application Fields' بدلاً من 'usage'
+    // (بافتراض أن 'Application Fields' هو ما تمثله 'Usage' في الواجهة)
+    setUsages(groupedValues['Application Fields'] || []);
+
   } catch (error) {
     console.error('Error fetching filter options:', error);
     setBrands([]);
