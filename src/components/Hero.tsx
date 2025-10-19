@@ -66,7 +66,7 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden ">
+    <div className="relative w-full h-screen overflow-hidden">
       {categories.map((category, index) => {
         const isActive = index === activeIndex;
         return (
@@ -82,7 +82,7 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
               src={category.image_url}
               alt={category.name}
               className="w-full h-full object-cover"
-              style={{ filter: "brightness(0.4) contrast(1.2)" }}
+              style={{ filter: "brightness(0.4) contrast(1.2)", margin: 0 }}
             />
             <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6">
               <AnimatedTitle 
@@ -115,7 +115,7 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
         );
       })}
 
-      {/* نقاط التقدم فقط - بدون أزرار اتجاه */}
+      {/* نقاط التقدم فقط */}
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
         {categories.map((_, idx) => (
           <button
@@ -220,14 +220,17 @@ const Hero = () => {
     );
   }
 
-  // 🔥 عرض التصميم الأصلي في الشاشات المتوسطة والكبيرة
+  // 🔥 عرض التصميم الأصلي في الشاشات المتوسطة والكبيرة — مع تحسين المياحة
   return (
-    <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
+    <div 
+      className="relative w-full h-screen overflow-hidden mt-20 md:mt-0"
+      style={{ overflowX: 'hidden' }} // ← منع التمرير الأفقي وتسريب الصور
+    >
       <div className="flex h-full">
         {categories.map((category, index) => {
           const isActive = activeIndex === index;
 
-          return ( 
+          return (
             <motion.div
               key={category.id}
               className={`relative h-full cursor-pointer ${
@@ -237,10 +240,12 @@ const Hero = () => {
               animate={{
                 flex: isActive ? 5 : 1,
                 transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
-                marginLeft: "-25px",
-                marginRight: "-25px",
+                // ← زيادة التداخل لتقليل الفراغات
+                marginLeft: isActive ? "-25px" : "-40px",
+                marginRight: isActive ? "-25px" : "-40px",
+                zIndex: isActive ? 10 : 1, // ← ضمان ظهور السلايد النشط في الأعلى
               }}
-              style={{ transformOrigin: "center center" }}
+              style={{ transformOrigin: "center center", overflow: "hidden" }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               onClick={() => {
                 setActiveIndex(index);
@@ -257,7 +262,7 @@ const Hero = () => {
                     : "brightness(0.4) contrast(1.1)", 
                 }}
                 initial={{ scale: 1.1 }}
-                animate={{ scale: isActive ? 1 : 1.1 }}
+                animate={{ scale: isActive ? 1 : 1.05 }} // ← تقليل التكبير غير الضروري
                 transition={{ duration: 0.5 }}
               />
 
@@ -298,29 +303,27 @@ const Hero = () => {
                     <p className="text-xl mb-6 text-white leading-relaxed drop-shadow-lg">
                       {isRTL && category.description_ar ? category.description_ar : category.description}
                     </p>
-                 <motion.button
-  onClick={(e) => {
-    e.stopPropagation();
-    if (category.button_link) {
-      window.open(category.button_link, "_blank");
-      setIsManual(true);
-    }
-  }}
- 
-  whileTap={{ scale: 0.98 }}
-  className="group but inline-flex items-center gap-3 px-8 py-3 
-             text-white font-semibold rounded-lg 
-             "
->
-  <span>{t('hero.readMore')}</span>
-  <ArrowRight 
-    className={`w-5 h-5 transition-transform ${
-      isRTL 
-        ? 'rotate-180 group-hover:-translate-x-1' 
-        : 'group-hover:translate-x-1'
-    }`} 
-  />
-</motion.button>
+                    <motion.button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (category.button_link) {
+                          window.open(category.button_link, "_blank");
+                          setIsManual(true);
+                        }
+                      }}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.98 }}
+                      className="group but inline-flex items-center gap-3 px-8 py-3 text-white font-semibold rounded-lg border-2 border-gray-300 hover:border-logo transition-all duration-300"
+                    >
+                      <span>{t('hero.readMore')}</span>
+                      <ArrowRight 
+                        className={`w-5 h-5 transition-transform ${
+                          isRTL 
+                            ? 'rotate-180 group-hover:-translate-x-1' 
+                            : 'group-hover:translate-x-1'
+                        }`} 
+                      />
+                    </motion.button>
                   </motion.div>
                 )}
               </div>
