@@ -43,6 +43,7 @@ const ProductForm = () => {
     applications: [],
     applications_ar: [],
     instructions: [],
+    
     instructions_ar: [],
     packaging: [],
     packaging_ar: [], 
@@ -122,6 +123,9 @@ const ProductForm = () => {
     color_ar: '',
     component_a_ar: '',
     component_b_ar: '',
+    specific_gravity: '',
+     specific_gravity_ar: '',
+    
     // Drying Time
     dry_to_touch: '',
     dry_to_touch_ar: '',
@@ -321,7 +325,7 @@ const ProductForm = () => {
         'method_of_application', 'method_of_application_ar', 'mixing_ratio', 'mixing_ratio_ar',
         'mixing_note', 'mixing_note_ar', 'mixing_steps', 'mixing_steps_ar', 'pot_life', 'pot_life_ar',
         'cleaner', 'cleaner_ar', 'thinner', 'thinner_ar', 'application_temperature', 'application_temperature_ar',
-        'curing_note', 'curing_note_ar', 'note_application', 'note_application_ar',
+        'curing_note', 'curing_note_ar','specific_gravity', ' specific_gravity_ar', 'note_application', 'note_application_ar',
         'number_of_coats', 'number_of_coats_ar', 'note', 'note_ar', 'tensile_adhesion_strength', 'tensile_adhesion_strength_ar',
         'material_consumption', 'material_consumption_ar', 'viscosity', 'viscosity_ar',
         'weather_resistance', 'weather_resistance_ar', 'compressive_strength', 'compressive_strength_ar',
