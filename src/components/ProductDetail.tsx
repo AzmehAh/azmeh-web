@@ -134,27 +134,32 @@ const ProductDetail = () => {
   };
 
 
-  const fetchFilterTranslations = async () => {
-    try {
-      const data = await api.getProductFilterTypes();
-      const map: FilterValueMap = {};
-      data?.forEach(filterType => {
-        const key = filterType.name.toLowerCase();
-        map[key] = {};
-        filterType.product_filter_values
-          .filter(v => v.is_active)
-          .forEach(value => {
-            const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
-            map[key][value.value] = displayValue;
-          });
-      }); 
-      setFilterValueMap(map);
-    } catch (error) {
-      console.error('Error fetching filter translations:', error);
-    } finally {
-      setFiltersLoading(false);
-    }
-  };
+const fetchFilterTranslations = async () => {
+  try {
+    const data = await api.getProductFilterTypes();
+    const map: FilterValueMap = {};
+    
+    data?.forEach(filterType => {
+      // استخدم اسم النوع كما هو (بدون lowerCase) كمفتاح رئيسي
+      const categoryKey = filterType.name; // مثلاً: "Brand", "Type", "Material Type", "Application Fields"
+      map[categoryKey] = {};
+      
+      filterType.product_filter_values
+        .filter(v => v.is_active)
+        .forEach(value => {
+          // ⚠️ المفتاح الآن هو الـ id، وليس القيمة النصية
+          const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
+          map[categoryKey][value.id] = displayValue; // ← هنا نستخدم value.id
+        });
+    });
+    
+    setFilterValueMap(map);
+  } catch (error) {
+    console.error('Error fetching filter translations:', error);
+  } finally {
+    setFiltersLoading(false);
+  }
+};
 
   const getLocalizedField = (enValue: any, arValue: any) => {
     if (i18n.language === 'ar') {
@@ -240,56 +245,60 @@ const ProductDetail = () => {
         console.error('Error fetching main image:', e);
       }
 
-      const formattedProduct: Product = {
-        id: productData.id,
-        name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
-        code: productData.code || 'No Code',
-        description: getLocalizedField(productData.description, productData.description_ar) || '',
-        technical_description: getLocalizedField(productData.technical_description, productData.technical_description_ar) || "",
-        image_url: mainImage?.image_url || 
-                   (imagesData.length > 0 ? imagesData[0].image_url : "") ||
-                   productData.image_url || 
-                   "/images/placeholder.jpg",
-        images: imagesData.map(img => img.image_url).filter(Boolean),
-        type: productData.type || "",
-        brand: productData.brand || "",
-        material: productData.material || "",
-        usage: productData.usage || "",
-        packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
-        technical_specs: TECHNICAL_FIELDS
-          .map(({ key, keyAr }) => {
-            const value = getLocalizedField(productData[key], productData[keyAr]);
-            return { key, value: value || '', standard: '' }; 
-          })
-          .filter(spec => spec.value.trim() !== ''),
-        features: parseArrayField(getLocalizedField(productData.features, productData.features_ar)),
-        applications: parseArrayField(getLocalizedField(productData.applications, productData.applications_ar)),
-        instructions: parseArrayField(getLocalizedField(productData.instructions, productData.instructions_ar)),
-        storage: getLocalizedField(productData.storage, productData.storage_ar) || "",
-        safety_precautions: parseArrayField(getLocalizedField(productData.safety_precautions, productData.safety_precautions_ar)),
-        safety_note: getLocalizedField(productData.safety_note, productData.safety_note_ar) || "",
-        safety_first_aid: parseArrayField(getLocalizedField(productData.safety_first_aid, productData.safety_first_aid_ar)),
-        application: createApplicationObject(productData),
-        joint_preparation: getLocalizedField(productData.joint_preparation, productData.joint_preparation_ar) || '',
-        joint_size: getLocalizedField(productData.joint_size, productData.joint_size_ar) || '',
-        movement_capacity: getLocalizedField(productData.movement_capacity, productData.movement_capacity_ar) || '',
-        substrate_treatment: getLocalizedField(productData.substrate_treatment, productData.substrate_treatment_ar) || '',
-        surface_preparation: getLocalizedField(productData.surface_preparation, productData.surface_preparation_ar) || '',
-        recommended_uses: parseArrayField(getLocalizedField(productData.recommended_uses, productData.recommended_uses_ar)),
-        storing_conditions: getLocalizedField(productData.storing_conditions, productData.storing_conditions_ar) || '',
-        dry_to_touch: getLocalizedField(productData.dry_to_touch, productData.dry_to_touch_ar) || '',
-        dry_to_handle: getLocalizedField(productData.dry_to_handle, productData.dry_to_handle_ar) || '',
-        complete_setting: getLocalizedField(productData.complete_setting, productData.complete_setting_ar) || '',
-        grouting_time: getLocalizedField(productData.grouting_time, productData.grouting_time_ar) || '',
-        adjustability_time: getLocalizedField(productData.adjustability_time, productData.adjustability_time_ar) || '',
-        dry_to_topcoat: getLocalizedField(productData.dry_to_topcoat, productData.dry_to_topcoat_ar) || '',
-        initial_setting: getLocalizedField(productData.initial_setting, productData.initial_setting_ar) || '',
-        fully_cured: getLocalizedField(productData.fully_cured, productData.fully_cured_ar) || '',
-        dry_to_sand: getLocalizedField(productData.dry_to_sand, productData.dry_to_sand_ar) || '',
-        drying_time_note: getLocalizedField(productData.drying_time_note, productData.drying_time_note_ar) || ''
-      };
+      // داخل fetchProduct، بعد الحصول على productData
+const formattedProduct: Product = {
+  id: productData.id,
+  name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
+  code: productData.code || 'No Code',
+  description: getLocalizedField(productData.description, productData.description_ar) || '',
+  technical_description: getLocalizedField(productData.technical_description, productData.technical_description_ar) || "",
+  image_url: mainImage?.image_url || 
+             (imagesData.length > 0 ? imagesData[0].image_url : "") ||
+             productData.image_url || 
+             "/images/placeholder.jpg",
+  images: imagesData.map(img => img.image_url).filter(Boolean),
 
-      setProduct(formattedProduct);
+  // ✅ استخدم الـ IDs هنا
+  type: productData.type_id || "", // ← هذا هو الـ ID
+  brand: productData.brand_id || "", // ← هذا هو الـ ID
+  material: productData.material_id || "", // ← هذا هو الـ ID
+  usage: productData.usage_id || "", // ← هذا هو الـ ID
+
+  packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
+  technical_specs: TECHNICAL_FIELDS
+    .map(({ key, keyAr }) => {
+      const value = getLocalizedField(productData[key], productData[keyAr]);
+      return { key, value: value || '', standard: '' }; 
+    })
+    .filter(spec => spec.value.trim() !== ''),
+  features: parseArrayField(getLocalizedField(productData.features, productData.features_ar)),
+  applications: parseArrayField(getLocalizedField(productData.applications, productData.applications_ar)),
+  instructions: parseArrayField(getLocalizedField(productData.instructions, productData.instructions_ar)),
+  storage: getLocalizedField(productData.storage, productData.storage_ar) || "",
+  safety_precautions: parseArrayField(getLocalizedField(productData.safety_precautions, productData.safety_precautions_ar)),
+  safety_note: getLocalizedField(productData.safety_note, productData.safety_note_ar) || "",
+  safety_first_aid: parseArrayField(getLocalizedField(productData.safety_first_aid, productData.safety_first_aid_ar)),
+  application: createApplicationObject(productData),
+  joint_preparation: getLocalizedField(productData.joint_preparation, productData.joint_preparation_ar) || '',
+  joint_size: getLocalizedField(productData.joint_size, productData.joint_size_ar) || '',
+  movement_capacity: getLocalizedField(productData.movement_capacity, productData.movement_capacity_ar) || '',
+  substrate_treatment: getLocalizedField(productData.substrate_treatment, productData.substrate_treatment_ar) || '',
+  surface_preparation: getLocalizedField(productData.surface_preparation, productData.surface_preparation_ar) || '',
+  recommended_uses: parseArrayField(getLocalizedField(productData.recommended_uses, productData.recommended_uses_ar)),
+  storing_conditions: getLocalizedField(productData.storing_conditions, productData.storing_conditions_ar) || '',
+  dry_to_touch: getLocalizedField(productData.dry_to_touch, productData.dry_to_touch_ar) || '',
+  dry_to_handle: getLocalizedField(productData.dry_to_handle, productData.dry_to_handle_ar) || '',
+  complete_setting: getLocalizedField(productData.complete_setting, productData.complete_setting_ar) || '',
+  grouting_time: getLocalizedField(productData.grouting_time, productData.grouting_time_ar) || '',
+  adjustability_time: getLocalizedField(productData.adjustability_time, productData.adjustability_time_ar) || '',
+  dry_to_topcoat: getLocalizedField(productData.dry_to_topcoat, productData.dry_to_topcoat_ar) || '',
+  initial_setting: getLocalizedField(productData.initial_setting, productData.initial_setting_ar) || '',
+  fully_cured: getLocalizedField(productData.fully_cured, productData.fully_cured_ar) || '',
+  dry_to_sand: getLocalizedField(productData.dry_to_sand, productData.dry_to_sand_ar) || '',
+  drying_time_note: getLocalizedField(productData.drying_time_note, productData.drying_time_note_ar) || ''
+};
+
+setProduct(formattedProduct);
     } catch (error) {
       console.error('Error fetching product:', error);
       setError(t('error_loading_product'));
@@ -389,21 +398,21 @@ const ProductDetail = () => {
               <p className="text-xl text-white mb-4 leading-relaxed">{product.description}</p>
 
               <div className="flex flex-wrap gap-4 mb-8">
-                {product.type && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {translateFilterValue('type', product.type, filterValueMap)}
-                  </span>
-                )}
-                {product.material && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {translateFilterValue('material', product.material, filterValueMap)}
-                  </span>
-                )}
-                {product.usage && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {translateFilterValue('usage', product.usage, filterValueMap)}
-                  </span>
-                )}
+               {product.type && (
+  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+    {translateFilterValue('Type', product.type, filterValueMap)} {/* اسم النوع كما في قاعدة البيانات */}
+  </span>
+)}
+{product.material && (
+  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+    {translateFilterValue('Material Type', product.material, filterValueMap)} {/* اسم النوع كما في قاعدة البيانات */}
+  </span>
+)}
+{product.usage && (
+  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+    {translateFilterValue('Application Fields', product.usage, filterValueMap)} {/* اسم النوع كما في قاعدة البيانات */}
+  </span>
+)}
               </div>
   
              {product.recommended_uses && (
