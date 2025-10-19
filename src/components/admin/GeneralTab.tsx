@@ -4,6 +4,7 @@ import { InputField } from './FormComponents';
 import BilingualInput from './BilingualInput';
 import BilingualArrayInput from './BilingualArrayInput';
 import { GeneralInfoTab } from './GeneralInfoTab';
+
 interface Props {
   data: any;
   onChange: (field: string, value: any) => void;
@@ -24,10 +25,10 @@ export const GeneralTab: React.FC<Props> = ({
   onImageRemove,
   onSetMainImage,
   uploading,
-  brands,
-  types,
-  materials,
-  usages,
+  brands = [],
+  types = [],
+  materials = [],
+  usages = [],
 }) => {
   // Packaging handlers
   const handlePackagingChange = (index: number, value: string) => {
@@ -46,7 +47,7 @@ export const GeneralTab: React.FC<Props> = ({
     onChange('packaging', newPack);
   };
 
-  // ✅ Features handlers
+  // Features handlers
   const handleFeatureChange = (index: number, value: string) => {
     const newFeatures = [...(data.features || [])];
     newFeatures[index] = value;
@@ -63,30 +64,19 @@ export const GeneralTab: React.FC<Props> = ({
     onChange('features', newFeatures);
   };
 
-  // قائمة الحقول الإضافية (بدون Features لأنها معالجة بشكل منفصل)
-  const additionalFields = [
-    { key: 'storing_conditions', label: 'Storing Conditions' },
-    { key: 'joint_preparation', label: 'Joint Preparation' },
-    { key: 'joint_size', label: 'Joint Size' },
-    { key: 'movement_capacity', label: 'Movement Capacity' },
-    { key: 'substrate_treatment', label: 'Substrate Treatment' },
-    { key: 'surface_preparation', label: 'Surface Preparation' },
-    { key: 'recommended_uses', label: 'Recommended Uses' },
-  ];
-
   return (
     <div className="space-y-6">
       <div className="space-y-6">
-       <BilingualInput
-  labelEn="Product Name"
-  labelAr="اسم المنتج"
-  nameEn="name"
-  nameAr="name_ar"
-  valueEn={data.name || ''}
-  valueAr={data.name_ar || ''}
-  onChange={(e) => onChange(e.target.name, e.target.value)}
-  required
-/>
+        <BilingualInput
+          labelEn="Product Name"
+          labelAr="اسم المنتج"
+          nameEn="name"
+          nameAr="name_ar"
+          valueEn={data.name || ''}
+          valueAr={data.name_ar || ''}
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+          required
+        />
 
         <InputField
           label="Product Code *"
@@ -95,117 +85,130 @@ export const GeneralTab: React.FC<Props> = ({
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Brand */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Brand / الفرع *
+            </label>
+            <select
+              value={data.brand_id ?? ''}
+              onChange={(e) => onChange('brand_id', e.target.value)}
+              className="w-full px-3 py-2 border rounded"
+            >
+              <option value="">Select Brand</option>
+              {brands.map((brand) => (
+                <option key={brand.id} value={brand.id}>
+                  {brand.name || brand.value}
+                </option>
+              ))}
+            </select>
+          </div>
 
-     {/* Brand */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">Brand / الفرع *</label>
-  <select
-    value={data.brand_id || ''}
-    onChange={(e) => onChange('brand_id', e.target.value)}
-    className="w-full px-3 py-2 border rounded"
-  >
-    <option value="">Select Brand</option>
-    {brands.map(brand => (
-      <option key={brand.id} value={brand.id}>
-        {brand.name}
-      </option>
-    ))}
-  </select>
-</div>
+          {/* Type */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Type / النوع *
+            </label>
+            <select
+              value={data.type_id ?? ''}
+              onChange={(e) => onChange('type_id', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+            >
+              <option value="">Select / اختار</option>
+              {types.map((t) => (
+                <option key={t.id} value={t.id}>
+                  {t.name || t.value}
+                </option>
+              ))}
+            </select>
+          </div>
 
-{/* Type */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">Type / النوع *</label>
-  <select
-    value={data.type_id || ''}
-    onChange={(e) => onChange('type_id', e.target.value)}
-    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-  >
-    <option value="">Select / اختار</option>
-    {types.map(t => (
-      <option key={t.id} value={t.id}>
-        {t.name}
-      </option>
-    ))}
-  </select>
-</div>
+          {/* Material */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Material / المادة *
+            </label>
+            <select
+              value={data.material_id ?? ''}
+              onChange={(e) => onChange('material_id', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+            >
+              <option value="">Select / اختار</option>
+              {materials.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.name || m.value}
+                </option>
+              ))}
+            </select>
+          </div>
 
-{/* Material */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">Material / المادة *</label>
-  <select
-    value={data.material_id || ''}
-    onChange={(e) => onChange('material_id', e.target.value)}
-    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-  >
-    <option value="">Select / اختار</option>
-    {materials.map(m => (
-      <option key={m.id} value={m.id}>
-        {m.name}
-      </option>
-    ))}
-  </select>
-</div>
+          {/* Usage */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Usage / الاستخدام *
+            </label>
+            <select
+              value={data.usage_id ?? ''}
+              onChange={(e) => onChange('usage_id', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+            >
+              <option value="">Select / اختار</option>
+              {usages.map((u) => (
+                <option key={u.id} value={u.id}>
+                  {u.name || u.value}
+                </option>
+              ))}
+            </select>
+          </div>
 
-{/* Usage */}
-<div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">Usage / الاستخدام *</label>
-  <select
-    value={data.usage_id || ''}
-    onChange={(e) => onChange('usage_id', e.target.value)}
-    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-  >
-    <option value="">Select / اختار</option>
-    {usages.map(u => (
-      <option key={u.id} value={u.id}>
-        {u.name}
-      </option>
-    ))}
-  </select>
-</div>
-
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-2">Status / الحالة</label>
-          <select
-            value={data.status || 'active'}
-            onChange={(e) => onChange('status', e.target.value)}
-            className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-          >
-            <option value="active">Active / نشط</option>
-            <option value="inactive">Inactive / غير نشط</option>
-            <option value="draft">Draft / مسودة</option>
-          </select>
-        </div>
-
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Status / الحالة
+            </label>
+            <select
+              value={data.status || 'active'}
+              onChange={(e) => onChange('status', e.target.value)}
+              className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+            >
+              <option value="active">Active / نشط</option>
+              <option value="inactive">Inactive / غير نشط</option>
+              <option value="draft">Draft / مسودة</option>
+            </select>
+          </div>
         </div>
 
         <BilingualInput
-  labelEn="Description"
-  labelAr="الوصف"
-  nameEn="description"
-  nameAr="description_ar"
-  valueEn={data.description || ''}
-  valueAr={data.description_ar || ''}
-  onChange={(e) => onChange(e.target.name, e.target.value)}
-  type="textarea"
-  required
-/>
+          labelEn="Description"
+          labelAr="الوصف"
+          nameEn="description"
+          nameAr="description_ar"
+          valueEn={data.description || ''}
+          valueAr={data.description_ar || ''}
+          onChange={(e) => onChange(e.target.name, e.target.value)}
+          type="textarea"
+          required
+        />
 
-      
-{/* Packaging - Bilingual (مثل المميزات) */}
-<BilingualArrayInput
-  label="Packaging Sizes / أحجام العبوة"
-  valueEn={Array.isArray(data.packaging) ? data.packaging.map(item => item?.size || '') : []}
-  valueAr={Array.isArray(data.packaging_ar) ? data.packaging_ar.map(item => item?.size || '') : []}
-  onChangeEn={(sizes) => {
-    const packaging = sizes.map(size => ({ size }));
-    onChange('packaging', packaging);
-  }}
-  onChangeAr={(sizes) => {
-    const packaging_ar = sizes.map(size => ({ size }));
-    onChange('packaging_ar', packaging_ar);
-  }}
-/>
+        {/* Packaging */}
+        <BilingualArrayInput
+          label="Packaging Sizes / أحجام العبوة"
+          valueEn={Array.isArray(data.packaging)
+            ? data.packaging.map((item: any) => item?.size || '')
+            : []
+          }
+          valueAr={Array.isArray(data.packaging_ar)
+            ? data.packaging_ar.map((item: any) => item?.size || '')
+            : []
+          }
+          onChangeEn={(sizes) => {
+            const packaging = sizes.map((size: string) => ({ size }));
+            onChange('packaging', packaging);
+          }}
+          onChangeAr={(sizes) => {
+            const packaging_ar = sizes.map((size: string) => ({ size }));
+            onChange('packaging_ar', packaging_ar);
+          }}
+        />
 
         {/* Features */}
         <BilingualArrayInput
@@ -215,15 +218,20 @@ export const GeneralTab: React.FC<Props> = ({
           onChangeEn={(items) => onChange('features', items)}
           onChangeAr={(items) => onChange('features_ar', items)}
         />
- {/* ✅ هنا نضيف قسم المعلومات الإضافية */}
-      <div className="border-t pt-6 mt-6">
-        <h3 className="text-lg font-semibold text-gray-800 mb-4">General Information</h3>
-        <GeneralInfoTab data={data} onChange={onChange} />
-      </div>
-   
+
+        {/* General Info */}
+        <div className="border-t pt-6 mt-6">
+          <h3 className="text-lg font-semibold text-gray-800 mb-4">
+            General Information
+          </h3>
+          <GeneralInfoTab data={data} onChange={onChange} />
+        </div>
+
         {/* Images */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Product Images</label>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Product Images
+          </label>
           <div className="space-y-4">
             <div className="flex items-center gap-4">
               <label className="flex items-center px-4 py-2 bg-[#0055A3] text-white rounded-lg cursor-pointer hover:bg-blue-700">
