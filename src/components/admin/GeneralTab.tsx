@@ -96,7 +96,7 @@ export const GeneralTab: React.FC<Props> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-  {/* Brand */}
+ {/* Brand */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Brand / الفرع *
@@ -107,12 +107,19 @@ export const GeneralTab: React.FC<Props> = ({
     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
   >
     <option value="">Select Brand / اختر الفرع</option>
-    {brands.map(brand => (
-      <option key={brand.id} value={brand.id}>
-        {brand.name_ar && brand.name ? `${brand.name_ar} / ${brand.name}` : brand.name_ar || brand.name}
-      </option>
-    ))}
+    {brands && brands.length > 0 ? (
+      brands.map(brand => (
+        <option key={brand.id} value={brand.id}>
+          {brand.name_ar && brand.name ? `${brand.name_ar} / ${brand.name}` : brand.name_ar || brand.name || 'Unnamed'}
+        </option>
+      ))
+    ) : (
+      <option value="" disabled>No brands available</option>
+    )}
   </select>
+  {(!brands || brands.length === 0) && (
+    <p className="text-red-500 text-sm mt-1">No brands found. Please add brands first.</p>
+  )}
 </div>
 
 {/* Type */}
@@ -126,12 +133,19 @@ export const GeneralTab: React.FC<Props> = ({
     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
   >
     <option value="">Select Type / اختر النوع</option>
-    {types.map(type => (
-      <option key={type.id} value={type.id}>
-        {type.name_ar && type.name ? `${type.name_ar} / ${type.name}` : type.name_ar || type.name}
-      </option>
-    ))}
+    {types && types.length > 0 ? (
+      types.map(type => (
+        <option key={type.id} value={type.id}>
+          {type.name_ar && type.name ? `${type.name_ar} / ${type.name}` : type.name_ar || type.name || 'Unnamed'}
+        </option>
+      ))
+    ) : (
+      <option value="" disabled>No types available</option>
+    )}
   </select>
+  {(!types || types.length === 0) && (
+    <p className="text-red-500 text-sm mt-1">No types found. Please add types first.</p>
+  )}
 </div>
 
 {/* Material */}
@@ -145,12 +159,19 @@ export const GeneralTab: React.FC<Props> = ({
     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
   >
     <option value="">Select Material / اختر المادة</option>
-    {materials.map(material => (
-      <option key={material.id} value={material.id}>
-        {material.name_ar && material.name ? `${material.name_ar} / ${material.name}` : material.name_ar || material.name}
-      </option>
-    ))}
+    {materials && materials.length > 0 ? (
+      materials.map(material => (
+        <option key={material.id} value={material.id}>
+          {material.name_ar && material.name ? `${material.name_ar} / ${material.name}` : material.name_ar || material.name || 'Unnamed'}
+        </option>
+      ))
+    ) : (
+      <option value="" disabled>No materials available</option>
+    )}
   </select>
+  {(!materials || materials.length === 0) && (
+    <p className="text-red-500 text-sm mt-1">No materials found. Please add materials first.</p>
+  )}
 </div>
 
 {/* Usage */}
@@ -164,12 +185,19 @@ export const GeneralTab: React.FC<Props> = ({
     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
   >
     <option value="">Select Usage / اختر الاستخدام</option>
-    {usages.map(usage => (
-      <option key={usage.id} value={usage.id}>
-        {usage.name_ar && usage.name ? `${usage.name_ar} / ${usage.name}` : usage.name_ar || usage.name}
-      </option>
-    ))}
+    {usages && usages.length > 0 ? (
+      usages.map(usage => (
+        <option key={usage.id} value={usage.id}>
+          {usage.name_ar && usage.name ? `${usage.name_ar} / ${usage.name}` : usage.name_ar || usage.name || 'Unnamed'}
+        </option>
+      ))
+    ) : (
+      <option value="" disabled>No usages available</option>
+    )}
   </select>
+  {(!usages || usages.length === 0) && (
+    <p className="text-red-500 text-sm mt-1">No usages found. Please add usages first.</p>
+  )}
 </div>
 
         <div className="md:col-span-2">
