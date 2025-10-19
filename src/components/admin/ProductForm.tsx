@@ -164,52 +164,57 @@ const ProductForm = () => {
   };
 
   // =============== Fetch Functions ===============
-  const fetchFilterOptions = async () => {
-    try {
-      const { data: filterTypes, error: typesError } = await supabase
-        .from('product_filter_types')
-        .select('*')
-        .eq('is_active', true);
+ const fetchFilterOptions = async () => {
+  try {
+    const { data: filterTypes, error: typesError } = await supabase
+      .from('product_filter_types')
+      .select('*')
+      .eq('is_active', true);
+    
+    if (typesError) throw typesError;
+
+    const { data: filterValues, error: valuesError } = await supabase
+      .from('product_filter_values')
+      .select('*, product_filter_types(name)')
+      .eq('is_active', true);
+    
+    if (valuesError) throw valuesError;
+
+    // تجميع القيم حسب نوع الفلتر
+    const groupedValues: any = {};
+    
+    (filterTypes || []).forEach((type: any) => {
+      const valuesForType = (filterValues || [])
+        .filter((value: any) => value.filter_type_id === type.id)
+        .map((value: any) => ({
+          id: value.id,
+          name: value.display_name || value.value,
+          name_ar: value.display_name_ar || value.value_ar,
+          value: value.value,
+          value_ar: value.value_ar,
+          filter_type: type.name.toLowerCase()
+        }));
       
-      if (typesError) throw typesError;
-
-      const { data: filterValues, error: valuesError } = await supabase
-        .from('product_filter_values')
-        .select('*, filter_type_id')
-        .eq('is_active', true);
-      
-      if (valuesError) throw valuesError;
-
-     const groupedValues = (filterTypes || []).reduce((acc: any, type: any) => {
-  acc[type.name.toLowerCase()] = (filterValues || [])
-    .filter((value: any) => value.filter_type_id === type.id)
-    .map((value: any) => {
-      const en = value.display_name || value.value;
-      const ar = value.display_name_ar || value.value_ar;
-      const displayName = ar && en ? `${ar} / ${en}` : ar || en || value.value || 'Unnamed';
-
-      return {
-        id: value.id,
-        name: displayName, 
-        value: value.value, 
-        value_ar: value.value_ar 
-      };
+      groupedValues[type.name.toLowerCase()] = valuesForType;
     });
-  return acc;
-}, {});
- 
-      setBrands(groupedValues.brand || groupedValues.brands || []);
-      setTypes(groupedValues.type || groupedValues.types || []);
-      setMaterials(groupedValues.material || groupedValues.materials || []);
-      setUsages(groupedValues.usage || groupedValues.usages || []);
-    } catch (error) {
-      console.error('Error fetching filter options:', error);
-      setBrands([]);
-      setTypes([]);
-      setMaterials([]);
-      setUsages([]);
-    }
-  };
+
+    console.log('Brands:', groupedValues.brand);
+    console.log('Types:', groupedValues.type);
+    console.log('Materials:', groupedValues.material);
+    console.log('Usages:', groupedValues.usage);
+
+    setBrands(groupedValues.brand || []);
+    setTypes(groupedValues.type || []);
+    setMaterials(groupedValues.material || []);
+    setUsages(groupedValues.usage || []);
+  } catch (error) {
+    console.error('Error fetching filter options:', error);
+    setBrands([]);
+    setTypes([]);
+    setMaterials([]);
+    setUsages([]);
+  }
+};
 
   const fetchProduct = async () => {
     if (!id) return;
