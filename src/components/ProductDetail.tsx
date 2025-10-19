@@ -134,27 +134,32 @@ const ProductDetail = () => {
   };
 
 
-  const fetchFilterTranslations = async () => {
-    try {
-      const data = await api.getProductFilterTypes();
-      const map: FilterValueMap = {};
-      data?.forEach(filterType => {
-        const key = filterType.name.toLowerCase();
-        map[key] = {};
-        filterType.product_filter_values
-          .filter(v => v.is_active)
-          .forEach(value => {
-            const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
-            map[key][value.value] = displayValue;
-          });
-      });
-      setFilterValueMap(map);
-    } catch (error) {
-      console.error('Error fetching filter translations:', error);
-    } finally {
-      setFiltersLoading(false);
-    }
-  };
+ const fetchFilterTranslations = async () => {
+  try {
+    const data = await api.getProductFilterTypes();
+    const map: FilterValueMap = {};
+    
+    data?.forEach(filterType => {
+      // استخدم اسم النوع كما هو (بدون lowerCase) كمفتاح رئيسي
+      const categoryKey = filterType.name; // مثلاً: "Brand", "Type", "Material Type", "Application Fields"
+      map[categoryKey] = {};
+      
+      filterType.product_filter_values
+        .filter(v => v.is_active)
+        .forEach(value => {
+          // ⚠️ المفتاح الآن هو الـ id، وليس القيمة النصية
+          const displayValue = i18n.language === 'ar' && value.value_ar ? value.value_ar : value.value;
+          map[categoryKey][value.id] = displayValue; // ← هنا نستخدم value.id
+        });
+    });
+    
+    setFilterValueMap(map);
+  } catch (error) {
+    console.error('Error fetching filter translations:', error);
+  } finally {
+    setFiltersLoading(false);
+  }
+};
 
   const getLocalizedField = (enValue: any, arValue: any) => {
     if (i18n.language === 'ar') {
@@ -389,21 +394,21 @@ const ProductDetail = () => {
               <p className="text-xl text-white mb-4 leading-relaxed">{product.description}</p>
 
               <div className="flex flex-wrap gap-4 mb-8">
-                {product.type && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {translateFilterValue('type', product.type, filterValueMap)}
-                  </span>
-                )}
-                {product.material && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {translateFilterValue('material', product.material, filterValueMap)}
-                  </span>
-                )}
-                {product.usage && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {translateFilterValue('usage', product.usage, filterValueMap)}
-                  </span>
-                )}
+              {product.type && (
+  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+    {translateFilterValue('Type', product.type, filterValueMap)}
+  </span>
+)}
+{product.material && (
+  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+    {translateFilterValue('Material Type', product.material, filterValueMap)} {/* اسم النوع كما في قاعدة البيانات */}
+  </span>
+)}
+{product.usage && (
+  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+    {translateFilterValue('Application Fields', product.usage, filterValueMap)} {/* اسم النوع كما في قاعدة البيانات */}
+  </span>
+)}
               </div>
   
              {product.recommended_uses && (
