@@ -96,18 +96,20 @@ export const GeneralTab: React.FC<Props> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-     {/* Brand */}
+  {/* Brand */}
 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">Brand / الفرع *</label>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Brand / الفرع *
+  </label>
   <select
     value={data.brand_id || ''}
     onChange={(e) => onChange('brand_id', e.target.value)}
-    className="w-full px-3 py-2 border rounded"
+    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
   >
-    <option value="">Select Brand</option>
+    <option value="">Select Brand / اختر الفرع</option>
     {brands.map(brand => (
       <option key={brand.id} value={brand.id}>
-        {brand.name}
+        {brand.name_ar && brand.name ? `${brand.name_ar} / ${brand.name}` : brand.name_ar || brand.name}
       </option>
     ))}
   </select>
@@ -115,16 +117,18 @@ export const GeneralTab: React.FC<Props> = ({
 
 {/* Type */}
 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">Type / النوع *</label>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Type / النوع *
+  </label>
   <select
     value={data.type_id || ''}
     onChange={(e) => onChange('type_id', e.target.value)}
     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
   >
-    <option value="">Select / اختار</option>
-    {types.map(t => (
-      <option key={t.id} value={t.id}>
-        {t.name}
+    <option value="">Select Type / اختر النوع</option>
+    {types.map(type => (
+      <option key={type.id} value={type.id}>
+        {type.name_ar && type.name ? `${type.name_ar} / ${type.name}` : type.name_ar || type.name}
       </option>
     ))}
   </select>
@@ -132,16 +136,18 @@ export const GeneralTab: React.FC<Props> = ({
 
 {/* Material */}
 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">Material / المادة *</label>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Material / المادة *
+  </label>
   <select
     value={data.material_id || ''}
     onChange={(e) => onChange('material_id', e.target.value)}
     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
   >
-    <option value="">Select / اختار</option>
-    {materials.map(m => (
-      <option key={m.id} value={m.id}>
-        {m.name}
+    <option value="">Select Material / اختر المادة</option>
+    {materials.map(material => (
+      <option key={material.id} value={material.id}>
+        {material.name_ar && material.name ? `${material.name_ar} / ${material.name}` : material.name_ar || material.name}
       </option>
     ))}
   </select>
@@ -149,16 +155,18 @@ export const GeneralTab: React.FC<Props> = ({
 
 {/* Usage */}
 <div>
-  <label className="block text-sm font-medium text-gray-700 mb-2">Usage / الاستخدام *</label>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Usage / الاستخدام *
+  </label>
   <select
     value={data.usage_id || ''}
     onChange={(e) => onChange('usage_id', e.target.value)}
     className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
   >
-    <option value="">Select / اختار</option>
-    {usages.map(u => (
-      <option key={u.id} value={u.id}>
-        {u.name}
+    <option value="">Select Usage / اختر الاستخدام</option>
+    {usages.map(usage => (
+      <option key={usage.id} value={usage.id}>
+        {usage.name_ar && usage.name ? `${usage.name_ar} / ${usage.name}` : usage.name_ar || usage.name}
       </option>
     ))}
   </select>
