@@ -243,7 +243,10 @@ const ProductForm = () => {
         ...productData,
         features: parseArrayField(productData?.features),
         general_features: parseArrayField(productData?.general_features),
-      
+      brand_id: productData?.brand_id || '',
+  type_id: productData?.type_id || '',
+  material_id: productData?.material_id || '',
+  usage_id: productData?.usage_id || '',
         applications: parseArrayField(productData?.applications),
         mixing_steps: parseArrayField(productData?.mixing_steps),
         safety_precautions: parseArrayField(productData?.safety_precautions),
