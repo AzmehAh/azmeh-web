@@ -234,12 +234,11 @@ const Hero = () => {
                 isActive ? "flex-grow" : "flex-shrink"
               }`}
               initial={{ flex: 1 }}
-              animate={{
-                flex: isActive ? 5 : 1,
-                transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
-                marginLeft: "-25px",
-                marginRight: "-25px",
-              }}
+            animate={{
+  flex: isActive ? 5 : 1,
+  transform: isActive ? "rotate(0deg)" : "rotate(5deg)",
+}}
+
               style={{ transformOrigin: "center center" }}
               transition={{ duration: 0.5, ease: "easeInOut" }}
               onClick={() => {
