@@ -195,21 +195,20 @@ const fetchFilterOptions = async () => {
           filter_type: type.name.toLowerCase()
         }));
       
-      // استخدم اسم النوع كما هو (بدون lowerCase) كمفتاح في groupedValues
+      
       groupedValues[type.name] = valuesForType;
     });
 
     console.log('Grouped Values:', groupedValues); // للتحقق
 
-    // ⚠️ هنا نقوم بتعيين القيم بناءً على الأسماء الفعلية في قاعدة البيانات
+    
     setBrands(groupedValues['Brand'] || []);
     setTypes(groupedValues['Type'] || []);
 
-    // ⚠️ تعديل هنا: استخدام 'Material Type' بدلاً من 'material'
+  
     setMaterials(groupedValues['Material Type'] || []);
 
-    // ⚠️ تعديل هنا: استخدام 'Application Fields' بدلاً من 'usage'
-    // (بافتراض أن 'Application Fields' هو ما تمثله 'Usage' في الواجهة)
+   
     setUsages(groupedValues['Application Fields'] || []);
 
   } catch (error) {
