@@ -180,6 +180,7 @@
     "tensile_strength_100": "Tensile Strength at 100% Elongation",
     "tensile_strength_50": "Tensile Strength at 50% Elongation",
     "specific_gravity_mixed": "Specific Gravity (Mixed)",
+    "specific_gravity": "Specific Gravity ",
     "solvent_resistance": "Solvent Resistance",
     "chemical_resistance": "Chemical Resistance",
     "abrasion_resistance": "Abrasion Resistance",
