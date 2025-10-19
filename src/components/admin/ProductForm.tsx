@@ -124,7 +124,7 @@ const ProductForm = () => {
     component_a_ar: '',
     component_b_ar: '',
     specific_gravity: '',
-     specific_gravity_ar: '',
+   specific_gravity_ar: '',
     
     // Drying Time
     dry_to_touch: '',
@@ -190,9 +190,9 @@ const ProductForm = () => {
 
       return {
         id: value.id,
-        name: displayName, // ← الآن يحتوي على "عربي / إنجليزي"
-        value: value.value, // ← القيمة الفعلية التي تُخزّن في قاعدة البيانات (الإنجليزية غالبًا)
-        value_ar: value.value_ar // ← مفيدة لعرض إضافي إن لزم
+        name: displayName, 
+        value: value.value, 
+        value_ar: value.value_ar 
       };
     });
   return acc;
