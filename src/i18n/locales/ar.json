@@ -180,6 +180,7 @@
     "tensile_strength_100": "قوة الشد عند استطالة 100%",
     "tensile_strength_50": "قوة الشد عند استطالة 50%",
     "specific_gravity_mixed": "الكثافة النوعية (بعد الخلط)",
+    "specific_gravity": "الكثافة النوعية",
     "solvent_resistance": "مقاومة المذيبات",
     "chemical_resistance": "مقاومة المواد الكيميائية",
     "abrasion_resistance": "مقاومة التآكل",
