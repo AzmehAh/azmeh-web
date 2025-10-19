@@ -96,69 +96,73 @@ export const GeneralTab: React.FC<Props> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Brand / الفرع *</label>
-        <select
-  value={data.brand || ''}
-  onChange={(e) => onChange('brand', e.target.value)}
-  className="w-full px-3 py-2 border rounded"
->
-  <option value="">Select Brand</option>
-  {brands.map(brand => (
-    <option key={brand.id} value={brand.value}>
-      {brand.name} {/* ← هذا سيعرض "عربي / إنجليزي" */}
-    </option>
-  ))}
-</select>
-        </div>
+     {/* Brand */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">Brand / الفرع *</label>
+  <select
+    value={data.brand_id || ''}
+    onChange={(e) => onChange('brand_id', e.target.value)}
+    className="w-full px-3 py-2 border rounded"
+  >
+    <option value="">Select Brand</option>
+    {brands.map(brand => (
+      <option key={brand.id} value={brand.id}>
+        {brand.name}
+      </option>
+    ))}
+  </select>
+</div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Type / النوع  *</label>
-         <select
-  value={data.type || ''}
-  onChange={(e) => onChange('type', e.target.value)}
-  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
->
-  <option value="">Select / اختار</option>
-  {types.map((t) => (
-    <option key={t.id} value={t.value}>
-      {t.name} {/* ← تغيير هنا */}
-    </option>
-  ))}
-</select>
-        </div>
+{/* Type */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">Type / النوع *</label>
+  <select
+    value={data.type_id || ''}
+    onChange={(e) => onChange('type_id', e.target.value)}
+    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+  >
+    <option value="">Select / اختار</option>
+    {types.map(t => (
+      <option key={t.id} value={t.id}>
+        {t.name}
+      </option>
+    ))}
+  </select>
+</div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Material / المادة*</label>
-        <select
-  value={data.material || ''}
-  onChange={(e) => onChange('material', e.target.value)}
-  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
->
-  <option value="">Select / اختار</option>
-  {materials.map((m) => (
-    <option key={m.id} value={m.value}>
-      {m.name} {/* ← تغيير هنا */}
-    </option>
-  ))}
-</select>
-        </div>
+{/* Material */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">Material / المادة *</label>
+  <select
+    value={data.material_id || ''}
+    onChange={(e) => onChange('material_id', e.target.value)}
+    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+  >
+    <option value="">Select / اختار</option>
+    {materials.map(m => (
+      <option key={m.id} value={m.id}>
+        {m.name}
+      </option>
+    ))}
+  </select>
+</div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Usage / الاستخدام*</label>
-       <select
-  value={data.usage || ''}
-  onChange={(e) => onChange('usage', e.target.value)}
-  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
->
-  <option value="">Select / اختار</option>
-  {usages.map((u) => (
-    <option key={u.id} value={u.value}>
-      {u.name} {/* ← تغيير هنا */}
-    </option>
-  ))}
-</select>
-        </div>
+{/* Usage */}
+<div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">Usage / الاستخدام *</label>
+  <select
+    value={data.usage_id || ''}
+    onChange={(e) => onChange('usage_id', e.target.value)}
+    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+  >
+    <option value="">Select / اختار</option>
+    {usages.map(u => (
+      <option key={u.id} value={u.id}>
+        {u.name}
+      </option>
+    ))}
+  </select>
+</div>
 
         <div className="md:col-span-2">
           <label className="block text-sm font-medium text-gray-700 mb-2">Status / الحالة</label>
