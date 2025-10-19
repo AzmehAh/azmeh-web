@@ -363,6 +363,11 @@ const ProductForm = () => {
 
       const productData = {
   ...filteredData,
+  brand_id: formData.brand_id,
+  type_id: formData.type_id, 
+  material_id: formData.material_id,
+  usage_id: formData.usage_id,
+
   features: formData.features || [],
   safety_precautions: formData.safety_precautions || [],
   safety_first_aid: formData.safety_first_aid || [],
