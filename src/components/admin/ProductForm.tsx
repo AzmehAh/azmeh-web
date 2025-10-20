@@ -427,8 +427,7 @@ const usageIds = usageLinks?.map(link => link.usage_id) || [];
 
       const productData = {
   ...filteredData,
-  brand_id: formData.brand_id,
-  type_id: formData.type_id, 
+ 
  
   
 
