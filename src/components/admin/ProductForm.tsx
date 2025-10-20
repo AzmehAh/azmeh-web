@@ -383,64 +383,54 @@ const fetchFilterOptions = async () => {
   mixing_steps: formData.mixing_steps || [],
 };
 
-    let productId = id;
-if (id) {
-  const { error } = await supabase.from('products').update(productData).eq('id', id);
-  if (error) throw error;
-} else {
-  const { data, error } = await supabase.from('products').insert([productData]).select();
-  if (error) throw error;
-  productId = data?.[0]?.id;
-}
+          let productId = id;
+      if (id) {
+        const { error } = await supabase.from('products').update(productData).eq('id', id);
+        if (error) throw error;
+      } else {
+        const { data, error } = await supabase.from('products').insert([productData]).select();
+        if (error) throw error;
+        productId = data?.[0]?.id;
+      }
 
-// ✅ ✅ ✅ حفظ المواد المرتبطة (بعد حفظ المنتج ووجود productId)
-if (productId && Array.isArray(formData.material_id) && formData.material_id.length > 0) {
-  // أولاً: احذف المواد القديمة إذا كنت في وضع التعديل
-  if (isEditing) {
-    const { error: deleteError } = await supabase
-      .from('product_materials')
-      .delete()
-      .eq('product_id', productId);
-    if (deleteError) throw deleteError;
-  }
+      // ✅ حفظ/تحديث المواد المرتبطة (جدول product_materials)
+      if (productId) {
+        // احذف المواد الحالية إذا كنا نعدّل
+        if (isEditing) {
+          const { error: delErr } = await supabase
+            .from('product_materials')
+            .delete()
+            .eq('product_id', productId);
+          if (delErr) throw delErr;
+        }
 
-  // ثم: أضف المواد الجديدة
-  const materialsToInsert = formData.material_id.map((materialId: string) => ({
-    product_id: productId,
-    material_id: materialId
-  }));
+        // أضف المواد الجديدة إن وُجدت
+        if (Array.isArray(formData.material_id) && formData.material_id.length > 0) {
+          const materialsToInsert = formData.material_id.map((materialId: string) => ({
+            product_id: productId,
+            material_id: materialId,
+          }));
+          const { error: insErr } = await supabase
+            .from('product_materials')
+            .insert(materialsToInsert);
+          if (insErr) throw insErr;
+        }
+      }
 
-  const { error: materialsError } = await supabase
-    .from('product_materials')
-    .insert(materialsToInsert);
-
-  if (materialsError) throw materialsError;
-} else if (productId && isEditing) {
-  // إذا لم تكن هناك مواد جديدة (أو مصفوفة فارغة)، فاحذف جميع المواد القديمة
-  const { error: deleteError } = await supabase
-    .from('product_materials')
-    .delete()
-    .eq('product_id', productId);
-  if (deleteError) throw deleteError;
-}
-
-// ✅ الآن احفظ الصور (كما كان من قبل)
-if (productId) {
-  // Delete existing images if editing
-  if (isEditing) {
-    await supabase.from('product_images').delete().eq('product_id', productId);
-  }
-
-  // Insert new images
-  if (images.length > 0) {
-    const imagesToInsert = images.map(img => ({
-      product_id: productId,
-      image_url: img.image_url,
-      is_main: img.isMain || false
-    }));
-    await supabase.from('product_images').insert(imagesToInsert);
-  }
-}
+      // ✅ حفظ الصور
+      if (productId) {
+        if (isEditing) {
+          await supabase.from('product_images').delete().eq('product_id', productId);
+        }
+        if (images.length > 0) {
+          const imagesToInsert = images.map(img => ({
+            product_id: productId,
+            image_url: img.image_url,
+            is_main: img.isMain || false
+          }));
+          await supabase.from('product_images').insert(imagesToInsert);
+        }
+      }
       navigate('/admin/products');
     } catch (err) {
       console.error('Save error:', err);
