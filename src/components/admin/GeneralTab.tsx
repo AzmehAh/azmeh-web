@@ -186,27 +186,45 @@ const handleMaterialChange = (selectedMaterials: string[]) => {
   </p>
 </div>
 
-{/* Usage */}
+{/* Usage - Multi-select */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Usage / الاستخدام *
   </label>
-  <select
-    value={data.usage_id || ''}
-    onChange={(e) => onChange('usage_id', e.target.value)}
-    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
-  >
-    <option value="">Select Usage / اختر الاستخدام</option>
+  <div className="border border-gray-200 rounded-lg p-2 max-h-40 overflow-y-auto">
     {usages && usages.length > 0 ? (
-      usages.map(usage => (
-        <option key={usage.id} value={usage.id}>
-          {usage.name_ar && usage.name ? `${usage.name_ar} / ${usage.name}` : usage.name_ar || usage.name || 'Unnamed'}
-        </option>
-      ))
+      usages.map(usage => {
+        const isSelected = Array.isArray(data.usage_id) && data.usage_id.includes(usage.id);
+        return (
+          <div
+            key={usage.id}
+            onClick={() => {
+              const current = Array.isArray(data.usage_id) ? [...data.usage_id] : [];
+              if (isSelected) {
+                onChange('usage_id', current.filter(id => id !== usage.id));
+              } else {
+                onChange('usage_id', [...current, usage.id]);
+              }
+            }}
+            className={`p-2 mb-1 rounded cursor-pointer flex items-center ${
+              isSelected ? 'bg-blue-100 border border-blue-300' : 'hover:bg-gray-50'
+            }`}
+          >
+            <div className={`w-4 h-4 rounded-full border mr-2 flex items-center justify-center ${isSelected ? 'bg-blue-500 border-blue-500' : 'border-gray-400'}`}>
+              {isSelected && <span className="text-white text-xs">✓</span>}
+            </div>
+            <span>
+              {usage.name_ar && usage.name 
+                ? `${usage.name_ar} / ${usage.name}` 
+                : usage.name_ar || usage.name || 'Unnamed'}
+            </span>
+          </div>
+        );
+      })
     ) : (
-      <option value="" disabled>No usages available</option>
+      <p className="text-gray-500 text-sm">No usages available</p>
     )}
-  </select>
+  </div>
   {(!usages || usages.length === 0) && (
     <p className="text-red-500 text-sm mt-1">No usages found. Please add usages first.</p>
   )}
