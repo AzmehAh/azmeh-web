@@ -31,16 +31,19 @@ const ProductForm = () => {
     name_ar: '',
     code: '',
     brand_id: '',        
-    type_id: '',        
-    material_id: [],     
-    usage_id: [],       
+  type_id: '',        
+  material_id: [],     
+  usage_id: [],       
+
     description: '',
     description_ar: '',
+  
     features: [],
     features_ar: [],
     applications: [],
     applications_ar: [],
     instructions: [],
+    
     instructions_ar: [],
     packaging: [],
     packaging_ar: [], 
@@ -121,7 +124,8 @@ const ProductForm = () => {
     component_a_ar: '',
     component_b_ar: '',
     specific_gravity: '',
-    specific_gravity_ar: '',
+   specific_gravity_ar: '',
+    
     // Drying Time
     dry_to_touch: '', 
     dry_to_touch_ar: '',
@@ -160,128 +164,131 @@ const ProductForm = () => {
   };
 
   // =============== Fetch Functions ===============
-  const fetchFilterOptions = async () => {
-    try {
-      const { data: filterTypes, error: typesError } = await supabase
-        .from('product_filter_types')
-        .select('*')
-        .eq('is_active', true);
+const fetchFilterOptions = async () => {
+  try {
+    const { data: filterTypes, error: typesError } = await supabase
+      .from('product_filter_types')
+      .select('*')
+      .eq('is_active', true);
+    
+    if (typesError) throw typesError;
+
+    const { data: filterValues, error: valuesError } = await supabase
+      .from('product_filter_values')
+      .select('*, product_filter_types(name)')
+      .eq('is_active', true);
+    
+    if (valuesError) throw valuesError;
+
+    // تجميع القيم حسب نوع الفلتر
+    const groupedValues: any = {};
+    
+    (filterTypes || []).forEach((type: any) => {
+      const valuesForType = (filterValues || [])
+        .filter((value: any) => value.filter_type_id === type.id)
+        .map((value: any) => ({
+          id: value.id,
+          name: value.display_name || value.value,
+          name_ar: value.display_name_ar || value.value_ar,
+          value: value.value,
+          value_ar: value.value_ar,
+          filter_type: type.name.toLowerCase()
+        }));
       
-      if (typesError) throw typesError;
-
-      const { data: filterValues, error: valuesError } = await supabase
-        .from('product_filter_values')
-        .select('*, product_filter_types(name)')
-        .eq('is_active', true);
       
-      if (valuesError) throw valuesError;
+      groupedValues[type.name] = valuesForType;
+    });
 
-      // Group values by filter type
-      const groupedValues: any = {};
-      
-      (filterTypes || []).forEach((type: any) => {
-        const valuesForType = (filterValues || [])
-          .filter((value: any) => value.filter_type_id === type.id)
-          .map((value: any) => ({
-            id: value.id,
-            name: value.display_name || value.value,
-            name_ar: value.display_name_ar || value.value_ar,
-            value: value.value,
-            value_ar: value.value_ar,
-            filter_type: type.name.toLowerCase()
-          }));
-        
-        groupedValues[type.name] = valuesForType;
-      });
+    console.log('Grouped Values:', groupedValues); // للتحقق
 
-      console.log('Grouped Values:', groupedValues);
+    
+    setBrands(groupedValues['Brand'] || []);
+    setTypes(groupedValues['Type'] || []);
 
-      setBrands(groupedValues['Brand'] || []);
-      setTypes(groupedValues['Type'] || []);
-      setMaterials(groupedValues['Material Type'] || []);
-      setUsages(groupedValues['Application Fields'] || []);
+  
+    setMaterials(groupedValues['Material Type'] || []);
 
-    } catch (error) {
-      console.error('Error fetching filter options:', error);
-      setBrands([]);
-      setTypes([]);
-      setMaterials([]);
-      setUsages([]);
-    }
-  };
-
-  const fetchProduct = async () => {
-    if (!id) return;
-    try {
-      setLoading(true);
-      console.log("Fetching product with ID:", id);
-
-      // FIXED: Use simple select without columns parameter to avoid URL too long errors
-      const { data: productData, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (error) throw error;
-      console.log("Product data:", productData);
-
-      // ✅ Fetch images
-      const { data: imagesData, error: imagesError } = await supabase
-        .from('product_images')
-        .select('*')
-        .eq('product_id', id);
-
-      if (imagesError) throw imagesError;
-      console.log("Images data:", imagesData);
-
-      // ✅ Fetch related materials from product_materials table
-      const { data: materialLinks, error: materialsError } = await supabase
-        .from('product_materials')
-        .select('material_id')
-        .eq('product_id', id);
-
-      if (materialsError) throw materialsError;
    
-      // Extract material_ids list
-      const materialIds = materialLinks?.map(link => link.material_id) || [];
+    setUsages(groupedValues['Application Fields'] || []);
 
-      // ✅ Fetch related usages from product_usages table
-      const { data: usageLinks, error: usageError } = await supabase
-        .from('product_usages')
-        .select('usage_id')
-        .eq('product_id', id);
+  } catch (error) {
+    console.error('Error fetching filter options:', error);
+    setBrands([]);
+    setTypes([]);
+    setMaterials([]);
+    setUsages([]);
+  }
+};
 
-      if (usageError) throw usageError;
+ const fetchProduct = async () => {
+  if (!id) return;
+  try {
+    setLoading(true);
+    console.log("Fetching product with ID:", id);
 
-      const usageIds = usageLinks?.map(link => link.usage_id) || [];
+    const { data: productData, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-      const parsed = {
-        ...productData,
-        features: parseArrayField(productData?.features),
-        general_features: parseArrayField(productData?.general_features),
-        brand_id: productData?.brand_id || '',
-        type_id: productData?.type_id || '',
-        material_id: materialIds,
-        usage_id: usageIds,
-        applications: parseArrayField(productData?.applications),
-        mixing_steps: parseArrayField(productData?.mixing_steps),
-        safety_precautions: parseArrayField(productData?.safety_precautions),
-        safety_first_aid: parseArrayField(productData?.safety_first_aid),
-        packaging: parseArrayField(productData?.packaging),
-        packaging_ar: parseArrayField(productData?.packaging_ar),
-      };
+    if (error) throw error;
+    console.log("Product data:", productData);
 
-      setFormData(parsed);
-      setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
-    } catch (err) {
-      console.error("Error loading product:", err);
-      alert('Failed to load product');
-      navigate('/admin/products');
-    } finally {
-      setLoading(false);
-    }
-  };
+    // ✅ جلب الصور
+    const { data: imagesData, error: imagesError } = await supabase
+      .from('product_images')
+      .select('*')
+      .eq('product_id', id);
+
+    if (imagesError) throw imagesError;
+    console.log("Images data:", imagesData);
+
+    // ✅ جلب المواد المرتبطة من جدول product_materials
+    const { data: materialLinks, error: materialsError } = await supabase
+      .from('product_materials')
+      .select('material_id')
+      .eq('product_id', id);
+
+    if (materialsError) throw materialsError;
+ 
+    // استخراج قائمة material_ids
+    const materialIds = materialLinks?.map(link => link.material_id) || [];
+ // ✅ جلب الاستخدامات المرتبطة من جدول product_usages
+const { data: usageLinks, error: usageError } = await supabase
+  .from('product_usages')
+  .select('usage_id')
+  .eq('product_id', id);
+
+if (usageError) throw usageError;
+
+const usageIds = usageLinks?.map(link => link.usage_id) || [];
+    const parsed = {
+      ...productData,
+      features: parseArrayField(productData?.features),
+      general_features: parseArrayField(productData?.general_features),
+      brand_id: productData?.brand_id || '',
+      type_id: productData?.type_id || '',
+      material_id: materialIds, // ✅ هنا نضع المصفوفة الفعلية
+      usage_id: usageIds,
+      applications: parseArrayField(productData?.applications),
+      mixing_steps: parseArrayField(productData?.mixing_steps),
+      safety_precautions: parseArrayField(productData?.safety_precautions),
+      safety_first_aid: parseArrayField(productData?.safety_first_aid),
+      packaging: parseArrayField(productData?.packaging),
+      packaging_ar: parseArrayField(productData?.packaging_ar),
+    };
+
+    setFormData(parsed);
+    setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
+  } catch (err) {
+    console.error("Error loading product:", err);
+    alert('Failed to load product');
+    navigate('/admin/products');
+  } finally {
+    setLoading(false);
+  }
+};
 
   // =============== UseEffect ===============
   useEffect(() => {
@@ -297,32 +304,32 @@ const ProductForm = () => {
     initializeData();
   }, [id, isEditing]);
 
-  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    setUploading(true);
-    const files = Array.from(e.target.files);
-    try {
-      const uploaded = await Promise.all(files.map(async (file) => {
-        const fileName = `${Math.random()}.${file.name.split('.').pop()}`;
-        const { error } = await supabase.storage.from('products').upload(`product_images/${fileName}`, file);
-        if (error) {
-          if (error.message.includes('Bucket not found')) {
-            throw new Error('Storage bucket "products" not found. Please create this bucket in your Supabase project dashboard under Storage.');
-          }
-          throw error;
+ const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (!e.target.files) return;
+  setUploading(true);
+  const files = Array.from(e.target.files);
+  try {
+    const uploaded = await Promise.all(files.map(async (file) => {
+      const fileName = `${Math.random()}.${file.name.split('.').pop()}`;
+      const { error } = await supabase.storage.from('products').upload(`product_images/${fileName}`, file);
+      if (error) {
+        if (error.message.includes('Bucket not found')) {
+          throw new Error('Storage bucket "products" not found. Please create this bucket in your Supabase project dashboard under Storage.');
         }
-        const { data } = supabase.storage.from('products').getPublicUrl(`product_images/${fileName}`);
-        return { image_url: data.publicUrl, isMain: false };
-      }));
-      setImages(prev => [...prev, ...uploaded]);
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Image upload failed';
-      alert(errorMessage);
-      console.error('Image upload error:', err);
-    } finally {
-      setUploading(false);
-    }
-  };
+        throw error;
+      }
+      const { data } = supabase.storage.from('products').getPublicUrl(`product_images/${fileName}`); // ✅ تم التصحيح هنا
+      return { image_url: data.publicUrl, isMain: false };
+    }));
+    setImages(prev => [...prev, ...uploaded]);
+  } catch (err) {
+    const errorMessage = err instanceof Error ? err.message : 'Image upload failed';
+    alert(errorMessage);
+    console.error('Image upload error:', err);
+  } finally {
+    setUploading(false);
+  }
+};
 
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
@@ -339,75 +346,76 @@ const ProductForm = () => {
     try {
       // Define valid database columns to prevent schema errors
       const validColumns = [
-        'name', 'name_ar', 'code', 'description', 'description_ar',
-        'brand_id', 'type_id',
-        'features', 'features_ar',
-        'applications', 'applications_ar',
-        'instructions', 'instructions_ar',
-        'packaging', 'packaging_ar',
-        'safety_precautions', 'safety_precautions_ar',
-        'safety_first_aid', 'safety_first_aid_ar',
-        'storing_conditions', 'storing_conditions_ar',
-        'joint_preparation', 'joint_preparation_ar',
-        'joint_size', 'joint_size_ar',
-        'movement_capacity', 'movement_capacity_ar',
-        'substrate_treatment', 'substrate_treatment_ar',
-        'surface_preparation', 'surface_preparation_ar',
-        'general_features', 'recommended_uses', 'recommended_uses_ar',
-        'method_of_application', 'method_of_application_ar',
-        'mixing_ratio', 'mixing_ratio_ar',
-        'mixing_note', 'mixing_note_ar',
-        'mixing_steps', 'mixing_steps_ar',
-        'pot_life', 'pot_life_ar',
-        'cleaner', 'cleaner_ar',
-        'thinner', 'thinner_ar',
-        'application_temperature', 'application_temperature_ar',
-        'curing_note', 'curing_note_ar',
-        'note_application', 'note_application_ar',
-        'number_of_coats', 'number_of_coats_ar',
-        'note', 'note_ar',
-        'tensile_adhesion_strength', 'tensile_adhesion_strength_ar',
-        'material_consumption', 'material_consumption_ar',
-        'viscosity', 'viscosity_ar',
-        'weather_resistance', 'weather_resistance_ar',
-        'compressive_strength', 'compressive_strength_ar',
-        'tear_resistance', 'tear_resistance_ar',
-        'elongation_at_rupture', 'elongation_at_rupture_ar',
-        'tensile_strength_100', 'tensile_strength_100_ar',
-        'tensile_strength_50', 'tensile_strength_50_ar',
-        'specific_gravity_mixed', 'specific_gravity_mixed_ar',
-        'solvent_resistance', 'solvent_resistance_ar',
-        'chemical_resistance', 'chemical_resistance_ar',
-        'abrasion_resistance', 'abrasion_resistance_ar',
-        'friction_resistance', 'friction_resistance_ar',
-        'washability', 'washability_ar',
-        'water_resistance', 'water_resistance_ar',
-        'theoretical_spreading_rate', 'theoretical_spreading_rate_ar',
-        'recommended_film_thickness', 'recommended_film_thickness_ar',
-        'temperature_resistance', 'temperature_resistance_ar',
-        'solvent_splash_resistance', 'solvent_splash_resistance_ar',
-        'sandability', 'sandability_ar',
-        'adhesion', 'adhesion_ar',
-        'flexibility', 'flexibility_ar',
-        'voc', 'voc_ar',
-        'volume_solids', 'volume_solids_ar',
-        'gloss', 'gloss_ar',
-        'color', 'color_ar',
-        'component_a', 'component_a_ar',
-        'component_b', 'component_b_ar',
-        'dry_to_touch', 'dry_to_touch_ar',
-        'dry_to_handle', 'dry_to_handle_ar',
-        'complete_setting', 'complete_setting_ar',
-        'grouting_time', 'grouting_time_ar',
-        'adjustability_time', 'adjustability_time_ar',
-        'dry_to_topcoat', 'dry_to_topcoat_ar',
-        'initial_setting', 'initial_setting_ar',
-        'fully_cured', 'fully_cured_ar',
-        'dry_to_sand', 'dry_to_sand_ar',
-        'drying_time_note', 'drying_time_note_ar',
-        'safety_note', 'safety_note_ar',
-        'status'
-      ];
+  'name', 'name_ar', 'code', 'description', 'description_ar',
+  'brand_id', 'type_id',
+  'features', 'features_ar',
+  'applications', 'applications_ar',
+  'instructions', 'instructions_ar',
+  'packaging', 'packaging_ar',
+  'safety_precautions', 'safety_precautions_ar',
+  'safety_first_aid', 'safety_first_aid_ar',
+  'storing_conditions', 'storing_conditions_ar',
+  'joint_preparation', 'joint_preparation_ar',
+  'joint_size', 'joint_size_ar',
+  'movement_capacity', 'movement_capacity_ar',
+  'substrate_treatment', 'substrate_treatment_ar',
+  'surface_preparation', 'surface_preparation_ar',
+  'general_features', 'recommended_uses', 'recommended_uses_ar',
+  'method_of_application', 'method_of_application_ar',
+  'mixing_ratio', 'mixing_ratio_ar',
+  'mixing_note', 'mixing_note_ar',
+  'mixing_steps', 'mixing_steps_ar',
+  'pot_life', 'pot_life_ar',
+  'cleaner', 'cleaner_ar',
+  'thinner', 'thinner_ar',
+  'application_temperature', 'application_temperature_ar',
+  'curing_note', 'curing_note_ar',
+  'note_application', 'note_application_ar',
+  'number_of_coats', 'number_of_coats_ar',
+  'note', 'note_ar',
+  'tensile_adhesion_strength', 'tensile_adhesion_strength_ar',
+  'material_consumption', 'material_consumption_ar',
+  'viscosity', 'viscosity_ar',
+  'weather_resistance', 'weather_resistance_ar',
+  'compressive_strength', 'compressive_strength_ar',
+  'tear_resistance', 'tear_resistance_ar',
+  'elongation_at_rupture', 'elongation_at_rupture_ar',
+  'tensile_strength_100', 'tensile_strength_100_ar',
+  'tensile_strength_50', 'tensile_strength_50_ar',
+  'specific_gravity_mixed', 'specific_gravity_mixed_ar',
+  'solvent_resistance', 'solvent_resistance_ar',
+  'chemical_resistance', 'chemical_resistance_ar',
+  'abrasion_resistance', 'abrasion_resistance_ar',
+  'friction_resistance', 'friction_resistance_ar',
+  'washability', 'washability_ar',
+  'water_resistance', 'water_resistance_ar',
+  'theoretical_spreading_rate', 'theoretical_spreading_rate_ar',
+  'recommended_film_thickness', 'recommended_film_thickness_ar',
+  'temperature_resistance', 'temperature_resistance_ar',
+  'solvent_splash_resistance', 'solvent_splash_resistance_ar',
+  'sandability', 'sandability_ar',
+  'adhesion', 'adhesion_ar',
+  'flexibility', 'flexibility_ar',
+  'voc', 'voc_ar',
+  'volume_solids', 'volume_solids_ar',
+  'gloss', 'gloss_ar',
+  'color', 'color_ar',
+  'component_a', 'component_a_ar',
+  'component_b', 'component_b_ar',
+  'dry_to_touch', 'dry_to_touch_ar',
+  'dry_to_handle', 'dry_to_handle_ar',
+  'complete_setting', 'complete_setting_ar',
+  'grouting_time', 'grouting_time_ar',
+  'adjustability_time', 'adjustability_time_ar',
+  'dry_to_topcoat', 'dry_to_topcoat_ar',
+  'initial_setting', 'initial_setting_ar',
+  'fully_cured', 'fully_cured_ar',
+  'dry_to_sand', 'dry_to_sand_ar',
+  'drying_time_note', 'drying_time_note_ar',
+  'safety_note', 'safety_note_ar',
+  'status'
+ 
+];
 
       // Filter formData to only include valid database columns
       const filteredData = Object.keys(formData)
@@ -418,17 +426,21 @@ const ProductForm = () => {
         }, {} as any);
 
       const productData = {
-        ...filteredData,
-        features: formData.features || [],
-        safety_precautions: formData.safety_precautions || [],
-        safety_first_aid: formData.safety_first_aid || [],
-        packaging: JSON.stringify(formData.packaging || []),
-        packaging_ar: JSON.stringify(formData.packaging_ar || []),
-        general_features: formData.general_features || [],
-        mixing_steps: formData.mixing_steps || [],
-      };
+  ...filteredData,
+ 
+ 
+  
 
-      let productId = id;
+  features: formData.features || [],
+  safety_precautions: formData.safety_precautions || [],
+  safety_first_aid: formData.safety_first_aid || [],
+  packaging: JSON.stringify(formData.packaging || []),
+ packaging_ar: JSON.stringify(formData.packaging_ar || []),
+  general_features: formData.general_features || [],
+  mixing_steps: formData.mixing_steps || [],
+};
+
+          let productId = id;
       if (id) {
         const { error } = await supabase.from('products').update(productData).eq('id', id);
         if (error) throw error;
@@ -438,9 +450,9 @@ const ProductForm = () => {
         productId = data?.[0]?.id;
       }
 
-      // ✅ Save/update related materials (product_materials table)
+      // ✅ حفظ/تحديث المواد المرتبطة (جدول product_materials)
       if (productId) {
-        // Delete current materials if editing
+        // احذف المواد الحالية إذا كنا نعدّل
         if (isEditing) {
           const { error: delErr } = await supabase
             .from('product_materials')
@@ -449,7 +461,7 @@ const ProductForm = () => {
           if (delErr) throw delErr;
         }
 
-        // Add new materials if they exist
+        // أضف المواد الجديدة إن وُجدت
         if (Array.isArray(formData.material_id) && formData.material_id.length > 0) {
           const materialsToInsert = formData.material_id.map((materialId: string) => ({
             product_id: productId,
@@ -461,32 +473,30 @@ const ProductForm = () => {
           if (insErr) throw insErr;
         }
       }
+ // ✅ حفظ/تحديث الاستخدامات المرتبطة (جدول product_usages)
+if (productId) {
+  // احذف الاستخدامات الحالية إذا كنا نعدّل
+  if (isEditing) {
+    const { error: delErr } = await supabase
+      .from('product_usages')
+      .delete()
+      .eq('product_id', productId);
+    if (delErr) throw delErr;
+  }
 
-      // ✅ Save/update related usages (product_usages table)
-      if (productId) {
-        // Delete current usages if editing
-        if (isEditing) {
-          const { error: delErr } = await supabase
-            .from('product_usages')
-            .delete()
-            .eq('product_id', productId);
-          if (delErr) throw delErr;
-        }
-
-        // Add new usages if they exist
-        if (Array.isArray(formData.usage_id) && formData.usage_id.length > 0) {
-          const usagesToInsert = formData.usage_id.map((usageId: string) => ({
-            product_id: productId,
-            usage_id: usageId,
-          }));
-          const { error: insErr } = await supabase
-            .from('product_usages')
-            .insert(usagesToInsert);
-          if (insErr) throw insErr;
-        }
-      }
-
-      // ✅ Save images
+  // أضف الاستخدامات الجديدة إن وُجدت
+  if (Array.isArray(formData.usage_id) && formData.usage_id.length > 0) {
+    const usagesToInsert = formData.usage_id.map((usageId: string) => ({
+      product_id: productId,
+      usage_id: usageId,
+    }));
+    const { error: insErr } = await supabase
+      .from('product_usages')
+      .insert(usagesToInsert);
+    if (insErr) throw insErr;
+  }
+}
+      // ✅ حفظ الصور
       if (productId) {
         if (isEditing) {
           await supabase.from('product_images').delete().eq('product_id', productId);
@@ -500,17 +510,15 @@ const ProductForm = () => {
           await supabase.from('product_images').insert(imagesToInsert);
         }
       }
-
-      alert('Product saved successfully!');
       navigate('/admin/products');
     } catch (err) {
       console.error('Save error:', err);
-      alert('Save failed: ' + (err instanceof Error ? err.message : 'Unknown error'));
+      alert('Save failed');
     } finally {
       setSaving(false);
     }
   };
-
+ 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
   return (
@@ -534,29 +542,27 @@ const ProductForm = () => {
             <Tab id="safety" activeTab={activeTab} label="Safety" onClick={() => setActiveTab('safety')} />
           </div>
         </div>
-
-        {/* Tab Content */}
-        <div className="p-6">
-          {activeTab === 'general' && (
-            <GeneralTab
-              data={{ ...formData, images }}
-              onChange={handleInputChange}
-              onImageUpload={handleUploadImage}
-              onImageRemove={removeImage}
-              onSetMainImage={setMainImage}
-              uploading={uploading}
-              brands={brands}
-              types={types}
-              materials={materials}
-              usages={usages}
-            />
-          )}
-          {activeTab === 'application' && <ApplicationTab data={formData} onChange={handleInputChange} />}
-          {activeTab === 'technical' && <TechnicalTab data={formData} onChange={handleInputChange} />}
-          {activeTab === 'drying' && <DryingTimeTab data={formData} onChange={handleInputChange} />}
-          {activeTab === 'safety' && <SafetyTab data={formData} onChange={handleInputChange} />}
-        </div>
-
+ {/* Tab Content */}
+<div className="p-6">
+  {activeTab === 'general' && (
+    <GeneralTab
+      data={{ ...formData, images }}
+      onChange={handleInputChange}
+      onImageUpload={handleUploadImage}
+      onImageRemove={removeImage}
+      onSetMainImage={setMainImage}
+      uploading={uploading}
+      brands={brands}
+      types={types}
+      materials={materials}
+      usages={usages}
+    />
+  )}
+  {activeTab === 'application' && <ApplicationTab data={formData} onChange={handleInputChange} />}
+  {activeTab === 'technical' && <TechnicalTab data={formData} onChange={handleInputChange} />}
+  {activeTab === 'drying' && <DryingTimeTab data={formData} onChange={handleInputChange} />}
+  {activeTab === 'safety' && <SafetyTab data={formData} onChange={handleInputChange} />}
+</div>
         {/* Footer */}
         <div className="flex justify-end space-x-3 p-6 border-t bg-gray-50">
           <button onClick={() => navigate('/admin/products')} className="px-4 py-2 border rounded">Cancel</button>
@@ -566,7 +572,7 @@ const ProductForm = () => {
         </div>
       </div>
     </div>
-  );
+  ); 
 }; 
 
 export default ProductForm;
