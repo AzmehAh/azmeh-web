@@ -187,20 +187,26 @@ const handleMaterialChange = (selectedMaterials: string[]) => {
 </div>
 
 {/* Usage */}
+{/* Usage - Multi-select using native <select multiple> */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Usage / الاستخدام *
   </label>
   <select
-    value={data.usage_id || ''}
-    onChange={(e) => onChange('usage_id', e.target.value)}
-    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3]"
+    multiple
+    value={Array.isArray(data.usage_id) ? data.usage_id : []}
+    onChange={(e) => {
+      const selected = Array.from(e.target.selectedOptions, option => option.value);
+      onChange('usage_id', selected); // ✅ يمرر مصفوفة من الـ IDs
+    }}
+    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
   >
-    <option value="">Select Usage / اختر الاستخدام</option>
     {usages && usages.length > 0 ? (
       usages.map(usage => (
         <option key={usage.id} value={usage.id}>
-          {usage.name_ar && usage.name ? `${usage.name_ar} / ${usage.name}` : usage.name_ar || usage.name || 'Unnamed'}
+          {usage.name_ar && usage.name 
+            ? `${usage.name_ar} / ${usage.name}` 
+            : usage.name_ar || usage.name || 'Unnamed'}
         </option>
       ))
     ) : (
@@ -209,7 +215,7 @@ const handleMaterialChange = (selectedMaterials: string[]) => {
   </select>
   {(!usages || usages.length === 0) && (
     <p className="text-red-500 text-sm mt-1">No usages found. Please add usages first.</p>
-  )} 
+  )}
 </div>
 
         <div className="md:col-span-2">
