@@ -596,7 +596,7 @@ if (Array.isArray(formData.material_id)) {
       alert('Product saved successfully!');
       navigate('/admin/products');
       
-    } } catch (err) {
+    } catch (err) {
   console.error('Save error:', err);
 
   // ✅ عرض رسالة الخطأ الكاملة من Supabase
