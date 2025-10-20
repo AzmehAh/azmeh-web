@@ -160,7 +160,7 @@ export const GeneralTab: React.FC<Props> = ({
     const selected = Array.from(e.target.selectedOptions, opt => opt.value);
     onChange('material_id', selected);
   }}
-  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
+  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32 select-multiple"
 >
   {materials.map(material => (
     <option key={material.id} value={material.id}>
