@@ -153,31 +153,23 @@ export const GeneralTab: React.FC<Props> = ({
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Material / المادة *
   </label>
-  <select
-    multiple
-    value={data.material_id || []}
-    onChange={(e) => {
-      const selected = Array.from(e.target.selectedOptions, option => {
-        // إذا كانت material.id أرقامًا (وهو الأرجح)، نحولها إلى رقم
-        const val = option.value;
-        return isNaN(Number(val)) ? val : Number(val);
-      });
-      onChange('material_id', selected);
-    }}
-    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
-  >
-    {materials && materials.length > 0 ? (
-      materials.map(material => (
-        <option key={material.id} value={material.id}>
-          {material.name_ar && material.name
-            ? `${material.name_ar} / ${material.name}`
-            : material.name_ar || material.name || 'Unnamed'}
-        </option>
-      ))
-    ) : (
-      <option value="" disabled>No materials available</option>
-    )}
-  </select>
+ <select
+  multiple
+  value={data.material_id || []}
+  onChange={(e) => {
+    const selected = Array.from(e.target.selectedOptions, opt => opt.value);
+    onChange('material_id', selected);
+  }}
+  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
+>
+  {materials.map(material => (
+    <option key={material.id} value={material.id}>
+      {material.name_ar && material.name
+        ? `${material.name_ar} / ${material.name}`
+        : material.name_ar || material.name || 'Unnamed'}
+    </option>
+  ))}
+</select>
   {(!materials || materials.length === 0) && (
     <p className="text-red-500 text-sm mt-1">No materials found. Please add materials first.</p>
   )}
