@@ -605,8 +605,7 @@ if (Array.isArray(formData.material_id)) {
   } else {
     alert('Failed to save product: Unknown error. Check console for details.');
   }
-}
-    } finally {
+} finally {
       setSaving(false);
     }
   };
