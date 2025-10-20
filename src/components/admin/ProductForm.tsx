@@ -313,7 +313,8 @@ const fetchFilterOptions = async () => {
     }));
     setImages(prev => [...prev, ...uploaded]);
   } catch (err) {
-    const errorMessage = err instanceof Error ? err.message : 'Image upload failed';
+ console.error('Full error details:', err);
+alert('Check console for error details');
     alert(errorMessage);
     console.error('Image upload error:', err);
   } finally {
