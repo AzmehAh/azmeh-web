@@ -219,55 +219,67 @@ const fetchFilterOptions = async () => {
   }
 };
 
-  const fetchProduct = async () => {
-    if (!id) return;
-    try {
-      setLoading(true);
-      console.log("Fetching product with ID:", id);
+ const fetchProduct = async () => {
+  if (!id) return;
+  try {
+    setLoading(true);
+    console.log("Fetching product with ID:", id);
 
-      const { data: productData, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', id)
-        .single();
+    const { data: productData, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-      if (error) throw error;
-      console.log("Product data:", productData);
+    if (error) throw error;
+    console.log("Product data:", productData);
 
-      const { data: imagesData, error: imagesError } = await supabase
-        .from('product_images')
-        .select('*')
-        .eq('product_id', id);
+    // ✅ جلب الصور
+    const { data: imagesData, error: imagesError } = await supabase
+      .from('product_images')
+      .select('*')
+      .eq('product_id', id);
 
-      if (imagesError) throw imagesError;
-      console.log("Images data:", imagesData);
+    if (imagesError) throw imagesError;
+    console.log("Images data:", imagesData);
 
-      const parsed = {
-        ...productData,
-        features: parseArrayField(productData?.features),
-        general_features: parseArrayField(productData?.general_features),
+    // ✅ جلب المواد المرتبطة من جدول product_materials
+    const { data: materialLinks, error: materialsError } = await supabase
+      .from('product_materials')
+      .select('material_id')
+      .eq('product_id', id);
+
+    if (materialsError) throw materialsError;
+
+    // استخراج قائمة material_ids
+    const materialIds = materialLinks?.map(link => link.material_id) || [];
+
+    const parsed = {
+      ...productData,
+      features: parseArrayField(productData?.features),
+      general_features: parseArrayField(productData?.general_features),
       brand_id: productData?.brand_id || '',
-  type_id: productData?.type_id || '',
-  material_id: JSON.stringify(formData.material_id || []),
-  usage_id: productData?.usage_id || '',
-        applications: parseArrayField(productData?.applications),
-        mixing_steps: parseArrayField(productData?.mixing_steps),
-        safety_precautions: parseArrayField(productData?.safety_precautions),
-        safety_first_aid: parseArrayField(productData?.safety_first_aid),
-        packaging: parseArrayField(productData?.packaging),
-        packaging_ar: parseArrayField(productData?.packaging_ar),
-      };
+      type_id: productData?.type_id || '',
+      material_id: materialIds, // ✅ هنا نضع المصفوفة الفعلية
+      usage_id: productData?.usage_id || '',
+      applications: parseArrayField(productData?.applications),
+      mixing_steps: parseArrayField(productData?.mixing_steps),
+      safety_precautions: parseArrayField(productData?.safety_precautions),
+      safety_first_aid: parseArrayField(productData?.safety_first_aid),
+      packaging: parseArrayField(productData?.packaging),
+      packaging_ar: parseArrayField(productData?.packaging_ar),
+    };
 
-      setFormData(parsed);
-      setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
-    } catch (err) {
-      console.error("Error loading product:", err);
-      alert('Failed to load product');
-      navigate('/admin/products');
-    } finally {
-      setLoading(false);
-    }
-  };
+    setFormData(parsed);
+    setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
+  } catch (err) {
+    console.error("Error loading product:", err);
+    alert('Failed to load product');
+    navigate('/admin/products');
+  } finally {
+    setLoading(false);
+  }
+};
 
   // =============== UseEffect ===============
   useEffect(() => {
