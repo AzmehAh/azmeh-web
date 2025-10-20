@@ -596,13 +596,33 @@ if (Array.isArray(formData.material_id)) {
       alert('Product saved successfully!');
       navigate('/admin/products');
       
-    } catch (err) {
-  console.error('Save error:', err);
+    } catch (err: any) {
+  console.error('Full save error details:', err);
 
-  // ✅ عرض رسالة الخطأ الكاملة من Supabase
-  if (err && typeof err === 'object' && 'message' in err) {
-    alert(`Failed to save product:\n\n${err.message}\n\nCheck console for details.`);
-  } else {
+  let errorMessage = 'Unknown error';
+
+  // ✅ محاولة استخراج رسالة الخطأ من Supabase
+  if (err && typeof err === 'object') {
+    if (err.message) {
+      errorMessage = err.message;
+    } else if (err.error && err.error.message) {
+      errorMessage = err.error.message;
+    } else if (err.toString) {
+      errorMessage = err.toString();
+    }
+  }
+
+  // 💡 عرض تفاصيل إضافية في Console
+  console.log('Supabase error details:', {
+    message: err?.message,
+    details: err?.details,
+    hint: err?.hint,
+    code: err?.code,
+    status: err?.status
+  });
+
+  alert(`Failed to save product:\n\n${errorMessage}\n\nCheck browser console for full details.`);
+}else {
     alert('Failed to save product: Unknown error. Check console for details.');
   }
 } finally {
