@@ -419,7 +419,23 @@ const fetchFilterOptions = async () => {
       setSaving(false);
     }
   };
+ // داخل handleSave، بعد حفظ المنتج وتحديد productId
 
+// ✅ حفظ المواد المرتبطة بالمنتج في جدول product_materials
+if (productId && Array.isArray(formData.material_id) && formData.material_id.length > 0) {
+  const materialsToInsert = formData.material_id.map((materialId: string) => ({
+    product_id: productId,
+    material_id: materialId // هنا نمرر كل مادة على حدة
+  }));
+
+  const { error: materialsError } = await supabase
+    .from('product_materials')
+    .insert(materialsToInsert);
+
+  if (materialsError) {
+    throw materialsError;
+  }
+}
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
   return (
