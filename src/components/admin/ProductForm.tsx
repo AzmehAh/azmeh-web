@@ -221,54 +221,64 @@ const fetchFilterOptions = async () => {
 };
 
   const fetchProduct = async () => {
-    if (!id) return;
-    try {
-      setLoading(true);
-      console.log("Fetching product with ID:", id);
+  if (!id) return;
+  try {
+    setLoading(true);
 
-      const { data: productData, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', id)
-        .single();
+    const { data: productData, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', id)
+      .single();
 
-      if (error) throw error;
-      console.log("Product data:", productData);
+    if (error) throw error;
 
-      const { data: imagesData, error: imagesError } = await supabase
-        .from('product_images')
-        .select('*')
-        .eq('product_id', id);
+    // ✅ جلب المواد المرتبطة من جدول product_materials
+    const { data: materialRelations } = await supabase
+      .from('product_materials')
+      .select('material_id')
+      .eq('product_id', id);
 
-      if (imagesError) throw imagesError;
-      console.log("Images data:", imagesData);
+    const materialIds = (materialRelations || []).map((r: any) => r.material_id);
 
-      const parsed = {
-        ...productData,
-        features: parseArrayField(productData?.features),
-        general_features: parseArrayField(productData?.general_features),
+    // جلب الصور
+    const { data: imagesData } = await supabase
+      .from('product_images')
+      .select('*')
+      .eq('product_id', id);
+
+    const parsed = {
+      ...productData,
+      features: parseArrayField(productData?.features),
+      features_ar: parseArrayField(productData?.features_ar),
+      packaging: parseArrayField(productData?.packaging),
+      packaging_ar: parseArrayField(productData?.packaging_ar),
+      safety_precautions: parseArrayField(productData?.safety_precautions),
+      safety_first_aid: parseArrayField(productData?.safety_first_aid),
+      general_features: parseArrayField(productData?.general_features),
+      applications: parseArrayField(productData?.applications),
+      applications_ar: parseArrayField(productData?.applications_ar),
+      instructions: parseArrayField(productData?.instructions),
+      instructions_ar: parseArrayField(productData?.instructions_ar),
+      mixing_steps: parseArrayField(productData?.mixing_steps),
+
+      // ✅ تعيين material_id كمصفوفة
+      material_id: materialIds,
       brand_id: productData?.brand_id || '',
-  type_id: productData?.type_id || '',
-  material_id: productData?.material_id || '',
-  usage_id: productData?.usage_id || '',
-        applications: parseArrayField(productData?.applications),
-        mixing_steps: parseArrayField(productData?.mixing_steps),
-        safety_precautions: parseArrayField(productData?.safety_precautions),
-        safety_first_aid: parseArrayField(productData?.safety_first_aid),
-        packaging: parseArrayField(productData?.packaging),
-        packaging_ar: parseArrayField(productData?.packaging_ar),
-      };
+      type_id: productData?.type_id || '',
+      usage_id: productData?.usage_id || '',
+    };
 
-      setFormData(parsed);
-      setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
-    } catch (err) {
-      console.error("Error loading product:", err);
-      alert('Failed to load product');
-      navigate('/admin/products');
-    } finally {
-      setLoading(false);
-    }
-  };
+    setFormData(parsed);
+    setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
+  } catch (err) {
+    console.error("Error loading product:", err);
+    alert('Failed to load product');
+    navigate('/admin/products');
+  } finally {
+    setLoading(false);
+  }
+};
 
   // =============== UseEffect ===============
   useEffect(() => {
@@ -322,104 +332,122 @@ const fetchFilterOptions = async () => {
   };
 
   const handleSave = async () => {
-    setSaving(true);
-    try {
-      // Define valid database columns to prevent schema errors
-      const validColumns = [
-        'name', 'name_ar', 'code', 'brand', 'type', 'material', 'usage', 'description', 'description_ar',
-         'features', 'features_ar', 'applications', 'applications_ar',
-        'instructions', 'instructions_ar', 'packaging', 'packaging_ar', 
-        'safety_first_aid', 'safety_first_aid_ar', 'technical_specs', 'status', 'category_id', 'featured',
-        'storing_conditions', 'storing_conditions_ar', 'joint_preparation', 'joint_preparation_ar',
-        'joint_size', 'joint_size_ar', 'movement_capacity', 'movement_capacity_ar',
-        'substrate_treatment', 'substrate_treatment_ar', 'surface_preparation', 'surface_preparation_ar',
-        'general_features', 'recommended_uses', 'recommended_uses_ar',
-        'method_of_application', 'method_of_application_ar', 'mixing_ratio', 'mixing_ratio_ar',
-        'mixing_note', 'mixing_note_ar', 'mixing_steps', 'mixing_steps_ar', 'pot_life', 'pot_life_ar',
-        'cleaner', 'cleaner_ar', 'thinner', 'thinner_ar', 'application_temperature', 'application_temperature_ar',
-        'curing_note', 'curing_note_ar','specific_gravity', 'specific_gravity_ar', 'note_application', 'note_application_ar',
-        'number_of_coats', 'number_of_coats_ar', 'note', 'note_ar', 'tensile_adhesion_strength', 'tensile_adhesion_strength_ar',
-        'material_consumption', 'material_consumption_ar', 'viscosity', 'viscosity_ar',
-        'weather_resistance', 'weather_resistance_ar', 'compressive_strength', 'compressive_strength_ar',
-        'tear_resistance', 'tear_resistance_ar', 'elongation_at_rupture', 'elongation_at_rupture_ar',
-        'tensile_strength_100', 'tensile_strength_100_ar', 'tensile_strength_50', 'tensile_strength_50_ar',
-        'specific_gravity_mixed', 'specific_gravity_mixed_ar', 'solvent_resistance', 'solvent_resistance_ar',
-        'chemical_resistance', 'chemical_resistance_ar', 'abrasion_resistance', 'abrasion_resistance_ar',
-        'friction_resistance', 'friction_resistance_ar', 'washability', 'washability_ar',
-        'water_resistance', 'water_resistance_ar', 'theoretical_spreading_rate', 'theoretical_spreading_rate_ar',
-        'recommended_film_thickness', 'recommended_film_thickness_ar', 'temperature_resistance', 'temperature_resistance_ar',
-        'solvent_splash_resistance', 'solvent_splash_resistance_ar', 'sandability', 'sandability_ar',
-        'adhesion', 'adhesion_ar', 'flexibility', 'flexibility_ar', 'voc', 'voc_ar',
-        'volume_solids', 'volume_solids_ar', 'gloss', 'gloss_ar', 'color', 'color_ar',
-        'component_a', 'component_a_ar', 'component_b', 'component_b_ar',
-        'dry_to_touch', 'dry_to_touch_ar', 'dry_to_handle', 'dry_to_handle_ar',
-        'complete_setting', 'complete_setting_ar', 'grouting_time', 'grouting_time_ar',
-        'adjustability_time', 'adjustability_time_ar', 'dry_to_topcoat', 'dry_to_topcoat_ar',
-        'initial_setting', 'initial_setting_ar', 'fully_cured', 'fully_cured_ar',
-        'dry_to_sand', 'dry_to_sand_ar', 'drying_time_note', 'drying_time_note_ar',
-        'safety_note', 'safety_note_ar'
-      ];
+  setSaving(true);
+  try {
+    // 1. تحديد الأعمدة الصالحة للحفظ في جدول products
+    const validColumns = [
+      'name', 'name_ar', 'code', 'brand', 'type', 'material', 'usage', 'description', 'description_ar',
+      'features', 'features_ar', 'applications', 'applications_ar',
+      'instructions', 'instructions_ar', 'packaging', 'packaging_ar', 
+      'safety_first_aid', 'safety_first_aid_ar', 'technical_specs', 'status', 'category_id', 'featured',
+      'storing_conditions', 'storing_conditions_ar', 'joint_preparation', 'joint_preparation_ar',
+      'joint_size', 'joint_size_ar', 'movement_capacity', 'movement_capacity_ar',
+      'substrate_treatment', 'substrate_treatment_ar', 'surface_preparation', 'surface_preparation_ar',
+      'general_features', 'recommended_uses', 'recommended_uses_ar',
+      'method_of_application', 'method_of_application_ar', 'mixing_ratio', 'mixing_ratio_ar',
+      'mixing_note', 'mixing_note_ar', 'mixing_steps', 'mixing_steps_ar', 'pot_life', 'pot_life_ar',
+      'cleaner', 'cleaner_ar', 'thinner', 'thinner_ar', 'application_temperature', 'application_temperature_ar',
+      'curing_note', 'curing_note_ar','specific_gravity', 'specific_gravity_ar', 'note_application', 'note_application_ar',
+      'number_of_coats', 'number_of_coats_ar', 'note', 'note_ar', 'tensile_adhesion_strength', 'tensile_adhesion_strength_ar',
+      'material_consumption', 'material_consumption_ar', 'viscosity', 'viscosity_ar',
+      'weather_resistance', 'weather_resistance_ar', 'compressive_strength', 'compressive_strength_ar',
+      'tear_resistance', 'tear_resistance_ar', 'elongation_at_rupture', 'elongation_at_rupture_ar',
+      'tensile_strength_100', 'tensile_strength_100_ar', 'tensile_strength_50', 'tensile_strength_50_ar',
+      'specific_gravity_mixed', 'specific_gravity_mixed_ar', 'solvent_resistance', 'solvent_resistance_ar',
+      'chemical_resistance', 'chemical_resistance_ar', 'abrasion_resistance', 'abrasion_resistance_ar',
+      'friction_resistance', 'friction_resistance_ar', 'washability', 'washability_ar',
+      'water_resistance', 'water_resistance_ar', 'theoretical_spreading_rate', 'theoretical_spreading_rate_ar',
+      'recommended_film_thickness', 'recommended_film_thickness_ar', 'temperature_resistance', 'temperature_resistance_ar',
+      'solvent_splash_resistance', 'solvent_splash_resistance_ar', 'sandability', 'sandability_ar',
+      'adhesion', 'adhesion_ar', 'flexibility', 'flexibility_ar', 'voc', 'voc_ar',
+      'volume_solids', 'volume_solids_ar', 'gloss', 'gloss_ar', 'color', 'color_ar',
+      'component_a', 'component_a_ar', 'component_b', 'component_b_ar',
+      'dry_to_touch', 'dry_to_touch_ar', 'dry_to_handle', 'dry_to_handle_ar',
+      'complete_setting', 'complete_setting_ar', 'grouting_time', 'grouting_time_ar',
+      'adjustability_time', 'adjustability_time_ar', 'dry_to_topcoat', 'dry_to_topcoat_ar',
+      'initial_setting', 'initial_setting_ar', 'fully_cured', 'fully_cured_ar',
+      'dry_to_sand', 'dry_to_sand_ar', 'drying_time_note', 'drying_time_note_ar',
+      'safety_note', 'safety_note_ar'
+    ];
 
-      // Filter formData to only include valid database columns
-      const filteredData = Object.keys(formData)
+    // 2. إعداد بيانات المنتج (بدون material_id)
+    const productData = {
+      // نأخذ فقط الأعمدة الصالحة
+      ...Object.keys(formData)
         .filter(key => validColumns.includes(key))
         .reduce((obj, key) => {
           obj[key] = formData[key];
           return obj;
-        }, {} as any);
+        }, {} as any),
+      
+      // نضمن أن الحقول الأخرى محفوظة كـ JSON إذا لزم
+      features: JSON.stringify(formData.features || []),
+      features_ar: JSON.stringify(formData.features_ar || []),
+      packaging: JSON.stringify(formData.packaging || []),
+      packaging_ar: JSON.stringify(formData.packaging_ar || []),
+      safety_precautions: JSON.stringify(formData.safety_precautions || []),
+      safety_first_aid: JSON.stringify(formData.safety_first_aid || []),
+      general_features: JSON.stringify(formData.general_features || []),
+      mixing_steps: JSON.stringify(formData.mixing_steps || []),
+      applications: JSON.stringify(formData.applications || []),
+      applications_ar: JSON.stringify(formData.applications_ar || []),
+      instructions: JSON.stringify(formData.instructions || []),
+      instructions_ar: JSON.stringify(formData.instructions_ar || []),
+    };
 
-      const productData = {
-  ...filteredData,
-  brand_id: formData.brand_id,
-  type_id: formData.type_id, 
-  material_id: formData.material_id,
-  usage_id: formData.usage_id,
+    let productId = id;
 
-  features: formData.features || [],
-  safety_precautions: formData.safety_precautions || [],
-  safety_first_aid: formData.safety_first_aid || [],
-  packaging: JSON.stringify(formData.packaging || []),
- packaging_ar: JSON.stringify(formData.packaging_ar || []),
-  general_features: formData.general_features || [],
-  mixing_steps: formData.mixing_steps || [],
-};
-
-      let productId = id;
-      if (id) {
-        const { error } = await supabase.from('products').update(productData).eq('id', id);
-        if (error) throw error;
-      } else {
-        const { data, error } = await supabase.from('products').insert([productData]).select();
-        if (error) throw error;
-        productId = data?.[0]?.id;
-      }
-
-      // Save images if productId exists
-      if (productId) {
-        // Delete existing images if editing
-        if (isEditing) {
-          await supabase.from('product_images').delete().eq('product_id', productId);
-        }
-
-        // Insert new images
-        if (images.length > 0) {
-          const imagesToInsert = images.map(img => ({
-            product_id: productId,
-            image_url: img.image_url,
-            is_main: img.isMain || false
-          }));
-          await supabase.from('product_images').insert(imagesToInsert);
-        }
-      }
-
-      navigate('/admin/products');
-    } catch (err) {
-      console.error('Save error:', err);
-      alert('Save failed');
-    } finally {
-      setSaving(false);
+    // 3. حفظ أو تحديث المنتج
+    if (id) {
+      const { error } = await supabase.from('products').update(productData).eq('id', id);
+      if (error) throw error;
+      productId = id;
+    } else {
+      const { data, error } = await supabase.from('products').insert([productData]).select('id');
+      if (error) throw error;
+      productId = data?.[0]?.id;
     }
-  };
+
+    if (!productId) throw new Error('Failed to get product ID');
+
+    // 4. ✅ حفظ علاقة المواد (Many-to-Many) في جدول product_materials
+    if (Array.isArray(formData.material_id)) {
+      // احذف الروابط القديمة
+      await supabase.from('product_materials').delete().eq('product_id', productId);
+
+      // أدخل الروابط الجديدة
+      if (formData.material_id.length > 0) {
+        const materialRelations = formData.material_id.map((materialId: string) => ({
+          product_id: productId,
+          material_id: materialId,
+        }));
+        const { error } = await supabase.from('product_materials').insert(materialRelations);
+        if (error) throw error;
+      }
+    }
+
+    // 5. حفظ الصور
+    if (images.length > 0) {
+      if (isEditing) {
+        await supabase.from('product_images').delete().eq('product_id', productId);
+      }
+      const imagesToInsert = images.map(img => ({
+        product_id: productId,
+        image_url: img.image_url,
+        is_main: img.isMain || false,
+      }));
+      const { error } = await supabase.from('product_images').insert(imagesToInsert);
+      if (error) throw error;
+    }
+
+    navigate('/admin/products');
+  } catch (err) {
+    console.error('Save error:', err);
+    alert('Failed to save product: ' + (err instanceof Error ? err.message : 'Unknown error'));
+  } finally {
+    setSaving(false);
+  }
+};
 
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
