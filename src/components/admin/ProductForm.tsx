@@ -30,8 +30,8 @@ const ProductForm = () => {
     name: '',
     name_ar: '',
     code: '',
-    brand_id: '',        
-  type_id: '',        
+   brand_id: null,        // ← تغيير من '' إلى null
+  type_id: null,        
   material_id: [],     
   usage_id: [],       
 
