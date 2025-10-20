@@ -356,300 +356,248 @@ const ProductForm = () => {
     );
   };
 
- const handleSave = async () => {
-  setSaving(true);
-  try {
-    // 1. التحقق من البيانات المطلوبة
-    if (!formData.name || !formData.name_ar || !formData.code) {
-      alert('Please fill in all required fields: Product Name (EN/AR) and Product Code');
-      return;
-    }
-
-    console.log('Starting save process...');
-
-    // دالة مساعدة لتحويل الحقول المصفوفية إلى JSON صحيح
-    const prepareArrayField = (field: any) => {
-      if (Array.isArray(field) && field.length > 0) {
-        return field;
-      }
-      return []; // إرجاع مصفوفة فارغة بدلاً من "[]"
-    };
-
-    // 2. إعداد بيانات المنتج الأساسية
-    const productData: any = {
-      name: formData.name,
-      name_ar: formData.name_ar,
-      code: formData.code,
-      description: formData.description || '',
-      description_ar: formData.description_ar || '',
-      status: formData.status || 'active',
-      
-      // العلاقات الأساسية
-      brand_id: formData.brand_id || null,
-      type_id: formData.type_id || null,
-      usage_id: formData.usage_id || null,
-      
-      // ✅ الحقول المصفوفية - نستخدم الدالة المساعدة
-      features: prepareArrayField(formData.features),
-      features_ar: prepareArrayField(formData.features_ar),
-      packaging: prepareArrayField(formData.packaging),
-      packaging_ar: prepareArrayField(formData.packaging_ar),
-      safety_precautions: prepareArrayField(formData.safety_precautions),
-      safety_precautions_ar: prepareArrayField(formData.safety_precautions_ar),
-      safety_first_aid: prepareArrayField(formData.safety_first_aid),
-      safety_first_aid_ar: prepareArrayField(formData.safety_first_aid_ar),
-      general_features: prepareArrayField(formData.general_features),
-      mixing_steps: prepareArrayField(formData.mixing_steps),
-      applications: prepareArrayField(formData.applications),
-      applications_ar: prepareArrayField(formData.applications_ar),
-      instructions: prepareArrayField(formData.instructions),
-      instructions_ar: prepareArrayField(formData.instructions_ar),
-      
-      // الحقول النصية
-      storing_conditions: formData.storing_conditions || '',
-      storing_conditions_ar: formData.storing_conditions_ar || '',
-      joint_preparation: formData.joint_preparation || '',
-      joint_preparation_ar: formData.joint_preparation_ar || '',
-      joint_size: formData.joint_size || '',
-      joint_size_ar: formData.joint_size_ar || '',
-      movement_capacity: formData.movement_capacity || '',
-      movement_capacity_ar: formData.movement_capacity_ar || '',
-      substrate_treatment: formData.substrate_treatment || '',
-      substrate_treatment_ar: formData.substrate_treatment_ar || '',
-      surface_preparation: formData.surface_preparation || '',
-      surface_preparation_ar: formData.surface_preparation_ar || '',
-      recommended_uses: formData.recommended_uses || '',
-      recommended_uses_ar: formData.recommended_uses_ar || '',
-      
-      // Application fields
-      method_of_application: formData.method_of_application || '',
-      method_of_application_ar: formData.method_of_application_ar || '',
-      mixing_ratio: formData.mixing_ratio || '',
-      mixing_ratio_ar: formData.mixing_ratio_ar || '',
-      mixing_note: formData.mixing_note || '',
-      mixing_note_ar: formData.mixing_note_ar || '',
-      pot_life: formData.pot_life || '',
-      pot_life_ar: formData.pot_life_ar || '',
-      cleaner: formData.cleaner || '',
-      cleaner_ar: formData.cleaner_ar || '',
-      thinner: formData.thinner || '',
-      thinner_ar: formData.thinner_ar || '',
-      application_temperature: formData.application_temperature || '',
-      application_temperature_ar: formData.application_temperature_ar || '',
-      curing_note: formData.curing_note || '',
-      curing_note_ar: formData.curing_note_ar || '',
-      note_application: formData.note_application || '',
-      note_application_ar: formData.note_application_ar || '',
-      
-      // Technical fields
-      number_of_coats: formData.number_of_coats || '',
-      number_of_coats_ar: formData.number_of_coats_ar || '',
-      note: formData.note || '',
-      note_ar: formData.note_ar || '',
-      tensile_adhesion_strength: formData.tensile_adhesion_strength || '',
-      tensile_adhesion_strength_ar: formData.tensile_adhesion_strength_ar || '',
-      material_consumption: formData.material_consumption || '',
-      material_consumption_ar: formData.material_consumption_ar || '',
-      viscosity: formData.viscosity || '',
-      viscosity_ar: formData.viscosity_ar || '',
-      weather_resistance: formData.weather_resistance || '',
-      weather_resistance_ar: formData.weather_resistance_ar || '',
-      compressive_strength: formData.compressive_strength || '',
-      compressive_strength_ar: formData.compressive_strength_ar || '',
-      tear_resistance: formData.tear_resistance || '',
-      tear_resistance_ar: formData.tear_resistance_ar || '',
-      elongation_at_rupture: formData.elongation_at_rupture || '',
-      elongation_at_rupture_ar: formData.elongation_at_rupture_ar || '',
-      tensile_strength_100: formData.tensile_strength_100 || '',
-      tensile_strength_100_ar: formData.tensile_strength_100_ar || '',
-      tensile_strength_50: formData.tensile_strength_50 || '',
-      tensile_strength_50_ar: formData.tensile_strength_50_ar || '',
-      specific_gravity_mixed: formData.specific_gravity_mixed || '',
-      specific_gravity_mixed_ar: formData.specific_gravity_mixed_ar || '',
-      solvent_resistance: formData.solvent_resistance || '',
-      solvent_resistance_ar: formData.solvent_resistance_ar || '',
-      chemical_resistance: formData.chemical_resistance || '',
-      chemical_resistance_ar: formData.chemical_resistance_ar || '',
-      abrasion_resistance: formData.abrasion_resistance || '',
-      abrasion_resistance_ar: formData.abrasion_resistance_ar || '',
-      friction_resistance: formData.friction_resistance || '',
-      friction_resistance_ar: formData.friction_resistance_ar || '',
-      washability: formData.washability || '',
-      washability_ar: formData.washability_ar || '',
-      water_resistance: formData.water_resistance || '',
-      water_resistance_ar: formData.water_resistance_ar || '',
-      theoretical_spreading_rate: formData.theoretical_spreading_rate || '',
-      theoretical_spreading_rate_ar: formData.theoretical_spreading_rate_ar || '',
-      recommended_film_thickness: formData.recommended_film_thickness || '',
-      recommended_film_thickness_ar: formData.recommended_film_thickness_ar || '',
-      temperature_resistance: formData.temperature_resistance || '',
-      temperature_resistance_ar: formData.temperature_resistance_ar || '',
-      solvent_splash_resistance: formData.solvent_splash_resistance || '',
-      solvent_splash_resistance_ar: formData.solvent_splash_resistance_ar || '',
-      sandability: formData.sandability || '',
-      sandability_ar: formData.sandability_ar || '',
-      adhesion: formData.adhesion || '',
-      adhesion_ar: formData.adhesion_ar || '',
-      flexibility: formData.flexibility || '',
-      flexibility_ar: formData.flexibility_ar || '',
-      voc: formData.voc || '',
-      voc_ar: formData.voc_ar || '',
-      volume_solids: formData.volume_solids || '',
-      volume_solids_ar: formData.volume_solids_ar || '',
-      gloss: formData.gloss || '',
-      gloss_ar: formData.gloss_ar || '',
-      color: formData.color || '',
-      color_ar: formData.color_ar || '',
-      component_a: formData.component_a || '',
-      component_a_ar: formData.component_a_ar || '',
-      component_b: formData.component_b || '',
-      component_b_ar: formData.component_b_ar || '',
-      specific_gravity: formData.specific_gravity || '',
-      specific_gravity_ar: formData.specific_gravity_ar || '',
-      
-      // Drying Time fields
-      dry_to_touch: formData.dry_to_touch || '',
-      dry_to_touch_ar: formData.dry_to_touch_ar || '',
-      dry_to_handle: formData.dry_to_handle || '',
-      dry_to_handle_ar: formData.dry_to_handle_ar || '',
-      complete_setting: formData.complete_setting || '',
-      complete_setting_ar: formData.complete_setting_ar || '',
-      grouting_time: formData.grouting_time || '',
-      grouting_time_ar: formData.grouting_time_ar || '',
-      adjustability_time: formData.adjustability_time || '',
-      adjustability_time_ar: formData.adjustability_time_ar || '',
-      dry_to_topcoat: formData.dry_to_topcoat || '',
-      dry_to_topcoat_ar: formData.dry_to_topcoat_ar || '',
-      initial_setting: formData.initial_setting || '',
-      initial_setting_ar: formData.initial_setting_ar || '',
-      fully_cured: formData.fully_cured || '',
-      fully_cured_ar: formData.fully_cured_ar || '',
-      dry_to_sand: formData.dry_to_sand || '',
-      dry_to_sand_ar: formData.dry_to_sand_ar || '',
-      drying_time_note: formData.drying_time_note || '',
-      drying_time_note_ar: formData.drying_time_note_ar || '',
-      safety_note: formData.safety_note || '',
-      safety_note_ar: formData.safety_note_ar || '',
-    };
-
-    console.log('Product data prepared:', productData);
-
-    let productId = id;
-
-    // 3. حفظ/تحديث المنتج
-    if (id) {
-      console.log('Updating existing product...', id);
-      const { data, error } = await supabase
-        .from('products')
-        .update(productData)
-        .eq('id', id)
-        .select('id');
-      
-      if (error) {
-        console.error('Update error details:', error);
-        throw error;
-      }
-      console.log('Update successful:', data);
-      productId = id;
-    } else {
-      console.log('Creating new product...');
-      const { data, error } = await supabase
-        .from('products')
-        .insert([productData])
-        .select('id')
-        .single();
-      
-      if (error) {
-        console.error('Insert error details:', error);
-        throw error;
-      }
-      console.log('Insert successful:', data);
-      productId = data.id;
-    }
-
-    if (!productId) throw new Error('Failed to get product ID');
-    console.log('Product ID obtained:', productId);
-
-    // 4. ✅ معالجة علاقة المواد (Many-to-Many)
-    if (Array.isArray(formData.material_id) && formData.material_id.length > 0) {
-      console.log('Processing materials:', formData.material_id);
-      
-      // احذف العلاقات القديمة أولاً
-      const { error: deleteError } = await supabase
-        .from('product_materials')
-        .delete()
-        .eq('product_id', productId);
-      
-      if (deleteError) {
-        console.error('Error deleting old materials:', deleteError);
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      // 1. التحقق من البيانات المطلوبة
+      if (!formData.name || !formData.name_ar || !formData.code) {
+        alert('Please fill in all required fields: Product Name (EN/AR) and Product Code');
+        return;
       }
 
-      // أدخل العلاقات الجديدة
-      const materialRelations = formData.material_id.map((materialId: string) => ({
-        product_id: productId,
-        material_id: materialId,
-      }));
+      // 2. إعداد بيانات المنتج الأساسية
+      const productData: any = {
+        name: formData.name,
+        name_ar: formData.name_ar,
+        code: formData.code,
+        description: formData.description || '',
+        description_ar: formData.description_ar || '',
+        status: formData.status || 'active',
+        
+        // العلاقات الأساسية
+        brand_id: formData.brand_id || null,
+        type_id: formData.type_id || null,
+        usage_id: formData.usage_id || null,
+        
+        // الحقول المصفوفية (كدول JSON)
+        features: JSON.stringify(formData.features || []),
+        features_ar: JSON.stringify(formData.features_ar || []),
+        packaging: JSON.stringify(formData.packaging || []),
+        packaging_ar: JSON.stringify(formData.packaging_ar || []),
+        safety_precautions: JSON.stringify(formData.safety_precautions || []),
+        safety_precautions_ar: JSON.stringify(formData.safety_precautions_ar || []),
+        safety_first_aid: JSON.stringify(formData.safety_first_aid || []),
+        safety_first_aid_ar: JSON.stringify(formData.safety_first_aid_ar || []),
+        general_features: JSON.stringify(formData.general_features || []),
+        mixing_steps: JSON.stringify(formData.mixing_steps || []),
+        applications: JSON.stringify(formData.applications || []),
+        applications_ar: JSON.stringify(formData.applications_ar || []),
+        instructions: JSON.stringify(formData.instructions || []),
+        instructions_ar: JSON.stringify(formData.instructions_ar || []),
+        
+        // الحقول العامة
+        storing_conditions: formData.storing_conditions || '',
+        storing_conditions_ar: formData.storing_conditions_ar || '',
+        joint_preparation: formData.joint_preparation || '',
+        joint_preparation_ar: formData.joint_preparation_ar || '',
+        joint_size: formData.joint_size || '',
+        joint_size_ar: formData.joint_size_ar || '',
+        movement_capacity: formData.movement_capacity || '',
+        movement_capacity_ar: formData.movement_capacity_ar || '',
+        substrate_treatment: formData.substrate_treatment || '',
+        substrate_treatment_ar: formData.substrate_treatment_ar || '',
+        surface_preparation: formData.surface_preparation || '',
+        surface_preparation_ar: formData.surface_preparation_ar || '',
+        recommended_uses: formData.recommended_uses || '',
+        recommended_uses_ar: formData.recommended_uses_ar || '',
+        method_of_application: formData.method_of_application || '',
+        method_of_application_ar: formData.method_of_application_ar || '',
+        mixing_ratio: formData.mixing_ratio || '',
+        mixing_ratio_ar: formData.mixing_ratio_ar || '',
+        mixing_note: formData.mixing_note || '',
+        mixing_note_ar: formData.mixing_note_ar || '',
+        pot_life: formData.pot_life || '',
+        pot_life_ar: formData.pot_life_ar || '',
+        cleaner: formData.cleaner || '',
+        cleaner_ar: formData.cleaner_ar || '',
+        thinner: formData.thinner || '',
+        thinner_ar: formData.thinner_ar || '',
+        application_temperature: formData.application_temperature || '',
+        application_temperature_ar: formData.application_temperature_ar || '',
+        curing_note: formData.curing_note || '',
+        curing_note_ar: formData.curing_note_ar || '',
+        note_application: formData.note_application || '',
+        note_application_ar: formData.note_application_ar || '',
+        number_of_coats: formData.number_of_coats || '',
+        number_of_coats_ar: formData.number_of_coats_ar || '',
+        note: formData.note || '',
+        note_ar: formData.note_ar || '',
+        tensile_adhesion_strength: formData.tensile_adhesion_strength || '',
+        tensile_adhesion_strength_ar: formData.tensile_adhesion_strength_ar || '',
+        material_consumption: formData.material_consumption || '',
+        material_consumption_ar: formData.material_consumption_ar || '',
+        viscosity: formData.viscosity || '',
+        viscosity_ar: formData.viscosity_ar || '',
+        weather_resistance: formData.weather_resistance || '',
+        weather_resistance_ar: formData.weather_resistance_ar || '',
+        compressive_strength: formData.compressive_strength || '',
+        compressive_strength_ar: formData.compressive_strength_ar || '',
+        tear_resistance: formData.tear_resistance || '',
+        tear_resistance_ar: formData.tear_resistance_ar || '',
+        elongation_at_rupture: formData.elongation_at_rupture || '',
+        elongation_at_rupture_ar: formData.elongation_at_rupture_ar || '',
+        tensile_strength_100: formData.tensile_strength_100 || '',
+        tensile_strength_100_ar: formData.tensile_strength_100_ar || '',
+        tensile_strength_50: formData.tensile_strength_50 || '',
+        tensile_strength_50_ar: formData.tensile_strength_50_ar || '',
+        specific_gravity_mixed: formData.specific_gravity_mixed || '',
+        specific_gravity_mixed_ar: formData.specific_gravity_mixed_ar || '',
+        solvent_resistance: formData.solvent_resistance || '',
+        solvent_resistance_ar: formData.solvent_resistance_ar || '',
+        chemical_resistance: formData.chemical_resistance || '',
+        chemical_resistance_ar: formData.chemical_resistance_ar || '',
+        abrasion_resistance: formData.abrasion_resistance || '',
+        abrasion_resistance_ar: formData.abrasion_resistance_ar || '',
+        friction_resistance: formData.friction_resistance || '',
+        friction_resistance_ar: formData.friction_resistance_ar || '',
+        washability: formData.washability || '',
+        washability_ar: formData.washability_ar || '',
+        water_resistance: formData.water_resistance || '',
+        water_resistance_ar: formData.water_resistance_ar || '',
+        theoretical_spreading_rate: formData.theoretical_spreading_rate || '',
+        theoretical_spreading_rate_ar: formData.theoretical_spreading_rate_ar || '',
+        recommended_film_thickness: formData.recommended_film_thickness || '',
+        recommended_film_thickness_ar: formData.recommended_film_thickness_ar || '',
+        temperature_resistance: formData.temperature_resistance || '',
+        temperature_resistance_ar: formData.temperature_resistance_ar || '',
+        solvent_splash_resistance: formData.solvent_splash_resistance || '',
+        solvent_splash_resistance_ar: formData.solvent_splash_resistance_ar || '',
+        sandability: formData.sandability || '',
+        sandability_ar: formData.sandability_ar || '',
+        adhesion: formData.adhesion || '',
+        adhesion_ar: formData.adhesion_ar || '',
+        flexibility: formData.flexibility || '',
+        flexibility_ar: formData.flexibility_ar || '',
+        voc: formData.voc || '',
+        voc_ar: formData.voc_ar || '',
+        volume_solids: formData.volume_solids || '',
+        volume_solids_ar: formData.volume_solids_ar || '',
+        gloss: formData.gloss || '',
+        gloss_ar: formData.gloss_ar || '',
+        color: formData.color || '',
+        color_ar: formData.color_ar || '',
+        component_a: formData.component_a || '',
+        component_a_ar: formData.component_a_ar || '',
+        component_b: formData.component_b || '',
+        component_b_ar: formData.component_b_ar || '',
+        specific_gravity: formData.specific_gravity || '',
+        specific_gravity_ar: formData.specific_gravity_ar || '',
+        dry_to_touch: formData.dry_to_touch || '',
+        dry_to_touch_ar: formData.dry_to_touch_ar || '',
+        dry_to_handle: formData.dry_to_handle || '',
+        dry_to_handle_ar: formData.dry_to_handle_ar || '',
+        complete_setting: formData.complete_setting || '',
+        complete_setting_ar: formData.complete_setting_ar || '',
+        grouting_time: formData.grouting_time || '',
+        grouting_time_ar: formData.grouting_time_ar || '',
+        adjustability_time: formData.adjustability_time || '',
+        adjustability_time_ar: formData.adjustability_time_ar || '',
+        dry_to_topcoat: formData.dry_to_topcoat || '',
+        dry_to_topcoat_ar: formData.dry_to_topcoat_ar || '',
+        initial_setting: formData.initial_setting || '',
+        initial_setting_ar: formData.initial_setting_ar || '',
+        fully_cured: formData.fully_cured || '',
+        fully_cured_ar: formData.fully_cured_ar || '',
+        dry_to_sand: formData.dry_to_sand || '',
+        dry_to_sand_ar: formData.dry_to_sand_ar || '',
+        drying_time_note: formData.drying_time_note || '',
+        drying_time_note_ar: formData.drying_time_note_ar || '',
+        safety_note: formData.safety_note || '',
+        safety_note_ar: formData.safety_note_ar || '',
+      };
 
-      console.log('Inserting material relations:', materialRelations);
+      let productId = id;
 
-      const { error: insertError } = await supabase
-        .from('product_materials')
-        .insert(materialRelations);
-      
-      if (insertError) {
-        console.error('Error inserting materials:', insertError);
-        throw insertError;
+      // 3. حفظ/تحديث المنتج
+      if (id) {
+        const { error } = await supabase
+          .from('products')
+          .update(productData)
+          .eq('id', id);
+        if (error) throw error;
+        productId = id;
+      } else {
+        const { data, error } = await supabase
+          .from('products')
+          .insert([productData])
+          .select('id')
+          .single();
+        if (error) throw error;
+        productId = data.id;
       }
-      console.log('Materials inserted successfully');
-    } else {
-      console.log('No materials to process');
-    }
 
-    // 5. معالجة الصور
-    if (images.length > 0) {
-      console.log('Processing images:', images.length);
-      
-      // احذف الصور القديمة إذا كنت في وضع التعديل
-      if (isEditing) {
-        const { error: deleteImagesError } = await supabase
-          .from('product_images')
+      if (!productId) throw new Error('Failed to get product ID');
+
+      // 4. ✅ معالجة علاقة المواد (Many-to-Many)
+      if (Array.isArray(formData.material_id)) {
+        // احذف العلاقات القديمة أولاً
+        const { error: deleteError } = await supabase
+          .from('product_materials')
           .delete()
           .eq('product_id', productId);
         
-        if (deleteImagesError) {
-          console.error('Error deleting old images:', deleteImagesError);
+        if (deleteError) console.error('Error deleting old materials:', deleteError);
+
+        // أدخل العلاقات الجديدة فقط إذا كانت هناك مواد محددة
+        if (formData.material_id.length > 0) {
+          const materialRelations = formData.material_id.map((materialId: string) => ({
+            product_id: productId,
+            material_id: materialId,
+          }));
+
+          const { error: insertError } = await supabase
+            .from('product_materials')
+            .insert(materialRelations);
+          
+          if (insertError) throw insertError;
         }
       }
 
-      // أدخل الصور الجديدة
-      const imagesToInsert = images.map(img => ({
-        product_id: productId,
-        image_url: img.image_url,
-        is_main: img.isMain || false,
-      }));
+      // 5. معالجة الصور
+      if (images.length > 0) {
+        // احذف الصور القديمة إذا كنت في وضع التعديل
+        if (isEditing) {
+          await supabase
+            .from('product_images')
+            .delete()
+            .eq('product_id', productId);
+        }
 
-      const { error: imagesError } = await supabase
-        .from('product_images')
-        .insert(imagesToInsert);
+        // أدخل الصور الجديدة
+        const imagesToInsert = images.map(img => ({
+          product_id: productId,
+          image_url: img.image_url,
+          is_main: img.isMain || false,
+        }));
+
+        const { error: imagesError } = await supabase
+          .from('product_images')
+          .insert(imagesToInsert);
+        
+        if (imagesError) throw imagesError;
+      } 
+
+      alert('Product saved successfully!');
+      navigate('/admin/products');
       
-      if (imagesError) {
-        console.error('Error inserting images:', imagesError);
-        throw imagesError;
-      }
-      console.log('Images inserted successfully');
+    } catch (err) {
+      console.error('Save error:', err);
+      alert('Failed to save product: ' + (err instanceof Error ? err.message : 'Unknown error'));
+    } finally {
+      setSaving(false);
     }
+  };
 
-    console.log('Product saved successfully!');
-    alert('Product saved successfully!');
-    navigate('/admin/products');
-    
-  } catch (err: any) {
-    console.error('Save error:', err);
-    alert('Failed to save product: ' + (err.message || 'Unknown error'));
-  } finally {
-    setSaving(false);
-  }
-};
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
   return (
