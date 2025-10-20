@@ -250,7 +250,15 @@ const fetchFilterOptions = async () => {
       .eq('product_id', id);
 
     if (materialsError) throw materialsError;
+ // ✅ جلب الاستخدامات المرتبطة من جدول product_usages
+const { data: usageLinks, error: usageError } = await supabase
+  .from('product_usages')
+  .select('usage_id')
+  .eq('product_id', id);
 
+if (usageError) throw usageError;
+
+const usageIds = usageLinks?.map(link => link.usage_id) || [];
     // استخراج قائمة material_ids
     const materialIds = materialLinks?.map(link => link.material_id) || [];
 
