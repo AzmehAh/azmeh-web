@@ -150,69 +150,90 @@ const handleMaterialChange = (selectedMaterials: string[]) => {
     <p className="text-red-500 text-sm mt-1">No types found. Please add types first.</p>
   )}
 </div>
-
-{/* Material - Multiple Select */}
+{/* Material - Checkboxes */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Material / المادة *
   </label>
-  <select
-    multiple
-    value={Array.isArray(data.material_id) ? data.material_id : []}
-    onChange={(e) => {
-      const selectedOptions = Array.from(e.target.selectedOptions);
-      const selectedValues = selectedOptions.map(option => option.value);
-      onChange('material_id', selectedValues);
-    }}
-    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
-  >
+  <div className="border border-gray-200 rounded-lg p-3 max-h-48 overflow-y-auto">
     {materials && materials.length > 0 ? (
-      materials.map(material => (
-        <option key={material.id} value={material.id}>
-          {material.name_ar && material.name
-            ? `${material.name_ar} / ${material.name}`
-            : material.name_ar || material.name || 'Unnamed'}
-        </option>
-      ))
+      materials.map(material => {
+        const isChecked = Array.isArray(data.material_id) && data.material_id.includes(material.id);
+        return (
+          <div key={material.id} className="flex items-center mb-2">
+            <input
+              type="checkbox"
+              id={`material-${material.id}`}
+              checked={isChecked}
+              onChange={(e) => {
+                const current = Array.isArray(data.material_id) ? [...data.material_id] : [];
+                if (e.target.checked) {
+                  onChange('material_id', [...current, material.id]);
+                } else {
+                  onChange('material_id', current.filter(id => id !== material.id));
+                }
+              }}
+              className="h-4 w-4 text-[#0055A3] rounded focus:ring-[#0055A3]"
+            />
+            <label
+              htmlFor={`material-${material.id}`}
+              className="mr-2 text-sm text-gray-700 cursor-pointer"
+            >
+              {material.name_ar && material.name
+                ? `${material.name_ar} / ${material.name}`
+                : material.name_ar || material.name || 'Unnamed'}
+            </label>
+          </div>
+        );
+      })
     ) : (
-      <option value="" disabled>No materials available</option>
+      <p className="text-gray-500 text-sm">No materials available</p>
     )}
-  </select>
+  </div>
   {(!materials || materials.length === 0) && (
     <p className="text-red-500 text-sm mt-1">No materials found. Please add materials first.</p>
   )}
-  <p className="text-gray-500 text-sm mt-1">
-    Hold Ctrl/Cmd to select multiple materials
-  </p>
 </div>
-
-{/* Usage */}
-{/* Usage - Multi-select using native <select multiple> */}
+{/* Usage - Checkboxes */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Usage / الاستخدام *
   </label>
-  <select
-    multiple
-    value={Array.isArray(data.usage_id) ? data.usage_id : []}
-    onChange={(e) => {
-      const selected = Array.from(e.target.selectedOptions, option => option.value);
-      onChange('usage_id', selected); // ✅ يمرر مصفوفة من الـ IDs
-    }}
-    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
-  >
+  <div className="border border-gray-200 rounded-lg p-3 max-h-48 overflow-y-auto">
     {usages && usages.length > 0 ? (
-      usages.map(usage => (
-        <option key={usage.id} value={usage.id}>
-          {usage.name_ar && usage.name 
-            ? `${usage.name_ar} / ${usage.name}` 
-            : usage.name_ar || usage.name || 'Unnamed'}
-        </option>
-      ))
+      usages.map(usage => {
+        const isChecked = Array.isArray(data.usage_id) && data.usage_id.includes(usage.id);
+        return (
+          <div key={usage.id} className="flex items-center mb-2">
+            <input
+              type="checkbox"
+              id={`usage-${usage.id}`}
+              checked={isChecked}
+              onChange={(e) => {
+                const current = Array.isArray(data.usage_id) ? [...data.usage_id] : [];
+                if (e.target.checked) {
+                  onChange('usage_id', [...current, usage.id]);
+                } else {
+                  onChange('usage_id', current.filter(id => id !== usage.id));
+                }
+              }}
+              className="h-4 w-4 text-[#0055A3] rounded focus:ring-[#0055A3]"
+            />
+            <label
+              htmlFor={`usage-${usage.id}`}
+              className="mr-2 text-sm text-gray-700 cursor-pointer"
+            >
+              {usage.name_ar && usage.name
+                ? `${usage.name_ar} / ${usage.name}`
+                : usage.name_ar || usage.name || 'Unnamed'}
+            </label>
+          </div>
+        );
+      })
     ) : (
-      <option value="" disabled>No usages available</option>
+      <p className="text-gray-500 text-sm">No usages available</p>
     )}
-  </select>
+  </div>
   {(!usages || usages.length === 0) && (
     <p className="text-red-500 text-sm mt-1">No usages found. Please add usages first.</p>
   )}
