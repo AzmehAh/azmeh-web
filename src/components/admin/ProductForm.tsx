@@ -539,29 +539,35 @@ const ProductForm = () => {
       if (!productId) throw new Error('Failed to get product ID');
 
       // 4. ✅ معالجة علاقة المواد (Many-to-Many)
-      if (Array.isArray(formData.material_id)) {
-        // احذف العلاقات القديمة أولاً
-        const { error: deleteError } = await supabase
-          .from('product_materials')
-          .delete()
-          .eq('product_id', productId);
-        
-        if (deleteError) console.error('Error deleting old materials:', deleteError);
+     // 4. ✅ معالجة علاقة المواد (Many-to-Many)
+if (Array.isArray(formData.material_id)) {
+  // ✅ تصفية القيم: تأكد أن كل قيمة هي UUID صالح (غير فارغة)
+  const validMaterialIds = formData.material_id.filter(
+    (id: any) => id && typeof id === 'string' && id.trim() !== ''
+  );
 
-        // أدخل العلاقات الجديدة فقط إذا كانت هناك مواد محددة
-        if (formData.material_id.length > 0) {
-          const materialRelations = formData.material_id.map((materialId: string) => ({
-            product_id: productId,
-            material_id: materialId,
-          }));
+  // احذف العلاقات القديمة
+  const { error: deleteError } = await supabase
+    .from('product_materials')
+    .delete()
+    .eq('product_id', productId);
+  
+  if (deleteError) console.error('Error deleting old materials:', deleteError);
 
-          const { error: insertError } = await supabase
-            .from('product_materials')
-            .insert(materialRelations);
-          
-          if (insertError) throw insertError;
-        }
-      }
+  // أدخل العلاقات الجديدة فقط إذا كانت هناك مواد محددة
+  if (validMaterialIds.length > 0) {
+    const materialRelations = validMaterialIds.map((materialId: string) => ({
+      product_id: productId,
+      material_id: materialId,
+    }));
+
+    const { error: insertError } = await supabase
+      .from('product_materials')
+      .insert(materialRelations);
+    
+    if (insertError) throw insertError;
+  }
+}
 
       // 5. معالجة الصور
       if (images.length > 0) {
