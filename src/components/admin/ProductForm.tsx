@@ -383,7 +383,7 @@ const fetchFilterOptions = async () => {
   ...filteredData,
   brand_id: formData.brand_id,
   type_id: formData.type_id, 
-  material_id: formData.material_id,
+ 
   usage_id: formData.usage_id,
 
   features: formData.features || [],
