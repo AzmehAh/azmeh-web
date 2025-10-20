@@ -365,10 +365,15 @@ const ProductForm = () => {
       return;
     }
 
-    console.log('Starting save process...', { 
-      formData: { ...formData, images: 'omitted' }, 
-      imagesCount: images.length 
-    });
+    console.log('Starting save process...');
+
+    // دالة مساعدة لتحويل الحقول المصفوفية إلى JSON صحيح
+    const prepareArrayField = (field: any) => {
+      if (Array.isArray(field) && field.length > 0) {
+        return field;
+      }
+      return []; // إرجاع مصفوفة فارغة بدلاً من "[]"
+    };
 
     // 2. إعداد بيانات المنتج الأساسية
     const productData: any = {
@@ -384,23 +389,23 @@ const ProductForm = () => {
       type_id: formData.type_id || null,
       usage_id: formData.usage_id || null,
       
-      // الحقول المصفوفية (كدول JSON)
-      features: JSON.stringify(formData.features || []),
-      features_ar: JSON.stringify(formData.features_ar || []),
-      packaging: JSON.stringify(formData.packaging || []),
-      packaging_ar: JSON.stringify(formData.packaging_ar || []),
-      safety_precautions: JSON.stringify(formData.safety_precautions || []),
-      safety_precautions_ar: JSON.stringify(formData.safety_precautions_ar || []),
-      safety_first_aid: JSON.stringify(formData.safety_first_aid || []),
-      safety_first_aid_ar: JSON.stringify(formData.safety_first_aid_ar || []),
-      general_features: JSON.stringify(formData.general_features || []),
-      mixing_steps: JSON.stringify(formData.mixing_steps || []),
-      applications: JSON.stringify(formData.applications || []),
-      applications_ar: JSON.stringify(formData.applications_ar || []),
-      instructions: JSON.stringify(formData.instructions || []),
-      instructions_ar: JSON.stringify(formData.instructions_ar || []),
+      // ✅ الحقول المصفوفية - نستخدم الدالة المساعدة
+      features: prepareArrayField(formData.features),
+      features_ar: prepareArrayField(formData.features_ar),
+      packaging: prepareArrayField(formData.packaging),
+      packaging_ar: prepareArrayField(formData.packaging_ar),
+      safety_precautions: prepareArrayField(formData.safety_precautions),
+      safety_precautions_ar: prepareArrayField(formData.safety_precautions_ar),
+      safety_first_aid: prepareArrayField(formData.safety_first_aid),
+      safety_first_aid_ar: prepareArrayField(formData.safety_first_aid_ar),
+      general_features: prepareArrayField(formData.general_features),
+      mixing_steps: prepareArrayField(formData.mixing_steps),
+      applications: prepareArrayField(formData.applications),
+      applications_ar: prepareArrayField(formData.applications_ar),
+      instructions: prepareArrayField(formData.instructions),
+      instructions_ar: prepareArrayField(formData.instructions_ar),
       
-      // الحقول العامة
+      // الحقول النصية
       storing_conditions: formData.storing_conditions || '',
       storing_conditions_ar: formData.storing_conditions_ar || '',
       joint_preparation: formData.joint_preparation || '',
@@ -527,10 +532,7 @@ const ProductForm = () => {
       safety_note_ar: formData.safety_note_ar || '',
     };
 
-    console.log('Product data prepared, checking required fields...');
-    console.log('Name:', productData.name);
-    console.log('Name AR:', productData.name_ar);
-    console.log('Code:', productData.code);
+    console.log('Product data prepared:', productData);
 
     let productId = id;
 
@@ -545,10 +547,6 @@ const ProductForm = () => {
       
       if (error) {
         console.error('Update error details:', error);
-        console.error('Error message:', error.message);
-        console.error('Error details:', error.details);
-        console.error('Error hint:', error.hint);
-        console.error('Error code:', error.code);
         throw error;
       }
       console.log('Update successful:', data);
@@ -563,10 +561,6 @@ const ProductForm = () => {
       
       if (error) {
         console.error('Insert error details:', error);
-        console.error('Error message:', error.message);
-        console.error('Error details:', error.details);
-        console.error('Error hint:', error.hint);
-        console.error('Error code:', error.code);
         throw error;
       }
       console.log('Insert successful:', data);
@@ -577,7 +571,7 @@ const ProductForm = () => {
     console.log('Product ID obtained:', productId);
 
     // 4. ✅ معالجة علاقة المواد (Many-to-Many)
-    if (Array.isArray(formData.material_id)) {
+    if (Array.isArray(formData.material_id) && formData.material_id.length > 0) {
       console.log('Processing materials:', formData.material_id);
       
       // احذف العلاقات القديمة أولاً
@@ -588,39 +582,32 @@ const ProductForm = () => {
       
       if (deleteError) {
         console.error('Error deleting old materials:', deleteError);
-        // لا نرمي خطأ هنا لأنها قد تكون أول مرة
-      } else {
-        console.log('Old materials deleted successfully');
       }
 
-      // أدخل العلاقات الجديدة فقط إذا كانت هناك مواد محددة
-      if (formData.material_id.length > 0) {
-        const materialRelations = formData.material_id.map((materialId: string) => ({
-          product_id: productId,
-          material_id: materialId,
-        }));
+      // أدخل العلاقات الجديدة
+      const materialRelations = formData.material_id.map((materialId: string) => ({
+        product_id: productId,
+        material_id: materialId,
+      }));
 
-        console.log('Inserting material relations:', materialRelations);
+      console.log('Inserting material relations:', materialRelations);
 
-        const { error: insertError } = await supabase
-          .from('product_materials')
-          .insert(materialRelations);
-        
-        if (insertError) {
-          console.error('Error inserting materials:', insertError);
-          throw insertError;
-        }
-        console.log('Materials inserted successfully');
-      } else {
-        console.log('No materials selected to insert');
+      const { error: insertError } = await supabase
+        .from('product_materials')
+        .insert(materialRelations);
+      
+      if (insertError) {
+        console.error('Error inserting materials:', insertError);
+        throw insertError;
       }
+      console.log('Materials inserted successfully');
     } else {
-      console.log('material_id is not an array:', formData.material_id);
+      console.log('No materials to process');
     }
 
     // 5. معالجة الصور
     if (images.length > 0) {
-      console.log('Processing images:', images);
+      console.log('Processing images:', images.length);
       
       // احذف الصور القديمة إذا كنت في وضع التعديل
       if (isEditing) {
@@ -631,9 +618,6 @@ const ProductForm = () => {
         
         if (deleteImagesError) {
           console.error('Error deleting old images:', deleteImagesError);
-          // لا نرمي خطأ هنا لأنها قد تكون أول مرة
-        } else {
-          console.log('Old images deleted successfully');
         }
       }
 
@@ -644,8 +628,6 @@ const ProductForm = () => {
         is_main: img.isMain || false,
       }));
 
-      console.log('Inserting images:', imagesToInsert);
-
       const { error: imagesError } = await supabase
         .from('product_images')
         .insert(imagesToInsert);
@@ -655,8 +637,6 @@ const ProductForm = () => {
         throw imagesError;
       }
       console.log('Images inserted successfully');
-    } else {
-      console.log('No images to process');
     }
 
     console.log('Product saved successfully!');
@@ -664,22 +644,8 @@ const ProductForm = () => {
     navigate('/admin/products');
     
   } catch (err: any) {
-    console.error('Full save error details:', err);
-    console.error('Error message:', err.message);
-    console.error('Error details:', err.details);
-    console.error('Error hint:', err.hint);
-    console.error('Error code:', err.code);
-    
-    let errorMessage = 'Failed to save product: ';
-    if (err.message) {
-      errorMessage += err.message;
-    } else if (err.details) {
-      errorMessage += err.details;
-    } else {
-      errorMessage += 'Unknown error. Check console for details.';
-    }
-    
-    alert(errorMessage);
+    console.error('Save error:', err);
+    alert('Failed to save product: ' + (err.message || 'Unknown error'));
   } finally {
     setSaving(false);
   }
