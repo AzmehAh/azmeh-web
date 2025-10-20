@@ -1,4 +1,3 @@
-// src/components/admin/ProductForm.tsx
 import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Save } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
@@ -17,7 +16,7 @@ const parseArrayField = (field: any): any[] => {
       return JSON.parse(field);
     } catch {
       return [];
-    } 
+    }
   }
   return [];
 };
@@ -242,7 +241,7 @@ const fetchFilterOptions = async () => {
 
       if (imagesError) throw imagesError;
       console.log("Images data:", imagesData);
- 
+
       const parsed = {
         ...productData,
         features: parseArrayField(productData?.features),
@@ -477,4 +476,4 @@ const fetchFilterOptions = async () => {
   );
 }; 
 
-export default ProductForm; 
+export default ProductForm;
