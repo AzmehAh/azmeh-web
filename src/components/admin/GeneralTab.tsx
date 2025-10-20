@@ -148,31 +148,39 @@ export const GeneralTab: React.FC<Props> = ({
   )}
 </div>
 
-{/* Material */}
+{/* Material - Multiple Select */}
 <div>
   <label className="block text-sm font-medium text-gray-700 mb-2">
     Material / المادة *
   </label>
- <select
-  multiple
-  value={data.material_id || []}
-  onChange={(e) => {
-    const selected = Array.from(e.target.selectedOptions, opt => opt.value);
-    onChange('material_id', selected);
-  }}
-  className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32 select-multiple"
->
-  {materials.map(material => (
-    <option key={material.id} value={material.id}>
-      {material.name_ar && material.name
-        ? `${material.name_ar} / ${material.name}`
-        : material.name_ar || material.name || 'Unnamed'}
-    </option>
-  ))}
-</select>
+  <select
+    multiple
+    value={Array.isArray(data.material_id) ? data.material_id : []}
+    onChange={(e) => {
+      const selectedOptions = Array.from(e.target.selectedOptions);
+      const selectedValues = selectedOptions.map(option => option.value);
+      onChange('material_id', selectedValues);
+    }}
+    className="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-[#0055A3] h-32"
+  >
+    {materials && materials.length > 0 ? (
+      materials.map(material => (
+        <option key={material.id} value={material.id}>
+          {material.name_ar && material.name
+            ? `${material.name_ar} / ${material.name}`
+            : material.name_ar || material.name || 'Unnamed'}
+        </option>
+      ))
+    ) : (
+      <option value="" disabled>No materials available</option>
+    )}
+  </select>
   {(!materials || materials.length === 0) && (
     <p className="text-red-500 text-sm mt-1">No materials found. Please add materials first.</p>
   )}
+  <p className="text-gray-500 text-sm mt-1">
+    Hold Ctrl/Cmd to select multiple materials
+  </p>
 </div>
 
 {/* Usage */}
