@@ -30,10 +30,11 @@ const ProductForm = () => {
     name: '',
     name_ar: '',
     code: '',
-    brand: '',
-    type: '',
-    material: '',
-    usage: '',
+    brand_id: '',        
+  type_id: '',        
+  material_id: [],     
+  usage_id: [],       
+
     description: '',
     description_ar: '',
   
