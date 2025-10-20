@@ -73,7 +73,10 @@ export const GeneralTab: React.FC<Props> = ({
     { key: 'surface_preparation', label: 'Surface Preparation' },
     { key: 'recommended_uses', label: 'Recommended Uses' },
   ];
-
+// في الـ onChange لاختيار المواد
+const handleMaterialChange = (selectedMaterials: string[]) => {
+  handleInputChange('material_id', selectedMaterials); // ✅ تمرير مصفوفة
+};
   return (
     <div className="space-y-6">
       <div className="space-y-6">
