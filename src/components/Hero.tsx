@@ -270,7 +270,7 @@ const Hero = () => {
                     left: isActive
                       ? "auto"
                       : isRTL
-                        ? "40%"
+                        ? "50%"
                         : "30%",
                     transform: isActive
                       ? "none"
