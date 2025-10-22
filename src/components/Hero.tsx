@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { supabase } from "../lib/supabase";
 import { useTranslation } from "react-i18next";
 
-// 🔹 مكوّن العنوان المتحرك (كما هو)
+
 const AnimatedTitle = ({ text, isActive, isRTL }) => {
   const container = {
     hidden: { opacity: 0, y: 30 },
@@ -48,7 +48,7 @@ const AnimatedTitle = ({ text, isActive, isRTL }) => {
   );
 }; 
 
-// 🔹 مكوّن السلايدر للهواتف فقط - بدون فلاش أبيض، مع نقاط فقط
+
 const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, setIsManual, t, isRTL }) => {
   useEffect(() => {
     if (isManual || categories.length <= 1) return;
@@ -115,7 +115,7 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
         );
       })}
 
-      {/* نقاط التقدم فقط - بدون أزرار اتجاه */}
+     
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
         {categories.map((_, idx) => (
           <button
@@ -132,7 +132,7 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
   );
 };
 
-// 🔹 المكوّن الرئيسي
+
 const Hero = () => {
   const { t, i18n } = useTranslation();
   const isRTL = i18n.language === 'ar';
@@ -179,7 +179,7 @@ const Hero = () => {
     fetchHeroCategories();
   }, []);
 
-  // تشغيل السلايدر التلقائي فقط في الشاشات غير الموبايل
+  
   useEffect(() => {
     if (isMobile || isManual || categories.length <= 1) return;
 
@@ -205,7 +205,7 @@ const Hero = () => {
     );
   }
 
-  // 🔥 عرض السلايدر في الموبايل فقط
+
   if (isMobile) {
     return (
       <MobileHeroSlider
@@ -220,7 +220,7 @@ const Hero = () => {
     );
   }
 
-  // 🔥 عرض التصميم الأصلي في الشاشات المتوسطة والكبيرة
+ 
   return (
     <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
       <div className="flex h-full">
