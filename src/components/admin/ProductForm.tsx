@@ -30,8 +30,7 @@ const ProductForm = () => {
     name: '',
     name_ar: '',
     code: '',
-   brand_id: null,        // ← تغيير من '' إلى null
-  type_id: null,        
+   brand_id: null,     
   material_id: [],     
   usage_id: [],       
 
@@ -104,6 +103,7 @@ const ProductForm = () => {
     tensile_strength_100_ar: '',
     tensile_strength_50_ar: '',
     specific_gravity_mixed_ar: '',
+    specific_gravity_mixed:'',
     solvent_resistance_ar: '',
     chemical_resistance_ar: '',
     abrasion_resistance_ar: '',
@@ -124,7 +124,7 @@ const ProductForm = () => {
     component_a_ar: '',
     component_b_ar: '',
     specific_gravity: '',
-   specific_gravity_ar: '',
+    specific_gravity_ar: '',
     
     // Drying Time
     dry_to_touch: '', 
@@ -382,6 +382,7 @@ const usageIds = usageLinks?.map(link => link.usage_id) || [];
   'elongation_at_rupture', 'elongation_at_rupture_ar',
   'tensile_strength_100', 'tensile_strength_100_ar',
   'tensile_strength_50', 'tensile_strength_50_ar',
+  'specific_gravity_ar',  'specific_gravity_ar',
   'specific_gravity_mixed', 'specific_gravity_mixed_ar',
   'solvent_resistance', 'solvent_resistance_ar',
   'chemical_resistance', 'chemical_resistance_ar',
