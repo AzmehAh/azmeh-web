@@ -171,7 +171,7 @@ const TroubleshootingManager = () => {
             {/* Category Header */}
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
-             <div className="flex items-start space-x-3 pt-1">
+             <div className="flex items-start gap-3 pt-1">
                   <button
                     onClick={() => toggleCategory(category.id)}
                     className="p-2 hover:bg-gray-100 rounded transition-colors"
@@ -204,7 +204,7 @@ const TroubleshootingManager = () => {
                     )}
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-500">{category.troubleshooting_items.length} items</span>
                   <button
                     onClick={() => openItemModal(null, true, category.id)}
@@ -247,7 +247,7 @@ const TroubleshootingManager = () => {
                         <div key={item.id} className="bg-gray-50 rounded-lg p-4">
                           <div className="flex items-start justify-between">
                             <div className="flex-1">
-                              <div className="flex items-center space-x-2 mb-2">
+                              <div className="flex items-center gap-2 mb-2">
                                 <span className={`px-2 py-1 text-xs font-medium rounded-full ${getSeverityColor(item.severity)}`}>
                                   {item.severity}
                                 </span>
@@ -269,7 +269,7 @@ const TroubleshootingManager = () => {
                                 )}
                               </p>
                             </div>
-                            <div className="flex items-center space-x-2 ml-4">
+                            <div className="flex items-center gap-2 ml-4">
                               <button
                                 onClick={() => openItemModal(item, true)}
                                 className="p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition-colors"
@@ -519,7 +519,7 @@ const CategoryModal = ({
           </div>
 
           {isEditing && (
-            <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t bg-gray-50">
               <button
                 onClick={onClose}
                 className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
@@ -777,7 +777,7 @@ const ItemModal = ({
           </div>
 
           {isEditing && (
-            <div className="flex items-center justify-end space-x-3 p-6 border-t bg-gray-50">
+            <div className="flex items-center justify-end gap-3 p-6 border-t bg-gray-50">
               <button
                 onClick={onClose}
                 className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
