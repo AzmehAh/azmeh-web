@@ -12,7 +12,7 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { supabase, FAQCategory, FAQItem } from '../../lib/supabase';
-import BilingualInput from './BilingualInput'; // تأكد من وجود هذا المكوّن
+import BilingualInput from './BilingualInput'; 
 
 const FAQManager = () => {
   const [categories, setCategories] = useState<(FAQCategory & { faq_items: FAQItem[] })[]>([]);
