@@ -142,7 +142,7 @@ return (
     <div className="min-h-screen bg-gray-50 pt-20">
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className={`flex items-center text-sm text-gray-600 ${currentLang === 'ar' ? 'flex-row-reverse space-x-reverse' : ''}`}>
+          <div className={`flex items-center text-sm text-gray-600 ${currentLang === 'ar' ? 'flex-row-reverse gap-reverse' : ''}`}>
             <Link to="/" className="hover:text-logo transition-colors">{t('faq.home')}</Link>
             <span className="mx-2">/</span>
             <Link to="/faq" className="hover:text-logo transition-colors">{t('faq.title')}</Link>
@@ -197,7 +197,7 @@ return (
                   onClick={() => toggleItem(item.id)}
                   className="w-full text-left p-6 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-between group"
                 >
-                  <div className="flex items-start space-x-4 flex-1">
+                  <div className="flex items-start gap-4 flex-1">
                     <div className="flex-shrink-0 mt-1">
                       <div className="w-8 h-8 bg-gradient-to-br from-logo to-blue-700 rounded-lg flex items-center justify-center">
                         <span className="text-white font-bold text-sm">{index + 1}</span>
@@ -226,7 +226,7 @@ return (
                     >
                       <div className="px-6 pb-6 pl-12">
                         <div className="bg-blue-50 rounded-lg p-6 border-l-4 border-logo">
-                          <div className="flex items-start space-x-3">
+                          <div className="flex items-start gap-3">
                             <CheckCircle className="w-5 h-5 text-logo mt-0.5 flex-shrink-0" />
                             <p className="text-gray-700 leading-relaxed">
                               {getField(item, 'answer')}
