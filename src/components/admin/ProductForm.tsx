@@ -382,7 +382,7 @@ const usageIds = usageLinks?.map(link => link.usage_id) || [];
   'elongation_at_rupture', 'elongation_at_rupture_ar',
   'tensile_strength_100', 'tensile_strength_100_ar',
   'tensile_strength_50', 'tensile_strength_50_ar',
-  'specific_gravity_ar',  'specific_gravity_ar',
+  'specific_gravity_ar',  'specific_gravity',
   'specific_gravity_mixed', 'specific_gravity_mixed_ar',
   'solvent_resistance', 'solvent_resistance_ar',
   'chemical_resistance', 'chemical_resistance_ar',
