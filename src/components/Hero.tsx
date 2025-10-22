@@ -271,7 +271,7 @@ const Hero = () => {
                       ? "auto"
                       : isRTL
                         ? "60%" 
-                        : "30%",
+                        : "20%",
                     transform: isActive
                       ? "none"
                       : "translate(-50%, -50%) rotate(-90deg)",
