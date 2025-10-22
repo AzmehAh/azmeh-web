@@ -245,7 +245,7 @@ const Troubleshooting = () => {
                   onClick={() => toggleItem(item.id)}
                   className="w-full text-left p-6 hover:bg-gray-50 transition-colors duration-200 flex items-center justify-between group"
                 >
-                  <div className="flex items-start space-x-4 flex-1">
+                  <div className="flex items-start gap-4 flex-1">
                     <div className="flex-shrink-0 mt-1">
                       <div className="w-8 h-8  bg-gradient-to-br from-logo to-blue-700 rounded-lg flex items-center justify-center">
                         <span className="text-white font-bold text-sm">{index + 1}</span>
@@ -255,9 +255,9 @@ const Troubleshooting = () => {
                       <h3 className="text-lg font-semibold text-gray-900 group-hover:text-logo transition-colors leading-relaxed mb-2">
                         {lang === 'ar' ? item.problem_ar : item.problem}
                       </h3>
-                      <div className="flex items-center space-x-2">
+                      <div className="flex items-center gap-2">
                         <span
-                          className={`inline-flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium border ${getSeverityColor(
+                          className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium border ${getSeverityColor(
                             item.severity
                           )}`}
                         >
@@ -301,7 +301,7 @@ const Troubleshooting = () => {
                       <div className="px-6 pb-6">
                         <div className="pl-12 pr-4">
                           <div className="bg-blue-50  rounded-lg p-6 border-l-4 border-logo">
-                            <div className="flex items-start space-x-3">
+                            <div className="flex items-start gap-3">
                               <CheckCircle className="w-5 h-5 text-logo mt-0.5 flex-shrink-0" />
                               <div>
                                 <h4 className="font-semibold text-gray-900 mb-2">
