@@ -270,8 +270,8 @@ const Hero = () => {
                     left: isActive
                       ? "auto"
                       : isRTL
-                        ? "55"
-                        : "40",
+                        ? "40%"
+                        : "30%",
                     transform: isActive
                       ? "none"
                       : "translate(-50%, -50%) rotate(-90deg)",
