@@ -41,15 +41,15 @@ const Troubleshooting = () => {
     }
   };
 
-  // اللغة الحالية
+  
   const lang = i18n.language;
 
-  // احصل على الفئة الحالية
+
   const currentCategory = category
     ? troubleshootingCategories.find((cat) => cat.id === category)
     : null;
 
-  // شاشة التحميل
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
@@ -58,7 +58,7 @@ const Troubleshooting = () => {
     ); 
   }
 
-  // إذا لم يتم تحديد فئة
+
   if (!category) {
    return (
   <div className="min-h-screen bg-gray-50 pt-20">
@@ -89,12 +89,12 @@ const Troubleshooting = () => {
                 </h3>
               </div>
 
-              {/* ✅ أضف flex-grow هنا */}
+          
               <p className="text-gray-600 leading-relaxed mb-6 flex-grow">
                 {lang === 'ar' ? cat.description_ar : cat.description}
               </p>
 
-              {/* ✅ لف القسم السفلي وادفعه للأسفل */}
+        
               <div className="mt-auto pt-4 border-t border-gray-100">
                 <div className="flex items-center text-logo font-semibold group-hover:translate-x-2 transition-transform">
                   <span>{t('troubleshooting.viewSolutions')}</span>
@@ -113,7 +113,7 @@ const Troubleshooting = () => {
 );
   }
 
-  // إذا لم يتم العثور على فئة مطابقة
+
   if (!currentCategory) {
     return (
       <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
@@ -131,7 +131,7 @@ const Troubleshooting = () => {
     );
   }
 
-  // فلترة المشاكل حسب البحث
+
   const filteredIssues = currentCategory
     ? currentCategory.troubleshooting_items.filter((issue) => {
         const problem = lang === 'ar' ? issue.problem_ar : issue.problem;
