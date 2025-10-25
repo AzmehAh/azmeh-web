@@ -304,9 +304,7 @@ const Troubleshooting = () => {
                             <div className="flex items-start gap-3">
                               <CheckCircle className="w-5 h-5 text-logo mt-0.5 flex-shrink-0" />
                               <div>
-                                <h4 className="font-semibold text-gray-900 mb-2">
-                                  {t('troubleshooting.solution')}
-                                </h4>
+                                
                                 <p className="text-gray-700 leading-relaxed">
                                   {lang === 'ar' ? item.solution_ar : item.solution}
                                 </p>
