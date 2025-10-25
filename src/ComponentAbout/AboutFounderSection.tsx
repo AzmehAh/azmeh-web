@@ -27,7 +27,7 @@ const AboutFounderSection = () => {
           >
             <div className="absolute -inset-4 bg-logo rounded-3xl opacity-20 blur-xl"></div>
             <div className="relative  p-8 ">
-              <div className="w-90 h-90 mx-auto bg-white rounded-2xl flex items-center justify-center">
+              <div className="w-85 h-90 mx-auto bg-white rounded-2xl flex items-center justify-center">
                 <img 
       src="/images/historyTitle.png" 
       alt="History Title"  
