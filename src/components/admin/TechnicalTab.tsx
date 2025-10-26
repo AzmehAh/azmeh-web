@@ -13,7 +13,7 @@ export const TechnicalTab: React.FC<Props> = ({ data, onChange }) => {
   };
 
   const fields = [
-    { en: 'number_of_coats', labelEn: 'Number of Coats', labelAr: 'عدد الطبقات' },
+  
     { en: 'tensile_adhesion_strength', labelEn: 'Tensile Adhesion Strength', labelAr: 'قوة التماسك الشدّي' },
     { en: 'material_consumption',labelEn: 'Material Consumption', labelAr: 'استهلاك المادة' },
     { en: 'viscosity', labelEn: 'Viscosity', labelAr: 'اللزوجة' },
