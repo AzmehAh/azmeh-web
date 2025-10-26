@@ -33,17 +33,10 @@ const ProductForm = () => {
    brand_id: null,     
   material_id: [],     
   usage_id: [],       
-
     description: '',
     description_ar: '',
-  
     features: [],
     features_ar: [],
-    applications: [],
-    applications_ar: [],
-    instructions: [],
-    
-    instructions_ar: [],
     packaging: [],
     packaging_ar: [], 
     safety_precautions: [],
@@ -63,7 +56,7 @@ const ProductForm = () => {
     substrate_treatment_ar: '',
     surface_preparation: '',
     surface_preparation_ar: '',
-    general_features: [],
+   
     recommended_uses: '',
     recommended_uses_ar: '',
     // Application
@@ -266,12 +259,12 @@ const usageIds = usageLinks?.map(link => link.usage_id) || [];
     const parsed = {
       ...productData,
       features: parseArrayField(productData?.features),
-      general_features: parseArrayField(productData?.general_features),
+    
       brand_id: productData?.brand_id || '',
       type_id: productData?.type_id || '',
       material_id: materialIds, // ✅ هنا نضع المصفوفة الفعلية
       usage_id: usageIds,
-      applications: parseArrayField(productData?.applications),
+     
       mixing_steps: parseArrayField(productData?.mixing_steps),
       safety_precautions: parseArrayField(productData?.safety_precautions),
       safety_first_aid: parseArrayField(productData?.safety_first_aid),
@@ -360,7 +353,7 @@ const usageIds = usageLinks?.map(link => link.usage_id) || [];
   'movement_capacity', 'movement_capacity_ar',
   'substrate_treatment', 'substrate_treatment_ar',
   'surface_preparation', 'surface_preparation_ar',
-  'general_features', 'recommended_uses', 'recommended_uses_ar',
+   'recommended_uses', 'recommended_uses_ar',
   'method_of_application', 'method_of_application_ar',
   'mixing_ratio', 'mixing_ratio_ar',
   'mixing_note', 'mixing_note_ar',
@@ -437,7 +430,6 @@ const usageIds = usageLinks?.map(link => link.usage_id) || [];
   safety_first_aid: formData.safety_first_aid || [],
   packaging: JSON.stringify(formData.packaging || []),
  packaging_ar: JSON.stringify(formData.packaging_ar || []),
-  general_features: formData.general_features || [],
   mixing_steps: formData.mixing_steps || [],
 };
 
