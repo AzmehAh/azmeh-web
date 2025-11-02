@@ -53,7 +53,7 @@ export const GeneralTab: React.FC<Props> = ({
     onChange('features', newFeatures);
   };
 
-  const addFeature = () => { 
+  const addFeature = () => {
     onChange('features', [...(data.features || []), '']);
   };
 
@@ -267,22 +267,20 @@ const handleMaterialChange = (selectedMaterials: string[]) => {
 />
 
       
+{/* Packaging - Bilingual (مثل المميزات) */}
 <BilingualArrayInput
   label="Packaging Sizes / أحجام العبوة"
-  valueEn={Array.isArray(data.packaging) ? data.packaging.map(item => item.size) : []}
-  valueAr={Array.isArray(data.packaging_ar) ? data.packaging_ar.map(item => item.size) : []}
+  valueEn={Array.isArray(data.packaging) ? data.packaging.map(item => item?.size || '') : []}
+  valueAr={Array.isArray(data.packaging_ar) ? data.packaging_ar.map(item => item?.size || '') : []}
   onChangeEn={(sizes) => {
-    // إذا تريد حفظها ككائنات كما قبل:
     const packaging = sizes.map(size => ({ size }));
-    onChange('packaging', packaging);
+    onChange('packaging', packaging); 
   }}
   onChangeAr={(sizes) => {
     const packaging_ar = sizes.map(size => ({ size }));
     onChange('packaging_ar', packaging_ar);
   }}
 />
-
-
 
         {/* Features */}
         <BilingualArrayInput
