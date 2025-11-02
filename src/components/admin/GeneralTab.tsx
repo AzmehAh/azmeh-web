@@ -267,18 +267,21 @@ const handleMaterialChange = (selectedMaterials: string[]) => {
 />
 
       
-{/* Packaging - Bilingual (مثل المميزات) */}
 <BilingualArrayInput
   label="Packaging Sizes / أحجام العبوة"
-  valueEn={Array.isArray(data.packaging) ? data.packaging : []}
-  valueAr={Array.isArray(data.packaging_ar) ? data.packaging_ar : []}
+  valueEn={Array.isArray(data.packaging) ? data.packaging.map(item => item.size) : []}
+  valueAr={Array.isArray(data.packaging_ar) ? data.packaging_ar.map(item => item.size) : []}
   onChangeEn={(sizes) => {
-    onChange('packaging', sizes); // مصفوفة نصوص مباشرة
+    // إذا تريد حفظها ككائنات كما قبل:
+    const packaging = sizes.map(size => ({ size }));
+    onChange('packaging', packaging);
   }}
   onChangeAr={(sizes) => {
-    onChange('packaging_ar', sizes); // مصفوفة نصوص مباشرة
+    const packaging_ar = sizes.map(size => ({ size }));
+    onChange('packaging_ar', packaging_ar);
   }}
 />
+
 
 
         {/* Features */}
