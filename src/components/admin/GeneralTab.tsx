@@ -29,22 +29,7 @@ export const GeneralTab: React.FC<Props> = ({
   materials,
   usages,
 }) => {
-  // Packaging handlers
-  const handlePackagingChange = (index: number, value: string) => {
-    const newPack = [...(data.packaging || [])];
-    newPack[index] = { size: value };
-    onChange('packaging', newPack);
-  };
-
-  const addPackaging = () => {
-    onChange('packaging', [...(data.packaging || []), { size: '' }]);
-  };
-
-  const removePackaging = (index: number) => {
-    const newPack = [...(data.packaging || [])];
-    newPack.splice(index, 1);
-    onChange('packaging', newPack);
-  };
+ 
 
   // ✅ Features handlers
   const handleFeatureChange = (index: number, value: string) => {
