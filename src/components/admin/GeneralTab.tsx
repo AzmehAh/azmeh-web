@@ -32,7 +32,7 @@ export const GeneralTab: React.FC<Props> = ({
   // Packaging handlers
   const handlePackagingChange = (index: number, value: string) => {
     const newPack = [...(data.packaging || [])];
-    newPack[index] = { size: value };
+    newPack[index] = { value };
     onChange('packaging', newPack);
   };
 
