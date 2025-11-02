@@ -32,7 +32,7 @@ export const GeneralTab: React.FC<Props> = ({
   // Packaging handlers
   const handlePackagingChange = (index: number, value: string) => {
     const newPack = [...(data.packaging || [])];
-    newPack[index] = {  value };
+    newPack[index] = { size: value };
     onChange('packaging', newPack);
   };
 
@@ -267,25 +267,21 @@ const handleMaterialChange = (selectedMaterials: string[]) => {
 />
 
       
-{/* Packaging - Bilingual (كقائمة نصوص مباشرة) */}
+{/* Packaging - Bilingual (مثل المميزات) */}
 <BilingualArrayInput
   label="Packaging Sizes / أحجام العبوة"
-  valueEn={Array.isArray(data.packaging) && data.packaging.every(item => typeof item === 'string')
-    ? data.packaging
-    : Array.isArray(data.packaging)
-      ? data.packaging.map((item: any) => item?.size || '')
-      : []
-  }
-  valueAr={Array.isArray(data.packaging_ar) && data.packaging_ar.every(item => typeof item === 'string')
-    ? data.packaging_ar
-    : Array.isArray(data.packaging_ar)
-      ? data.packaging_ar.map((item: any) => item?.size || '')
-      : []
-  }
-  onChangeEn={(sizes) => onChange('packaging', sizes)}
-  onChangeAr={(sizes) => onChange('packaging_ar', sizes)}
-/>
-
+  valueEn={Array.isArray(data.packaging) ? data.packaging.map(item => item?.size || '') : []}
+  valueAr={Array.isArray(data.packaging_ar) ? data.packaging_ar.map(item => item?.size || '') : []}
+  onChangeEn={(sizes) => {
+    const packaging = sizes.map(size => ({ size }));
+    onChange('packaging', packaging); 
+  }}
+  onChangeAr={(sizes) => {
+    const packaging_ar = sizes.map(size => ({ size }));
+    onChange('packaging_ar', packaging_ar);
+  }}
+/> 
+ 
         {/* Features */}
         <BilingualArrayInput
           label="Product Features / المميزات"
