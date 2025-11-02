@@ -39,13 +39,7 @@ export const GeneralTab: React.FC<Props> = ({
   const addPackaging = () => {
     onChange('packaging', [...(data.packaging || []), { size: '' }]);
   };
-const packagingStrings = Array.isArray(data.packaging)
-  ? data.packaging.map(item => item.size || '')
-  : [];
 
-const packagingArStrings = Array.isArray(data.packaging_ar)
-  ? data.packaging_ar.map(item => item.size || '')
-  : [];
   const removePackaging = (index: number) => {
     const newPack = [...(data.packaging || [])];
     newPack.splice(index, 1);
@@ -59,7 +53,7 @@ const packagingArStrings = Array.isArray(data.packaging_ar)
     onChange('features', newFeatures);
   };
 
-  const addFeature = () => {
+  const addFeature = () => { 
     onChange('features', [...(data.features || []), '']);
   };
 
@@ -275,18 +269,20 @@ const handleMaterialChange = (selectedMaterials: string[]) => {
       
 <BilingualArrayInput
   label="Packaging Sizes / أحجام العبوة"
-  valueEn={packagingStrings}
-  valueAr={packagingArStrings}
+  valueEn={Array.isArray(data.packaging) ? data.packaging.map(item => item.size) : []}
+  valueAr={Array.isArray(data.packaging_ar) ? data.packaging_ar.map(item => item.size) : []}
   onChangeEn={(sizes) => {
-    // عند الحفظ، احفظ كمصفوفة كائنات مرة أخرى
-    const formatted = sizes.map(size => ({ size }));
-    onChange('packaging', formatted);
+    // إذا تريد حفظها ككائنات كما قبل:
+    const packaging = sizes.map(size => ({ size }));
+    onChange('packaging', packaging);
   }}
   onChangeAr={(sizes) => {
-    const formatted = sizes.map(size => ({ size }));
-    onChange('packaging_ar', formatted);
+    const packaging_ar = sizes.map(size => ({ size }));
+    onChange('packaging_ar', packaging_ar);
   }}
 />
+
+
 
         {/* Features */}
         <BilingualArrayInput
