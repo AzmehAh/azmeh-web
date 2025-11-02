@@ -25,14 +25,14 @@ export const GeneralTab: React.FC<Props> = ({
   onSetMainImage,
   uploading,
   brands,
-  types,
+  types, 
   materials,
   usages,
 }) => {
   // Packaging handlers
   const handlePackagingChange = (index: number, value: string) => {
     const newPack = [...(data.packaging || [])];
-    newPack[index] = { value };
+    newPack[index] = { size: value };
     onChange('packaging', newPack);
   };
 
