@@ -205,35 +205,43 @@ const Products = () => {
   return filterNames[category] || category;
 };
 
-  const filteredProducts = useMemo(() => {
-    let filtered = products.filter(product => {
-      const productName = getTranslatedText(product, 'name');
-      const productDescription = getTranslatedText(product, 'description');
+ const filteredProducts = useMemo(() => {
+  let filtered = products.filter(product => {
+    const productName = getTranslatedText(product, 'name');
+    const productDescription = getTranslatedText(product, 'description');
+    
+    const matchesSearch = productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         productDescription.toLowerCase().includes(searchTerm.toLowerCase());
+
+    // 👇 هذا هو التعديل الوحيد: جعل matchesFilters آمنًا
+    const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
+      if (values.length === 0) return true;
+
+      // ✅ تحقق أولًا: هل هذا الحقل موجود في المنتج؟
+      const productValue = product[category as keyof Product];
       
-      const matchesSearch = productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                           productDescription.toLowerCase().includes(searchTerm.toLowerCase());
+      // ❌ إذا لم يكن موجودًا، تجاهله (لا تفلتر به)
+      if (productValue == null) {
+        return true; // ← هذا يمنع الخطأ
+      }
 
-      const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
-        if (values.length === 0) return true;
-        const productValue = product[category as keyof Product] as string;
-        const translatedValue = translateFilterValue(category, productValue);
-        return values.includes(translatedValue);
-      });
-
-      return matchesSearch && matchesFilters;
+      const translatedValue = translateFilterValue(category, String(productValue));
+      return values.includes(translatedValue);
     });
 
-    filtered.sort((a, b) => {
-      const aName = getTranslatedText(a, 'name');
-      const bName = getTranslatedText(b, 'name');
-      const compareValue = aName.localeCompare(bName, i18n.language);
-      return sortOrder === 'asc' ? compareValue : -compareValue;
-    });
+    return matchesSearch && matchesFilters;
+  });
 
-    return filtered;
-  }, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
+  filtered.sort((a, b) => {
+    const aName = getTranslatedText(a, 'name');
+    const bName = getTranslatedText(b, 'name');
+    const compareValue = aName.localeCompare(bName, i18n.language);
+    return sortOrder === 'asc' ? compareValue : -compareValue;
+  });
 
+  return filtered;
+}, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
   return ( 
     <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Hero Section */}
