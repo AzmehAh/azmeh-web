@@ -229,7 +229,7 @@ const Products = () => {
       else if (category === 'Application Fields') field = 'usage';
       else return true;
 
-      const productValue = product[field];
+      const productValue = product[field]; 
       if (productValue == null) return false;
 
       const translatedValue = translateFilterValue(category, String(productValue));
