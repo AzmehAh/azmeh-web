@@ -206,42 +206,33 @@ const Products = () => {
 };
 
  const filteredProducts = useMemo(() => {
-  let filtered = products.filter(product => {
-    const productName = getTranslatedText(product, 'name');
-    const productDescription = getTranslatedText(product, 'description');
-    
-    const matchesSearch = productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         productDescription.toLowerCase().includes(searchTerm.toLowerCase());
+  // 1. ابحث أولًا (بدون أي فلتر)
+  const searched = products.filter(product => {
+    const name = (i18n.language === 'ar' ? product.name_ar : product.name) || '';
+    const desc = (i18n.language === 'ar' ? product.description_ar : product.description) || '';
+    const code = product.code || '';
 
-    // 👇 هذا هو التعديل الوحيد: جعل matchesFilters آمنًا
-    const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
-      if (values.length === 0) return true;
+    const term = searchTerm.toLowerCase().trim();
+    if (term === '') return true;
 
-      // ✅ تحقق أولًا: هل هذا الحقل موجود في المنتج؟
-      const productValue = product[category as keyof Product];
-      
-      // ❌ إذا لم يكن موجودًا، تجاهله (لا تفلتر به)
-      if (productValue == null) {
-        return true; // ← هذا يمنع الخطأ
-      }
-
-      const translatedValue = translateFilterValue(category, String(productValue));
-      return values.includes(translatedValue);
-    });
-
-    return matchesSearch && matchesFilters;
+    return (
+      name.toLowerCase().includes(term) ||
+      desc.toLowerCase().includes(term) ||
+      code.toLowerCase().includes(term)
+    );
   });
 
-  filtered.sort((a, b) => {
-    const aName = getTranslatedText(a, 'name');
-    const bName = getTranslatedText(b, 'name');
-    const compareValue = aName.localeCompare(bName, i18n.language);
-    return sortOrder === 'asc' ? compareValue : -compareValue;
+  // 2. فرّز
+  searched.sort((a, b) => {
+    const nameA = (i18n.language === 'ar' ? a.name_ar : a.name) || '';
+    const nameB = (i18n.language === 'ar' ? b.name_ar : b.name) || '';
+    return sortOrder === 'asc'
+      ? nameA.localeCompare(nameB, i18n.language)
+      : nameB.localeCompare(nameA, i18n.language);
   });
 
-  return filtered;
-}, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
+  return searched;
+}, [searchTerm, sortOrder, products, i18n.language]);
   return ( 
     <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Hero Section */}
