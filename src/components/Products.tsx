@@ -224,12 +224,13 @@ const Products = () => {
 
   const productValue = product[field];
   if (productValue == null) return false;
-
+ 
   const translatedValue = translateFilterValue(category, String(productValue));
   return values.includes(translatedValue);
 });
 
-      
+      return matchesSearch && matchesFilters;
+    });
 
     filtered.sort((a, b) => {
       const aName = getTranslatedText(a, 'name');
