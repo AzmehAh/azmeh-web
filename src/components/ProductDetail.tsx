@@ -443,21 +443,22 @@ setProduct(formattedProduct);
   </>
 )}
      
-              {product.packaging && product.packaging.length > 0 && (
-                <div className="mb-8">
-                  <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
-                    <Package className="w-5 h-5 text-white mr-2" />
-                    {t('products.packaging_sizes')}
-                  </h3>
-                  <div className="flex flex-wrap gap-4">
-                    {product.packaging.map((pack, index) => (
-                      <div key={index} className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28"> 
-                        <h4 className="text-sm font-bold text-white">{pack}</h4>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+             {product.packaging && product.packaging.length > 0 && (
+  <div className="mb-8">
+    <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
+      <Package className="w-5 h-5 text-white mr-2" />
+      {t('products.packaging_sizes')}
+    </h3>
+    <div className="flex flex-wrap gap-4 items-start">
+      {product.packaging.map((pack, index) => (
+        <div key={index} className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28"> 
+          <h4 className="text-sm font-bold text-white">{pack}</h4>
+        </div>
+      ))}
+    </div>
+  </div>
+)}
+
 
               <button
                 onClick={handleDownloadDatasheet}
