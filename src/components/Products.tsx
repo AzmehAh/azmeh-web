@@ -256,8 +256,7 @@ const Products = () => {
       return sortOrder === 'asc' ? compareValue : -compareValue;
     });
 
-    return filtered;
-  }, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
+    
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
