@@ -205,49 +205,24 @@ const Products = () => {
   return filterNames[category] || category;
 };
 
- const filteredProducts = useMemo(() => {
-  let filtered = products.filter(product => {
-    const productName = getTranslatedText(product, 'name');
-    const productDescription = getTranslatedText(product, 'description');
-    
-    const matchesSearch = productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         productDescription.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredProducts = useMemo(() => {
+    let filtered = products.filter(product => {
+      const productName = getTranslatedText(product, 'name');
+      const productDescription = getTranslatedText(product, 'description');
+      
+      const matchesSearch = productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                           productDescription.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
-      if (values.length === 0) return true;
+      const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
+        if (values.length === 0) return true;
+        const productValue = product[category as keyof Product] as string;
+        const translatedValue = translateFilterValue(category, productValue);
+        return values.includes(translatedValue);
+      });
 
-      const supported = ['Brand', 'Type', 'Material Type', 'Application Fields'];
-      if (!supported.includes(category)) {
-        return true;
-      }
-
-      let field: keyof Product;
-      if (category === 'Brand') field = 'brand';
-      else if (category === 'Type') field = 'type';
-      else if (category === 'Material Type') field = 'material';
-      else if (category === 'Application Fields') field = 'usage';
-      else return true;
-
-      const productValue = product[field]; 
-      if (productValue == null) return false;
-
-      const translatedValue = translateFilterValue(category, String(productValue));
-      return values.includes(translatedValue);
+      return matchesSearch && matchesFilters;
     });
-
-    return matchesSearch && matchesFilters;
-  });
-
-  filtered.sort((a, b) => {
-    const aName = getTranslatedText(a, 'name');
-    const bName = getTranslatedText(b, 'name');
-    const compareValue = aName.localeCompare(bName, i18n.language);
-    return sortOrder === 'asc' ? compareValue : -compareValue;
-  });
-
-  return filtered;
-}, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
 
     filtered.sort((a, b) => {
       const aName = getTranslatedText(a, 'name');
@@ -256,9 +231,10 @@ const Products = () => {
       return sortOrder === 'asc' ? compareValue : -compareValue;
     });
 
-    
+    return filtered;
+  }, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
 
-  return (
+  return ( 
     <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Hero Section */}
       <div className=" text-logo pt-20 ">
