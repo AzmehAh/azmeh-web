@@ -224,11 +224,10 @@ const Products = () => {
 
   const productValue = product[field];
   if (productValue == null) return false;
- 
+
   const translatedValue = translateFilterValue(category, String(productValue));
   return values.includes(translatedValue);
 });
-
       return matchesSearch && matchesFilters;
     });
 
