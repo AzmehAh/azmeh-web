@@ -205,7 +205,7 @@ const Products = () => {
   return filterNames[category] || category;
 };
 
-const filteredProducts = useMemo(() => {
+  const filteredProducts = useMemo(() => {
   let filtered = products.filter(product => {
     const productName = getTranslatedText(product, 'name');
     const productDescription = getTranslatedText(product, 'description');
