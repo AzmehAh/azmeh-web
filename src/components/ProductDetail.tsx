@@ -168,22 +168,38 @@ const fetchFilterTranslations = async () => {
     return enValue;
   };
 
-  const parseArrayField = (field: any): any[] => {
-    if (Array.isArray(field)) return field;
-    if (typeof field === 'string') {
+ const parseArrayField = (field: any): any[] => {
+  if (Array.isArray(field)) return field;
+
+  if (typeof field === 'string') {
+    // تنظيف النص من المسافات الزائدة
+    let cleanField = field.trim();
+
+    // إذا كان يبدأ بـ [ وينتهي بـ ]، جرب تحليله كـ JSON
+    if (cleanField.startsWith('[') && cleanField.endsWith(']')) {
       try {
-        const parsed = JSON.parse(field);
-        return Array.isArray(parsed) ? parsed : [];
-      } catch (e) {
-        if (field.includes(',')) {
-          return field.split(',').map((item: string) => item.trim()).filter(Boolean);
+        const parsed = JSON.parse(cleanField);
+        if (Array.isArray(parsed)) {
+          return parsed.map(item => typeof item === 'string' ? item.trim() : item).filter(Boolean);
         }
-        return field ? [field] : [];
+      } catch (e) {
+        console.warn('Failed to parse as JSON array:', e.message);
       }
     }
-    return [];
-  };
 
+    // إذا لم ينجح JSON.parse، نحاول تقسيم النص بفاصلة
+    if (cleanField.includes(',')) {
+      return cleanField.split(',')
+        .map(item => item.trim())
+        .filter(item => item.length > 0);
+    }
+
+    // إذا كان نصًا واحدًا فقط
+    return cleanField ? [cleanField] : [];
+  }
+
+  return [];
+};
   const createApplicationObject = (productData: any) => {
     const appFields = [
       'method_of_application', 'mixing_ratio', 'mixing_note', 'mixing_steps',
