@@ -205,31 +205,54 @@ const Products = () => {
   return filterNames[category] || category;
 };
 
-  const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
-  if (values.length === 0) return true;
+const filteredProducts = useMemo(() => {
+  let filtered = products.filter(product => {
+    const productName = getTranslatedText(product, 'name');
+    const productDescription = getTranslatedText(product, 'description');
+    
+    const matchesSearch = productName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         productDescription.toLowerCase().includes(searchTerm.toLowerCase());
 
-  // ✅ فقط الفلاتر المعروفة نعالجها
-  const supported = ['Brand', 'Type', 'Material Type', 'Application Fields'];
-  if (!supported.includes(category)) {
-    return true; // تجاهل الفلاتر الجديدة
-  }
+    // 👇 ابدأ الاستبدال من هنا 👇
+    const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
+      if (values.length === 0) return true;
 
-  // ربط الفئة بالحقل
-  let field: keyof Product;
-  if (category === 'Brand') field = 'brand';
-  else if (category === 'Type') field = 'type';
-  else if (category === 'Material Type') field = 'material';
-  else if (category === 'Application Fields') field = 'usage';
-  else return true;
+      // ✅ فقط الفلاتر المعروفة نعالجها
+      const supported = ['Brand', 'Type', 'Material Type', 'Application Fields'];
+      if (!supported.includes(category)) {
+        return true; // تجاهل الفلاتر الجديدة
+      }
 
-  const productValue = product[field];
-  if (productValue == null) return false;
+      // ربط الفئة بالحقل
+      let field: keyof Product;
+      if (category === 'Brand') field = 'brand';
+      else if (category === 'Type') field = 'type';
+      else if (category === 'Material Type') field = 'material';
+      else if (category === 'Application Fields') field = 'usage';
+      else return true;
 
-  const translatedValue = translateFilterValue(category, String(productValue));
-  return values.includes(translatedValue);
-});
-      return matchesSearch && matchesFilters;
+      const productValue = product[field];
+      if (productValue == null) return false;
+
+      const translatedValue = translateFilterValue(category, String(productValue));
+      return values.includes(translatedValue);
     });
+    // 👆 انتهى الاستبدال هنا 👆
+
+    return matchesSearch && matchesFilters;
+  });
+
+  // ... باقي الكود (الفرز، إلخ)
+  filtered.sort((a, b) => {
+    const aName = getTranslatedText(a, 'name');
+    const bName = getTranslatedText(b, 'name');
+    const compareValue = aName.localeCompare(bName, i18n.language);
+    return sortOrder === 'asc' ? compareValue : -compareValue;
+  });
+
+  return filtered;
+}, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
 
     filtered.sort((a, b) => {
       const aName = getTranslatedText(a, 'name');
