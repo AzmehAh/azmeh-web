@@ -205,7 +205,7 @@ const Products = () => {
   return filterNames[category] || category;
 };
 
-  const filteredProducts = useMemo(() => {
+ const filteredProducts = useMemo(() => {
   let filtered = products.filter(product => {
     const productName = getTranslatedText(product, 'name');
     const productDescription = getTranslatedText(product, 'description');
@@ -239,7 +239,6 @@ const Products = () => {
     return matchesSearch && matchesFilters;
   });
 
-  // 👇 الفرز يجب أن يكون داخل useMemo أيضًا
   filtered.sort((a, b) => {
     const aName = getTranslatedText(a, 'name');
     const bName = getTranslatedText(b, 'name');
@@ -248,14 +247,7 @@ const Products = () => {
   });
 
   return filtered;
-}, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]); // ← هذا السطر يجب أن يكون نهاية useMemo
-
-// 👇 الآن بعد إغلاق useMemo، تبدأ دالة العرض (return JSX)
-return (
-  <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
-    {/* باقي الـ JSX */}
-  </div>
-);
+}, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
 
     filtered.sort((a, b) => {
       const aName = getTranslatedText(a, 'name');
