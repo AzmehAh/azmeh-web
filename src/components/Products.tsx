@@ -214,17 +214,14 @@ const filteredProducts = useMemo(() => {
                          product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          productDescription.toLowerCase().includes(searchTerm.toLowerCase());
 
-    // 👇 ابدأ الاستبدال من هنا 👇
     const matchesFilters = Object.entries(selectedFilters).every(([category, values]) => {
       if (values.length === 0) return true;
 
-      // ✅ فقط الفلاتر المعروفة نعالجها
       const supported = ['Brand', 'Type', 'Material Type', 'Application Fields'];
       if (!supported.includes(category)) {
-        return true; // تجاهل الفلاتر الجديدة
+        return true;
       }
 
-      // ربط الفئة بالحقل
       let field: keyof Product;
       if (category === 'Brand') field = 'brand';
       else if (category === 'Type') field = 'type';
@@ -238,12 +235,11 @@ const filteredProducts = useMemo(() => {
       const translatedValue = translateFilterValue(category, String(productValue));
       return values.includes(translatedValue);
     });
-    // 👆 انتهى الاستبدال هنا 👆
 
     return matchesSearch && matchesFilters;
   });
 
-  // ... باقي الكود (الفرز، إلخ)
+  // 👇 الفرز يجب أن يكون داخل useMemo أيضًا
   filtered.sort((a, b) => {
     const aName = getTranslatedText(a, 'name');
     const bName = getTranslatedText(b, 'name');
@@ -252,7 +248,14 @@ const filteredProducts = useMemo(() => {
   });
 
   return filtered;
-}, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]);
+}, [searchTerm, selectedFilters, sortOrder, products, i18n.language, translatedFilterValues]); // ← هذا السطر يجب أن يكون نهاية useMemo
+
+// 👇 الآن بعد إغلاق useMemo، تبدأ دالة العرض (return JSX)
+return (
+  <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
+    {/* باقي الـ JSX */}
+  </div>
+);
 
     filtered.sort((a, b) => {
       const aName = getTranslatedText(a, 'name');
