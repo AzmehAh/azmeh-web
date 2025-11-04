@@ -452,7 +452,7 @@ setProduct(formattedProduct);
                   <div className="flex flex-wrap gap-4">
                     {product.packaging.map((pack, index) => (
                       <div key={index} className="bg-white/20 backdrop-blur-sm rounded-lg p-3 text-center w-28"> 
-                        <h4 className="text-sm font-bold text-white">{pack.size}</h4>
+                        <h4 className="text-sm font-bold text-white">{pack}</h4>
                       </div>
                     ))}
                   </div>
