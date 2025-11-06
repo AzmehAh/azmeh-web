@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Save } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -247,7 +247,15 @@ const fetchFilterOptions = async () => {
  
     // استخراج قائمة material_ids
     const materialIds = materialLinks?.map(link => link.material_id) || [];
+ // ✅ جلب الاستخدامات المرتبطة من جدول product_usages
+const { data: usageLinks, error: usageError } = await supabase
+  .from('product_usages')
+  .select('usage_id')
+  .eq('product_id', id);
 
+if (usageError) throw usageError;
+
+const usageIds = usageLinks?.map(link => link.usage_id) || [];
     const parsed = {
       ...productData,
       features: parseArrayField(productData?.features),
@@ -255,7 +263,7 @@ const fetchFilterOptions = async () => {
       brand_id: productData?.brand_id || '',
       type_id: productData?.type_id || '',
       material_id: materialIds, // ✅ هنا نضع المصفوفة الفعلية
-
+      usage_id: usageIds,
      
       mixing_steps: parseArrayField(productData?.mixing_steps),
       safety_precautions: parseArrayField(productData?.safety_precautions),
@@ -458,7 +466,30 @@ const fetchFilterOptions = async () => {
           if (insErr) throw insErr;
         }
       }
-  // ✅ حفظ الصور
+ // ✅ حفظ/تحديث الاستخدامات المرتبطة (جدول product_usages)
+if (productId) {
+  // احذف الاستخدامات الحالية إذا كنا نعدّل
+  if (isEditing) {
+    const { error: delErr } = await supabase
+      .from('product_usages')
+      .delete()
+      .eq('product_id', productId);
+    if (delErr) throw delErr;
+  }
+
+  // أضف الاستخدامات الجديدة إن وُجدت
+  if (Array.isArray(formData.usage_id) && formData.usage_id.length > 0) {
+    const usagesToInsert = formData.usage_id.map((usageId: string) => ({
+      product_id: productId,
+      usage_id: usageId,
+    }));
+    const { error: insErr } = await supabase
+      .from('product_usages')
+      .insert(usagesToInsert);
+    if (insErr) throw insErr;
+  }
+}
+      // ✅ حفظ الصور
       if (productId) {
         if (isEditing) {
           await supabase.from('product_images').delete().eq('product_id', productId);
@@ -537,4 +568,4 @@ const fetchFilterOptions = async () => {
   ); 
 }; 
 
-export default ProductForm;
+export default ProductForm; 
