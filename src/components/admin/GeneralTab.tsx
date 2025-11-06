@@ -302,7 +302,7 @@ const handleMaterialChange = (selectedMaterials: string[]) => {
                   onChange={onImageUpload}
                   className="hidden"
                   disabled={uploading}
-                />
+                /> 
               </label>
               {uploading && <span className="text-gray-500">Uploading...</span>}
             </div>
