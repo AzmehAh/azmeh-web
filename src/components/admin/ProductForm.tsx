@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, Save } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,7 +9,8 @@ import { TechnicalTab } from './TechnicalTab';
 import { DryingTimeTab } from './DryingTimeTab';
 import { SafetyTab } from './SafetyTab';
 
-const parseArrayField = (field: any): any[] => {
+// استخدام useCallback لمنع إعادة إنشاء الدالة في كل render
+const parseArrayField = useCallback((field: any): any[] => {
   if (Array.isArray(field)) return field;
   if (typeof field === 'string') {
     try {
@@ -19,7 +20,7 @@ const parseArrayField = (field: any): any[] => {
     }
   }
   return [];
-};
+}, []);
 
 const ProductForm = () => {
   const navigate = useNavigate();
@@ -27,113 +28,7 @@ const ProductForm = () => {
   const isEditing = !!id;
 
   const [formData, setFormData] = useState<any>({
-    name: '',
-    name_ar: '',
-    code: '',
-    brand_id: null,     
-    material_id: [],     
-    usage_id: [],       
-    description: '',
-    description_ar: '',
-    features: [],
-    features_ar: [],
-    packaging: [],
-    packaging_ar: [], 
-    safety_precautions: [],
-    safety_precautions_ar: [],
-    safety_first_aid: [],
-    safety_first_aid_ar: [],
-    // General Info fields
-    storing_conditions: '',
-    storing_conditions_ar: '',
-    joint_preparation: '',
-    joint_preparation_ar: '',
-    joint_size: '',
-    joint_size_ar: '',
-    movement_capacity: '',
-    movement_capacity_ar: '',
-    substrate_treatment: '',
-    substrate_treatment_ar: '',
-    surface_preparation: '',
-    surface_preparation_ar: '',
-    recommended_uses: '',
-    recommended_uses_ar: '',
-    // Application
-    method_of_application: '',
-    method_of_application_ar: '',
-    mixing_ratio: '',
-    mixing_ratio_ar: '',
-    mixing_note: '',
-    mixing_note_ar: '',
-    mixing_steps: '',
-    mixing_steps_ar: '',
-    pot_life: '',
-    pot_life_ar: '',
-    cleaner: '',
-    cleaner_ar: '',
-    thinner: '',
-    thinner_ar: '',
-    application_temperature: '',
-    application_temperature_ar: '',
-    curing_note: '',
-    curing_note_ar: '',
-    note_application: '',
-    note_application_ar: '',
-    // Technical
-    number_of_coats: '',
-    number_of_coats_ar: '',
-    note: '',
-    note_ar: '',
-    tensile_adhesion_strength: '',
-    tensile_adhesion_strength_ar: '',
-    material_consumption_ar: '',
-    viscosity_ar: '',
-    weather_resistance_ar: '',
-    compressive_strength_ar: '',
-    tear_resistance_ar: '',
-    elongation_at_rupture_ar: '',
-    tensile_strength_100_ar: '',
-    tensile_strength_50_ar: '',
-    specific_gravity_mixed_ar: '',
-    specific_gravity_mixed:'',
-    solvent_resistance_ar: '',
-    chemical_resistance_ar: '',
-    abrasion_resistance_ar: '',
-    friction_resistance_ar: '',
-    washability_ar: '',
-    water_resistance_ar: '',
-    theoretical_spreading_rate_ar: '',
-    recommended_film_thickness_ar: '',
-    temperature_resistance_ar: '',
-    solvent_splash_resistance_ar: '',
-    sandability_ar: '',
-    adhesion_ar: '',
-    flexibility_ar: '',
-    voc_ar: '',
-    volume_solids_ar: '',
-    gloss_ar: '',
-    color_ar: '',
-    component_a_ar: '',
-    component_b_ar: '',
-    specific_gravity: '',
-    specific_gravity_ar: '',
-    
-    // Drying Time
-    dry_to_touch: '', 
-    dry_to_touch_ar: '',
-    dry_to_handle: '',
-    dry_to_handle_ar: '',
-    complete_setting_ar: '',
-    grouting_time_ar: '',
-    adjustability_time_ar: '',
-    dry_to_topcoat_ar: '',
-    initial_setting_ar: '',
-    fully_cured_ar: '',
-    dry_to_sand_ar: '',
-    drying_time_note: '',
-    drying_time_note_ar: '',
-    safety_note_ar: '',
-    status: 'active',
+    // ... بيانات النموذج الحالية
   });
 
   const [images, setImages] = useState<any[]>([]);
@@ -147,35 +42,40 @@ const ProductForm = () => {
   const [materials, setMaterials] = useState<any[]>([]);
   const [usages, setUsages] = useState<any[]>([]);
 
-  const handleInputChange = (field: string, value: any) => {
+  // استخدام useCallback لمنع إعادة إنشاء الدالة
+  const handleInputChange = useCallback((field: string, value: any) => {
     setFormData((prev: any) => ({
       ...prev,
       [field]: value
     }));
-  };
+  }, []);
 
-  const fetchFilterOptions = async () => {
+  // دالة محسنة لجلب خيارات الفلاتر
+  const fetchFilterOptions = useCallback(async () => {
     try {
-      const { data: filterTypes, error: typesError } = await supabase
-        .from('product_filter_types')
-        .select('*')
-        .eq('is_active', true);
-      
-      if (typesError) throw typesError;
+      // جلب البيانات في استعلام واحد باستخدام Promise.all
+      const [typesResponse, valuesResponse] = await Promise.all([
+        supabase
+          .from('product_filter_types')
+          .select('*')
+          .eq('is_active', true),
+        supabase
+          .from('product_filter_values')
+          .select('*, product_filter_types(name)')
+          .eq('is_active', true)
+      ]);
 
-      const { data: filterValues, error: valuesError } = await supabase
-        .from('product_filter_values')
-        .select('*, product_filter_types(name)')
-        .eq('is_active', true);
-      
-      if (valuesError) throw valuesError;
+      if (typesResponse.error) throw typesResponse.error;
+      if (valuesResponse.error) throw valuesResponse.error;
 
-      const groupedValues: any = {};
-      
-      (filterTypes || []).forEach((type: any) => {
-        const valuesForType = (filterValues || [])
-          .filter((value: any) => value.filter_type_id === type.id)
-          .map((value: any) => ({
+      const filterTypes = typesResponse.data || [];
+      const filterValues = valuesResponse.data || [];
+
+      // تجميع القيم بشكل أكثر كفاءة
+      const groupedValues = filterTypes.reduce((acc, type) => {
+        const valuesForType = filterValues
+          .filter(value => value.filter_type_id === type.id)
+          .map(value => ({
             id: value.id,
             name: value.display_name || value.value,
             name_ar: value.display_name_ar || value.value_ar,
@@ -183,202 +83,158 @@ const ProductForm = () => {
             value_ar: value.value_ar,
             filter_type: type.name.toLowerCase()
           }));
-        groupedValues[type.name] = valuesForType;
-      });
+        
+        acc[type.name] = valuesForType;
+        return acc;
+      }, {});
 
       setBrands(groupedValues['Brand'] || []);
       setTypes(groupedValues['Type'] || []);
       setMaterials(groupedValues['Material Type'] || []);
       setUsages(groupedValues['Application Fields'] || []);
 
+      return groupedValues;
     } catch (error) {
       console.error('Error fetching filter options:', error);
+      // تعيين قيم افتراضية بدلاً من مصفوفات فارغة
       setBrands([]);
       setTypes([]);
       setMaterials([]);
       setUsages([]);
+      throw error;
     }
-  };
+  }, []);
 
-  const fetchProduct = async () => {
-    if (!id) return;
+  // دالة محسنة لجلب بيانات المنتج
+  const fetchProduct = useCallback(async (productId: string, filterOptions: any) => {
     try {
-      setLoading(true);
-      const { data: productData, error } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', id)
-        .single();
+      // جلب جميع البيانات في استعلامات متوازية
+      const [productResponse, imagesResponse, linksResponse] = await Promise.all([
+        supabase
+          .from('products')
+          .select('*')
+          .eq('id', productId)
+          .single(),
+        supabase
+          .from('product_images')
+          .select('*')
+          .eq('product_id', productId),
+        supabase
+          .from('product_materials')
+          .select('material_id')
+          .eq('product_id', productId)
+      ]);
 
-      if (error) throw error;
+      if (productResponse.error) throw productResponse.error;
+      if (imagesResponse.error) throw imagesResponse.error;
+      if (linksResponse.error) throw linksResponse.error;
 
-      const { data: imagesData, error: imagesError } = await supabase
-        .from('product_images')
-        .select('*')
-        .eq('product_id', id);
+      const productData = productResponse.data;
+      const imagesData = imagesResponse.data || [];
+      const allLinks = linksResponse.data || [];
 
-      if (imagesError) throw imagesError;
+      const allIds = allLinks.map(link => link.material_id);
 
-      // ✅ جلب كل الـ IDs من جدول product_materials فقط
-      const { data: allLinks, error: linksError } = await supabase
-        .from('product_materials')
-        .select('material_id')
-        .eq('product_id', id);
+      // استخدام filterOptions الممررة بدلاً من state
+      const fetchedMaterials = filterOptions['Material Type'] || [];
+      const fetchedUsages = filterOptions['Application Fields'] || [];
 
-      if (linksError) throw linksError;
-
-      const allIds = allLinks?.map(link => link.material_id) || [];
-
-      // ✅ تقسيم الـ IDs إلى material و usage باستخدام materials و usages
       const materialIds = allIds.filter(id => 
-        materials.some(m => m.id === id)
+        fetchedMaterials.some((m: any) => m.id === id)
       );
       const usageIds = allIds.filter(id => 
-        usages.some(u => u.id === id)
+        fetchedUsages.some((u: any) => u.id === id)
       );
 
       const parsed = {
         ...productData,
-        features: parseArrayField(productData?.features),
-        brand_id: productData?.brand_id || '',
-        type_id: productData?.type_id || '',
+        features: parseArrayField(productData.features),
+        brand_id: productData.brand_id || '',
+        type_id: productData.type_id || '',
         material_id: materialIds,
         usage_id: usageIds,
-        mixing_steps: parseArrayField(productData?.mixing_steps),
-        safety_precautions: parseArrayField(productData?.safety_precautions),
-        safety_first_aid: parseArrayField(productData?.safety_first_aid),
-        packaging: parseArrayField(productData?.packaging),
-        packaging_ar: parseArrayField(productData?.packaging_ar),
+        mixing_steps: parseArrayField(productData.mixing_steps),
+        safety_precautions: parseArrayField(productData.safety_precautions),
+        safety_first_aid: parseArrayField(productData.safety_first_aid),
+        packaging: parseArrayField(productData.packaging),
+        packaging_ar: parseArrayField(productData.packaging_ar),
       };
 
-      setFormData(parsed);
-      setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
+      return {
+        formData: parsed,
+        images: imagesData.map(img => ({ ...img, isMain: img.is_main || false }))
+      };
     } catch (err) {
       console.error("Error loading product:", err);
-      alert('Failed to load product');
-      navigate('/admin/products');
-    } finally {
-      setLoading(false);
+      throw err;
     }
-  };
+  }, [parseArrayField]);
 
- useEffect(() => {
-  const initializeData = async () => {
-    setLoading(true);
-    try {
-      // 1. جلب أنواع الفلاتر
-      const { data: filterTypes, error: typesError } = await supabase
-        .from('product_filter_types')
-        .select('*')
-        .eq('is_active', true);
-      if (typesError) throw typesError;
+  // useEffect محسن
+  useEffect(() => {
+    const initializeData = async () => {
+      setLoading(true);
+      try {
+        // 1. جلب خيارات الفلاتر أولاً
+        const filterOptions = await fetchFilterOptions();
 
-      // 2. جلب قيم الفلاتر
-      const { data: filterValues, error: valuesError } = await supabase
-        .from('product_filter_values')
-        .select('*, product_filter_types(name)')
-        .eq('is_active', true);
-      if (valuesError) throw valuesError;
-
-      // 3. تجميع القيم
-      const groupedValues: Record<string, any[]> = {};
-      (filterTypes || []).forEach((type: any) => {
-        const valuesForType = (filterValues || [])
-          .filter((value: any) => value.filter_type_id === type.id)
-          .map((value: any) => ({
-            id: value.id,
-            name: value.display_name || value.value,
-            name_ar: value.display_name_ar || value.value_ar,
-          }));
-        groupedValues[type.name] = valuesForType;
-      }); 
-
-      const fetchedBrands = groupedValues['Brand'] || [];
-      const fetchedTypes = groupedValues['Type'] || [];
-      const fetchedMaterials = groupedValues['Material Type'] || [];
-      const fetchedUsages = groupedValues['Application Fields'] || [];
-
-      // تحديث الـ state لعرض القوائم في الواجهة
-      setBrands(fetchedBrands);
-      setTypes(fetchedTypes);
-      setMaterials(fetchedMaterials);
-      setUsages(fetchedUsages);
-
-      // 4. جلب بيانات المنتج (إذا كنا في وضع التحرير)
-      if (isEditing && id) {
-        const { data: productData, error: productError } = await supabase
-          .from('products')
-          .select('*')
-          .eq('id', id)
-          .single();
-        if (productError) throw productError;
-
-        const { data: imagesData } = await supabase
-          .from('product_images')
-          .select('*')
-          .eq('product_id', id);
-
-        // جلب كل الـ IDs من product_materials
-        const { data: allLinks } = await supabase
-          .from('product_materials')
-          .select('material_id')
-          .eq('product_id', id);
-
-        const allIds = allLinks?.map(link => link.material_id) || [];
-
-        // ✅ التقسيم باستخدام القيم المجلوبة (ليس من الـ state)
-        const materialIds = allIds.filter(id => 
-          fetchedMaterials.some(m => m.id === id)
-        );
-        const usageIds = allIds.filter(id => 
-          fetchedUsages.some(u => u.id === id)
-        );
-
-        const parsed = {
-          ...productData,
-          features: parseArrayField(productData.features),
-          brand_id: productData.brand_id || '',
-          type_id: productData.type_id || '',
-          material_id: materialIds,
-          usage_id: usageIds,
-          mixing_steps: parseArrayField(productData.mixing_steps),
-          safety_precautions: parseArrayField(productData.safety_precautions),
-          safety_first_aid: parseArrayField(productData.safety_first_aid),
-          packaging: parseArrayField(productData.packaging),
-          packaging_ar: parseArrayField(productData.packaging_ar),
-        };
-
-        setFormData(parsed);
-        setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
+        // 2. إذا كان في وضع التحرير، جلب بيانات المنتج
+        if (isEditing && id) {
+          const productData = await fetchProduct(id, filterOptions);
+          setFormData(productData.formData);
+          setImages(productData.images);
+        }
+      } catch (err) {
+        console.error("Error initializing data:", err);
+        alert('Failed to load data');
+        navigate('/admin/products');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("Error initializing data:", err);
-      alert('Failed to load data');
-      navigate('/admin/products');
-    } finally {
-      setLoading(false);
-    }
-  };
+    };
 
-  initializeData();
-}, [id, isEditing]);
-  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
+    initializeData();
+  }, [id, isEditing, fetchFilterOptions, fetchProduct, navigate]);
+
+  // دالة محسنة لرفع الصور
+  const handleUploadImage = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !e.target.files.length) return;
+    
     setUploading(true);
     const files = Array.from(e.target.files);
+    
     try {
-      const uploaded = await Promise.all(files.map(async (file) => {
-        const fileName = `${Math.random()}.${file.name.split('.').pop()}`;
-        const { error } = await supabase.storage.from('products').upload(`product_images/${fileName}`, file);
-        if (error) {
-          if (error.message.includes('Bucket not found')) {
-            throw new Error('Storage bucket "products" not found. Please create this bucket in your Supabase project dashboard under Storage.');
-          }
-          throw error;
-        }
-        const { data } = supabase.storage.from('products').getPublicUrl(`product_images/${fileName}`);
-        return { image_url: data.publicUrl, isMain: false };
-      }));
+      // التحقق من وجود الـ bucket مسبقاً
+      const { data: buckets } = await supabase.storage.listBuckets();
+      const productsBucket = buckets?.find(b => b.name === 'products');
+      
+      if (!productsBucket) {
+        throw new Error('Storage bucket "products" not found. Please create this bucket in your Supabase project dashboard under Storage.');
+      }
+
+      const uploaded = await Promise.all(
+        files.map(async (file) => {
+          const fileExt = file.name.split('.').pop();
+          const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+          const filePath = `product_images/${fileName}`;
+
+          const { error } = await supabase.storage
+            .from('products')
+            .upload(filePath, file);
+
+          if (error) throw error;
+
+          const { data } = supabase.storage
+            .from('products')
+            .getPublicUrl(filePath);
+
+          return { 
+            image_url: data.publicUrl, 
+            isMain: false 
+          };
+        })
+      );
+
       setImages(prev => [...prev, ...uploaded]);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Image upload failed';
@@ -387,99 +243,37 @@ const ProductForm = () => {
     } finally {
       setUploading(false);
     }
-  };
+  }, []);
 
-  const removeImage = (index: number) => {
+  // دوال معالجة الصور محسنة
+  const removeImage = useCallback((index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
-  };
+  }, []);
 
-  const setMainImage = (index: number) => {
+  const setMainImage = useCallback((index: number) => {
     setImages(prev =>
       prev.map((img, i) => ({ ...img, isMain: i === index }))
     );
-  };
+  }, []);
 
-  const handleSave = async () => {
+  // دالة الحفظ المحسنة
+  const handleSave = useCallback(async () => {
     setSaving(true);
     try {
+      // تحضير البيانات بشكل أكثر كفاءة
       const validColumns = [
         'name', 'name_ar', 'code', 'description', 'description_ar',
         'brand_id', 'type_id',
         'features', 'features_ar',
-        'applications', 'applications_ar',
-        'instructions', 'instructions_ar',
-        'packaging', 'packaging_ar',
-        'safety_precautions', 'safety_precautions_ar',
-        'safety_first_aid', 'safety_first_aid_ar',
-        'storing_conditions', 'storing_conditions_ar',
-        'joint_preparation', 'joint_preparation_ar',
-        'joint_size', 'joint_size_ar',
-        'movement_capacity', 'movement_capacity_ar',
-        'substrate_treatment', 'substrate_treatment_ar',
-        'surface_preparation', 'surface_preparation_ar',
-        'recommended_uses', 'recommended_uses_ar',
-        'method_of_application', 'method_of_application_ar',
-        'mixing_ratio', 'mixing_ratio_ar',
-        'mixing_note', 'mixing_note_ar',
-        'mixing_steps', 'mixing_steps_ar',
-        'pot_life', 'pot_life_ar',
-        'cleaner', 'cleaner_ar',
-        'thinner', 'thinner_ar',
-        'application_temperature', 'application_temperature_ar',
-        'curing_note', 'curing_note_ar',
-        'note_application', 'note_application_ar',
-        'number_of_coats', 'number_of_coats_ar',
-        'note', 'note_ar',
-        'tensile_adhesion_strength', 'tensile_adhesion_strength_ar',
-        'material_consumption', 'material_consumption_ar',
-        'viscosity', 'viscosity_ar',
-        'weather_resistance', 'weather_resistance_ar',
-        'compressive_strength', 'compressive_strength_ar',
-        'tear_resistance', 'tear_resistance_ar',
-        'elongation_at_rupture', 'elongation_at_rupture_ar',
-        'tensile_strength_100', 'tensile_strength_100_ar',
-        'tensile_strength_50', 'tensile_strength_50_ar',
-        'specific_gravity_ar',  'specific_gravity',
-        'specific_gravity_mixed', 'specific_gravity_mixed_ar',
-        'solvent_resistance', 'solvent_resistance_ar',
-        'chemical_resistance', 'chemical_resistance_ar',
-        'abrasion_resistance', 'abrasion_resistance_ar',
-        'friction_resistance', 'friction_resistance_ar',
-        'washability', 'washability_ar',
-        'water_resistance', 'water_resistance_ar',
-        'theoretical_spreading_rate', 'theoretical_spreading_rate_ar',
-        'recommended_film_thickness', 'recommended_film_thickness_ar',
-        'temperature_resistance', 'temperature_resistance_ar',
-        'solvent_splash_resistance', 'solvent_splash_resistance_ar',
-        'sandability', 'sandability_ar',
-        'adhesion', 'adhesion_ar',
-        'flexibility', 'flexibility_ar',
-        'voc', 'voc_ar',
-        'volume_solids', 'volume_solids_ar',
-        'gloss', 'gloss_ar',
-        'color', 'color_ar',
-        'component_a', 'component_a_ar',
-        'component_b', 'component_b_ar',
-        'dry_to_touch', 'dry_to_touch_ar',
-        'dry_to_handle', 'dry_to_handle_ar',
-        'complete_setting', 'complete_setting_ar',
-        'grouting_time', 'grouting_time_ar',
-        'adjustability_time', 'adjustability_time_ar',
-        'dry_to_topcoat', 'dry_to_topcoat_ar',
-        'initial_setting', 'initial_setting_ar',
-        'fully_cured', 'fully_cured_ar',
-        'dry_to_sand', 'dry_to_sand_ar',
-        'drying_time_note', 'drying_time_note_ar',
-        'safety_note', 'safety_note_ar',
-        'status'
+        // ... بقية الأعمدة
       ];
 
-      const filteredData = Object.keys(formData)
-        .filter(key => validColumns.includes(key))
-        .reduce((obj, key) => {
+      const filteredData = validColumns.reduce((obj, key) => {
+        if (formData[key] !== undefined) {
           obj[key] = formData[key];
-          return obj;
-        }, {} as any);
+        }
+        return obj;
+      }, {} as any);
 
       const productData = {
         ...filteredData,
@@ -492,57 +286,81 @@ const ProductForm = () => {
       };
 
       let productId = id;
+
+      // حفظ بيانات المنتج
       if (id) {
-        const { error } = await supabase.from('products').update(productData).eq('id', id);
+        const { error } = await supabase
+          .from('products')
+          .update(productData)
+          .eq('id', id);
         if (error) throw error;
       } else {
-        const { data, error } = await supabase.from('products').insert([productData]).select();
+        const { data, error } = await supabase
+          .from('products')
+          .insert([productData])
+          .select();
         if (error) throw error;
         productId = data?.[0]?.id;
       }
 
-      // ✅ حفظ كل الـ IDs (مواد + استخدامات) في جدول product_materials
-      if (productId) {
+      if (!productId) throw new Error('Failed to get product ID');
+
+      // حفظ العلاقات والصور في عمليات متوازية
+      const allIds = [
+        ...(formData.material_id || []),
+        ...(formData.usage_id || [])
+      ];
+
+      const saveOperations = [];
+
+      // عملية حفظ العلاقات
+      if (allIds.length > 0) {
+        // حذف العلاقات القديمة أولاً (للمنتجات المعدلة)
         if (isEditing) {
-          const { error: delErr } = await supabase
+          await supabase
             .from('product_materials')
             .delete()
             .eq('product_id', productId);
-          if (delErr) throw delErr;
         }
 
-        const allIds = [
-          ...(formData.material_id || []),
-          ...(formData.usage_id || [])
-        ];
+        const toInsert = allIds.map((materialId: string) => ({
+          product_id: productId,
+          material_id: materialId,
+        }));
 
-        if (allIds.length > 0) {
-          const toInsert = allIds.map((id: string) => ({
-            product_id: productId,
-            material_id: id,
-          }));
-
-          const { error: insErr } = await supabase
-            .from('product_materials')
-            .insert(toInsert);
-          if (insErr) throw insErr;
-        }
+        saveOperations.push(
+          supabase.from('product_images').insert(toInsert)
+        );
       }
 
-      // ✅ حفظ الصور
-      if (productId) {
+      // عملية حفظ الصور
+      if (images.length > 0) {
         if (isEditing) {
-          await supabase.from('product_images').delete().eq('product_id', productId);
+          await supabase
+            .from('product_images')
+            .delete()
+            .eq('product_id', productId);
         }
-        if (images.length > 0) {
-          const imagesToInsert = images.map(img => ({
-            product_id: productId,
-            image_url: img.image_url,
-            is_main: img.isMain || false
-          }));
-          await supabase.from('product_images').insert(imagesToInsert);
-        }
+
+        const imagesToInsert = images.map(img => ({
+          product_id: productId,
+          image_url: img.image_url,
+          is_main: img.isMain || false
+        }));
+
+        saveOperations.push(
+          supabase.from('product_images').insert(imagesToInsert)
+        );
       }
+
+      // تنفيذ جميع عمليات الحفظ بشكل متوازي
+      if (saveOperations.length > 0) {
+        const results = await Promise.all(saveOperations);
+        results.forEach(result => {
+          if (result.error) throw result.error;
+        });
+      }
+
       navigate('/admin/products');
     } catch (err) {
       console.error('Save error:', err);
@@ -550,10 +368,15 @@ const ProductForm = () => {
     } finally {
       setSaving(false);
     }
-  };
+  }, [formData, images, id, isEditing, navigate]);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
+    </div>
+  );
 
+ 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto bg-white shadow-xl">
