@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+
 interface BilingualInputProps {
   labelEn: string;
   labelAr: string;
@@ -12,8 +12,7 @@ interface BilingualInputProps {
   required?: boolean;
   placeholder?: string;
 }
- const { t, i18n } = useTranslation(''); // استخدام namespace 'social'
-  const isRTL = i18n.language === 'ar';
+
 const BilingualInput: React.FC<BilingualInputProps> = ({
   labelEn,
   labelAr,
@@ -65,7 +64,7 @@ const BilingualInput: React.FC<BilingualInputProps> = ({
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
             {...(type === 'textarea' && { rows: 3 })}
           />
-        </div> 
+        </div>
       </div>
     </div>
   );
