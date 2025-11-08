@@ -26,10 +26,116 @@ const ProductForm = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditing = !!id;
-
-  const [formData, setFormData] = useState<any>({
-    // ... بيانات النموذج الحالية
+const [formData, setFormData] = useState<any>({
+    name: '',
+    name_ar: '',
+    code: '',
+    brand_id: null,     
+    material_id: [],     
+    usage_id: [],       
+    description: '',
+    description_ar: '',
+    features: [],
+    features_ar: [],
+    packaging: [],
+    packaging_ar: [], 
+    safety_precautions: [],
+    safety_precautions_ar: [],
+    safety_first_aid: [],
+    safety_first_aid_ar: [],
+    // General Info fields
+    storing_conditions: '',
+    storing_conditions_ar: '',
+    joint_preparation: '',
+    joint_preparation_ar: '',
+    joint_size: '',
+    joint_size_ar: '',
+    movement_capacity: '',
+    movement_capacity_ar: '',
+    substrate_treatment: '',
+    substrate_treatment_ar: '',
+    surface_preparation: '',
+    surface_preparation_ar: '',
+    recommended_uses: '',
+    recommended_uses_ar: '',
+    // Application
+    method_of_application: '',
+    method_of_application_ar: '',
+    mixing_ratio: '',
+    mixing_ratio_ar: '',
+    mixing_note: '',
+    mixing_note_ar: '',
+    mixing_steps: '',
+    mixing_steps_ar: '',
+    pot_life: '',
+    pot_life_ar: '',
+    cleaner: '',
+    cleaner_ar: '',
+    thinner: '',
+    thinner_ar: '',
+    application_temperature: '',
+    application_temperature_ar: '',
+    curing_note: '',
+    curing_note_ar: '',
+    note_application: '',
+    note_application_ar: '',
+    // Technical
+    number_of_coats: '',
+    number_of_coats_ar: '',
+    note: '',
+    note_ar: '',
+    tensile_adhesion_strength: '',
+    tensile_adhesion_strength_ar: '',
+    material_consumption_ar: '',
+    viscosity_ar: '',
+    weather_resistance_ar: '',
+    compressive_strength_ar: '',
+    tear_resistance_ar: '',
+    elongation_at_rupture_ar: '',
+    tensile_strength_100_ar: '',
+    tensile_strength_50_ar: '',
+    specific_gravity_mixed_ar: '',
+    specific_gravity_mixed:'',
+    solvent_resistance_ar: '',
+    chemical_resistance_ar: '',
+    abrasion_resistance_ar: '',
+    friction_resistance_ar: '',
+    washability_ar: '',
+    water_resistance_ar: '',
+    theoretical_spreading_rate_ar: '',
+    recommended_film_thickness_ar: '',
+    temperature_resistance_ar: '',
+    solvent_splash_resistance_ar: '',
+    sandability_ar: '',
+    adhesion_ar: '',
+    flexibility_ar: '',
+    voc_ar: '',
+    volume_solids_ar: '',
+    gloss_ar: '',
+    color_ar: '',
+    component_a_ar: '',
+    component_b_ar: '',
+    specific_gravity: '',
+    specific_gravity_ar: '',
+    
+    // Drying Time
+    dry_to_touch: '', 
+    dry_to_touch_ar: '',
+    dry_to_handle: '',
+    dry_to_handle_ar: '',
+    complete_setting_ar: '',
+    grouting_time_ar: '',
+    adjustability_time_ar: '',
+    dry_to_topcoat_ar: '',
+    initial_setting_ar: '',
+    fully_cured_ar: '',
+    dry_to_sand_ar: '',
+    drying_time_note: '',
+    drying_time_note_ar: '',
+    safety_note_ar: '',
+    status: 'active',
   });
+
 
   const [images, setImages] = useState<any[]>([]);
   const [uploading, setUploading] = useState(false);
@@ -376,7 +482,9 @@ const ProductForm = () => {
     </div>
   );
 
- 
+
+
+  
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto bg-white shadow-xl">
