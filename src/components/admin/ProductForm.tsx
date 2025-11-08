@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowLeft, Save } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -9,8 +9,7 @@ import { TechnicalTab } from './TechnicalTab';
 import { DryingTimeTab } from './DryingTimeTab';
 import { SafetyTab } from './SafetyTab';
 
-// استخدام useCallback لمنع إعادة إنشاء الدالة في كل render
-const parseArrayField = useCallback((field: any): any[] => {
+const parseArrayField = (field: any): any[] => {
   if (Array.isArray(field)) return field;
   if (typeof field === 'string') {
     try {
@@ -20,13 +19,14 @@ const parseArrayField = useCallback((field: any): any[] => {
     }
   }
   return [];
-}, []);
+};
 
 const ProductForm = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditing = !!id;
-const [formData, setFormData] = useState<any>({
+
+  const [formData, setFormData] = useState<any>({
     name: '',
     name_ar: '',
     code: '',
@@ -136,7 +136,6 @@ const [formData, setFormData] = useState<any>({
     status: 'active',
   });
 
-
   const [images, setImages] = useState<any[]>([]);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -148,40 +147,35 @@ const [formData, setFormData] = useState<any>({
   const [materials, setMaterials] = useState<any[]>([]);
   const [usages, setUsages] = useState<any[]>([]);
 
-  // استخدام useCallback لمنع إعادة إنشاء الدالة
-  const handleInputChange = useCallback((field: string, value: any) => {
+  const handleInputChange = (field: string, value: any) => {
     setFormData((prev: any) => ({
       ...prev,
       [field]: value
     }));
-  }, []);
+  };
 
-  // دالة محسنة لجلب خيارات الفلاتر
-  const fetchFilterOptions = useCallback(async () => {
+  const fetchFilterOptions = async () => {
     try {
-      // جلب البيانات في استعلام واحد باستخدام Promise.all
-      const [typesResponse, valuesResponse] = await Promise.all([
-        supabase
-          .from('product_filter_types')
-          .select('*')
-          .eq('is_active', true),
-        supabase
-          .from('product_filter_values')
-          .select('*, product_filter_types(name)')
-          .eq('is_active', true)
-      ]);
+      const { data: filterTypes, error: typesError } = await supabase
+        .from('product_filter_types')
+        .select('*')
+        .eq('is_active', true);
+      
+      if (typesError) throw typesError;
 
-      if (typesResponse.error) throw typesResponse.error;
-      if (valuesResponse.error) throw valuesResponse.error;
+      const { data: filterValues, error: valuesError } = await supabase
+        .from('product_filter_values')
+        .select('*, product_filter_types(name)')
+        .eq('is_active', true);
+      
+      if (valuesError) throw valuesError;
 
-      const filterTypes = typesResponse.data || [];
-      const filterValues = valuesResponse.data || [];
-
-      // تجميع القيم بشكل أكثر كفاءة
-      const groupedValues = filterTypes.reduce((acc, type) => {
-        const valuesForType = filterValues
-          .filter(value => value.filter_type_id === type.id)
-          .map(value => ({
+      const groupedValues: any = {};
+      
+      (filterTypes || []).forEach((type: any) => {
+        const valuesForType = (filterValues || [])
+          .filter((value: any) => value.filter_type_id === type.id)
+          .map((value: any) => ({
             id: value.id,
             name: value.display_name || value.value,
             name_ar: value.display_name_ar || value.value_ar,
@@ -189,158 +183,202 @@ const [formData, setFormData] = useState<any>({
             value_ar: value.value_ar,
             filter_type: type.name.toLowerCase()
           }));
-        
-        acc[type.name] = valuesForType;
-        return acc;
-      }, {});
+        groupedValues[type.name] = valuesForType;
+      });
 
       setBrands(groupedValues['Brand'] || []);
       setTypes(groupedValues['Type'] || []);
       setMaterials(groupedValues['Material Type'] || []);
       setUsages(groupedValues['Application Fields'] || []);
 
-      return groupedValues;
     } catch (error) {
       console.error('Error fetching filter options:', error);
-      // تعيين قيم افتراضية بدلاً من مصفوفات فارغة
       setBrands([]);
       setTypes([]);
       setMaterials([]);
       setUsages([]);
-      throw error;
     }
-  }, []);
+  };
 
-  // دالة محسنة لجلب بيانات المنتج
-  const fetchProduct = useCallback(async (productId: string, filterOptions: any) => {
+  const fetchProduct = async () => {
+    if (!id) return;
     try {
-      // جلب جميع البيانات في استعلامات متوازية
-      const [productResponse, imagesResponse, linksResponse] = await Promise.all([
-        supabase
-          .from('products')
-          .select('*')
-          .eq('id', productId)
-          .single(),
-        supabase
-          .from('product_images')
-          .select('*')
-          .eq('product_id', productId),
-        supabase
-          .from('product_materials')
-          .select('material_id')
-          .eq('product_id', productId)
-      ]);
+      setLoading(true);
+      const { data: productData, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
 
-      if (productResponse.error) throw productResponse.error;
-      if (imagesResponse.error) throw imagesResponse.error;
-      if (linksResponse.error) throw linksResponse.error;
+      if (error) throw error;
 
-      const productData = productResponse.data;
-      const imagesData = imagesResponse.data || [];
-      const allLinks = linksResponse.data || [];
+      const { data: imagesData, error: imagesError } = await supabase
+        .from('product_images')
+        .select('*')
+        .eq('product_id', id);
 
-      const allIds = allLinks.map(link => link.material_id);
+      if (imagesError) throw imagesError;
 
-      // استخدام filterOptions الممررة بدلاً من state
-      const fetchedMaterials = filterOptions['Material Type'] || [];
-      const fetchedUsages = filterOptions['Application Fields'] || [];
+      // ✅ جلب كل الـ IDs من جدول product_materials فقط
+      const { data: allLinks, error: linksError } = await supabase
+        .from('product_materials')
+        .select('material_id')
+        .eq('product_id', id);
 
+      if (linksError) throw linksError;
+
+      const allIds = allLinks?.map(link => link.material_id) || [];
+
+      // ✅ تقسيم الـ IDs إلى material و usage باستخدام materials و usages
       const materialIds = allIds.filter(id => 
-        fetchedMaterials.some((m: any) => m.id === id)
+        materials.some(m => m.id === id)
       );
       const usageIds = allIds.filter(id => 
-        fetchedUsages.some((u: any) => u.id === id)
+        usages.some(u => u.id === id)
       );
 
       const parsed = {
         ...productData,
-        features: parseArrayField(productData.features),
-        brand_id: productData.brand_id || '',
-        type_id: productData.type_id || '',
+        features: parseArrayField(productData?.features),
+        brand_id: productData?.brand_id || '',
+        type_id: productData?.type_id || '',
         material_id: materialIds,
         usage_id: usageIds,
-        mixing_steps: parseArrayField(productData.mixing_steps),
-        safety_precautions: parseArrayField(productData.safety_precautions),
-        safety_first_aid: parseArrayField(productData.safety_first_aid),
-        packaging: parseArrayField(productData.packaging),
-        packaging_ar: parseArrayField(productData.packaging_ar),
+        mixing_steps: parseArrayField(productData?.mixing_steps),
+        safety_precautions: parseArrayField(productData?.safety_precautions),
+        safety_first_aid: parseArrayField(productData?.safety_first_aid),
+        packaging: parseArrayField(productData?.packaging),
+        packaging_ar: parseArrayField(productData?.packaging_ar),
       };
 
-      return {
-        formData: parsed,
-        images: imagesData.map(img => ({ ...img, isMain: img.is_main || false }))
-      };
+      setFormData(parsed);
+      setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
     } catch (err) {
       console.error("Error loading product:", err);
-      throw err;
+      alert('Failed to load product');
+      navigate('/admin/products');
+    } finally {
+      setLoading(false);
     }
-  }, [parseArrayField]);
+  };
 
-  // useEffect محسن
-  useEffect(() => {
-    const initializeData = async () => {
-      setLoading(true);
-      try {
-        // 1. جلب خيارات الفلاتر أولاً
-        const filterOptions = await fetchFilterOptions();
+ useEffect(() => {
+  const initializeData = async () => {
+    setLoading(true);
+    try {
+      // 1. جلب أنواع الفلاتر
+      const { data: filterTypes, error: typesError } = await supabase
+        .from('product_filter_types')
+        .select('*')
+        .eq('is_active', true);
+      if (typesError) throw typesError;
 
-        // 2. إذا كان في وضع التحرير، جلب بيانات المنتج
-        if (isEditing && id) {
-          const productData = await fetchProduct(id, filterOptions);
-          setFormData(productData.formData);
-          setImages(productData.images);
-        }
-      } catch (err) {
-        console.error("Error initializing data:", err);
-        alert('Failed to load data');
-        navigate('/admin/products');
-      } finally {
-        setLoading(false);
+      // 2. جلب قيم الفلاتر
+      const { data: filterValues, error: valuesError } = await supabase
+        .from('product_filter_values')
+        .select('*, product_filter_types(name)')
+        .eq('is_active', true);
+      if (valuesError) throw valuesError;
+
+      // 3. تجميع القيم
+      const groupedValues: Record<string, any[]> = {};
+      (filterTypes || []).forEach((type: any) => {
+        const valuesForType = (filterValues || [])
+          .filter((value: any) => value.filter_type_id === type.id)
+          .map((value: any) => ({
+            id: value.id,
+            name: value.display_name || value.value,
+            name_ar: value.display_name_ar || value.value_ar,
+          }));
+        groupedValues[type.name] = valuesForType;
+      }); 
+
+      const fetchedBrands = groupedValues['Brand'] || [];
+      const fetchedTypes = groupedValues['Type'] || [];
+      const fetchedMaterials = groupedValues['Material Type'] || [];
+      const fetchedUsages = groupedValues['Application Fields'] || [];
+
+      // تحديث الـ state لعرض القوائم في الواجهة
+      setBrands(fetchedBrands);
+      setTypes(fetchedTypes);
+      setMaterials(fetchedMaterials);
+      setUsages(fetchedUsages);
+
+      // 4. جلب بيانات المنتج (إذا كنا في وضع التحرير)
+      if (isEditing && id) {
+        const { data: productData, error: productError } = await supabase
+          .from('products')
+          .select('*')
+          .eq('id', id)
+          .single();
+        if (productError) throw productError;
+
+        const { data: imagesData } = await supabase
+          .from('product_images')
+          .select('*')
+          .eq('product_id', id);
+
+        // جلب كل الـ IDs من product_materials
+        const { data: allLinks } = await supabase
+          .from('product_materials')
+          .select('material_id')
+          .eq('product_id', id);
+
+        const allIds = allLinks?.map(link => link.material_id) || [];
+
+        // ✅ التقسيم باستخدام القيم المجلوبة (ليس من الـ state)
+        const materialIds = allIds.filter(id => 
+          fetchedMaterials.some(m => m.id === id)
+        );
+        const usageIds = allIds.filter(id => 
+          fetchedUsages.some(u => u.id === id)
+        );
+
+        const parsed = {
+          ...productData,
+          features: parseArrayField(productData.features),
+          brand_id: productData.brand_id || '',
+          type_id: productData.type_id || '',
+          material_id: materialIds,
+          usage_id: usageIds,
+          mixing_steps: parseArrayField(productData.mixing_steps),
+          safety_precautions: parseArrayField(productData.safety_precautions),
+          safety_first_aid: parseArrayField(productData.safety_first_aid),
+          packaging: parseArrayField(productData.packaging),
+          packaging_ar: parseArrayField(productData.packaging_ar),
+        };
+
+        setFormData(parsed);
+        setImages((imagesData || []).map(img => ({ ...img, isMain: img.is_main || false })));
       }
-    };
+    } catch (err) {
+      console.error("Error initializing data:", err);
+      alert('Failed to load data');
+      navigate('/admin/products');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    initializeData();
-  }, [id, isEditing, fetchFilterOptions, fetchProduct, navigate]);
-
-  // دالة محسنة لرفع الصور
-  const handleUploadImage = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || !e.target.files.length) return;
-    
+  initializeData();
+}, [id, isEditing]);
+  const handleUploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
     setUploading(true);
     const files = Array.from(e.target.files);
-    
     try {
-      // التحقق من وجود الـ bucket مسبقاً
-      const { data: buckets } = await supabase.storage.listBuckets();
-      const productsBucket = buckets?.find(b => b.name === 'products');
-      
-      if (!productsBucket) {
-        throw new Error('Storage bucket "products" not found. Please create this bucket in your Supabase project dashboard under Storage.');
-      }
-
-      const uploaded = await Promise.all(
-        files.map(async (file) => {
-          const fileExt = file.name.split('.').pop();
-          const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-          const filePath = `product_images/${fileName}`;
-
-          const { error } = await supabase.storage
-            .from('products')
-            .upload(filePath, file);
-
-          if (error) throw error;
-
-          const { data } = supabase.storage
-            .from('products')
-            .getPublicUrl(filePath);
-
-          return { 
-            image_url: data.publicUrl, 
-            isMain: false 
-          };
-        })
-      );
-
+      const uploaded = await Promise.all(files.map(async (file) => {
+        const fileName = `${Math.random()}.${file.name.split('.').pop()}`;
+        const { error } = await supabase.storage.from('products').upload(`product_images/${fileName}`, file);
+        if (error) {
+          if (error.message.includes('Bucket not found')) {
+            throw new Error('Storage bucket "products" not found. Please create this bucket in your Supabase project dashboard under Storage.');
+          }
+          throw error;
+        }
+        const { data } = supabase.storage.from('products').getPublicUrl(`product_images/${fileName}`);
+        return { image_url: data.publicUrl, isMain: false };
+      }));
       setImages(prev => [...prev, ...uploaded]);
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Image upload failed';
@@ -349,37 +387,99 @@ const [formData, setFormData] = useState<any>({
     } finally {
       setUploading(false);
     }
-  }, []);
+  };
 
-  // دوال معالجة الصور محسنة
-  const removeImage = useCallback((index: number) => {
+  const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
-  }, []);
+  };
 
-  const setMainImage = useCallback((index: number) => {
+  const setMainImage = (index: number) => {
     setImages(prev =>
       prev.map((img, i) => ({ ...img, isMain: i === index }))
     );
-  }, []);
+  };
 
-  // دالة الحفظ المحسنة
-  const handleSave = useCallback(async () => {
+  const handleSave = async () => {
     setSaving(true);
     try {
-      // تحضير البيانات بشكل أكثر كفاءة
       const validColumns = [
         'name', 'name_ar', 'code', 'description', 'description_ar',
         'brand_id', 'type_id',
         'features', 'features_ar',
-        // ... بقية الأعمدة
+        'applications', 'applications_ar',
+        'instructions', 'instructions_ar',
+        'packaging', 'packaging_ar',
+        'safety_precautions', 'safety_precautions_ar',
+        'safety_first_aid', 'safety_first_aid_ar',
+        'storing_conditions', 'storing_conditions_ar',
+        'joint_preparation', 'joint_preparation_ar',
+        'joint_size', 'joint_size_ar',
+        'movement_capacity', 'movement_capacity_ar',
+        'substrate_treatment', 'substrate_treatment_ar',
+        'surface_preparation', 'surface_preparation_ar',
+        'recommended_uses', 'recommended_uses_ar',
+        'method_of_application', 'method_of_application_ar',
+        'mixing_ratio', 'mixing_ratio_ar',
+        'mixing_note', 'mixing_note_ar',
+        'mixing_steps', 'mixing_steps_ar',
+        'pot_life', 'pot_life_ar',
+        'cleaner', 'cleaner_ar',
+        'thinner', 'thinner_ar',
+        'application_temperature', 'application_temperature_ar',
+        'curing_note', 'curing_note_ar',
+        'note_application', 'note_application_ar',
+        'number_of_coats', 'number_of_coats_ar',
+        'note', 'note_ar',
+        'tensile_adhesion_strength', 'tensile_adhesion_strength_ar',
+        'material_consumption', 'material_consumption_ar',
+        'viscosity', 'viscosity_ar',
+        'weather_resistance', 'weather_resistance_ar',
+        'compressive_strength', 'compressive_strength_ar',
+        'tear_resistance', 'tear_resistance_ar',
+        'elongation_at_rupture', 'elongation_at_rupture_ar',
+        'tensile_strength_100', 'tensile_strength_100_ar',
+        'tensile_strength_50', 'tensile_strength_50_ar',
+        'specific_gravity_ar',  'specific_gravity',
+        'specific_gravity_mixed', 'specific_gravity_mixed_ar',
+        'solvent_resistance', 'solvent_resistance_ar',
+        'chemical_resistance', 'chemical_resistance_ar',
+        'abrasion_resistance', 'abrasion_resistance_ar',
+        'friction_resistance', 'friction_resistance_ar',
+        'washability', 'washability_ar',
+        'water_resistance', 'water_resistance_ar',
+        'theoretical_spreading_rate', 'theoretical_spreading_rate_ar',
+        'recommended_film_thickness', 'recommended_film_thickness_ar',
+        'temperature_resistance', 'temperature_resistance_ar',
+        'solvent_splash_resistance', 'solvent_splash_resistance_ar',
+        'sandability', 'sandability_ar',
+        'adhesion', 'adhesion_ar',
+        'flexibility', 'flexibility_ar',
+        'voc', 'voc_ar',
+        'volume_solids', 'volume_solids_ar',
+        'gloss', 'gloss_ar',
+        'color', 'color_ar',
+        'component_a', 'component_a_ar',
+        'component_b', 'component_b_ar',
+        'dry_to_touch', 'dry_to_touch_ar',
+        'dry_to_handle', 'dry_to_handle_ar',
+        'complete_setting', 'complete_setting_ar',
+        'grouting_time', 'grouting_time_ar',
+        'adjustability_time', 'adjustability_time_ar',
+        'dry_to_topcoat', 'dry_to_topcoat_ar',
+        'initial_setting', 'initial_setting_ar',
+        'fully_cured', 'fully_cured_ar',
+        'dry_to_sand', 'dry_to_sand_ar',
+        'drying_time_note', 'drying_time_note_ar',
+        'safety_note', 'safety_note_ar',
+        'status'
       ];
 
-      const filteredData = validColumns.reduce((obj, key) => {
-        if (formData[key] !== undefined) {
+      const filteredData = Object.keys(formData)
+        .filter(key => validColumns.includes(key))
+        .reduce((obj, key) => {
           obj[key] = formData[key];
-        }
-        return obj;
-      }, {} as any);
+          return obj;
+        }, {} as any);
 
       const productData = {
         ...filteredData,
@@ -392,81 +492,57 @@ const [formData, setFormData] = useState<any>({
       };
 
       let productId = id;
-
-      // حفظ بيانات المنتج
       if (id) {
-        const { error } = await supabase
-          .from('products')
-          .update(productData)
-          .eq('id', id);
+        const { error } = await supabase.from('products').update(productData).eq('id', id);
         if (error) throw error;
       } else {
-        const { data, error } = await supabase
-          .from('products')
-          .insert([productData])
-          .select();
+        const { data, error } = await supabase.from('products').insert([productData]).select();
         if (error) throw error;
         productId = data?.[0]?.id;
       }
 
-      if (!productId) throw new Error('Failed to get product ID');
-
-      // حفظ العلاقات والصور في عمليات متوازية
-      const allIds = [
-        ...(formData.material_id || []),
-        ...(formData.usage_id || [])
-      ];
-
-      const saveOperations = [];
-
-      // عملية حفظ العلاقات
-      if (allIds.length > 0) {
-        // حذف العلاقات القديمة أولاً (للمنتجات المعدلة)
+      // ✅ حفظ كل الـ IDs (مواد + استخدامات) في جدول product_materials
+      if (productId) {
         if (isEditing) {
-          await supabase
+          const { error: delErr } = await supabase
             .from('product_materials')
             .delete()
             .eq('product_id', productId);
+          if (delErr) throw delErr;
         }
 
-        const toInsert = allIds.map((materialId: string) => ({
-          product_id: productId,
-          material_id: materialId,
-        }));
+        const allIds = [
+          ...(formData.material_id || []),
+          ...(formData.usage_id || [])
+        ];
 
-        saveOperations.push(
-          supabase.from('product_images').insert(toInsert)
-        );
+        if (allIds.length > 0) {
+          const toInsert = allIds.map((id: string) => ({
+            product_id: productId,
+            material_id: id,
+          }));
+
+          const { error: insErr } = await supabase
+            .from('product_materials')
+            .insert(toInsert);
+          if (insErr) throw insErr;
+        }
       }
 
-      // عملية حفظ الصور
-      if (images.length > 0) {
+      // ✅ حفظ الصور
+      if (productId) {
         if (isEditing) {
-          await supabase
-            .from('product_images')
-            .delete()
-            .eq('product_id', productId);
+          await supabase.from('product_images').delete().eq('product_id', productId);
         }
-
-        const imagesToInsert = images.map(img => ({
-          product_id: productId,
-          image_url: img.image_url,
-          is_main: img.isMain || false
-        }));
-
-        saveOperations.push(
-          supabase.from('product_images').insert(imagesToInsert)
-        );
+        if (images.length > 0) {
+          const imagesToInsert = images.map(img => ({
+            product_id: productId,
+            image_url: img.image_url,
+            is_main: img.isMain || false
+          }));
+          await supabase.from('product_images').insert(imagesToInsert);
+        }
       }
-
-      // تنفيذ جميع عمليات الحفظ بشكل متوازي
-      if (saveOperations.length > 0) {
-        const results = await Promise.all(saveOperations);
-        results.forEach(result => {
-          if (result.error) throw result.error;
-        });
-      }
-
       navigate('/admin/products');
     } catch (err) {
       console.error('Save error:', err);
@@ -474,17 +550,10 @@ const [formData, setFormData] = useState<any>({
     } finally {
       setSaving(false);
     }
-  }, [formData, images, id, isEditing, navigate]);
+  };
 
-  if (loading) return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
-    </div>
-  );
+  if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
 
-
-
-  
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto bg-white shadow-xl">
@@ -535,4 +604,4 @@ const [formData, setFormData] = useState<any>({
   ); 
 }; 
 
-export default ProductForm;
+export default ProductForm; 
