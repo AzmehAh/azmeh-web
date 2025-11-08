@@ -60,9 +60,8 @@ const BilingualInput: React.FC<BilingualInputProps> = ({
     value={valueAr}
     onChange={onChange}
     placeholder={placeholder}
-    dir="rtl"
-    lang="ar"
-    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right [unicode-bidi:plaintext]"
+    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    style={{ direction: 'rtl', textAlign: 'right' }}
     {...(type === 'textarea' && { rows: 3 })}
   />
 </div>
