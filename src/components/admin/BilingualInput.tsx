@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { useTranslation } from 'react-i18next';
 interface BilingualInputProps {
   labelEn: string;
   labelAr: string;
@@ -12,7 +12,8 @@ interface BilingualInputProps {
   required?: boolean;
   placeholder?: string;
 }
-
+ const { t, i18n } = useTranslation(''); // استخدام namespace 'social'
+  const isRTL = i18n.language === 'ar';
 const BilingualInput: React.FC<BilingualInputProps> = ({
   labelEn,
   labelAr,
