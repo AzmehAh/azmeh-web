@@ -51,20 +51,20 @@ const BilingualInput: React.FC<BilingualInputProps> = ({
           />
         </div>
 
-       <div>
-  <label className="block text-xs font-medium text-gray-500 mb-1">
-    العربية (Arabic)
-  </label>
-  <InputComponent
-    name={nameAr}
-    value={valueAr}
-    onChange={onChange}
-    placeholder={placeholder}
-    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-    style={{ direction: 'rtl', textAlign: 'right' }}
-    {...(type === 'textarea' && { rows: 3 })}
-  />
-</div>
+        <div>
+          <label className="block text-xs font-medium text-gray-500 mb-1">
+            العربية (Arabic)
+          </label>
+          <InputComponent
+            name={nameAr}
+            value={valueAr}
+            onChange={onChange}
+            placeholder={placeholder}
+            dir="rtl"
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-right"
+            {...(type === 'textarea' && { rows: 3 })}
+          />
+        </div> 
       </div>
     </div>
   );
