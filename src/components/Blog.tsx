@@ -30,7 +30,6 @@ const Blog = () => {
         api.getBulletinCategoriesConfig()
       ]);
 
-      // ✅ الاحتفاظ بالبيانات الأصلية دون ترجمة
       setBulletins(bulletinsData || []);
       setBulletinCategories(categoriesData || []);
 
@@ -44,7 +43,6 @@ const Blog = () => {
           
           displayNames[originalName] = displayName;
 
-          // جلب النشرات حسب الاسم الأصلي
           const categoryBulletins = bulletinsData.filter(b => b.category === originalName);
           const subcategories = [
             ...new Set(
@@ -73,7 +71,7 @@ const Blog = () => {
       const params = new URLSearchParams(window.location.search);
       const newFilters: Record<string, string[]> = {};
       bulletinCategories.forEach(cat => {
-        const key = cat.name; // ← دائمًا الاسم الأصلي
+        const key = cat.name;
         const value = params.get(key);
         newFilters[key] = value ? value.split(',') : [];
       });
@@ -134,13 +132,30 @@ const Blog = () => {
     navigate(`/bulletin/${id}`);
   };
 
+  // Skeleton للعناصر أثناء التحميل
+  const renderSkeleton = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      {[...Array(6)].map((_, idx) => (
+        <div key={idx} className="bg-white rounded-xl shadow animate-pulse overflow-hidden">
+          <div className="h-48 bg-gray-200 w-full"></div>
+          <div className="p-6 space-y-4">
+            <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+            <div className="h-6 bg-gray-200 rounded w-full"></div>
+            <div className="h-4 bg-gray-200 rounded w-4/5"></div>
+            <div className="h-10 bg-gray-200 rounded"></div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+
   return (
     <div className={`min-h-screen bg-gray-50 pt-28 ${isRTL ? 'rtl' : 'ltr'}`}>
       {/* Hero Section */}
-          <div className=" text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
-              {t('blog.heroTitle')}
-            </h1>
+      <div className="text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 className="text-5xl md:text-6xl font-bold mb-6">
+          {t('blog.heroTitle')}
+        </h1>
       </div>
 
       {/* Content */}
@@ -172,51 +187,66 @@ const Blog = () => {
                 </div>
               </div>
 
-              {/* Categories */}
-              <div className="space-y-4">
-                {Object.entries(systemCategories).map(([originalCategoryName, subcategories]) => (
-                  <div key={originalCategoryName}>
-                    <button
-                      onClick={() => setActiveCategory(activeCategory === originalCategoryName ? null : originalCategoryName)}
-                      className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-logo transition-colors"
-                    >
-                      <span>{categoryDisplayNames[originalCategoryName] || originalCategoryName}</span>
-                      <motion.span animate={{ rotate: activeCategory === originalCategoryName ? 180 : 0 }} className="inline-block">
-                        <ChevronDown className="w-4 h-4" />
-                      </motion.span>
-                    </button>
+              {/* Categories - عرض Skeleton أثناء التحميل */}
+              {loading ? (
+                <div className="space-y-4">
+                  {[...Array(3)].map((_, i) => (
+                    <div key={i} className="animate-pulse">
+                      <div className="h-5 bg-gray-200 rounded w-3/4 mb-3"></div>
+                      <div className="space-y-2 pl-4">
+                        {[...Array(2)].map((_, j) => (
+                          <div key={j} className="h-4 bg-gray-100 rounded w-5/6"></div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {Object.entries(systemCategories).map(([originalCategoryName, subcategories]) => (
+                    <div key={originalCategoryName}>
+                      <button
+                        onClick={() => setActiveCategory(activeCategory === originalCategoryName ? null : originalCategoryName)}
+                        className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-logo transition-colors"
+                      >
+                        <span>{categoryDisplayNames[originalCategoryName] || originalCategoryName}</span>
+                        <motion.span animate={{ rotate: activeCategory === originalCategoryName ? 180 : 0 }} className="inline-block">
+                          <ChevronDown className="w-4 h-4" />
+                        </motion.span>
+                      </button>
 
-                    <AnimatePresence>
-                      {activeCategory === originalCategoryName && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                          className="overflow-hidden space-y-2"
-                        >
-                          {subcategories.map(sub => (
-                            <label
-                              key={sub}
-                              className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
-                            >
-                              <div className="flex items-center space-x-2">
-                                <input
-                                  type="checkbox"
-                                  checked={selectedFilters[originalCategoryName]?.includes(sub) || false}
-                                  onChange={() => toggleFilter(originalCategoryName, sub)}
-                                  className="w-4 h-4 text-logo border-gray-300 rounded focus:ring-logo"
-                                />
-                                <span className="text-sm text-gray-700">{sub}</span>
-                              </div>
-                            </label>
-                          ))}
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                ))}
-              </div>
+                      <AnimatePresence>
+                        {activeCategory === originalCategoryName && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="overflow-hidden space-y-2"
+                          >
+                            {subcategories.map(sub => (
+                              <label
+                                key={sub}
+                                className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedFilters[originalCategoryName]?.includes(sub) || false}
+                                    onChange={() => toggleFilter(originalCategoryName, sub)}
+                                    className="w-4 h-4 text-logo border-gray-300 rounded focus:ring-logo"
+                                  />
+                                  <span className="text-sm text-gray-700">{sub}</span>
+                                </div>
+                              </label>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -229,66 +259,70 @@ const Blog = () => {
                   : t('blog.allTitle')}
               </h2>
               <p className="text-gray-600">
-                {filteredBulletins.length} {t('blog.bulletinsAvailable')}
+                {loading ? '0' : filteredBulletins.length} {t('blog.bulletinsAvailable')}
               </p>
             </div>
 
-            <AnimatePresence mode="wait">
-              {filteredBulletins.length === 0 ? (
-                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-16">
-                  <div className="text-gray-400 mb-4">
-                    <Search className="w-16 h-16 mx-auto" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('blog.noResults')}</h3>
-                  <p className="text-gray-600">{t('blog.noResultsText')}</p>
-                </motion.div>
-              ) : (
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {filteredBulletins.map((b, idx) => {
-                    const displayTitle = isRTL ? b.title_ar || b.title : b.title;
-                    const displayDesc = isRTL ? b.short_description_ar || b.short_description : b.short_description;
-                    const displaySubcategory = isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
+            {loading ? (
+              renderSkeleton()
+            ) : filteredBulletins.length === 0 ? (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }} 
+                animate={{ opacity: 1, y: 0 }} 
+                className="text-center py-16"
+              >
+                <div className="text-gray-400 mb-4">
+                  <Search className="w-16 h-16 mx-auto" />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">{t('blog.noResults')}</h3>
+                <p className="text-gray-600">{t('blog.noResultsText')}</p>
+              </motion.div>
+            ) : (
+              <motion.div 
+                initial={{ opacity: 0 }} 
+                animate={{ opacity: 1 }}
+                className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
+              >
+                {filteredBulletins.map((b, idx) => {
+                  const displayTitle = isRTL ? b.title_ar || b.title : b.title;
+                  const displayDesc = isRTL ? b.short_description_ar || b.short_description : b.short_description;
+                  const displaySubcategory = isRTL ? b.subcategory_ar || b.subcategory : b.subcategory;
 
-                    return (
-                      <motion.div
-                        key={b.id}
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: idx * 0.1 }}
-                        className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
-                        onClick={() => handleBulletinClick(b.id)}
-                      >
-                        <div className="h-48 overflow-hidden">
-                          <img 
-                            src={b.cover_image} 
-                            alt={displayTitle} 
-                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
-                          />
-                        </div>
-                        <div className="p-6">
-                          <span className="inline-block px-3 py-1 bg-blue-50 text-logo text-xs font-medium rounded-full mb-2">
-                            {displaySubcategory}
-                          </span>
-                          <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-logo transition-colors line-clamp-2">
-                            {displayTitle}
-                          </h3>
-                          <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
-                            {displayDesc}
-                          </p>
-                        <button
-  className="w-full but py-3 rounded-lg 
-             focus:outline-none focus:ring-2 focus:ring-logo/20 
-             font-medium"
->
-  {t('blog.readMore')}
-</button>
-                        </div>
-                      </motion.div>
-                    );
-                  })}
-                </motion.div>
-              )}
-            </AnimatePresence>
+                  return (
+                    <motion.div
+                      key={b.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1 }}
+                      className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                      onClick={() => handleBulletinClick(b.id)}
+                    >
+                      <div className="h-48 overflow-hidden">
+                        <img 
+                          src={b.cover_image} 
+                          alt={displayTitle} 
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                        />
+                      </div>
+                      <div className="p-6">
+                        <span className="inline-block px-3 py-1 bg-blue-50 text-logo text-xs font-medium rounded-full mb-2">
+                          {displaySubcategory}
+                        </span>
+                        <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-logo transition-colors line-clamp-2">
+                          {displayTitle}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
+                          {displayDesc}
+                        </p>
+                        <button className="w-full but py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-logo/20 font-medium">
+                          {t('blog.readMore')}
+                        </button>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </motion.div>
+            )}
           </div>
         </div>
       </div>
