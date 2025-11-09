@@ -608,7 +608,7 @@ useEffect(() => {
                     <div className="text-xs font-medium text-gray-600 mb-2">English</div>
                     <div className="border border-gray-200 rounded-lg overflow-hidden">
                       <Editor
-                        apiKey="no-api-key"
+                        apiKey="nm9wmaq1c42v1lti9s3bpvij8d4e8flgk6jqcaeveif2bk0w"
                         onInit={(evt, editor) => editorRefEn.current = editor}
                         value={formData.content}
                         onEditorChange={(content) => setFormData(prev => ({ ...prev, content }))}
@@ -672,7 +672,7 @@ useEffect(() => {
                     <div className="text-xs font-medium text-gray-600 mb-2">العربية (Arabic)</div>
                     <div className="border border-gray-200 rounded-lg overflow-hidden">
                       <Editor
-                        apiKey="no-api-key"
+                        apiKey="nm9wmaq1c42v1lti9s3bpvij8d4e8flgk6jqcaeveif2bk0w"
                         onInit={(evt, editor) => editorRefAr.current = editor}
                         value={formData.content_ar}
                         onEditorChange={(content) => setFormData(prev => ({ ...prev, content_ar: content }))}
