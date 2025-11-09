@@ -223,7 +223,7 @@ const BulletinDetail = () => {
     <h3 className="text-2xl font-bold mb-4">{t('bulletin.needHelpTitle')}</h3>
     <p className="text-gray-300 mb-6 max-w-2xl mx-auto">{t('bulletin.needHelpText')}</p>
     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-      {/* ✅ هذا الزر سيأخذك إلى صفحة /contact */}
+      
       <Link
         to="/contact"
         className=" bg-gradient-to-r from-logo to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20  text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center"
@@ -238,7 +238,7 @@ const BulletinDetail = () => {
   </div>
           </div>
         </div>
-      </div>
+      </div> 
     </div>
   );
 };
