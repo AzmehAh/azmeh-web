@@ -448,7 +448,7 @@ useEffect(() => {
                   <img
                     src={formData.cover_image}
                     alt="Cover"
-                    className="w-full h-32 object-cover rounded border"
+                    className="w-full h-64 object-cover rounded border"
                   />
                 ) : (
                   <p className="text-gray-500">No cover image</p>
