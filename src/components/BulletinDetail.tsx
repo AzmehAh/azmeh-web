@@ -187,8 +187,8 @@ const BulletinDetail = () => {
                       onClick={() => navigate(`/bulletin/${related.id}`)}
                       className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
                     > 
-                      <div className="h-100 overflow-hidden">
-                        <img
+                      <div className="h-32 overflow-hidden">
+                        <img 
                           src={related.cover_image || '/placeholder-image.jpg'}
                           alt={relTitle}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
