@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Save, 
-  X, 
+import {
+  Save,
+  X,
   Upload,
   ArrowLeft
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
+import { Editor } from '@tinymce/tinymce-react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import BilingualInput from './BilingualInput'; // تأكد من وجوده
+import BilingualInput from './BilingualInput';
 
 const BulletinForm = () => {
   const navigate = useNavigate();
@@ -37,18 +36,12 @@ const BulletinForm = () => {
     tags: ''
   });
   const [saving, setSaving] = useState(false);
-  const [uploadingImage, setUploadingImage] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
- const [categoryOptions, setCategoryOptions] = useState([]);
+  const [categoryOptions, setCategoryOptions] = useState([]);
   const [bulletin, setBulletin] = useState(null);
   const [loading, setLoading] = useState(!!id);
-  const quillRef = useRef(null);
-  const quillRefAr = useRef(null); // مرجع منفصل للمحرر العربي
-  
-  const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [selectedImageFile, setSelectedImageFile] = useState(null);
-  const [imageWidth, setImageWidth] = useState('');
-  const [imageHeight, setImageHeight] = useState('');
+  const editorRefEn = useRef(null);
+  const editorRefAr = useRef(null);
   const [allBulletins, setAllBulletins] = useState([]);
   const [selectedRelatedIds, setSelectedRelatedIds] = useState<string[]>([]);
 
@@ -222,134 +215,25 @@ useEffect(() => {
     }
   };
 
-  // دالة لمعالجة رفع الصورة في المحرر (الإنجليزي)
-  const imageHandlerEn = useCallback(() => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      if (input.files && input.files[0]) {
-        setSelectedImageFile(input.files[0]);
-        setImageWidth('');
-        setImageHeight('');
-        setImageModalOpen(true);
-      }
-    };
-  }, []);
-
-  // دالة لمعالجة رفع الصورة في المحرر (العربي)
-  const imageHandlerAr = useCallback(() => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    input.onchange = async () => {
-      if (input.files && input.files[0]) {
-        setSelectedImageFile(input.files[0]);
-        setImageWidth('');
-        setImageHeight('');
-        setImageModalOpen(true);
-      }
-    };
-  }, []);
-
-  // دالة لإدراج الصورة بعد تحديد الأبعاد
-  const handleInsertImageWithDimensions = async () => {
-    if (!selectedImageFile) {
-      alert('No image selected');
-      return;
-    }
+  // TinyMCE image upload handler
+  const handleTinyMCEImageUpload = useCallback(async (blobInfo, progress) => {
+    const file = blobInfo.blob();
 
     try {
-      setUploadingImage(true);
-      setImageModalOpen(false);
+      progress(30);
+      const imageUrl = await uploadImage(file, 'bulletins/content');
+      progress(100);
 
-      const imageUrl = await uploadImage(selectedImageFile, 'bulletins/content');
       if (!imageUrl) {
-        alert('Failed to upload image.');
-        return;
+        throw new Error('Failed to upload image');
       }
 
-      let styleAttr = '';
-      if (imageWidth) styleAttr += `width: ${imageWidth}; `;
-      if (imageHeight) styleAttr += `height: ${imageHeight}; `;
-      let imgTag = `<img src="${imageUrl}" ${styleAttr ? `style="${styleAttr}"` : ''} />`;
-
-      // إدراج في المحرر الإنجليزي إذا كان نشطًا
-      if (quillRef.current) {
-        const quill = quillRef.current.getEditor();
-        if (quill) {
-          const range = quill.getSelection();
-          const position = range ? range.index : quill.getLength();
-          quill.clipboard.dangerouslyPasteHTML(position, imgTag);
-          quill.setSelection(position + 1, 0);
-        }
-      }
-
-      // إدراج في المحرر العربي إذا كان نشطًا
-      if (quillRefAr.current) {
-        const quill = quillRefAr.current.getEditor();
-        if (quill) {
-          const range = quill.getSelection();
-          const position = range ? range.index : quill.getLength();
-          quill.clipboard.dangerouslyPasteHTML(position, imgTag);
-          quill.setSelection(position + 1, 0);
-        }
-      }
-
-      setSelectedImageFile(null);
-      setImageWidth('');
-      setImageHeight('');
+      return imageUrl;
     } catch (error) {
-      console.error('Error inserting image with dimensions:', error);
-      alert('Error: ' + (error.message || 'Unknown error'));
-    } finally {
-      setUploadingImage(false);
+      console.error('Error uploading image:', error);
+      throw error;
     }
-  };
-
-  const quillModulesEn = useMemo(() => ({
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'], 
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean']
-      ],
-      handlers: {
-        image: imageHandlerEn 
-      }
-    }
-  }), [imageHandlerEn]);
-
-  const quillModulesAr = useMemo(() => ({
-    toolbar: {
-      container: [
-        [{ 'header': [1, 2, 3, false] }],
-        ['bold', 'italic', 'underline', 'strike'], 
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-        ['blockquote', 'code-block'],
-        ['link', 'image'],
-        ['clean']
-      ],
-      handlers: {
-        image: imageHandlerAr 
-      }
-    }
-  }), [imageHandlerAr]);
-
-  const quillFormats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike',
-    'list', 'bullet',
-    'blockquote', 'code-block',
-    'link', 'image'
-  ];
+  }, []);
 
   const handleSave = async () => {
     if (!formData.title || !formData.slug || !formData.category || !formData.subcategory || !formData.content) {
@@ -718,41 +602,133 @@ useEffect(() => {
                 Content *
               </label>
               {isEditing || !id ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
                   {/* English */}
                   <div>
-                    <div className="text-xs text-gray-500 mb-1">English</div>
-                    {uploadingImage && (
-                      <div className="bg-blue-50 p-2 text-sm text-blue-700 rounded mb-2 flex items-center">
-                        <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-600 mr-2"></div>
-                        Uploading image...
-                      </div>
-                    )}
+                    <div className="text-xs font-medium text-gray-600 mb-2">English</div>
                     <div className="border border-gray-200 rounded-lg overflow-hidden">
-                      <ReactQuill
-                        ref={quillRef}
-                        theme="snow"
+                      <Editor
+                        apiKey="no-api-key"
+                        onInit={(evt, editor) => editorRefEn.current = editor}
                         value={formData.content}
-                        onChange={(value) => setFormData(prev => ({ ...prev, content: value }))}
-                        modules={quillModulesEn}
-                        formats={quillFormats}
-                        placeholder="Write content in English..."
+                        onEditorChange={(content) => setFormData(prev => ({ ...prev, content }))}
+                        init={{
+                          height: 500,
+                          menubar: true,
+                          plugins: [
+                            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount',
+                            'directionality', 'paste'
+                          ],
+                          toolbar: 'undo redo | formatselect | bold italic underline strikethrough | ' +
+                            'alignleft aligncenter alignright alignjustify | outdent indent | ' +
+                            'bullist numlist | blockquote | link image media | ' +
+                            'table tabledelete | tableprops tablerowprops tablecellprops | ' +
+                            'tableinsertrowbefore tableinsertrowafter tabledeleterow | ' +
+                            'tableinsertcolbefore tableinsertcolafter tabledeletecol | ' +
+                            'forecolor backcolor | removeformat | code fullscreen | help',
+                          content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; line-height: 1.6; } ' +
+                            'img { max-width: 100%; height: auto; } ' +
+                            'table { border-collapse: collapse; width: 100%; } ' +
+                            'table td, table th { border: 1px solid #ddd; padding: 8px; } ' +
+                            'table th { background-color: #f2f2f2; } ' +
+                            'blockquote { border-left: 4px solid #ddd; padding-left: 16px; margin: 16px 0; color: #666; }',
+                          directionality: 'ltr',
+                          images_upload_handler: handleTinyMCEImageUpload,
+                          image_advtab: true,
+                          image_caption: true,
+                          image_dimensions: true,
+                          image_class_list: [
+                            { title: 'Responsive', value: 'img-responsive' },
+                            { title: 'Rounded', value: 'img-rounded' }
+                          ],
+                          table_class_list: [
+                            { title: 'Default', value: 'table' },
+                            { title: 'Bordered', value: 'table-bordered' },
+                            { title: 'Striped', value: 'table-striped' }
+                          ],
+                          table_default_attributes: {
+                            border: '1'
+                          },
+                          table_default_styles: {
+                            'border-collapse': 'collapse',
+                            'width': '100%'
+                          },
+                          paste_data_images: true,
+                          paste_as_text: false,
+                          paste_word_valid_elements: 'b,strong,i,em,h1,h2,h3,h4,h5,h6,p,br,ul,ol,li,table,tr,td,th,blockquote,a,img',
+                          paste_webkit_styles: 'all',
+                          paste_retain_style_properties: 'all',
+                          paste_merge_formats: true,
+                          placeholder: 'Write content in English...'
+                        }}
                       />
                     </div>
                   </div>
 
                   {/* Arabic */}
                   <div dir="rtl">
-                    <div className="text-xs text-gray-500 mb-1">العربية</div>
+                    <div className="text-xs font-medium text-gray-600 mb-2">العربية (Arabic)</div>
                     <div className="border border-gray-200 rounded-lg overflow-hidden">
-                      <ReactQuill
-                        ref={quillRefAr}
-                        theme="snow"
+                      <Editor
+                        apiKey="no-api-key"
+                        onInit={(evt, editor) => editorRefAr.current = editor}
                         value={formData.content_ar}
-                        onChange={(value) => setFormData(prev => ({ ...prev, content_ar: value }))}
-                        modules={quillModulesAr}
-                        formats={quillFormats}
-                        placeholder="اكتب المحتوى بالعربية..."
+                        onEditorChange={(content) => setFormData(prev => ({ ...prev, content_ar: content }))}
+                        init={{
+                          height: 500,
+                          menubar: true,
+                          plugins: [
+                            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount',
+                            'directionality', 'paste'
+                          ],
+                          toolbar: 'undo redo | formatselect | bold italic underline strikethrough | ' +
+                            'alignleft aligncenter alignright alignjustify | outdent indent | ' +
+                            'bullist numlist | blockquote | link image media | ' +
+                            'table tabledelete | tableprops tablerowprops tablecellprops | ' +
+                            'tableinsertrowbefore tableinsertrowafter tabledeleterow | ' +
+                            'tableinsertcolbefore tableinsertcolafter tabledeletecol | ' +
+                            'forecolor backcolor | removeformat | code fullscreen | help',
+                          content_style: 'body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; line-height: 1.6; direction: rtl; text-align: right; } ' +
+                            'img { max-width: 100%; height: auto; } ' +
+                            'table { border-collapse: collapse; width: 100%; direction: rtl; } ' +
+                            'table td, table th { border: 1px solid #ddd; padding: 8px; text-align: right; } ' +
+                            'table th { background-color: #f2f2f2; } ' +
+                            'blockquote { border-right: 4px solid #ddd; border-left: none; padding-right: 16px; padding-left: 0; margin: 16px 0; color: #666; } ' +
+                            'ul, ol { padding-right: 20px; padding-left: 0; }',
+                          directionality: 'rtl',
+                          images_upload_handler: handleTinyMCEImageUpload,
+                          image_advtab: true,
+                          image_caption: true,
+                          image_dimensions: true,
+                          image_class_list: [
+                            { title: 'Responsive', value: 'img-responsive' },
+                            { title: 'Rounded', value: 'img-rounded' }
+                          ],
+                          table_class_list: [
+                            { title: 'Default', value: 'table' },
+                            { title: 'Bordered', value: 'table-bordered' },
+                            { title: 'Striped', value: 'table-striped' }
+                          ],
+                          table_default_attributes: {
+                            border: '1'
+                          },
+                          table_default_styles: {
+                            'border-collapse': 'collapse',
+                            'width': '100%',
+                            'direction': 'rtl'
+                          },
+                          paste_data_images: true,
+                          paste_as_text: false,
+                          paste_word_valid_elements: 'b,strong,i,em,h1,h2,h3,h4,h5,h6,p,br,ul,ol,li,table,tr,td,th,blockquote,a,img',
+                          paste_webkit_styles: 'all',
+                          paste_retain_style_properties: 'all',
+                          paste_merge_formats: true,
+                          placeholder: 'اكتب المحتوى بالعربية...'
+                        }}
                       />
                     </div>
                   </div>
@@ -820,61 +796,6 @@ useEffect(() => {
                 >
                   Back to List
                 </button>
-              </div>
-            )}
-
-            {/* Image Modal */}
-            {imageModalOpen && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                  <h3 className="text-lg font-semibold mb-4">Set Image Dimensions</h3>
-                  {selectedImageFile && (
-                    <div className="mb-4 text-center">
-                      <p className="text-sm text-gray-600 mb-2">Selected: {selectedImageFile.name}</p>
-                      <img 
-                        src={URL.createObjectURL(selectedImageFile)} 
-                        alt="Preview" 
-                        className="max-h-40 mx-auto rounded border"
-                      />
-                    </div>
-                  )}
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Width (px or %)</label>
-                      <input
-                        type="text"
-                        value={imageWidth}
-                        onChange={(e) => setImageWidth(e.target.value)}
-                        placeholder="e.g., 300 or 50%"
-                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#0055A3]"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Height (px or %)</label>
-                      <input
-                        type="text"
-                        value={imageHeight}
-                        onChange={(e) => setImageHeight(e.target.value)}
-                        placeholder="e.g., 200 or auto"
-                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-[#0055A3]"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex justify-end space-x-3 mt-6">
-                    <button
-                      onClick={() => setImageModalOpen(false)}
-                      className="px-4 py-2 text-gray-700 border border-gray-300 rounded hover:bg-gray-50"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleInsertImageWithDimensions}
-                      className="px-4 py-2 bg-[#0055A3] text-white rounded hover:bg-blue-700"
-                    >
-                      Insert Image
-                    </button>
-                  </div>
-                </div>
               </div>
             )}
           </div>

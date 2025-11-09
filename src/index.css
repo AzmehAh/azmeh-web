@@ -168,6 +168,7 @@
   line-height: 1.1;
   margin-top: 0;
   margin-bottom: 1.5rem;
+  color: #1f2937;
 }
 
 .prose h2 {
@@ -176,6 +177,7 @@
   line-height: 1.2;
   margin-top: 2rem;
   margin-bottom: 1rem;
+  color: #1f2937;
 }
 
 .prose h3 {
@@ -184,19 +186,231 @@
   line-height: 1.3;
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
+  color: #1f2937;
+}
+
+.prose h4 {
+  font-weight: 600;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  margin-top: 1.25rem;
+  margin-bottom: 0.625rem;
+  color: #374151;
 }
 
 .prose p {
   margin-bottom: 1.5rem;
   line-height: 1.7;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+/* Lists */
+.prose ul,
+.prose ol {
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+  line-height: 1.7;
+}
+
+.prose[dir="rtl"] ul,
+.prose[dir="rtl"] ol {
+  padding-left: 0;
+  padding-right: 1.5rem;
 }
 
 .prose ul {
-  margin-bottom: 1.5rem;
+  list-style-type: disc;
 }
 
+.prose ol {
+  list-style-type: decimal;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+  padding-left: 0.25rem;
+}
+
+.prose[dir="rtl"] li {
+  padding-left: 0;
+  padding-right: 0.25rem;
+}
+
+.prose ul ul,
+.prose ol ol,
+.prose ul ol,
+.prose ol ul {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Blockquotes */
+.prose blockquote {
+  border-left: 4px solid #0055A3;
+  padding-left: 1rem;
+  margin: 1.5rem 0;
+  color: #6b7280;
+  font-style: italic;
+  background-color: #f9fafb;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
+.prose[dir="rtl"] blockquote {
+  border-left: none;
+  border-right: 4px solid #0055A3;
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+/* Tables */
 .prose table {
-  margin-bottom: 2rem;
+  width: 100%;
+  border-collapse: collapse;
+  margin: 2rem 0;
+  font-size: 0.875rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.prose table thead {
+  background-color: #f3f4f6;
+}
+
+.prose table th {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #1f2937;
+  border-bottom: 2px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+}
+
+.prose[dir="rtl"] table th {
+  text-align: right;
+  border-right: none;
+  border-left: 1px solid #e5e7eb;
+}
+
+.prose table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  border-right: 1px solid #e5e7eb;
+  text-align: left;
+}
+
+.prose[dir="rtl"] table td {
+  text-align: right;
+  border-right: none;
+  border-left: 1px solid #e5e7eb;
+}
+
+.prose table tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+.prose table tbody tr:hover {
+  background-color: #f3f4f6;
+  transition: background-color 0.2s ease;
+}
+
+.prose table th:last-child,
+.prose table td:last-child {
+  border-right: none;
+}
+
+.prose[dir="rtl"] table th:first-child,
+.prose[dir="rtl"] table td:first-child {
+  border-left: none;
+}
+
+/* Images */
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1.5rem auto;
+  display: block;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.prose img.img-responsive {
+  width: 100%;
+}
+
+.prose img.img-rounded {
+  border-radius: 12px;
+}
+
+/* Links */
+.prose a {
+  color: #0055A3;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+.prose a:hover {
+  color: #2C5DB6;
+}
+
+/* Strong and emphasis */
+.prose strong {
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.prose em {
+  font-style: italic;
+}
+
+/* Code blocks */
+.prose code {
+  background-color: #f3f4f6;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.875em;
+  font-family: 'Courier New', monospace;
+}
+
+.prose pre {
+  background-color: #1f2937;
+  color: #f9fafb;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.prose pre code {
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+}
+
+/* Horizontal rules */
+.prose hr {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 2rem 0;
+}
+
+/* Preserve spacing in pasted content */
+.prose * {
+  word-spacing: normal;
+  letter-spacing: normal;
+}
+
+/* RTL-specific adjustments */
+.prose[dir="rtl"] {
+  text-align: right;
+  direction: rtl;
+}
+
+.prose[dir="rtl"] p,
+.prose[dir="rtl"] li {
+  text-align: right;
 }
 
 /* Line clamp utilities */
