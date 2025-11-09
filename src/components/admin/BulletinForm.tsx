@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import {
   Save,
@@ -7,9 +7,9 @@ import {
   ArrowLeft
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
-import { Editor } from '@tinymce/tinymce-react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import BilingualInput from './BilingualInput';
+import BilingualRichTextEditor from './BilingualRichTextEditor';
 
 const BulletinForm = () => {
   const navigate = useNavigate();
@@ -40,8 +40,6 @@ const BulletinForm = () => {
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [bulletin, setBulletin] = useState(null);
   const [loading, setLoading] = useState(!!id);
-  const editorRefEn = useRef(null);
-  const editorRefAr = useRef(null);
   const [allBulletins, setAllBulletins] = useState([]);
   const [selectedRelatedIds, setSelectedRelatedIds] = useState<string[]>([]);
 
@@ -215,25 +213,6 @@ useEffect(() => {
     }
   };
 
-  // TinyMCE image upload handler
-  const handleTinyMCEImageUpload = useCallback(async (blobInfo, progress) => {
-    const file = blobInfo.blob();
-
-    try {
-      progress(30);
-      const imageUrl = await uploadImage(file, 'bulletins/content');
-      progress(100);
-
-      if (!imageUrl) {
-        throw new Error('Failed to upload image');
-      }
-
-      return imageUrl;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-      throw error;
-    }
-  }, []);
 
   const handleSave = async () => {
     if (!formData.title || !formData.slug || !formData.category || !formData.subcategory || !formData.content) {
@@ -597,143 +576,21 @@ useEffect(() => {
             )}
 
             {/* Content - Bilingual */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Content *
-              </label>
-              {isEditing || !id ? (
-                <div className="space-y-6">
-                  {/* English */}
-                  <div>
-                    <div className="text-xs font-medium text-gray-600 mb-2">English</div>
-                    <div className="border border-gray-200 rounded-lg overflow-hidden">
-                      <Editor
-                        apiKey="nm9wmaq1c42v1lti9s3bpvij8d4e8flgk6jqcaeveif2bk0w"
-                        onInit={(evt, editor) => editorRefEn.current = editor}
-                        value={formData.content}
-                        onEditorChange={(content) => setFormData(prev => ({ ...prev, content }))}
-                        init={{
-                          height: 500,
-                          menubar: true,
-                          plugins: [
-                            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount',
-                            'directionality', 'paste'
-                          ],
-                          toolbar: 'undo redo | formatselect | bold italic underline strikethrough | ' +
-                            'alignleft aligncenter alignright alignjustify | outdent indent | ' +
-                            'bullist numlist | blockquote | link image media | ' +
-                            'table tabledelete | tableprops tablerowprops tablecellprops | ' +
-                            'tableinsertrowbefore tableinsertrowafter tabledeleterow | ' +
-                            'tableinsertcolbefore tableinsertcolafter tabledeletecol | ' +
-                            'forecolor backcolor | removeformat | code fullscreen | help',
-                          content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; font-size: 14px; line-height: 1.6; } ' +
-                            'img { max-width: 100%; height: auto; } ' +
-                            'table { border-collapse: collapse; width: 100%; } ' +
-                            'table td, table th { border: 1px solid #ddd; padding: 8px; } ' +
-                            'table th { background-color: #f2f2f2; } ' +
-                            'blockquote { border-left: 4px solid #ddd; padding-left: 16px; margin: 16px 0; color: #666; }',
-                          directionality: 'ltr',
-                          images_upload_handler: handleTinyMCEImageUpload,
-                          image_advtab: true,
-                          image_caption: true,
-                          image_dimensions: true,
-                          image_class_list: [
-                            { title: 'Responsive', value: 'img-responsive' },
-                            { title: 'Rounded', value: 'img-rounded' }
-                          ],
-                          table_class_list: [
-                            { title: 'Default', value: 'table' },
-                            { title: 'Bordered', value: 'table-bordered' },
-                            { title: 'Striped', value: 'table-striped' }
-                          ],
-                          table_default_attributes: {
-                            border: '1'
-                          },
-                          table_default_styles: {
-                            'border-collapse': 'collapse',
-                            'width': '100%'
-                          },
-                          paste_data_images: true,
-                          paste_as_text: false,
-                          paste_word_valid_elements: 'b,strong,i,em,h1,h2,h3,h4,h5,h6,p,br,ul,ol,li,table,tr,td,th,blockquote,a,img',
-                          paste_webkit_styles: 'all',
-                          paste_retain_style_properties: 'all',
-                          paste_merge_formats: true,
-                          placeholder: 'Write content in English...'
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Arabic */}
-                  <div dir="rtl">
-                    <div className="text-xs font-medium text-gray-600 mb-2">العربية (Arabic)</div>
-                    <div className="border border-gray-200 rounded-lg overflow-hidden">
-                      <Editor
-                        apiKey="nm9wmaq1c42v1lti9s3bpvij8d4e8flgk6jqcaeveif2bk0w"
-                        onInit={(evt, editor) => editorRefAr.current = editor}
-                        value={formData.content_ar}
-                        onEditorChange={(content) => setFormData(prev => ({ ...prev, content_ar: content }))}
-                        init={{
-                          height: 500,
-                          menubar: true,
-                          plugins: [
-                            'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-                            'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-                            'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount',
-                            'directionality', 'paste'
-                          ],
-                          toolbar: 'undo redo | formatselect | bold italic underline strikethrough | ' +
-                            'alignleft aligncenter alignright alignjustify | outdent indent | ' +
-                            'bullist numlist | blockquote | link image media | ' +
-                            'table tabledelete | tableprops tablerowprops tablecellprops | ' +
-                            'tableinsertrowbefore tableinsertrowafter tabledeleterow | ' +
-                            'tableinsertcolbefore tableinsertcolafter tabledeletecol | ' +
-                            'forecolor backcolor | removeformat | code fullscreen | help',
-                          content_style: 'body { font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif; font-size: 14px; line-height: 1.6; direction: rtl; text-align: right; } ' +
-                            'img { max-width: 100%; height: auto; } ' +
-                            'table { border-collapse: collapse; width: 100%; direction: rtl; } ' +
-                            'table td, table th { border: 1px solid #ddd; padding: 8px; text-align: right; } ' +
-                            'table th { background-color: #f2f2f2; } ' +
-                            'blockquote { border-right: 4px solid #ddd; border-left: none; padding-right: 16px; padding-left: 0; margin: 16px 0; color: #666; } ' +
-                            'ul, ol { padding-right: 20px; padding-left: 0; }',
-                          directionality: 'rtl',
-                          images_upload_handler: handleTinyMCEImageUpload,
-                          image_advtab: true,
-                          image_caption: true,
-                          image_dimensions: true,
-                          image_class_list: [
-                            { title: 'Responsive', value: 'img-responsive' },
-                            { title: 'Rounded', value: 'img-rounded' }
-                          ],
-                          table_class_list: [
-                            { title: 'Default', value: 'table' },
-                            { title: 'Bordered', value: 'table-bordered' },
-                            { title: 'Striped', value: 'table-striped' }
-                          ],
-                          table_default_attributes: {
-                            border: '1'
-                          },
-                          table_default_styles: {
-                            'border-collapse': 'collapse',
-                            'width': '100%',
-                            'direction': 'rtl'
-                          },
-                          paste_data_images: true,
-                          paste_as_text: false,
-                          paste_word_valid_elements: 'b,strong,i,em,h1,h2,h3,h4,h5,h6,p,br,ul,ol,li,table,tr,td,th,blockquote,a,img',
-                          paste_webkit_styles: 'all',
-                          paste_retain_style_properties: 'all',
-                          paste_merge_formats: true,
-                          placeholder: 'اكتب المحتوى بالعربية...'
-                        }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              ) : (
+            {isEditing || !id ? (
+              <BilingualRichTextEditor
+                labelEn="Content"
+                labelAr="المحتوى"
+                valueEn={formData.content}
+                valueAr={formData.content_ar}
+                onChangeEn={(value) => setFormData(prev => ({ ...prev, content: value }))}
+                onChangeAr={(value) => setFormData(prev => ({ ...prev, content_ar: value }))}
+                required={true}
+              />
+            ) : (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Content
+                </label>
                 <div className="space-y-4">
                   <div>
                     <div className="text-xs text-gray-500 mb-1">English</div>
@@ -756,8 +613,8 @@ useEffect(() => {
                     </div>
                   </div>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* Footer */}
             {(isEditing || !id) && (
