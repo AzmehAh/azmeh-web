@@ -10,62 +10,87 @@ const Blog = () => {
   const isRTL = i18n.language === 'ar';
   const navigate = useNavigate();
 
+  // 📦 بيانات الأصلية (لا تتغير عند تغيير اللغة)
+  const [originalBulletins, setOriginalBulletins] = useState<Bulletin[]>([]);
+  const [originalCategoriesConfig, setOriginalCategoriesConfig] = useState<BulletinCategoryConfig[]>([]);
+
+  // 🌐 بيانات مُترجمة/مرتبة حسب اللغة الحالية
   const [bulletins, setBulletins] = useState<Bulletin[]>([]);
   const [systemCategories, setSystemCategories] = useState<Record<string, string[]>>({});
   const [bulletinCategories, setBulletinCategories] = useState<BulletinCategoryConfig[]>([]);
   const [categoryDisplayNames, setCategoryDisplayNames] = useState<Record<string, string>>({});
+
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  // 🔁 تحميل البيانات مرة واحدة فقط عند التحميل الأولي
   useEffect(() => {
-    fetchData();
-  }, [i18n.language]);
+    const loadInitialData = async () => {
+      if (originalBulletins.length > 0 && originalCategoriesConfig.length > 0) return;
 
-  const fetchData = async () => {
-    try {
-      const [bulletinsData, categoriesData] = await Promise.all([
-        api.getBulletins(),
-        api.getBulletinCategoriesConfig()
-      ]);
+      try {
+        const [bulletinsData, categoriesData] = await Promise.all([
+          api.getBulletins(),
+          api.getBulletinCategoriesConfig()
+        ]);
 
-      setBulletins(bulletinsData || []);
-      setBulletinCategories(categoriesData || []);
+        setOriginalBulletins(bulletinsData || []);
+        setOriginalCategoriesConfig(categoriesData || []);
 
-      const categoriesMap: Record<string, string[]> = {};
-      const displayNames: Record<string, string> = {};
+        // استخدم هذه البيانات لاحقاً في تحديث اللغة
+        setBulletins(bulletinsData || []);
+        setBulletinCategories(categoriesData || []);
 
-      categoriesData?.forEach(category => {
-        if (category.is_active) {
-          const originalName = category.name;
-          const displayName = isRTL ? category.name_ar || category.name : category.name;
-          
-          displayNames[originalName] = displayName;
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-          const categoryBulletins = bulletinsData.filter(b => b.category === originalName);
-          const subcategories = [
-            ...new Set(
-              categoryBulletins
-                .map(b => (isRTL ? b.subcategory_ar || b.subcategory : b.subcategory))
-                .filter(Boolean)
-            ),
-          ];
+    loadInitialData();
+  }, []); // فقط مرة واحدة
 
-          categoriesMap[originalName] = subcategories;
-        }
-      });
+  // 🌍 تحديث العرض عند تغيير اللغة (بدون إعادة جلب من API)
+  useEffect(() => {
+    if (originalBulletins.length === 0 || originalCategoriesConfig.length === 0) return;
 
-      setSystemCategories(categoriesMap);
-      setCategoryDisplayNames(displayNames);
+    const isRTL = i18n.language === 'ar';
 
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const categoriesMap: Record<string, string[]> = {};
+    const displayNames: Record<string, string> = {};
 
+    originalCategoriesConfig.forEach(category => {
+      if (category.is_active) {
+        const originalName = category.name;
+        const displayName = isRTL ? category.name_ar || category.name : category.name;
+        
+        displayNames[originalName] = displayName;
+
+        const categoryBulletins = originalBulletins.filter(b => b.category === originalName);
+        const subcategories = [
+          ...new Set(
+            categoryBulletins
+              .map(b => (isRTL ? b.subcategory_ar || b.subcategory : b.subcategory))
+              .filter(Boolean)
+          ),
+        ];
+
+        categoriesMap[originalName] = subcategories;
+      }
+    });
+
+    setSystemCategories(categoriesMap);
+    setCategoryDisplayNames(displayNames);
+    // لا نعيد تعيين bulletins لأنها نفس البيانات، فقط عرضها باللغة الجديدة
+    // لكننا نعيد تعيينها للتأكد من أن أي تغيير في اللغة يعكس الترجمة
+    setBulletins(originalBulletins.map(b => ({ ...b }))); // shallow copy لتفادي مشاكل الـ re-render
+
+  }, [i18n.language, originalBulletins, originalCategoriesConfig]);
+
+  // 💡 تحديث الفلاتر من URL عند التحميل
   useEffect(() => {
     if (!loading) {
       const params = new URLSearchParams(window.location.search);
@@ -294,7 +319,7 @@ const Blog = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.1 }}
-                      className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+                      className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group min-h-[400px] flex flex-col"
                       onClick={() => handleBulletinClick(b.id)}
                     >
                       <div className="h-48 overflow-hidden">
@@ -304,17 +329,19 @@ const Blog = () => {
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                         />
                       </div>
-                      <div className="p-6">
-                        <span className="inline-block px-3 py-1 bg-blue-50 text-logo text-xs font-medium rounded-full mb-2">
-                          {displaySubcategory}
-                        </span>
-                        <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-logo transition-colors line-clamp-2">
-                          {displayTitle}
-                        </h3>
-                        <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed">
-                          {displayDesc}
-                        </p>
-                        <button className="w-full but py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-logo/20 font-medium">
+                      <div className="p-6 flex-grow flex flex-col justify-between">
+                        <div>
+                          <span className="inline-block px-3 py-1 bg-blue-50 text-logo text-xs font-medium rounded-full mb-2">
+                            {displaySubcategory}
+                          </span>
+                          <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-logo transition-colors line-clamp-2 min-h-[2.5rem]">
+                            {displayTitle}
+                          </h3>
+                          <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed min-h-[3rem]">
+                            {displayDesc}
+                          </p>
+                        </div>
+                        <button className="w-full but py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-logo/20 font-medium mt-auto">
                           {t('blog.readMore')}
                         </button>
                       </div>
