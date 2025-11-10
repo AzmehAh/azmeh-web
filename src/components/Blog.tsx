@@ -254,7 +254,7 @@ const Blog = () => {
                                 key={sub}
                                 className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
                               >
-                                <div className="flex items-center space-x-2">
+                                <div className="flex items-center gap-2">
                                   <input
                                     type="checkbox"
                                     checked={selectedFilters[originalCategoryName]?.includes(sub) || false}
