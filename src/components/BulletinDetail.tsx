@@ -6,6 +6,7 @@ import DOMPurify from 'dompurify';
 import { Bulletin } from '../lib/supabase';
 import { api } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
+import html2pdf from 'html2pdf.js';
 
 const BulletinDetail = () => {
   const { t, i18n } = useTranslation();
@@ -23,8 +24,6 @@ const BulletinDetail = () => {
 
       try {
         setLoading(true);
-
-        // 1. جلب النشرة
         const bulletinData = await api.getBulletin(id);
         if (!bulletinData) {
           setBulletin(null);
@@ -32,7 +31,6 @@ const BulletinDetail = () => {
         }
         setBulletin(bulletinData);
 
-        // 2. جلب تكوين التصنيفات
         const categoriesConfig = await api.getBulletinCategoriesConfig();
         const configMap: Record<string, { name: string; name_ar: string }> = {};
         categoriesConfig.forEach(cat => {
@@ -43,7 +41,6 @@ const BulletinDetail = () => {
         });
         setCategoryConfigs(configMap);
 
-        // 3. جلب النشرات المرتبطة
         if (bulletinData.related_bulletin_ids?.length > 0) {
           const related = await api.getBulletinsByIds(bulletinData.related_bulletin_ids);
           setRelatedBulletins(related);
@@ -61,6 +58,70 @@ const BulletinDetail = () => {
 
     fetchData();
   }, [id]);
+
+  // 🔽 دالة تنزيل PDF محسّنة
+  const handleDownloadPDF = () => {
+    if (!bulletin) return;
+
+    const title = isRTL ? bulletin.title_ar || bulletin.title : bulletin.title;
+    const content = DOMPurify.sanitize(
+      isRTL ? bulletin.content_ar || bulletin.content : bulletin.content
+    );
+
+    const printElement = document.createElement('div');
+    printElement.dir = isRTL ? 'rtl' : 'ltr';
+    printElement.style.fontFamily = isRTL ? "'Tajawal', system-ui, sans-serif" : "system-ui, sans-serif";
+    printElement.style.padding = '2rem';
+    printElement.style.maxWidth = '800px';
+    printElement.style.margin = '0 auto';
+    printElement.style.lineHeight = '1.6';
+    printElement.style.color = '#1f2937';
+    printElement.style.fontSize = '16px';
+
+    // إضافة صورة الغلاف
+    if (bulletin.cover_image) {
+      const img = document.createElement('img');
+      img.src = bulletin.cover_image;
+      img.alt = title;
+      img.style.width = '100%';
+      img.style.maxHeight = '300px';
+      img.style.objectFit = 'cover';
+      img.style.borderRadius = '8px';
+      img.style.marginBottom = '1.5rem';
+      printElement.appendChild(img);
+    }
+
+    // العنوان
+    const heading = document.createElement('h1');
+    heading.textContent = title;
+    heading.style.fontSize = '28px';
+    heading.style.fontWeight = 'bold';
+    heading.style.marginBottom = '1rem';
+    heading.style.color = '#1f2937';
+    printElement.appendChild(heading);
+
+    // المحتوى
+    const contentDiv = document.createElement('div');
+    contentDiv.innerHTML = content;
+    contentDiv.style.lineHeight = '1.8';
+    printElement.appendChild(contentDiv);
+
+    // اسم الملف (آمن ويدعم العربية)
+    const safeTitle = title
+      .replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '_')
+      .replace(/\s+/g, '_')
+      .trim();
+
+    const options = {
+      margin: 12,
+      filename: `${safeTitle}.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+    };
+
+    html2pdf().from(printElement).set(options).save();
+  };
 
   if (loading) {
     return (
@@ -85,18 +146,13 @@ const BulletinDetail = () => {
     );
   }
 
-  // 🇴 تحديد الحقول حسب اللغة
   const title = isRTL ? bulletin.title_ar || bulletin.title : bulletin.title;
   const shortDescription = isRTL ? bulletin.short_description_ar || bulletin.short_description : bulletin.short_description;
   const content = isRTL ? bulletin.content_ar || bulletin.content : bulletin.content;
-
-  // ✅ حساب اسم التصنيف المعروض (باستخدام التكوين)
   const categoryName = bulletin.category;
   const categoryDisplayName = isRTL
     ? (categoryConfigs[categoryName]?.name_ar || categoryName)
     : categoryName;
-
-  // ✅ حساب اسم التصنيف الفرعي المعروض
   const subcategory = isRTL 
     ? bulletin.subcategory_ar || bulletin.subcategory 
     : bulletin.subcategory;
@@ -106,12 +162,12 @@ const BulletinDetail = () => {
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className={`flex items-center text-sm text-gray-600 ${isRTL ? 'flex-row-reverse gap-reverse' : ''}`}>
+          <div className={`flex items-center text-sm text-gray-600 ${isRTL ? 'flex-row-reverse' : ''}`}>
             <Link to="/" className="hover:text-logo transition-colors">{t('bulletin.home')}</Link>
             <span className="mx-2">/</span>
             <Link to="/blog" className="hover:text-logo transition-colors">{t('bulletin.blog')}</Link>
             <span className="mx-2">/</span>
-            <span className="text-gray-900">{categoryDisplayName}</span> {/* ✅ هنا تم التعديل */}
+            <span className="text-gray-900">{categoryDisplayName}</span>
             <span className="mx-2">/</span>
             <span className="text-gray-900">{subcategory}</span>
             <span className="mx-2">/</span>
@@ -129,12 +185,12 @@ const BulletinDetail = () => {
           >
             {isRTL ? null : <ArrowLeft className="w-4 h-4 mr-2" />}
             {t('bulletin.backToBlog')}
-            {isRTL ? <ArrowLeft className="w-4 h-4 ml-2 " /> : null}
+            {isRTL ? <ArrowLeft className="w-4 h-4 ml-2" /> : null}
           </button>
 
           <div className="flex items-center gap-3 mb-4">
             <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
-              {categoryDisplayName} {/* ✅ هنا تم التعديل */}
+              {categoryDisplayName}
             </span>
             <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
               {subcategory}
@@ -217,30 +273,31 @@ const BulletinDetail = () => {
             )}
           </div>
 
-          {/* Contact Section */}
-        <div className="mt-16">
-  <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white text-center">
-    <h3 className="text-2xl font-bold mb-4">{t('bulletin.needHelpTitle')}</h3>
-    <p className="text-gray-300 mb-6 max-w-2xl mx-auto">{t('bulletin.needHelpText')}</p>
-    <div className="flex flex-col sm:flex-row gap-4 justify-center">
-      
-      <Link
-        to="/contact"
-        className=" bg-gradient-to-r from-logo to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-logo/20  text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center"
-      >
-        {t('bulletin.contactTeam')}
-      </Link>
-
-      <button className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm">
-        {t('bulletin.downloadPdf')}
-      </button>
-    </div>
-  </div>
+          {/* Contact & Download Section */}
+          <div className="mt-16">
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white text-center">
+              <h3 className="text-2xl font-bold mb-4">{t('bulletin.needHelpTitle')}</h3>
+              <p className="text-gray-300 mb-6 max-w-2xl mx-auto">{t('bulletin.needHelpText')}</p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  to="/contact"
+                  className="bg-gradient-to-r from-logo to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-8 py-3 rounded-lg font-semibold transition-colors text-center"
+                >
+                  {t('bulletin.contactTeam')}
+                </Link>
+                <button
+                  onClick={handleDownloadPDF}
+                  className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm"
+                >
+                  {t('bulletin.downloadPdf')}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
-      </div> 
+      </div>
     </div>
   );
 };
 
-export default BulletinDetail; 
+export default BulletinDetail;
