@@ -1211,7 +1211,7 @@ const ProductDetail = () => {
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
                 <Shield className="w-8 h-8 text-logo mr-3" />
                 {t('products.safety_note')}
-              </h2> 
+              </h2>
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-8">
                   <p className="text-gray-700 leading-relaxed whitespace-pre-line">
