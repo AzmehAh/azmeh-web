@@ -430,47 +430,7 @@ const ProductDetail = () => {
       printElement.appendChild(catDiv);
     }
 
-    // المواصفات الفنية
-    if (product.technical_specs && product.technical_specs.length > 0) {
-      const specsTable = document.createElement('table');
-      specsTable.style.width = '100%';
-      specsTable.style.borderCollapse = 'collapse';
-      specsTable.style.fontSize = '13px';
-
-      product.technical_specs.forEach(spec => {
-        if (!spec.value) return;
-        const row = document.createElement('tr');
-        const keyCell = document.createElement('td');
-        keyCell.style.fontWeight = 'bold';
-        keyCell.style.padding = '6px 8px';
-        keyCell.style.border = '1px solid #ddd';
-        keyCell.style.width = '40%';
-        keyCell.textContent = getTranslated(
-          t(`products.${spec.key}`),
-          t(`products.${spec.key}_ar`)
-        );
-        const valCell = document.createElement('td');
-        valCell.style.padding = '6px 8px';
-        valCell.style.border = '1px solid #ddd';
-        valCell.textContent = spec.value;
-        row.appendChild(keyCell);
-        row.appendChild(valCell);
-        specsTable.appendChild(row);
-      });
-
-      const specsSection = document.createElement('div');
-      specsSection.style.marginBottom = '20px';
-      const specsTitle = document.createElement('h2');
-      specsTitle.textContent = t('products.technical_specifications');
-      specsTitle.style.fontSize = '18px';
-      specsTitle.style.fontWeight = 'bold';
-      specsTitle.style.marginBottom = '10px';
-      specsTitle.style.color = '#0055A3';
-      specsSection.appendChild(specsTitle);
-      specsSection.appendChild(specsTable);
-      printElement.appendChild(specsSection);
-    }
-
+  
     // باقي الأقسام
     addSection(t('products.key_features'), product.features, true);
     addSection(t('products.technical_description'), technicalDescription);
