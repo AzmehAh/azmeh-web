@@ -414,7 +414,7 @@ const ProductDetail = () => {
 
       printElement.appendChild(section);
     };
-
+ 
     // التصنيفات
     const type = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
     const material = product.material ? translateFilterValue('Material Type', product.material, filterValueMap) : '';
@@ -430,14 +430,14 @@ const ProductDetail = () => {
       printElement.appendChild(catDiv);
     }
 
-  
-    // باقي الأقسام
-    addSection(t('products.key_features'), product.features, true);
-    addSection(t('products.technical_description'), technicalDescription);
-    addSection(t('products.packaging_sizes'), product.packaging);
+ addSection(t('products.packaging_sizes'), product.packaging);
     if (product.recommended_uses && product.recommended_uses.length > 0) {
       addSection(t('products.recommended_uses'), product.recommended_uses.join(', '));
     }
+    // باقي الأقسام
+    addSection(t('products.key_features'), product.features, true);
+    addSection(t('products.technical_description'), technicalDescription);
+   
     addSection(t('products.surface_preparation'), product.surface_preparation);
     addSection(t('products.storing_conditions'), product.storing_conditions);
     addSection(t('products.safety_note'), product.safety_note);
