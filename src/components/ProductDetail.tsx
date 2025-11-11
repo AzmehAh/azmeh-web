@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Download, Package, FileText, CheckCircle, Wrench, Shield, Info, Layers, Lightbulb, Brush } from "lucide-react";
+import {
+  Download, Package, FileText, CheckCircle, Wrench,
+  Shield, Info, Layers, Lightbulb, Brush
+} from "lucide-react";
 import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
 import { useTranslation } from "react-i18next";
@@ -22,8 +25,8 @@ interface Product {
   images: string[];
   type: string;
   brand: string;
-  material: string;
-  usage: string;
+  material: string[]; // ✅ تغيير إلى مصفوفة
+  usage: string[];    // ✅ تغيير إلى مصفوفة
   packaging: string[];
   technical_specs: { key: string; value: string; standard: string }[];
   features: string[];
@@ -234,6 +237,7 @@ const ProductDetail = () => {
         .select('*')
         .eq('id', productId)
         .single();
+
       if (productError) throw productError;
       if (!productData) {
         setProduct(null);
@@ -260,6 +264,19 @@ const ProductDetail = () => {
         console.error('Error fetching main image:', e);
       }
 
+      // ✅ تحويل material_id و usage_id إلى مصفوفات
+      const materialArray = Array.isArray(productData.material_id)
+        ? productData.material_id
+        : productData.material_id
+          ? [productData.material_id]
+          : [];
+
+      const usageArray = Array.isArray(productData.usage_id)
+        ? productData.usage_id
+        : productData.usage_id
+          ? [productData.usage_id]
+          : [];
+
       const formattedProduct: Product = {
         id: productData.id,
         name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
@@ -269,20 +286,20 @@ const ProductDetail = () => {
         description_ar: productData.description_ar,
         technical_description: getLocalizedField(productData.technical_description, productData.technical_description_ar) || "",
         technical_description_ar: productData.technical_description_ar,
-        image_url: mainImage?.image_url || 
+        image_url: mainImage?.image_url ||
                    (imagesData.length > 0 ? imagesData[0].image_url : "") ||
-                   productData.image_url || 
+                   productData.image_url ||
                    "/images/placeholder.jpg",
         images: imagesData.map(img => img.image_url).filter(Boolean),
         type: productData.type_id || "",
         brand: productData.brand_id || "",
-        material: productData.material_id || "",
-        usage: productData.usage_id || "",
+        material: materialArray, // ✅ مصفوفة
+        usage: usageArray,       // ✅ مصفوفة
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
         technical_specs: TECHNICAL_FIELDS
           .map(({ key, keyAr }) => {
             const value = getLocalizedField(productData[key], productData[keyAr]);
-            return { key, value: value || '', standard: '' }; 
+            return { key, value: value || '', standard: '' };
           })
           .filter(spec => spec.value.trim() !== ''),
         features: parseArrayField(getLocalizedField(productData.features, productData.features_ar)),
@@ -323,13 +340,16 @@ const ProductDetail = () => {
     }
   };
 
-  // 🔽 دالة تنزيل PDF كاملة - مصححة
+  const getSafetyNoteFallback = (): string => {
+    return i18n.language === 'ar'
+      ? 'كافة المعلومات الواردة في نشرتنا هذه وفي جميع نشراتنا الفنية هي نتيجة لتجارب مخبرية وخبرات عملية وتبقى النتائج النهائية متوقفة على مهارة المستهلك ومدى التزامه بالتعليمات، وتنحصر مسؤوليتنا بتقديم منتجات مطابقة للمساطر والعينات المقدمة من قبلنا كما تحتفظ الشركة بحق تغيير المواصفات بدون إعلام مسبق.'
+      : 'Information in this data sheet and in all our data sheets are given to the best of our knowledge based on laboratory testing and practical experience. Final results depend on following instructions and on consumer skill. Our responsibility is limited to providing products that conform to samples and specimens provided by us. Due to technical needs, we reserve the right to change any given specification without notice.';
+  };
+
   const handleDownloadPDF = () => {
     if (!product) return;
-
     const isRTL = i18n.language === 'ar';
-
-    const getTranslated = (enVal: string, arVal?: string) => 
+    const getTranslated = (enVal: string, arVal?: string) =>
       isRTL ? (arVal || enVal) : enVal;
 
     const name = getTranslated(product.name, product.name_ar);
@@ -344,20 +364,13 @@ const ProductDetail = () => {
     printElement.style.color = '#000';
     printElement.style.fontSize = '14px';
     printElement.style.maxWidth = '210mm';
-    
-    // منع تقطيع النص بين الصفحات
     printElement.style.pageBreakInside = 'avoid';
     printElement.style.breakInside = 'avoid';
-    printElement.style.pageBreakBefore = 'auto';
-    printElement.style.pageBreakAfter = 'auto';
 
-    // العنوان والصورة
+    // Header
     const header = document.createElement('div');
     header.style.textAlign = isRTL ? 'right' : 'left';
     header.style.marginBottom = '20px';
-    header.style.pageBreakInside = 'avoid';
-    header.style.breakInside = 'avoid';
-
     if (product.image_url) {
       const img = document.createElement('img');
       img.src = product.image_url;
@@ -368,33 +381,25 @@ const ProductDetail = () => {
       img.style.marginBottom = '15px';
       header.appendChild(img);
     }
-
     const title = document.createElement('h1');
     title.textContent = name;
     title.style.fontSize = '24px';
     title.style.fontWeight = 'bold';
     title.style.marginBottom = '10px';
     header.appendChild(title);
-
     const desc = document.createElement('p');
     desc.textContent = description;
     desc.style.marginBottom = '20px';
     desc.style.fontSize = '16px';
     header.appendChild(desc);
-
     printElement.appendChild(header);
 
-    // دالة إضافة قسم - مصححة لمنع التقاطع
     const addSection = (titleText: string, content: string | string[] | null, asList = false) => {
       if (!content) return;
       const isEmptyArray = Array.isArray(content) && content.length === 0;
       if (isEmptyArray) return;
-
       const section = document.createElement('div');
       section.style.marginBottom = '20px';
-      section.style.pageBreakInside = 'avoid';
-      section.style.breakInside = 'avoid';
-
       const secTitle = document.createElement('h2');
       secTitle.textContent = titleText;
       secTitle.style.fontSize = '18px';
@@ -402,39 +407,36 @@ const ProductDetail = () => {
       secTitle.style.marginBottom = '10px';
       secTitle.style.color = '#0055A3';
       section.appendChild(secTitle);
-
       if (asList && Array.isArray(content)) {
         const list = document.createElement('ul');
         list.style.paddingInlineStart = '20px';
-        list.style.pageBreakInside = 'avoid';
-        list.style.breakInside = 'avoid';
         content.forEach(item => {
           if (!item) return;
           const li = document.createElement('li');
           li.textContent = item;
           li.style.marginBottom = '5px';
-          li.style.pageBreakInside = 'avoid';
-          li.style.breakInside = 'avoid';
           list.appendChild(li);
         });
         section.appendChild(list);
       } else {
         const text = document.createElement('div');
-        text.innerHTML = typeof content === 'string' 
-          ? DOMPurify.sanitize(content) 
+        text.innerHTML = typeof content === 'string'
+          ? DOMPurify.sanitize(content)
           : (Array.isArray(content) ? content.join(', ') : '');
-        text.style.pageBreakInside = 'avoid';
-        text.style.breakInside = 'avoid';
         section.appendChild(text);
       }
-
       printElement.appendChild(section);
     };
 
-    // التصنيفات
+    // ✅ عرض التصنيفات بشكل صحيح (يدعم المصفوفات)
     const type = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
-    const material = product.material ? translateFilterValue('Material Type', product.material, filterValueMap) : '';
-    const usage = product.usage ? translateFilterValue('Application Fields', product.usage, filterValueMap) : '';
+    const material = product.material.length
+      ? product.material.map(id => translateFilterValue('Material Type', id, filterValueMap)).join(', ')
+      : '';
+    const usage = product.usage.length
+      ? product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap)).join(', ')
+      : '';
+
     if (type || material || usage) {
       const cats = [type, material, usage].filter(Boolean).join(' • ');
       const catDiv = document.createElement('div');
@@ -443,27 +445,20 @@ const ProductDetail = () => {
       catDiv.style.padding = '8px 12px';
       catDiv.style.borderRadius = '6px';
       catDiv.style.marginBottom = '20px';
-      catDiv.style.pageBreakInside = 'avoid';
-      catDiv.style.breakInside = 'avoid';
       printElement.appendChild(catDiv);
     }
 
     addSection(t('products.technical_description'), technicalDescription);
     addSection(t('products.packaging_sizes'), product.packaging);
-    
-    if (product.recommended_uses && product.recommended_uses.length > 0) {
+    if (product.recommended_uses?.length) {
       addSection(t('products.recommended_uses'), product.recommended_uses.join(', '));
-    } 
-    
+    }
     addSection(t('products.key_features'), product.features, true);
 
-    // قسم التطبيق
+    // Application Section
     if (product.application) {
       const appSection = document.createElement('div');
       appSection.style.marginBottom = '20px';
-      appSection.style.pageBreakInside = 'avoid';
-      appSection.style.breakInside = 'avoid';
-      
       const appTitle = document.createElement('h2');
       appTitle.textContent = t('products.application_instructions');
       appTitle.style.fontSize = '18px';
@@ -471,8 +466,11 @@ const ProductDetail = () => {
       appTitle.style.marginBottom = '10px';
       appTitle.style.color = '#0055A3';
       appSection.appendChild(appTitle);
-
-      const appFields: { key: keyof Product['application']; label: string }[] = [
+      const appTable = document.createElement('table');
+      appTable.style.width = '100%';
+      appTable.style.borderCollapse = 'collapse';
+      appTable.style.fontSize = '13px';
+      const appFields = [
         { key: 'method_of_application', label: t('products.method_of_application') },
         { key: 'mixing_ratio', label: t('products.mixing_ratio') },
         { key: 'mixing_note', label: t('products.mixing_note') },
@@ -483,74 +481,54 @@ const ProductDetail = () => {
         { key: 'curing_note', label: t('products.curing_note') },
         { key: 'note_application', label: t('products.note_application') },
       ];
-
-      const appTable = document.createElement('table');
-      appTable.style.width = '100%';
-      appTable.style.borderCollapse = 'collapse';
-      appTable.style.fontSize = '13px';
-      appTable.style.pageBreakInside = 'avoid';
-      appTable.style.breakInside = 'avoid';
-
       appFields.forEach(({ key, label }) => {
         const value = product.application?.[key];
         if (!value) return;
         const row = document.createElement('tr');
-        row.style.pageBreakInside = 'avoid';
-        row.style.breakInside = 'avoid';
-        
         const lblCell = document.createElement('td');
         lblCell.style.fontWeight = 'bold';
         lblCell.style.padding = '6px 8px';
         lblCell.style.border = '1px solid #ddd';
         lblCell.style.width = '40%';
         lblCell.textContent = label;
-        
         const valCell = document.createElement('td');
         valCell.style.padding = '6px 8px';
         valCell.style.border = '1px solid #ddd';
         valCell.textContent = value;
-        
         row.appendChild(lblCell);
         row.appendChild(valCell);
         appTable.appendChild(row);
       });
-
       if (appTable.children.length > 0) {
         appSection.appendChild(appTable);
         printElement.appendChild(appSection);
       }
     }
 
-     // 👇 إصلاح المواصفات الفنية في PDF
+    // Technical Specs
     if (product.technical_specs?.length) {
       const specsTable = document.createElement('table');
       specsTable.style.width = '100%';
       specsTable.style.borderCollapse = 'collapse';
       specsTable.style.fontSize = '13px';
-
       TECHNICAL_FIELDS.forEach(({ key }) => {
         const spec = product.technical_specs.find(s => s.key === key);
         if (!spec?.value?.trim()) return;
-
         const row = document.createElement('tr');
         const keyCell = document.createElement('td');
         keyCell.style.fontWeight = 'bold';
         keyCell.style.padding = '6px 8px';
         keyCell.style.border = '1px solid #ddd';
         keyCell.style.width = '40%';
-        // ✅ الإصلاح الرئيسي: استخدم t مباشرة بدون keyAr
         keyCell.textContent = t(`products.${key}`);
-
         const valCell = document.createElement('td');
         valCell.style.padding = '6px 8px';
         valCell.style.border = '1px solid #ddd';
         valCell.textContent = spec.value;
-
         row.appendChild(keyCell);
         row.appendChild(valCell);
         specsTable.appendChild(row);
       });
-
       if (specsTable.children.length > 0) {
         const specsSection = document.createElement('div');
         specsSection.style.marginBottom = '20px';
@@ -566,12 +544,10 @@ const ProductDetail = () => {
       }
     }
 
-
-
     addSection(t('products.surface_preparation'), product.surface_preparation);
 
-    // أوقات الجفاف
-    const dryingFields: { key: string; label: string }[] = [
+    // Drying Time
+    const dryingFields = [
       { key: 'dry_to_touch', label: t('products.dry_to_touch') },
       { key: 'dry_to_handle', label: t('products.dry_to_handle') },
       { key: 'complete_setting', label: t('products.complete_setting') },
@@ -583,20 +559,15 @@ const ProductDetail = () => {
       { key: 'dry_to_sand', label: t('products.dry_to_sand') },
       { key: 'drying_time_note', label: t('products.drying_time_note') },
     ];
-
     const dryingData = dryingFields
       .map(({ key, label }) => {
         const value = (product as any)[key];
         return value ? { label, value } : null;
       })
       .filter(Boolean);
-
     if (dryingData.length > 0) {
       const dryingSection = document.createElement('div');
       dryingSection.style.marginBottom = '20px';
-      dryingSection.style.pageBreakInside = 'avoid';
-      dryingSection.style.breakInside = 'avoid';
-      
       const dryingTitle = document.createElement('h2');
       dryingTitle.textContent = t('products.drying_time');
       dryingTitle.style.fontSize = '18px';
@@ -604,49 +575,41 @@ const ProductDetail = () => {
       dryingTitle.style.marginBottom = '10px';
       dryingTitle.style.color = '#0055A3';
       dryingSection.appendChild(dryingTitle);
-
       const dryingTable = document.createElement('table');
       dryingTable.style.width = '100%';
       dryingTable.style.borderCollapse = 'collapse';
       dryingTable.style.fontSize = '13px';
-      dryingTable.style.pageBreakInside = 'avoid';
-      dryingTable.style.breakInside = 'avoid';
-
       dryingData.forEach(({ label, value }: any) => {
         const row = document.createElement('tr');
-        row.style.pageBreakInside = 'avoid';
-        row.style.breakInside = 'avoid';
-        
         const lblCell = document.createElement('td');
         lblCell.style.fontWeight = 'bold';
         lblCell.style.padding = '6px 8px';
         lblCell.style.border = '1px solid #ddd';
         lblCell.style.width = '40%';
         lblCell.textContent = label;
-        
         const valCell = document.createElement('td');
         valCell.style.padding = '6px 8px';
         valCell.style.border = '1px solid #ddd';
         valCell.textContent = value;
-        
         row.appendChild(lblCell);
         row.appendChild(valCell);
         dryingTable.appendChild(row);
       });
-
       dryingSection.appendChild(dryingTable);
       printElement.appendChild(dryingSection);
-    } 
+    }
 
     addSection(t('products.storing_conditions'), product.storing_conditions);
-    addSection(t('products.safety_note'), product.safety_note);
 
-    // إنشاء اسم الملف
+    // ✅ Safety Note with fallback
+    const displaySafetyNote = product.safety_note || getSafetyNoteFallback();
+    addSection(t('products.safety_note'), displaySafetyNote);
+
+    // Export PDF
     const safeName = name
       .replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '_')
       .replace(/\s+/g, '_')
       .trim();
-
     const options = {
       margin: 10,
       filename: `${safeName}_Datasheet.pdf`,
@@ -654,7 +617,6 @@ const ProductDetail = () => {
       html2canvas: { scale: 2, useCORS: true },
       jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
     };
-
     html2pdf().from(printElement).set(options).save();
   };
 
@@ -719,6 +681,18 @@ const ProductDetail = () => {
     );
   }
 
+  // ✅ عرض المواد والاستخدامات في الواجهة
+  const displayType = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
+  const displayMaterial = product.material.length
+    ? product.material.map(id => translateFilterValue('Material Type', id, filterValueMap)).join(', ')
+    : '';
+  const displayUsage = product.usage.length
+    ? product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap)).join(', ')
+    : '';
+
+  // ✅ Safety note fallback للعرض
+  const displayedSafetyNote = product.safety_note || getSafetyNoteFallback();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
@@ -733,31 +707,28 @@ const ProductDetail = () => {
               <span className="text-white">{product.name}</span>
             </div>
           </div>
-
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
               <p className="text-xl text-white mb-4 leading-relaxed">{product.description}</p>
-
               <div className="flex flex-wrap gap-4 mb-8">
-                {product.type && (
+                {displayType && (
                   <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {translateFilterValue('Type', product.type, filterValueMap)}
+                    {displayType}
                   </span>
                 )}
-                {product.material && (
+                {displayMaterial && (
                   <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {translateFilterValue('Material Type', product.material, filterValueMap)}
+                    {displayMaterial}
                   </span>
                 )}
-                {product.usage && (
+                {displayUsage && (
                   <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {translateFilterValue('Application Fields', product.usage, filterValueMap)}
+                    {displayUsage}
                   </span>
                 )}
               </div>
-
-              {product.recommended_uses && product.recommended_uses.length > 0 && (
+              {product.recommended_uses?.length > 0 && (
                 <>
                   <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
                     <Lightbulb className="w-5 h-5 text-white mr-2" />
@@ -768,8 +739,7 @@ const ProductDetail = () => {
                   </p>
                 </>
               )}
-
-              {product.packaging && product.packaging.length > 0 && (
+              {product.packaging?.length > 0 && (
                 <div className="mb-8">
                   <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
                     <Package className="w-5 h-5 text-white mr-2" />
@@ -784,7 +754,6 @@ const ProductDetail = () => {
                   </div>
                 </div>
               )}
-
               <button
                 onClick={handleDownloadPDF}
                 className="bg-white/20 text-white px-8 py-4 rounded-xl font-bold shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center"
@@ -794,7 +763,7 @@ const ProductDetail = () => {
               </button>
             </div>
             <div className="relative">
-              {product.images && product.images.length > 0 ? (
+              {product.images?.length > 0 ? (
                 <>
                   <motion.div
                     key={currentImageIndex}
@@ -859,7 +828,7 @@ const ProductDetail = () => {
       </section>
 
       {/* Features */}
-      {product.features && product.features.length > 0 && (
+      {product.features?.length > 0 && (
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
@@ -898,78 +867,17 @@ const ProductDetail = () => {
               </h2>
               <div className="bg-gray-50 rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="divide-y divide-gray-100">
-                  {product.application.method_of_application && (
-                    <div className="px-6 py-4">
-                      <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                        <span className="font-bold text-gray-800">{t('products.method_of_application')}:</span>
-                        <span className="text-gray-700 leading-relaxed">{product.application.method_of_application}</span>
+                  {Object.entries(product.application).map(([key, value]) => {
+                    if (!value) return null;
+                    return (
+                      <div key={key} className="px-6 py-4">
+                        <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
+                          <span className="font-bold text-gray-800">{t(`products.${key}`)}:</span>
+                          <span className="text-gray-700 leading-relaxed">{value}</span>
+                        </div>
                       </div>
-                    </div>
-                  )}
-                  {product.application.mixing_ratio && (
-                    <div className="px-6 py-4">
-                      <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                        <span className="font-bold text-gray-800">{t('products.mixing_ratio')}:</span>
-                        <span className="text-gray-700 leading-relaxed">{product.application.mixing_ratio}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.application.mixing_note && (
-                    <div className="px-6 py-4">
-                      <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                        <span className="font-bold text-gray-800">{t('products.mixing_note')}:</span>
-                        <span className="text-gray-700 leading-relaxed">{product.application.mixing_note}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.application.mixing_steps && (
-                    <div className="px-6 py-4">
-                      <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                        <span className="font-bold text-gray-800">{t('products.mixing_steps')}:</span>
-                        <span className="text-gray-700 leading-relaxed">{product.application.mixing_steps}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.application.cleaner && (
-                    <div className="px-6 py-4">
-                      <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                        <span className="font-bold text-gray-800">{t('products.cleaner')}:</span>
-                        <span className="text-gray-700 leading-relaxed">{product.application.cleaner}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.application.thinner && (
-                    <div className="px-6 py-4">
-                      <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                        <span className="font-bold text-gray-800">{t('products.thinner')}:</span>
-                        <span className="text-gray-700 leading-relaxed">{product.application.thinner}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.application.application_temperature && (
-                    <div className="px-6 py-4">
-                      <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                        <span className="font-bold text-gray-800">{t('products.application_temperature')}:</span>
-                        <span className="text-gray-700 leading-relaxed">{product.application.application_temperature}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.application.curing_note && (
-                    <div className="px-6 py-4">
-                      <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                        <span className="font-bold text-gray-800">{t('products.curing_note')}:</span>
-                        <span className="text-gray-700 leading-relaxed">{product.application.curing_note}</span>
-                      </div>
-                    </div>
-                  )}
-                  {product.application.note_application && (
-                    <div className="px-6 py-4">
-                      <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
-                        <span className="font-bold text-gray-800">{t('products.note_application')}:</span>
-                        <span className="text-gray-700 leading-relaxed">{product.application.note_application}</span>
-                      </div>
-                    </div>
-                  )}
+                    );
+                  })}
                 </div>
               </div>
             </div>
@@ -978,7 +886,7 @@ const ProductDetail = () => {
       )}
 
       {/* Technical Specifications */}
-      {product.technical_specs && product.technical_specs.length > 0 && (
+      {product.technical_specs?.length > 0 && (
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
@@ -1203,26 +1111,24 @@ const ProductDetail = () => {
         </section>
       )}
 
-      {/* Safety Note - مصححة */}
-      {product.safety_note && (
-        <section className="py-16 bg-gray-50">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-6xl mx-auto">
-              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
-                <Shield className="w-8 h-8 text-logo mr-3" />
-                {t('products.safety_note')}
-              </h2>
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
-                <div className="p-8">
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                    {product.safety_note}
-                  </p>
-                </div>
+      {/* Safety Note */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto">
+            <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+              <Shield className="w-8 h-8 text-logo mr-3" />
+              {t('products.safety_note')}
+            </h2>
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-8">
+                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                  {displayedSafetyNote}
+                </p>
               </div>
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
     </div>
   );
 };
