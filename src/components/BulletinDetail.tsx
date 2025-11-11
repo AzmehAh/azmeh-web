@@ -178,7 +178,7 @@ const BulletinDetail = () => {
 
       {/* Article Header */}
       <div className="bg-logo text-white py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-start">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-start">
           <button
             onClick={() => navigate('/blog')}
             className="inline-flex items-center text-blue-100 hover:text-white font-medium mb-6 transition-colors"
