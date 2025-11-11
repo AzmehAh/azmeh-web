@@ -219,7 +219,7 @@ const ProductForm = () => {
 
       if (imagesError) throw imagesError;
 
-      // ✅ جلب كل الـ IDs من جدول product_materials فقط
+
       const { data: allLinks, error: linksError } = await supabase
         .from('product_materials')
         .select('material_id')
@@ -229,7 +229,6 @@ const ProductForm = () => {
 
       const allIds = allLinks?.map(link => link.material_id) || [];
 
-      // ✅ تقسيم الـ IDs إلى material و usage باستخدام materials و usages
       const materialIds = allIds.filter(id => 
         materials.some(m => m.id === id)
       );
@@ -266,21 +265,21 @@ const ProductForm = () => {
   const initializeData = async () => {
     setLoading(true);
     try {
-      // 1. جلب أنواع الفلاتر
+     
       const { data: filterTypes, error: typesError } = await supabase
         .from('product_filter_types')
         .select('*')
         .eq('is_active', true);
       if (typesError) throw typesError;
 
-      // 2. جلب قيم الفلاتر
+
       const { data: filterValues, error: valuesError } = await supabase
         .from('product_filter_values')
         .select('*, product_filter_types(name)')
         .eq('is_active', true);
       if (valuesError) throw valuesError;
 
-      // 3. تجميع القيم
+      
       const groupedValues: Record<string, any[]> = {};
       (filterTypes || []).forEach((type: any) => {
         const valuesForType = (filterValues || [])
@@ -298,13 +297,12 @@ const ProductForm = () => {
       const fetchedMaterials = groupedValues['Material Type'] || [];
       const fetchedUsages = groupedValues['Application Fields'] || [];
 
-      // تحديث الـ state لعرض القوائم في الواجهة
       setBrands(fetchedBrands);
       setTypes(fetchedTypes);
       setMaterials(fetchedMaterials);
       setUsages(fetchedUsages);
 
-      // 4. جلب بيانات المنتج (إذا كنا في وضع التحرير)
+
       if (isEditing && id) {
         const { data: productData, error: productError } = await supabase
           .from('products')
@@ -318,7 +316,7 @@ const ProductForm = () => {
           .select('*')
           .eq('product_id', id);
 
-        // جلب كل الـ IDs من product_materials
+    
         const { data: allLinks } = await supabase
           .from('product_materials')
           .select('material_id')
@@ -326,7 +324,7 @@ const ProductForm = () => {
 
         const allIds = allLinks?.map(link => link.material_id) || [];
 
-        // ✅ التقسيم باستخدام القيم المجلوبة (ليس من الـ state)
+      
         const materialIds = allIds.filter(id => 
           fetchedMaterials.some(m => m.id === id)
         );
@@ -501,7 +499,6 @@ const ProductForm = () => {
         productId = data?.[0]?.id;
       }
 
-      // ✅ حفظ كل الـ IDs (مواد + استخدامات) في جدول product_materials
       if (productId) {
         if (isEditing) {
           const { error: delErr } = await supabase
@@ -529,7 +526,7 @@ const ProductForm = () => {
         }
       }
 
-      // ✅ حفظ الصور
+
       if (productId) {
         if (isEditing) {
           await supabase.from('product_images').delete().eq('product_id', productId);
