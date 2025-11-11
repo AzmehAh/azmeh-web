@@ -186,53 +186,7 @@ const JobApplication = () => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Company Info */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 mb-8"
-        >
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">
-            {t('jobApplication.whyWorkWithUs')}
-          </h2>
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="text-center">
-              <div className="w-12 h-12 bg-logo rounded-lg flex items-center justify-center mx-auto mb-3">
-                <CheckCircle className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                {t('jobApplication.excellenceSince1955')}
-              </h3>
-              <p className="text-gray-600 text-sm">
-                {t('jobApplication.excellenceDescription')}
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-logo rounded-lg flex items-center justify-center mx-auto mb-3">
-                <User className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                {t('jobApplication.careerGrowth')}
-              </h3>
-              <p className="text-gray-600 text-sm">
-                {t('jobApplication.careerGrowthDescription')}
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-12 h-12 bg-logo rounded-lg flex items-center justify-center mx-auto mb-3">
-                <FileText className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-2">
-                {t('jobApplication.innovation')}
-              </h3>
-              <p className="text-gray-600 text-sm">
-                {t('jobApplication.innovationDescription')}
-              </p>
-            </div>
-          </div>
-        </motion.div>
-
+      ؤ
         {/* Application Form */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
