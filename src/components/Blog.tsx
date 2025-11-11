@@ -277,7 +277,7 @@ const Blog = () => {
 
           {/* Bulletins Grid */}
           <div className="flex-1">
-            <div className="mb-8">
+            <div className="mb-6">
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
                 {Object.values(selectedFilters).flat().length > 0
                   ? t('blog.filteredTitle')
