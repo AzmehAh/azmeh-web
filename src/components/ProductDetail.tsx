@@ -323,7 +323,7 @@ const ProductDetail = () => {
     }
   };
 
-  // 🔽 دالة تنزيل PDF كاملة
+  // 🔽 دالة تنزيل PDF كاملة - مصححة
   const handleDownloadPDF = () => {
     if (!product) return;
 
@@ -344,11 +344,19 @@ const ProductDetail = () => {
     printElement.style.color = '#000';
     printElement.style.fontSize = '14px';
     printElement.style.maxWidth = '210mm';
+    
+    // منع تقطيع النص بين الصفحات
+    printElement.style.pageBreakInside = 'avoid';
+    printElement.style.breakInside = 'avoid';
+    printElement.style.pageBreakBefore = 'auto';
+    printElement.style.pageBreakAfter = 'auto';
 
     // العنوان والصورة
     const header = document.createElement('div');
     header.style.textAlign = isRTL ? 'right' : 'left';
     header.style.marginBottom = '20px';
+    header.style.pageBreakInside = 'avoid';
+    header.style.breakInside = 'avoid';
 
     if (product.image_url) {
       const img = document.createElement('img');
@@ -376,7 +384,7 @@ const ProductDetail = () => {
 
     printElement.appendChild(header);
 
-    // دالة إضافة قسم
+    // دالة إضافة قسم - مصححة لمنع التقاطع
     const addSection = (titleText: string, content: string | string[] | null, asList = false) => {
       if (!content) return;
       const isEmptyArray = Array.isArray(content) && content.length === 0;
@@ -384,6 +392,8 @@ const ProductDetail = () => {
 
       const section = document.createElement('div');
       section.style.marginBottom = '20px';
+      section.style.pageBreakInside = 'avoid';
+      section.style.breakInside = 'avoid';
 
       const secTitle = document.createElement('h2');
       secTitle.textContent = titleText;
@@ -396,11 +406,15 @@ const ProductDetail = () => {
       if (asList && Array.isArray(content)) {
         const list = document.createElement('ul');
         list.style.paddingInlineStart = '20px';
+        list.style.pageBreakInside = 'avoid';
+        list.style.breakInside = 'avoid';
         content.forEach(item => {
           if (!item) return;
           const li = document.createElement('li');
           li.textContent = item;
           li.style.marginBottom = '5px';
+          li.style.pageBreakInside = 'avoid';
+          li.style.breakInside = 'avoid';
           list.appendChild(li);
         });
         section.appendChild(list);
@@ -409,6 +423,8 @@ const ProductDetail = () => {
         text.innerHTML = typeof content === 'string' 
           ? DOMPurify.sanitize(content) 
           : (Array.isArray(content) ? content.join(', ') : '');
+        text.style.pageBreakInside = 'avoid';
+        text.style.breakInside = 'avoid';
         section.appendChild(text);
       }
 
@@ -427,20 +443,27 @@ const ProductDetail = () => {
       catDiv.style.padding = '8px 12px';
       catDiv.style.borderRadius = '6px';
       catDiv.style.marginBottom = '20px';
+      catDiv.style.pageBreakInside = 'avoid';
+      catDiv.style.breakInside = 'avoid';
       printElement.appendChild(catDiv);
     }
+
     addSection(t('products.technical_description'), technicalDescription);
     addSection(t('products.packaging_sizes'), product.packaging);
+    
     if (product.recommended_uses && product.recommended_uses.length > 0) {
-    addSection(t('products.recommended_uses'), product.recommended_uses.join(', '));
+      addSection(t('products.recommended_uses'), product.recommended_uses.join(', '));
     } 
+    
     addSection(t('products.key_features'), product.features, true);
 
-    
-      // قسم التطبيق
+    // قسم التطبيق
     if (product.application) {
       const appSection = document.createElement('div');
       appSection.style.marginBottom = '20px';
+      appSection.style.pageBreakInside = 'avoid';
+      appSection.style.breakInside = 'avoid';
+      
       const appTitle = document.createElement('h2');
       appTitle.textContent = t('products.application_instructions');
       appTitle.style.fontSize = '18px';
@@ -465,21 +488,28 @@ const ProductDetail = () => {
       appTable.style.width = '100%';
       appTable.style.borderCollapse = 'collapse';
       appTable.style.fontSize = '13px';
+      appTable.style.pageBreakInside = 'avoid';
+      appTable.style.breakInside = 'avoid';
 
       appFields.forEach(({ key, label }) => {
         const value = product.application?.[key];
         if (!value) return;
         const row = document.createElement('tr');
+        row.style.pageBreakInside = 'avoid';
+        row.style.breakInside = 'avoid';
+        
         const lblCell = document.createElement('td');
         lblCell.style.fontWeight = 'bold';
         lblCell.style.padding = '6px 8px';
         lblCell.style.border = '1px solid #ddd';
         lblCell.style.width = '40%';
         lblCell.textContent = label;
+        
         const valCell = document.createElement('td');
         valCell.style.padding = '6px 8px';
         valCell.style.border = '1px solid #ddd';
         valCell.textContent = value;
+        
         row.appendChild(lblCell);
         row.appendChild(valCell);
         appTable.appendChild(row);
@@ -490,59 +520,65 @@ const ProductDetail = () => {
         printElement.appendChild(appSection);
       }
     }
+
+    // المواصفات الفنية - مصححة لعرض العناوين العربية
     if (product.technical_specs && product.technical_specs.length > 0) {
-  const specsTable = document.createElement('table');
-  specsTable.style.width = '100%';
-  specsTable.style.borderCollapse = 'collapse';
-  specsTable.style.fontSize = '13px';
+      const specsTable = document.createElement('table');
+      specsTable.style.width = '100%';
+      specsTable.style.borderCollapse = 'collapse';
+      specsTable.style.fontSize = '13px';
+      specsTable.style.pageBreakInside = 'avoid';
+      specsTable.style.breakInside = 'avoid';
 
-  // استخدم TECHNICAL_FIELDS للحفاظ على الترتيب الأصلي
-  TECHNICAL_FIELDS.forEach(({ key, label, keyAr }) => {
-    // ابحث عن القيمة المقابلة في technical_specs
-    const spec = product.technical_specs.find(s => s.key === key);
-    if (!spec || !spec.value) return; // تخطي إذا لم يكن هناك قيمة
+      // استخدم TECHNICAL_FIELDS للحفاظ على الترتيب الأصلي
+      TECHNICAL_FIELDS.forEach(({ key, label, keyAr }) => {
+        // ابحث عن القيمة المقابلة في technical_specs
+        const spec = product.technical_specs.find(s => s.key === key);
+        if (!spec || !spec.value) return; // تخطي إذا لم يكن هناك قيمة
 
-    const row = document.createElement('tr');
-    const keyCell = document.createElement('td');
-    keyCell.style.fontWeight = 'bold';
-    keyCell.style.padding = '6px 8px';
-    keyCell.style.border = '1px solid #ddd';
-    keyCell.style.width = '40%';
+        const row = document.createElement('tr');
+        row.style.pageBreakInside = 'avoid';
+        row.style.breakInside = 'avoid';
+        
+        const keyCell = document.createElement('td');
+        keyCell.style.fontWeight = 'bold';
+        keyCell.style.padding = '6px 8px';
+        keyCell.style.border = '1px solid #ddd';
+        keyCell.style.width = '40%';
 
-    // استخدم getTranslated للحصول على الترجمة الصحيحة
-    keyCell.textContent = getTranslated(
-      t(`products.${key}`),
-      t(`products.${keyAr}`)
-    );
+        // استخدم getTranslated للحصول على الترجمة الصحيحة
+        const fieldLabel = isRTL ? 
+          (keyAr ? getTranslated(label, t(`products.${keyAr}`)) : label) : 
+          label;
+        keyCell.textContent = fieldLabel;
 
-    const valCell = document.createElement('td');
-    valCell.style.padding = '6px 8px';
-    valCell.style.border = '1px solid #ddd';
-    valCell.textContent = spec.value;
+        const valCell = document.createElement('td');
+        valCell.style.padding = '6px 8px';
+        valCell.style.border = '1px solid #ddd';
+        valCell.textContent = spec.value;
 
-    row.appendChild(keyCell);
-    row.appendChild(valCell);
-    specsTable.appendChild(row);
-  });
+        row.appendChild(keyCell);
+        row.appendChild(valCell);
+        specsTable.appendChild(row);
+      });
 
-  const specsSection = document.createElement('div');
-  specsSection.style.marginBottom = '20px';
-  const specsTitle = document.createElement('h2');
-  specsTitle.textContent = t('products.technical_specifications');
-  specsTitle.style.fontSize = '18px';
-  specsTitle.style.fontWeight = 'bold';
-  specsTitle.style.marginBottom = '10px';
-  specsTitle.style.color = '#0055A3';
-  specsSection.appendChild(specsTitle);
-  specsSection.appendChild(specsTable);
-  printElement.appendChild(specsSection);
-}
-   
+      const specsSection = document.createElement('div');
+      specsSection.style.marginBottom = '20px';
+      specsSection.style.pageBreakInside = 'avoid';
+      specsSection.style.breakInside = 'avoid';
+      
+      const specsTitle = document.createElement('h2');
+      specsTitle.textContent = t('products.technical_specifications');
+      specsTitle.style.fontSize = '18px';
+      specsTitle.style.fontWeight = 'bold';
+      specsTitle.style.marginBottom = '10px';
+      specsTitle.style.color = '#0055A3';
+      specsSection.appendChild(specsTitle);
+      specsSection.appendChild(specsTable);
+      printElement.appendChild(specsSection);
+    }
    
     addSection(t('products.surface_preparation'), product.surface_preparation);
-
-
-  
 
     // أوقات الجفاف
     const dryingFields: { key: string; label: string }[] = [
@@ -568,6 +604,9 @@ const ProductDetail = () => {
     if (dryingData.length > 0) {
       const dryingSection = document.createElement('div');
       dryingSection.style.marginBottom = '20px';
+      dryingSection.style.pageBreakInside = 'avoid';
+      dryingSection.style.breakInside = 'avoid';
+      
       const dryingTitle = document.createElement('h2');
       dryingTitle.textContent = t('products.drying_time');
       dryingTitle.style.fontSize = '18px';
@@ -580,19 +619,26 @@ const ProductDetail = () => {
       dryingTable.style.width = '100%';
       dryingTable.style.borderCollapse = 'collapse';
       dryingTable.style.fontSize = '13px';
+      dryingTable.style.pageBreakInside = 'avoid';
+      dryingTable.style.breakInside = 'avoid';
 
       dryingData.forEach(({ label, value }: any) => {
         const row = document.createElement('tr');
+        row.style.pageBreakInside = 'avoid';
+        row.style.breakInside = 'avoid';
+        
         const lblCell = document.createElement('td');
         lblCell.style.fontWeight = 'bold';
         lblCell.style.padding = '6px 8px';
         lblCell.style.border = '1px solid #ddd';
         lblCell.style.width = '40%';
         lblCell.textContent = label;
+        
         const valCell = document.createElement('td');
         valCell.style.padding = '6px 8px';
         valCell.style.border = '1px solid #ddd';
         valCell.textContent = value;
+        
         row.appendChild(lblCell);
         row.appendChild(valCell);
         dryingTable.appendChild(row);
@@ -601,7 +647,8 @@ const ProductDetail = () => {
       dryingSection.appendChild(dryingTable);
       printElement.appendChild(dryingSection);
     } 
-        addSection(t('products.storing_conditions'), product.storing_conditions);
+
+    addSection(t('products.storing_conditions'), product.storing_conditions);
     addSection(t('products.safety_note'), product.safety_note);
 
     // إنشاء اسم الملف
@@ -1166,15 +1213,21 @@ const ProductDetail = () => {
         </section>
       )}
 
-      {/* Safety Note */}
+      {/* Safety Note - مصححة */}
       {product.safety_note && (
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
-              <div className="rounded-2xl p-8">
-                <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {product.safety_note}
-                </p>
+              <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
+                <Shield className="w-8 h-8 text-logo mr-3" />
+                {t('products.safety_note')}
+              </h2>
+              <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                <div className="p-8">
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">
+                    {product.safety_note}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
