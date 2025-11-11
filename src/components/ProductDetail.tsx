@@ -1212,15 +1212,16 @@ const ProductDetail = () => {
           </div>
         </section>
       )}
-  {/* Safety Note - إصلاح العرض */}
-      {hasSafetyNote && (
+
+      {/* Safety Note - مصححة */}
+      {product.safety_note && (
         <section className="py-16 bg-gray-50">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
                 <Shield className="w-8 h-8 text-logo mr-3" />
                 {t('products.safety_note')}
-              </h2>
+              </h2> 
               <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
                 <div className="p-8">
                   <p className="text-gray-700 leading-relaxed whitespace-pre-line">
@@ -1231,7 +1232,6 @@ const ProductDetail = () => {
             </div>
           </div>
         </section>
-      
       )}
     </div>
   );
