@@ -177,7 +177,7 @@ const BulletinDetail = () => {
       </div>
 
       {/* Article Header */}
-      <div className="bg-gradient-to-r from-logo to-blue-700 text-white py-16">
+      <div className="bg-logo text-white py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-start">
           <button
             onClick={() => navigate('/blog')}
