@@ -159,19 +159,19 @@ const BulletinDetail = () => {
 
   return (
     <div className={`min-h-screen bg-gray-50 pt-20 ${isRTL ? 'rtl' : 'ltr'}`}>
-      {/* Breadcrumb */}
-      <div className="bg-logo"> 
+      {/* Breadcrumb */} 
+      <div className="bg-white border-b border-gray-200"> 
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className={`flex items-center text-gray-600 ${isRTL ? 'rtl' : 'ltr'}`}>
-            <Link to="/" className="hover:text-white transition-colors">{t('bulletin.home')}</Link>
+          <div className={`flex items-center  text-gray-600 ${isRTL ? 'rtl' : 'ltr'}`}>
+            <Link to="/" className="hover:text-logo transition-colors">{t('bulletin.home')}</Link>
             <span className="mx-2">/</span>
             <Link to="/blog" className="hover:text-logo transition-colors">{t('bulletin.blog')}</Link>
             <span className="mx-2">/</span>
-            <span className="text-white">{categoryDisplayName}</span>
+            <span className="text-gray-900">{categoryDisplayName}</span>
             <span className="mx-2">/</span>
-            <span className="text-white">{subcategory}</span>
+            <span className="text-gray-900">{subcategory}</span>
             <span className="mx-2">/</span>
-            <span className="text-white">{title}</span> 
+            <span className="text-gray-900">{title}</span> 
           </div> 
         </div> 
       </div>
