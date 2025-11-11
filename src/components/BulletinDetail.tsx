@@ -171,7 +171,7 @@ const BulletinDetail = () => {
             <span className="mx-2">/</span>
             <span className="text-gray-900">{subcategory}</span>
             <span className="mx-2">/</span>
-            <span className="text-gray-900">{title}</span>
+            <h3 className="text-gray-900">{title}</h3>
           </div>
         </div> 
       </div>
