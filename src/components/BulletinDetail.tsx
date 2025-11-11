@@ -204,7 +204,7 @@ const BulletinDetail = () => {
 
       {/* Article Content */}
       <div className="py-16">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <article className="max-w-none">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
