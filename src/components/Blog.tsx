@@ -334,7 +334,7 @@ const Blog = () => {
                           <span className="inline-block px-3 py-1 bg-blue-50 text-logo text-xs font-medium rounded-full mb-2">
                             {displaySubcategory}
                           </span>
-                          <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-logo transition-colors line-clamp-2 min-h-[2.5rem]">
+                          <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-logo transition-colors line-clamp-2 min-h-[3rem]">
                             {displayTitle}
                           </h3>
                         
