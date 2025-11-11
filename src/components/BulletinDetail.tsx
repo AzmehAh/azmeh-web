@@ -162,7 +162,7 @@ const BulletinDetail = () => {
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className={`flex items-center text- text-gray-600 ${isRTL ? 'rtl' : 'ltr'}`}>
+          <div className={`flex items-center  text-gray-600 ${isRTL ? 'rtl' : 'ltr'}`}>
             <Link to="/" className="hover:text-logo transition-colors">{t('bulletin.home')}</Link>
             <span className="mx-2">/</span>
             <Link to="/blog" className="hover:text-logo transition-colors">{t('bulletin.blog')}</Link>
@@ -171,7 +171,7 @@ const BulletinDetail = () => {
             <span className="mx-2">/</span>
             <span className="text-gray-900">{subcategory}</span>
             <span className="mx-2">/</span>
-            <span className="text-gray-900">{title}</span>
+            <h3 className="text-gray-900">{title}</h3>
           </div> 
         </div> 
       </div>
