@@ -337,9 +337,7 @@ const Blog = () => {
                           <h3 className="text-lg font-bold text-gray-900 mb-3 group-hover:text-logo transition-colors line-clamp-2 min-h-[2.5rem]">
                             {displayTitle}
                           </h3>
-                          <p className="text-gray-600 text-sm mb-4 line-clamp-3 leading-relaxed min-h-[3rem]">
-                            {displayDesc}
-                          </p>
+                        
                         </div>
                         <button className="w-full but py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-logo/20 font-medium mt-auto">
                           {t('blog.readMore')}
