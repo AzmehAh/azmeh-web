@@ -521,36 +521,25 @@ const ProductDetail = () => {
       }
     }
 
-    // المواصفات الفنية - مصححة لعرض العناوين العربية
-    if (product.technical_specs && product.technical_specs.length > 0) {
+     // 👇 إصلاح المواصفات الفنية في PDF
+    if (product.technical_specs?.length) {
       const specsTable = document.createElement('table');
       specsTable.style.width = '100%';
       specsTable.style.borderCollapse = 'collapse';
       specsTable.style.fontSize = '13px';
-      specsTable.style.pageBreakInside = 'avoid';
-      specsTable.style.breakInside = 'avoid';
 
-      // استخدم TECHNICAL_FIELDS للحفاظ على الترتيب الأصلي
-      TECHNICAL_FIELDS.forEach(({ key, label, keyAr }) => {
-        // ابحث عن القيمة المقابلة في technical_specs
+      TECHNICAL_FIELDS.forEach(({ key }) => {
         const spec = product.technical_specs.find(s => s.key === key);
-        if (!spec || !spec.value) return; // تخطي إذا لم يكن هناك قيمة
+        if (!spec?.value?.trim()) return;
 
         const row = document.createElement('tr');
-        row.style.pageBreakInside = 'avoid';
-        row.style.breakInside = 'avoid';
-        
         const keyCell = document.createElement('td');
         keyCell.style.fontWeight = 'bold';
         keyCell.style.padding = '6px 8px';
         keyCell.style.border = '1px solid #ddd';
         keyCell.style.width = '40%';
-
-        // استخدم getTranslated للحصول على الترجمة الصحيحة
-        const fieldLabel = isRTL ? 
-          (keyAr ? getTranslated(label, t(`products.${keyAr}`)) : label) : 
-          label;
-        keyCell.textContent = fieldLabel;
+        // ✅ الإصلاح الرئيسي: استخدم t مباشرة بدون keyAr
+        keyCell.textContent = t(`products.${key}`);
 
         const valCell = document.createElement('td');
         valCell.style.padding = '6px 8px';
@@ -562,22 +551,23 @@ const ProductDetail = () => {
         specsTable.appendChild(row);
       });
 
-      const specsSection = document.createElement('div');
-      specsSection.style.marginBottom = '20px';
-      specsSection.style.pageBreakInside = 'avoid';
-      specsSection.style.breakInside = 'avoid';
-      
-      const specsTitle = document.createElement('h2');
-      specsTitle.textContent = t('products.technical_specifications');
-      specsTitle.style.fontSize = '18px';
-      specsTitle.style.fontWeight = 'bold';
-      specsTitle.style.marginBottom = '10px';
-      specsTitle.style.color = '#0055A3';
-      specsSection.appendChild(specsTitle);
-      specsSection.appendChild(specsTable);
-      printElement.appendChild(specsSection);
+      if (specsTable.children.length > 0) {
+        const specsSection = document.createElement('div');
+        specsSection.style.marginBottom = '20px';
+        const specsTitle = document.createElement('h2');
+        specsTitle.textContent = t('products.technical_specifications');
+        specsTitle.style.fontSize = '18px';
+        specsTitle.style.fontWeight = 'bold';
+        specsTitle.style.marginBottom = '10px';
+        specsTitle.style.color = '#0055A3';
+        specsSection.appendChild(specsTitle);
+        specsSection.appendChild(specsTable);
+        printElement.appendChild(specsSection);
+      }
     }
-   
+
+
+
     addSection(t('products.surface_preparation'), product.surface_preparation);
 
     // أوقات الجفاف
