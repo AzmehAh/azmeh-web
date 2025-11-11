@@ -154,7 +154,7 @@ const BulletinDetail = () => {
     ? (categoryConfigs[categoryName]?.name_ar || categoryName)
     : categoryName;
   const subcategory = isRTL 
-    ? bulletin.subcategory_ar || bulletin.subcategory 
+    ? bulletin.subcategory_ar || bulletin.subcategory  
     : bulletin.subcategory;
 
   return (
@@ -162,7 +162,7 @@ const BulletinDetail = () => {
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className={`flex items-center text-sm text-gray-600 ${isRTL ? '' : 'flex-row-reverse'}`}>
+          <div className={`flex items-center text-sm text-gray-600 ${isRTL ? 'flex-row-reverse' : ''}`}>
             <Link to="/" className="hover:text-logo transition-colors">{t('bulletin.home')}</Link>
             <span className="mx-2">/</span>
             <Link to="/blog" className="hover:text-logo transition-colors">{t('bulletin.blog')}</Link>
