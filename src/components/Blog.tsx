@@ -277,7 +277,7 @@ const Blog = () => {
 
           {/* Bulletins Grid */}
           <div className="flex-1">
-            <div className="mb-2">
+            <div className="mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-2">
                 {Object.values(selectedFilters).flat().length > 0
                   ? t('blog.filteredTitle')
@@ -322,7 +322,7 @@ const Blog = () => {
                       className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group min-h-[400px] flex flex-col"
                       onClick={() => handleBulletinClick(b.id)}
                     >
-                      <div className="h-48 overflow-hidden">
+                      <div className="h-48 overflow-hidden"> 
                         <img 
                           src={b.cover_image} 
                           alt={displayTitle} 
