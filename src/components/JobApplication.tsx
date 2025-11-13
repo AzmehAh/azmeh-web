@@ -416,8 +416,8 @@ const JobApplication = () => {
   type="submit"
   disabled={isSubmitting}
   className="w-full but py-4 px-6 rounded-lg font-semibold 
-             focus:outline-none focus:ring-2 focus:ring-logo/20 
-             disabled:opacity-70 disabled:cursor-not-allowed 
+           focus:outline-none focus:ring-2 focus:ring-logo/20
+         
              flex items-center justify-center"
 >
   {isSubmitting ? (
