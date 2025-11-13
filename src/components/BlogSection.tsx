@@ -100,17 +100,17 @@ const BlogSection = () => {
                   </div>
 
                   {/* Post Content */}
-                  <div className="p-2 sm:p-5 flex flex-col flex-grow">
+                  <div className="p-4 sm:p-6 flex flex-col flex-grow">
                     <div
                       className={`flex items-center text-sm text-gray-500 mb-3 ${
                         isArabic ? 'flex-row-reverse' : ''
                       }`}
                     >
                       <Calendar className={`w-4 h-4 ${isArabic ? 'ml-2' : 'mr-2'}`} />
-                      <span>{formatDate(post.created_at)}</span>
+                      <span>{formatDate(post.created_at)}</span> 
                     </div>
 
-                    <h1 className="text-lg sm:text-xl font-bold text-gray-900  min-h-[40px] group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
+                    <h1 className="text-lg sm:text-xl font-bold text-gray-900  min-h-[50px] group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
                       {isArabic ? post.title_ar || post.title : post.title}
                     </h1>
 
