@@ -115,11 +115,7 @@ const BlogSection = () => {
                       {isArabic ? post.title_ar || post.title : post.title}
                     </h1>
 
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 flex-grow">
-                      {isArabic
-                        ? post.short_description_ar || post.short_description
-                        : post.short_description}
-                    </p>
+                    
                   </div>
                 </motion.article>
               </Link>
