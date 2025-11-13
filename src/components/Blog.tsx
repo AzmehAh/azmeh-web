@@ -259,7 +259,7 @@ const Blog = () => {
                                     type="checkbox"
                                     checked={selectedFilters[originalCategoryName]?.includes(sub) || false}
                                     onChange={() => toggleFilter(originalCategoryName, sub)}
-                                    className="w-4 h-4 text-logo border-gray-300 rounded focus:ring-logo"
+                                    className="w-4 h-4 text-logo border-gray-300 rounded focus:ring-logo mt-0.5 flex-shrink-0"
                                   />
                                   <span className="text-sm text-gray-700">{sub}</span>
                                 </div>
