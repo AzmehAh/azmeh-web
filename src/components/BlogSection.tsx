@@ -100,7 +100,7 @@ const BlogSection = () => {
                   </div>
 
                   {/* Post Content */}
-                  <div className="p-3 sm:p-6 flex flex-col flex-grow">
+                  <div className="p-3 sm:p-5 flex flex-col flex-grow">
                     <div
                       className={`flex items-center text-sm text-gray-500 mb-3 ${
                         isArabic ? 'flex-row-reverse' : ''
