@@ -349,7 +349,7 @@ const Products = () => {
                                   type="checkbox"
                                   checked={selectedFilters[category]?.includes(option.value) || false}
                                   onChange={() => toggleFilter(category, option.value)}
-                                  className="w-4 h-4 text-logo border-gray-300 rounded focus:ring-logo"
+                                  className="w-4 h-4 text-logo border-gray-300 rounded focus:ring-logo mt-0.5 flex-shrink-0 "
                                 />
                                 <span className="text-sm text-gray-700">{option.value}</span>
                               </label>
