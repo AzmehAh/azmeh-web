@@ -228,60 +228,73 @@ const ProductDetail = () => {
     return hasData ? application : undefined;
   };
 
-  const fetchProduct = async (productId: string) => {
+ const fetchProduct = async (productId: string) => {
+  try {
+    setLoading(true);
+    setError(null);
+
+    // 1. جلب بيانات المنتج الأساسية
+    const { data: productData, error: productError } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', productId)
+      .single();
+
+    if (productError) throw productError;
+    if (!productData) {
+      setProduct(null);
+      return;
+    }
+
+    // 2. جلب الصور
+    const { data: imagesData } = await supabase
+      .from('product_images')
+      .select('*')
+      .eq('product_id', productId)
+      .order('is_main', { ascending: false })
+      .order('sort_order', { ascending: true });
+
+    // 3. ✅ جلب material_id و usage_id من الجدول الوسيط
+    const { data: linkedItems, error: linkError } = await supabase
+      .from('product_materials')
+      .select('material_id')
+      .eq('product_id', productId);
+
+    if (linkError) throw linkError;
+
+    const allLinkedIds = linkedItems.map(item => item.material_id);
+
+    // 4. جلب تصنيفات المواد والاستخدامات (للفصل بينها)
+    const { data: filterValues } = await supabase
+      .from('product_filter_values')
+      .select('id, filter_type_id, product_filter_types(name)')
+      .eq('is_active', true);
+
+    const materialTypeIds = filterValues
+      .filter(v => v.product_filter_types?.name === 'Material Type')
+      .map(v => v.id);
+
+    const usageTypeIds = filterValues
+      .filter(v => v.product_filter_types?.name === 'Application Fields')
+      .map(v => v.id);
+
+    const materialArray = allLinkedIds.filter(id => materialTypeIds.includes(id));
+    const usageArray = allLinkedIds.filter(id => usageTypeIds.includes(id));
+
+    // 5. جلب الصورة الرئيسية
+    let mainImage = null;
     try {
-      setLoading(true);
-      setError(null);
-      const { data: productData, error: productError } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', productId)
-        .single();
+      mainImage = await api.getMainProductImage(productId);
+    } catch (e) {
+      console.warn('Main image fallback used');
+    }
 
-      if (productError) throw productError;
-      if (!productData) {
-        setProduct(null);
-        return;
-      }
-
-      let imagesData = [];
-      try {
-        const { data: images } = await supabase
-          .from('product_images')
-          .select('*')
-          .eq('product_id', productId)
-          .order('is_main', { ascending: false })
-          .order('sort_order', { ascending: true });
-        imagesData = images || [];
-      } catch (e) {
-        console.error('Error fetching images:', e);
-      }
-
-      let mainImage = null;
-      try {
-        mainImage = await api.getMainProductImage(productId);
-      } catch (e) {
-        console.error('Error fetching main image:', e);
-      }
-
-      // ✅ تحويل material_id و usage_id إلى مصفوفات
-      const materialArray = Array.isArray(productData.material_id)
-        ? productData.material_id
-        : productData.material_id
-          ? [productData.material_id]
-          : [];
-
-      const usageArray = Array.isArray(productData.usage_id)
-        ? productData.usage_id
-        : productData.usage_id
-          ? [productData.usage_id]
-          : [];
-
-      const formattedProduct: Product = {
-        id: productData.id,
-        name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
-        name_ar: productData.name_ar,
-        code: productData.code || 'No Code',
+    // 6. بناء الكائن النهائي
+    const formattedProduct: Product = {
+      id: productData.id,
+      name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
+      name_ar: productData.name_ar,
+      code: productData.code || 'No Code',
         description: getLocalizedField(productData.description, productData.description_ar) || '',
         description_ar: productData.description_ar,
         technical_description: getLocalizedField(productData.technical_description, productData.technical_description_ar) || "",
@@ -292,9 +305,9 @@ const ProductDetail = () => {
                    "/images/placeholder.jpg",
         images: imagesData.map(img => img.image_url).filter(Boolean),
         type: productData.type_id || "",
-        brand: productData.brand_id || "",
-        material: materialArray, // ✅ مصفوفة
-        usage: usageArray,       // ✅ مصفوفة
+      brand: productData.brand_id || "",
+      material: materialArray, // ✅ الآن صحيح
+      usage: usageArray,       // ✅ الآن صحيح
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
         technical_specs: TECHNICAL_FIELDS
           .map(({ key, keyAr }) => {
@@ -336,7 +349,7 @@ const ProductDetail = () => {
       setError(t('error_loading_product'));
       setProduct(null);
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 
