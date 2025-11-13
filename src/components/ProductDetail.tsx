@@ -9,13 +9,13 @@ import { supabase, api } from "../lib/supabase";
 import DOMPurify from 'dompurify';
 import { useTranslation } from "react-i18next";
 import html2pdf from 'html2pdf.js';
-
+ 
 type FilterValueMap = Record<string, Record<string, string>>;
 
 interface Product {
   id: string;
   name: string;
-  name_ar?: string; 
+  name_ar?: string;
   code: string;
   description: string;
   description_ar?: string;
@@ -25,7 +25,7 @@ interface Product {
   images: string[];
   type: string;
   brand: string;
-  material : string[]; // ✅ تغيير إلى مصفوفة
+  material: string[]; // ✅ تغيير إلى مصفوفة
   usage: string[];    // ✅ تغيير إلى مصفوفة
   packaging: string[];
   technical_specs: { key: string; value: string; standard: string }[];
@@ -128,9 +128,9 @@ const brands = [
   { name: "Omegan", logo: "/images/Omegan.gif" },
   { name: "Mlonati", logo: "/images/Mlonati.gif" },
   { name: "Jupiter", logo: "/images/Jupiter.gif" },
-  { name: "COPRAbEL", logo: "/images/COPRAbEL.jpg" }, 
+  { name: "COPRAbEL", logo: "/images/COPRAbEL.jpg" },
   { name: "Capric", logo: "/images/Capric.gif" },
-  { name: "Azur", logo: "/images/Azur.png" },
+  { name: "Azur", logo: "/images/Azur-.png" },
   { name: "AlDahab", logo: "/images/AlDahab.png" },
 ];
 
@@ -228,73 +228,60 @@ const ProductDetail = () => {
     return hasData ? application : undefined;
   };
 
- const fetchProduct = async (productId: string) => {
-  try {
-    setLoading(true);
-    setError(null);
-
-    // 1. جلب بيانات المنتج الأساسية
-    const { data: productData, error: productError } = await supabase
-      .from('products')
-      .select('*')
-      .eq('id', productId)
-      .single();
-
-    if (productError) throw productError;
-    if (!productData) {
-      setProduct(null);
-      return;
-    }
-
-    // 2. جلب الصور
-    const { data: imagesData } = await supabase
-      .from('product_images')
-      .select('*')
-      .eq('product_id', productId)
-      .order('is_main', { ascending: false })
-      .order('sort_order', { ascending: true });
-
-    // 3. ✅ جلب material_id و usage_id من الجدول الوسيط
-    const { data: linkedItems, error: linkError } = await supabase
-      .from('product_materials')
-      .select('material_id')
-      .eq('product_id', productId);
-
-    if (linkError) throw linkError;
-
-    const allLinkedIds = linkedItems.map(item => item.material_id);
-
-    // 4. جلب تصنيفات المواد والاستخدامات (للفصل بينها)
-    const { data: filterValues } = await supabase
-      .from('product_filter_values')
-      .select('id, filter_type_id, product_filter_types(name)')
-      .eq('is_active', true);
-
-    const materialTypeIds = filterValues
-      .filter(v => v.product_filter_types?.name === 'Material Type')
-      .map(v => v.id);
-
-    const usageTypeIds = filterValues
-      .filter(v => v.product_filter_types?.name === 'Application Fields')
-      .map(v => v.id);
-
-    const materialArray = allLinkedIds.filter(id => materialTypeIds.includes(id));
-    const usageArray = allLinkedIds.filter(id => usageTypeIds.includes(id));
-
-    // 5. جلب الصورة الرئيسية
-    let mainImage = null;
+  const fetchProduct = async (productId: string) => {
     try {
-      mainImage = await api.getMainProductImage(productId);
-    } catch (e) {
-      console.warn('Main image fallback used');
-    }
+      setLoading(true);
+      setError(null);
+      const { data: productData, error: productError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('id', productId)
+        .single();
 
-    // 6. بناء الكائن النهائي
-    const formattedProduct: Product = {
-      id: productData.id,
-      name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
-      name_ar: productData.name_ar,
-      code: productData.code || 'No Code',
+      if (productError) throw productError;
+      if (!productData) {
+        setProduct(null);
+        return;
+      }
+
+      let imagesData = [];
+      try {
+        const { data: images } = await supabase
+          .from('product_images')
+          .select('*')
+          .eq('product_id', productId)
+          .order('is_main', { ascending: false })
+          .order('sort_order', { ascending: true });
+        imagesData = images || [];
+      } catch (e) {
+        console.error('Error fetching images:', e);
+      }
+
+      let mainImage = null;
+      try {
+        mainImage = await api.getMainProductImage(productId);
+      } catch (e) {
+        console.error('Error fetching main image:', e);
+      }
+
+      // ✅ تحويل material_id و usage_id إلى مصفوفات
+      const materialArray = Array.isArray(productData.material_id)
+        ? productData.material_id
+        : productData.material_id
+          ? [productData.material_id]
+          : [];
+
+      const usageArray = Array.isArray(productData.usage_id)
+        ? productData.usage_id
+        : productData.usage_id
+          ? [productData.usage_id]
+          : [];
+
+      const formattedProduct: Product = {
+        id: productData.id,
+        name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
+        name_ar: productData.name_ar,
+        code: productData.code || 'No Code',
         description: getLocalizedField(productData.description, productData.description_ar) || '',
         description_ar: productData.description_ar,
         technical_description: getLocalizedField(productData.technical_description, productData.technical_description_ar) || "",
@@ -305,9 +292,9 @@ const ProductDetail = () => {
                    "/images/placeholder.jpg",
         images: imagesData.map(img => img.image_url).filter(Boolean),
         type: productData.type_id || "",
-      brand: productData.brand_id || "",
-      material: materialArray, // ✅ الآن صحيح
-      usage: usageArray,       // ✅ الآن صحيح
+        brand: productData.brand_id || "",
+        material: materialArray, // ✅ مصفوفة
+        usage: usageArray,       // ✅ مصفوفة
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
         technical_specs: TECHNICAL_FIELDS
           .map(({ key, keyAr }) => {
@@ -349,7 +336,7 @@ const ProductDetail = () => {
       setError(t('error_loading_product'));
       setProduct(null);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -695,9 +682,6 @@ const ProductDetail = () => {
   }
 
   // ✅ عرض المواد والاستخدامات في الواجهة
-  const displayBrand = product.brand 
-  ? translateFilterValue('Brand', product.brand, filterValueMap) 
-  : '';
   const displayType = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
   const displayMaterial = product.material.length
     ? product.material.map(id => translateFilterValue('Material Type', id, filterValueMap)).join(', ')
@@ -794,18 +778,18 @@ const ProductDetail = () => {
                       className="w-full h-full object-cover"
                       onError={(e) => { e.currentTarget.src = "/images/placeholder.jpg"; }}
                     />
-                   {displayBrand && brands.find(b => b.name === displayBrand)?.logo && (
-  <div className={`absolute top-0 flex items-center justify-center ${isRTL ? "left-10" : "right-10"}`}>
-    <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
-      <img
-        src={brands.find(b => b.name === displayBrand)!.logo}
-        alt={displayBrand}
-        className="w-16 h-16 object-contain"
-        onError={(e) => { e.currentTarget.style.display = 'none'; }}
-      />
-    </div>
-  </div>
-)}
+                    {brands.find(b => product.brand && product.brand.toLowerCase().includes(b.name.toLowerCase()))?.logo && (
+                      <div className={`absolute top-0 flex items-center justify-center ${isRTL ? "left-10" : "right-10"}`}>
+                        <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
+                          <img
+                            src={brands.find(b => product.brand && product.brand.toLowerCase().includes(b.name.toLowerCase()))!.logo}
+                            alt=""
+                            className="w-16 h-16 object-contain"
+                            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                          />
+                        </div>
+                      </div>
+                    )}
                   </motion.div>
                   {product.images.length > 1 && (
                     <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
@@ -822,21 +806,19 @@ const ProductDetail = () => {
                   )}
                 </>
               ) : (
-              <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
-  {displayBrand && brands.find(b => b.name === displayBrand)?.logo && (
-    <div className={`absolute top-0 flex items-center justify-center ${isRTL ? "left-10" : "right-10"}`}>
-      <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
-        <img
-          src={brands.find(b => b.name === displayBrand)!.logo}
-          alt={displayBrand}
-          className="w-16 h-16 object-contain"
-          onError={(e) => { e.currentTarget.style.display = 'none'; }}
-        />
-      </div>
-    </div>
-  )}
-  <p className="text-gray-500">{t('products.image')}</p>
-
+                <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
+                  {brands.find(b => product.brand && product.brand.toLowerCase().includes(b.name.toLowerCase()))?.logo && (
+                    <div className={`absolute top-0 flex items-center justify-center ${isRTL ? "left-10" : "right-10"}`}>
+                      <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
+                        <img
+                          src={brands.find(b => product.brand && product.brand.toLowerCase().includes(b.name.toLowerCase()))!.logo}
+                          alt=""
+                          className="w-16 h-16 object-contain"
+                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                        />
+                      </div>
+                    </div>
+                  )}
                   <p className="text-gray-500">{t('products.image')}</p>
                 </div>
               )}
@@ -1146,7 +1128,7 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-      </section> 
+      </section>
     </div>
   );
 };
