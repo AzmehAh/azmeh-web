@@ -25,7 +25,7 @@ interface Product {
   images: string[];
   type: string;
   brand: string;
-  material: string[]; // ✅ تغيير إلى مصفوفة
+  material : string[]; // ✅ تغيير إلى مصفوفة
   usage: string[];    // ✅ تغيير إلى مصفوفة
   packaging: string[];
   technical_specs: { key: string; value: string; standard: string }[];
