@@ -128,9 +128,9 @@ const brands = [
   { name: "Omegan", logo: "/images/Omegan.gif" },
   { name: "Mlonati", logo: "/images/Mlonati.gif" },
   { name: "Jupiter", logo: "/images/Jupiter.gif" },
-  { name: "COPRAbEL", logo: "/images/COPRAbEL.jpg" },
+  { name: "COPRAbEL", logo: "/images/COPRAbEL.jpg" }, 
   { name: "Capric", logo: "/images/Capric.gif" },
-  { name: "Azur", logo: "/images/Azur-.png" },
+  { name: "Azur", logo: "/images/Azur.png" },
   { name: "AlDahab", logo: "/images/AlDahab.png" },
 ];
 
