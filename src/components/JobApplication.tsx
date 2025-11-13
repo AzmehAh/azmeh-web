@@ -178,7 +178,7 @@ const JobApplication = () => {
       {/* Hero Section */}
      <div className=" text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
        
-            <h1 className="text-5xl md:text-6xl font-bold mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold mb-4">
               {t('jobApplication.title')}
             </h1>
             
@@ -186,7 +186,7 @@ const JobApplication = () => {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      ؤ
+      
         {/* Application Form */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
