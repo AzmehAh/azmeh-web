@@ -784,7 +784,7 @@ const ProductDetail = () => {
                     initial={{ opacity: 0, scale: 1.1 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.7 }}
-                  >
+                  > 
                     <img
                       src={product.images[currentImageIndex]}
                       alt={product.name}
