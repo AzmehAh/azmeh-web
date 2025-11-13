@@ -411,13 +411,13 @@ const JobApplication = () => {
               </motion.div>
             )}
 
-            {/* Submit Button */}
+            {/* Submit Button */} 
          <button
   type="submit"
   disabled={isSubmitting}
   className="w-full but py-4 px-6 rounded-lg font-semibold 
            focus:outline-none focus:ring-2 focus:ring-logo/20
-         
+             disabled:opacity-70 disabled:cursor-not-allowed 
              flex items-center justify-center"
 >
   {isSubmitting ? (
