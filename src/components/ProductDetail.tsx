@@ -15,7 +15,7 @@ type FilterValueMap = Record<string, Record<string, string>>;
 interface Product {
   id: string;
   name: string;
-  name_ar?: string;
+  name_ar?: string; 
   code: string;
   description: string;
   description_ar?: string;
@@ -25,7 +25,7 @@ interface Product {
   images: string[];
   type: string;
   brand: string;
-  material: string[]; // ✅ تغيير إلى مصفوفة
+  material : string[]; // ✅ تغيير إلى مصفوفة
   usage: string[];    // ✅ تغيير إلى مصفوفة
   packaging: string[];
   technical_specs: { key: string; value: string; standard: string }[];
@@ -1128,9 +1128,9 @@ const ProductDetail = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> 
     </div>
   );
 };
 
-export default ProductDetail; 
+export default ProductDetail;
