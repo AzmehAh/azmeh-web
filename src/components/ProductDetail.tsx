@@ -25,8 +25,8 @@ interface Product {
   images: string[];
   type: string;
   brand: string;
-  material : string[]; // ✅ تغيير إلى مصفوفة
-  usage: string[];    // ✅ تغيير إلى مصفوفة
+  material: string[];
+  usage: string[];
   packaging: string[];
   technical_specs: { key: string; value: string; standard: string }[];
   features: string[];
@@ -143,6 +143,7 @@ const ProductDetail = () => {
   const [error, setError] = useState<string | null>(null);
   const [filterValueMap, setFilterValueMap] = useState<FilterValueMap>({});
   const [filtersLoading, setFiltersLoading] = useState(true);
+  const [filtersReady, setFiltersReady] = useState(false); // ✅ جديد
   const isRTL = i18n.language === 'ar';
 
   const translateFilterValue = (
@@ -169,8 +170,10 @@ const ProductDetail = () => {
           });
       });
       setFilterValueMap(map);
+      setFiltersReady(true); // ✅ جديد
     } catch (error) {
       console.error('Error fetching filter translations:', error);
+      setFiltersReady(true); // ✅ حتى في حالة الخطأ
     } finally {
       setFiltersLoading(false);
     }
@@ -237,13 +240,11 @@ const ProductDetail = () => {
         .select('*')
         .eq('id', productId)
         .single();
-
       if (productError) throw productError;
       if (!productData) {
         setProduct(null);
         return;
       }
-
       let imagesData = [];
       try {
         const { data: images } = await supabase
@@ -256,7 +257,6 @@ const ProductDetail = () => {
       } catch (e) {
         console.error('Error fetching images:', e);
       }
-
       let mainImage = null;
       try {
         mainImage = await api.getMainProductImage(productId);
@@ -264,13 +264,11 @@ const ProductDetail = () => {
         console.error('Error fetching main image:', e);
       }
 
-      // ✅ تحويل material_id و usage_id إلى مصفوفات
       const materialArray = Array.isArray(productData.material_id)
         ? productData.material_id
         : productData.material_id
           ? [productData.material_id]
           : [];
-
       const usageArray = Array.isArray(productData.usage_id)
         ? productData.usage_id
         : productData.usage_id
@@ -293,8 +291,8 @@ const ProductDetail = () => {
         images: imagesData.map(img => img.image_url).filter(Boolean),
         type: productData.type_id || "",
         brand: productData.brand_id || "",
-        material: materialArray, // ✅ مصفوفة
-        usage: usageArray,       // ✅ مصفوفة
+        material: materialArray,
+        usage: usageArray,
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
         technical_specs: TECHNICAL_FIELDS
           .map(({ key, keyAr }) => {
@@ -329,7 +327,6 @@ const ProductDetail = () => {
         dry_to_sand: getLocalizedField(productData.dry_to_sand, productData.dry_to_sand_ar) || '',
         drying_time_note: getLocalizedField(productData.drying_time_note, productData.drying_time_note_ar) || ''
       };
-
       setProduct(formattedProduct);
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -351,11 +348,9 @@ const ProductDetail = () => {
     const isRTL = i18n.language === 'ar';
     const getTranslated = (enVal: string, arVal?: string) =>
       isRTL ? (arVal || enVal) : enVal;
-
     const name = getTranslated(product.name, product.name_ar);
     const description = getTranslated(product.description, product.description_ar);
     const technicalDescription = getTranslated(product.technical_description, product.technical_description_ar);
-
     const printElement = document.createElement('div');
     printElement.dir = isRTL ? 'rtl' : 'ltr';
     printElement.style.fontFamily = isRTL ? "'Tajawal', system-ui, sans-serif" : "system-ui, sans-serif";
@@ -367,7 +362,6 @@ const ProductDetail = () => {
     printElement.style.pageBreakInside = 'avoid';
     printElement.style.breakInside = 'avoid';
 
-    // Header
     const header = document.createElement('div');
     header.style.textAlign = isRTL ? 'right' : 'left';
     header.style.marginBottom = '20px';
@@ -428,7 +422,7 @@ const ProductDetail = () => {
       printElement.appendChild(section);
     };
 
-    // ✅ عرض التصنيفات بشكل صحيح (يدعم المصفوفات)
+    // ✅ عرض التصنيفات بشكل صحيح (يدعم المصفوفات + البراند)
     const type = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
     const material = product.material.length
       ? product.material.map(id => translateFilterValue('Material Type', id, filterValueMap)).join(', ')
@@ -436,9 +430,10 @@ const ProductDetail = () => {
     const usage = product.usage.length
       ? product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap)).join(', ')
       : '';
+    const brand = product.brand ? translateFilterValue('brand', product.brand, filterValueMap) : ''; // ✅ جديد
 
-    if (type || material || usage) {
-      const cats = [type, material, usage].filter(Boolean).join(' • ');
+    if (type || material || usage || brand) {
+      const cats = [type, material, usage, brand].filter(Boolean).join(' • ');
       const catDiv = document.createElement('div');
       catDiv.textContent = cats;
       catDiv.style.backgroundColor = '#eef5ff';
@@ -455,7 +450,6 @@ const ProductDetail = () => {
     }
     addSection(t('products.key_features'), product.features, true);
 
-    // Application Section
     if (product.application) {
       const appSection = document.createElement('div');
       appSection.style.marginBottom = '20px';
@@ -505,7 +499,6 @@ const ProductDetail = () => {
       }
     }
 
-    // Technical Specs
     if (product.technical_specs?.length) {
       const specsTable = document.createElement('table');
       specsTable.style.width = '100%';
@@ -543,10 +536,8 @@ const ProductDetail = () => {
         printElement.appendChild(specsSection);
       }
     }
-
     addSection(t('products.surface_preparation'), product.surface_preparation);
 
-    // Drying Time
     const dryingFields = [
       { key: 'dry_to_touch', label: t('products.dry_to_touch') },
       { key: 'dry_to_handle', label: t('products.dry_to_handle') },
@@ -598,14 +589,10 @@ const ProductDetail = () => {
       dryingSection.appendChild(dryingTable);
       printElement.appendChild(dryingSection);
     }
-
     addSection(t('products.storing_conditions'), product.storing_conditions);
-
-    // ✅ Safety Note with fallback
     const displaySafetyNote = product.safety_note || getSafetyNoteFallback();
     addSection(t('products.safety_note'), displaySafetyNote);
 
-    // Export PDF
     const safeName = name
       .replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '_')
       .replace(/\s+/g, '_')
@@ -625,10 +612,10 @@ const ProductDetail = () => {
   }, [i18n.language]);
 
   useEffect(() => {
-    if (id) {
+    if (id && filtersReady) { // ✅ يعتمد على filtersReady
       fetchProduct(id);
     }
-  }, [id, i18n.language]);
+  }, [id, filtersReady, i18n.language]); // ✅ أضف filtersReady للتبعيات
 
   useEffect(() => {
     if (product && product.images && product.images.length > 1) {
@@ -639,7 +626,8 @@ const ProductDetail = () => {
     }
   }, [product]);
 
-  if (loading || filtersLoading) {
+  // ✅ تعديل شرط التحميل ليشمل !filtersReady
+  if (loading || filtersLoading || !filtersReady) {
     return (
       <div className="min-h-screen bg-gray-50 pt-20 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#0055A3]"></div>
@@ -681,7 +669,7 @@ const ProductDetail = () => {
     );
   }
 
-  // ✅ عرض المواد والاستخدامات في الواجهة
+  // ✅ عرض المواد والاستخدامات (+ البراند) في الواجهة
   const displayType = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
   const displayMaterial = product.material.length
     ? product.material.map(id => translateFilterValue('Material Type', id, filterValueMap)).join(', ')
@@ -689,13 +677,14 @@ const ProductDetail = () => {
   const displayUsage = product.usage.length
     ? product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap)).join(', ')
     : '';
+  const displayBrand = product.brand
+    ? translateFilterValue('brand', product.brand, filterValueMap)
+    : '';
 
-  // ✅ Safety note fallback للعرض
   const displayedSafetyNote = product.safety_note || getSafetyNoteFallback();
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
       <section className="py-24 bg-logo text-white">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="relative mb-8">
@@ -725,6 +714,11 @@ const ProductDetail = () => {
                 {displayUsage && (
                   <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
                     {displayUsage}
+                  </span>
+                )}
+                {displayBrand && ( // ✅ جديد
+                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+                    {displayBrand}
                   </span>
                 )}
               </div>
@@ -827,6 +821,7 @@ const ProductDetail = () => {
         </div>
       </section>
 
+      {/* باقي الأقسام كما هي... */}
       {/* Features */}
       {product.features?.length > 0 && (
         <section className="py-16 bg-gray-50">
