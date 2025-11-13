@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  Download, Package, FileText, CheckCircle, Wrench,
+import {Download, Package, FileText, CheckCircle, Wrench,
   Shield, Info, Layers, Lightbulb, Brush
 } from "lucide-react";
 import { supabase, api } from "../lib/supabase";
