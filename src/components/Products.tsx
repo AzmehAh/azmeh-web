@@ -239,15 +239,24 @@ const Products = () => {
     return Object.values(selectedFilters).flat().length;
   };
 
-  const getFilterCategoryName = (category: string): string => {
-    const filterNames: Record<string, string> = {
-      'brand': t('products.brand'),
-      'type': t('products.type'),
-      'material': t('products.material'),
-      'usage': t('products.usage')
-    };
-    return filterNames[category] || category;
-  };
+ const getFilterCategoryName = (category: string): string => {
+  // ابحث عن نوع الفلتر في القائمة القادمة من Supabase
+  const matchedType = filterTypes.find(
+    (ft) => ft.name.toLowerCase() === category.toLowerCase()
+  );
+
+  if (!matchedType) {
+    // إذا لم يتم العثور عليه، استخدم نفس النص (للأمان)
+    return category;
+  }
+
+  // إذا كانت اللغة عربية استخدم الاسم العربي من قاعدة البيانات
+  // وإلا استخدم الاسم الإنجليزي
+  return i18n.language === "ar"
+    ? matchedType.name_ar || matchedType.name
+    : matchedType.name;
+};
+
 
   // === الواجهة (JSX) ===
   return ( 
