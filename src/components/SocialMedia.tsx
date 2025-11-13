@@ -9,8 +9,8 @@ const SocialMedia = () => {
 
   const socialPosts = [
     { 
-      iframe: 'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02J7BXbrpepYK7wqLU62JxrTdeRGQMx9zGBKZAsNVgR75NX5inQr2bMq3capk9H9oVl&show_text=true&width=500" width="500" height="548" style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowfullscreen="true" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share',
-      platform: 'facebook'
+      iframe: 'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02J7BXbrpepYK7wqLU62JxrTdeRGQMx9zGBKZAsNVgR75NX5inQr2bMq3capk9H9oVl&show_text=true&width=500',
+      platform: 'facebook' 
     },
     { 
       iframe: 'https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fazmehpaints%2Fposts%2Fpfbid02DSC5xcLaR4pAGbVZbC5fSvJDdWnDtr8Dd35eBzvfAVCfxkk8nFGXEe4URi6f98p7l&show_text=true&width=500',
