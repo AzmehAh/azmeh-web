@@ -11,8 +11,7 @@ interface Bulletin {
   title_ar?: string;
   cover_image: string;
   created_at: string;
-  short_description: string;
-  short_description_ar?: string;
+  
   featured?: boolean;
 }
 
