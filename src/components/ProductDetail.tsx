@@ -791,11 +791,11 @@ const ProductDetail = () => {
                       className="w-full h-full object-cover"
                       onError={(e) => { e.currentTarget.src = "/images/placeholder.jpg"; }}
                     />
-                    {brands.find(b => product.brand && product.brand.toLowerCase().includes(b.name.toLowerCase()))?.logo && (
+                    {brands.find(b => product.brand_id && product.brand_id.toLowerCase().includes(b.name.toLowerCase()))?.logo && (
                       <div className={`absolute top-0 flex items-center justify-center ${isRTL ? "left-10" : "right-10"}`}>
                         <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
                           <img
-                            src={brands.find(b => product.brand && product.brand.toLowerCase().includes(b.name.toLowerCase()))!.logo}
+                            src={brands.find(b => product.brand_id && product.brand_id.toLowerCase().includes(b.name.toLowerCase()))!.logo}
                             alt=""
                             className="w-16 h-16 object-contain"
                             onError={(e) => { e.currentTarget.style.display = 'none'; }}
