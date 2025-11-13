@@ -110,7 +110,7 @@ const BlogSection = () => {
                       <span>{formatDate(post.created_at)}</span>
                     </div>
 
-                    <h1 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 min-h-[90px] group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
+                    <h1 className="text-lg sm:text-xl font-bold text-gray-900  min-h-[90px] group-hover:text-[#2C5DB6] transition-colors line-clamp-2">
                       {isArabic ? post.title_ar || post.title : post.title}
                     </h1>
 
