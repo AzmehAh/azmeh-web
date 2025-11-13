@@ -263,32 +263,6 @@ const ProductDetail = () => {
       } catch (e) {
         console.error('Error fetching main image:', e);
       }
-// 3. ✅ جلب material_id و usage_id من الجدول الوسيط
-    const { data: linkedItems, error: linkError } = await supabase
-      .from('product_materials')
-      .select('material_id')
-      .eq('product_id', productId);
-
-    if (linkError) throw linkError;
-
-    const allLinkedIds = linkedItems.map(item => item.material_id);
-
-    // 4. جلب تصنيفات المواد والاستخدامات (للفصل بينها)
-    const { data: filterValues } = await supabase
-      .from('product_filter_values')
-      .select('id, filter_type_id, product_filter_types(name)')
-      .eq('is_active', true);
-
-    const materialTypeIds = filterValues
-      .filter(v => v.product_filter_types?.name === 'Material Type')
-      .map(v => v.id);
-
-    const usageTypeIds = filterValues
-      .filter(v => v.product_filter_types?.name === 'Application Fields')
-      .map(v => v.id);
-
-    const materialArray = allLinkedIds.filter(id => materialTypeIds.includes(id));
-    const usageArray = allLinkedIds.filter(id => usageTypeIds.includes(id));
 
       // ✅ تحويل material_id و usage_id إلى مصفوفات
       const materialArray = Array.isArray(productData.material_id)
@@ -317,10 +291,10 @@ const ProductDetail = () => {
                    productData.image_url ||
                    "/images/placeholder.jpg",
         images: imagesData.map(img => img.image_url).filter(Boolean),
-         type: productData.type_id || "",
-      brand: productData.brand_id || "",
-      material: materialArray, // ✅ الآن صحيح
-      usage: usageArray,       // ✅ الآن صحيح
+        type: productData.type_id || "",
+        brand: productData.brand_id || "",
+        material: materialArray, // ✅ مصفوفة
+        usage: usageArray,       // ✅ مصفوفة
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
         technical_specs: TECHNICAL_FIELDS
           .map(({ key, keyAr }) => {
@@ -362,7 +336,7 @@ const ProductDetail = () => {
       setError(t('error_loading_product'));
       setProduct(null);
     } finally {
-      setLoading(false);
+      setLoading(false); 
     }
   };
 
