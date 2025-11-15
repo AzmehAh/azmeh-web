@@ -68,38 +68,39 @@ const AboutSection = () => {
   />
 </Link>
           </motion.div>
-
-          {/* Right Content - Company Image with Counter Badge */}
-          <motion.div
-            initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative flex justify-center"
-          >
-            {/* Company Image */}
-            <img
-              src="./images/about_png"
-              alt="Al Azmeh Paints Company"
-              className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg"
-            />
-
-            {/* Counter Badge - يمين في العربية، يسار في الإنجليزية */}
-           <motion.div
-  className={`absolute bottom-4 ${
-    isRTL ? 'right-8 ' : 'left-8' 
-  } bg-white  rounded-r-2xl px-8 py-4 shadow-xl flex flex-col items-center justify-center transform rotate-[-3deg] max-w-[70%]`}
-  initial={{ scale: 0.5, opacity: 0 }}
-  animate={{ scale: 1, opacity: 1 }}   
-  transition={{ duration: 0.5, delay: 0.5 }}
+{/* Right Content - Company Image with Counter Badge */}
+<motion.div
+  initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
+  whileInView={{ opacity: 1, x: 0 }}
+  transition={{ duration: 0.6, delay: 0.2 }}
+  className="relative flex justify-center"
 >
-  {/* Counter Text */} 
-  <div className="text-2xl sm:text-3xl font-bold text-logo">
-    {count}Y+
+  {/* حاوية نسبية تحتوي الصورة واللاصقة */}
+  <div className="relative w-full max-w-md lg:max-w-lg">
+    <img
+      src="./images/about_png"
+      alt="Al Azmeh Paints Company"
+      className="w-full h-auto rounded-xl shadow-lg object-cover"
+    />
+
+    {/* Counter Badge - ملتصقة بحافة الصورة */}
+    <motion.div
+      className={`absolute bottom-4 ${
+        isRTL ? 'right-0 translate-x-1/2' : 'left-0 -translate-x-1/2'
+      } bg-white rounded-r-2xl px-4 sm:px-6 py-2.5 sm:py-3.5 shadow-xl flex flex-col items-center justify-center transform rotate-[-3deg] whitespace-nowrap`}
+      initial={{ scale: 0.5, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.5 }}
+    >
+      <div className="text-xl sm:text-2xl font-bold text-logo">
+        {count}Y+
+      </div>
+      <div className="text-[9px] sm:text-xs text-logo font-semibold uppercase mt-0.5">
+        {t('about.experience')}
+      </div>
+    </motion.div>
   </div>
-  <div className="text-[10px] sm:text-xs text-logo font-semibold uppercase">
-    {t('about.experience')}
-  </div>
-</motion.div>  
+
 
           </motion.div>
         </div>
