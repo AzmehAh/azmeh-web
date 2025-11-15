@@ -697,8 +697,8 @@ const ProductDetail = () => {
   }
 
   // ✅ عرض المواد والاستخدامات في الواجهة
-  const displayBrand = product.brand 
-  ? translateFilterValue('Brand', product.brand, filterValueMap) 
+ const displayBrand = product.brand 
+  ? translateFilterValue('brand_id', product.brand, filterValueMap) // ← غيرت 'Brand' إلى 'brand_id'
   : '';
   const displayType = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
   const displayMaterial = product.material.length
