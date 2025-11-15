@@ -62,9 +62,9 @@ const AboutSection = () => {
   <ArrowRight
     className={`w-4 h-4 sm:w-5 sm:h-5 transition-transform ${
       isRTL 
-        ? ' rotate-180 group-hover:-translate-x-1' 
-        : ' group-hover:translate-x-1'
-    }`}
+        ? 'mr-2 rotate-180 group-hover:-translate-x-1' 
+        : 'ml-2 group-hover:translate-x-1'
+    }`} 
   />
 </Link>
           </motion.div>
