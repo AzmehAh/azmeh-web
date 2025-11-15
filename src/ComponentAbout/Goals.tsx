@@ -39,7 +39,7 @@ const Goals = () => {
           </div> 
 
           <div className="bg-gray-100 rounded-2xl p-8 text-white flex flex-col gap-4 border border-logo/20">
-            <div className="flex items-center gap-3  border border-logo/20">
+            <div className="flex items-center gap-3  border border-logo/20 ">
               <Target className="w-6 h-6 text-logo" />
               <h3 className="text-2xl text-logo font-bold">{t('goals.mission.title')}</h3>
             </div>
