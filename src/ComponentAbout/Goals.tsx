@@ -29,7 +29,7 @@ const Goals = () => {
         {/* كتل Vision و Mission */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-gray-100 rounded-2xl p-8 text-white flex flex-col gap-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 border-logo/20">
               <Eye className="w-6 h-6 text-logo" />
               <h3 className="text-2xl font-bold text-logo">{t('goals.vision.title')}</h3>
             </div>
@@ -38,7 +38,7 @@ const Goals = () => {
             </p>
           </div> 
 
-          <div className="bg-gray-100 rounded-2xl p-8 text-white flex flex-col gap-4">
+          <div className="bg-gray-100 rounded-2xl p-8 text-white flex flex-col gap-4 border-logo/20">
             <div className="flex items-center gap-3">
               <Target className="w-6 h-6 text-logo" />
               <h3 className="text-2xl text-logo font-bold">{t('goals.mission.title')}</h3>
