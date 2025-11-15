@@ -42,18 +42,14 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
             className={`text-center lg:text-left ${isRTL ? 'lg:text-right' : ''}`}
           >
-            <h3 className="text-sm uppercase text-logo mb-2">
-              {t('about.legacy')}
-            </h3>
+            
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
               {t('about.title')}
             </h2>
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 sm:mb-6">
               {t('about.description1')}
             </p>
-            <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
-              {t('about.description2')}
-            </p>
+           
           <Link
   to="/about"
   className="inline-flex items-center but group px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
