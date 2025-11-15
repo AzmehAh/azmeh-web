@@ -57,14 +57,7 @@ const ColorInspiration = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-10 lg:px-14">
         {/* Title */}
         <div className="text-center mb-10">
-          <motion.h3
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-sm uppercase text-logo mb-2"
-          >
-            {t('colorInspiration.subtitle')} 
-          </motion.h3>
+         
 
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
