@@ -121,18 +121,20 @@ const TECHNICAL_FIELDS = [
   { key: 'note', label: 'Note', keyAr: 'note_ar' },
 ];
 
-const brands = [
-  { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
-  { name: "SRT", logo: "/images/SRT-.gif" },
-  { name: "Original", logo: "/images/Original.gif" },
-  { name: "Omegan", logo: "/images/Omegan.gif" },
-  { name: "Mlonati", logo: "/images/Mlonati.gif" },
-  { name: "Jupiter", logo: "/images/Jupiter.gif" },
-  { name: "COPRAbEL", logo: "/images/COPRAbEL.jpg" }, 
-  { name: "Capric", logo: "/images/Capric.gif" },
-  { name: "Azur", logo: "/images/Azur.png" },
-  { name: "AlDahab", logo: "/images/AlDahab.png" },
+const brandLogos = [
+  { id: "a3f4f300-4052-4b03-b7d8-437eba0607da", name: "Azur", logo: "/images/Azur.png" },
+  { id: "835a9d0b-3ab1-4a25-bf95-176559412d62", name: "COPRAbEL.", logo: "/images/COPRAbEL.jpg" },
+  { id: "28071c24-3ac5-464f-ab5d-7caab121d1c2", name: "Omegan", logo: "/images/Omegan.gif" },
+  { id: "250cea8a-a42f-4cd9-818f-aa689ab4bbad", name: "Décor", logo: "/images/Decor.png" }, // ⚠️ اسم الملف: Decor.png (بدون é)
+  { id: "0e135e6c-6221-41c9-960c-4e1a2b7a5173", name: "Capric", logo: "/images/Capric.gif" },
+  { id: "578b40da-4b05-40f2-ad11-447452e37c02", name: "Miracle", logo: "/images/Miracle.png" },
+  { id: "3ba98710-3b80-44ce-83c5-eef8d42e75ec", name: "Original", logo: "/images/Original.gif" },
+  { id: "85140bc7-c373-4145-865f-1873346544e0", name: "SRT", logo: "/images/SRT.gif" }, // تم تغييره من "SRT-.gif" إلى "SRT.gif" (يفضل تبسيط الاسم)
+  { id: "e40995d6-56d0-4c86-a2d6-1139a8e52ba8", name: "Jupiter", logo: "/images/Jupiter.gif" },
+  { id: "4c7ef6c7-00d6-4c5e-98cc-6f4e1cc700aa", name: "omega", logo: "/images/omega.gif" }, // مختلف عن Omegan
+  { id: "d08efffb-abb8-4b05-9f5c-79fec6670a78", name: "AlDahab", logo: "/images/AlDahab.png" },
 ];
+
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
