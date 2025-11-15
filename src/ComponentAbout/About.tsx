@@ -12,9 +12,9 @@ const About = () => {
       <AboutFounderSection />
        <Goals />
       <Values /> 
-     
+      <CTA />
     </div>
-  );
+  ); 
 };
 
 export default About;
