@@ -84,22 +84,23 @@ const AboutSection = () => {
             />
 
             {/* Counter Badge - يمين في العربية، يسار في الإنجليزية */}
-           <motion.div
+         <motion.div
   className={`absolute bottom-4 ${
-    isRTL ? 'right-8' : 'left-8'
-  } bg-white  rounded-r-2xl px-8 py-4 shadow-xl flex flex-col items-center justify-center transform rotate-[-3deg] max-w-[70%]`}
+    isRTL ? 'right-4 sm:right-8' : 'left-4 sm:left-8'
+  } bg-white rounded-r-2xl px-4 sm:px-8 py-3 sm:py-4 shadow-xl flex flex-col items-center justify-center 
+     transform sm:rotate-[-3deg] w-[90%] sm:max-w-[70%]`}
   initial={{ scale: 0.5, opacity: 0 }}
   animate={{ scale: 1, opacity: 1 }}
   transition={{ duration: 0.5, delay: 0.5 }}
 >
-  {/* Counter Text */}
-  <div className="text-2xl sm:text-3xl font-bold text-logo">
+  <div className="text-xl sm:text-2xl font-bold text-logo">
     {count}Y+
   </div>
   <div className="text-[10px] sm:text-xs text-logo font-semibold uppercase">
     {t('about.experience')}
   </div>
 </motion.div>
+
 
           </motion.div>
         </div>
