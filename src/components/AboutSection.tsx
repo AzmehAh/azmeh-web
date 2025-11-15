@@ -87,7 +87,7 @@ const AboutSection = () => {
            <motion.div
   className={`absolute bottom-4 ${
     isRTL ? 'right-8' : 'left-8'
-  } bg-white rounded-l-xl rounded-r-3xl px-8 py-4 shadow-xl flex flex-col items-center justify-center transform rotate-[-3deg] max-w-[70%]`}
+  } bg-white  rounded-r-3xl px-8 py-4 shadow-xl flex flex-col items-center justify-center transform rotate-[-3deg] max-w-[70%]`}
   initial={{ scale: 0.5, opacity: 0 }}
   animate={{ scale: 1, opacity: 1 }}
   transition={{ duration: 0.5, delay: 0.5 }}
