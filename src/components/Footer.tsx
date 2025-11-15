@@ -74,7 +74,7 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-white text-lg mb-5">
               {t('footer.followUs')}
-               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-logo"></span>
+               
             </h4>
             <div className="flex gap-3">
               <a
