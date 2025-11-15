@@ -94,12 +94,6 @@ const AboutSection = () => {
   animate={{ scale: 1, opacity: 1 }}
   transition={{ duration: 0.5, delay: 0.5 }}
 >
-  {/* Optional small logo on the side */}
-  <img 
-    src="/images/Azmeh-Paints-Logo.png"
-    alt="Brand Logo"
-    className="w-12 h-12 object-contain rounded-full"
-  />
 
   {/* Counter Text */}
   <div className="flex flex-col items-start">
