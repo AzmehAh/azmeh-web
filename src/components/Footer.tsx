@@ -55,7 +55,7 @@ const Footer = () => {
             <h4 className="font-bold text-white text-lg mb-5">
               {t('footer.contactInfo')}
             </h4>
-            <div className="space-y-4 text-gray-400">
+            <div className="space-y-4 text-white">
               <div className="flex items-start gap-3">
                 <Mail className="w-5 h-5 mt-0.5 flex-shrink-0" />
                 <span className="text-sm break-all">azmeh@azmeh.com</span>
@@ -107,7 +107,7 @@ const Footer = () => {
               </a>
             </div>
             <div className="mt-6 pt-6 border-t border-gray-800">
-              <p className="text-gray-500 text-xs">{t('footer.stayUpdated')}</p>
+              <p className="text-white text-xs">{t('footer.stayUpdated')}</p>
             </div>
           </div>
         </div>
