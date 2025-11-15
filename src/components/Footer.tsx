@@ -31,7 +31,7 @@ const Footer = () => {
           <div>
             <h4 className="font-bold text-white text-lg mb-5">
               {t('footer.quickLinks')}
-               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-logo"></span>
+               <span className="absolute bottom-0 left-0 w-full h-0.5 bg-red"></span>
             </h4>
             <ul className="space-y-3">
               {[
