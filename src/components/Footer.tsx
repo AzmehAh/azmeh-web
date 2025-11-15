@@ -24,9 +24,7 @@ const Footer = () => {
             <p className="text-gray-400 text-sm leading-relaxed">
               {t('footer.companyDescription')}
             </p>
-            <p className="text-gray-500 text-xs mt-2">
-              © {new Date().getFullYear()} {t('footer.copyright')}
-            </p>
+           
           </div>
 
           {/* --- Quick Links --- */}
