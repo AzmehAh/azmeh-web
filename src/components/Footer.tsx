@@ -82,7 +82,7 @@ const Footer = () => {
                 href="https://www.facebook.com/azmehpaints"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center hover:bg-[#1877F2] transition-colors duration-300"
+                className="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center  transition-colors duration-300"
                 aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5 text-white" />
@@ -91,8 +91,8 @@ const Footer = () => {
                 href="https://www.instagram.com/azmehpaints/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gradient-to-r hover:from-[#f58529] hover:via-[#dd2a7b] hover:to-[#8134af]"
-                aria-label="Instagram"
+                className="w-10 h-10 rounded-full  bg-gradient-to-r from-[#f58529] via-[#dd2a7b] to-[#8134af]  flex items-center justify-center "
+              aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5 text-white" />
               </a>
@@ -100,7 +100,7 @@ const Footer = () => {
                 href="https://wa.me/963115425058"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-[#25D366]"
+                className="w-10 h-10 rounded-full bg-[#25D366] flex items-center justify-center "
                 aria-label="WhatsApp"
               >
                 <MessageCircle className="w-5 h-5 text-white" />
