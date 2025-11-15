@@ -12,7 +12,7 @@ const About = () => {
       <AboutFounderSection />
        <Goals />
       <Values /> 
-      <CTA />
+     
     </div>
   );
 };
