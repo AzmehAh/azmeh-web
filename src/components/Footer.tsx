@@ -18,7 +18,7 @@ const Footer = () => {
               <img
                 src="/images/Azmeh-Paints-Logo.png"
                 alt="Al Azmeh Paints"
-                className="h-10 w-auto brightness-0 invert"
+                className="h-15 w-auto brightness-0 invert"
               />
             </div>
             <p className="text-white text-sm leading-relaxed">
