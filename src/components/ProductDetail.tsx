@@ -796,11 +796,11 @@ const ProductDetail = () => {
                       className="w-full h-full object-cover"
                       onError={(e) => { e.currentTarget.src = "/images/placeholder.jpg"; }}
                     />
-                   {displayBrand && brands.find(b => b.name === displayBrand)?.logo && (
+                 {product.brand && brandLogos.find(b => b.id === product.brand)?.logo && (
   <div className={`absolute top-0 flex items-center justify-center ${isRTL ? "left-10" : "right-10"}`}>
     <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
       <img
-        src={brands.find(b => b.name === displayBrand)!.logo}
+        src={brandLogos.find(b => b.id === product.brand)!.logo}
         alt={displayBrand}
         className="w-16 h-16 object-contain"
         onError={(e) => { e.currentTarget.style.display = 'none'; }}
@@ -825,18 +825,18 @@ const ProductDetail = () => {
                 </>
               ) : (
                 <div className="w-full h-80 lg:h-96 bg-gray-200 rounded-2xl flex items-center justify-center relative">
-                  {brands.find(b => product.brand && product.brand.toLowerCase().includes(b.name.toLowerCase()))?.logo && (
-                    <div className={`absolute top-0 flex items-center justify-center ${isRTL ? "left-10" : "right-10"}`}>
-                      <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
-                        <img
-                          src={brands.find(b => product.brand && product.brand.toLowerCase().includes(b.name.toLowerCase()))!.logo}
-                          alt=""
-                          className="w-16 h-16 object-contain"
-                          onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                        />
-                      </div>
-                    </div>
-                  )}
+                {product.brand && brandLogos.find(b => b.id === product.brand)?.logo && (
+  <div className={`absolute top-0 flex items-center justify-center ${isRTL ? "left-10" : "right-10"}`}>
+    <div className="bg-white rounded-t-none rounded-b-md p-4 shadow-md">
+      <img
+        src={brandLogos.find(b => b.id === product.brand)!.logo}
+        alt={displayBrand}
+        className="w-16 h-16 object-contain"
+        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+      />
+    </div>
+  </div>
+)}
                   <p className="text-gray-500">{t('products.image')}</p>
                 </div>
               )}
