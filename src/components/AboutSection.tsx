@@ -78,7 +78,7 @@ const AboutSection = () => {
   {/* Container */}
   <div className="relative w-full max-w-md lg:max-w-lg">
     <img
-      src="./images/about_png"
+      src="./images/about_png.jpg"
       alt="Al Azmeh Paints Company"
       className="w-full h-auto rounded-xl shadow-lg object-cover"
     />
