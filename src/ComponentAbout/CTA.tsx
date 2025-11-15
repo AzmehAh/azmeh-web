@@ -9,8 +9,7 @@ const CTA = () => {
 
   return (
     <section className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-       
+     
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <motion.button
@@ -29,8 +28,8 @@ const CTA = () => {
               {t('cta.buttons.products')}
             </motion.button>
           </div>
-        </motion.div>
-      </div>
+      
+    
     </section>
   );
 };
