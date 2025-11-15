@@ -42,16 +42,18 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
             className={`text-center lg:text-left ${isRTL ? 'lg:text-right' : ''}`}
           >
-             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2 ">
+            <h3 className="text-sm uppercase text-logo mb-2">
               {t('about.legacy')}
-            </h2>
+            </h3>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
               {t('about.title')}
             </h2>
             <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-4 sm:mb-6">
               {t('about.description1')}
             </p>
-           
+            <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8">
+              {t('about.description2')}
+            </p>
           <Link
   to="/about"
   className="inline-flex items-center but group px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
@@ -73,7 +75,7 @@ const AboutSection = () => {
           <motion.div
             initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.2 }} 
             className="relative flex justify-center"
           >
             {/* Company Image */}
@@ -84,29 +86,21 @@ const AboutSection = () => {
             />
 
             {/* Counter Badge - يمين في العربية، يسار في الإنجليزية */}
-           {/* Counter Badge - Sticker/Brand Style */}
-{/* Counter Badge - Brand Sticker Style */}
-<motion.div
-  className={`absolute bottom-4 ${
-    isRTL ? 'right-8' : 'left-8'
-  } bg-white rounded-l-xl rounded-r-3xl px-6 py-3 shadow-xl flex items-center space-x-3 transform rotate-[-3deg]`}
-  initial={{ scale: 0.5, opacity: 0 }}
-  animate={{ scale: 1, opacity: 1 }}
-  transition={{ duration: 0.5, delay: 0.5 }}
->
-
-  {/* Counter Text */}
-  <div className="flex flex-col items-start">
-    <div className="text-xl sm:text-2xl font-bold text-logo">
-      {count}Y+
-    </div>
-    <div className="text-[10px] sm:text-xs text-logo font-semibold uppercase">
-      {t('about.experience')}
-    </div>
-  </div>
-</motion.div>
-
-
+            <motion.div
+              className={`absolute bottom-0 ${
+              isRTL ? 'right-0 sm:right-4 md:right-8' : 'left-0 sm:left-4 md:left-8'
+              } bg-white rounded-xl shadow-xl w-24 h-24 sm:w-28 sm:h-28 flex flex-col items-center justify-center border-2 border-logo`}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+            >
+              <div className="text-xl sm:text-2xl font-bold text-logo">
+                {count}Y+
+              </div>
+              <div className="text-[10px] sm:text-xs text-logo font-semibold uppercase">
+                {t('about.experience')}
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </div>
