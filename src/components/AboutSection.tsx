@@ -85,21 +85,33 @@ const AboutSection = () => {
 
             {/* Counter Badge - يمين في العربية، يسار في الإنجليزية */}
            {/* Counter Badge - Sticker/Brand Style */}
+{/* Counter Badge - Brand Sticker Style */}
 <motion.div
-  className={`absolute bottom-0 ${
-    isRTL ? 'right-10' : 'left-10'
-  } bg-white rounded-t-md rounded-b-lg p-4 shadow-lg flex flex-col items-center justify-center transform rotate-[-5deg] border border-gray-200`}
+  className={`absolute bottom-4 ${
+    isRTL ? 'right-8' : 'left-8'
+  } bg-white rounded-l-xl rounded-r-3xl px-6 py-3 shadow-xl flex items-center space-x-3 transform rotate-[-3deg]`}
   initial={{ scale: 0.5, opacity: 0 }}
   animate={{ scale: 1, opacity: 1 }}
   transition={{ duration: 0.5, delay: 0.5 }}
 >
-  <div className="text-2xl sm:text-3xl font-bold text-logo">
-    {count}Y+
-  </div>
-  <div className="text-[10px] sm:text-xs text-logo font-semibold uppercase">
-    {t('about.experience')}
+  {/* Optional small logo on the side */}
+  <img
+    src="/images/logo.png"
+    alt="Brand Logo"
+    className="w-10 h-10 object-contain rounded-full"
+  />
+
+  {/* Counter Text */}
+  <div className="flex flex-col items-start">
+    <div className="text-xl sm:text-2xl font-bold text-logo">
+      {count}Y+
+    </div>
+    <div className="text-[10px] sm:text-xs text-logo font-semibold uppercase">
+      {t('about.experience')}
+    </div>
   </div>
 </motion.div>
+
 
           </motion.div>
         </div>
