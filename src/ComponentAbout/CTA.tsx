@@ -9,8 +9,20 @@ const CTA = () => {
 
   return (
     <section className="py-20 bg-gray-50">
-     
-
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 50 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="bg-logo rounded-3xl p-12 text-white"
+        >
+          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+            {t('cta.title')}
+          </h2>
+          <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+            {t('cta.subtitle')}
+          </p>
+ 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <motion.button
               whileTap={{ scale: 0.95 }}
@@ -28,8 +40,8 @@ const CTA = () => {
               {t('cta.buttons.products')}
             </motion.button>
           </div>
-      
-    
+        </motion.div>
+      </div>
     </section>
   );
 };
