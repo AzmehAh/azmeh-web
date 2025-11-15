@@ -85,7 +85,7 @@ const AboutSection = () => {
 
     {/* Counter Badge - ملتصقة بحافة الصورة */}
     <motion.div
-      className="absolute bottom-4 right-0 translate-x-1/2  
+      className="absolute bottom-4 Left-0 translate-x-1/2  
        bg-white rounded-r-2xl px-4 sm:px-6 py-2.5 sm:py-3.5 shadow-xl flex flex-col items-center justify-center transform rotate-[-3deg] whitespace-nowrap"
       initial={{ scale: 0.5, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
