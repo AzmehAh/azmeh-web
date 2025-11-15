@@ -93,31 +93,30 @@
   border-right: 0;
   border-left-width: 1px;
 }
-.menu-item {
+..menu-item {
   position: relative;
   padding-left: 0.5rem;
   transition: all 0.3s ease;
-  display: flex;
-  align-items: center; /* يخلي الخط والنص بنفس المستوى */
-  height: 40px; /* حدد ارتفاع ثابت */
+  display: inline-block; /* لتسهيل استخدام ::before */
+  height: 40px;
 }
 
+/* الخط الصغير أسفل النص */
 .menu-item::before {
   content: '';
+  position: absolute;
+  bottom: 0; /* الخط عند الأسفل */
+  left: 0;   /* يبدأ من بداية النص */
   width: 0;
   height: 2px;
   background-color: #2C5DB6;
   transition: width 0.3s ease;
-  margin-right: 5px; /* مسافة صغيرة عن النص */
-}
- 
-.menu-item:hover {
-  padding-left: 0.5rem;
 }
 
 .menu-item:hover::before {
-  width: 15px;
+  width: 15px; /* طول الخط عند المرور */
 }
+
 
 @layer utilities {
   @keyframes dropdown {
