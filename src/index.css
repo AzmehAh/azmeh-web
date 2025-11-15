@@ -136,19 +136,19 @@
   }
 }
 /* styles.css */
-..nav-link {
+.nav-link {
   position: relative;
-  padding-bottom: 4px;
+  padding-bottom: 4px; /* نفس الـ pb-1 */
 }
 
 .nav-link::after {
   content: '';
   position: absolute;
-  inset-inline-start: 0;   /* يبدأ حسب اتجاه الصفحة RTL/LTR */
+ inset-inline-start: 0; 
   bottom: 0;
   width: 0;
   height: 2px;
-  background-color: #0055A3;
+  background-color: #0055A3; /* tailwind yellow-400 */
   transition: width 0.3s ease;
 }
 
