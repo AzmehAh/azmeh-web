@@ -315,7 +315,7 @@ const Products = () => {
                   </label>
                   <button
                     onClick={() => setSortOrder(prev => prev === 'asc' ? 'desc' : 'asc')}
-                    className="flex items-center space-x-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors w-full"
+                    className="flex items-center gap-2 px-4 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors w-full"
                   >
                     <SortAsc className={`w-4 h-4 ${sortOrder === 'desc' ? 'rotate-180' : ''} transition-transform`} />
                     <span className="text-sm">
@@ -352,7 +352,7 @@ const Products = () => {
                             {options.map((option) => (
                               <label
                                 key={option.id}
-                                className="flex items-center space-x-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
+                                className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 p-2 rounded-md transition-colors"
                               >
                                 <input
                                   type="checkbox"
@@ -381,7 +381,7 @@ const Products = () => {
                         values.map((value) => (
                           <span
                             key={`${category}-${value}`}
-                            className="inline-flex items-center space-x-1 px-3 py-1 bg-logo text-white text-xs rounded-full"
+                            className="inline-flex items-center gap-1 px-3 py-1 bg-logo text-white text-xs rounded-full"
                           >
                             <span>{value}</span>
                             <button
