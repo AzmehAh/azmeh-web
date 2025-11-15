@@ -94,7 +94,7 @@ const AboutSection = () => {
       {t('about.experience')}
     </div>
   </motion.div>
-</div>
+
 
 
           </motion.div>
