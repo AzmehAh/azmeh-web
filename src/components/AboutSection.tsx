@@ -96,7 +96,7 @@ const AboutSection = () => {
 >
   {/* Optional small logo on the side */}
   <img 
-    src="/images/logo.png"
+    src="/images/Azmeh-Paints-Logo.png"
     alt="Brand Logo"
     className="w-10 h-10 object-contain rounded-full"
   />
