@@ -14,9 +14,9 @@ const CTA = () => {
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="bg-logo rounded-3xl p-12 text-white"
+          className="bg-logo rounded-2xl p-12 text-white"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6">
+          <h2 className="text-2xl md:text-5xl font-bold mb-6">
             {t('cta.title')}
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
