@@ -17,7 +17,7 @@ const Goals = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-2xl md:text-3xl font-bold mb-6 text-gray-900">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-gray-900">
               {t('goals.title')}
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
