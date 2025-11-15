@@ -69,8 +69,14 @@ const AboutSection = () => {
 </Link>
           </motion.div>
 
-       {/* Right Content - Company Image with Counter Badge */}
-<div className="relative flex justify-center w-full max-w-md lg:max-w-lg mx-auto">
+          {/* Right Content - Company Image with Counter Badge */}
+          <motion.div
+            initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative flex justify-center"
+          >
+       <div className="relative flex justify-center w-full max-w-md lg:max-w-lg mx-auto">
   {/* Company Image */}
   <img
     src="./images/about_png"
@@ -91,7 +97,6 @@ const AboutSection = () => {
     <div className="text-[10px] sm:text-xs text-logo font-semibold uppercase">
       {t('about.experience')}
     </div>
-  </div>
 
 
           </motion.div>
