@@ -19,15 +19,18 @@ const BrandsSection = () => {
 
   const brands = [
     { name: "Azmeh Paints", logo: "/images/Azmeh-Paints-Logo.png" },
-    { name: "SRT", logo: "/images/SRT-.gif" },
+    { name: "SRT", logo: "/images/SRT.gif" },
     { name: "Original", logo: "/images/Original.gif" },
     { name: "Omegan", logo: "/images/Omegan.gif" },
     { name: "Mlonati", logo: "/images/Mlonati.gif" },
     { name: "Jupiter", logo: "/images/Jupiter.gif" },
     { name: "COPRAbEL", logo: "/images/COPRAbEL.jpg" },
     { name: "Capric", logo: "/images/Capric.gif" },
-    { name: "Azur", logo: "/images/Azur-.png" },
+    { name: "Azur", logo: "/images/Azur.png" },
     { name: "AlDahab", logo: "/images/AlDahab.png" },
+    { name: "Miracle", logo: "/images/Miracle.png" },
+    { name: "Décor", logo: "/images/Decor.png" },
+    
   ];
 
   const duplicated = [...brands, ...brands, ...brands];
