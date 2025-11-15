@@ -26,7 +26,7 @@ const Footer = () => {
             </p>
            
           </div>
-
+ 
           {/* --- Quick Links --- */}
           <div>
             <h4 className="font-bold text-white text-lg mb-5">
