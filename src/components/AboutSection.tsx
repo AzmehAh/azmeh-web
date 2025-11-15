@@ -42,7 +42,7 @@ const AboutSection = () => {
             transition={{ duration: 0.6 }}
             className={`text-center lg:text-left ${isRTL ? 'lg:text-right' : ''}`}
           >
-             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 ">
+             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-1 ">
               {t('about.legacy')}
             </h2>
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
