@@ -21,7 +21,7 @@ const Footer = () => {
                 className="h-10 w-auto"
               />
             </div>
-            <p className="text-gray-400 text-sm leading-relaxed">
+            <p className="text-white text-sm leading-relaxed">
               {t('footer.companyDescription')}
             </p>
            
