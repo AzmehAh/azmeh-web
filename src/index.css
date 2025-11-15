@@ -98,7 +98,7 @@
   padding-left: 0.5rem;
   transition: all 0.3s ease;
   display: flex;
-  align-items: center; /* يخلي الخط والنص بنفس المستوى */
+  align-items: end; /* يخلي الخط والنص بنفس المستوى */
   height: 40px; /* حدد ارتفاع ثابت */
 } 
 
