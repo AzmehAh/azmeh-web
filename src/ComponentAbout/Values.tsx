@@ -17,7 +17,7 @@ const Values = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6">
             {t('values.title')}
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
