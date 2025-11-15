@@ -70,40 +70,38 @@ const AboutSection = () => {
           </motion.div>
 
           {/* Right Content - Company Image with Counter Badge */}
-<motion.div
-  initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
-  whileInView={{ opacity: 1, x: 0 }}
-  transition={{ duration: 0.6, delay: 0.2 }}
-  className="relative w-full max-w-md lg:max-w-lg mx-auto"
->
-  {/* Container لربط العنصر المطلق بالصورة */}
-  <div className="relative w-full pt-[75%]"> {/* نسبة 4:3 أو 3:2 — يمكنك تعديلها */}
-    <img
-      src="./images/about_png"
-      alt="Al Azmeh Paints Company"
-      className="absolute inset-0 w-full h-full object-cover rounded-xl shadow-lg"
-    />
+          <motion.div
+            initial={{ opacity: 0, x: isRTL ? -20 : 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="relative flex justify-center"
+          >
+            {/* Company Image */}
+            <img
+              src="./images/about_png"
+              alt="Al Azmeh Paints Company"
+              className="rounded-xl shadow-lg object-cover w-full max-w-md lg:max-w-lg"
+            />
 
-    {/* Counter Badge - مصمم ليكون متجاوباً */}
-    <motion.div
-      className={`absolute bottom-4 ${
-        isRTL ? 'right-4 sm:right-6' : 'left-4 sm:left-6'
-      } bg-white rounded-r-2xl px-4 sm:px-6 py-2.5 sm:py-3.5 shadow-lg flex flex-col items-center justify-center z-10`}
-      initial={{ scale: 0.5, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.5, delay: 0.5 }}
-    >
-      <div className="text-lg sm:text-2xl font-bold text-logo whitespace-nowrap">
-        {count}Y+
-      </div>
-      <div className="text-[9px] sm:text-xs text-logo font-semibold uppercase mt-0.5">
-        {t('about.experience')}
-      </div>
-    </motion.div>
+            {/* Counter Badge - يمين في العربية، يسار في الإنجليزية */}
+           <motion.div
+  className={`absolute bottom-4 ${
+    isRTL ? 'right-8' : 'left-8'
+  } bg-white  rounded-r-2xl px-8 py-4 shadow-xl flex flex-col items-center justify-center transform rotate-[-3deg] max-w-[70%]`}
+  initial={{ scale: 0.5, opacity: 0 }}
+  animate={{ scale: 1, opacity: 1 }}   
+  transition={{ duration: 0.5, delay: 0.5 }}
+>
+  {/* Counter Text */} 
+  <div className="text-2xl sm:text-3xl font-bold text-logo">
+    {count}Y+
+  </div>
+  <div className="text-[10px] sm:text-xs text-logo font-semibold uppercase">
+    {t('about.experience')}
   </div>
 </motion.div>  
 
-         
+          </motion.div>
         </div>
       </div>
     </section>
