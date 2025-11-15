@@ -169,7 +169,7 @@ const BulletinDetail = () => {
             <span className="mx-2">/</span>
             <span className="text-gray-900">{categoryDisplayName}</span>
             <span className="mx-2">/</span>
-            <span className="text-gray-900">{subcategory}</span>
+           
             <span className="mx-2">/</span>
             <span className="text-gray-900">{title}</span> 
           </div> 
