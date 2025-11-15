@@ -96,7 +96,6 @@ const AboutSection = () => {
   </motion.div>
 
 
-
           </motion.div>
         </div>
       </div>
