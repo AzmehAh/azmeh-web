@@ -98,7 +98,7 @@ const AboutSection = () => {
   <img 
     src="/images/Azmeh-Paints-Logo.png"
     alt="Brand Logo"
-    className="w-10 h-10 object-contain rounded-full"
+    className="w-13 h-13 object-contain rounded-full"
   />
 
   {/* Counter Text */}
