@@ -282,7 +282,7 @@ const BulletinDetail = () => {
            <Link
   to="/contact"
   className="inline-flex  items-center justify-center w-full group px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
-             focus:outline-none focus:ring-2 focus:ring-logo/20 
+           focus:outline-none focus:ring-2 focus:ring-logo/20
              font-semibold text-sm sm:text-base"
 >
   {t('bulletin.contactTeam')}
