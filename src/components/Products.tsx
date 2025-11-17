@@ -303,7 +303,7 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
                   {getActiveFiltersCount() > 0 && (
                     <button
                       onClick={clearFilters}
-                      className="text-sm text-logo hover:text-white/20 font-medium"
+                      className="text-sm text-logo  font-medium"
                     >
                       {t('products.clearAll')}
                     </button>
