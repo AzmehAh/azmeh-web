@@ -222,7 +222,7 @@ const Hero = () => {
 
  
   return (
-    <div className="relative w-full h-screen overflow-hidden mt-20 md:mt-0">
+    <div className="relative w-full h-screen overflow-hidden md:mt-0 md:mt-0">
       <div className="flex h-full">
         {categories.map((category, index) => {
           const isActive = activeIndex === index;
