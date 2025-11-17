@@ -242,7 +242,7 @@ return (
           )}
         </div>
 
-        <div className="mt-16 text-center">
+        {/*  <div className="mt-16 text-center">
           <div className="bg-logo rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">{t('faq.stillHaveQuestions')}</h3>
             <p className="text-white mb-6 max-w-2xl mx-auto">
@@ -258,7 +258,7 @@ return (
              
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
