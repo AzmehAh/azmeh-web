@@ -25,8 +25,8 @@ interface Product {
   images: string[];
   type: string;
   brand: string;
-  material : string[]; // ✅ تغيير إلى مصفوفة
-  usage: string[];    // ✅ تغيير إلى مصفوفة
+  material : string[]; 
+  usage: string[];   
   packaging: string[];
   technical_specs: { key: string; value: string; standard: string }[];
   features: string[];
@@ -125,13 +125,13 @@ const brandLogos = [
   { id: "a3f4f300-4052-4b03-b7d8-437eba0607da", name: "Azur", logo: "/images/Azur.png" },
   { id: "835a9d0b-3ab1-4a25-bf95-176559412d62", name: "COPRAbEL.", logo: "/images/COPRAbEL.jpg" },
   { id: "28071c24-3ac5-464f-ab5d-7caab121d1c2", name: "Omegan", logo: "/images/Omegan.gif" },
-  { id: "250cea8a-a42f-4cd9-818f-aa689ab4bbad", name: "Décor", logo: "/images/Decor.png" }, // ⚠️ اسم الملف: Decor.png (بدون é)
+  { id: "250cea8a-a42f-4cd9-818f-aa689ab4bbad", name: "Décor", logo: "/images/Decor.png" }, 
   { id: "0e135e6c-6221-41c9-960c-4e1a2b7a5173", name: "Capric", logo: "/images/Capric.gif" },
   { id: "578b40da-4b05-40f2-ad11-447452e37c02", name: "Miracle", logo: "/images/Miracle.png" },
   { id: "3ba98710-3b80-44ce-83c5-eef8d42e75ec", name: "Original", logo: "/images/Original.gif" },
-  { id: "85140bc7-c373-4145-865f-1873346544e0", name: "SRT", logo: "/images/SRT.gif" }, // تم تغييره من "SRT-.gif" إلى "SRT.gif" (يفضل تبسيط الاسم)
+  { id: "85140bc7-c373-4145-865f-1873346544e0", name: "SRT", logo: "/images/SRT.gif" }, 
   { id: "e40995d6-56d0-4c86-a2d6-1139a8e52ba8", name: "Jupiter", logo: "/images/Jupiter.gif" },
-  { id: "4c7ef6c7-00d6-4c5e-98cc-6f4e1cc700aa", name: "omega", logo: "/images/omega.gif" }, // مختلف عن Omegan
+  { id: "4c7ef6c7-00d6-4c5e-98cc-6f4e1cc700aa", name: "omega", logo: "/images/omega.gif" }, 
   { id: "d08efffb-abb8-4b05-9f5c-79fec6670a78", name: "AlDahab", logo: "/images/AlDahab.png" },
 ];
 
@@ -235,7 +235,7 @@ const ProductDetail = () => {
     setLoading(true);
     setError(null);
 
-    // 1. جلب بيانات المنتج الأساسية
+
     const { data: productData, error: productError } = await supabase
       .from('products')
       .select('*')
@@ -248,7 +248,7 @@ const ProductDetail = () => {
       return;
     }
 
-    // 2. جلب الصور
+  
     const { data: imagesData } = await supabase
       .from('product_images')
       .select('*')
@@ -256,7 +256,7 @@ const ProductDetail = () => {
       .order('is_main', { ascending: false })
       .order('sort_order', { ascending: true });
 
-    // 3. ✅ جلب material_id و usage_id من الجدول الوسيط
+ 
     const { data: linkedItems, error: linkError } = await supabase
       .from('product_materials')
       .select('material_id')
@@ -266,7 +266,6 @@ const ProductDetail = () => {
 
     const allLinkedIds = linkedItems.map(item => item.material_id);
 
-    // 4. جلب تصنيفات المواد والاستخدامات (للفصل بينها)
     const { data: filterValues } = await supabase
       .from('product_filter_values')
       .select('id, filter_type_id, product_filter_types(name)')
@@ -283,7 +282,7 @@ const ProductDetail = () => {
     const materialArray = allLinkedIds.filter(id => materialTypeIds.includes(id));
     const usageArray = allLinkedIds.filter(id => usageTypeIds.includes(id));
 
-    // 5. جلب الصورة الرئيسية
+
     let mainImage = null;
     try {
       mainImage = await api.getMainProductImage(productId);
@@ -291,7 +290,6 @@ const ProductDetail = () => {
       console.warn('Main image fallback used');
     }
 
-    // 6. بناء الكائن النهائي
     const formattedProduct: Product = {
       id: productData.id,
       name: getLocalizedField(productData.name, productData.name_ar) || 'No Name',
@@ -308,8 +306,8 @@ const ProductDetail = () => {
         images: imagesData.map(img => img.image_url).filter(Boolean),
         type: productData.type_id || "",
       brand: productData.brand_id || "",
-      material: materialArray, // ✅ الآن صحيح
-      usage: usageArray,       // ✅ الآن صحيح
+      material: materialArray,
+      usage: usageArray,      
         packaging: parseArrayField(getLocalizedField(productData.packaging, productData.packaging_ar)),
         technical_specs: TECHNICAL_FIELDS
           .map(({ key, keyAr }) => {
@@ -443,7 +441,7 @@ const ProductDetail = () => {
       printElement.appendChild(section);
     };
 
-    // ✅ عرض التصنيفات بشكل صحيح (يدعم المصفوفات)
+
     const type = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
     const material = product.material.length
       ? product.material.map(id => translateFilterValue('Material Type', id, filterValueMap)).join(', ')
@@ -696,9 +694,8 @@ const ProductDetail = () => {
     );
   }
 
-  // ✅ عرض المواد والاستخدامات في الواجهة
  const displayBrand = product.brand 
-  ? translateFilterValue('brand_id', product.brand, filterValueMap) // ← غيرت 'Brand' إلى 'brand_id'
+  ? translateFilterValue('brand_id', product.brand, filterValueMap) 
   : '';
   const displayType = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
   const displayMaterial = product.material.length
@@ -708,7 +705,7 @@ const ProductDetail = () => {
     ? product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap)).join(', ')
     : '';
 
-  // ✅ Safety note fallback للعرض
+
   const displayedSafetyNote = product.safety_note || getSafetyNoteFallback();
 
   return (
