@@ -9,7 +9,7 @@ const Values = () => {
   const icons = [Shield, Lightbulb, Globe, Users, Handshake, Award];
 
   return (
-    <section className="py-25 bg-white">
+    <section className="py-26 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
