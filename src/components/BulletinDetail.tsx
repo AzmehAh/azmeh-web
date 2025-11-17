@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, FileText } from 'lucide-react';
@@ -275,18 +275,19 @@ const BulletinDetail = () => {
 
           {/* Contact & Download Section */}
           <div className="mt-16">
-            <div className="bg-gray-900 rounded-2xl p-8 text-white text-center">
+            <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl p-8 text-white text-center">
               <h3 className="text-2xl font-bold mb-4">{t('bulletin.needHelpTitle')}</h3>
               <p className="text-gray-300 mb-6 max-w-2xl mx-auto">{t('bulletin.needHelpText')}</p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-           <Link
-  to="/contact"
-  className="inline-flex  items-center justify-center w-full group px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
-           focus:outline-none focus:ring-2 focus:ring-logo/20
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center but group px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
+             focus:outline-none focus:ring-2 focus:ring-logo/20 
              font-semibold text-sm sm:text-base"
->
-  {t('bulletin.contactTeam')}
-</Link>     <button
+                >
+                  {t('bulletin.contactTeam')} 
+                </Link>
+                <button
                   onClick={handleDownloadPDF}
                   className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm"
                 >
