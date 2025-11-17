@@ -187,11 +187,11 @@ const BulletinDetail = () => {
           </button>
 
           <div className="flex items-center gap-3 mb-4">
-            <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium  max-w-full break-words whitespace-normal">
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium ">
               {categoryDisplayName}
             </span>
-            <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium  max-w-full break-words whitespace-normal">
-              {subcategory}
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
+              {subcategory} 
             </span>
           </div>
 
