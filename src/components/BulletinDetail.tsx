@@ -59,7 +59,7 @@ const BulletinDetail = () => {
     fetchData();
   }, [id]);
 
-  // 🔽 دالة تنزيل PDF محسّنة
+
   const handleDownloadPDF = () => {
     if (!bulletin) return;
 
@@ -78,7 +78,6 @@ const BulletinDetail = () => {
     printElement.style.color = '#1f2937';
     printElement.style.fontSize = '16px';
 
-    // إضافة صورة الغلاف
     if (bulletin.cover_image) {
       const img = document.createElement('img');
       img.src = bulletin.cover_image;
@@ -91,7 +90,7 @@ const BulletinDetail = () => {
       printElement.appendChild(img);
     }
 
-    // العنوان
+
     const heading = document.createElement('h1');
     heading.textContent = title;
     heading.style.fontSize = '28px';
@@ -100,13 +99,12 @@ const BulletinDetail = () => {
     heading.style.color = '#1f2937';
     printElement.appendChild(heading);
 
-    // المحتوى
     const contentDiv = document.createElement('div');
     contentDiv.innerHTML = content;
     contentDiv.style.lineHeight = '1.8';
     printElement.appendChild(contentDiv);
 
-    // اسم الملف (آمن ويدعم العربية)
+
     const safeTitle = title
       .replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '_')
       .replace(/\s+/g, '_')
