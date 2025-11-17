@@ -273,7 +273,7 @@ const JobApplication = () => {
                 name="phone" 
                 value={formData.phone}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition-all   ${isRTL ? 'rtl' : 'ltr'} ${
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition-all   ${
                   errors.phone 
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
                     : 'border-gray-200 focus:border-logo focus:ring-2 focus:ring-logo/20'
@@ -282,7 +282,7 @@ const JobApplication = () => {
               />
               {errors.phone && (
                 <motion.p
-                  initial={{ opacity: 0, y: -5 }}
+                  initial={{ opacity: 0, y: -5 }} 
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-2 text-sm text-red-600 flex items-center"
                 >
