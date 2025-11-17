@@ -186,8 +186,8 @@ const BulletinDetail = () => {
             {isRTL ? <ArrowLeft className="w-4 h-4 ml-2" /> : null}
           </button>
 
-        <div className="flex flex-wrap justify-center items-center gap-3 mb-4 w-full">
-  <span className="px-4 py-3 bg-white/20 rounded-full text-sm font-medium 
+          <div className="flex items-center gap-3 mb-4">
+            <span className="px-4 py-3 bg-white/20 rounded-full text-sm font-medium 
                    max-w-[calc(100%-1rem)] break-words whitespace-pre-line 
                    overflow-hidden text-ellipsis">
     {categoryDisplayName}
@@ -197,7 +197,8 @@ const BulletinDetail = () => {
                    overflow-hidden text-ellipsis">
     {subcategory}
   </span>
-</div>
+          </div>
+
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">{title}</h1>
           <p className="text-xl text-blue-100 leading-relaxed">{shortDescription}</p>
         </div>
