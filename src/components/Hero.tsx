@@ -66,7 +66,15 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
   };
 
   return (
-    <div className="relative w-full h-screen overflow-hidden ">
+    <div 
+      className="relative w-screen h-screen overflow-hidden"
+      style={{
+        direction: isRTL ? 'rtl' : 'ltr',
+        textAlign: isRTL ? 'right' : 'left',
+        transform: 'translateZ(0)',
+        willChange: 'transform',
+      }}
+    >
       {categories.map((category, index) => {
         const isActive = index === activeIndex;
         return (
@@ -115,7 +123,6 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
         );
       })}
 
-     
       <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex gap-2">
         {categories.map((_, idx) => (
           <button
@@ -125,13 +132,12 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
               idx === activeIndex ? 'bg-white w-4' : 'bg-white/50'
             }`}
             aria-label={`Go to slide ${idx + 1}`}
-          />
+          /> 
         ))}
       </div>
     </div>
   );
 };
-
 
 const Hero = () => {
   const { t, i18n } = useTranslation();
