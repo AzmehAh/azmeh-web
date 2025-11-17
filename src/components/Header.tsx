@@ -385,32 +385,35 @@ const Header = () => {
             <span>{t('header.contactAndJob')}</span>
             <ChevronDown className={`w-4 h-4 transition-transform ${activeMobileDropdown === 'contact' ? 'rotate-180' : ''}`} />
           </button>
-          <AnimatePresence>
-            {activeMobileDropdown === 'contact' && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.25 }}
-                className="overflow-hidden bg-gray-50 rounded-lg mt-2 p-4 space-y-2"
-              >
-                <Link
-                  to="/contact"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
-                >
-                  {t('header.contactUs')}
-                </Link>
-                <Link
-                  to="/job-application"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
-                >
-                  {t('header.applyForJob')}
-                </Link>
-              </motion.div>
-            )}
-          </AnimatePresence>
+        <AnimatePresence>
+  {activeMobileDropdown === 'contact' && (
+    <motion.div
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: 'auto' }}
+      exit={{ opacity: 0, height: 0 }}
+      transition={{ duration: 0.25 }}
+      className="overflow-hidden bg-gray-50 rounded-lg mt-2" // ← بدون p-4 هنا
+    >
+      {/* ✅ ضع الـ padding هنا بدلًا من العنصر الخارجي */}
+      <div className="p-4 space-y-2">
+        <Link
+          to="/contact"
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+        >
+          {t('header.contactUs')}
+        </Link>
+        <Link
+          to="/job-application"
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="block text-gray-600 hover:text-logo py-2 px-3 rounded-md transition-colors duration-200 text-sm hover:bg-white"
+        >
+          {t('header.applyForJob')}
+        </Link>
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
         </div>
  
        <div
