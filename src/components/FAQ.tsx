@@ -12,7 +12,7 @@ const FAQ = () => {
   const [faqCategories, setFaqCategories] = useState<(FAQCategory & { faq_items: FAQItem[] })[]>([]);
   const [loading, setLoading] = useState(true);
   const { i18n, t } = useTranslation();
-  const currentLang = i18n.language; // "ar" or "en"
+  const currentLang = i18n.language; 
 const isRTL = currentLang === 'ar';
   useEffect(() => {
     fetchFAQData();
