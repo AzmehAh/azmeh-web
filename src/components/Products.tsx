@@ -102,35 +102,47 @@ const Products = () => {
 
     try {
       setProductsLoading(true);
-      const { data: productsData, error } = await supabase
-        .from('products')
-        .select(`
-          *,
-          product_images(*)
-        `)
-        .eq('status', 'active')
-        .order('created_at', { ascending: false });
+    // في fetchProducts() داخل useMemo
+const { data: productsData, error } = await supabase
+  .from('products')
+  .select(`
+    *,
+    product_images(*),
+    product_materials(material_id)
+  `)
+  .eq('status', 'active')
+  .order('created_at', { ascending: false });
 
-      if (error) throw error;
+if (error) throw error;
 
-      const formattedProducts = (productsData || []).map(product => {
-        const mainImage = product.product_images.find((img: any) => img.is_main) || 
-                          product.product_images[0];
-        
-        return {
-          id: product.id,
-          name: product.name,
-          name_ar: product.name_ar || product.name,
-          code: product.code,
-          description: product.description,
-          description_ar: product.description_ar || product.description,
-          image: mainImage?.image_url || '',
-          type: product.type_id || "",
-          brand: product.brand_id || "",
-          material: product.material_id || "",
-          usage: product.usage_id || "",
-        };
-      });
+const formattedProducts = (productsData || []).map(product => {
+  const mainImage = product.product_images.find((img: any) => img.is_main) || 
+                    product.product_images[0];
+
+  // ⚠️ هنا التغيير: استخراج material_ids وتقسيمها إلى مجموعتين
+  const materialIds = product.product_materials?.map(pm => pm.material_id) || [];
+
+  // 👇 افترض أن لديك طريقة لتحديد نوع material_id (مثلاً: باستخدام جدول آخر أو فلتر)
+  // لكن بما أنك لم تذكر ذلك، سنستخدم حلًا بسيطًا: تخزين جميع IDs في مصفوفة واحدة
+  // وسنعتمد على أن filterOptions سيحدد أي ID ينتمي لأي فلتر
+
+  return {
+    id: product.id,
+    name: product.name,
+    name_ar: product.name_ar || product.name,
+    code: product.code,
+    description: product.description,
+    description_ar: product.description_ar || product.description,
+    image: mainImage?.image_url || '',
+
+    type: product.type_id || "",
+    brand: product.brand_id || "",
+
+    // ✅ استخدم نفس اسم الفئة من filterOptions
+    "material type": materialIds, // ⬅️ الآن هي مصفوفة من IDs
+    "application fields": materialIds, // ⬅️ نفس المصفوفة، لأنهما في نفس الجدول
+  };
+});
 
       productsDataCache = formattedProducts;
       setProducts(formattedProducts);
@@ -183,20 +195,32 @@ const Products = () => {
       });
     }
 
-    // تطبيق الفلاتر (كما هو — لأنه يعمل على الـ IDs)
-    Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
-      if (selectedValues.length > 0) {
-        filtered = filtered.filter(product => {
-          const productValue = product[category as keyof Product] as string;
-          const categoryOptions = filterOptions[category] || [];
-          const selectedIds = selectedValues.map(selectedValue => {
-            const option = categoryOptions.find(opt => opt.value === selectedValue);
-            return option?.id;
-          }).filter(Boolean);
-          return selectedIds.includes(productValue);
-        });
+  // في filteredProducts useMemo
+Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
+  if (selectedValues.length > 0) {
+    filtered = filtered.filter(product => {
+      // 🔍 احصل على قائمة IDs المختارة لهذا الفلتر
+      const categoryOptions = filterOptions[category] || [];
+      const selectedIds = selectedValues.map(selectedValue => {
+        const option = categoryOptions.find(opt => opt.value === selectedValue);
+        return option?.id;
+      }).filter(Boolean);
+
+      // 🔄 تحقق مما إذا كان هناك تطابق بين أي ID من المنتج وأي ID مختار
+      // ⚠️ هنا التغيير: استخدم some() بدلاً من includes()
+      if (Array.isArray(product[category as keyof Product])) {
+        // إذا كان المنتج يحتوي على مصفوفة من IDs (مثل material type و application fields)
+        return product[category as keyof Product].some(
+          (productId: string) => selectedIds.includes(productId)
+        );
+      } else {
+        // إذا كان المنتج يحتوي على ID واحد فقط (مثل brand أو type)
+        const productValue = product[category as keyof Product] as string;
+        return selectedIds.includes(productValue);
       }
     });
+  }
+});
 
     // الترتيب
     filtered.sort((a, b) => {
