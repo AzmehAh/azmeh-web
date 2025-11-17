@@ -31,7 +31,7 @@ const ProductsManager = () => {
   if (searchTerm) {
     const term = searchTerm.toLowerCase().trim();
     filtered = filtered.filter(product => {
-      // تحويل كل حقل إلى سلسلة نصية بأمان
+    
       const name = (product.name ?? '').toString().toLowerCase();
       const code = (product.code ?? '').toString().toLowerCase();
       const brand = (product.brand ?? '').toString().toLowerCase();
