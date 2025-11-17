@@ -724,4 +724,19 @@
 
 [dir="rtl"] .ProseMirror p.is-editor-empty:first-child::before {
   float: right;
+} /* src/index.css */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden; /* ⚠️ هذا يمنع الخط الأبيض الجانبي نهائياً */
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
