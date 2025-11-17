@@ -281,7 +281,7 @@ const BulletinDetail = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   to="/contact"
-                  className="inline-flex items-center but group px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
+                  className="inline-flex  items-center justify-center w-full  but group px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
              focus:outline-none focus:ring-2 focus:ring-logo/20 
              font-semibold text-sm sm:text-base"
                 >
