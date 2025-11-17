@@ -241,7 +241,7 @@
   "emailInput": "البريد الإلكتروني",
   "emailPlaceholder": "بريدك@example.com",
   "phoneInput": "رقم الهاتف",
-  "phonePlaceholder": "+963**********",
+  "phonePlaceholder": "رقم الهاتف",
   "subject": "الموضوع",
   "selectSubject": "اختر موضوعاً",
   "technicalSupport": "الدعم الفني",
