@@ -356,7 +356,7 @@ export const systemsData: Record<string, SystemData> = {
       'Provides moisture regulation',
       'Cost-effective solution'
     ],
-    applicationMethod: [
+   {/* applicationMethod: [
       'Brush application for texture',
       'Roller for smooth finish',
       'Spray for large areas',
