@@ -321,7 +321,7 @@ const Troubleshooting = () => {
           )}
         </div>
 
-        {/* Contact Section */}
+  {/* Contact Section
         <div className="mt-16 text-center">
           <div className=" bg-logo rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-bold mb-4">{t('troubleshooting.needSupport')}</h3>
@@ -339,7 +339,7 @@ const Troubleshooting = () => {
             
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
