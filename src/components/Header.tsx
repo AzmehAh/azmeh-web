@@ -58,7 +58,7 @@ const Header = () => {
       }
     };
 
-    // جلب بيانات استكشاف الأخطاء من Supabase
+ 
     const fetchTroubleshootingCategories = async () => {
       const { data, error } = await supabase
         .from('troubleshooting_categories')
@@ -87,10 +87,10 @@ const Header = () => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* استخدام grid لتوسيط الشعار دائمًا */}
+
         <div className="grid grid-cols-3 items-center h-20">
 
-          {/* Left Navigation - يصبح يمين في RTL */}
+          
           <nav className="hidden lg:flex items-center gap-8 justify-self-start">
             <Link
               to="/products"
@@ -153,7 +153,7 @@ const Header = () => {
                       </Link>
                     </div>
                      
-                    {/* FAQ - ثانيًا في RTL */}
+                  
                     <div className="min-w-[35rem] p-4">
                       <h4 className="font-semibold text-gray-900 mb-2">{t('header.faq')}</h4>
                       {faqCategories.map(category => (
@@ -178,7 +178,7 @@ const Header = () => {
             </div>
           </nav>
 
-          {/* Logo - دائمًا في المنتصف */}
+        
           <div className="justify-self-center flex-shrink-0">
             <Link to="/" className="flex items-center transition-opacity">
               <img 
@@ -191,7 +191,7 @@ const Header = () => {
             </Link>
           </div> 
 
-          {/* Right Navigation - يصبح يسار في RTL */}
+        
           <nav className="hidden lg:flex items-center gap-8 justify-self-end">
            
             <Link
@@ -295,7 +295,7 @@ const Header = () => {
       className="lg:hidden bg-white border-t border-gray-200 overflow-hidden shadow-lg"
     >
       <div className="px-6 py-6 space-y-1 max-h-[80vh] overflow-y-auto">
-        {/* نفس الترتيب الأصلي كما طلبت */}
+       
         <Link
           to="/"
           onClick={() => setIsMobileMenuOpen(false)}
