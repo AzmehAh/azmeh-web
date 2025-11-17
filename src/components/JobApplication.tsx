@@ -278,7 +278,7 @@ const JobApplication = () => {
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
                     : 'border-gray-200 focus:border-logo focus:ring-2 focus:ring-logo/20'
                 }`}
-                placeholder="Your Number"
+                placeholder={t('contact.phonePlaceholder')}
               />
               {errors.phone && (
                 <motion.p
