@@ -26,23 +26,32 @@ const ProductsManager = () => {
   }, []);
 
   useEffect(() => {
-    let filtered = products;
+  let filtered = products;
 
-    if (searchTerm) {
-      filtered = filtered.filter(product =>
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+  if (searchTerm) {
+    const term = searchTerm.toLowerCase().trim();
+    filtered = filtered.filter(product => {
+      // تحويل كل حقل إلى سلسلة نصية بأمان
+      const name = (product.name ?? '').toString().toLowerCase();
+      const code = (product.code ?? '').toString().toLowerCase();
+      const brand = (product.brand ?? '').toString().toLowerCase();
+      const description = (product.description ?? '').toString().toLowerCase();
+
+      return (
+        name.includes(term) ||
+        code.includes(term) ||
+        brand.includes(term) ||
+        description.includes(term)
       );
-    }
+    });
+  }
 
-    if (statusFilter !== 'all') {
-      filtered = filtered.filter(product => product.status === statusFilter);
-    }
+  if (statusFilter !== 'all') {
+    filtered = filtered.filter(product => product.status === statusFilter);
+  }
 
-    setFilteredProducts(filtered);
-  }, [searchTerm, statusFilter, products]);
+  setFilteredProducts(filtered);
+}, [searchTerm, statusFilter, products]);
 
   const fetchProducts = async () => {
     try {
