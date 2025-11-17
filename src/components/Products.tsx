@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase, api, ProductFilterType, ProductFilterValue } from '../lib/supabase';
 import { useTranslation } from 'react-i18next';
 
-// ملاحظة: الحقول مثل type_ar, brand_ar غير مستخدمة في الواقع
+
 interface Product {
   id: string;
   name: string;
@@ -13,15 +13,14 @@ interface Product {
   code: string;
   description: string;
   description_ar: string;
-  image: string;
-  // هذه الحقول تحتوي على IDs، وليس نصوصًا
+
   type: string;
   brand: string;
   material: string;
   usage: string;
 }
 
-// Cache للبيانات
+
 let filterDataCache: any = null;
 let productsDataCache: any = null;
 let currentLanguageCache: string = '';
@@ -92,7 +91,6 @@ const Products = () => {
     }
   }, [i18n.language]);
 
-  // جلب المنتجات مع caching
   const fetchProducts = useCallback(async () => {
     if (productsDataCache) {
       setProducts(productsDataCache);
@@ -102,7 +100,7 @@ const Products = () => {
 
     try {
       setProductsLoading(true);
-    // في fetchProducts() داخل useMemo
+  
 const { data: productsData, error } = await supabase
   .from('products')
   .select(`
@@ -119,12 +117,9 @@ const formattedProducts = (productsData || []).map(product => {
   const mainImage = product.product_images.find((img: any) => img.is_main) || 
                     product.product_images[0];
 
-  // ⚠️ هنا التغيير: استخراج material_ids وتقسيمها إلى مجموعتين
   const materialIds = product.product_materials?.map(pm => pm.material_id) || [];
 
-  // 👇 افترض أن لديك طريقة لتحديد نوع material_id (مثلاً: باستخدام جدول آخر أو فلتر)
-  // لكن بما أنك لم تذكر ذلك، سنستخدم حلًا بسيطًا: تخزين جميع IDs في مصفوفة واحدة
-  // وسنعتمد على أن filterOptions سيحدد أي ID ينتمي لأي فلتر
+ 
 
   return {
     id: product.id,
@@ -138,9 +133,9 @@ const formattedProducts = (productsData || []).map(product => {
     type: product.type_id || "",
     brand: product.brand_id || "",
 
-    // ✅ استخدم نفس اسم الفئة من filterOptions
-    "material type": materialIds, // ⬅️ الآن هي مصفوفة من IDs
-    "application fields": materialIds, // ⬅️ نفس المصفوفة، لأنهما في نفس الجدول
+  
+    "material type": materialIds, 
+    "application fields": materialIds, 
   };
 });
 
@@ -153,7 +148,7 @@ const formattedProducts = (productsData || []).map(product => {
     }
   }, []);
 
-  // تحميل البيانات الأولية
+ 
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
@@ -163,58 +158,56 @@ const formattedProducts = (productsData || []).map(product => {
     loadData();
   }, [fetchFilterData, fetchProducts]);
 
-  // تحديث الفلاتر عند تغيير اللغة
+ 
   useEffect(() => {
     if (!loading) {
       fetchFilterData();
     }
   }, [i18n.language, fetchFilterData]);
 
-  // ✅ فلترة المنتجات — مع إصلاح محرك البحث
+ 
   const filteredProducts = useMemo(() => {
     let filtered = [...products];
 
-    // 🔍 البحث: فقط في الحقول النصية (name, description, code)
+   
     if (searchTerm.trim()) {
       const term = searchTerm.toLowerCase().trim();
       filtered = filtered.filter(product => {
-        // الاسم
+     
         const name = isRTL
           ? (product.name_ar || product.name || '').toLowerCase()
           : (product.name || '').toLowerCase();
         
-        // الوصف
+       
         const description = isRTL
           ? (product.description_ar || product.description || '').toLowerCase()
           : (product.description || '').toLowerCase();
         
-        // الكود (لا يُترجم)
+    
         const code = (product.code?.toString() || '').toLowerCase();
 
         return name.includes(term) || description.includes(term) || code.includes(term);
       });
     }
 
-  // في filteredProducts useMemo
+
 Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
   if (selectedValues.length > 0) {
     filtered = filtered.filter(product => {
-      // 🔍 احصل على قائمة IDs المختارة لهذا الفلتر
+    
       const categoryOptions = filterOptions[category] || [];
       const selectedIds = selectedValues.map(selectedValue => {
         const option = categoryOptions.find(opt => opt.value === selectedValue);
         return option?.id;
       }).filter(Boolean);
 
-      // 🔄 تحقق مما إذا كان هناك تطابق بين أي ID من المنتج وأي ID مختار
-      // ⚠️ هنا التغيير: استخدم some() بدلاً من includes()
       if (Array.isArray(product[category as keyof Product])) {
-        // إذا كان المنتج يحتوي على مصفوفة من IDs (مثل material type و application fields)
+      
         return product[category as keyof Product].some(
           (productId: string) => selectedIds.includes(productId)
         );
       } else {
-        // إذا كان المنتج يحتوي على ID واحد فقط (مثل brand أو type)
+        
         const productValue = product[category as keyof Product] as string;
         return selectedIds.includes(productValue);
       }
@@ -222,7 +215,7 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
   }
 });
 
-    // الترتيب
+    
     filtered.sort((a, b) => {
       const nameA = isRTL ? (a.name_ar || a.name) : a.name;
       const nameB = isRTL ? (b.name_ar || b.name) : b.name;
@@ -264,25 +257,24 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
   };
 
  const getFilterCategoryName = (category: string): string => {
-  // ابحث عن نوع الفلتر في القائمة القادمة من Supabase
+
   const matchedType = filterTypes.find(
     (ft) => ft.name.toLowerCase() === category.toLowerCase()
   );
 
   if (!matchedType) {
-    // إذا لم يتم العثور عليه، استخدم نفس النص (للأمان)
+    
     return category;
   }
 
-  // إذا كانت اللغة عربية استخدم الاسم العربي من قاعدة البيانات
-  // وإلا استخدم الاسم الإنجليزي
+
   return i18n.language === "ar"
     ? matchedType.name_ar || matchedType.name
     : matchedType.name;
 };
 
 
-  // === الواجهة (JSX) ===
+  
   return ( 
     <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="text-logo pt-20">
