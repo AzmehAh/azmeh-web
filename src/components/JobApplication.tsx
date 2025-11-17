@@ -273,7 +273,7 @@ const JobApplication = () => {
                 name="phone" 
                 value={formData.phone}
                 onChange={handleInputChange}
-                className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition-all ${
+                className={`w-full px-4 py-3 border rounded-lg focus:outline-none transition-all   ${isRTL ? 'rtl' : 'ltr'} ${
                   errors.phone 
                     ? 'border-red-300 focus:border-red-500 focus:ring-2 focus:ring-red-500/20' 
                     : 'border-gray-200 focus:border-logo focus:ring-2 focus:ring-logo/20'
