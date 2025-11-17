@@ -187,16 +187,12 @@ const BulletinDetail = () => {
           </button>
 
           <div className="flex items-center gap-3 mb-4">
-            <span className="px-4 py-3 bg-white/20 rounded-full text-sm font-medium 
-                   max-w-[calc(100%-1rem)] break-words whitespace-pre-line 
-                   overflow-hidden text-ellipsis">
-    {categoryDisplayName}
-  </span>
-  <span className="px-4 py-3 bg-white/20 rounded-full text-sm font-medium 
-                   max-w-[calc(100%-1rem)] break-words whitespace-pre-line 
-                   overflow-hidden text-ellipsis">
-    {subcategory}
-  </span>
+            <span className="px-4 py-3 bg-white/20 rounded-full text-sm font-medium ">
+              {categoryDisplayName}
+            </span>
+            <span className="px-4 py-3 bg-white/20 rounded-full text-sm font-medium">
+              {subcategory}  
+            </span>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">{title}</h1>
