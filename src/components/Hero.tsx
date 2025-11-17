@@ -67,12 +67,14 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
 
   return (
     <div 
-      className="relative w-screen h-screen overflow-hidden"
+      className="relative w-screen min-w-screen h-screen overflow-hidden"
       style={{
         direction: isRTL ? 'rtl' : 'ltr',
         textAlign: isRTL ? 'right' : 'left',
         transform: 'translateZ(0)',
         willChange: 'transform',
+        // 👇 مهم جدًا لمنع السحب الأفقي العرضي
+        touchAction: 'pan-y',
       }}
     >
       {categories.map((category, index) => {
@@ -86,10 +88,11 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
             animate={{ opacity: isActive ? 1 : 0 }}
             transition={{ duration: 0.5, ease: "easeInOut" }}
           >
+            {/* 👇 أضف inset-0 لضمان التغطية الكاملة */}
             <img
               src={category.image_url}
               alt={category.name}
-              className="w-full h-full object-cover"
+              className="absolute inset-0 w-full h-full object-cover"
               style={{ filter: "brightness(0.4) contrast(1.2)" }}
             />
             <div className="absolute inset-0 z-10 flex flex-col justify-center items-start p-4 sm:p-6">
@@ -128,11 +131,11 @@ const MobileHeroSlider = ({ categories, activeIndex, setActiveIndex, isManual, s
           <button
             key={idx}
             onClick={() => goToSlide(idx)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${ 
               idx === activeIndex ? 'bg-white w-4' : 'bg-white/50'
             }`}
             aria-label={`Go to slide ${idx + 1}`}
-          /> 
+          />
         ))}
       </div>
     </div>
