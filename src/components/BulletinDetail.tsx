@@ -190,7 +190,7 @@ const BulletinDetail = () => {
             <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium  max-w-full break-words whitespace-normal">
               {categoryDisplayName}
             </span>
-            <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium">
+            <span className="px-3 py-1 bg-white/20 rounded-full text-sm font-medium  max-w-full break-words whitespace-normal">
               {subcategory}
             </span>
           </div>
