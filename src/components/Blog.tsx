@@ -297,17 +297,8 @@ const Blog = () => {
           </div>
         </div>
 
-        {/* ----------------------------- */}
-        {/*         BLOG POSTS AREA       */}
-        {/* ----------------------------- */}
-        <div className="flex-1">
-          {/* هنا مكان عرض المقالات */}
-          {/** cards grid, pagination, anything ... */}
-        </div>
+        
 
-      </div>
-    </div>
-  </div>
 
 
           {/* Bulletins Grid */}
