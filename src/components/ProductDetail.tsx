@@ -359,7 +359,7 @@ const ProductDetail = () => {
       : 'Information in this data sheet and in all our data sheets are given to the best of our knowledge based on laboratory testing and practical experience. Final results depend on following instructions and on consumer skill. Our responsibility is limited to providing products that conform to samples and specimens provided by us. Due to technical needs, we reserve the right to change any given specification without notice.';
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = (brandLogos: { id: string; name: string; logo: string }[]) => {
     if (!product) return;
     const isRTL = i18n.language === 'ar';
     const getTranslated = (enVal: string, arVal?: string) =>
@@ -394,31 +394,29 @@ const ProductDetail = () => {
       img.style.marginBottom = '15px';
       header.appendChild(img);
     }
-    // --- إضافة شعار البراند ---
-if (product.brand && brandLogos?.length) {
-  const brandLogo = brandLogos.find(b => b.id === product.brand);
-  if (brandLogo?.logo) {
-    const logoImg = document.createElement('img');
-    logoImg.src = brandLogo.logo;
-    logoImg.alt = getTranslated(
-      brandLogo.name || '',
-      brandLogo.name_ar
-    );
-    logoImg.style.width = '60px';
-    logoImg.style.height = '60px';
-    logoImg.style.objectFit = 'contain';
-    logoImg.style.marginTop = '8px'; // مسافة صغيرة من الصورة الرئيسية
-    logoImg.style.opacity = '0.9';
-    logoImg.style.backgroundColor = '#fff'; // لتجنب الخلفيات الشفافة
-    logoImg.style.padding = '4px';
-    logoImg.style.borderRadius = '4px';
+    // إضافة شعار البراند
+if (product.brand && brandLogos.length > 0) {
+  const brand = brandLogos.find(b => b.id === product.brand);
+  if (brand?.logo) {
+    const brandImg = document.createElement('img');
+    brandImg.src = brand.logo;
+    brandImg.alt = getTranslated(brand.name, brand.name); // لأنك لا تملك name_ar في المصفوفة
+    brandImg.style.width = '60px';
+    brandImg.style.height = '60px';
+    brandImg.style.objectFit = 'contain';
+    brandImg.style.marginTop = '10px';
+    brandImg.style.backgroundColor = '#fff';
+    brandImg.style.padding = '3px';
+    brandImg.style.borderRadius = '4px';
 
-    // معالجة خطأ التحميل
-    logoImg.onerror = () => {
-      logoImg.style.display = 'none';
+    // ⚠️ مهم: تأكد من ظهور الصورة في PDF
+    brandImg.onerror = () => {
+      console.error('Failed to load brand logo:', brand.logo);
+      // لا تخف الصورة هنا مؤقتًا لترى إذا كان الرابط خاطئًا
+      // brandImg.style.display = 'none';
     };
 
-    header.appendChild(logoImg);
+    header.appendChild(brandImg);
   }
 }
     const title = document.createElement('h1');
