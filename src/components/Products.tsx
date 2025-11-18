@@ -294,7 +294,8 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
           <div className="flex flex-col lg:flex-row gap-8">
             {/* Filters Sidebar */}
             <div className="lg:w-80 flex-shrink-0">
-              <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto">
+              <div className="sticky top-24">
+                <div className="bg-white rounded-xl shadow-lg p-6 max-h-[calc(100vh-7rem)] overflow-y-auto">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-bold text-gray-900 flex items-center">
                     <Filter className="w-5 h-5 text-logo mr-2" />
@@ -412,6 +413,7 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
                     </div>
                   </div>
                 )}
+                </div>
               </div>
             </div>
 
