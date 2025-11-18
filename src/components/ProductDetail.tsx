@@ -442,67 +442,56 @@ const ProductDetail = () => {
     };
 
 // --- بدلاً من الكود القديم ---
-// إنشاء قسم لكل تصنيف مع عرض كل قيمة فيه كـ Badge
+// إنشاء مجموعة واحدة من الـ badges لكل التصنيفات دون عناوين
 
-const createCategoryBadges = (titleKey: string, values: string[] | null, label: string) => {
-  if (!values || values.length === 0) return;
+const allBadges = [];
 
-  const section = document.createElement('div');
-  section.style.marginBottom = '20px';
-
-  // عنوان القسم
-  const title = document.createElement('h3');
-  title.textContent = `${label}:`;
-  title.style.fontSize = '14px';
-  title.style.fontWeight = 'bold';
-  title.style.color = '#0055A3';
-  title.style.marginBottom = '8px';
-  section.appendChild(title);
-
-  // حاوية الـ badges
-  const badgesContainer = document.createElement('div');
-  badgesContainer.style.display = 'flex';
-  badgesContainer.style.flexWrap = 'wrap';
-  badgesContainer.style.gap = '8px';
-  badgesContainer.style.alignItems = 'center';
-
-  values.forEach(value => {
-    if (!value.trim()) return;
-    const badge = document.createElement('div');
-    badge.textContent = value;
-    badge.style.backgroundColor = '#0055A3'; // لون خلفية الزر كما في الصورة
-    badge.style.color = '#fff';
-    badge.style.padding = '6px 12px';
-    badge.style.borderRadius = '20px'; // زوايا مستديرة
-    badge.style.fontSize = '13px';
-    badge.style.fontWeight = '500';
-    badge.style.textAlign = 'center';
-    badge.style.whiteSpace = 'nowrap';
-    badgesContainer.appendChild(badge);
-  });
-
-  section.appendChild(badgesContainer);
-  printElement.appendChild(section);
-};
-
-// Type (عادة قيمة واحدة)
+// Type (قيمة واحدة)
 if (product.type) {
   const typeValue = translateFilterValue('Type', product.type, filterValueMap);
   if (typeValue) {
-    createCategoryBadges('Type', [typeValue], t('products.type'));
+    allBadges.push(typeValue);
   }
 }
 
 // Material (قد يكون عدة قيم)
 if (product.material?.length) {
   const materialValues = product.material.map(id => translateFilterValue('Material Type', id, filterValueMap));
-  createCategoryBadges('Material Type', materialValues, t('products.material'));
+  allBadges.push(...materialValues);
 }
 
 // Usage (قد يكون عدة قيم)
 if (product.usage?.length) {
   const usageValues = product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap));
-  createCategoryBadges('Application Fields', usageValues, t('products.usage'));
+  allBadges.push(...usageValues);
+}
+
+// إذا كان هناك أي قيمة، نعرضها كـ badges
+if (allBadges.length > 0) {
+  const badgesContainer = document.createElement('div');
+  badgesContainer.style.display = 'flex';
+  badgesContainer.style.flexWrap = 'wrap';
+  badgesContainer.style.gap = '8px';
+  badgesContainer.style.marginBottom = '20px';
+  badgesContainer.style.alignItems = 'center';
+
+  allBadges.forEach(value => {
+    if (!value.trim()) return;
+    const badge = document.createElement('div');
+    badge.textContent = value;
+    badge.style.backgroundColor = '#f0f0f0'; // خلفية رمادية فاتحة (مثل الصورة)
+    badge.style.color = '#333'; // نص داكن
+    badge.style.padding = '6px 12px';
+    badge.style.borderRadius = '20px';
+    badge.style.fontSize = '13px';
+    badge.style.fontWeight = '500';
+    badge.style.textAlign = 'center';
+    badge.style.whiteSpace = 'nowrap';
+    badge.style.border = '1px solid #ddd'; // حدود رقيقة لإضافة عمق
+    badgesContainer.appendChild(badge);
+  });
+
+  printElement.appendChild(badgesContainer);
 }
     addSection(t('products.technical_description'), technicalDescription);
     addSection(t('products.packaging_sizes'), product.packaging);
