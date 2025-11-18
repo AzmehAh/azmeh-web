@@ -848,7 +848,7 @@ const ProductDetail = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-800 mb-10 flex items-center justify-center">
-                <CheckCircle className="w-8 h-8 text-logo ml-2 mr-3" />
+                <CheckCircle className="w-8 h-8 text-logo mr-3   ml-2" />
                 {t('products.key_features')}
               </h2>
               <div className="space-y-4">
