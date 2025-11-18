@@ -232,9 +232,9 @@ const BulletinDetail = () => {
 
             {relatedBulletins.length > 0 ? (
               <div className="grid md:grid-cols-2 gap-6">
-                {relatedBulletins.map((related) => {
+                {relatedBulletins.map((related) => { 
                   const relTitle = isRTL ? related.title_ar || related.title : related.title;
-              
+                  const relShort = isRTL ? related.short_description_ar || related.short_description : related.short_description;
                   const relSub = isRTL ? related.subcategory_ar || related.subcategory : related.subcategory;
                   const relCategory = isRTL
                     ? (categoryConfigs[related.category]?.name_ar || related.category)
