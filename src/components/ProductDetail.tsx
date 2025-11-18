@@ -726,38 +726,33 @@ const ProductDetail = () => {
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
               <p className="text-xl text-white mb-4 leading-relaxed">{product.description}</p>
-             <div className="flex flex-wrap gap-3 mb-8">
+            <div className="flex flex-wrap gap-4 mb-8">
 
-  {/* Type Filters */}
-  {Array.isArray(displayType) &&
-    displayType.map((item) => (
+  {displayType && (
+    <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
+      {displayType}
+    </span>
+  )}
+
+  {/* Materials */}
+  {displayMaterial &&
+    displayMaterial.split(",").map((item, index) => (
       <span
-        key={item}
+        key={index}
         className="px-4 py-2 bg-white/20 rounded-full text-white font-medium"
       >
-        {item}
+        {item.trim()}
       </span>
     ))}
 
-  {/* Material Filters */}
-  {Array.isArray(displayMaterial) &&
-    displayMaterial.map((item) => (
+  {/* Usages */}
+  {displayUsage &&
+    displayUsage.split(",").map((item, index) => (
       <span
-        key={item}
+        key={index}
         className="px-4 py-2 bg-white/20 rounded-full text-white font-medium"
       >
-        {item}
-      </span>
-    ))}
-
-  {/* Usage Filters */}
-  {Array.isArray(displayUsage) &&
-    displayUsage.map((item) => (
-      <span
-        key={item}
-        className="px-4 py-2 bg-white/20 rounded-full text-white font-medium"
-      >
-        {item}
+        {item.trim()}
       </span>
     ))}
 
