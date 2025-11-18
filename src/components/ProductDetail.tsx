@@ -394,6 +394,33 @@ const ProductDetail = () => {
       img.style.marginBottom = '15px';
       header.appendChild(img);
     }
+    // --- إضافة شعار البراند ---
+if (product.brand && brandLogos?.length) {
+  const brandLogo = brandLogos.find(b => b.id === product.brand);
+  if (brandLogo?.logo) {
+    const logoImg = document.createElement('img');
+    logoImg.src = brandLogo.logo;
+    logoImg.alt = getTranslated(
+      brandLogo.name || '',
+      brandLogo.name_ar
+    );
+    logoImg.style.width = '60px';
+    logoImg.style.height = '60px';
+    logoImg.style.objectFit = 'contain';
+    logoImg.style.marginTop = '8px'; // مسافة صغيرة من الصورة الرئيسية
+    logoImg.style.opacity = '0.9';
+    logoImg.style.backgroundColor = '#fff'; // لتجنب الخلفيات الشفافة
+    logoImg.style.padding = '4px';
+    logoImg.style.borderRadius = '4px';
+
+    // معالجة خطأ التحميل
+    logoImg.onerror = () => {
+      logoImg.style.display = 'none';
+    };
+
+    header.appendChild(logoImg);
+  }
+}
     const title = document.createElement('h1');
     title.textContent = name;
     title.style.fontSize = '24px';
