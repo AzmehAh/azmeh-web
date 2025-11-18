@@ -536,7 +536,7 @@ const ProductDetail = () => {
         keyCell.textContent = t(`products.${key}`);
         const valCell = document.createElement('td');
         valCell.style.padding = '6px 8px';
-        valCell.style.border = '1px solid #ddd';
+        valCell.style.border = 'none';
         valCell.textContent = spec.value;
         row.appendChild(keyCell);
         row.appendChild(valCell);
@@ -602,7 +602,7 @@ const ProductDetail = () => {
         lblCell.textContent = label;
         const valCell = document.createElement('td');
         valCell.style.padding = '6px 8px';
-        valCell.style.border = '1px solid #ddd';
+        valCell.style.border = 'none';
         valCell.textContent = value;
         row.appendChild(lblCell);
         row.appendChild(valCell);
