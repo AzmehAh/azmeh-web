@@ -359,7 +359,7 @@ const ProductDetail = () => {
       : 'Information in this data sheet and in all our data sheets are given to the best of our knowledge based on laboratory testing and practical experience. Final results depend on following instructions and on consumer skill. Our responsibility is limited to providing products that conform to samples and specimens provided by us. Due to technical needs, we reserve the right to change any given specification without notice.';
   };
 
-  const handleDownloadPDF = (brandLogos: { id: string; name: string; logo: string }[]) => {
+  const handleDownloadPDF = () => { 
     if (!product) return;
     const isRTL = i18n.language === 'ar';
     const getTranslated = (enVal: string, arVal?: string) =>
