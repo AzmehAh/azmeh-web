@@ -188,6 +188,7 @@ const Blog = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className="lg:w-80 flex-shrink-0">
+             <div className="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
             <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">{t('blog.categoriesTitle')}</h3>
