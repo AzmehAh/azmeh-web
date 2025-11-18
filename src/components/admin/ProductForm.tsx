@@ -243,7 +243,7 @@ const ProductForm = () => {
         type_id: productData?.type_id || '',
         material_id: materialIds,
         usage_id: usageIds,
-        mixing_steps: parseArrayField(productData?.mixing_steps),
+       
         safety_precautions: parseArrayField(productData?.safety_precautions),
         safety_first_aid: parseArrayField(productData?.safety_first_aid),
         packaging: parseArrayField(productData?.packaging),
@@ -339,7 +339,7 @@ const ProductForm = () => {
           type_id: productData.type_id || '',
           material_id: materialIds,
           usage_id: usageIds,
-          mixing_steps: parseArrayField(productData.mixing_steps),
+       
           safety_precautions: parseArrayField(productData.safety_precautions),
           safety_first_aid: parseArrayField(productData.safety_first_aid),
           packaging: parseArrayField(productData.packaging),
@@ -486,7 +486,7 @@ const ProductForm = () => {
         safety_first_aid: formData.safety_first_aid || [],
         packaging: JSON.stringify(formData.packaging || []),
         packaging_ar: JSON.stringify(formData.packaging_ar || []),
-        mixing_steps: formData.mixing_steps || [],
+     
       };
 
       let productId = id;
