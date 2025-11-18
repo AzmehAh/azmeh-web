@@ -234,7 +234,7 @@ const BulletinDetail = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 {relatedBulletins.map((related) => { 
                   const relTitle = isRTL ? related.title_ar || related.title : related.title;
-                  const relShort = isRTL ? related.short_description_ar || related.short_description : related.short_description;
+                 
                   const relSub = isRTL ? related.subcategory_ar || related.subcategory : related.subcategory;
                   const relCategory = isRTL
                     ? (categoryConfigs[related.category]?.name_ar || related.category)
@@ -263,7 +263,7 @@ const BulletinDetail = () => {
                         <h4 className="text-lg font-semibold text-gray-900 group-hover:text-logo transition-colors mb-2 line-clamp-2">
                           {relTitle}
                         </h4>
-                        <p className="text-gray-600 text-sm line-clamp-2">{relShort}</p>
+                
                       </div>
                     </div>
                   );
