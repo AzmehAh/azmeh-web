@@ -430,17 +430,17 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
                         : 'text-gray-400 hover:text-gray-600'
                     }`}
                   >
-                    <Grid className="w-5 h-5" />
+                    <List className="w-5 h-5" />
                   </button>
                   <button
-                    onClick={() => setViewMode('list')}
+                    onClick={() => setViewMode('Grid')}
                     className={`p-2 ${isRTL ? 'rounded-l-lg' : 'rounded-r-lg'} transition-colors ${
-                      viewMode === 'list'
+                      viewMode === 'Grid'
                         ? 'bg-logo text-white'
                         : 'text-gray-400 hover:text-gray-600'
                     }`}
                   >
-                    <List className="w-5 h-5" />
+                    <Grid className="w-5 h-5" />
                   </button>
                 </div>
               </div>
