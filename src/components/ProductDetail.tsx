@@ -929,7 +929,7 @@ const ProductDetail = () => {
       {/* Surface Preparation */}
       {product.surface_preparation && (
         <section className="py-16 bg-white">
-          <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="container max-w-6xl mx-auto">
             <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
               <Brush className="w-8 h-8 text-logo mr-3" />
               {t('products.surface_preparation')}
