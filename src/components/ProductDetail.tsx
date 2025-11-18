@@ -848,7 +848,7 @@ const ProductDetail = () => {
           <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="max-w-6xl mx-auto">
               <h2 className="text-3xl font-bold text-gray-800 mb-10 flex items-center justify-center">
-                <CheckCircle className="w-8 h-8 text-logo mr-3   ml-2" />
+                <CheckCircle className="w-8 h-8 text-logo mr-3  " />
                 {t('products.key_features')}
               </h2>
               <div className="space-y-4">
@@ -861,7 +861,7 @@ const ProductDetail = () => {
                     viewport={{ once: true }}
                     className="flex items-center bg-white p-4 rounded-xl shadow-sm"
                   >
-                    <div className="w-3 h-3 bg-logo rounded-full mr-4 flex-shrink-0" />
+                    <div className="w-3 h-3 bg-logo rounded-full mr-4  ml-2 flex-shrink-0" />
                     <span className="text-gray-700 font-medium">{feature}</span>
                   </motion.div>
                 ))}
