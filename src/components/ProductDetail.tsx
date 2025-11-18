@@ -477,18 +477,25 @@ if (allBadges.length > 0) {
 
   allBadges.forEach(value => {
     if (!value.trim()) return;
-    const badge = document.createElement('div');
-    badge.textContent = value;
-    badge.style.backgroundColor = '#f0f0f0'; // خلفية رمادية فاتحة (مثل الصورة)
-    badge.style.color = '#333'; // نص داكن
-    badge.style.padding = '6px 12px';
-    badge.style.borderRadius = '20px';
-    badge.style.fontSize = '13px';
-    badge.style.fontWeight = '500';
-    badge.style.textAlign = 'center';
-    badge.style.whiteSpace = 'nowrap';
-    badge.style.border = '1px solid #ddd'; // حدود رقيقة لإضافة عمق
-    badgesContainer.appendChild(badge);
+  const badge = document.createElement('div');
+badge.textContent = value;
+badge.style.backgroundColor = '#f0f0f0';
+badge.style.color = '#333';
+badge.style.padding = '6px 12px';
+badge.style.borderRadius = '20px';
+badge.style.fontSize = '13px';
+badge.style.fontWeight = '500';
+badge.style.textAlign = 'center';
+badge.style.whiteSpace = 'nowrap';
+badge.style.border = '1px solid #ddd';
+
+// ✅ إضافة هذا السطر لجعل النص في منتصف الزر عموديًا
+badge.style.display = 'flex';
+badge.style.alignItems = 'center';
+badge.style.justifyContent = 'center';
+badge.style.height = 'auto'; // أو يمكنك تحديد ارتفاع ثابت مثل '30px' إذا أردت
+
+badgesContainer.appendChild(badge);
   });
 
   printElement.appendChild(badgesContainer);
