@@ -74,7 +74,7 @@ const BulletinDetail = () => {
     printElement.style.padding = '2rem';
     printElement.style.maxWidth = '800px';
     printElement.style.margin = '0 auto';
-    printElement.style.lineHeight = '1.6';
+    printElement.style.lineHeight = '1';
     printElement.style.color = '#1f2937';
     printElement.style.fontSize = '16px';
 
