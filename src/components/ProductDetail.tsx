@@ -907,7 +907,7 @@ const ProductDetail = () => {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
           <FileText className="w-5 h-5 mr-2 text-logo" />
-          {t('products.technical_specifications 
+          {t('products.technical_specifications')}
         </h2>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-100">
@@ -920,7 +920,7 @@ const ProductDetail = () => {
               </div>
             ))}
           </div>
-        </div>
+        </div> 
       </div>
     </div>
   </section>
