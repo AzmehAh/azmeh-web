@@ -739,4 +739,7 @@ html, body {
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+} 
+.no-sticky-overflow {
+  overflow: visible !important;
 }
