@@ -1128,12 +1128,12 @@ const ProductDetail = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
            
-            <div className="rounded-2xl">
+           
               <div className="p-8">
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">
                   {displayedSafetyNote}
                 </p>
-              </div>
+             
             </div>
           </div>
         </div>
