@@ -308,7 +308,7 @@ const Blog = () => {
       </div>
     </div>
   </div>
-);
+
 
           {/* Bulletins Grid */}
           <div className="flex-1">
