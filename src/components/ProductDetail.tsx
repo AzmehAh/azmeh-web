@@ -506,7 +506,7 @@ const ProductDetail = () => {
         lblCell.textContent = label;
         const valCell = document.createElement('td');
         valCell.style.padding = '6px 8px';
-        valCell.style.border = '1px solid #ddd';
+        valCell.style.border = 'none';
         valCell.textContent = value;
         row.appendChild(lblCell);
         row.appendChild(valCell);
