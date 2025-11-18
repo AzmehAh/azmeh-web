@@ -726,23 +726,43 @@ const ProductDetail = () => {
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
               <p className="text-xl text-white mb-4 leading-relaxed">{product.description}</p>
-              <div className="flex flex-wrap gap-4 mb-8">
-                {displayType && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {displayType}
-                  </span>
-                )}
-                {displayMaterial && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {displayMaterial}
-                  </span>
-                )}
-                {displayUsage && (
-                  <span className="px-4 py-2 bg-white/20 rounded-full text-white font-medium">
-                    {displayUsage}
-                  </span>
-                )}
-              </div>
+             <div className="flex flex-wrap gap-3 mb-8">
+
+  {/* Type Filters */}
+  {Array.isArray(displayType) &&
+    displayType.map((item) => (
+      <span
+        key={item}
+        className="px-4 py-2 bg-white/20 rounded-full text-white font-medium"
+      >
+        {item}
+      </span>
+    ))}
+
+  {/* Material Filters */}
+  {Array.isArray(displayMaterial) &&
+    displayMaterial.map((item) => (
+      <span
+        key={item}
+        className="px-4 py-2 bg-white/20 rounded-full text-white font-medium"
+      >
+        {item}
+      </span>
+    ))}
+
+  {/* Usage Filters */}
+  {Array.isArray(displayUsage) &&
+    displayUsage.map((item) => (
+      <span
+        key={item}
+        className="px-4 py-2 bg-white/20 rounded-full text-white font-medium"
+      >
+        {item}
+      </span>
+    ))}
+
+</div>
+
               {product.recommended_uses?.length > 0 && (
                 <>
                   <h3 className="text-xl font-semibold text-white mb-4 flex items-center">
