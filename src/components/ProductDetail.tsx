@@ -1131,7 +1131,7 @@ const ProductDetail = () => {
             
               <div className="p-8">
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {t('products.safety_note')}  {displayedSafetyNote}
+                  {t('products.safety_note')}:  {displayedSafetyNote}
                 </p>
             
             </div>
