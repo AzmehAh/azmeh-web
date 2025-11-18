@@ -179,7 +179,7 @@ const Blog = () => {
       {/* Hero Section */}
       <div className="text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className="text-5xl md:text-6xl font-bold mb-6">
-          {t('blog.heroTitle')}
+          {t('blog.heroTitle')} 
         </h1>
       </div>
 
@@ -188,7 +188,7 @@ const Blog = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Filters Sidebar */}
           <div className="lg:w-80 flex-shrink-0">
-            <div className="sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
+            
             <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">{t('blog.categoriesTitle')}</h3>
@@ -198,7 +198,7 @@ const Blog = () => {
                   </button>
                 )}
               </div>
-</div>
+
               {/* Search */}
               <div className="mb-6">
                 <div className="relative">
