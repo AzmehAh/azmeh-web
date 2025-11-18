@@ -442,17 +442,15 @@ const ProductDetail = () => {
     };
 
 // --- بدلاً من الكود القديم ---
-// إنشاء قسم لكل تصنيف مع عرض كل قيمة فيه كعنصر منفصل
+// إنشاء قسم لكل تصنيف مع عرض كل قيمة فيه كـ Badge
 
-const createCategorySection = (titleKey: string, values: string[] | null, label: string) => {
+const createCategoryBadges = (titleKey: string, values: string[] | null, label: string) => {
   if (!values || values.length === 0) return;
 
   const section = document.createElement('div');
-  section.style.marginBottom = '15px';
-  section.style.backgroundColor = '#eef5ff';
-  section.style.padding = '8px 12px';
-  section.style.borderRadius = '6px';
+  section.style.marginBottom = '20px';
 
+  // عنوان القسم
   const title = document.createElement('h3');
   title.textContent = `${label}:`;
   title.style.fontSize = '14px';
@@ -461,21 +459,29 @@ const createCategorySection = (titleKey: string, values: string[] | null, label:
   title.style.marginBottom = '8px';
   section.appendChild(title);
 
-  const list = document.createElement('ul');
-  list.style.paddingInlineStart = '20px';
-  list.style.margin = '0';
-  list.style.listStyleType = 'disc';
+  // حاوية الـ badges
+  const badgesContainer = document.createElement('div');
+  badgesContainer.style.display = 'flex';
+  badgesContainer.style.flexWrap = 'wrap';
+  badgesContainer.style.gap = '8px';
+  badgesContainer.style.alignItems = 'center';
 
   values.forEach(value => {
     if (!value.trim()) return;
-    const li = document.createElement('li');
-    li.textContent = value;
-    li.style.marginBottom = '4px';
-    li.style.fontSize = '13px';
-    list.appendChild(li);
+    const badge = document.createElement('div');
+    badge.textContent = value;
+    badge.style.backgroundColor = '#0055A3'; // لون خلفية الزر كما في الصورة
+    badge.style.color = '#fff';
+    badge.style.padding = '6px 12px';
+    badge.style.borderRadius = '20px'; // زوايا مستديرة
+    badge.style.fontSize = '13px';
+    badge.style.fontWeight = '500';
+    badge.style.textAlign = 'center';
+    badge.style.whiteSpace = 'nowrap';
+    badgesContainer.appendChild(badge);
   });
 
-  section.appendChild(list);
+  section.appendChild(badgesContainer);
   printElement.appendChild(section);
 };
 
@@ -483,20 +489,20 @@ const createCategorySection = (titleKey: string, values: string[] | null, label:
 if (product.type) {
   const typeValue = translateFilterValue('Type', product.type, filterValueMap);
   if (typeValue) {
-    createCategorySection('Type', [typeValue], t('products.type')); // نضعها كمصفوفة لتوافق الدالة
+    createCategoryBadges('Type', [typeValue], t('products.type'));
   }
 }
 
 // Material (قد يكون عدة قيم)
 if (product.material?.length) {
   const materialValues = product.material.map(id => translateFilterValue('Material Type', id, filterValueMap));
-  createCategorySection('Material Type', materialValues, t('products.material'));
+  createCategoryBadges('Material Type', materialValues, t('products.material'));
 }
 
 // Usage (قد يكون عدة قيم)
 if (product.usage?.length) {
   const usageValues = product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap));
-  createCategorySection('Application Fields', usageValues, t('products.usage'));
+  createCategoryBadges('Application Fields', usageValues, t('products.usage'));
 }
     addSection(t('products.technical_description'), technicalDescription);
     addSection(t('products.packaging_sizes'), product.packaging);
