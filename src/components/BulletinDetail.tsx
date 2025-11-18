@@ -196,7 +196,12 @@ const BulletinDetail = () => {
           </div>
 
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">{title}</h1>
-          <p className="text-xl text-blue-100 leading-relaxed">{shortDescription}</p>
+             <button
+                  onClick={handleDownloadPDF}
+                  className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm"
+                >
+                  {t('bulletin.downloadPdf')}
+                </button>
         </div>
       </div>
 
@@ -285,12 +290,7 @@ const BulletinDetail = () => {
                 >
                   {t('bulletin.contactTeam')} 
                 </Link>
-                <button
-                  onClick={handleDownloadPDF}
-                  className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm"
-                >
-                  {t('bulletin.downloadPdf')}
-                </button>
+            
               </div>
             </div>
           </div>
