@@ -851,7 +851,7 @@ const ProductDetail = () => {
                 <CheckCircle className="w-8 h-8 text-logo mr-3  " />
                 {t('products.key_features')}
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-2">
                 {product.features.map((feature, index) => (
                   <motion.div
                     key={index}
