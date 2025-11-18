@@ -189,7 +189,7 @@ const Blog = () => {
           {/* Filters Sidebar */} 
          <div className="lg:w-80  flex-shrink-0">
   <div className="  top-24">
-    <div className="bg-white rounded-xl shadow-lg p-6 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar">
+    <div className="bg-white fixed rounded-xl shadow-lg p-6 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar">
 
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">{t('blog.categoriesTitle')}</h3>
