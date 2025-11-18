@@ -420,7 +420,7 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-2xl font-bold text-gray-900">
                   {t('products.ourProducts')} ({filteredProducts.length})
-                </h2>
+                </h2> 
                 <div className="flex bg-white rounded-lg shadow-sm border border-gray-200">
                   <button
                     onClick={() => setViewMode('grid')}
