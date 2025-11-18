@@ -1118,8 +1118,8 @@ const ProductDetail = () => {
               <Shield className="w-8 h-8 text-logo mr-3" />
               {t('products.storing_conditions')}
             </h2>
-            <div
-              className="max-w-6xl prose prose-lg mx-auto bg-gray-50 rounded-2xl p-8"
+            <div 
+              className="max-w-4xl prose prose-lg mx-auto bg-gray-50 rounded-2xl p-8"
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(product.storing_conditions) }}
             />
           </div>
