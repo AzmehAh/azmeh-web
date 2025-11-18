@@ -222,7 +222,7 @@ const BulletinDetail = () => {
           </article>
 
           {/* Related Articles */}
-          <div className="mt-16 pt-8 border-t border-gray-200">
+          <div className="mt-16 pt-4 border-t border-gray-200">
             <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
               <FileText className="w-6 h-6 text-logo mr-3" />
               {bulletin?.related_bulletin_ids?.length > 0
