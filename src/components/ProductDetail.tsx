@@ -441,26 +441,63 @@ const ProductDetail = () => {
       printElement.appendChild(section);
     };
 
+// --- بدلاً من الكود القديم ---
+// إنشاء قسم لكل تصنيف مع عرض كل قيمة فيه كعنصر منفصل
 
-    const type = product.type ? translateFilterValue('Type', product.type, filterValueMap) : '';
-    const material = product.material.length
-      ? product.material.map(id => translateFilterValue('Material Type', id, filterValueMap)).join(', ')
-      : '';
-    const usage = product.usage.length
-      ? product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap)).join(', ')
-      : '';
+const createCategorySection = (titleKey: string, values: string[] | null, label: string) => {
+  if (!values || values.length === 0) return;
 
-    if (type || material || usage) {
-      const cats = [type, material, usage].filter(Boolean).join(' • ');
-      const catDiv = document.createElement('div');
-      catDiv.textContent = cats;
-      catDiv.style.backgroundColor = '#eef5ff';
-      catDiv.style.padding = '8px 12px';
-      catDiv.style.borderRadius = '6px';
-      catDiv.style.marginBottom = '20px';
-      printElement.appendChild(catDiv);
-    }
+  const section = document.createElement('div');
+  section.style.marginBottom = '15px';
+  section.style.backgroundColor = '#eef5ff';
+  section.style.padding = '8px 12px';
+  section.style.borderRadius = '6px';
 
+  const title = document.createElement('h3');
+  title.textContent = `${label}:`;
+  title.style.fontSize = '14px';
+  title.style.fontWeight = 'bold';
+  title.style.color = '#0055A3';
+  title.style.marginBottom = '8px';
+  section.appendChild(title);
+
+  const list = document.createElement('ul');
+  list.style.paddingInlineStart = '20px';
+  list.style.margin = '0';
+  list.style.listStyleType = 'disc';
+
+  values.forEach(value => {
+    if (!value.trim()) return;
+    const li = document.createElement('li');
+    li.textContent = value;
+    li.style.marginBottom = '4px';
+    li.style.fontSize = '13px';
+    list.appendChild(li);
+  });
+
+  section.appendChild(list);
+  printElement.appendChild(section);
+};
+
+// Type (عادة قيمة واحدة)
+if (product.type) {
+  const typeValue = translateFilterValue('Type', product.type, filterValueMap);
+  if (typeValue) {
+    createCategorySection('Type', [typeValue], t('products.type')); // نضعها كمصفوفة لتوافق الدالة
+  }
+}
+
+// Material (قد يكون عدة قيم)
+if (product.material?.length) {
+  const materialValues = product.material.map(id => translateFilterValue('Material Type', id, filterValueMap));
+  createCategorySection('Material Type', materialValues, t('products.material'));
+}
+
+// Usage (قد يكون عدة قيم)
+if (product.usage?.length) {
+  const usageValues = product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap));
+  createCategorySection('Application Fields', usageValues, t('products.usage'));
+}
     addSection(t('products.technical_description'), technicalDescription);
     addSection(t('products.packaging_sizes'), product.packaging);
     if (product.recommended_uses?.length) {
