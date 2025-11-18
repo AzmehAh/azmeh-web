@@ -726,7 +726,7 @@ const ProductDetail = () => {
             <div>
               <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">{product.name}</h1>
               <p className="text-xl text-white mb-4 leading-relaxed">{product.description}</p>
-            <div className="flex flex-wrap gap-4 mb-8">
+            <div className="flex flex-wrap gap-2 mb-8">
 
   {displayType && (
     <span className="px-3 py-1 bg-white/20 rounded-full text-white font-medium">
