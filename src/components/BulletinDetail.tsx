@@ -198,9 +198,9 @@ const BulletinDetail = () => {
           <h1 className="text-2xl md:text-5xl font-bold mb-6 leading-tight">{title}</h1>
              <button
                   onClick={handleDownloadPDF}
-                  className="bg-gray-600/20 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm"
+                  className="bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-lg font-semibold transition-colors backdrop-blur-sm"
                 >
-                  {t('bulletin.downloadPdf')}
+                  {t('bulletin.downloadPdf')} 
                 </button>
         </div>
       </div>
