@@ -501,7 +501,7 @@ const ProductDetail = () => {
         const lblCell = document.createElement('td');
         lblCell.style.fontWeight = 'bold';
         lblCell.style.padding = '6px 8px';
-        lblCell.style.border = '1px solid #ddd';
+        lblCell.style.border = 'none';
         lblCell.style.width = '40%';
         lblCell.textContent = label;
         const valCell = document.createElement('td');
@@ -518,7 +518,7 @@ const ProductDetail = () => {
       }
     }
 
-    // Technical Specs
+    // Technical Specs 
     if (product.technical_specs?.length) {
       const specsTable = document.createElement('table');
       specsTable.style.width = '100%';
@@ -597,7 +597,7 @@ const ProductDetail = () => {
         const lblCell = document.createElement('td');
         lblCell.style.fontWeight = 'bold';
         lblCell.style.padding = '6px 8px';
-        lblCell.style.border = '1px solid #ddd';
+        lblCell.style.border = 'none';
         lblCell.style.width = '40%';
         lblCell.textContent = label;
         const valCell = document.createElement('td');
