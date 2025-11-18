@@ -359,7 +359,7 @@ const ProductDetail = () => {
       : 'Information in this data sheet and in all our data sheets are given to the best of our knowledge based on laboratory testing and practical experience. Final results depend on following instructions and on consumer skill. Our responsibility is limited to providing products that conform to samples and specimens provided by us. Due to technical needs, we reserve the right to change any given specification without notice.';
   };
 
-  const handleDownloadPDF = () => { 
+  const handleDownloadPDF = () => {
     if (!product) return;
     const isRTL = i18n.language === 'ar';
     const getTranslated = (enVal: string, arVal?: string) =>
@@ -394,13 +394,13 @@ const ProductDetail = () => {
       img.style.marginBottom = '15px';
       header.appendChild(img);
     }
-    // إضافة شعار البراند
-if (product.brand && brandLogos.length > 0) {
-  const brand = brandLogos.find(b => b.id === product.brand);
+   // === إضافة شعار البراند من filterValueMap ===
+if (product.brand && filterValueMap?.brands) {
+  const brand = filterValueMap.brands.find((b: any) => b.id === product.brand);
   if (brand?.logo) {
     const brandImg = document.createElement('img');
     brandImg.src = brand.logo;
-    brandImg.alt = getTranslated(brand.name, brand.name); // لأنك لا تملك name_ar في المصفوفة
+    brandImg.alt = getTranslated(brand.name || '', brand.name_ar || brand.name || '');
     brandImg.style.width = '60px';
     brandImg.style.height = '60px';
     brandImg.style.objectFit = 'contain';
@@ -409,11 +409,9 @@ if (product.brand && brandLogos.length > 0) {
     brandImg.style.padding = '3px';
     brandImg.style.borderRadius = '4px';
 
-    // ⚠️ مهم: تأكد من ظهور الصورة في PDF
+    // لرؤية أي خطأ في التحميل
     brandImg.onerror = () => {
-      console.error('Failed to load brand logo:', brand.logo);
-      // لا تخف الصورة هنا مؤقتًا لترى إذا كان الرابط خاطئًا
-      // brandImg.style.display = 'none';
+      console.error('Failed to load brand logo in PDF:', brand.logo);
     };
 
     header.appendChild(brandImg);
