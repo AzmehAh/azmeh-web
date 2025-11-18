@@ -36,7 +36,7 @@ const Products = () => {
   const [productsLoading, setProductsLoading] = useState(true);
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({});
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('list');
   const [activeFilterCategory, setActiveFilterCategory] = useState<string | null>(null);
 
   const isRTL = i18n.language === 'ar';
