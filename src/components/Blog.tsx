@@ -175,42 +175,26 @@ const Blog = () => {
   );
 
   return (
-  <div className={`min-h-screen bg-gray-50 pt-28 ${isRTL ? 'rtl' : 'ltr'}`}>
-    
-    {/* Hero Section */}
-    <div className="text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 className="text-5xl md:text-6xl font-bold mb-6">
-        {t('blog.heroTitle')}
-      </h1>
-    </div>
+    <div className={`min-h-screen bg-gray-50 pt-28 ${isRTL ? 'rtl' : 'ltr'}`}>
+      {/* Hero Section */}
+      <div className="text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 className="text-5xl md:text-6xl font-bold mb-6">
+          {t('blog.heroTitle')} 
+        </h1>
+      </div>
+ 
+      {/* Content */}
+      <div className="max-w-7xl  mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Filters Sidebar */} 
+         <div className="lg:w-80  flex-shrink-0">
+  <div className=" sticky top-24">
+    <div className="bg-white rounded-xl shadow-lg p-6 max-h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar">
 
-    {/* Content Layout */}
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-      {/* Main Flex Layout */}
-      <div className="flex flex-col lg:flex-row gap-8 items-start">
-
-        {/* ----------------------------- */}
-        {/*         FILTER SIDEBAR        */}
-        {/* ----------------------------- */}
-        <div className="lg:w-80 flex-shrink-0 self-start">
-
-          {/* Sticky only this wrapper */}
-          <div className="sticky top-24 z-20">
-
-            <div className="bg-white rounded-xl shadow-lg p-6 h-[calc(100vh-7rem)] overflow-y-auto no-scrollbar">
-
-              {/* Header */}
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900">
-                  {t('blog.categoriesTitle')}
-                </h3>
-
+                <h3 className="text-xl font-bold text-gray-900">{t('blog.categoriesTitle')}</h3>
                 {Object.values(selectedFilters).flat().length > 0 && (
-                  <button
-                    onClick={clearFilters}
-                    className="text-sm text-logo hover:text-blue-700 font-medium"
-                  >
+                  <button onClick={clearFilters} className="text-sm text-logo hover:text-blue-700 font-medium">
                     {t('blog.clearAll')}
                   </button>
                 )}
@@ -225,12 +209,12 @@ const Blog = () => {
                     placeholder={t('blog.searchPlaceholder')}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-logo transition`}
+                    className={`w-full ${isRTL ? 'pr-10 pl-4' : 'pl-10 pr-4'} py-3 border border-gray-200 rounded-lg focus:outline-none focus:border-logo transition-colors`}
                   />
                 </div>
               </div>
 
-              {/* Categories Loader */}
+              {/* Categories - عرض Skeleton أثناء التحميل */}
               {loading ? (
                 <div className="space-y-4">
                   {[...Array(3)].map((_, i) => (
@@ -246,45 +230,43 @@ const Blog = () => {
                 </div>
               ) : (
                 <div className="space-y-4">
-                  {Object.entries(systemCategories).map(([cat, subs]) => (
-                    <div key={cat}>
+                  {Object.entries(systemCategories).map(([originalCategoryName, subcategories]) => (
+                    <div key={originalCategoryName}>
                       <button
-                        onClick={() => setActiveCategory(activeCategory === cat ? null : cat)}
-                        className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-logo transition"
+                        onClick={() => setActiveCategory(activeCategory === originalCategoryName ? null : originalCategoryName)}
+                        className="flex items-center justify-between w-full text-left font-medium text-gray-900 mb-2 hover:text-logo transition-colors"
                       >
-                        <span>{categoryDisplayNames[cat] || cat}</span>
-
-                        <motion.span
-                          animate={{ rotate: activeCategory === cat ? 180 : 0 }}
-                          className="inline-block"
-                        >
+                        <span>{categoryDisplayNames[originalCategoryName] || originalCategoryName}</span>
+                        <motion.span animate={{ rotate: activeCategory === originalCategoryName ? 180 : 0 }} className="inline-block">
                           <ChevronDown className="w-4 h-4" />
                         </motion.span>
                       </button>
 
                       <AnimatePresence>
-                        {activeCategory === cat && (
+                        {activeCategory === originalCategoryName && (
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
+                            animate={{ height: 'auto', opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.3 }}
                             className="overflow-hidden space-y-2"
                           >
-                            {subs.map((sub) => (
+                            {subcategories.map(sub => (
                               <label
                                 key={sub}
-                                className="flex items-center gap-2 p-2 rounded-md hover:bg-gray-50 cursor-pointer"
+                                className="flex items-center justify-between p-2 rounded-md hover:bg-gray-50 cursor-pointer"
                               >
-                                <input
-                                  type="checkbox"
-                                  checked={selectedFilters[cat]?.includes(sub) || false}
-                                  onChange={() => toggleFilter(cat, sub)}
-                                  className="w-4 h-4 text-logo border-gray-300 rounded focus:ring-logo"
-                                />
-                                <span className="text-sm text-gray-700">{sub}</span>
+                                <div className="flex items-center gap-2">
+                                  <input
+                                    type="checkbox"
+                                    checked={selectedFilters[originalCategoryName]?.includes(sub) || false}
+                                    onChange={() => toggleFilter(originalCategoryName, sub)}
+                                    className="w-4 h-4 text-logo border-gray-300 rounded focus:ring-logo mt-0.5 flex-shrink-0"
+                                  />
+                                  <span className="text-sm text-gray-700">{sub}</span>
+                                </div>
                               </label>
-                            ))}
+                            ))} 
                           </motion.div>
                         )}
                       </AnimatePresence>
@@ -292,15 +274,9 @@ const Blog = () => {
                   ))}
                 </div>
               )}
-
             </div>
           </div>
-        </div>
-
-        
-
-
-
+   </div>
           {/* Bulletins Grid */}
           <div className="flex-1">
             <div className="mb-8">
