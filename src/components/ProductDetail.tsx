@@ -1127,13 +1127,13 @@ const ProductDetail = () => {
       <section className="py-16 bg-gray-50">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto">
-           
-           
+            
+            
               <div className="p-8">
                 <p className="text-gray-700 leading-relaxed whitespace-pre-line">
-                  {displayedSafetyNote}
+                  {t('products.safety_note')}  {displayedSafetyNote}
                 </p>
-             
+            
             </div>
           </div>
         </div>
