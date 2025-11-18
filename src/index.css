@@ -628,18 +628,18 @@
 
 .ProseMirror ul,
 .ProseMirror ol { 
-  padding-left: 0.5rem;
+  padding-left: 1.5rem;
   margin-bottom: 0.1rem;
 }
 
 .ProseMirror[dir="rtl"] ul,
 .ProseMirror[dir="rtl"] ol {
   padding-left: 0;
-  padding-right: 0.5rem;
+  padding-right: 1.5rem;
 }
 
 .ProseMirror li {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.05rem;
 }
 
 .ProseMirror blockquote {
