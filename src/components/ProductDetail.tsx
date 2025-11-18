@@ -907,12 +907,12 @@ const ProductDetail = () => {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-3xl font-bold text-center text-gray-800 mb-10 flex items-center justify-center">
           <FileText className="w-5 h-5 mr-2 text-logo" />
-          {t('products.technical_specifications')}
+          {t('products.technical_specifications 
         </h2>
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
           <div className="divide-y divide-gray-100">
             {product.technical_specs.map((spec, index) => ( 
-              <div key={index} className="px-6 py-2 mt-2"> 
+              <div key={index} className="px-6 py-4 ">
                 <div className="grid grid-cols-1 gap-y-1 md:grid-cols-[200px_1fr] md:gap-x-6 items-start">
                   <span className="font-bold text-gray-800">{t(`products.${spec.key}`)}:</span>
                   <span className="text-gray-700 leading-relaxed">{spec.value}</span>
