@@ -179,25 +179,23 @@ const Blog = () => {
       {/* Hero Section */}
       <div className="text-logo pt-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h1 className="text-5xl md:text-6xl font-bold mb-6">
-          {t('blog.heroTitle')} 
+          {t('blog.heroTitle')}
         </h1>
       </div>
- 
-      {/* Content */}
-      <div className="max-w-7xl  mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col lg:flex-row gap-8">
-          {/* Filters Sidebar */} 
-       <div className="lg:w-80 flex-shrink-0 relative">
-  <div className="absolute top-28 left-0 right-0 z-10">
-    <div className="bg-white rounded-xl shadow-lg p-6 max-h-[calc(100vh - 12rem)] overflow-y-auto no-scrollbar">
 
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Filters Sidebar */}
+          <div className="lg:w-80 flex-shrink-0">
+            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24 max-h-[calc(100vh-6rem)] overflow-y-auto no-scrollbar">
               <div className="flex items-center justify-between mb-6">
                 <h3 className="text-xl font-bold text-gray-900">{t('blog.categoriesTitle')}</h3>
                 {Object.values(selectedFilters).flat().length > 0 && (
                   <button onClick={clearFilters} className="text-sm text-logo hover:text-blue-700 font-medium">
                     {t('blog.clearAll')}
                   </button>
-                )}
+                )} 
               </div>
 
               {/* Search */}
@@ -266,7 +264,7 @@ const Blog = () => {
                                   <span className="text-sm text-gray-700">{sub}</span>
                                 </div>
                               </label>
-                            ))} 
+                            ))}
                           </motion.div>
                         )}
                       </AnimatePresence>
@@ -276,7 +274,7 @@ const Blog = () => {
               )}
             </div>
           </div>
-   </div>
+
           {/* Bulletins Grid */}
           <div className="flex-1">
             <div className="mb-8">
