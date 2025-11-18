@@ -198,7 +198,7 @@ const Blog = () => {
                   </button>
                 )}
               </div>
-
+</div>
               {/* Search */}
               <div className="mb-6">
                 <div className="relative">
