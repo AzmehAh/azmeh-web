@@ -740,3 +740,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+@media print {
+  * {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+  table, tr, td {
+    page-break-inside: avoid !important;
+  }
+  h1, h2, h3, div {
+    page-break-inside: avoid !important;
+  }
+}
