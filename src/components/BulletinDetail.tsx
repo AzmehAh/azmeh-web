@@ -276,24 +276,7 @@ const BulletinDetail = () => {
             )}
           </div>
 
-          {/* Contact & Download Section */}
-          <div className="mt-16">
-            <div className="bg-gray-900  rounded-2xl p-8 text-white text-center">
-              <h3 className="text-2xl font-bold mb-4">{t('bulletin.needHelpTitle')}</h3>
-              <p className="text-gray-300 mb-6 max-w-2xl mx-auto">{t('bulletin.needHelpText')}</p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link
-                  to="/contact"
-                  className="inline-flex  items-center justify-center  but group px-6 py-3 sm:px-8 sm:py-4 rounded-lg 
-             focus:outline-none focus:ring-2 focus:ring-logo/20 
-             font-semibold text-sm sm:text-base"
-                >
-                  {t('bulletin.contactTeam')} 
-                </Link>
-            
-              </div>
-            </div>
-          </div>
+   
         </div>
       </div>
     </div>
