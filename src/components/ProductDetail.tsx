@@ -492,7 +492,7 @@ const handleDownloadPDF = async () => {
 
       allBadges.forEach(value => {
         if (!value.trim()) return;
-       const badge = document.createElement('div');
+  const badge = document.createElement('div');
 badge.textContent = value;
 badge.style.backgroundColor = '#f0f0f0';
 badge.style.color = '#333';
