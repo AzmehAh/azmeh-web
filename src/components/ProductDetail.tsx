@@ -490,7 +490,7 @@ const handleDownloadPDF = async () => {
       badgesContainer.style.alignItems = 'center';
       badgesContainer.style.breakInside = 'avoid';
 
-     allBadges.forEach(value => {
+ allBadges.forEach(value => {
   if (!value.trim()) return;
   const badge = document.createElement('div'); 
   badge.textContent = value;
@@ -512,6 +512,9 @@ const handleDownloadPDF = async () => {
 
   badgesContainer.appendChild(badge);
 });
+
+      printElement.appendChild(badgesContainer);
+    } 
 
     // === الأقسام المتبقية ===
     addSection(t('products.technical_description'), technicalDescription);
