@@ -486,7 +486,7 @@ const handleDownloadPDF = async () => {
       badgesContainer.style.display = 'flex';
       badgesContainer.style.flexWrap = 'wrap';
       badgesContainer.style.gap = '8px';
-      badgesContainer.style.marginBottom = '20px';
+      badgesContainer.style.marginBottom = '25px';
       badgesContainer.style.alignItems = 'center';
       badgesContainer.style.breakInside = 'avoid';
 
