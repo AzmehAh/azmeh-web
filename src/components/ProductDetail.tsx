@@ -720,46 +720,51 @@ imagesContainer.style.marginBottom = "15px";
     html2pdf().from(printElement).set(options).save();
   };
 
-  // === تحميل شعار البراند كـ Base64 ===
   if (product.brand) {
-    const brand = staticBrandLogos.find(b => b.id === product.brand);
-    if (brand?.logo) {
-      try {
-        const absoluteUrl = brand.logo.startsWith('http')
-          ? brand.logo
-          : `${window.location.origin}${brand.logo.startsWith('/') ? '' : '/'}${brand.logo.replace(/^\/+/, '')}`;
+  const brand = staticBrandLogos.find(b => b.id === product.brand);
 
-        const response = await fetch(absoluteUrl);
-        if (!response.ok) throw new Error('Logo not found');
-        const blob = await response.blob();
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const dataUrl = reader.result as string;
-          const brandImg = document.createElement('img');
-          brandImg.src = dataUrl;
-          brandImg.alt = getTranslated(brand.name, brand.name);
-          brandImg.style.width = '60px';
-          brandImg.style.height = '60px';
-          brandImg.style.objectFit = 'contain';
-          brandImg.style.marginTop = '10px';
-          brandImg.style.backgroundColor = '#fff';
-          brandImg.style.padding = '3px';
-          brandImg.style.borderRadius = '4px';
-          header.appendChild(brandImg);
-          generatePDF(); // بعد إضافة الصورة
-        };
-        reader.readAsDataURL(blob);
-        return;
-      } catch (error) {
-        console.error('Failed to load brand logo for PDF:', error);
-        // إذا فشل، نُولّد بدون شعار
-      }
-    }
+  if (brand?.logo) {
+    const img = new Image();
+    img.crossOrigin = "anonymous"; // مهم للـ CORS
+    img.src = brand.logo.startsWith('http')
+      ? brand.logo
+      : `${window.location.origin}/${brand.logo.replace(/^\/+/, '')}`;
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0);
+
+      const dataUrl = canvas.toDataURL("image/png");
+
+      const brandImg = document.createElement("img");
+      brandImg.src = dataUrl;
+      brandImg.style.width = "60px";
+      brandImg.style.height = "60px";
+      brandImg.style.objectFit = "contain";
+      brandImg.style.marginTop = "10px";
+      brandImg.style.backgroundColor = "#fff";
+      brandImg.style.padding = "3px";
+      brandImg.style.borderRadius = "4px";
+
+      header.appendChild(brandImg);
+
+      generatePDF();
+    };
+
+    img.onerror = (e) => {
+      console.error("⚠ فشل تحميل صورة البراند:", e);
+      generatePDF(); // توليد بدون صورة بدل توقف الكود
+    };
+
+    return;
   }
+}
 
-  // إذا لم يكن هناك براند أو فشل التحميل
-  generatePDF();
-};
+generatePDF();
+
  
   useEffect(() => {
     fetchFilterTranslations();
