@@ -492,21 +492,23 @@ const handleDownloadPDF = async () => {
 
       allBadges.forEach(value => {
         if (!value.trim()) return;
-        const badge = document.createElement('div'); 
-        badge.textContent = value;
-        badge.style.backgroundColor = '#f0f0f0';
-        badge.style.color = '#333';
-        badge.style.padding = '6px 12px';
-        badge.style.borderRadius = '20px';
-        badge.style.fontSize = '13px';
-        badge.style.fontWeight = '500';
-        badge.style.textAlign = 'center';
-        badge.style.whiteSpace = 'nowrap';
-        badge.style.border = '1px solid #ddd';
-        badge.style.display = 'flex';
-        badge.style.alignItems = 'center';
-        badge.style.justifyContent = 'center';
-        badgesContainer.appendChild(badge);
+       const badge = document.createElement('div');
+badge.textContent = value;
+badge.style.backgroundColor = '#f0f0f0';
+badge.style.color = '#333';
+badge.style.padding = '6px 12px';
+badge.style.borderRadius = '20px';
+badge.style.fontSize = '13px';
+badge.style.fontWeight = '500';
+badge.style.textAlign = 'center';
+
+// هنا التعديلات الأساسية لمحاذاة النص في الوسط عموديًا
+badge.style.display = 'flex';
+badge.style.alignItems = 'center'; // ✅ محاذاة عمودية
+badge.style.justifyContent = 'center'; // ✅ محاذاة أفقية
+badge.style.height = '28px'; // يمكنك تعديل الارتفاع حسب الحاجة
+badge.style.whiteSpace = 'nowrap';
+badge.style.border = '1px solid #ddd';
       });
       printElement.appendChild(badgesContainer);
     }
