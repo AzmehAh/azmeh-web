@@ -489,7 +489,7 @@ const handleDownloadPDF = async () => {
       badgesContainer.style.marginBottom = '20px';
       badgesContainer.style.alignItems = 'center';
       badgesContainer.style.breakInside = 'avoid';
-
+badgesContainer.style.justifyContent = "center";
       allBadges.forEach(value => {
         if (!value.trim()) return;
         const badge = document.createElement('div');
