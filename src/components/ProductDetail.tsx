@@ -709,7 +709,7 @@ const handleDownloadPDF = async () => {
   const imagesContainer = document.createElement("div");
   imagesContainer.style.display = "flex";
   imagesContainer.style.alignItems = "center";
-  imagesContainer.style.gap = "15px";
+  imagesContainer.style.gap = "50px";
   imagesContainer.style.marginBottom = "15px";
   // في الواجهة العربية (RTL)، البراند يكون على اليمين تلقائياً
 
