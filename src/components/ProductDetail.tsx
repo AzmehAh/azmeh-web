@@ -760,6 +760,7 @@ const ProductDetail = () => {
 
 generatePDF();
 
+};
 
   useEffect(() => {
     fetchFilterTranslations();
