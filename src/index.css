@@ -735,6 +735,10 @@ html, body {
   width: 100%;
 
 }
+/* ✅ الحل الآمن */
+html {
+  overflow-x: hidden; /* يمنع الخط الأبيض الجانبي */
+}
 
 body { 
   -webkit-font-smoothing: antialiased;
