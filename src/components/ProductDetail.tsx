@@ -359,7 +359,7 @@ const ProductDetail = () => {
       : 'Information in this data sheet and in all our data sheets are given to the best of our knowledge based on laboratory testing and practical experience. Final results depend on following instructions and on consumer skill. Our responsibility is limited to providing products that conform to samples and specimens provided by us. Due to technical needs, we reserve the right to change any given specification without notice.';
   };
 
-const handleDownloadPDF = async () => {
+ const handleDownloadPDF = async () => {
   if (!product) return;
   const isRTL = i18n.language === 'ar';
   const getTranslated = (enVal: string, arVal?: string) =>
@@ -754,26 +754,6 @@ const handleDownloadPDF = async () => {
   // إذا لم يكن هناك براند أو فشل التحميل
   generatePDF();
 };
-    addSection(t('products.storing_conditions'), product.storing_conditions);
-
-    // ✅ Safety Note with fallback
-    const displaySafetyNote = product.safety_note || getSafetyNoteFallback();
-    addSection(t('products.safety_note'), displaySafetyNote);
-
-    // Export PDF
-    const safeName = name
-      .replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '_')
-      .replace(/\s+/g, '_')
-      .trim();
-    const options = {
-      margin: 10,
-      filename: `${safeName}_Datasheet.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    };
-    html2pdf().from(printElement).set(options).save();
-  };
 
   useEffect(() => {
     fetchFilterTranslations();
