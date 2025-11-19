@@ -735,9 +735,9 @@ html, body {
   width: 100%;
 
 }
-/* ✅ الحل الآمن */
+
 html {
-  overflow-x: hidden; /* يمنع الخط الأبيض الجانبي */
+  overflow-x: hidden; 
 }
 
 body { 
