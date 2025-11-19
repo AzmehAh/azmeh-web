@@ -482,7 +482,6 @@ const handleDownloadPDF = async () => {
     }
 
     if (allBadges.length > 0) {
-    if (allBadges.length > 0) {
   const badgesContainer = document.createElement('div');
   badgesContainer.style.display = 'flex';
   badgesContainer.style.flexWrap = 'wrap';
@@ -516,7 +515,6 @@ const handleDownloadPDF = async () => {
 
   printElement.appendChild(badgesContainer);
 }
-
     // === الأقسام المتبقية ===
     addSection(t('products.technical_description'), technicalDescription);
     addSection(t('products.packaging_sizes'), product.packaging);
