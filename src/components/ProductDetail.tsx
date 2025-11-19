@@ -628,7 +628,7 @@ const ProductDetail = () => {
         printElement.appendChild(specsSection);
       }
     }
-
+ addSection(t('products.packaging_sizes'), product.packaging);
     addSection(t('products.surface_preparation'), product.surface_preparation);
 
     // Drying Time
