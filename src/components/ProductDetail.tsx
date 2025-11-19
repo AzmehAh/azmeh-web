@@ -522,7 +522,7 @@ const ProductDetail = () => {
 
     // === الأقسام المتبقية ===
     addSection(t('products.technical_description'), technicalDescription);
-    addSection(t('products.packaging_sizes'), product.packaging);
+   
     if (product.recommended_uses?.length) {
       addSection(t('products.recommended_uses'), product.recommended_uses.join(', '));
     }
@@ -628,7 +628,7 @@ const ProductDetail = () => {
         printElement.appendChild(specsSection);
       }
     }
-
+ addSection(t('products.packaging_sizes'), product.packaging);
     addSection(t('products.surface_preparation'), product.surface_preparation);
 
     // Drying Time
@@ -714,13 +714,12 @@ const ProductDetail = () => {
     html2pdf().from(printElement).set(options).save();
   };
 
-  // === تحميل شعار البراند كـ Base64 ===
-  if (product.brand) {
+if (product.brand) {
   const brand = staticBrandLogos.find(b => b.id === product.brand);
 
   if (brand?.logo) {
     const img = new Image();
-    img.crossOrigin = "anonymous"; // مهم للـ CORS
+    img.crossOrigin = "anonymous";
     img.src = brand.logo.startsWith('http')
       ? brand.logo
       : `${window.location.origin}/${brand.logo.replace(/^\/+/, '')}`;
@@ -739,28 +738,24 @@ const ProductDetail = () => {
       brandImg.style.width = "60px";
       brandImg.style.height = "60px";
       brandImg.style.objectFit = "contain";
-      brandImg.style.marginTop = "10px";
-      brandImg.style.backgroundColor = "#fff";
       brandImg.style.padding = "3px";
       brandImg.style.borderRadius = "4px";
+      brandImg.style.background = "#fff";
 
-      header.appendChild(brandImg);
+      // حاوية لعرض الصور جنب بعض
+      const imagesContainer = document.createElement("div");
+      imagesContainer.style.display = "flex";
+      imagesContainer.style.alignItems = "center";
+      imagesContainer.style.gap = "15px";
+
+      header.appendChild(imagesContainer);
+
+      // أضف صورة البراند بجانب الصورة الرئيسية
+      imagesContainer.appendChild(brandImg);
 
       generatePDF();
     };
 
-    img.onerror = (e) => {
-      console.error("⚠ فشل تحميل صورة البراند:", e);
-      generatePDF(); // توليد بدون صورة بدل توقف الكود
-    };
-
-    return;
-  }
-}
-
-generatePDF();
-
-};
 
   useEffect(() => {
     fetchFilterTranslations();
