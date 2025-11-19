@@ -489,7 +489,7 @@ const handleDownloadPDF = async () => {
       badgesContainer.style.marginBottom = '20px';
       badgesContainer.style.alignItems = 'center';
       badgesContainer.style.breakInside = 'avoid';
-badgesContainer.style.justifyContent = "center";
+
       allBadges.forEach(value => {
         if (!value.trim()) return;
         const badge = document.createElement('div');
@@ -499,6 +499,8 @@ badgesContainer.style.justifyContent = "center";
         badge.style.padding = '6px 12px';
         badge.style.borderRadius = '20px';
         badge.style.fontSize = '13px';
+        badge.style.alignItems = 'center'; // ✅ محاذاة عمودية
+badge.style.justifyContent = 'center'; /
         badge.style.fontWeight = '500';
         badge.style.textAlign = 'center';
         badge.style.whiteSpace = 'nowrap';
