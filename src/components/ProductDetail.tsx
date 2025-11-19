@@ -379,6 +379,12 @@ const ProductDetail = () => {
   printElement.style.maxWidth = '210mm';
   printElement.style.breakInside = 'avoid';
 
+   const imagesContainer = document.createElement("div");
+imagesContainer.style.display = "flex";
+imagesContainer.style.alignItems = "center";
+imagesContainer.style.gap = "15px";
+imagesContainer.style.marginBottom = "15px";
+
   // Header
   const header = document.createElement('div');
   header.style.textAlign = isRTL ? 'right' : 'left';
