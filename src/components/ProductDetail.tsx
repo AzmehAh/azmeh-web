@@ -412,8 +412,13 @@ const staticBrandLogos = [
 if (product.brand) {
   const brand = staticBrandLogos.find(b => b.id === product.brand);
   if (brand?.logo) {
+    // ✅ تحويل الرابط النسبي إلى مطلق
+    const absoluteLogoUrl = brand.logo.startsWith('http')
+      ? brand.logo
+      : `${window.location.origin}${brand.logo.startsWith('/') ? '' : '/'}${brand.logo.replace(/^\/+/, '')}`;
+
     const brandImg = document.createElement('img');
-    brandImg.src = brand.logo;
+    brandImg.src = absoluteLogoUrl; // ← ✅ الآن سيُحمّل في PDF
     brandImg.alt = getTranslated(brand.name, brand.name);
     brandImg.style.width = '60px';
     brandImg.style.height = '60px';
@@ -423,7 +428,7 @@ if (product.brand) {
     brandImg.style.padding = '3px';
     brandImg.style.borderRadius = '4px';
     brandImg.onerror = () => {
-      console.error('PDF: Brand logo not found at', brand.logo);
+      console.error('PDF: Brand logo failed to load:', absoluteLogoUrl);
     };
     header.appendChild(brandImg);
   }
@@ -1224,9 +1229,9 @@ badgesContainer.appendChild(badge);
             </div>
           </div>
         </div>
-      </section> 
+      </section>  
     </div>
   );
 };
 
-export default ProductDetail;
+export default ProductDetail;  
