@@ -359,114 +359,107 @@ const ProductDetail = () => {
       : 'Information in this data sheet and in all our data sheets are given to the best of our knowledge based on laboratory testing and practical experience. Final results depend on following instructions and on consumer skill. Our responsibility is limited to providing products that conform to samples and specimens provided by us. Due to technical needs, we reserve the right to change any given specification without notice.';
   };
 
-  const handleDownloadPDF = () => {
-    if (!product) return;
-    const isRTL = i18n.language === 'ar';
-    const getTranslated = (enVal: string, arVal?: string) =>
-      isRTL ? (arVal || enVal) : enVal;
+const handleDownloadPDF = async () => {
+  if (!product) return;
+  const isRTL = i18n.language === 'ar';
+  const getTranslated = (enVal: string, arVal?: string) =>
+    isRTL ? (arVal || enVal) : enVal;
 
-    const name = getTranslated(product.name, product.name_ar);
-    const description = getTranslated(product.description, product.description_ar);
-    const technicalDescription = getTranslated(product.technical_description, product.technical_description_ar);
+  const name = getTranslated(product.name, product.name_ar);
+  const description = getTranslated(product.description, product.description_ar);
+  const technicalDescription = getTranslated(product.technical_description, product.technical_description_ar);
 
-    const printElement = document.createElement('div');
-    printElement.dir = isRTL ? 'rtl' : 'ltr';
-    printElement.style.fontFamily = isRTL ? "'Tajawal', system-ui, sans-serif" : "system-ui, sans-serif";
-    printElement.style.padding = '20mm';
-    printElement.style.lineHeight = '1.6';
-    printElement.style.color = '#000';
-    printElement.style.fontSize = '14px';
-    printElement.style.maxWidth = '210mm';
-    printElement.style.pageBreakInside = 'avoid';
-    printElement.style.breakInside = 'avoid';
+  const printElement = document.createElement('div');
+  printElement.dir = isRTL ? 'rtl' : 'ltr';
+  printElement.style.fontFamily = isRTL ? "'Tajawal', system-ui, sans-serif" : "system-ui, sans-serif";
+  printElement.style.padding = '20mm';
+  printElement.style.lineHeight = '1.6';
+  printElement.style.color = '#000';
+  printElement.style.fontSize = '14px';
+  printElement.style.maxWidth = '210mm';
+  printElement.style.breakInside = 'avoid';
 
-    // Header
-    const header = document.createElement('div');
-    header.style.textAlign = isRTL ? 'right' : 'left';
-    header.style.marginBottom = '20px';
-    if (product.image_url) {
-      const img = document.createElement('img');
-      img.src = product.image_url;
-      img.alt = name;
-      img.style.width = '100px';
-      img.style.height = '100px';
-      img.style.objectFit = 'contain';
-      img.style.marginBottom = '15px';
-      header.appendChild(img);
-    }
-  // === مصفوفة ثابتة داخل الدالة (لأنها لا تعتمد على state) ===
-const staticBrandLogos = [
-  { id: "a3f4f300-4052-4b03-b7d8-437eba0607da", name: "Azur", logo: "/images/Azur.png" },
-  { id: "835a9d0b-3ab1-4a25-bf95-176559412d62", name: "COPRAbEL.", logo: "/images/COPRAbEL.jpg" },
-  { id: "28071c24-3ac5-464f-ab5d-7caab121d1c2", name: "Omegan", logo: "/images/Omegan.gif" },
-  { id: "250cea8a-a42f-4cd9-818f-aa689ab4bbad", name: "Décor", logo: "/images/Decor.png" }, 
-  { id: "0e135e6c-6221-41c9-960c-4e1a2b7a5173", name: "Capric", logo: "/images/Capric.gif" },
-  { id: "578b40da-4b05-40f2-ad11-447452e37c02", name: "Miracle", logo: "/images/Miracle.png" },
-  { id: "3ba98710-3b80-44ce-83c5-eef8d42e75ec", name: "Original", logo: "/images/Original.gif" },
-  { id: "85140bc7-c373-4145-865f-1873346544e0", name: "SRT", logo: "/images/SRT.gif" }, 
-  { id: "e40995d6-56d0-4c86-a2d6-1139a8e52ba8", name: "Jupiter", logo: "/images/Jupiter.gif" },
-  { id: "4c7ef6c7-00d6-4c5e-98cc-6f4e1cc700aa", name: "omega", logo: "/images/omega.gif" }, 
-  { id: "d08efffb-abb8-4b05-9f5c-79fec6670a78", name: "AlDahab", logo: "/images/AlDahab.png" },
-];
+  // Header
+  const header = document.createElement('div');
+  header.style.textAlign = isRTL ? 'right' : 'left';
+  header.style.marginBottom = '20px';
+  header.style.breakInside = 'avoid';
 
-if (product.brand) {
-  const brand = staticBrandLogos.find(b => b.id === product.brand);
-  if (brand?.logo) {
-    // ✅ تحويل الرابط النسبي إلى مطلق
-    const absoluteLogoUrl = brand.logo.startsWith('http')
-      ? brand.logo
-      : `${window.location.origin}${brand.logo.startsWith('/') ? '' : '/'}${brand.logo.replace(/^\/+/, '')}`;
-
-    const brandImg = document.createElement('img');
-    brandImg.src = absoluteLogoUrl; // ← ✅ الآن سيُحمّل في PDF
-    brandImg.alt = getTranslated(brand.name, brand.name);
-    brandImg.style.width = '60px';
-    brandImg.style.height = '60px';
-    brandImg.style.objectFit = 'contain';
-    brandImg.style.marginTop = '10px';
-    brandImg.style.backgroundColor = '#fff';
-    brandImg.style.padding = '3px';
-    brandImg.style.borderRadius = '4px';
-    brandImg.onerror = () => {
-      console.error('PDF: Brand logo failed to load:', absoluteLogoUrl);
-    };
-    header.appendChild(brandImg);
+  if (product.image_url) {
+    const img = document.createElement('img');
+    img.src = product.image_url;
+    img.alt = name;
+    img.style.width = '100px';
+    img.style.height = '100px';
+    img.style.objectFit = 'contain';
+    img.style.marginBottom = '15px';
+    header.appendChild(img);
   }
-}
+
+  // === مصفوفة البراندات (ثابتة) ===
+  const staticBrandLogos = [
+    { id: "a3f4f300-4052-4b03-b7d8-437eba0607da", name: "Azur", logo: "/images/Azur.png" },
+    { id: "835a9d0b-3ab1-4a25-bf95-176559412d62", name: "COPRAbEL.", logo: "/images/COPRAbEL.jpg" },
+    { id: "28071c24-3ac5-464f-ab5d-7caab121d1c2", name: "Omegan", logo: "/images/Omegan.gif" },
+    { id: "250cea8a-a42f-4cd9-818f-aa689ab4bbad", name: "Décor", logo: "/images/Decor.png" }, 
+    { id: "0e135e6c-6221-41c9-960c-4e1a2b7a5173", name: "Capric", logo: "/images/Capric.gif" },
+    { id: "578b40da-4b05-40f2-ad11-447452e37c02", name: "Miracle", logo: "/images/Miracle.png" },
+    { id: "3ba98710-3b80-44ce-83c5-eef8d42e75ec", name: "Original", logo: "/images/Original.gif" },
+    { id: "85140bc7-c373-4145-865f-1873346544e0", name: "SRT", logo: "/images/SRT.gif" }, 
+    { id: "e40995d6-56d0-4c86-a2d6-1139a8e52ba8", name: "Jupiter", logo: "/images/Jupiter.gif" },
+    { id: "4c7ef6c7-00d6-4c5e-98cc-6f4e1cc700aa", name: "omega", logo: "/images/omega.gif" }, 
+    { id: "d08efffb-abb8-4b05-9f5c-79fec6670a78", name: "AlDahab", logo: "/images/AlDahab.png" },
+  ];
+
+  // === وظيفة توليد PDF بعد تحميل الصور ===
+  const generatePDF = () => {
     const title = document.createElement('h1');
     title.textContent = name;
     title.style.fontSize = '24px';
     title.style.fontWeight = 'bold';
     title.style.marginBottom = '10px';
+    title.style.breakInside = 'avoid';
     header.appendChild(title);
+
     const desc = document.createElement('p');
     desc.textContent = description;
     desc.style.marginBottom = '20px';
     desc.style.fontSize = '16px';
+    desc.style.breakInside = 'avoid';
     header.appendChild(desc);
+
     printElement.appendChild(header);
 
+    // === دالة إنشاء الأقسام مع منع القطع ===
     const addSection = (titleText: string, content: string | string[] | null, asList = false) => {
       if (!content) return;
       const isEmptyArray = Array.isArray(content) && content.length === 0;
       if (isEmptyArray) return;
+
       const section = document.createElement('div');
       section.style.marginBottom = '20px';
+      section.style.breakInside = 'avoid'; // ✅ منع القطع داخل القسم
+      section.style.pageBreakInside = 'avoid';
+
       const secTitle = document.createElement('h2');
       secTitle.textContent = titleText;
       secTitle.style.fontSize = '18px';
       secTitle.style.fontWeight = 'bold';
       secTitle.style.marginBottom = '10px';
       secTitle.style.color = '#0055A3';
+      secTitle.style.breakInside = 'avoid';
       section.appendChild(secTitle);
+
       if (asList && Array.isArray(content)) {
         const list = document.createElement('ul');
         list.style.paddingInlineStart = '20px';
+        list.style.breakInside = 'avoid';
         content.forEach(item => {
           if (!item) return;
           const li = document.createElement('li');
           li.textContent = item;
           li.style.marginBottom = '5px';
+          li.style.breakInside = 'avoid';
           list.appendChild(li);
         });
         section.appendChild(list);
@@ -475,70 +468,59 @@ if (product.brand) {
         text.innerHTML = typeof content === 'string'
           ? DOMPurify.sanitize(content)
           : (Array.isArray(content) ? content.join(', ') : '');
+        text.style.breakInside = 'avoid';
         section.appendChild(text);
       }
+
       printElement.appendChild(section);
     };
 
-// --- بدلاً من الكود القديم ---
-// إنشاء مجموعة واحدة من الـ badges لكل التصنيفات دون عناوين
+    // === Badges التصنيفات ===
+    const allBadges = [];
+    if (product.type) {
+      const typeValue = translateFilterValue('Type', product.type, filterValueMap);
+      if (typeValue) allBadges.push(typeValue);
+    }
+    if (product.material?.length) {
+      const materialValues = product.material.map(id => translateFilterValue('Material Type', id, filterValueMap));
+      allBadges.push(...materialValues);
+    }
+    if (product.usage?.length) {
+      const usageValues = product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap));
+      allBadges.push(...usageValues);
+    }
 
-const allBadges = [];
+    if (allBadges.length > 0) {
+      const badgesContainer = document.createElement('div');
+      badgesContainer.style.display = 'flex';
+      badgesContainer.style.flexWrap = 'wrap';
+      badgesContainer.style.gap = '8px';
+      badgesContainer.style.marginBottom = '20px';
+      badgesContainer.style.alignItems = 'center';
+      badgesContainer.style.breakInside = 'avoid';
 
-// Type (قيمة واحدة)
-if (product.type) {
-  const typeValue = translateFilterValue('Type', product.type, filterValueMap);
-  if (typeValue) {
-    allBadges.push(typeValue);
-  }
-}
+      allBadges.forEach(value => {
+        if (!value.trim()) return;
+        const badge = document.createElement('div');
+        badge.textContent = value;
+        badge.style.backgroundColor = '#f0f0f0';
+        badge.style.color = '#333';
+        badge.style.padding = '6px 12px';
+        badge.style.borderRadius = '20px';
+        badge.style.fontSize = '13px';
+        badge.style.fontWeight = '500';
+        badge.style.textAlign = 'center';
+        badge.style.whiteSpace = 'nowrap';
+        badge.style.border = '1px solid #ddd';
+        badge.style.display = 'flex';
+        badge.style.alignItems = 'center';
+        badge.style.justifyContent = 'center';
+        badgesContainer.appendChild(badge);
+      });
+      printElement.appendChild(badgesContainer);
+    }
 
-// Material (قد يكون عدة قيم)
-if (product.material?.length) {
-  const materialValues = product.material.map(id => translateFilterValue('Material Type', id, filterValueMap));
-  allBadges.push(...materialValues);
-}
-
-// Usage (قد يكون عدة قيم)
-if (product.usage?.length) {
-  const usageValues = product.usage.map(id => translateFilterValue('Application Fields', id, filterValueMap));
-  allBadges.push(...usageValues);
-}
-
-// إذا كان هناك أي قيمة، نعرضها كـ badges
-if (allBadges.length > 0) {
-  const badgesContainer = document.createElement('div');
-  badgesContainer.style.display = 'flex';
-  badgesContainer.style.flexWrap = 'wrap';
-  badgesContainer.style.gap = '8px';
-  badgesContainer.style.marginBottom = '20px';
-  badgesContainer.style.alignItems = 'center';
-
-  allBadges.forEach(value => {
-    if (!value.trim()) return;
-  const badge = document.createElement('div');
-badge.textContent = value;
-badge.style.backgroundColor = '#f0f0f0';
-badge.style.color = '#333';
-badge.style.padding = '6px 12px';
-badge.style.borderRadius = '20px';
-badge.style.fontSize = '13px';
-badge.style.fontWeight = '500';
-badge.style.textAlign = 'center';
-badge.style.whiteSpace = 'nowrap';
-badge.style.border = '1px solid #ddd';
-
-// ✅ إضافة هذا السطر لجعل النص في منتصف الزر عموديًا
-badge.style.display = 'flex';
-badge.style.alignItems = 'center';
-badge.style.justifyContent = 'center';
-badge.style.height = 'auto'; // أو يمكنك تحديد ارتفاع ثابت مثل '30px' إذا أردت
-
-badgesContainer.appendChild(badge);
-  });
-
-  printElement.appendChild(badgesContainer);
-}
+    // === الأقسام المتبقية ===
     addSection(t('products.technical_description'), technicalDescription);
     addSection(t('products.packaging_sizes'), product.packaging);
     if (product.recommended_uses?.length) {
@@ -550,6 +532,7 @@ badgesContainer.appendChild(badge);
     if (product.application) {
       const appSection = document.createElement('div');
       appSection.style.marginBottom = '20px';
+      appSection.style.breakInside = 'avoid';
       const appTitle = document.createElement('h2');
       appTitle.textContent = t('products.application_instructions');
       appTitle.style.fontSize = '18px';
@@ -557,10 +540,13 @@ badgesContainer.appendChild(badge);
       appTitle.style.marginBottom = '10px';
       appTitle.style.color = '#0055A3';
       appSection.appendChild(appTitle);
+
       const appTable = document.createElement('table');
       appTable.style.width = '100%';
       appTable.style.borderCollapse = 'collapse';
       appTable.style.fontSize = '13px';
+      appTable.style.breakInside = 'avoid';
+
       const appFields = [
         { key: 'method_of_application', label: t('products.method_of_application') },
         { key: 'mixing_ratio', label: t('products.mixing_ratio') },
@@ -572,10 +558,12 @@ badgesContainer.appendChild(badge);
         { key: 'curing_note', label: t('products.curing_note') },
         { key: 'note_application', label: t('products.note_application') },
       ];
+
       appFields.forEach(({ key, label }) => {
         const value = product.application?.[key];
         if (!value) return;
         const row = document.createElement('tr');
+        row.style.breakInside = 'avoid';
         const lblCell = document.createElement('td');
         lblCell.style.fontWeight = 'bold';
         lblCell.style.padding = '6px 8px';
@@ -590,22 +578,26 @@ badgesContainer.appendChild(badge);
         row.appendChild(valCell);
         appTable.appendChild(row);
       });
+
       if (appTable.children.length > 0) {
         appSection.appendChild(appTable);
         printElement.appendChild(appSection);
       }
     }
 
-    // Technical Specs 
+    // Technical Specs
     if (product.technical_specs?.length) {
       const specsTable = document.createElement('table');
       specsTable.style.width = '100%';
       specsTable.style.borderCollapse = 'collapse';
       specsTable.style.fontSize = '13px';
+      specsTable.style.breakInside = 'avoid';
+
       TECHNICAL_FIELDS.forEach(({ key }) => {
         const spec = product.technical_specs.find(s => s.key === key);
         if (!spec?.value?.trim()) return;
         const row = document.createElement('tr');
+        row.style.breakInside = 'avoid';
         const keyCell = document.createElement('td');
         keyCell.style.fontWeight = 'bold';
         keyCell.style.padding = '6px 8px';
@@ -620,9 +612,11 @@ badgesContainer.appendChild(badge);
         row.appendChild(valCell);
         specsTable.appendChild(row);
       });
+
       if (specsTable.children.length > 0) {
         const specsSection = document.createElement('div');
         specsSection.style.marginBottom = '20px';
+        specsSection.style.breakInside = 'avoid';
         const specsTitle = document.createElement('h2');
         specsTitle.textContent = t('products.technical_specifications');
         specsTitle.style.fontSize = '18px';
@@ -650,15 +644,18 @@ badgesContainer.appendChild(badge);
       { key: 'dry_to_sand', label: t('products.dry_to_sand') },
       { key: 'drying_time_note', label: t('products.drying_time_note') },
     ];
+
     const dryingData = dryingFields
       .map(({ key, label }) => {
         const value = (product as any)[key];
         return value ? { label, value } : null;
       })
       .filter(Boolean);
+
     if (dryingData.length > 0) {
       const dryingSection = document.createElement('div');
       dryingSection.style.marginBottom = '20px';
+      dryingSection.style.breakInside = 'avoid';
       const dryingTitle = document.createElement('h2');
       dryingTitle.textContent = t('products.drying_time');
       dryingTitle.style.fontSize = '18px';
@@ -666,12 +663,16 @@ badgesContainer.appendChild(badge);
       dryingTitle.style.marginBottom = '10px';
       dryingTitle.style.color = '#0055A3';
       dryingSection.appendChild(dryingTitle);
+
       const dryingTable = document.createElement('table');
       dryingTable.style.width = '100%';
       dryingTable.style.borderCollapse = 'collapse';
       dryingTable.style.fontSize = '13px';
+      dryingTable.style.breakInside = 'avoid';
+
       dryingData.forEach(({ label, value }: any) => {
         const row = document.createElement('tr');
+        row.style.breakInside = 'avoid';
         const lblCell = document.createElement('td');
         lblCell.style.fontWeight = 'bold';
         lblCell.style.padding = '6px 8px';
@@ -686,10 +687,73 @@ badgesContainer.appendChild(badge);
         row.appendChild(valCell);
         dryingTable.appendChild(row);
       });
+
       dryingSection.appendChild(dryingTable);
       printElement.appendChild(dryingSection);
     }
 
+    addSection(t('products.storing_conditions'), product.storing_conditions);
+    const displaySafetyNote = product.safety_note || getSafetyNoteFallback();
+    addSection(t('products.safety_note'), displaySafetyNote);
+
+    // === توليد PDF ===
+    const safeName = name
+      .replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '_')
+      .replace(/\s+/g, '_')
+      .trim();
+
+    const options = {
+      margin: 10,
+      filename: `${safeName}_Datasheet.pdf`,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+      pageBreak: { mode: ['avoid-all', 'css'] }, // ✅ منع القطع بين الصفحات
+    };
+
+    html2pdf().from(printElement).set(options).save();
+  };
+
+  // === تحميل شعار البراند كـ Base64 ===
+  if (product.brand) {
+    const brand = staticBrandLogos.find(b => b.id === product.brand);
+    if (brand?.logo) {
+      try {
+        const absoluteUrl = brand.logo.startsWith('http')
+          ? brand.logo
+          : `${window.location.origin}${brand.logo.startsWith('/') ? '' : '/'}${brand.logo.replace(/^\/+/, '')}`;
+
+        const response = await fetch(absoluteUrl);
+        if (!response.ok) throw new Error('Logo not found');
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const dataUrl = reader.result as string;
+          const brandImg = document.createElement('img');
+          brandImg.src = dataUrl;
+          brandImg.alt = getTranslated(brand.name, brand.name);
+          brandImg.style.width = '60px';
+          brandImg.style.height = '60px';
+          brandImg.style.objectFit = 'contain';
+          brandImg.style.marginTop = '10px';
+          brandImg.style.backgroundColor = '#fff';
+          brandImg.style.padding = '3px';
+          brandImg.style.borderRadius = '4px';
+          header.appendChild(brandImg);
+          generatePDF(); // بعد إضافة الصورة
+        };
+        reader.readAsDataURL(blob);
+        return;
+      } catch (error) {
+        console.error('Failed to load brand logo for PDF:', error);
+        // إذا فشل، نُولّد بدون شعار
+      }
+    }
+  }
+
+  // إذا لم يكن هناك براند أو فشل التحميل
+  generatePDF();
+};
     addSection(t('products.storing_conditions'), product.storing_conditions);
 
     // ✅ Safety Note with fallback
