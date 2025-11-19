@@ -748,8 +748,8 @@ const handleDownloadPDF = async () => {
 
         const brandImg = document.createElement("img");
         brandImg.src = dataUrl;
-        brandImg.style.width = "60px";
-        brandImg.style.height = "60px";
+        brandImg.style.width = "90px";
+        brandImg.style.height = "70px";
         brandImg.style.objectFit = "contain";
         brandImg.style.backgroundColor = "#fff";
         brandImg.style.padding = "3px";
