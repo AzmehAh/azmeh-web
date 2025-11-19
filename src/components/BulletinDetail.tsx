@@ -59,67 +59,93 @@ const BulletinDetail = () => {
     fetchData();
   }, [id]);
 
+const handleDownloadPDF = () => {
+  if (!bulletin) return;
 
-  const handleDownloadPDF = () => {
-    if (!bulletin) return;
+  const title = isRTL ? bulletin.title_ar || bulletin.title : bulletin.title;
+  const content = DOMPurify.sanitize(
+    isRTL ? bulletin.content_ar || bulletin.content : bulletin.content
+  );
 
-    const title = isRTL ? bulletin.title_ar || bulletin.title : bulletin.title;
-    const content = DOMPurify.sanitize(
-      isRTL ? bulletin.content_ar || bulletin.content : bulletin.content
-    );
+  const printElement = document.createElement('div');
+  printElement.dir = isRTL ? 'rtl' : 'ltr';
+  printElement.style.fontFamily = isRTL ? "'Tajawal', system-ui, sans-serif" : "system-ui, sans-serif";
+  printElement.style.padding = '2rem';
+  printElement.style.maxWidth = '800px';
+  printElement.style.margin = '0 auto';
+  printElement.style.lineHeight = '1.8';
+  printElement.style.color = '#1f2937';
+  printElement.style.fontSize = '16px';
+  printElement.style.breakInside = 'avoid'; // منع القطع داخل العنصر الجذر
 
-    const printElement = document.createElement('div');
-    printElement.dir = isRTL ? 'rtl' : 'ltr';
-    printElement.style.fontFamily = isRTL ? "'Tajawal', system-ui, sans-serif" : "system-ui, sans-serif";
-    printElement.style.padding = '2rem';
-    printElement.style.maxWidth = '800px';
-    printElement.style.margin = '0 auto';
-    printElement.style.lineHeight = '1';
-    printElement.style.color = '#1f2937';
-    printElement.style.fontSize = '16px';
+  // --- الغلاف ---
+  if (bulletin.cover_image) {
+    const img = document.createElement('img');
+    img.src = bulletin.cover_image;
+    img.alt = title;
+    img.style.width = '100%';
+    img.style.maxHeight = '300px';
+    img.style.objectFit = 'cover';
+    img.style.borderRadius = '8px';
+    img.style.marginBottom = '1.5rem';
+    img.style.breakInside = 'avoid'; // منع القطع داخل الصورة
+    printElement.appendChild(img);
+  }
 
-    if (bulletin.cover_image) {
-      const img = document.createElement('img');
-      img.src = bulletin.cover_image;
-      img.alt = title;
-      img.style.width = '100%';
-      img.style.maxHeight = '300px';
-      img.style.objectFit = 'cover';
-      img.style.borderRadius = '8px';
-      img.style.marginBottom = '1.5rem';
-      printElement.appendChild(img);
-    }
+  // --- العنوان ---
+  const heading = document.createElement('h1');
+  heading.textContent = title;
+  heading.style.fontSize = '28px';
+  heading.style.fontWeight = 'bold';
+  heading.style.marginBottom = '1rem';
+  heading.style.color = '#1f2937';
+  heading.style.breakInside = 'avoid'; // منع تقسيم العنوان
+  printElement.appendChild(heading);
 
+  // --- المحتوى ---
+  const contentDiv = document.createElement('div');
+  contentDiv.innerHTML = content;
+  contentDiv.style.lineHeight = '1.8';
+  contentDiv.style.breakInside = 'avoid'; // منع تقسيم الكتلة الكاملة
 
-    const heading = document.createElement('h1');
-    heading.textContent = title;
-    heading.style.fontSize = '28px';
-    heading.style.fontWeight = 'bold';
-    heading.style.marginBottom = '1rem';
-    heading.style.color = '#1f2937';
-    printElement.appendChild(heading);
+  // 👇 خطوة إضافية: معالجة الفقرات والفقرات الطويلة داخل المحتوى
+  const paragraphs = contentDiv.querySelectorAll('p, h2, h3, ul, ol, blockquote, table');
+  paragraphs.forEach(para => {
+    (para as HTMLElement).style.pageBreakInside = 'avoid';
+    (para as HTMLElement).style.breakInside = 'avoid';
+    (para as HTMLElement).style.marginBottom = '1rem'; // مسافة لتحسين التقسيم
+  });
 
-    const contentDiv = document.createElement('div');
-    contentDiv.innerHTML = content;
-    contentDiv.style.lineHeight = '1.8';
-    printElement.appendChild(contentDiv);
+  printElement.appendChild(contentDiv);
 
+  // --- اسم الملف ---
+  const safeTitle = title
+    .replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '_')
+    .replace(/\s+/g, '_')
+    .trim();
 
-    const safeTitle = title
-      .replace(/[^a-zA-Z0-9\u0600-\u06FF\s]/g, '_')
-      .replace(/\s+/g, '_')
-      .trim();
-
-    const options = {
-      margin: 12,
-      filename: `${safeTitle}.pdf`,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-    };
-
-    html2pdf().from(printElement).set(options).save();
+  // --- خيارات التوليد ---
+  const options = {
+    margin: 12,
+    filename: `${safeTitle}.pdf`,
+    image: { type: 'jpeg', quality: 0.98 },
+    html2canvas: { 
+      scale: 2, 
+      useCORS: true 
+    },
+    jsPDF: { 
+      unit: 'mm', 
+      format: 'a4', 
+      orientation: 'portrait' 
+    },
+    // ✅ منع القطع بين الصفحات قدر الإمكان
+    pageBreak: { 
+      mode: ['avoid-all', 'css', 'legacy'] 
+    },
   };
+
+  html2pdf().from(printElement).set(options).save();
+};
 
   if (loading) {
     return (
