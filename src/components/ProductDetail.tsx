@@ -500,7 +500,7 @@ const handleDownloadPDF = async () => {
         badge.style.borderRadius = '20px';
         badge.style.fontSize = '13px';
         badge.style.alignItems = 'center'; // ✅ محاذاة عمودية
-badge.style.justifyContent = 'center'; /
+badge.style.justifyContent = 'center'; 
         badge.style.fontWeight = '500';
         badge.style.textAlign = 'center';
         badge.style.whiteSpace = 'nowrap';
