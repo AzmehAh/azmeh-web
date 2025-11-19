@@ -764,7 +764,7 @@ imagesContainer.style.marginBottom = "15px";
 }
 
 generatePDF();
-
+ },
  
   useEffect(() => {
     fetchFilterTranslations();
