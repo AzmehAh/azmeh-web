@@ -513,7 +513,7 @@ const handleDownloadPDF = async () => {
 
     // === الأقسام المتبقية ===
     addSection(t('products.technical_description'), technicalDescription);
-    addSection(t('products.packaging_sizes'), product.packaging);
+  
     if (product.recommended_uses?.length) {
       addSection(t('products.recommended_uses'), product.recommended_uses.join(', '));
     }
@@ -619,7 +619,7 @@ const handleDownloadPDF = async () => {
         printElement.appendChild(specsSection);
       }
     }
-
+  addSection(t('products.packaging_sizes'), product.packaging);
     addSection(t('products.surface_preparation'), product.surface_preparation);
 
     // Drying Time
