@@ -481,28 +481,35 @@ const handleDownloadPDF = async () => {
       allBadges.push(...usageValues);
     }
 
-   allBadges.forEach(value => {
-  if (!value.trim()) return;
-  const badge = document.createElement('div'); 
-  badge.textContent = value;
-  badge.style.backgroundColor = '#f0f0f0';
-  badge.style.color = '#333';
-  badge.style.padding = '6px 12px';
-  badge.style.borderRadius = '20px';
-  badge.style.fontSize = '13px';
-  badge.style.fontWeight = '500';
-  badge.style.textAlign = 'center';
-  badge.style.whiteSpace = 'nowrap';
-  badge.style.border = '1px solid #ddd';
+    if (allBadges.length > 0) {
+      const badgesContainer = document.createElement('div');
+      badgesContainer.style.display = 'flex';
+      badgesContainer.style.flexWrap = 'wrap';
+      badgesContainer.style.gap = '8px';
+      badgesContainer.style.marginBottom = '20px';
+      badgesContainer.style.alignItems = 'center';
+      badgesContainer.style.breakInside = 'avoid';
 
-  // استخدام flex لمحاذاة النص بالمنتصف
-  badge.style.display = 'inline-flex'; // أو 'flex'
-  badge.style.alignItems = 'center'; // محاذاة عمودية
-  badge.style.justifyContent = 'center'; // محاذاة أفقية
-  badge.style.lineHeight = 'normal'; // مهم لتجنب التباعد الغريب
-
-  badgesContainer.appendChild(badge);
-});
+      allBadges.forEach(value => {
+        if (!value.trim()) return;
+        const badge = document.createElement('div'); 
+        badge.textContent = value;
+        badge.style.backgroundColor = '#f0f0f0';
+        badge.style.color = '#333';
+        badge.style.padding = '6px 12px';
+        badge.style.borderRadius = '20px';
+        badge.style.fontSize = '13px'; 
+        badge.style.fontWeight = '500';
+        badge.style.textAlign = 'center';
+        badge.style.whiteSpace = 'nowrap';
+        badge.style.border = '1px solid #ddd';
+        badge.style.display = 'flex';
+        badge.style.alignItems = 'center'; 
+        badge.style.justifyContent = 'center';
+        badgesContainer.appendChild(badge);
+      });
+      printElement.appendChild(badgesContainer);
+    } 
 
     // === الأقسام المتبقية ===
     addSection(t('products.technical_description'), technicalDescription);
