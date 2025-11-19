@@ -522,7 +522,7 @@ const ProductDetail = () => {
 
     // === الأقسام المتبقية ===
     addSection(t('products.technical_description'), technicalDescription);
-   
+    addSection(t('products.packaging_sizes'), product.packaging);
     if (product.recommended_uses?.length) {
       addSection(t('products.recommended_uses'), product.recommended_uses.join(', '));
     }
@@ -628,7 +628,7 @@ const ProductDetail = () => {
         printElement.appendChild(specsSection);
       }
     }
- addSection(t('products.packaging_sizes'), product.packaging);
+
     addSection(t('products.surface_preparation'), product.surface_preparation);
 
     // Drying Time
@@ -714,49 +714,47 @@ const ProductDetail = () => {
     html2pdf().from(printElement).set(options).save();
   };
 
-if (product.brand) {
-  const brand = staticBrandLogos.find(b => b.id === product.brand);
+  // === تحميل شعار البراند كـ Base64 ===
+  if (product.brand) {
+    const brand = staticBrandLogos.find(b => b.id === product.brand);
+    if (brand?.logo) {
+      try {
+        const absoluteUrl = brand.logo.startsWith('http')
+          ? brand.logo
+          : `${window.location.origin}${brand.logo.startsWith('/') ? '' : '/'}${brand.logo.replace(/^\/+/, '')}`;
 
-  if (brand?.logo) {
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.src = brand.logo.startsWith('http')
-      ? brand.logo
-      : `${window.location.origin}/${brand.logo.replace(/^\/+/, '')}`;
+        const response = await fetch(absoluteUrl);
+        if (!response.ok) throw new Error('Logo not found');
+        const blob = await response.blob();
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const dataUrl = reader.result as string;
+          const brandImg = document.createElement('img');
+          brandImg.src = dataUrl;
+          brandImg.alt = getTranslated(brand.name, brand.name);
+          brandImg.style.width = '60px';
+          brandImg.style.height = '60px';
+          brandImg.style.objectFit = 'contain';
+          brandImg.style.marginTop = '10px';
+          brandImg.style.backgroundColor = '#fff';
+          brandImg.style.padding = '3px';
+          brandImg.style.borderRadius = '4px';
+          header.appendChild(brandImg);
+          generatePDF(); // بعد إضافة الصورة
+        };
+        reader.readAsDataURL(blob);
+        return;
+      } catch (error) {
+        console.error('Failed to load brand logo for PDF:', error);
+        // إذا فشل، نُولّد بدون شعار
+      }
+    }
+  }
 
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0);
-
-      const dataUrl = canvas.toDataURL("image/png");
-
-      const brandImg = document.createElement("img");
-      brandImg.src = dataUrl;
-      brandImg.style.width = "60px";
-      brandImg.style.height = "60px";
-      brandImg.style.objectFit = "contain";
-      brandImg.style.padding = "3px";
-      brandImg.style.borderRadius = "4px";
-      brandImg.style.background = "#fff";
-
-      // حاوية لعرض الصور جنب بعض
-      const imagesContainer = document.createElement("div");
-      imagesContainer.style.display = "flex";
-      imagesContainer.style.alignItems = "center";
-      imagesContainer.style.gap = "15px";
-
-      header.appendChild(imagesContainer);
-
-      // أضف صورة البراند بجانب الصورة الرئيسية
-      imagesContainer.appendChild(brandImg);
-
-      generatePDF();
-    };
-
-
+  // إذا لم يكن هناك براند أو فشل التحميل
+  generatePDF();
+};
+ 
   useEffect(() => {
     fetchFilterTranslations();
   }, [i18n.language]);
