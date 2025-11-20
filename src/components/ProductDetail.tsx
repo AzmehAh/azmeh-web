@@ -441,19 +441,25 @@ const handleDownloadPDF = async () => {
       secTitle.style.breakInside = 'avoid';
       section.appendChild(secTitle);
 
-      if (asList && Array.isArray(content)) {
-        const list = document.createElement('ul');
-        list.style.paddingInlineStart = '20px';
-        list.style.breakInside = 'avoid';
-        content.forEach(item => {
-          if (!item) return;
-          const li = document.createElement('li');
-          li.textContent = item;
-          li.style.marginBottom = '5px';
-          li.style.breakInside = 'avoid';
-          list.appendChild(li);
-        });
-        section.appendChild(list);
+     if (asList && Array.isArray(content)) {
+  const listContainer = document.createElement('div');
+  listContainer.style.breakInside = 'avoid';
+  listContainer.style.lineHeight = '1.6';
+  listContainer.style.fontSize = '13px'; // أو حسب خطك
+
+  content.forEach(item => {
+    if (!item?.trim()) return;
+    const line = document.createElement('div');
+    line.textContent = `• ${item}`;
+    line.style.marginBottom = '5px';
+    line.style.breakInside = 'avoid';
+    line.style.direction = 'rtl';      // مهم للعربية
+    line.style.textAlign = 'right';    // يضمن المحاذاة الصحيحة
+    listContainer.appendChild(line);
+  });
+
+  section.appendChild(listContainer);
+}
       } else {
         const text = document.createElement('div');
         text.innerHTML = typeof content === 'string'
@@ -518,47 +524,7 @@ if (allBadges.length > 0) {
     }
     
     addSection(t('products.key_features'), product.features, true);
-function addSection(title, content, isList = false) {
-  if (!content || (Array.isArray(content) && content.length === 0)) return;
 
-  const section = document.createElement('div');
-  section.style.marginBottom = '20px';
-
-  // عنوان القسم
-  const titleEl = document.createElement('h3');
-  titleEl.textContent = title;
-  titleEl.style.fontSize = '16px';
-  titleEl.style.fontWeight = '600';
-  titleEl.style.color = '#1f2937';
-  titleEl.style.marginBottom = '8px';
-  section.appendChild(titleEl);
-
-  if (isList && Array.isArray(content)) {
-    // عرض كل عنصر في سطر منفصل مع نقطة
-    const listContainer = document.createElement('div');
-    listContainer.style.lineHeight = '1.6';
-    listContainer.style.fontSize = '13px';
-    listContainer.style.color = '#333';
-
-    content.forEach(item => {
-      if (!item?.trim()) return;
-      const line = document.createElement('div');
-      line.textContent = `• ${item}`;
-      listContainer.appendChild(line);
-    });
-
-    section.appendChild(listContainer);
-  } else {
-    // عرض كنص عادي
-    const textEl = document.createElement('div');
-    textEl.textContent = Array.isArray(content) ? content.join(', ') : String(content);
-    textEl.style.fontSize = '13px';
-    textEl.style.color = '#333';
-    section.appendChild(textEl);
-  }
-
-  printElement.appendChild(section);
-}
     // Application Section
     if (product.application) {
       const appSection = document.createElement('div');
