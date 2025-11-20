@@ -443,8 +443,7 @@ const handleDownloadPDF = async () => {
 
     if (asList && Array.isArray(content)) {
   const listContainer = document.createElement('div');
-  listContainer.style.direction = 'rtl';
-  listContainer.style.textAlign = 'right';
+listContainer.style.textAlign = 'start'; // ← يعتمد على اتجاه النص تلقائيًا
   listContainer.style.lineHeight = '1.6';
   listContainer.style.breakInside = 'avoid';
 
