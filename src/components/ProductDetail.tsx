@@ -441,25 +441,19 @@ const handleDownloadPDF = async () => {
       secTitle.style.breakInside = 'avoid';
       section.appendChild(secTitle);
 
-     if (asList && Array.isArray(content)) {
-  const listContainer = document.createElement('div');
-  listContainer.style.breakInside = 'avoid';
-  listContainer.style.lineHeight = '1.6';
-  listContainer.style.fontSize = '13px'; // أو حسب خطك
-
-  content.forEach(item => {
-    if (!item?.trim()) return;
-    const line = document.createElement('div');
-    line.textContent = `• ${item}`;
-    line.style.marginBottom = '5px';
-    line.style.breakInside = 'avoid';
-    line.style.direction = 'rtl';      // مهم للعربية
-    line.style.textAlign = 'right';    // يضمن المحاذاة الصحيحة
-    listContainer.appendChild(line);
-  });
-
-  section.appendChild(listContainer);
-}
+      if (asList && Array.isArray(content)) {
+        const list = document.createElement('ul');
+        list.style.paddingInlineStart = '20px';
+        list.style.breakInside = 'avoid';
+        content.forEach(item => {
+          if (!item) return;
+          const li = document.createElement('li');
+          li.textContent = item;
+          li.style.marginBottom = '5px';
+          li.style.breakInside = 'avoid';
+          list.appendChild(li);
+        });
+        section.appendChild(list); 
       } else {
         const text = document.createElement('div');
         text.innerHTML = typeof content === 'string'
