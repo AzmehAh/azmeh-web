@@ -441,20 +441,46 @@ const handleDownloadPDF = async () => {
       secTitle.style.breakInside = 'avoid';
       section.appendChild(secTitle);
 
-      if (asList && Array.isArray(content)) {
-        const list = document.createElement('ul');
-        list.style.paddingInlineStart = '20px';
-        list.style.breakInside = 'avoid'; 
-        content.forEach(item => {
-          if (!item) return;
-          const li = document.createElement('li');
-          li.textContent = item; 
-          li.style.marginBottom = '5px';
-          li.style.breakInside = 'avoid';
-          list.appendChild(li);
-        });
-        section.appendChild(list); 
-      } else {
+    if (asList && Array.isArray(content)) {
+  // اكتشاف إذا كان القسم هو "المميزات الرئيسية"
+  const isKeyFeatures = 
+    titleText.includes('Feature') || 
+    titleText.includes('ميزة') || 
+    titleText.includes('مميزات');
+
+  if (isKeyFeatures) {
+    const listContainer = document.createElement('div');
+    listContainer.style.lineHeight = '1.6';
+    listContainer.style.breakInside = 'avoid';
+    content.forEach(item => {
+      if (!item || typeof item !== 'string') return;
+      const trimmed = item.trim();
+      if (!trimmed) return;
+      const line = document.createElement('div');
+      line.textContent = `• ${trimmed}`;
+      line.style.marginBottom = '5px';
+      line.style.fontSize = '13px';
+      line.style.color = '#333';
+      line.style.breakInside = 'avoid';
+      listContainer.appendChild(line);
+    });
+    section.appendChild(listContainer);
+  } else {
+    // باقي الأقسام — نستخدم <ul> كما كان
+    const list = document.createElement('ul');
+    list.style.paddingInlineStart = '20px';
+    list.style.breakInside = 'avoid';
+    content.forEach(item => {
+      if (!item) return;
+      const li = document.createElement('li');
+      li.textContent = item;
+      li.style.marginBottom = '5px';
+      li.style.breakInside = 'avoid';
+      list.appendChild(li);
+    });
+    section.appendChild(list);
+  }
+} else {
         const text = document.createElement('div');
         text.innerHTML = typeof content === 'string'
           ? DOMPurify.sanitize(content)
