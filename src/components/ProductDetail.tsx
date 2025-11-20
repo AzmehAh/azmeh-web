@@ -591,7 +591,7 @@ const handleDownloadPDF = async () => {
         row.style.breakInside = 'avoid';
         const keyCell = document.createElement('td');
         keyCell.style.fontWeight = 'bold';
-        keyCell.style.padding = '6px 8px';
+       
         keyCell.style.border = 'none';
         keyCell.style.width = '40%';
         keyCell.textContent = t(`products.${key}`);
