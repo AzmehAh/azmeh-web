@@ -482,6 +482,7 @@ const handleDownloadPDF = async () => {
     }
 
   if (allBadges.length > 0) {
+if (allBadges.length > 0) {
   const badgesContainer = document.createElement('div');
   badgesContainer.style.display = 'flex';
   badgesContainer.style.flexWrap = 'wrap';
@@ -492,26 +493,23 @@ const handleDownloadPDF = async () => {
 
   allBadges.forEach(value => {
     if (!value.trim()) return;
-   const badge = document.createElement('div'); 
-badge.textContent = value;
-badge.style.backgroundColor = '#f0f0f0';
-badge.style.color = '#333';
-badge.style.borderRadius = '20px';
-badge.style.fontSize = '13px'; 
-badge.style.fontWeight = '500';
-badge.style.border = '1px solid #ddd';
-
-// ⬇️ هذه السطور تضمن التمركز المثالي:
-badge.style.padding = '0 12px'; // إزالة padding عمودي
-badge.style.height = '32px';    // ارتفاع ثابت
-badge.style.lineHeight = '32px'; // ← نفس الارتفاع!
-badge.style.display = 'inline-flex';
-badge.style.alignItems = 'center';
-badge.style.justifyContent = 'center';
-badge.style.whiteSpace = 'nowrap';
+    const badge = document.createElement('div'); 
+    badge.textContent = value;
+    badge.style.backgroundColor = '#f0f0f0';
+    badge.style.color = '#333';
     badge.style.border = '1px solid #ddd';
-
-    badge.style.lineHeight = '1.4';     // ⬅️ لتحسين التمركز العمودي للنص
+    badge.style.borderRadius = '20px';
+    badge.style.fontSize = '13px';
+    badge.style.fontWeight = '500';
+    badge.style.height = '32px';
+    badge.style.padding = '0 12px';
+    badge.style.whiteSpace = 'nowrap';
+    badge.style.display = 'flex';
+    badge.style.alignItems = 'center';
+    badge.style.justifyContent = 'center';
+    badge.style.boxSizing = 'border-box'; // ← ضروري مع وجود border
+    // لا تضبط lineHeight إذا استخدمت flex + alignItems: center + height ثابت
+    // أو اضبطه لـ '30px' إذا أردت استخدامه بدل flex
     badgesContainer.appendChild(badge);
   });
   printElement.appendChild(badgesContainer);
