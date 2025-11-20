@@ -481,7 +481,7 @@ const handleDownloadPDF = async () => {
       allBadges.push(...usageValues);
     }
 
-  if (allBadges.length > 0) {
+  
 if (allBadges.length > 0) {
   const badgesContainer = document.createElement('div');
   badgesContainer.style.display = 'flex';
