@@ -449,11 +449,10 @@ const handleDownloadPDF = async () => {
     titleText.includes('مميزات');
 
   if (isKeyFeatures) {
-    const listContainer = document.createElement('div');
+    const listContainer = document.createElement('div'); 
     listContainer.style.lineHeight = '1.6';
     listContainer.style.breakInside = 'avoid';
-    listContainer.style.direction = 'rtl';
-listContainer.style.textAlign = 'right';
+    
     content.forEach(item => {
       if (!item || typeof item !== 'string') return;
       const trimmed = item.trim();
