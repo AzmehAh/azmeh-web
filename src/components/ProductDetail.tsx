@@ -457,10 +457,10 @@ const handleDownloadPDF = async () => {
       const trimmed = item.trim();
       if (!trimmed) return;
       const line = document.createElement('div');
-   line.textContent = `\u202B• ${trimmed}\u202C`;
+      line.textContent = `• ${trimmed}`;
       line.style.marginBottom = '5px';
       line.style.fontSize = '13px';
-      line.style.color = '#333';
+      line.style.color = '#333'; 
       line.style.breakInside = 'avoid';
       listContainer.appendChild(line);
     });
