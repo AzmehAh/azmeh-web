@@ -666,7 +666,7 @@ const handleDownloadPDF = async () => {
         row.style.breakInside = 'avoid';
         const lblCell = document.createElement('td');
         lblCell.style.fontWeight = 'bold';
-        lblCell.style.padding = '6px 8px';
+
         lblCell.style.border = 'none';
         lblCell.style.width = '40%';
         lblCell.textContent = label;
