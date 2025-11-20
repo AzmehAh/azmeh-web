@@ -516,7 +516,9 @@ if (allBadges.length > 0) {
     if (product.recommended_uses?.length) {
       addSection(t('products.recommended_uses'), product.recommended_uses.join(', '));
     }
-    function addSection(title, content, isList = false) {
+    
+    addSection(t('products.key_features'), product.features, true);
+function addSection(title, content, isList = false) {
   if (!content || (Array.isArray(content) && content.length === 0)) return;
 
   const section = document.createElement('div');
@@ -557,8 +559,6 @@ if (allBadges.length > 0) {
 
   printElement.appendChild(section);
 }
-    addSection(t('products.key_features'), product.features, true);
-
     // Application Section
     if (product.application) {
       const appSection = document.createElement('div');
