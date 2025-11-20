@@ -497,19 +497,21 @@ if (allBadges.length > 0) {
     badge.textContent = value;
     badge.style.backgroundColor = '#f0f0f0';
     badge.style.color = '#333';
-    badge.style.border = '1px solid #ddd';
+    badge.style.padding = '6px 12px';
     badge.style.borderRadius = '20px';
-    badge.style.fontSize = '13px';
+    badge.style.fontSize = '13px'; 
     badge.style.fontWeight = '500';
-    badge.style.height = '32px';
-    badge.style.padding = '0 12px';
+    badge.style.textAlign = 'center';
     badge.style.whiteSpace = 'nowrap';
+    badge.style.border = '1px solid #ddd';
     badge.style.display = 'flex';
-    badge.style.alignItems = 'center';
+    badge.style.alignItems = 'center';  
     badge.style.justifyContent = 'center';
-    badge.style.boxSizing = 'border-box'; // ← ضروري مع وجود border
-    // لا تضبط lineHeight إذا استخدمت flex + alignItems: center + height ثابت
-    // أو اضبطه لـ '30px' إذا أردت استخدامه بدل flex
+    
+    // إضافة هذه الخاصية للمحاذاة العمودية
+    badge.style.lineHeight = '1.2';
+    badge.style.minHeight = '32px'; // ارتفاع مناسب
+    
     badgesContainer.appendChild(badge);
   });
   printElement.appendChild(badgesContainer);
