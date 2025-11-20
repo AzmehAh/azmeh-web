@@ -457,9 +457,7 @@ const handleDownloadPDF = async () => {
     line.style.textAlign = 'right';    // يضمن المحاذاة الصحيحة
     listContainer.appendChild(line);
   });
-
-  section.appendChild(listContainer);
-}
+        section.appendChild(list); 
       } else {
         const text = document.createElement('div');
         text.innerHTML = typeof content === 'string'
