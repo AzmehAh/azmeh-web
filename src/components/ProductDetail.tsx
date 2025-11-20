@@ -483,38 +483,22 @@ const handleDownloadPDF = async () => {
 
   
 if (allBadges.length > 0) {
-  const badgesContainer = document.createElement('div');
-  badgesContainer.style.display = 'flex';
-  badgesContainer.style.flexWrap = 'wrap';
-  badgesContainer.style.gap = '8px';
-  badgesContainer.style.marginBottom = '25px';
-  badgesContainer.style.alignItems = 'center';
-  badgesContainer.style.breakInside = 'avoid';
+  const listContainer = document.createElement('div');
+  listContainer.style.marginBottom = '25px';
+  listContainer.style.lineHeight = '1.6'; // تباعد مناسب بين الأسطر
 
   allBadges.forEach(value => {
     if (!value.trim()) return;
-    const badge = document.createElement('div'); 
-    badge.textContent = value;
-    badge.style.backgroundColor = '#f0f0f0';
-    badge.style.color = '#333';
-    badge.style.padding = '6px 12px';
-    badge.style.borderRadius = '20px';
-    badge.style.fontSize = '13px'; 
-    badge.style.fontWeight = '500';
-    badge.style.textAlign = 'center';
-    badge.style.whiteSpace = 'nowrap';
-    badge.style.border = '1px solid #ddd';
-    badge.style.display = 'flex';
-    badge.style.alignItems = 'center';  
-    badge.style.justifyContent = 'center';
-    
-    // إضافة هذه الخاصية للمحاذاة العمودية
-    badge.style.lineHeight = '1.2';
-    badge.style.minHeight = '32px'; // ارتفاع مناسب
-    
-    badgesContainer.appendChild(badge);
+    const item = document.createElement('div');
+    item.textContent = `• ${value}`; // إضافة النقطة يدويًا
+    item.style.fontSize = '13px';
+    item.style.fontWeight = '500';
+    item.style.color = '#333';
+    // لا حدود، لا خلفية، لا padding معقد
+    listContainer.appendChild(item);
   });
-  printElement.appendChild(badgesContainer);
+
+  printElement.appendChild(listContainer);
 }
     // === الأقسام المتبقية ===
     addSection(t('products.technical_description'), technicalDescription);
