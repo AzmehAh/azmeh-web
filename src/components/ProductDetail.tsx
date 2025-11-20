@@ -443,7 +443,7 @@ const handleDownloadPDF = async () => {
 
       if (asList && Array.isArray(content)) {
         const list = document.createElement('ul');
-        list.style.paddingInlineStart = '20px';
+      
         list.style.breakInside = 'avoid'; 
         content.forEach(item => {
           if (!item) return;
