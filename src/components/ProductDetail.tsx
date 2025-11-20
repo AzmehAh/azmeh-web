@@ -483,22 +483,32 @@ const handleDownloadPDF = async () => {
 
   
 if (allBadges.length > 0) {
-  const listContainer = document.createElement('div');
-  listContainer.style.marginBottom = '25px';
-  listContainer.style.lineHeight = '1.6'; // تباعد مناسب بين الأسطر
+  const badgesContainer = document.createElement('div');
+  badgesContainer.style.display = 'inline-flex'; // ⬅️ مهم لجعل العناصر جنبًا لجنب
+  badgesContainer.style.flexWrap = 'wrap';       // يسمح بالانتقال للسطر التالي إذا احتاج
+  badgesContainer.style.gap = '8px';             // مسافة بين العناصر
+  badgesContainer.style.marginBottom = '25px';
+  badgesContainer.style.alignItems = 'center';
+  badgesContainer.style.breakInside = 'avoid';
 
   allBadges.forEach(value => {
     if (!value.trim()) return;
-    const item = document.createElement('div');
-    item.textContent = `• ${value}`; // إضافة النقطة يدويًا
-    item.style.fontSize = '13px';
-    item.style.fontWeight = '500';
-    item.style.color = '#333';
-    // لا حدود، لا خلفية، لا padding معقد
-    listContainer.appendChild(item);
+    const badge = document.createElement('span'); // استخدم span بدلاً من div لتجنب التفاف السطر
+    badge.textContent = `• ${value}`;             // إضافة النقطة + القيمة
+    badge.style.fontSize = '13px';
+    badge.style.fontWeight = '500';
+    badge.style.color = '#333';
+    badge.style.whiteSpace = 'nowrap';            // يمنع كسر السطر داخل القيمة
+    badge.style.display = 'inline-flex';          // يحافظ على الترتيب الأفقي
+    badge.style.alignItems = 'center';
+    
+    // إذا أردت تخصيص لون النقطة:
+    // badge.innerHTML = `<span style="color:#0055A3">•</span> ${value}`;
+
+    badgesContainer.appendChild(badge);
   });
 
-  printElement.appendChild(listContainer);
+  printElement.appendChild(badgesContainer);
 }
     // === الأقسام المتبقية ===
     addSection(t('products.technical_description'), technicalDescription);
