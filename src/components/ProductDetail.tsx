@@ -492,20 +492,25 @@ const handleDownloadPDF = async () => {
 
   allBadges.forEach(value => {
     if (!value.trim()) return;
-    const badge = document.createElement('div'); 
-    badge.textContent = value;
-    badge.style.backgroundColor = '#f0f0f0';
-    badge.style.color = '#333';
-    badge.style.padding = '8px 12px'; // ⬅️ زيادة البادينج العمودي قليلاً
-    badge.style.borderRadius = '20px';
-    badge.style.fontSize = '13px'; 
-    badge.style.fontWeight = '500';
-    badge.style.textAlign = 'center';
-    badge.style.whiteSpace = 'nowrap';
+   const badge = document.createElement('div'); 
+badge.textContent = value;
+badge.style.backgroundColor = '#f0f0f0';
+badge.style.color = '#333';
+badge.style.borderRadius = '20px';
+badge.style.fontSize = '13px'; 
+badge.style.fontWeight = '500';
+badge.style.border = '1px solid #ddd';
+
+// ⬇️ هذه السطور تضمن التمركز المثالي:
+badge.style.padding = '0 12px'; // إزالة padding عمودي
+badge.style.height = '32px';    // ارتفاع ثابت
+badge.style.lineHeight = '32px'; // ← نفس الارتفاع!
+badge.style.display = 'inline-flex';
+badge.style.alignItems = 'center';
+badge.style.justifyContent = 'center';
+badge.style.whiteSpace = 'nowrap';
     badge.style.border = '1px solid #ddd';
-    badge.style.display = 'flex';
-    badge.style.alignItems = 'center';  // ⬅️ هذا هو المفتاح للتركيز العمودي
-    badge.style.justifyContent = 'center';
+
     badge.style.lineHeight = '1.4';     // ⬅️ لتحسين التمركز العمودي للنص
     badgesContainer.appendChild(badge);
   });
