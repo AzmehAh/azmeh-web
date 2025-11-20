@@ -516,6 +516,47 @@ if (allBadges.length > 0) {
     if (product.recommended_uses?.length) {
       addSection(t('products.recommended_uses'), product.recommended_uses.join(', '));
     }
+    function addSection(title, content, isList = false) {
+  if (!content || (Array.isArray(content) && content.length === 0)) return;
+
+  const section = document.createElement('div');
+  section.style.marginBottom = '20px';
+
+  // عنوان القسم
+  const titleEl = document.createElement('h3');
+  titleEl.textContent = title;
+  titleEl.style.fontSize = '16px';
+  titleEl.style.fontWeight = '600';
+  titleEl.style.color = '#1f2937';
+  titleEl.style.marginBottom = '8px';
+  section.appendChild(titleEl);
+
+  if (isList && Array.isArray(content)) {
+    // عرض كل عنصر في سطر منفصل مع نقطة
+    const listContainer = document.createElement('div');
+    listContainer.style.lineHeight = '1.6';
+    listContainer.style.fontSize = '13px';
+    listContainer.style.color = '#333';
+
+    content.forEach(item => {
+      if (!item?.trim()) return;
+      const line = document.createElement('div');
+      line.textContent = `• ${item}`;
+      listContainer.appendChild(line);
+    });
+
+    section.appendChild(listContainer);
+  } else {
+    // عرض كنص عادي
+    const textEl = document.createElement('div');
+    textEl.textContent = Array.isArray(content) ? content.join(', ') : String(content);
+    textEl.style.fontSize = '13px';
+    textEl.style.color = '#333';
+    section.appendChild(textEl);
+  }
+
+  printElement.appendChild(section);
+}
     addSection(t('products.key_features'), product.features, true);
 
     // Application Section
