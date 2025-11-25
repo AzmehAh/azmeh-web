@@ -3,7 +3,7 @@
 @tailwind utilities;
 @font-face {
   font-family: 'GE SS Two Arabic';
-  src: url('/fonts/ge-ss-two.ttf') format('truetype');
+  src: url('/fonts/GE_SS_Two_Light.otf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
