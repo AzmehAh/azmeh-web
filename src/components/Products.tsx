@@ -276,10 +276,7 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
 
   
   return ( 
- <div 
-  className=" bg-gray-50 pt-20" 
-  dir={isRTL ? 'rtl' : 'ltr'}
->
+    <div className="min-h-screen bg-gray-50 pt-20" dir={isRTL ? 'rtl' : 'ltr'}>
       <div className="text-logo pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-5xl md:text-6xl font-bold mb-6">
@@ -421,8 +418,8 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
             </aside>
 
             {/* Products Grid */}
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-8">
+            <div className="flex-1 scrollable-page custom-scrollbar">
+              <div className="flex items-center justify-between mb-8 ">
                 <h2 className="text-2xl font-bold text-gray-900">
                   {t('products.ourProducts')} ({filteredProducts.length})
                 </h2> 
