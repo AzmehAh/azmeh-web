@@ -42,7 +42,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ onLogout }) => {
     { name: 'Bulletins', href: '/admin/bulletins', icon: FileText },
     { name: 'FAQ', href: '/admin/faq', icon: HelpCircle },
     { name: 'Troubleshooting', href: '/admin/troubleshooting', icon: Settings },
-    { name: 'Content', href: '/admin/content', icon: Layout },
+ 
     { name: 'Contact Messages', href: '/admin/messages', icon: MessageSquare },
     { name: 'Job Applications', href: '/admin/applications', icon: Users },
   ];
