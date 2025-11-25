@@ -187,11 +187,7 @@ function App() {
             </ProtectedRoute>
           } 
         />
-          <Route path="content" element={
-            <ProtectedRoute>
-              <ContentManager />
-            </ProtectedRoute>
-          } />
+       
           <Route path="messages" element={
             <ProtectedRoute>
               <ContactMessages />
