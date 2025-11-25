@@ -11,28 +11,26 @@ export default {
   plugins: [
     function ({ addUtilities }) {
       addUtilities({
-        // دعم المتصفحات الحديثة (مثل Firefox)
-        '.scrollbar-thin': {
-          'scrollbar-width': 'thin',
-          'scrollbar-color': '#003399 #f3f4f6',
-        },
-        // دعم WebKit (مثل Chrome, Safari)
-        '.scrollbar-thumb-logo': {
+        // هذا سيُطبّق على العنصر الذي يحتوي على الكلاس
+        '.custom-scrollbar': {
+          '&::-webkit-scrollbar': {
+            width: '8px',
+          },
           '&::-webkit-scrollbar-thumb': {
             backgroundColor: '#003399',
-            borderRadius: '8px',
+            borderRadius: '4px',
           },
-        },
-        '.scrollbar-track-gray-100': {
           '&::-webkit-scrollbar-track': {
             backgroundColor: '#f3f4f6',
           },
+          // دعم Firefox
+          scrollbarWidth: 'thin',
+          scrollbarColor: '#003399 #f3f4f6',
         },
-        '.scrollbar': {
-          '&::-webkit-scrollbar': {
-            width: '8px',
-            height: '8px',
-          },
+        // لضمان أن الصفحة قابلة للتمرير
+        '.scrollable-page': {
+          height: '100vh',
+          overflowY: 'auto',
         },
       });
     },
