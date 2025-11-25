@@ -11,7 +11,7 @@
 } body {
   font-family: 'GE SS Two Arabic', 'Poppins', system-ui, sans-serif;
 
-  text-align: right;
+ 
 }
 /* RTL Support */
 [dir="rtl"] {
