@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+/*import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Plus, 
@@ -64,7 +64,7 @@ const ContentManager = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
+ 
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Content Management</h1>
@@ -72,7 +72,7 @@ const ContentManager = () => {
         </div>
       </div>
 
-      {/* Tabs */}
+
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8">
           {tabs.map((tab) => (
@@ -95,7 +95,6 @@ const ContentManager = () => {
         </nav>
       </div>
 
-      {/* Content based on active tab */}
       {activeTab === 'homepage' && (
         <HomepageSectionsTab
           sections={homepageSections}
@@ -153,7 +152,7 @@ const HomepageSectionsTab = ({
 
   return (
     <div className="space-y-6">
-      {/* Search */}
+ 
       <div className="relative">
         <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
         <input
@@ -165,7 +164,6 @@ const HomepageSectionsTab = ({
         />
       </div>
 
-      {/* Sections Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredSections.map((section) => (
           <motion.div
@@ -202,7 +200,6 @@ const HomepageSectionsTab = ({
         ))}
       </div>
 
-      {/* Edit Modal */}
       {isModalOpen && selectedSection && (
         <HomepageSectionModal
           section={selectedSection}
@@ -241,7 +238,7 @@ const SiteSettingsTab = ({
 
   return (
     <div className="space-y-6">
-      {/* Search */}
+   
       <div className="relative">
         <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
         <input
@@ -253,7 +250,7 @@ const SiteSettingsTab = ({
         />
       </div>
 
-      {/* Settings List */}
+
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         {filteredSettings.map((setting) => (
           <div key={setting.id} className="p-6 border-b border-gray-200 last:border-b-0">
@@ -286,7 +283,6 @@ const SiteSettingsTab = ({
         ))}
       </div>
 
-      {/* Edit Modal */}
       {isModalOpen && selectedSetting && (
         <SiteSettingModal
           setting={selectedSetting}
@@ -325,7 +321,7 @@ const ContentBlocksTab = ({
 
   return (
     <div className="space-y-6">
-      {/* Search */}
+ 
       <div className="relative">
         <Search className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
         <input
@@ -337,7 +333,6 @@ const ContentBlocksTab = ({
         />
       </div>
 
-      {/* Blocks Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {filteredBlocks.map((block) => (
           <motion.div
@@ -376,7 +371,7 @@ const ContentBlocksTab = ({
         ))}
       </div>
 
-      {/* Edit Modal */}
+
       {isModalOpen && selectedBlock && (
         <ContentBlockModal
           block={selectedBlock}
@@ -847,4 +842,4 @@ const ContentBlockModal = ({
   );
 };
 
-export default ContentManager;
+export default ContentManager; 
