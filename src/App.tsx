@@ -8,6 +8,7 @@ import Hero from './components/Hero';
 import AdminLayout from './components/admin/AdminLayout';
 import AdminLogin from './components/admin/AdminLogin';
 
+
 import ProtectedRoute from './components/admin/ProtectedRoute';
 import FAQManager from './components/admin/FAQManager';
 import TroubleshootingManager from './components/admin/TroubleshootingManager';
@@ -37,7 +38,8 @@ import SocialMedia from './components/SocialMedia';
 import Footer from './components/Footer';
 import Contact from './components/Contact';
 import JobApplication from './components/JobApplication';
-import About from './ComponentAbout/About.tsx'; 
+import About from './ComponentAbout/About.tsx';
+import About from './ComponentAbout/Layout.tsx';
 import { auth } from './lib/auth';
 import ScrollToTopButton from './components/ScrollToTopButton';
 const HomePage = () => ( 
@@ -105,7 +107,11 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/job-application" element={<JobApplication />} />
-        <Route path="/products" element={<Products />} />
+      <Route path="/products" element={
+    <Layout>
+      <Products />
+    </Layout>
+  } />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/bulletin/:id" element={<BulletinDetail />} />
@@ -155,7 +161,9 @@ function App() {
           <Route path="products" element={
             <ProtectedRoute>
               <ProductsManager />
+              
             </ProtectedRoute>
+            
           } />
            
           <Route path="categories" element={
