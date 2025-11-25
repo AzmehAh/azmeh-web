@@ -295,12 +295,12 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
             {/* Filters Sidebar */}
             <aside className="lg:w-80 flex-shrink-0">
               <div className="lg:sticky lg:top-24">
-                <div className="bg-white rounded-xl shadow-lg p-6 max-h-[calc(100vh-7rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-blue-500 scrollbar-track-gray-100">
+                <div className="bg-white rounded-xl shadow-lg p-6 max-h-[calc(100vh-7rem)] overflow-y-auto">
                 <div className="flex items-center justify-between mb-6">
                   <h3 className="text-xl font-bold text-gray-900 flex items-center">
                     <Filter className="w-5 h-5 text-logo mr-2" />
                     {t('products.filter')}
-                  </h3>
+                  </h3> 
                   {getActiveFiltersCount() > 0 && (
                     <button
                       onClick={clearFilters}
