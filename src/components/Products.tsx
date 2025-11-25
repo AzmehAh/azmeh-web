@@ -277,7 +277,7 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
   
   return ( 
  <div 
-  className="scrollable-page custom-scrollbar bg-gray-50 pt-20" 
+  className=" bg-gray-50 pt-20" 
   dir={isRTL ? 'rtl' : 'ltr'}
 >
       <div className="text-logo pt-20">
