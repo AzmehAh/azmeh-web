@@ -2,27 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 @font-face {
-  font-family: 'GE SS Two';
-  src: url('/fonts/GE_SS_Two_Light.otf') format('truetype');
+  font-family: 'GE SS Two Arabic';
+  src: url('/fonts/ge-ss-two.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
-} 
-/* مثلاً: لتطبيقه على كامل الموقع */
-body {
-  font-family: 'GE SS Two', 'Tajawal', sans-serif;
-}
-
-/* أو على العناوين فقط */
-h1, h2, h3 {
-  font-family: 'GE SS Two', serif;
+  unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+} body {
+  font-family: 'GE SS Two Arabic', 'Poppins', system-ui, sans-serif;
+  direction: rtl;
+  text-align: right;
 }
 /* RTL Support */
 [dir="rtl"] {
   text-align: right;
 }
 
-[dir="rtl"] .space-x-2 > * + *,
+[dir="rtl"] .space-x-2 > * + *, 
 [dir="rtl"] .space-x-3 > * + *,
 [dir="rtl"] .space-x-4 > * + *,
 [dir="rtl"] .space-x-8 > * + * {
