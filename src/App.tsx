@@ -18,7 +18,7 @@ import ProductCategoriesManager from './components/admin/ProductCategoriesManage
 import BulletinsManager from './components/admin/BulletinsManager';
 import BulletinForm from './components/admin/BulletinForm';
 import ProductForm from './components/admin/ProductForm';
-import ContentManager from './components/admin/ContentManager';
+;
 import ProductFiltersManager from './components/admin/ProductFiltersManager';
 import SystemCategoriesManager from './components/admin/SystemCategoriesManager';
 import ContactMessages from './components/admin/ContactMessages';
