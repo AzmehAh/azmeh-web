@@ -418,7 +418,7 @@ Object.entries(selectedFilters).forEach(([category, selectedValues]) => {
             </aside>
 
             {/* Products Grid */}
-            <div className="flex-1 scrollable-page custom-scrollbar">
+            <div className="flex-1 "> 
               <div className="flex items-center justify-between mb-8 ">
                 <h2 className="text-2xl font-bold text-gray-900">
                   {t('products.ourProducts')} ({filteredProducts.length})
