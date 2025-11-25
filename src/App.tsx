@@ -39,7 +39,7 @@ import Footer from './components/Footer';
 import Contact from './components/Contact';
 import JobApplication from './components/JobApplication';
 import About from './ComponentAbout/About.tsx';
-import  Layout from './Components/Layout.tsx';
+import  Layout from './Components/Layout';
 import { auth } from './lib/auth';
 import ScrollToTopButton from './components/ScrollToTopButton';
 const HomePage = () => ( 
