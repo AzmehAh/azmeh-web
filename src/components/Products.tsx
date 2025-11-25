@@ -148,16 +148,45 @@ const formattedProducts = (productsData || []).map(product => {
     }
   }, []);
 
- 
-  useEffect(() => {
-    const loadData = async () => {
-      setLoading(true);
-      setProductsLoading(true);
-      await Promise.all([fetchFilterData(), fetchProducts()]);
-    };
-    loadData();
-  }, [fetchFilterData, fetchProducts]);
+// 👇 جديد: دالة لقراءة الفلاتر من الـ URL
+const initializeFiltersFromUrl = () => {
+  const params = new URLSearchParams(window.location.search);
+  const initialFilters: Record<string, string[]> = {};
 
+  Object.keys(filterOptions).forEach((category) => {
+    const paramValue = params.get(category);
+    if (paramValue) {
+      // تقسيم القيم إذا كانت متعددة (مفصولة بفواصل)
+      const values = paramValue.split(',').map(v => v.trim()).filter(v => v);
+      // التأكد من أن كل قيمة موجودة فعلاً في خيارات الفلتر (لتجنب قيم مزيفة)
+      const validValues = values.filter(val =>
+        filterOptions[category]?.some(opt => opt.value === val)
+      );
+      initialFilters[category] = validValues;
+    } else {
+      initialFilters[category] = [];
+    }
+  });
+
+  setSelectedFilters(initialFilters);
+};
+
+// 👇 تعديل useEffect لتحميل البيانات ثم تطبيق الفلاتر من الرابط
+useEffect(() => {
+  const loadData = async () => {
+    setLoading(true);
+    setProductsLoading(true);
+    await Promise.all([fetchFilterData(), fetchProducts()]);
+  };
+  loadData();
+}, [fetchFilterData, fetchProducts]);
+
+// 👇 جديد: بعد تحميل filterOptions، نُطبّق الفلاتر من الـ URL
+useEffect(() => {
+  if (!loading && Object.keys(filterOptions).length > 0) {
+    initializeFiltersFromUrl();
+  }
+}, [loading, filterOptions]);
  
   useEffect(() => {
     if (!loading) {
