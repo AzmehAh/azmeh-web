@@ -767,3 +767,18 @@ body {
     page-break-inside: avoid !important;
   }
 }
+
+body::-webkit-scrollbar {
+  width: 8px;
+  background: transparent; 
+}
+
+body:hover::-webkit-scrollbar-thumb {
+  background: logo; 
+  border-radius: 4px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background: transparent;
+  transition: background 0.3s;
+}
