@@ -82,7 +82,7 @@ const Footer = () => {
                 href="https://www.facebook.com/azmehpaints"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-[#1877F2] flex items-center justify-center  transition-colors duration-300"
+                className="w-15 h-10 rounded-full bg-[#1877F2] flex items-center justify-center  transition-colors duration-300"
                 aria-label="Facebook"
               >
                 <Facebook className="w-5 h-5 text-white" />
