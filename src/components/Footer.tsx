@@ -115,7 +115,7 @@ const Footer = () => {
         {/* --- Bottom Divider --- */}
         <div className="mt-12 pt-8 border-t border-gray-800 text-center md:text-left">
           <p className="text-gray-500 text-xs mt-2">
-              ©  {t('footer.copyright')}
+              {t('footer.copyright')}
             </p>
         </div>
       </div>
