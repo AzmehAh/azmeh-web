@@ -770,15 +770,8 @@ body {
 
 body::-webkit-scrollbar {
   width: 8px;
-  background: transparent; 
 }
-
-body:hover::-webkit-scrollbar-thumb {
-  background: #003399; 
-  border-radius: 4px;
-}
-
 body::-webkit-scrollbar-thumb {
-  background: transparent;
-  transition: background 0.3s;
+  background: #003399;
+  border-radius: 4px;
 }
